@@ -12,7 +12,7 @@ create_op_cond -name opcond -library_file ${LIB}/asap7sc7p5t_SIMPLE_RVT_TT_ccs_2
 
 create_delay_corner -name corner -library_set libset -opcond_library opcond -rc_corner rccorner
 
-create_constraint_mode -name mode_normal -sdc_files ./outputs/Mul32_final.sdc
+create_constraint_mode -name mode_normal -sdc_files ./outputs/Mul32_syn.sdc
 
 create_analysis_view -name tt -constraint_mode mode_normal -delay_corner corner
 

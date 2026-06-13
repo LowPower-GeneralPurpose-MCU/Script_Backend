@@ -44,12 +44,12 @@ set row_height_x2 [expr 2 * $row_height]
 set row_height_x4 [expr 4 * $row_height]
 set row_height_d2 [expr $row_height / 2.0]
 
-set stripe_pitch [expr 32 * $row_height]
-set margin_rows 32
-set margin_dist [expr $margin_rows * $row_height]
+# Left/Bottom margins must be a multiple of 0.384 to avoid DRC. 
+# Set to 2.304 (6 * 0.384) to safely fit the 1.92 um ring constraint.
+set margin_dist 2.16
 
 # Set overall density
-set Density 0.6
+set Density 0.8
 
 ###################################
 ## Floor Plan
@@ -86,9 +86,10 @@ close $fo
 ## Power planning
 ###################################
 # Ring constraints (M8/M9 pitch 0.320)
-set ring_m89_w 1.600
-set ring_m89_s 1.280
-set ring_m89_o 1.280 ;# Offset distance: 4 pitches of M8/M9 (0.320 * 4)
+# Total distance to core: Offset (0.320) + VDD_w (0.640) + Spacing (0.320) + VSS_w (0.640) = 1.920 <= 2.16
+set ring_m89_w 0.640
+set ring_m89_s 0.320
+set ring_m89_o 0.320 ;# Offset distance: 1 pitch of M8/M9 (0.320)
 
 setAddStripeMode -trim_antenna_back_to_shape core_ring
 setAddStripeMode -split_vias true
@@ -109,7 +110,7 @@ addRing -nets {VDD VSS} -type core_rings -follow core \
     -layer {top M8 bottom M8 left M9 right M9} \
     -width $ring_m89_w -spacing $ring_m89_s -offset $ring_m89_o
 
-# Add PG pins
+# Add PG pins (Exactly overlapping the ring)
 set vdd_m9_right [expr {$margin_dist - $ring_m89_o}]
 set vdd_m9_left  [expr {$vdd_m9_right - $ring_m89_w}]
 set vss_m9_right [expr {$vdd_m9_left - $ring_m89_s}]
@@ -130,28 +131,27 @@ set stripe_m89_pitch 34.560 ;# 32 * 1.08
 
 set stripe_m4_w 0.096
 set stripe_m4_s 0.288
-set stripe_m4_offset 8.640 ;# On-grid: 45 * 0.192 (M4 pitch) = 8.640
+set stripe_m4_offset 0 ;# On-grid manually: 45 * 0.192 (M4 pitch) = 8.640
 
 set stripe_m5_w 0.096
 set stripe_m5_s 0.288
-set stripe_m5_offset 8.640 ;# On-grid: 45 * 0.192 (M5 pitch) = 8.640
+set stripe_m5_offset 0 ;# On-grid manually: 45 * 0.192 (M5 pitch) = 8.640
 
 set stripe_m6_w 0.640
 set stripe_m6_s 0.896
-set stripe_m6_offset 12.800 ;# On-grid: 50 * 0.256 (M6 pitch) = 12.800
+set stripe_m6_offset 12.800 ;# On-grid manually: 50 * 0.256 (M6 pitch) = 12.800
 
 set stripe_m7_w 0.640
 set stripe_m7_s 0.896
-set stripe_m7_offset 12.800 ;# On-grid: 50 * 0.256 (M7 pitch) = 12.800
+set stripe_m7_offset 12.800 ;# On-grid manually: 50 * 0.256 (M7 pitch) = 12.800
 
 set stripe_m8_w 1.600
 set stripe_m8_s 1.280
-set stripe_m8_offset 17.280 ;# On-grid: 54 * 0.320 (M8 pitch) = 17.280
+set stripe_m8_offset 17.280 ;# On-grid manually: 54 * 0.320 (M8 pitch) = 17.280
 
 set stripe_m9_w 1.600
 set stripe_m9_s 1.280
-set stripe_m9_offset 17.280 ;# On-grid: 54 * 0.320 (M9 pitch) = 17.280
-
+set stripe_m9_offset 17.280 ;# On-grid manually: 54 * 0.320 (M9 pitch) = 17.280
 
 # M7 (Vertical)
 setAddStripeMode -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
@@ -163,18 +163,33 @@ addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width $stripe_m6_w -s
 
 # M5 (Vertical)
 setAddStripeMode -stacked_via_bottom_layer M5 -stacked_via_top_layer M6
+
+set num_stripes [expr {int(floor($FPx / $stripe_m45_pitch))}]
+set last_stripe_pos [expr {$num_stripes * $stripe_m45_pitch}]
+set right_pos_ongrid [expr {floor($FPx / 0.192) * 0.192}]
+set dist [expr {$right_pos_ongrid - $last_stripe_pos}]
+
 addStripe -nets {VDD VSS} -layer M5 -direction vertical -width $stripe_m5_w -spacing $stripe_m5_s -set_to_set_distance $stripe_m45_pitch -start_from left -start_offset $stripe_m5_offset -snap_wire_center_to_grid grid
+
+if {$dist >= [expr {2 * 0.192}]} {
+    set right_offset [expr {$FPx - $right_pos_ongrid}]
+    
+    addStripe -nets {VDD VSS} -layer M5 -direction vertical \
+        -width $stripe_m5_w -spacing $stripe_m5_s \
+        -start_from right -start_offset $right_offset \
+        -number_of_sets 1 -snap_wire_center_to_grid grid
+}
 
 # Sroute (Limited to M1-M5)
 setSrouteMode -viaConnectToShape { stripe }
 sroute -connect { corePin } -layerChangeRange { M1 M5 } -corePinTarget { stripe } -allowJogging 0 -allowLayerChange 0 -nets { VDD VSS }
 
-# Trim dangling wires
+# Trim dangling wires safely
 editTrim -nets {VSS VDD}
 clearDrc
 
 # Load pins
-setPinConstraint -corner_to_pin_distance 10;
+setPinConstraint -corner_to_pin_distance 8;
 source tcl/pins.tcl
 
 ###################################
@@ -290,8 +305,8 @@ setMetalFill -layer { M6 M7 } \
 setMetalFill -layer { M8 M9 } \
     -maxWidth 2.5 -minWidth 0.160 \
     -maxLength 5.0 -minLength 0.960 \
-    -decrement 0.160 -activeSpacing 0.320 \
-    -gapSpacing 0.320 -maxDensity 55 -minDensity 25 -preferredDensity 40
+    -decrement 0.160 -activeSpacing 0.640 \
+    -gapSpacing 0.640 -maxDensity 55 -minDensity 25 -preferredDensity 40
 
 # Pad
 setMetalFill -layer { Pad } \
@@ -307,14 +322,17 @@ addMetalFill -snap -squareShape
 ###################################
 ## Export FIles
 ###################################
-verify_drc -report ./verify_rpt/final_drc.rpt
-verifyConnectivity -type all -error 1000 -warning 50 -report ./verify_rpt/final_connectivity.rpt
-saveNetlist outputs/Mul32_pnr.v
-saveDesign saved/Mul32_final.enc
+verify_drc -report ./verify_rpt/drc_pnr.rpt
+verifyConnectivity -type all -error 1000 -warning 50 -report ./verify_rpt/connectivity_pnr.rpt
+saveNetlist ./outputs/Mul32_pnr_lec.v -excludeLeafCell -removePowerGround
+saveNetlist ./outputs/Mul32_pnr_sta.v
+saveDesign saved/Mul32_pnr.enc
+write_sdc ./outputs/Mul32_pnr.sdc
 
-streamOut outputs/Mul32.gds -libName WORK -units 4000 -mode ALL
+streamOut outputs/Mul32_pnr.gds -libName WORK -units 4000 -mode ALL
+defOut -floorplan -netlist -routing ./outputs/Mul32_pnr.def
 
-report_area > ./verify_rpt/final_area.rpt
-report_power > ./verify_rpt/final_power.rpt
-report_timing > ./verify_rpt/final_timing.rpt
-report_gate > ./verify_rpt/final_gate.rpt
+report_area > ./verify_rpt/area_pnr.rpt
+report_power > ./verify_rpt/power_pnr.rpt
+report_timing > ./verify_rpt/timing_pnr.rpt
+report_gate > ./verify_rpt/gate_pnr.rpt

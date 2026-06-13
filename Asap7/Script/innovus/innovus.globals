@@ -23,7 +23,7 @@ set init_gnd_net {VSS}
 set init_layout_view {layout}
 set init_mmmc_file {./tcl/viewDefinition.tcl}
 set init_pwr_net {VDD}
-set init_verilog "./outputs/Mul32_netlist.v"
+set init_verilog "./outputs/Mul32_syn.v"
 set latch_time_borrow_mode max_borrow
 set pegDefaultResScaleFactor 1
 set pegDetailResScaleFactor 1

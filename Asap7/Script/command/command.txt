@@ -1,0 +1,23 @@
+genus: 
+  genus -files tcl/genus.tcl
+  
+innovus:
+  innovus -files tcl/innovus.tcl
+  
+conformal:
+  lec -xl -nogui -dofile genus_mapping_hints.do | tee lec_final.log
+  lec -xl -tclmode -nogui -dofile tcl/formal/lec_pnr.do | tee lec_pnr.log
+  
+quantus:
+  innovus -64 -nowin -init tcl/quantus.tcl | tee log/extract_qrc.log
+  
+tempus:
+  tempus -64 -nowin -init tcl/run_tempus.tcl | tee log/tempus_run.log
+  
+voltus:
+  voltus -64 -nowin -init tcl/run_voltus.tcl | tee log/voltus_run.log
+  
+calibre:
+
+  
+
