@@ -18,6 +18,6 @@ voltus:
   voltus -64 -nowin -init tcl/run_voltus.tcl | tee log/voltus_run.log
   
 calibre:
-
+  make all
   
 
