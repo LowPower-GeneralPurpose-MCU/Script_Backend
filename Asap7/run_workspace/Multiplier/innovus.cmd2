@@ -1,0 +1,190 @@
+#######################################################
+#                                                     
+#  Innovus Command Logging File                     
+#  Created on Sun Jul 19 00:49:18 2026                
+#                                                     
+#######################################################
+
+#@(#)CDS: Innovus v23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: NanoRoute 23.14-s088_1 NR250219-0822/23_14-UB (database version 18.20.661) {superthreading v2.20}
+#@(#)CDS: AAE 23.14-s018 (64bit) 02/28/2025 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: CTE 23.14-s036_1 () Feb 22 2025 01:17:26 ( )
+#@(#)CDS: SYNTECH 23.14-s010_1 () Feb 19 2025 23:56:49 ( )
+#@(#)CDS: CPE v23.14-s082
+#@(#)CDS: IQuantus/TQuantus 23.1.1-s336 (64bit) Mon Jan 20 22:11:00 PST 2025 (Linux 3.10.0-693.el7.x86_64)
+
+set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+suppressMessage ENCEXT-2799
+getVersion
+getVersion
+getVersion
+win
+set auto_file_dir /tmp/user1/innovus
+set init_design_uniquify 1
+set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef}
+set ::TimeLib::tsgMarkCellLatchConstructFlag 1
+set conf_qxconf_file NULL
+set conf_qxlib_file NULL
+set defHierChar /
+set distributed_client_message_echo 1
+set distributed_mmmc_disable_reports_auto_redirection 0
+set init_abstract_view abstract
+set init_design_settop 0
+set init_gnd_net VSS
+set init_layout_view layout
+set init_mmmc_file ./tcl/viewDefinition.tcl
+set init_pwr_net VDD
+set init_verilog ./outputs/Mul32_syn.v
+get_message -id GLOBAL-100 -suppress
+get_message -id GLOBAL-100 -suppress
+set latch_time_borrow_mode max_borrow
+set pegDefaultResScaleFactor 1
+set pegDetailResScaleFactor 1
+get_message -id GLOBAL-100 -suppress
+get_message -id GLOBAL-100 -suppress
+set report_inactive_arcs_format {from to when arc_type sense reason}
+set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
+setGenerateViaMode -auto false
+init_design
+all_constraint_modes
+set_interactive_constraint_modes [all_constraint_modes]
+set_propagated_clock [all_clocks]
+setDesignMode -process 7
+setMultiCpuUsage -acquireLicense 12
+setMultiCpuUsage -localCpu 12
+setDistributeHost -local
+floorPlan -r 1.0 0.70 2.304 2.304 2.304 2.304
+setAddStripeMode -trim_antenna_back_to_shape core_ring
+setAddStripeMode -split_vias true
+setAddStripeMode -via_using_exact_crossover_size false
+clearGlobalNets
+deleteAllPowerPreroutes
+globalNetConnect VDD -type pgpin -pin VDD -inst * -module {}
+globalNetConnect VSS -type pgpin -pin VSS -inst * -module {}
+globalNetConnect VDD -type tiehi -inst * -module {}
+globalNetConnect VSS -type tielo -inst * -module {}
+applyGlobalNets
+addRing -nets {VDD VSS} -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.640 -spacing 0.320 -offset 0.320
+createPGPin VDD -geom M9 1.344 1.344 1.984 1.984 -net VDD
+createPGPin VSS -geom M9 0.384 0.384 1.024 1.024 -net VSS
+setAddStripeMode -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
+addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.128 -spacing 0.384 -set_to_set_distance 25.856 -start_from left -start_offset 12.800 -snap_wire_center_to_grid grid
+setAddStripeMode -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
+addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 25.856 -start_from bottom -start_offset 12.800 -snap_wire_center_to_grid grid
+setAddStripeMode -stacked_via_bottom_layer M5 -stacked_via_top_layer M6
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 17.280 -start_from left -start_offset 0.000 -snap_wire_center_to_grid grid
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from right -start_offset 0.048 -number_of_sets 1 -snap_wire_center_to_grid grid
+setSrouteMode -viaConnectToShape { stripe }
+sroute -connect { corePin } -corePinTarget { stripe } -allowJogging 0 -allowLayerChange 0 -nets { VDD VSS }
+editTrim -nets {VSS VDD}
+clearDrc
+verifyConnectivity -type all -error 1000 -warning 50 -report ./verify_rpt/connectivity_after_sroute.rpt
+setPinConstraint -corner_to_pin_distance 8
+setPinAssignMode -pinEditInBatch true
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side BOTTOM -layer M7 -honorConstraint 1 -pin { iclk iA[31] iA[30] iA[29] iA[28] iA[27] iA[26] iA[25] iA[24] iA[23] iA[22] iA[21] iA[20] iA[19] iA[18] iA[17] iA[16] iA[15] iA[14] iA[13] iA[12] iA[11] iA[10] iA[9] iA[8] iA[7] iA[6] iA[5] iA[4] iA[3] iA[2] iA[1] iA[0] }
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side RIGHT -layer M6 -honorConstraint 1 -pin { iB[31] iB[30] iB[29] iB[28] iB[27] iB[26] iB[25] iB[24] iB[23] iB[22] iB[21] iB[20] iB[19] iB[18] iB[17] iB[16] iB[15] iB[14] iB[13] iB[12] iB[11] iB[10] iB[9] iB[8] iB[7] iB[6] iB[5] iB[4] iB[3] iB[2] iB[1] iB[0] }
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side TOP -layer M7 -honorConstraint 1 -pin {rst_n oP[63] oP[62] oP[61] oP[60] oP[59] oP[58] oP[57] oP[56] oP[55] oP[54] oP[53] oP[52] oP[51] oP[50] oP[49] oP[48] oP[47] oP[46] oP[45] oP[44] oP[43] oP[42] oP[41] oP[40] oP[39] oP[38] oP[37] oP[36] oP[35] oP[34] oP[33] oP[32] }
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side LEFT -layer M6 -honorConstraint 1 -pin { oP[31] oP[30] oP[29] oP[28] oP[27] oP[26] oP[25] oP[24] oP[23] oP[22] oP[21] oP[20] oP[19] oP[18] oP[17] oP[16] oP[15] oP[14] oP[13] oP[12] oP[11] oP[10] oP[9] oP[8] oP[7] oP[6] oP[5] oP[4] oP[3] oP[2] oP[1] oP[0] }
+setPinAssignMode -pinEditInBatch false
+setDelayCalMode -SIAware false -equivalent_waveform_model none
+setPlaceMode -reset
+setPlaceMode -place_global_uniform_density true -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_design_refine_macro true
+place_design
+refinePlace
+checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil.rpt
+create_route_type -name leaf_rule -bottom_preferred_layer M2 -top_preferred_layer M3
+create_route_type -name trunk_rule -shield_net VSS -bottom_preferred_layer M4 -top_preferred_layer M5
+create_route_type -name top_rule -shield_net VSS -bottom_preferred_layer M6 -top_preferred_layer M7
+set_ccopt_property -net_type leaf route_type leaf_rule
+set_ccopt_property -net_type trunk route_type trunk_rule
+set_ccopt_property -net_type top route_type top_rule
+set_ccopt_property routing_top_min_fanout 100
+set_ccopt_property target_max_trans 0.3ns
+set_ccopt_property buffer_cells {BUFx4_ASAP7_75t_R BUFx8_ASAP7_75t_R BUFx12_ASAP7_75t_R}
+set_ccopt_property inverter_cells {CKINVDCx8_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R}
+set_ccopt_property use_inverters auto
+setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 -powerEffort high -fixFanoutLoad true
+optDesign -prefix preCTS -preCTS
+report_timing > ./verify_rpt/preCTS_timing.rpt
+create_ccopt_clock_tree_spec -filename ccopt.spec
+get_ccopt_clock_trees
+ccopt_check_and_flatten_ilms_no_restore
+set_ccopt_property cts_is_sdc_clock_root -pin iclk true
+create_ccopt_clock_tree -name CLK -source iclk -no_skew_group
+set_ccopt_property target_max_trans_sdc -delay_corner corner -early -clock_tree CLK 10.0
+set_ccopt_property target_max_trans_sdc -delay_corner corner -late -clock_tree CLK 40.0
+set_ccopt_property source_latency -delay_corner corner -early -rise -clock_tree CLK 100.0
+set_ccopt_property source_latency -delay_corner corner -early -fall -clock_tree CLK 100.0
+set_ccopt_property source_latency -delay_corner corner -late -rise -clock_tree CLK 150.0
+set_ccopt_property source_latency -delay_corner corner -late -fall -clock_tree CLK 150.0
+set_ccopt_property clock_period -pin iclk 1000
+set_ccopt_property timing_connectivity_info {}
+create_ccopt_skew_group -name CLK/mode_normal -sources iclk -auto_sinks
+set_ccopt_property include_source_latency -skew_group CLK/mode_normal true
+set_ccopt_property extracted_from_clock_name -skew_group CLK/mode_normal CLK
+set_ccopt_property extracted_from_constraint_mode_names -skew_group CLK/mode_normal {mode_normal  }
+set_ccopt_property extracted_from_delay_corners -skew_group CLK/mode_normal corner
+check_ccopt_clock_tree_convergence
+get_ccopt_property auto_design_state_for_ilms
+clock_opt_design -prefix postCTS
+optDesign -prefix postCTS -postCTS -setup -hold
+report_timing > ./verify_rpt/postCTS_timing.rpt
+report_area > ./verify_rpt/postCTS_area.rpt
+setNanoRouteMode -reset
+setNanoRouteMode -quiet -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 1:9 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven true -route_detail_fix_antenna true -route_detail_merge_abutting_cut true -route_detail_end_iteration 5
+routeDesign -globalDetail
+ecoRoute -fix_drc
+verify_drc -report ./verify_rpt/drc_after_route.rpt
+verifyConnectivity -type all -error 1000 -warning 50 -report ./verify_rpt/connectivity_after_route.rpt
+setAnalysisMode -analysisType onChipVariation
+setDelayCalMode -SIAware true -equivalent_waveform_model propagation
+setExtractRCMode -engine postRoute -effortLevel medium
+optDesign -postRoute -setup -hold -prefix postRoute
+report_timing > ./verify_rpt/postRoute_timing.rpt
+report_area > ./verify_rpt/postRoute_area.rpt
+setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
+addFiller
+ecoRoute -fix_drc
+verify_drc -report ./verify_rpt/drc_after_filler.rpt
+verifyConnectivity -type all -error 1000 -warning 50 -report ./verify_rpt/connectivity_after_filler.rpt
+verify_drc -report ./verify_rpt/drc_after_metal_fill.rpt
+verifyConnectivity -type all -error 1000 -warning 50 -report ./verify_rpt/connectivity_after_metal_fill.rpt
+saveNetlist ./outputs/Mul32_pnr_lec.v -excludeLeafCell -removePowerGround
+saveDesign saved/Mul32_pnr.enc
+extractRC
+rcOut -spef ./outputs/innovus.spef -rc_corner rccorner
+all_hold_analysis_views
+all_setup_analysis_views
+writeTimingCon ./outputs/Multiplier32.sdc
+saveNetlist -excludeLeafCell ./outputs/Mul32_pnr_sta.v
+saveNetlist -excludeLeafCell -includePowerGround -includePhysicalInst ./Multiplier_pg.v
+setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic -virtualConnection false -textSize 1
+streamOut ./outputs/Multiplier.gds -mapFile /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Multiplier/tcl/streamOut.map -merge /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds -dieAreaAsBoundary -outputMacros
+write_lef_abstract -noCutObs .outputs/Multiplier.lef
+saveNetlist ./outputs/Mul32_pnr_sta.v
+defOut -floorplan -netlist -routing ./outputs/Mul32_pnr.def
+report_area > ./verify_rpt/area_pnr.rpt
+report_power > ./verify_rpt/power_pnr.rpt
+report_timing > ./verify_rpt/timing_pnr.rpt
+report_gates > ./verify_rpt/gate_pnr.rpt
+zoomBox -18.84775 -14.20650 112.29700 103.19600
+fit
+zoomBox -7.61900 4.62075 91.94600 93.75275
+zoomBox -3.47300 19.38250 68.46300 83.78050
+zoomBox -0.20525 35.11075 43.97275 74.65950
+zoomBox 0.21475 38.35975 37.76625 71.97625
+zoomBox 0.88875 43.46875 28.01975 67.75675
+zoomBox 1.56550 48.60175 18.22750 63.51775
+zoomBox 1.86450 50.86875 13.90275 61.64550
+zoomBox 2.16475 53.14600 9.55800 59.76450
+zoomBox 2.34925 54.54475 6.88950 58.60925
+pan -1.40975 52.08375
+zoomBox 0.37325 53.79475 6.65725 59.42025
+zoomBox -0.41050 52.91125 8.28700 60.69725
+zoomBox -1.49525 51.68800 10.54300 62.46475
+zoomBox -2.99675 49.99525 13.66525 64.91125
+zoomBox -6.39625 46.16225 20.73500 70.45050
+zoomBox -11.93175 39.92075 32.24700 79.47025
+zoomBox -25.06800 25.11025 59.56500 100.87475
+zoomBox -42.33550 5.64125 95.47550 129.01150
+pan 20.50225 30.50525

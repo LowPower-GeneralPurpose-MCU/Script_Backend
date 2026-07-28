@@ -1,8 +1,8 @@
-set ASAP7 "../tkvm/asap7"
+set ASAP7 "/home/user1/Desktop/asap7"
 set LIB "${ASAP7}/asap7sc7p5t_28/LIB/CCS"
 set QRC "${ASAP7}/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06"
 
-set LIB_LIST [list ${LIB}/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib ${LIB}/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib ${LIB}/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib ${LIB}/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib]
+set LIB_LIST [list ${LIB}/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib ${LIB}/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib ]
 
 create_library_set -name libset -timing $LIB_LIST
 

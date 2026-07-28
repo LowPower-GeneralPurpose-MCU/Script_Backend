@@ -1,0 +1,58 @@
+############################################################
+## Innovus global initialization
+## Style follows the teacher's original innovus.globals.
+############################################################
+
+source ./tcl/project_config.tcl
+
+set TECH_LEF "${ASAP7}/asap7sc7p5t_28/techlef_misc"
+set CELL_LEF "${ASAP7}/asap7sc7p5t_28/LEF/scaled"
+
+source ./tcl/sram_macro_setup.tcl
+
+# Tech LEF
+set tech_lef "${TECH_LEF}/asap7_tech_4x_201209.lef"
+
+# Standard-cell LEFs for the RVT + LVT mapped netlist.
+# Do not load SLVT because it is not present in the timing library set.
+set cell_lefs [list \
+    "${CELL_LEF}/asap7sc7p5t_28_L_4x_220121a.lef" \
+    "${CELL_LEF}/asap7sc7p5t_28_R_4x_220121a.lef" \
+]
+
+# Hard SRAM abstract view.
+lappend cell_lefs $SRAM_LEF
+
+# Tech LEF must be first.
+set init_lef_file [concat [list $tech_lef] $cell_lefs]
+
+foreach lef $init_lef_file {
+    if {![file exists $lef]} {
+        error "Missing LEF file: [file normalize $lef]"
+    }
+}
+
+set ::TimeLib::tsgMarkCellLatchConstructFlag 1
+set conf_qxconf_file {NULL}
+set conf_qxlib_file {NULL}
+set defHierChar {/}
+set distributed_client_message_echo {1}
+set distributed_mmmc_disable_reports_auto_redirection {0}
+
+set init_abstract_view {abstract}
+set init_layout_view   {layout}
+
+set init_design_settop 1
+set init_top_cell      $DESIGN
+
+set init_gnd_net {VSS}
+set init_pwr_net {VDD}
+
+set init_mmmc_file {./tcl/viewDefinition.tcl}
+set init_verilog   "./outputs/${DESIGN}_syn.v"
+
+set latch_time_borrow_mode max_borrow
+set pegDefaultResScaleFactor 1
+set pegDetailResScaleFactor 1
+set report_inactive_arcs_format {from to when arc_type sense reason}
+set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}

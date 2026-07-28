@@ -13,7 +13,7 @@ editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side \
 # Top - Metal7 Vertical
 editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side \
 -spreadDirection counterclockwise -side TOP -layer M7 -honorConstraint 1 \
--pin { oP[63] oP[62] oP[61] oP[60] oP[59] oP[58] oP[57] oP[56] oP[55] oP[54] oP[53] oP[52] oP[51] oP[50] oP[49] oP[48] oP[47] oP[46] oP[45] oP[44] oP[43] oP[42] oP[41] oP[40] oP[39] oP[38] oP[37] oP[36] oP[35] oP[34] oP[33] oP[32] }
+-pin {rst_n oP[63] oP[62] oP[61] oP[60] oP[59] oP[58] oP[57] oP[56] oP[55] oP[54] oP[53] oP[52] oP[51] oP[50] oP[49] oP[48] oP[47] oP[46] oP[45] oP[44] oP[43] oP[42] oP[41] oP[40] oP[39] oP[38] oP[37] oP[36] oP[35] oP[34] oP[33] oP[32] }
 
 # Left - Metal6 Horizontal
 editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side \

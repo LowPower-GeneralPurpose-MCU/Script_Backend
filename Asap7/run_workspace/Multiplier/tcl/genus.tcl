@@ -1,109 +1,76 @@
-set ASAP7_DIR "../../Asap7/asap7"
-set LIB_PATH "${ASAP7_DIR}/asap7sc7p5t_28/LIB/CCS"
-set LEF_PATH "${ASAP7_DIR}/asap7sc7p5t_28/LEF/scaled"
+# Global variables
+set LIB "/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS"
 set TOP Multiplier32
 set SYNFILE "Multiplier32.v"
 
 if {![file exists ./outputs]} { file mkdir outputs }
 if {![file exists ./reports]} { file mkdir reports }
 
-set_db / .init_lib_search_path ${LIB_PATH}
+set_db / .init_lib_search_path ${LIB}
 set_db / .script_search_path {./tcl}
 set_db / .init_hdl_search_path {./rtl}
 
+if {![catch {open "/proc/cpuinfo"} f]} {
+    set CORES [regexp -all -line {^processor\s} [read $f]]; close $f
+}
+set_db / .max_cpus_per_server ${CORES}
+
+#Default undriven/unconnected setting is 'none'
+#               available options: 0 | 1 | x | none
 set_db / .hdl_unconnected_value 0
+set_db / .hdl_track_filename_row_col true
+set_db / .auto_ungroup none
 
-set MY_LIB [glob ${LIB_PATH}/*_TT_ccs_*.lib]
-set_db library $MY_LIB
-create_library_set -name libset -timing $MY_LIB
+#set_db / .wireload_mode <value>
+#set_db / .information_level 7
 
+# Library setup
+set_db / .library { asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib asap7sc7p5t_AO_RVT_TT_ccs_211120.lib asap7sc7p5t_OA_RVT_TT_ccs_211120.lib asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib  }
+
+create_library_set -name libset -timing { asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib asap7sc7p5t_AO_RVT_TT_ccs_211120.lib asap7sc7p5t_OA_RVT_TT_ccs_211120.lib asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib  }
+
+# Read hdl
+read_hdl Multiplier32.v
+elaborate Multiplier32
+check_design -unresolved
+
+
+# SDC and operating conditions
 create_rc_corner -name rccorner -pre_route_res 1 -post_route_res 1 \
 -pre_route_cap 1 -post_route_cap 1 -post_route_cross_cap 1 \
 -pre_route_clock_res 0 -pre_route_clock_cap 0 -temperature 25
 
-create_opcond -name opcond -process 1.0 -voltage 0.7 -temperature 25
+create_opcond -name opcond -process 1 -voltage 0.7 -temperature 25
 create_timing_condition -name timecond -library_sets libset -opcond opcond
 create_delay_corner -name corner -timing_condition timecond -rc_corner rccorner
+
 create_constraint_mode -name mode_normal -sdc_files ./tcl/constraint.sdc
+
 create_analysis_view -name tt -constraint_mode mode_normal -delay_corner corner
 set_analysis_view -setup {tt} -hold {tt}
 
-set_db / .hdl_track_filename_row_col true
-set_db / .lp_insert_clock_gating false
-
-####################################################################
-## Load Design
-####################################################################
-read_hdl ${SYNFILE}
-elaborate ${TOP}
-uniquify ${TOP}
-
-check_design -unresolved
-report_metric -format html -file reports/sequencer.html
-
 init_design
-############################################################################
-## Define cost groups (clock-clock, clock-output, input-clock, input-output)
-############################################################################
 
-if {[llength [all::all_seqs]] > 0} { 
-  define_cost_group -name I2C -design ${TOP}
-  define_cost_group -name C2O -design ${TOP}
-  define_cost_group -name C2C -design ${TOP}
-  
-  path_group -from [all::all_seqs] -to [all::all_seqs] -group C2C -name C2C -view tt
-  path_group -from [all::all_seqs] -to [all_outputs] -group C2O -name C2O -view tt
-  path_group -from [all_inputs]  -to [all::all_seqs] -group I2C -name I2C -view tt 
-}
-define_cost_group -name I2O -design ${TOP}
-path_group -from [all_inputs]  -to [all_outputs] -group I2O -name I2O -view tt
-foreach cg [vfind / -cost_group *] {
-  report_timing -cost_group [list $cg] >> reports/synthesis_pretim.rpt }
-
-###########################################################
-## Synthesizing 
-###########################################################
-# generic
-set_db / .syn_generic_effort high
+# Synthesis
 syn_generic
-write_hdl > outputs/synthesis_generic.v
-
-# map to gates
-set_db / .syn_map_effort high
 syn_map
-write_hdl > outputs/synthesis_map.v
-
-# flatten the design
-ungroup -all
-
-set_db / .syn_opt_effort extreme
+# ungroup -all
 syn_opt
-write_hdl > outputs/synthesis_net.v
 
-###############################################################
-## write backend file set (verilog, SDC, config, etc.)
-###############################################################
-report_dp > reports/synthesis_datapath_incr.rpt
-report_messages > reports/synthesis_messages.rpt
-write_sdc -view tt > outputs/synthesis.sdc
-write_parasitics > outputs/synthesis.spef
+# Reports
+report_area > reports/area_syn.rpt
+report_timing -max_paths 50 > reports/timing_syn.rpt
+report_power > reports/power_syn.rpt
+report_gates > reports/gates_syn.rpt
+report_dp > reports/datapath_syn.rpt
+report_qor > reports/qor_syn.rpt
+report_hierarchy > reports/hier_syn.hier
+report_metric -format html -file reports/metric_syn.html
 
-report_qor > reports/synthesis_qor.rpt
-report_area > reports/synthesis_area.rpt
-report_gate > reports/synthesis_gate.rpt
-report_module > reports/synthesis_module.rpt
-#report_clock_gating -ungated_ff > reports/synthesis_CG.rpt
-report_power > reports/synthesis_power.rpt
-report_timing > reports/synthesis_timing.rpt
-report_metric -format html -file reports/synthesis.html
-report_hierarchy > outputs/synthesis.hier
-puts "Final Runtime & Memory."
-time_info FINAL
-puts "============================"
-puts "Synthesis Finished ........."
-puts "============================"
-
-file copy -force [get_db / .stdout_log] .
+# Outputs
+write_hdl > outputs/Mul32_syn.v
+write_sdc -view tt > outputs/Mul32_syn.sdc
+write_parasitics > outputs/Mul32_syn.spef
+write_do_lec -revised_design ./outputs/Mul32_syn.v -logfile lec_genus.log > genus_mapping_hints.do
 
 quit
-

@@ -1,4 +1,4 @@
-set ASAP7 "../tkvm/asap7"
+set ASAP7 "/home/user1/Desktop/asap7"
 set TECH_LEF "${ASAP7}/asap7sc7p5t_28/techlef_misc"
 set CELL_LEF "${ASAP7}/asap7sc7p5t_28/LEF/scaled"
 
@@ -6,7 +6,7 @@ set CELL_LEF "${ASAP7}/asap7sc7p5t_28/LEF/scaled"
 set tech_lef "${TECH_LEF}/asap7_tech_4x_201209.lef"
 
 # Cell LEF
-set cell_lefs "${CELL_LEF}/asap7sc7p5t_28_L_4x_220121a.lef ${CELL_LEF}/asap7sc7p5t_28_R_4x_220121a.lef ${CELL_LEF}/asap7sc7p5t_28_SL_4x_220121a.lef ${CELL_LEF}/asap7sc7p5t_28_SRAM_4x_220121a.lef"
+set cell_lefs " ${CELL_LEF}/asap7sc7p5t_28_R_4x_220121a.lef "
 
 # Concat
 set init_lef_file [concat $tech_lef $cell_lefs]

@@ -1,0 +1,17 @@
+bank instance orient_after_refine_snap orient_final box_llx box_lly
+0 u_mem/G_SRAM_BANK[0].u_sram MX R180 133.212 9.572
+1 u_mem/G_SRAM_BANK[1].u_sram MX R180 7.204 9.596
+2 u_mem/G_SRAM_BANK[2].u_sram MX R180 252.56 9.48
+3 u_mem/G_SRAM_BANK[3].u_sram R180 R180 378.872 176.164
+4 u_mem/G_SRAM_BANK[4].u_sram MX R180 252.864 176.42
+5 u_mem/G_SRAM_BANK[5].u_sram R180 R180 126.864 176.412
+6 u_mem/G_SRAM_BANK[6].u_sram MX R180 133.424 186.988
+7 u_mem/G_SRAM_BANK[7].u_sram MX R180 7.416 187.012
+8 u_mem/G_SRAM_BANK[8].u_sram MY R180 378.872 353.572
+9 u_mem/G_SRAM_BANK[9].u_sram R0 R0 7.428 353.82
+10 u_mem/G_SRAM_BANK[10].u_sram R0 R0 378.864 530.98
+11 u_mem/G_SRAM_BANK[11].u_sram MY R180 0.0 0.0
+12 u_mem/G_SRAM_BANK[12].u_sram R0 R0 7.416 353.564
+13 u_mem/G_SRAM_BANK[13].u_sram R0 R0 133.428 353.828
+14 u_mem/G_SRAM_BANK[14].u_sram R0 R0 126.864 531.236
+15 u_mem/G_SRAM_BANK[15].u_sram MY R180 252.864 531.236

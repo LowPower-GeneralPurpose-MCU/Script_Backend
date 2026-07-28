@@ -1,5 +1,5 @@
 # Global variables
-set ASAP7 "../tkvm/asap7"
+set ASAP7 "~/Desktop/asap7"
 set LIB "${ASAP7}/asap7sc7p5t_28/LIB/CCS"
 set TOP Mul32
 set SYNFILE "Mul32.v"
