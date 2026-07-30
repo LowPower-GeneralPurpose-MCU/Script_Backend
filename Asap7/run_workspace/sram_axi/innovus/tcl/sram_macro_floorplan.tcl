@@ -211,12 +211,15 @@ for {set k 0} {$k < $SRAM_COUNT} {incr k} {
     }
 
     set x [expr {
-        $SRAM_X0 + $col * ($SRAM_W + $SRAM_MACRO_GAP_X)
+    	$SRAM_X0 + $col * ($SRAM_W + $SRAM_MACRO_GAP_X)
     }]
     set y [expr {
-        $SRAM_Y0 + $row * ($SRAM_H + $SRAM_MACRO_GAP_Y)
+    	$SRAM_Y0 + $row * ($SRAM_H + $SRAM_MACRO_GAP_Y)
     }]
-
+    set site_w [lindex [dbGet head.site.size_x] 0]
+    set site_h [lindex [dbGet head.site.size_y] 0]
+    set snap_x [expr { round($x / $site_w) * $site_w}]
+    set snap_y [expr { round($y / $site_h) * $site_h}]
     # Keep the macro movable until the concurrent run and deterministic pack
     # have completed.
     dbSet $ptr.pStatus unplaced
@@ -356,26 +359,36 @@ if {$SRAM_PACK_4X4} {
             lappend packed_names $name
 
             set x [expr {
-                $SRAM_X0 +
-                $col * ($SRAM_W + $SRAM_MACRO_GAP_X)
+            	$SRAM_X0 +
+            	$col * ($SRAM_W + $SRAM_MACRO_GAP_X)
             }]
             set y [expr {
-                $SRAM_Y0 +
-                $row * ($SRAM_H + $SRAM_MACRO_GAP_Y)
+            	$SRAM_Y0 +
+            	$row * ($SRAM_H + $SRAM_MACRO_GAP_Y)
             }]
-
-            dbSet $ptr.pStatus unplaced
-            placeInstance $name $x $y $SRAM_ISLAND_ORIENT
+            set site_w [lindex [dbGet head.site.size_x] 0]
+            set site_h [lindex [dbGet head.site.size_y] 0]
+            set snap_x [expr {round($x / $site_w) * $site_w}]
+            set snap_y [expr {round($y / $site_h) * $site_h}]
+            
+            dbSet $ptr.pStatus.unplaced
+            placeInstance $name $snap_x $snap_y $SRAM_ISLAND_ORIENT
             dbSet $ptr.pStatus placed
-
+            
+            #Not placement in SRAM
+            set urx [expr {$snap_x + $SRAM_W}]
+            set ury [expr {$snap_y + $SRAM_H}]
+            createRouteBlk -box $snap_x $snap_y $urx $ury \
+            		   -layer {1 2 3}\
+            		   -name ${name}_routeBlk \
+            		   -pgnetOnly false
             if {[dbGet $ptr.orient] ne $SRAM_ISLAND_ORIENT} {
-                close $packed_map
-                error "$name was not placed with orientation $SRAM_ISLAND_ORIENT"
+            	close $packed_map
+            	error "$name was not placed with orientation $SRAM_ISLAND_ORIENT"
             }
-
             puts $packed_map \
-                "$bank $name $row $col $x $y $SRAM_ISLAND_ORIENT"
-            incr packed_count
+            	"$bank $name $row $col $snap_x $snap_y $SRAM_ISLAND_ORIENT"
+            puts packed_count
         }
     }
     close $packed_map

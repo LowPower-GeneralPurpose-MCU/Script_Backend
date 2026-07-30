@@ -1,49 +1,11 @@
 catch { setDesignMode -process 7 }
 catch { setAnalysisMode -analysisType single }
-catch { setOptMode -opt_drv_margin 0 }
-catch { setOptMode -opt_setup_target_slack 0 }
 catch { setExtractRCMode  -engine preRoute -total_c_th 0 -relative_c_th 1 -coupling_c_th 0.1 }
-catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
-
-catch { setPlaceMode -eTimer false }
-catch { setPlaceMode -eTimerIteration 0 }
-catch { setPlaceMode -eTimerLightMemoryFlow false }
-catch { setPlaceMode -eTimerMovingAvg 10 }
-catch { setPlaceMode -eTimerSensitivityMul 0.5 }
-catch { setPlaceMode -exp_slack_driven false }
-catch { setPlaceMode -expSKPDC false }
-catch { setPlaceMode -IOSlackAdjust true }
 catch { setPlaceMode -macroPlaceMode 0 }
-catch { setPlaceMode -place_global_exp_tns_mode_v2 false }
-catch { setPlaceMode -tdgp_use_db_location false }
-catch { setPlaceMode -tdgpCombineRF true }
-catch { setPlaceMode -tdgpEnablePinCap 0 }
-catch { setPlaceMode -tdgpInitIgnoreNetLoad true }
-catch { setPlaceMode -tdgpMaxFanoutThreshold 10 }
-catch { setPlaceMode -tdgpMaxNonBufferedNetLength 0 }
-catch { setPlaceMode -tdgpNetArcDelayScheme 0 }
-catch { setPlaceMode -tdgpNetArcDelaySchemePValue 0 }
-catch { setPlaceMode -tdgpOptDC true }
-catch { setPlaceMode -tdgpRealMax false }
-catch { setPlaceMode -tdgpSoftMaxThreshold 40 }
-catch { setPlaceMode -tdgpSoftMaxThreshold2 20 }
-catch { setPlaceMode -tdgpSoftMaxThreshold3 2 }
-catch { setPlaceMode -tdgpUseNetArcLengthAdjustmentOptLenFract 1 }
-catch { setPlaceMode -tdgpUseOptLengthMultiple 4 }
-catch { setPlaceMode -tdgpWLRealMax false }
-catch { setPlaceMode -wlBasedETimer true }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
-catch { setDelayCalMode -enable_hier_save_restore_flow false }
-catch { setDelayCalMode -enable_high_fanout true }
-catch { setDelayCalMode -enable_ideal_seq_async_pins false }
 catch { setDelayCalMode -engine aae }
-catch { setDelayCalMode -ignoreNetLoad true }
-catch { setDelayCalMode -socv_accuracy_mode low }
 catch { setImportMode -discardFloatingVNets false }
 catch { setImportMode -keepEmptyModule true }
-catch { set_proto_design_mode -congestion_aware true }
-catch { set_proto_design_mode -timing_aware true }
-catch { setSIMode -separate_delta_delay_on_data true }
 catch { setFPlanMode -cellsForExtraSites {} }
 catch { setFPlanMode -defaultRowPatternSite {} }
 catch { setFPlanMode -defaultTechSite asap7sc7p5t }

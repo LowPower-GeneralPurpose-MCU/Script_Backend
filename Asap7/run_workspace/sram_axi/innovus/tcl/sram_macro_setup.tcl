@@ -64,10 +64,10 @@ set SRAM_EDGE_GAP_Y 0.000
 
 # Individual two-row halos exactly meet inside every four-row inter-macro gap.
 # The group hard blockage additionally covers all macro bodies and all gaps.
-set SRAM_HALO_L $SRAM_BLOCKAGE_BORDER
-set SRAM_HALO_B $SRAM_BLOCKAGE_BORDER
-set SRAM_HALO_R $SRAM_BLOCKAGE_BORDER
-set SRAM_HALO_T $SRAM_BLOCKAGE_BORDER
+set SRAM_HALO_L 2*$SRAM_BLOCKAGE_BORDER
+set SRAM_HALO_B 2*$SRAM_BLOCKAGE_BORDER
+set SRAM_HALO_R 2*$SRAM_BLOCKAGE_BORDER
+set SRAM_HALO_T 2*$SRAM_BLOCKAGE_BORDER
 
 # The top/right edges of the rectangular group blockage are also two rows from
 # the physical SRAM bbox.
