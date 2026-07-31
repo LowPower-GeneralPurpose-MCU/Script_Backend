@@ -39,8 +39,18 @@ set FLOORPLAN_GRID 0.384
 # the old database-derived two-row halo was 2.160 um.
 set ASAP7_ROW_HEIGHT             1.080
 set SRAM_MACRO_GAP_ROWS          4
-set SRAM_BLOCKAGE_BORDER_ROWS    4
+set SRAM_BLOCKAGE_BORDER_ROWS    2
 
+set SRAM_MACRO_GAP_X 15.0
+set SRAM_MACRO_GAP_Y 15.0
+set SRAM_BLOCKAGE_BORDER [expr {
+    $SRAM_BLOCKAGE_BORDER_ROWS * $ASAP7_ROW_HEIGHT
+}]
+
+# The die-to-core margin is also two rows.  With the SRAM array placed directly
+# on the lower-left core boundary, the outer hard blockage can extend to the
+# die boundary while retaining exactly two rows around the physical SRAM bbox.
+set margin_dist $SRAM_BLOCKAGE_BORDER
 
 # Place the rectangular island directly against the lower-left core boundary.
 # The two-row protection area is supplied by the die-to-core margin and the
@@ -50,7 +60,7 @@ set SRAM_EDGE_GAP_Y 15.0
 
 # Individual two-row halos exactly meet inside every four-row inter-macro gap.
 # The group hard blockage additionally covers all macro bodies and all gaps.
-set SRAM_HALO_L 4.32  #(2 row standard cell)
+set SRAM_HALO_L 4.32
 set SRAM_HALO_B 4.32
 set SRAM_HALO_R 4.32
 set SRAM_HALO_T 4.32
@@ -60,6 +70,15 @@ set SRAM_HALO_T 4.32
 set SRAM_ISLAND_ESCAPE_TOP   20.0
 set SRAM_ISLAND_ESCAPE_RIGHT 20.0
 
+# Standard-cell/controller area retained to the right and above island.
+# With the current macro size this gives a core close to the reference
+# corner-island floorplan aspect ratio.
+set LOGIC_REGION_WIDTH  600.000
+set LOGIC_REGION_HEIGHT 260.000
+
+# The generated SRAM has the main signal pins near its local BOTTOM edge.
+# R180 moves those pins to physical TOP, generally toward the core area.
+# Only R0/R180 are legal; no R90/R270 is used.
 set SRAM_ISLAND_ORIENT "R0"
 
 # Always convert the raw concurrent-macro result into a complete deterministic
