@@ -1,0 +1,640 @@
+[07/31 13:21:32      0s] 
+[07/31 13:21:32      0s] Cadence Innovus(TM) Implementation System.
+[07/31 13:21:32      0s] Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+[07/31 13:21:32      0s] 
+[07/31 13:21:32      0s] Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
+[07/31 13:21:32      0s] Options:	
+[07/31 13:21:32      0s] Date:		Fri Jul 31 13:21:32 2026
+[07/31 13:21:32      0s] Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
+[07/31 13:21:32      0s] OS:		Ubuntu 26.04 LTS
+[07/31 13:21:32      0s] 
+[07/31 13:21:32      0s] License:
+[07/31 13:21:36      0s] 		[13:21:36.206210] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+[07/31 13:21:37      0s] 		invs	Innovus Implementation System	23.1	checkout succeeded
+[07/31 13:21:37      0s] 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
+[07/31 13:21:46      9s] Memory management switch to non-aggressive memory release mode.
+[07/31 13:21:46      9s] 
+[07/31 13:21:46      9s] OS Mmap count monitoring thread starts. Limit of OS Mmap count is 1048576
+[07/31 13:21:46      9s] 
+[07/31 13:21:47     10s] Reset Parastics called with the command setExtractRCMode -reset@(#)CDS: Innovus v23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+[07/31 13:21:49     12s] @(#)CDS: NanoRoute 23.14-s088_1 NR250219-0822/23_14-UB (database version 18.20.661) {superthreading v2.20}
+[07/31 13:21:49     12s] @(#)CDS: AAE 23.14-s018 (64bit) 02/28/2025 (Linux 3.10.0-693.el7.x86_64)
+[07/31 13:21:49     12s] @(#)CDS: CTE 23.14-s036_1 () Feb 22 2025 01:17:26 ( )
+[07/31 13:21:49     12s] @(#)CDS: SYNTECH 23.14-s010_1 () Feb 19 2025 23:56:49 ( )
+[07/31 13:21:49     12s] @(#)CDS: CPE v23.14-s082
+[07/31 13:21:49     12s] @(#)CDS: IQuantus/TQuantus 23.1.1-s336 (64bit) Mon Jan 20 22:11:00 PST 2025 (Linux 3.10.0-693.el7.x86_64)
+[07/31 13:21:49     12s] @(#)CDS: OA 22.61-p020 Fri Nov  1 12:14:48 2024
+[07/31 13:21:49     12s] @(#)CDS: SGN 23.10-d005 (03-Oct-2023) (64 bit executable, TkQt5.15.9)
+[07/31 13:21:49     12s] @(#)CDS: RCDB 11.15.0
+[07/31 13:21:49     12s] @(#)CDS: STYLUS 23.16-e002_1 (01/09/2025 16:47 PST)
+[07/31 13:21:49     12s] @(#)CDS: IntegrityPlanner-23.14-17034 (23.14) (2025-02-20 15:50:05+0800)
+[07/31 13:21:49     12s] @(#)CDS: SYNTHESIS_ENGINE 23.14-s090
+[07/31 13:21:49     12s] Create and set the environment variable TMPDIR to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/innovus_temp_108910_91f848e2-c24c-45c4-b6cd-ee94dd9d04c7_user1-EliteMini_user1_ifuUXy.
+
+[07/31 13:21:49     12s] Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
+[07/31 13:21:50     13s] Info: Process UID = 108910 / 91f848e2-c24c-45c4-b6cd-ee94dd9d04c7 / YkqVwWuZQd
+[07/31 13:21:50     13s] 
+[07/31 13:21:50     13s] **INFO:  MMMC transition support version v31-84 
+[07/31 13:21:50     13s] 
+[07/31 13:21:50     13s] <CMD> set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+[07/31 13:21:50     13s] <CMD> suppressMessage ENCEXT-2799
+[07/31 13:21:50     13s] <CMD> getVersion
+[07/31 13:21:50     13s] <CMD> getVersion
+[07/31 13:21:50     13s] <CMD> getVersion
+[07/31 13:21:50     13s] [INFO] Loading PVS 21.12 fill procedures
+[07/31 13:21:50     13s] <CMD> win
+[07/31 13:22:13     14s] <CMD> set auto_file_dir /tmp/user1/innovus_master
+[07/31 13:22:13     14s] <CMD> set init_design_uniquify 1
+[07/31 13:22:13     14s] <CMD> set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef}
+[07/31 13:22:13     14s] <CMD> set ::TimeLib::tsgMarkCellLatchConstructFlag 1
+[07/31 13:22:13     14s] <CMD> set conf_qxconf_file NULL
+[07/31 13:22:13     14s] <CMD> set conf_qxlib_file NULL
+[07/31 13:22:13     14s] <CMD> set defHierChar /
+[07/31 13:22:13     14s] <CMD> set distributed_client_message_echo 1
+[07/31 13:22:13     14s] <CMD> set distributed_mmmc_disable_reports_auto_redirection 0
+[07/31 13:22:13     14s] <CMD> set init_abstract_view abstract
+[07/31 13:22:13     14s] <CMD> set init_layout_view layout
+[07/31 13:22:13     14s] <CMD> set init_design_settop 1
+[07/31 13:22:13     14s] <CMD> set init_top_cell axi_ram
+[07/31 13:22:13     14s] <CMD> set init_gnd_net VSS
+[07/31 13:22:13     14s] <CMD> set init_pwr_net VDD
+[07/31 13:22:13     14s] <CMD> set init_mmmc_file ./tcl/viewDefinition.tcl
+[07/31 13:22:13     14s] <CMD> set init_verilog ./outputs/axi_ram_syn.v
+[07/31 13:22:13     14s] <CMD> get_message -id GLOBAL-100 -suppress
+[07/31 13:22:13     14s] <CMD> get_message -id GLOBAL-100 -suppress
+[07/31 13:22:13     14s] <CMD> set latch_time_borrow_mode max_borrow
+[07/31 13:22:13     14s] <CMD> set pegDefaultResScaleFactor 1
+[07/31 13:22:13     14s] <CMD> set pegDetailResScaleFactor 1
+[07/31 13:22:13     14s] <CMD> get_message -id GLOBAL-100 -suppress
+[07/31 13:22:13     14s] <CMD> get_message -id GLOBAL-100 -suppress
+[07/31 13:22:13     14s] <CMD> set report_inactive_arcs_format {from to when arc_type sense reason}
+[07/31 13:22:13     14s] <CMD> set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
+[07/31 13:22:13     14s] Set ASAP7_GDS_MAP_FILE before running the full one-shot flow
+[07/31 13:22:13     14s] <CMD> init_design
+[07/31 13:22:13     14s] #% Begin Load MMMC data ... (date=07/31 13:22:13, mem=1847.7M)
+[07/31 13:22:13     14s] #% End Load MMMC data ... (date=07/31 13:22:13, total cpu=0:00:00.1, real=0:00:00.0, peak res=1849.3M, current mem=1849.3M)
+[07/31 13:22:13     14s] 
+[07/31 13:22:13     14s] Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef ...
+[07/31 13:22:13     14s] 
+[07/31 13:22:13     14s] Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef ...
+[07/31 13:22:13     14s] Set DBUPerIGU to M1 pitch 576.
+[07/31 13:22:13     14s] 
+[07/31 13:22:13     14s] Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef ...
+[07/31 13:22:13     14s] 
+[07/31 13:22:13     14s] Loading LEF file /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef ...
+[07/31 13:22:13     14s] 
+##  Check design process and node:  
+##  Both design process and tech node are not set.
+
+[07/31 13:22:13     14s] Loading view definition file from ./tcl/viewDefinition.tcl
+[07/31 13:22:13     14s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib' ...
+[07/31 13:22:13     14s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 46726)
+[07/31 13:22:13     14s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 75682)
+[07/31 13:22:13     14s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120' 
+[07/31 13:22:13     14s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib' ...
+[07/31 13:22:13     14s] Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_TT_ccs_211120' 
+[07/31 13:22:13     14s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib' ...
+[07/31 13:22:17     18s] Read 42 cells in library 'asap7sc7p5t_AO_RVT_TT_ccs_211120' 
+[07/31 13:22:17     18s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib' ...
+[07/31 13:22:19     20s] Read 34 cells in library 'asap7sc7p5t_OA_RVT_TT_ccs_211120' 
+[07/31 13:22:19     20s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib' ...
+[07/31 13:22:20     21s] Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_TT_ccs_220123' 
+[07/31 13:22:20     21s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib' ...
+[07/31 13:22:20     21s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 46726)
+[07/31 13:22:20     21s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 75682)
+[07/31 13:22:20     21s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120' 
+[07/31 13:22:20     21s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib' ...
+[07/31 13:22:20     21s] Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_TT_ccs_211120' 
+[07/31 13:22:20     21s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib' ...
+[07/31 13:22:23     24s] Read 42 cells in library 'asap7sc7p5t_AO_LVT_TT_ccs_211120' 
+[07/31 13:22:23     24s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib' ...
+[07/31 13:22:26     27s] Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120' 
+[07/31 13:22:26     27s] Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
+[07/31 13:22:26     27s] Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
+[07/31 13:22:26     27s] Reading libset timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib' ...
+[07/31 13:22:26     27s] Read 1 cells in library 'srambank_256x4x32_6t122' 
+[07/31 13:22:26     27s] Ending "PreSetAnalysisView" (total cpu=0:00:13.4, real=0:00:13.0, peak res=2291.1M, current mem=1875.5M)
+[07/31 13:22:26     27s] *** End library_loading (cpu=0.22min, real=0.22min, mem=429.0M, fe_cpu=0.46min, fe_real=0.90min, fe_mem=2254.4M) ***
+[07/31 13:22:26     27s] #% Begin Load netlist data ... (date=07/31 13:22:26, mem=1874.5M)
+[07/31 13:22:26     27s] *** Begin netlist parsing (mem=2254.4M) ***
+[07/31 13:22:26     27s] Created 405 new cells from 11 timing libraries.
+[07/31 13:22:26     27s] Reading netlist ...
+[07/31 13:22:26     27s] Backslashed names will retain backslash and a trailing blank character.
+[07/31 13:22:26     27s] Reading verilog netlist './outputs/axi_ram_syn.v'
+[07/31 13:22:26     27s] 
+[07/31 13:22:26     27s] *** Memory Usage v#2 (Current mem = 2254.383M, initial mem = 839.699M) ***
+[07/31 13:22:26     27s] *** End netlist parsing (cpu=0:00:00.0, real=0:00:00.0, mem=2254.4M) ***
+[07/31 13:22:26     27s] #% End Load netlist data ... (date=07/31 13:22:26, total cpu=0:00:00.1, real=0:00:00.0, peak res=1921.7M, current mem=1921.7M)
+[07/31 13:22:26     27s] Set top cell to axi_ram.
+[07/31 13:22:26     28s] Hooked 405 DB cells to tlib cells.
+[07/31 13:22:26     28s] Ending "BindLib:" (total cpu=0:00:00.1, real=0:00:00.0, peak res=1956.5M, current mem=1956.5M)
+[07/31 13:22:26     28s] Starting recursive module instantiation check.
+[07/31 13:22:26     28s] No recursion found.
+[07/31 13:22:26     28s] Building hierarchical netlist for Cell axi_ram ...
+[07/31 13:22:26     28s] ***** UseNewTieNetMode *****.
+[07/31 13:22:26     28s] *** Netlist is unique.
+[07/31 13:22:26     28s] Set DBUPerIGU to techSite asap7sc7p5t width 864.
+[07/31 13:22:26     28s] Setting Std. cell height to 4320 DBU (smallest netlist inst).
+[07/31 13:22:26     28s] ** info: there are 427 modules.
+[07/31 13:22:26     28s] ** info: there are 1240 stdCell insts.
+[07/31 13:22:26     28s] ** info: there are 1240 stdCell insts with at least one signal pin.
+[07/31 13:22:26     28s] ** info: there are 16 macros.
+[07/31 13:22:26     28s] 
+[07/31 13:22:26     28s] *** Memory Usage v#2 (Current mem = 2278.395M, initial mem = 839.699M) ***
+[07/31 13:22:26     28s] **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
+[07/31 13:22:26     28s] Type 'man IMPTS-16' for more detail.
+[07/31 13:22:26     28s] **WARN: (IMPTS-17):	Inconsistency detected in the capacitance units specified among the timing libraries being used. Default system capacitance unit of 1pF will be used. Use the 'setLibraryUnit' command to set a specific capacitance unit.
+[07/31 13:22:26     28s] Type 'man IMPTS-17' for more detail.
+[07/31 13:22:26     28s] **WARN: (EMS-27):	Message (IMPTS-16) has exceeded the current message display limit of 1.
+[07/31 13:22:26     28s] To increase the message display limit, refer to the product command reference manual.
+[07/31 13:22:26     28s] Start create_tracks
+[07/31 13:22:26     28s] **WARN: (EMS-27):	Message (IMPTS-17) has exceeded the current message display limit of 1.
+[07/31 13:22:26     28s] To increase the message display limit, refer to the product command reference manual.
+[07/31 13:22:27     28s] Extraction setup Started for TopCell axi_ram 
+[07/31 13:22:27     28s] Initializing multi-corner RC extraction with 1 active RC Corners ...
+[07/31 13:22:27     28s] Captable file(s) not specified in multi-corner setup. PreRoute extraction will use technology file. For postRoute extraction, default value for effort level would be 'medium' and effort level 'low' would not be allowed.
+[07/31 13:22:27     28s] eee: __QRC_SADV_USE_LE__ is set 0
+[07/31 13:22:27     28s] Generating auto layer map file.
+[07/31 13:22:27     28s] eee:  LayerId	    Name	QrcTechId	QrcTechName	Type
+[07/31 13:22:27     28s] eee:        1	      M1	        2	       lisd	Metal          
+[07/31 13:22:27     28s] eee:       34	      V1	        3	         v0	Via            
+[07/31 13:22:27     28s] eee:        2	      M2	        4	         m1	Metal          
+[07/31 13:22:27     28s] eee:       35	      V2	        5	         v1	Via            
+[07/31 13:22:27     28s] eee:        3	      M3	        6	         m2	Metal          
+[07/31 13:22:27     28s] eee:       36	      V3	        7	         v2	Via            
+[07/31 13:22:27     28s] eee:        4	      M4	        8	         m3	Metal          
+[07/31 13:22:27     28s] eee:       37	      V4	        9	         v3	Via            
+[07/31 13:22:27     28s] eee:        5	      M5	       10	         m4	Metal          
+[07/31 13:22:27     28s] eee:       38	      V5	       11	         v4	Via            
+[07/31 13:22:27     28s] eee:        6	      M6	       12	         m5	Metal          
+[07/31 13:22:27     28s] eee:       39	      V6	       13	         v5	Via            
+[07/31 13:22:27     28s] eee:        7	      M7	       14	         m6	Metal          
+[07/31 13:22:27     28s] eee:       40	      V7	       15	         v6	Via            
+[07/31 13:22:27     28s] eee:        8	      M8	       16	         m7	Metal          
+[07/31 13:22:27     28s] eee:       41	      V8	       17	         v7	Via            
+[07/31 13:22:27     28s] eee:        9	      M9	       18	         m8	Metal          
+[07/31 13:22:27     28s] eee:       42	      V9	       19	         v8	Via            
+[07/31 13:22:27     28s] eee:       10	     Pad	       20	         m9	Metal          
+[07/31 13:22:27     28s] eee: TechFile: /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
+[07/31 13:22:27     28s] eee: HoWee  : 0 0 0 0 0 0 0 0 0 0 
+[07/31 13:22:27     28s] eee: Erosn  : 0 0 0 0 0 0 0 0 0 0 
+[07/31 13:22:27     28s] eee: nrColor: 0 0 0 0 0 0 0 0 0 0 
+[07/31 13:22:27     28s] eee: Save / Restore of RC patterns enabled 
+[07/31 13:22:27     28s] eee: Pattern meta data file doesn't exist
+[07/31 13:22:27     28s] eee: Pattern data restore failed for 1 tech files
+[07/31 13:22:27     28s] eee: Pattern extraction started for 1 tech files
+[07/31 13:22:27     28s] Importing multi-corner technology file(s) for preRoute extraction...
+[07/31 13:22:27      0s] /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
+[07/31 13:22:27      0s] Generating auto layer map file.
+[07/31 13:22:27      0s] eee:  LayerId	    Name	QrcTechId	QrcTechName	Type
+[07/31 13:22:27      0s] eee:        1	      M1	        2	       lisd	Metal          
+[07/31 13:22:27      0s] eee:       34	      V1	        3	         v0	Via            
+[07/31 13:22:27      0s] eee:        2	      M2	        4	         m1	Metal          
+[07/31 13:22:27      0s] eee:       35	      V2	        5	         v1	Via            
+[07/31 13:22:27      0s] eee:        3	      M3	        6	         m2	Metal          
+[07/31 13:22:27      0s] eee:       36	      V3	        7	         v2	Via            
+[07/31 13:22:27      0s] eee:        4	      M4	        8	         m3	Metal          
+[07/31 13:22:27      0s] eee:       37	      V4	        9	         v3	Via            
+[07/31 13:22:27      0s] eee:        5	      M5	       10	         m4	Metal          
+[07/31 13:22:27      0s] eee:       38	      V5	       11	         v4	Via            
+[07/31 13:22:27      0s] eee:        6	      M6	       12	         m5	Metal          
+[07/31 13:22:27      0s] eee:       39	      V6	       13	         v5	Via            
+[07/31 13:22:27      0s] eee:        7	      M7	       14	         m6	Metal          
+[07/31 13:22:27      0s] eee:       40	      V7	       15	         v6	Via            
+[07/31 13:22:27      0s] eee:        8	      M8	       16	         m7	Metal          
+[07/31 13:22:27      0s] eee:       41	      V8	       17	         v7	Via            
+[07/31 13:22:27      0s] eee:        9	      M9	       18	         m8	Metal          
+[07/31 13:22:27      0s] eee:       42	      V9	       19	         v8	Via            
+[07/31 13:22:27      0s] eee:       10	     Pad	       20	         m9	Metal          
+[07/31 13:22:27      0s] eee: Total Patterns: 3565 xTiles: 60 yTiles: 61 25micronYTiles: 0(0x3)
+[07/31 13:22:27      0s] eee: MaxTileSize:92 design urx:5563 ury:5655
+[07/31 13:22:28      0s] eee: ViaCellPattern Id: 3564 ts: 927200 yTile:59 
+
+[07/31 13:22:28     29s] eee: Pattern extraction completed
+[07/31 13:22:28     29s] Completed (cpu: 0:00:01.4 real: 0:00:01.0)
+[07/31 13:22:28     29s] Set Shrink Factor to 1.00000
+[07/31 13:22:28     29s] Summary of Active RC-Corners : 
+[07/31 13:22:28     29s]  
+[07/31 13:22:28     29s]  Analysis View: tt
+[07/31 13:22:28     29s]     RC-Corner Name        : rccorner
+[07/31 13:22:28     29s]     RC-Corner Index       : 0
+[07/31 13:22:28     29s]     RC-Corner Temperature : 25 Celsius
+[07/31 13:22:28     29s]     RC-Corner Cap Table   : ''
+[07/31 13:22:28     29s]     RC-Corner PreRoute Res Factor         : 1
+[07/31 13:22:28     29s]     RC-Corner PreRoute Cap Factor         : 1
+[07/31 13:22:28     29s]     RC-Corner PostRoute Res Factor        : 1 {1 1 1}
+[07/31 13:22:28     29s]     RC-Corner PostRoute Cap Factor        : 1 {1 1 1}
+[07/31 13:22:28     29s]     RC-Corner PostRoute XCap Factor       : 1 {1 1 1}
+[07/31 13:22:28     29s]     RC-Corner PreRoute Clock Res Factor   : 1	[Derived from postRoute_res (effortLevel low)]
+[07/31 13:22:28     29s]     RC-Corner PreRoute Clock Cap Factor   : 1	[Derived from postRoute_cap (effortLevel low)]
+[07/31 13:22:28     29s]     RC-Corner PostRoute Clock Cap Factor  : 1 {1 1 1} 	[Derived from postRoute_cap (effortLevel low)]
+[07/31 13:22:28     29s]     RC-Corner PostRoute Clock Res Factor  : 1 {1 1 1} 	[Derived from postRoute_res (effortLevel low)]
+[07/31 13:22:28     29s]     RC-Corner PostRoute Clock coupling capacitance Factor : 1 {1 1 1} 
+[07/31 13:22:28     29s]     RC-Corner Technology file: '/home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06'
+[07/31 13:22:28     29s] eee: RC Grid memory allocated = 522720 (66 X 66 X 10 X 12b)
+[07/31 13:22:28     29s] Updating RC Grid density data for preRoute extraction ...
+[07/31 13:22:28     29s] eee: pegSigSF=1.070000
+[07/31 13:22:28     29s] Initializing multi-corner resistance tables ...
+[07/31 13:22:28     29s] eee: Grid unit RC data computation started
+[07/31 13:22:28     29s] eee: Grid unit RC data computation completed
+[07/31 13:22:28     29s] eee: l=1 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] eee: l=2 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] eee: l=3 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] eee: l=4 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] eee: l=5 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] eee: l=6 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] eee: l=7 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] eee: l=8 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] eee: l=9 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] eee: l=10 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[07/31 13:22:28     29s] {RT rccorner 0 2 10  {4 1} {6 0} {8 0} {9 0} 4}
+[07/31 13:22:28     29s] eee: LAM-FP: thresh=1 ; dimX=4825.583333 ; dimY=4822.500000 ; multX=1.000000 ; multY=1.000000 ; minP=576 ; fpMult=1.000000 ;
+[07/31 13:22:28     29s] eee: LAM: n=40 LLS=2-3 HLS=3-5 rDens=0.000000 uaWl=0.000000 uaWlH=0.000000 aWlH=0.000000 lMod=0 pMax=0.850000 pMod=82 pModAss=50 wcR=0.616100 crit=0.000000 siPrev=0 newSi=0.000000 wHLS=1.540300 viaL=0.000000 shortMod=0.000000 fModUnas=0.000000 fModAs=0.000000 pDens=0.500000 
+[07/31 13:22:28     29s] eee: NetCapCache creation started. (Current Mem: 2270.395M) 
+[07/31 13:22:28     29s] eee: NetCapCache completed. (CPU Time: 0:00:00.0  Real Time: 0:00:00.0  Curr Mem: 2270.395M) 
+[07/31 13:22:28     29s] eee: dbu = 4000, Design = [ll(0.000000, 0.000000) ur(694.884000, 694.440000)], Layers = [f(10) b(0)], Grid size = 10.800000 um, Grid Dim = (65 X 65)
+[07/31 13:22:28     29s] eee: Metal Layers Info:
+[07/31 13:22:28     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[07/31 13:22:28     29s] eee: |   Layer  |  Id |    W    |    S    |    P    |   uC   |   uR   | D | T | wS |
+[07/31 13:22:28     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[07/31 13:22:28     29s] eee: |       M1 |   1 |   0.072 |   0.072 |   0.144 |  0.039 |  13.89 | V | 0 |  1 |
+[07/31 13:22:28     29s] eee: |       M2 |   2 |   0.072 |   0.072 |   0.144 |  0.049 |  16.96 | H | 0 |  1 |
+[07/31 13:22:28     29s] eee: |       M3 |   3 |   0.072 |   0.072 |   0.144 |  0.047 |  16.96 | V | 0 |  1 |
+[07/31 13:22:28     29s] eee: |       M4 |   4 |   0.096 |   0.096 |   0.192 |  0.042 |  11.74 | H | 0 |  1 |
+[07/31 13:22:28     29s] eee: |       M5 |   5 |   0.096 |   0.096 |   0.216 |  0.043 |  10.27 | V | 0 |  1 |
+[07/31 13:22:28     29s] eee: |       M6 |   6 |   0.128 |   0.128 |   0.288 |  0.038 |   7.26 | H | 0 |  1 |
+[07/31 13:22:28     29s] eee: |       M7 |   7 |   0.128 |   0.128 |   0.288 |  0.045 |   6.77 | V | 0 |  1 |
+[07/31 13:22:28     29s] eee: |       M8 |   8 |   0.160 |   0.160 |   0.384 |  0.038 |   5.20 | H | 0 |  1 |
+[07/31 13:22:28     29s] eee: |       M9 |   9 |   0.160 |   0.160 |   0.360 |  0.044 |   4.83 | V | 0 |  1 |
+[07/31 13:22:28     29s] eee: |      Pad |  10 |   0.160 |   8.000 |   8.280 |  0.021 |   4.83 | H | 0 |  1 |
+[07/31 13:22:28     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[07/31 13:22:28     29s] eee: uC/uR for corner rccorner, min-width/min-spacing, 30 perc over/under densities.
+[07/31 13:22:28     29s] eee: +-----------------------NDR Info-----------------------+
+[07/31 13:22:28     29s] eee: NDR Count = 0, Fake NDR = 0
+[07/31 13:22:28     29s] Default value for postRoute extraction mode's effortLevel (-effortLevel option of setExtractRCMode) changed to 'medium'.
+[07/31 13:22:28     29s] *Info: initialize multi-corner CTS.
+[07/31 13:22:29     29s] Ending "SetAnalysisView" (total cpu=0:00:00.1, real=0:00:01.0, peak res=1992.0M, current mem=1992.0M)
+[07/31 13:22:29     30s] Reading timing constraints file './outputs/axi_ram_syn.sdc' ...
+[07/31 13:22:29     30s] Current (total cpu=0:00:30.3, real=0:00:57.0, peak res=2379.2M, current mem=2379.2M)
+[07/31 13:22:29     30s] **WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ./outputs/axi_ram_syn.sdc, Line 9).
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] **WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ./outputs/axi_ram_syn.sdc, Line 10).
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] INFO (CTE): Reading of timing constraints file ./outputs/axi_ram_syn.sdc completed, with 2 WARNING
+[07/31 13:22:29     30s] Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2393.9M, current mem=2393.9M)
+[07/31 13:22:29     30s] Current (total cpu=0:00:30.4, real=0:00:57.0, peak res=2393.9M, current mem=2393.9M)
+[07/31 13:22:29     30s] **WARN: (TA-976):	Path groups asserted by the group_path/set_path_adjust_group constraint are considered by the software to be global in nature - they cannot be restricted to specific constraint modes. Due to this restriction, the group_path/set_path_adjust_group constraint is not supported directly in the constraint files which are configured in mode-specific commands such as create_constraint_mode. The current group_path/set_path_adjust_group entry will be ignored. You can enter the group_path/set_path_adjust_group constraint interactively or as part of a general command script -  where it will be interpreted as global and will be in effect for all modes.
+[07/31 13:22:29     30s] Tech dependent Parameter, Build TLibAnalyzer for: cellAreaConsiderPadding
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) Begin ...
+[07/31 13:22:29     30s] Summary for sequential cells identification: 
+[07/31 13:22:29     30s]   Identified SBFF number: 34
+[07/31 13:22:29     30s]   Identified MBFF number: 0
+[07/31 13:22:29     30s]   Identified SB Latch number: 12
+[07/31 13:22:29     30s]   Identified MB Latch number: 0
+[07/31 13:22:29     30s]   Not identified SBFF number: 0
+[07/31 13:22:29     30s]   Not identified MBFF number: 0
+[07/31 13:22:29     30s]   Not identified SB Latch number: 0
+[07/31 13:22:29     30s]   Not identified MB Latch number: 0
+[07/31 13:22:29     30s]   Number of sequential cells which are not FFs: 20
+[07/31 13:22:29     30s] Total number of combinational cells: 338
+[07/31 13:22:29     30s] Total number of sequential cells: 66
+[07/31 13:22:29     30s] Total number of tristate cells: 0
+[07/31 13:22:29     30s] Total number of level shifter cells: 0
+[07/31 13:22:29     30s] Total number of power gating cells: 0
+[07/31 13:22:29     30s] Total number of isolation cells: 0
+[07/31 13:22:29     30s] Total number of power switch cells: 0
+[07/31 13:22:29     30s] Total number of pulse generator cells: 0
+[07/31 13:22:29     30s] Total number of always on buffers: 0
+[07/31 13:22:29     30s] Total number of retention cells: 0
+[07/31 13:22:29     30s] Total number of physical cells: 0
+[07/31 13:22:29     30s] List of usable buffers: BUFx10_ASAP7_75t_L BUFx12_ASAP7_75t_L BUFx12f_ASAP7_75t_L BUFx16f_ASAP7_75t_L BUFx24_ASAP7_75t_L BUFx2_ASAP7_75t_L BUFx3_ASAP7_75t_L BUFx4_ASAP7_75t_L BUFx5_ASAP7_75t_L BUFx4f_ASAP7_75t_L BUFx6f_ASAP7_75t_L BUFx8_ASAP7_75t_L HB1xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx24_ASAP7_75t_R BUFx2_ASAP7_75t_R BUFx3_ASAP7_75t_R BUFx4_ASAP7_75t_R BUFx5_ASAP7_75t_R BUFx4f_ASAP7_75t_R BUFx6f_ASAP7_75t_R BUFx8_ASAP7_75t_R HB1xp67_ASAP7_75t_R
+[07/31 13:22:29     30s] Total number of usable buffers: 27
+[07/31 13:22:29     30s] List of unusable buffers:
+[07/31 13:22:29     30s] Total number of unusable buffers: 0
+[07/31 13:22:29     30s] List of usable inverters: CKINVDCx10_ASAP7_75t_L CKINVDCx12_ASAP7_75t_L CKINVDCx11_ASAP7_75t_L CKINVDCx14_ASAP7_75t_L CKINVDCx16_ASAP7_75t_L CKINVDCx20_ASAP7_75t_L CKINVDCx8_ASAP7_75t_L CKINVDCx5p33_ASAP7_75t_L CKINVDCx6p67_ASAP7_75t_L CKINVDCx9p33_ASAP7_75t_L INVx11_ASAP7_75t_L INVx13_ASAP7_75t_L INVx1_ASAP7_75t_L INVx2_ASAP7_75t_L INVx3_ASAP7_75t_L INVx4_ASAP7_75t_L INVx5_ASAP7_75t_L INVx6_ASAP7_75t_L INVx8_ASAP7_75t_L INVxp67_ASAP7_75t_L INVxp33_ASAP7_75t_L CKINVDCx10_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx11_ASAP7_75t_R CKINVDCx14_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx20_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R CKINVDCx5p33_ASAP7_75t_R CKINVDCx6p67_ASAP7_75t_R CKINVDCx9p33_ASAP7_75t_R INVx11_ASAP7_75t_R INVx13_ASAP7_75t_R INVx1_ASAP7_75t_R INVx2_ASAP7_75t_R INVx3_ASAP7_75t_R INVx4_ASAP7_75t_R INVx5_ASAP7_75t_R INVx6_ASAP7_75t_R INVx8_ASAP7_75t_R INVxp67_ASAP7_75t_R INVxp33_ASAP7_75t_R
+[07/31 13:22:29     30s] Total number of usable inverters: 42
+[07/31 13:22:29     30s] List of unusable inverters:
+[07/31 13:22:29     30s] Total number of unusable inverters: 0
+[07/31 13:22:29     30s] List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_R
+[07/31 13:22:29     30s] Total number of identified usable delay cells: 5
+[07/31 13:22:29     30s] List of identified unusable delay cells:
+[07/31 13:22:29     30s] Total number of identified unusable delay cells: 0
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) End ...
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] TimeStamp Deleting Cell Server Begin ...
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] TimeStamp Deleting Cell Server End ...
+[07/31 13:22:29     30s] Ending "Cell type marking" (total cpu=0:00:00.0, real=0:00:00.0, peak res=2412.5M, current mem=2412.0M)
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) Begin ...
+[07/31 13:22:29     30s] Summary for sequential cells identification: 
+[07/31 13:22:29     30s]   Identified SBFF number: 34
+[07/31 13:22:29     30s]   Identified MBFF number: 0
+[07/31 13:22:29     30s]   Identified SB Latch number: 12
+[07/31 13:22:29     30s]   Identified MB Latch number: 0
+[07/31 13:22:29     30s]   Not identified SBFF number: 0
+[07/31 13:22:29     30s]   Not identified MBFF number: 0
+[07/31 13:22:29     30s]   Not identified SB Latch number: 0
+[07/31 13:22:29     30s]   Not identified MB Latch number: 0
+[07/31 13:22:29     30s]   Number of sequential cells which are not FFs: 20
+[07/31 13:22:29     30s]  Visiting view : tt
+[07/31 13:22:29     30s]    : PowerDomain = none : Weighted F : unweighted  = 5.00 (1.000) with rcCorner = 0
+[07/31 13:22:29     30s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[07/31 13:22:29     30s]  Visiting view : tt
+[07/31 13:22:29     30s]    : PowerDomain = none : Weighted F : unweighted  = 5.00 (1.000) with rcCorner = 0
+[07/31 13:22:29     30s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[07/31 13:22:29     30s] TLC MultiMap info (StdDelay):
+[07/31 13:22:29     30s]   : corner + libset + 1 + no RcCorner := 4.3ps
+[07/31 13:22:29     30s]   : corner + libset + 1 + rccorner := 5ps
+[07/31 13:22:29     30s]  Setting StdDelay to: 5ps
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) End ...
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] TimeStamp Deleting Cell Server Begin ...
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] TimeStamp Deleting Cell Server End ...
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] *** Summary of all messages that are not suppressed in this session:
+[07/31 13:22:29     30s] Severity  ID               Count  Summary                                  
+[07/31 13:22:29     30s] WARNING   IMPTS-16            10  Inconsistency detected in the time units...
+[07/31 13:22:29     30s] WARNING   IMPTS-17             6  Inconsistency detected in the capacitanc...
+[07/31 13:22:29     30s] WARNING   TA-976               1  Path groups asserted by the group_path/s...
+[07/31 13:22:29     30s] WARNING   TCLCMD-1461          2  Skipped unsupported command: %s          
+[07/31 13:22:29     30s] WARNING   TECHLIB-1277         4  The %s '%s' has been defined for %s %s '...
+[07/31 13:22:29     30s] *** Message Summary: 23 warning(s), 0 error(s)
+[07/31 13:22:29     30s] 
+[07/31 13:22:29     30s] <CMD> setDesignMode -process 7
+[07/31 13:22:29     30s] ##  Process: 7             (User Set)               
+[07/31 13:22:29     30s] ##     Node: (not set)                           
+[07/31 13:22:29     30s] 
+##  Check design process and node:  
+##  Design tech node is not set.
+
+[07/31 13:22:29     30s] Applying the recommended capacitance filtering threshold values for 7nm process node: total_c_th=0, relative_c_th=1 and coupling_c_th=0.1.
+[07/31 13:22:29     30s] 	These values will be used by all post-route extraction engines, including TQuantus, IQuantus and Quantus QRC extraction.
+[07/31 13:22:29     30s] 	Capacitance filtering mode(-capFilterMode option of the setExtractRCMode) is 'relAndCoup' for all engines.
+[07/31 13:22:29     30s] 	The accuracy mode for postRoute effortLevel low extraction will be set to 'high'.
+[07/31 13:22:29     30s] 	Default value for EffortLevel(-effortLevel option of the setExtractRCMode) in postRoute extraction mode is 'medium'.
+[07/31 13:22:29     30s] <CMD> setMultiCpuUsage -acquireLicense 12
+[07/31 13:22:29     30s] Total CPU(s) requested: 12
+[07/31 13:22:29     30s] Total CPU(s) enabled with current License(s): 8
+[07/31 13:22:29     30s] Current free CPU(s): 8
+[07/31 13:22:30     30s] Additional license(s) checked out: 1 Innovus_CPU_Opt license(s) for 8 CPU(s)
+[07/31 13:22:30     30s] [13:22:30.475115] Periodic Lic check successful
+[13:22:30.475131] Feature usage summary:
+[13:22:30.475131] Innovus_Impl_System
+[13:22:30.475136] Innovus_CPU_Opt
+
+[07/31 13:22:30     30s] Total CPU(s) now enabled: 16
+[07/31 13:22:30     30s] <CMD> setMultiCpuUsage -localCpu 12
+[07/31 13:22:30     30s] <CMD> setDistributeHost -local
+[07/31 13:22:30     30s] The timeout for a remote job to respond is 3600 seconds.
+[07/31 13:22:30     30s] Submit command for task runs will be: local
+[07/31 13:22:30     30s] <CMD> floorPlan -s 1100.928 966.528 2.16 2.16 2.16 2.16
+[07/31 13:22:30     30s] The core width changes from 1100.928000 to 1100.880000 when snapping to grid "PlacementGrid".
+[07/31 13:22:30     30s] Start create_tracks
+[07/31 13:22:30     30s] **WARN: (IMPFP-325):	Floorplan of the design is resized. All current floorplan objects are automatically derived based on specified new floorplan. This may change blocks, fixed standard cells, existing routes and blockages.
+[07/31 13:22:30     30s] <CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_proto.rpt
+[07/31 13:22:30     30s] Checking routing tracks.....
+[07/31 13:22:30     30s] Checking other grids.....
+[07/31 13:22:30     30s] Checking FINFET Grid is on Manufacture Grid.....
+[07/31 13:22:30     30s] Checking core/die box is on Grid.....
+[07/31 13:22:30     30s] Checking snap rule ......
+[07/31 13:22:30     30s] Checking Row is on grid......
+[07/31 13:22:30     30s] Checking AreaIO row.....
+[07/31 13:22:30     30s] Checking row out of die ...
+[07/31 13:22:30     30s] Checking routing blockage.....
+[07/31 13:22:30     30s] Checking placement blockage.....
+[07/31 13:22:30     30s] placeBlkGrid grid_type = 1 
+[07/31 13:22:30     30s] Checking components.....
+[07/31 13:22:30     30s] Checking IO Pads out of die...
+[07/31 13:22:30     30s] Checking constraints (guide/region/fence).....
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] Checking Preroutes.....
+[07/31 13:22:30     30s] No. of regular pre-routes not on tracks : 0 
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] Reporting Utilizations.....
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] Core utilization  = 31.746105
+[07/31 13:22:30     30s] Effective Utilizations
+[07/31 13:22:30     30s] Extracting standard cell pins and blockage ...... 
+[07/31 13:22:30     30s] Pin and blockage extraction finished
+[07/31 13:22:30     30s] Extracting macro/IO cell pins and blockage ...... 
+[07/31 13:22:30     30s] Pin and blockage extraction finished
+[07/31 13:22:30     30s] Disable fast DP-INIT: start main density report
+[07/31 13:22:30     30s] Processing tracks to init pin-track alignment.
+[07/31 13:22:30     30s] z: 1, totalTracks: 1
+[07/31 13:22:30     30s] z: 3, totalTracks: 1
+[07/31 13:22:30     30s] z: 5, totalTracks: 1
+[07/31 13:22:30     30s] z: 7, totalTracks: 1
+[07/31 13:22:30     30s] #spOpts: N=7 autoPA advPA fgc alignH mergeVia=T sncAbut pinDensity cut2cut 
+[07/31 13:22:30     30s] #spOpts: hrOri=1 hrSnap=1 rpCkHalo=4 
+[07/31 13:22:30     30s] Cell axi_ram LLGs are deleted
+[07/31 13:22:30     30s] Before cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] After cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] OPERPROF: Starting SiteArray-Init at level 1, MEM:2524.6M, EPOCH TIME: 1785471750.546165
+[07/31 13:22:30     30s] Multithreaded Timing Analysis is initialized with 12 threads
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] Before cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] After cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] OPERPROF:   Starting SiteArray-Init-FPlan at level 2, MEM:2622.1M, EPOCH TIME: 1785471750.574333
+[07/31 13:22:30     30s] Max number of tech site patterns supported in site array is 256.
+[07/31 13:22:30     30s] Core basic site is asap7sc7p5t
+[07/31 13:22:30     30s] DP-Init: Signature of floorplan is 64c52c8284248000. Signature of routing blockage is 0.
+[07/31 13:22:30     30s] After signature check, allow fast init is false, keep pre-filter is false.
+[07/31 13:22:30     30s] After signature check and other controls, allow fast init is false, keep pre-filter is false.
+[07/31 13:22:30     30s] Use non-trimmed site array because memory saving is not enough.
+[07/31 13:22:30     30s] SiteArray: non-trimmed site array dimensions = 894 x 5096
+[07/31 13:22:30     30s] SiteArray: use 22,888,448 bytes
+[07/31 13:22:30     30s] SiteArray: current memory after site array memory allocation 2675.9M
+[07/31 13:22:30     30s] SiteArray: FP blocked sites are writable
+[07/31 13:22:30     30s] SY_THREAD_POOL_QUEUE SY-GLB-THREAD-POOL (0x4a77d180): Create thread pool 0x7f18c973b1c0.
+[07/31 13:22:30     30s] SY_THREAD_POOL_QUEUE SY-GLB-THREAD-POOL (0x4a77d180): 0 out of 1 thread pools are available.
+[07/31 13:22:30     30s] Keep-away cache is enable on metals: 1-10
+[07/31 13:22:30     30s] z: 9, totalTracks: 1
+[07/31 13:22:30     30s] SiteArray: number of non floorplan blocked sites for llg default is 4555824
+[07/31 13:22:30     30s] Atter site array init, number of instance map data is 0.
+[07/31 13:22:30     30s] OPERPROF:   Finished SiteArray-Init-FPlan at level 2, CPU:0.096, REAL:0.039, MEM:2869.0M, EPOCH TIME: 1785471750.613443
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] Scanning PG Shapes for Pre-Colorizing...Done.
+[07/31 13:22:30     30s] Verbose-2062: PG Shapes are colorized in Pre_CCE_Colorize flow.
+[07/31 13:22:30     30s]  Pre_CCE_Colorizing is not ON! (0:0:424:0)
+[07/31 13:22:30     30s] OPERPROF: Finished SiteArray-Init at level 1, CPU:0.133, REAL:0.074, MEM:2869.0M, EPOCH TIME: 1785471750.620620
+[07/31 13:22:30     30s] Average macro density = 0.316.
+[07/31 13:22:30     30s] Average macro with halo density = 0.316.
+[07/31 13:22:30     30s] Average module density = 0.318.
+[07/31 13:22:30     30s] Pure std cell Density 0.002976
+[07/31 13:22:30     30s]  Density for the design = 0.318.
+[07/31 13:22:30     30s]        = (stdcell_area 9276 sites (2164 um^2) + block_area 1438720 sites (335625 um^2)) / alloc_area 4555824 sites (1062783 um^2).
+[07/31 13:22:30     30s] Density for the design with macro halo = 0.318.
+[07/31 13:22:30     30s]        = (stdcell_area 9276 sites (2164 um^2) + block_area with halo 1438720 sites (335625 um^2)) / alloc_area 4555824 sites (1062783 um^2).
+[07/31 13:22:30     30s] Pin Density = 0.001375.
+[07/31 13:22:30     30s]             = total # of pins 6263 / total area 4555824.
+[07/31 13:22:30     30s] Cell axi_ram LLGs are deleted
+[07/31 13:22:30     30s] Before cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] After cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] # Resetting pin-track-align track data.
+[07/31 13:22:30     30s] Disable fast DP-INIT: end main density report
+[07/31 13:22:30     30s] *** Message Summary: 0 warning(s), 0 error(s)
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] <CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_final.rpt
+[07/31 13:22:30     30s] Checking routing tracks.....
+[07/31 13:22:30     30s] Checking other grids.....
+[07/31 13:22:30     30s] Checking FINFET Grid is on Manufacture Grid.....
+[07/31 13:22:30     30s] Checking core/die box is on Grid.....
+[07/31 13:22:30     30s] Checking snap rule ......
+[07/31 13:22:30     30s] Checking Row is on grid......
+[07/31 13:22:30     30s] Checking AreaIO row.....
+[07/31 13:22:30     30s] Checking row out of die ...
+[07/31 13:22:30     30s] Checking routing blockage.....
+[07/31 13:22:30     30s] Checking placement blockage.....
+[07/31 13:22:30     30s] placeBlkGrid grid_type = 1 
+[07/31 13:22:30     30s] Checking components.....
+[07/31 13:22:30     30s] Checking IO Pads out of die...
+[07/31 13:22:30     30s] Checking constraints (guide/region/fence).....
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] Checking Preroutes.....
+[07/31 13:22:30     30s] No. of regular pre-routes not on tracks : 0 
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] Reporting Utilizations.....
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] Core utilization  = 31.746105
+[07/31 13:22:30     30s] Effective Utilizations
+[07/31 13:22:30     30s] Disable fast DP-INIT: start main density report
+[07/31 13:22:30     30s] Processing tracks to init pin-track alignment.
+[07/31 13:22:30     30s] z: 1, totalTracks: 1
+[07/31 13:22:30     30s] z: 3, totalTracks: 1
+[07/31 13:22:30     30s] z: 5, totalTracks: 1
+[07/31 13:22:30     30s] z: 7, totalTracks: 1
+[07/31 13:22:30     30s] #spOpts: N=7 autoPA advPA fgc alignH mergeVia=T sncAbut pinDensity cut2cut 
+[07/31 13:22:30     30s] #spOpts: hrOri=1 hrSnap=1 rpCkHalo=4 
+[07/31 13:22:30     30s] Cell axi_ram LLGs are deleted
+[07/31 13:22:30     30s] Before cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] After cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] OPERPROF: Starting SiteArray-Init at level 1, MEM:2847.1M, EPOCH TIME: 1785471750.662689
+[07/31 13:22:30     30s] Before cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] After cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] OPERPROF:   Starting SiteArray-Init-FPlan at level 2, MEM:2847.1M, EPOCH TIME: 1785471750.662938
+[07/31 13:22:30     30s] Max number of tech site patterns supported in site array is 256.
+[07/31 13:22:30     30s] Core basic site is asap7sc7p5t
+[07/31 13:22:30     30s] After signature check, allow fast init is true, keep pre-filter is true.
+[07/31 13:22:30     30s] After signature check and other controls, allow fast init is false, keep pre-filter is false.
+[07/31 13:22:30     30s] SiteArray: non-trimmed site array dimensions = 894 x 5096
+[07/31 13:22:30     30s] SiteArray: use 22,888,448 bytes
+[07/31 13:22:30     30s] SiteArray: current memory after site array memory allocation 2869.0M
+[07/31 13:22:30     30s] SiteArray: FP blocked sites are writable
+[07/31 13:22:30     30s] Keep-away cache is enable on metals: 1-10
+[07/31 13:22:30     30s] z: 9, totalTracks: 1
+[07/31 13:22:30     30s] SiteArray: number of non floorplan blocked sites for llg default is 4555824
+[07/31 13:22:30     30s] Atter site array init, number of instance map data is 0.
+[07/31 13:22:30     30s] OPERPROF:   Finished SiteArray-Init-FPlan at level 2, CPU:0.105, REAL:0.038, MEM:2870.0M, EPOCH TIME: 1785471750.700775
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] Verbose-2062: PG Shapes are colorized in Pre_CCE_Colorize flow.
+[07/31 13:22:30     30s]  Pre_CCE_Colorizing is not ON! (0:0:424:0)
+[07/31 13:22:30     30s] OPERPROF: Finished SiteArray-Init at level 1, CPU:0.113, REAL:0.045, MEM:2870.0M, EPOCH TIME: 1785471750.708121
+[07/31 13:22:30     30s] Average macro density = 0.316.
+[07/31 13:22:30     30s] Average macro with halo density = 0.316.
+[07/31 13:22:30     30s] Average module density = 0.318.
+[07/31 13:22:30     30s] Pure std cell Density 0.002976
+[07/31 13:22:30     30s]  Density for the design = 0.318.
+[07/31 13:22:30     30s]        = (stdcell_area 9276 sites (2164 um^2) + block_area 1438720 sites (335625 um^2)) / alloc_area 4555824 sites (1062783 um^2).
+[07/31 13:22:30     30s] Density for the design with macro halo = 0.318.
+[07/31 13:22:30     30s]        = (stdcell_area 9276 sites (2164 um^2) + block_area with halo 1438720 sites (335625 um^2)) / alloc_area 4555824 sites (1062783 um^2).
+[07/31 13:22:30     30s] Pin Density = 0.001375.
+[07/31 13:22:30     30s]             = total # of pins 6263 / total area 4555824.
+[07/31 13:22:30     30s] Cell axi_ram LLGs are deleted
+[07/31 13:22:30     30s] Before cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] After cleanup instance map, number of data still kept is (map:0, fakeMap:0, inst:0).
+[07/31 13:22:30     30s] # Resetting pin-track-align track data.
+[07/31 13:22:30     30s] Disable fast DP-INIT: end main density report
+[07/31 13:22:30     30s] *** Message Summary: 0 warning(s), 0 error(s)
+[07/31 13:22:30     30s] 
+[07/31 13:22:30     30s] <CMD> saveFPlan ./outputs/FloorPlan.fp
+[07/31 13:22:30     30s] <CMD> saveDesign ./saved/axi_ram_hierFP.enc
+[07/31 13:22:30     30s] #% Begin save design ... (date=07/31 13:22:30, mem=2495.9M)
+[07/31 13:22:30     31s] % Begin Save ccopt configuration ... (date=07/31 13:22:30, mem=2496.0M)
+[07/31 13:22:30     31s] **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
+[07/31 13:22:30     31s] Type 'man IMPTS-16' for more detail.
+[07/31 13:22:30     31s] **WARN: (EMS-27):	Message (IMPTS-16) has exceeded the current message display limit of 1.
+[07/31 13:22:30     31s] To increase the message display limit, refer to the product command reference manual.
+[07/31 13:22:30     31s] % End Save ccopt configuration ... (date=07/31 13:22:30, total cpu=0:00:00.0, real=0:00:00.0, peak res=2497.1M, current mem=2497.1M)
+[07/31 13:22:30     31s] % Begin Save netlist data ... (date=07/31 13:22:30, mem=2497.2M)
+[07/31 13:22:30     31s] Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/vbin/axi_ram.v.bin in multi-threaded mode...
+[07/31 13:22:30     31s] % End Save netlist data ... (date=07/31 13:22:30, total cpu=0:00:00.1, real=0:00:00.0, peak res=2505.9M, current mem=2500.5M)
+[07/31 13:22:30     31s] Saving symbol-table file in separate thread ...
+[07/31 13:22:30     31s] Saving congestion map file in separate thread ...
+[07/31 13:22:30     31s] Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/axi_ram.route.congmap.gz ...
+[07/31 13:22:31     31s] % Begin Save AAE data ... (date=07/31 13:22:30, mem=2501.9M)
+[07/31 13:22:31     31s] Saving AAE Data ...
+[07/31 13:22:31     31s] % End Save AAE data ... (date=07/31 13:22:31, total cpu=0:00:00.1, real=0:00:00.0, peak res=2511.0M, current mem=2502.5M)
+[07/31 13:22:31     31s] Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/gui.pref.tcl ...
+[07/31 13:22:31     31s] Saving mode setting ...
+[07/31 13:22:31     31s] **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+[07/31 13:22:31     31s] Saving global file ...
+[07/31 13:22:31     31s] *info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/axi_ram.bbox.lef
+[07/31 13:22:31     31s] Saving Drc markers ...
+[07/31 13:22:31     31s] ... No Drc file written since there is no markers found.
+[07/31 13:22:31     31s] Saving special route data file in separate thread ...
+[07/31 13:22:31     31s] Saving PG Conn data in separate thread ...
+[07/31 13:22:31     31s] Saving placement file in separate thread ...
+[07/31 13:22:31     31s] Saving route file in separate thread ...
+[07/31 13:22:31     31s] Saving property file in separate thread ...
+[07/31 13:22:31     31s] ** Saving stdCellPlacement_binary (version# 2) ...
+[07/31 13:22:31     31s] Save Adaptive View Pruning View Names to Binary file
+[07/31 13:22:31     31s] *** Completed savePlace (cpu=0:00:00.0 real=0:00:00.0 mem=2951.5M) ***
+[07/31 13:22:31     31s] Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/axi_ram.prop
+[07/31 13:22:31     31s] TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
+[07/31 13:22:31     31s] TAT_INFO: savePGConnFile REAL = 0 : CPU = 0 : MEM = 0.
+[07/31 13:22:31     31s] TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
+[07/31 13:22:31     31s] *** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=2951.5M) ***
+[07/31 13:22:31     31s] *** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=2951.5M) ***
+[07/31 13:22:31     31s] TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
+[07/31 13:22:31     31s] TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
+[07/31 13:22:31     31s] Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/axi_ram.techData.gz' ...
+[07/31 13:22:31     31s] Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/extraction/' ...
+[07/31 13:22:31     31s] eee: Checksum of RC Grid density data=120
+[07/31 13:22:31     31s] TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
+[07/31 13:22:31     31s] TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
+[07/31 13:22:31     31s] % Begin Save power constraints data ... (date=07/31 13:22:31, mem=2514.1M)
+[07/31 13:22:31     31s] % End Save power constraints data ... (date=07/31 13:22:31, total cpu=0:00:00.0, real=0:00:00.0, peak res=2514.5M, current mem=2514.5M)
+[07/31 13:22:31     31s] Generated self-contained design axi_ram_hierFP.enc.dat
+[07/31 13:22:32     32s] #% End save design ... (date=07/31 13:22:31, total cpu=0:00:01.0, real=0:00:02.0, peak res=2549.3M, current mem=2515.6M)
+[07/31 13:22:32     32s] 
+[07/31 13:22:32     32s] *** Summary of all messages that are not suppressed in this session:
+[07/31 13:22:32     32s] Severity  ID               Count  Summary                                  
+[07/31 13:22:32     32s] WARNING   IMPTS-16            16  Inconsistency detected in the time units...
+[07/31 13:22:32     32s] WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
+[07/31 13:22:32     32s] *** Message Summary: 17 warning(s), 0 error(s)
+[07/31 13:22:32     32s] 
+[07/31 13:22:32     32s] **WARN: (IMPDBTCL-204):	'coreSite' is not a recognized object/attribute for object type 'head'. For help use 'dbSchema head' to get list of all supported (settable/unsettable) objects and attributes.
+[07/31 13:22:32     32s] Type 'man IMPDBTCL-204' for more detail.
+[07/31 13:22:32     32s] **WARN: (IMPDBTCL-204):	'coreSite' is not a recognized object/attribute for object type 'head'. For help use 'dbSchema head' to get list of all supported (settable/unsettable) objects and attributes.
+[07/31 13:22:32     32s] Type 'man IMPDBTCL-204' for more detail.
+[07/31 13:22:32     32s] integer value too large to represent
+[07/31 13:22:34     32s] <CMD> addHaloToBlock -allBlock 2*2.16 2*2.16 2*2.16 2*2.16
+[07/31 13:22:34     32s] 
+[07/31 13:22:34     32s] Usage: addHaloToBlock [-help] <left_bottom_right_top> [-fromInstBox] [-ori <orientation>] [-snapToSite] [<inst_name> | -allMacro  | -allBlackBox  | -allCommitPtn  | -allBlock  | -allIOPad  | -cell <name>]
+[07/31 13:22:34     32s] 
+[07/31 13:22:34     32s] **ERROR: (IMPTCM-40):	Must specify four floating numbers for argument "left_bottom_right_top".
+
+[07/31 13:24:19     35s] <CMD> fit
+[07/31 13:25:55     38s] 
+[07/31 13:25:55     38s] *** Memory Usage v#2 (Current mem = 3031.430M, initial mem = 839.699M) ***
+[07/31 13:25:55     38s] 
+[07/31 13:25:55     38s] *** Summary of all messages that are not suppressed in this session:
+[07/31 13:25:55     38s] Severity  ID               Count  Summary                                  
+[07/31 13:25:55     38s] WARNING   IMPFP-325            1  Floorplan of the design is resized. All ...
+[07/31 13:25:55     38s] WARNING   IMPDBTCL-204         2  '%s' is not a recognized object/attribut...
+[07/31 13:25:55     38s] WARNING   IMPTS-16            26  Inconsistency detected in the time units...
+[07/31 13:25:55     38s] WARNING   IMPTS-17             6  Inconsistency detected in the capacitanc...
+[07/31 13:25:55     38s] WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
+[07/31 13:25:55     38s] ERROR     IMPTCM-40            1  Must specify four floating numbers for a...
+[07/31 13:25:55     38s] WARNING   TA-976               1  Path groups asserted by the group_path/s...
+[07/31 13:25:55     38s] WARNING   TCLCMD-1461          2  Skipped unsupported command: %s          
+[07/31 13:25:55     38s] WARNING   TECHLIB-1277         4  The %s '%s' has been defined for %s %s '...
+[07/31 13:25:55     38s] *** Message Summary: 43 warning(s), 1 error(s)
+[07/31 13:25:55     38s] 
+[07/31 13:25:55     38s] --- Ending "Innovus" (totcpu=0:00:38.7, real=0:04:23, mem=3031.4M) ---
