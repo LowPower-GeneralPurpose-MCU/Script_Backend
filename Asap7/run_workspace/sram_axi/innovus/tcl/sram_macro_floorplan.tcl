@@ -216,14 +216,14 @@ for {set k 0} {$k < $SRAM_COUNT} {incr k} {
     set y [expr {
     	$SRAM_Y0 + $row * ($SRAM_H + $SRAM_MACRO_GAP_Y)
     }]
-    set site_w [lindex [dbGet head.site.size_x] 0]
-    set site_h [lindex [dbGet head.site.size_y] 0]
+    set site_w [lindex [dbGet head.coreSite.size_x] 0]
+    set site_h [lindex [dbGet head.coreSite.size_y] 0]
     set snap_x [expr { round($x / $site_w) * $site_w}]
     set snap_y [expr { round($y / $site_h) * $site_h}]
     # Keep the macro movable until the concurrent run and deterministic pack
     # have completed.
     dbSet $ptr.pStatus unplaced
-    placeInstance $name $x $y $SRAM_ISLAND_ORIENT
+    placeInstance $name $snap_x $snpa_y $SRAM_ISLAND_ORIENT
     dbSet $ptr.pStatus placed
 
     puts $planned_map \
@@ -366,12 +366,12 @@ if {$SRAM_PACK_4X4} {
             	$SRAM_Y0 +
             	$row * ($SRAM_H + $SRAM_MACRO_GAP_Y)
             }]
-            set site_w [lindex [dbGet head.site.size_x] 0]
-            set site_h [lindex [dbGet head.site.size_y] 0]
+            set site_w [lindex [dbGet head.coreSite.size_x] 0]
+            set site_h [lindex [dbGet head.coreSite.size_y] 0]
             set snap_x [expr {round($x / $site_w) * $site_w}]
             set snap_y [expr {round($y / $site_h) * $site_h}]
             
-            dbSet $ptr.pStatus.unplaced
+            dbSet $ptr.pStatus unplaced
             placeInstance $name $snap_x $snap_y $SRAM_ISLAND_ORIENT
             dbSet $ptr.pStatus placed
             
@@ -388,7 +388,7 @@ if {$SRAM_PACK_4X4} {
             }
             puts $packed_map \
             	"$bank $name $row $col $snap_x $snap_y $SRAM_ISLAND_ORIENT"
-            puts packed_count
+            incr packed_count
         }
     }
     close $packed_map
