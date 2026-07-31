@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Jul 31 13:21:49 2026                
+#  Created on Fri Jul 31 13:30:30 2026                
 #                                                     
 #######################################################
 
@@ -50,10 +50,11 @@ setDesignMode -process 7
 setMultiCpuUsage -acquireLicense 12
 setMultiCpuUsage -localCpu 12
 setDistributeHost -local
-floorPlan -s 1100.928 966.528 2.16 2.16 2.16 2.16
+floorPlan -s 1102.848 968.832 4.32 4.32 4.32 4.32
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_proto.rpt
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_final.rpt
 saveFPlan ./outputs/FloorPlan.fp
 saveDesign ./saved/axi_ram_hierFP.enc
-addHaloToBlock -allBlock 2*2.16 2*2.16 2*2.16 2*2.16
+addHaloToBlock -allBlock 4.32 4.32 4.32 4.32
+snapFPlan -block
 fit

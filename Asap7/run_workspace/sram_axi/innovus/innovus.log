@@ -4,17 +4,17 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
 Options:	
-Date:		Fri Jul 31 13:21:32 2026
+Date:		Fri Jul 31 13:30:13 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04 LTS
 
 License:
-		[13:21:36.206210] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[13:30:17.206202] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		invs	Innovus Implementation System	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 108910 / 91f848e2-c24c-45c4-b6cd-ee94dd9d04c7 / YkqVwWuZQd
+Info: Process UID = 152458 / 04f612d3-e6c5-4bf7-9972-5552deef9a14 / rOR3reQS5s
 
 **INFO:  MMMC transition support version v31-84 
 
@@ -53,8 +53,8 @@ Info: Process UID = 108910 / 91f848e2-c24c-45c4-b6cd-ee94dd9d04c7 / YkqVwWuZQd
 <CMD> set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
 Set ASAP7_GDS_MAP_FILE before running the full one-shot flow
 <CMD> init_design
-#% Begin Load MMMC data ... (date=07/31 13:22:13, mem=1847.7M)
-#% End Load MMMC data ... (date=07/31 13:22:13, total cpu=0:00:00.1, real=0:00:00.0, peak res=1849.3M, current mem=1849.3M)
+#% Begin Load MMMC data ... (date=07/31 13:30:38, mem=1844.3M)
+#% End Load MMMC data ... (date=07/31 13:30:38, total cpu=0:00:00.0, real=0:00:00.0, peak res=1845.9M, current mem=1845.9M)
 rccorner
 
 Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef ...
@@ -96,17 +96,17 @@ Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
 Reading libset timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib' ...
 Read 1 cells in library 'srambank_256x4x32_6t122' 
-*** End library_loading (cpu=0.22min, real=0.22min, mem=429.0M, fe_cpu=0.46min, fe_real=0.90min, fe_mem=2254.4M) ***
-#% Begin Load netlist data ... (date=07/31 13:22:26, mem=1874.5M)
-*** Begin netlist parsing (mem=2254.4M) ***
+*** End library_loading (cpu=0.23min, real=0.22min, mem=430.0M, fe_cpu=0.46min, fe_real=0.63min, fe_mem=2255.1M) ***
+#% Begin Load netlist data ... (date=07/31 13:30:51, mem=1874.0M)
+*** Begin netlist parsing (mem=2255.1M) ***
 Created 405 new cells from 11 timing libraries.
 Reading netlist ...
 Backslashed names will retain backslash and a trailing blank character.
 Reading verilog netlist './outputs/axi_ram_syn.v'
 
-*** Memory Usage v#2 (Current mem = 2254.383M, initial mem = 839.699M) ***
-*** End netlist parsing (cpu=0:00:00.0, real=0:00:00.0, mem=2254.4M) ***
-#% End Load netlist data ... (date=07/31 13:22:26, total cpu=0:00:00.1, real=0:00:00.0, peak res=1921.7M, current mem=1921.7M)
+*** Memory Usage v#2 (Current mem = 2255.117M, initial mem = 839.699M) ***
+*** End netlist parsing (cpu=0:00:00.0, real=0:00:00.0, mem=2255.1M) ***
+#% End Load netlist data ... (date=07/31 13:30:51, total cpu=0:00:00.0, real=0:00:00.0, peak res=1921.4M, current mem=1921.4M)
 Set top cell to axi_ram.
 Hooked 405 DB cells to tlib cells.
 Starting recursive module instantiation check.
@@ -120,7 +120,7 @@ Set DBUPerIGU to techSite asap7sc7p5t width 864.
 ** info: there are 1240 stdCell insts with at least one signal pin.
 ** info: there are 16 macros.
 
-*** Memory Usage v#2 (Current mem = 2278.395M, initial mem = 839.699M) ***
+*** Memory Usage v#2 (Current mem = 2279.129M, initial mem = 839.699M) ***
 **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
 Type 'man IMPTS-16' for more detail.
 **WARN: (IMPTS-17):	Inconsistency detected in the capacitance units specified among the timing libraries being used. Default system capacitance unit of 1pF will be used. Use the 'setLibraryUnit' command to set a specific capacitance unit.
@@ -163,7 +163,7 @@ Initializing multi-corner resistance tables ...
 Default value for postRoute extraction mode's effortLevel (-effortLevel option of setExtractRCMode) changed to 'medium'.
 *Info: initialize multi-corner CTS.
 Reading timing constraints file './outputs/axi_ram_syn.sdc' ...
-Current (total cpu=0:00:30.3, real=0:00:57.0, peak res=2379.2M, current mem=2379.2M)
+Current (total cpu=0:00:29.8, real=0:00:41.0, peak res=2372.6M, current mem=2372.6M)
 **WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ./outputs/axi_ram_syn.sdc, Line 9).
 
 **WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ./outputs/axi_ram_syn.sdc, Line 10).
@@ -192,8 +192,8 @@ set_clock_transition                              | 2              | 0
 set_max_transition                                | 1              | 0              
 ------------------------------------------------------------------------------------
 INFO (CTE): Reading of timing constraints file ./outputs/axi_ram_syn.sdc completed, with 2 WARNING
-Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2393.9M, current mem=2393.9M)
-Current (total cpu=0:00:30.4, real=0:00:57.0, peak res=2393.9M, current mem=2393.9M)
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2387.3M, current mem=2387.3M)
+Current (total cpu=0:00:30.0, real=0:00:41.0, peak res=2387.3M, current mem=2387.3M)
 **WARN: (TA-976):	Path groups asserted by the group_path/set_path_adjust_group constraint are considered by the software to be global in nature - they cannot be restricted to specific constraint modes. Due to this restriction, the group_path/set_path_adjust_group constraint is not supported directly in the constraint files which are configured in mode-specific commands such as create_constraint_mode. The current group_path/set_path_adjust_group entry will be ignored. You can enter the group_path/set_path_adjust_group constraint interactively or as part of a general command script -  where it will be interpreted as global and will be in effect for all modes.
 Total number of combinational cells: 338
 Total number of sequential cells: 66
@@ -245,18 +245,18 @@ Total CPU(s) requested: 12
 Total CPU(s) enabled with current License(s): 8
 Current free CPU(s): 8
 Additional license(s) checked out: 1 Innovus_CPU_Opt license(s) for 8 CPU(s)
-[13:22:30.475115] Periodic Lic check successful
-[13:22:30.475131] Feature usage summary:
-[13:22:30.475131] Innovus_Impl_System
-[13:22:30.475136] Innovus_CPU_Opt
+[13:30:55.458273] Periodic Lic check successful
+[13:30:55.458283] Feature usage summary:
+[13:30:55.458283] Innovus_Impl_System
+[13:30:55.458288] Innovus_CPU_Opt
 
 Total CPU(s) now enabled: 16
 <CMD> setMultiCpuUsage -localCpu 12
 <CMD> setDistributeHost -local
 The timeout for a remote job to respond is 3600 seconds.
 Submit command for task runs will be: local
-<CMD> floorPlan -s 1100.928 966.528 2.16 2.16 2.16 2.16
-The core width changes from 1100.928000 to 1100.880000 when snapping to grid "PlacementGrid".
+<CMD> floorPlan -s 1102.848 968.832 4.32 4.32 4.32 4.32
+The core width changes from 1102.848000 to 1102.896000 when snapping to grid "PlacementGrid".
 Start create_tracks
 **WARN: (IMPFP-325):	Floorplan of the design is resized. All current floorplan objects are automatically derived based on specified new floorplan. This may change blocks, fixed standard cells, existing routes and blockages.
 <CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_proto.rpt
@@ -280,7 +280,7 @@ No. of regular pre-routes not on tracks : 0
 
 Reporting Utilizations.....
 
-Core utilization  = 31.746105
+Core utilization  = 31.612718
 Effective Utilizations
 Extracting standard cell pins and blockage ...... 
 Pin and blockage extraction finished
@@ -288,16 +288,16 @@ Extracting macro/IO cell pins and blockage ......
 Pin and blockage extraction finished
 Multithreaded Timing Analysis is initialized with 12 threads
 
-Average macro density = 0.316.
-Average macro with halo density = 0.316.
-Average module density = 0.318.
-Pure std cell Density 0.002976
- Density for the design = 0.318.
-       = (stdcell_area 9276 sites (2164 um^2) + block_area 1438720 sites (335625 um^2)) / alloc_area 4555824 sites (1062783 um^2).
-Density for the design with macro halo = 0.318.
-       = (stdcell_area 9276 sites (2164 um^2) + block_area with halo 1438720 sites (335625 um^2)) / alloc_area 4555824 sites (1062783 um^2).
-Pin Density = 0.001375.
-            = total # of pins 6263 / total area 4555824.
+Average macro density = 0.314.
+Average macro with halo density = 0.314.
+Average module density = 0.316.
+Pure std cell Density 0.002953
+ Density for the design = 0.316.
+       = (stdcell_area 9276 sites (2164 um^2) + block_area 1438720 sites (335625 um^2)) / alloc_area 4580082 sites (1068442 um^2).
+Density for the design with macro halo = 0.316.
+       = (stdcell_area 9276 sites (2164 um^2) + block_area with halo 1438720 sites (335625 um^2)) / alloc_area 4580082 sites (1068442 um^2).
+Pin Density = 0.001367.
+            = total # of pins 6263 / total area 4580082.
 *** Message Summary: 0 warning(s), 0 error(s)
 
 <CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_final.rpt
@@ -321,43 +321,44 @@ No. of regular pre-routes not on tracks : 0
 
 Reporting Utilizations.....
 
-Core utilization  = 31.746105
+Core utilization  = 31.612718
 Effective Utilizations
-Average macro density = 0.316.
-Average macro with halo density = 0.316.
-Average module density = 0.318.
-Pure std cell Density 0.002976
- Density for the design = 0.318.
-       = (stdcell_area 9276 sites (2164 um^2) + block_area 1438720 sites (335625 um^2)) / alloc_area 4555824 sites (1062783 um^2).
-Density for the design with macro halo = 0.318.
-       = (stdcell_area 9276 sites (2164 um^2) + block_area with halo 1438720 sites (335625 um^2)) / alloc_area 4555824 sites (1062783 um^2).
-Pin Density = 0.001375.
-            = total # of pins 6263 / total area 4555824.
+Average macro density = 0.314.
+Average macro with halo density = 0.314.
+Average module density = 0.316.
+Pure std cell Density 0.002953
+ Density for the design = 0.316.
+       = (stdcell_area 9276 sites (2164 um^2) + block_area 1438720 sites (335625 um^2)) / alloc_area 4580082 sites (1068442 um^2).
+Density for the design with macro halo = 0.316.
+       = (stdcell_area 9276 sites (2164 um^2) + block_area with halo 1438720 sites (335625 um^2)) / alloc_area 4580082 sites (1068442 um^2).
+Pin Density = 0.001367.
+            = total # of pins 6263 / total area 4580082.
 *** Message Summary: 0 warning(s), 0 error(s)
 
 <CMD> saveFPlan ./outputs/FloorPlan.fp
 <CMD> saveDesign ./saved/axi_ram_hierFP.enc
-#% Begin save design ... (date=07/31 13:22:30, mem=2495.9M)
-% Begin Save ccopt configuration ... (date=07/31 13:22:30, mem=2496.0M)
+#% Begin save design ... (date=07/31 13:30:55, mem=2489.6M)
+INFO: Current data have to be saved into a temporary db: 'axi_ram_hierFP.enc.dat.tmp' first. It will be renamed to the correct name 'axi_ram_hierFP.enc.dat' after the old db was deleted.
+% Begin Save ccopt configuration ... (date=07/31 13:30:55, mem=2489.6M)
 **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
 Type 'man IMPTS-16' for more detail.
 **WARN: (EMS-27):	Message (IMPTS-16) has exceeded the current message display limit of 1.
 To increase the message display limit, refer to the product command reference manual.
-% End Save ccopt configuration ... (date=07/31 13:22:30, total cpu=0:00:00.0, real=0:00:00.0, peak res=2497.1M, current mem=2497.1M)
-% Begin Save netlist data ... (date=07/31 13:22:30, mem=2497.2M)
-Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/vbin/axi_ram.v.bin in multi-threaded mode...
-% End Save netlist data ... (date=07/31 13:22:30, total cpu=0:00:00.1, real=0:00:00.0, peak res=2505.9M, current mem=2500.5M)
+% End Save ccopt configuration ... (date=07/31 13:30:55, total cpu=0:00:00.0, real=0:00:00.0, peak res=2490.8M, current mem=2490.8M)
+% Begin Save netlist data ... (date=07/31 13:30:55, mem=2490.8M)
+Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/vbin/axi_ram.v.bin in multi-threaded mode...
+% End Save netlist data ... (date=07/31 13:30:55, total cpu=0:00:00.1, real=0:00:00.0, peak res=2499.0M, current mem=2494.1M)
 Saving symbol-table file in separate thread ...
 Saving congestion map file in separate thread ...
-Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/axi_ram.route.congmap.gz ...
-% Begin Save AAE data ... (date=07/31 13:22:30, mem=2501.9M)
+Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.route.congmap.gz ...
+% Begin Save AAE data ... (date=07/31 13:30:55, mem=2495.6M)
 Saving AAE Data ...
-% End Save AAE data ... (date=07/31 13:22:31, total cpu=0:00:00.1, real=0:00:00.0, peak res=2511.0M, current mem=2502.5M)
-Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/gui.pref.tcl ...
+% End Save AAE data ... (date=07/31 13:30:56, total cpu=0:00:00.1, real=0:00:00.0, peak res=2504.2M, current mem=2496.2M)
+Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/gui.pref.tcl ...
 Saving mode setting ...
 **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
 Saving global file ...
-*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/axi_ram.bbox.lef
+*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.bbox.lef
 Saving Drc markers ...
 ... No Drc file written since there is no markers found.
 Saving special route data file in separate thread ...
@@ -367,29 +368,29 @@ Saving route file in separate thread ...
 Saving property file in separate thread ...
 ** Saving stdCellPlacement_binary (version# 2) ...
 Save Adaptive View Pruning View Names to Binary file
-Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/axi_ram.prop
 TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: savePGConnFile REAL = 0 : CPU = 0 : MEM = 0.
+Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.prop
 TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
-*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=2951.5M) ***
-*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=2951.5M) ***
+*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=2951.1M) ***
+*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=2951.1M) ***
 TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
-Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/axi_ram.techData.gz' ...
-Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat/extraction/' ...
+Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.techData.gz' ...
+Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/extraction/' ...
 TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
-% Begin Save power constraints data ... (date=07/31 13:22:31, mem=2514.1M)
-% End Save power constraints data ... (date=07/31 13:22:31, total cpu=0:00:00.0, real=0:00:00.0, peak res=2514.5M, current mem=2514.5M)
+% Begin Save power constraints data ... (date=07/31 13:30:56, mem=2507.5M)
+% End Save power constraints data ... (date=07/31 13:30:56, total cpu=0:00:00.0, real=0:00:00.0, peak res=2507.9M, current mem=2507.9M)
 rccorner
 rccorner
 rccorner
-Generated self-contained design axi_ram_hierFP.enc.dat
+Generated self-contained design axi_ram_hierFP.enc.dat.tmp
 libset
 rccorner
 mode_normal
 ./outputs/axi_ram_syn.sdc
-#% End save design ... (date=07/31 13:22:31, total cpu=0:00:01.0, real=0:00:02.0, peak res=2549.3M, current mem=2515.6M)
+#% End save design ... (date=07/31 13:30:56, total cpu=0:00:01.0, real=0:00:01.0, peak res=2541.3M, current mem=2510.4M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -402,15 +403,7 @@ Type 'man IMPDBTCL-204' for more detail.
 **WARN: (IMPDBTCL-204):	'coreSite' is not a recognized object/attribute for object type 'head'. For help use 'dbSchema head' to get list of all supported (settable/unsettable) objects and attributes.
 Type 'man IMPDBTCL-204' for more detail.
 integer value too large to represent
-<CMD> addHaloToBlock -allBlock 2*2.16 2*2.16 2*2.16 2*2.16
-
-Usage: addHaloToBlock [-help] <left_bottom_right_top> [-fromInstBox] [-ori <orientation>] [-snapToSite] [<inst_name> | -allMacro  | -allBlackBox  | -allCommitPtn  | -allBlock  | -allIOPad  | -cell <name>]
-
-**ERROR: (IMPTCM-40):	Must specify four floating numbers for argument "left_bottom_right_top".
-
+<CMD> addHaloToBlock -allBlock 4.32 4.32 4.32 4.32
+<CMD> snapFPlan -block
+Packed SRAM macro bodies lie outside the core boundary
 <CMD> fit
-
-*** Memory Usage v#2 (Current mem = 3031.430M, initial mem = 839.699M) ***
-*** Message Summary: 43 warning(s), 1 error(s)
-
---- Ending "Innovus" (totcpu=0:00:38.7, real=0:04:23, mem=3031.4M) ---
