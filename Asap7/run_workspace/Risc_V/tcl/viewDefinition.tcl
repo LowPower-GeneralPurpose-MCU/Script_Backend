@@ -1,1 +1,0 @@
-../../../Script/innovus/viewDefinition.tcl

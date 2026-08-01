@@ -1,1 +1,0 @@
-../../../Script/innovus/innovus.tcl
