@@ -223,7 +223,7 @@ for {set k 0} {$k < $SRAM_COUNT} {incr k} {
     # Keep the macro movable until the concurrent run and deterministic pack
     # have completed.
     dbSet $ptr.pStatus unplaced
-    placeInstance $name $snap_x $snpa_y $SRAM_ISLAND_ORIENT
+    placeInstance $name $snap_x $snap_y $SRAM_ISLAND_ORIENT
     dbSet $ptr.pStatus placed
 
     puts $planned_map \

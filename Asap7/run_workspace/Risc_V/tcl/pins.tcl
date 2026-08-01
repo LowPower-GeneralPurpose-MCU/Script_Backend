@@ -1,0 +1,1 @@
+../../../Script/innovus/pins.tcl
