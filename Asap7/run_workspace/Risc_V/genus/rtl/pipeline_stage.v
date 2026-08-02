@@ -3,26 +3,26 @@
 //==================================================================================================
 module instruction_fetch (
     input wire reset_n,
-    input wire flush_temp, 
-    input wire trap_enter, 
+    input wire flush_temp,
+    input wire trap_enter,
     input wire mret_exec,
     input wire [31:0] reset_vector_in,
-    input wire [31:0] mtvec_in, 
+    input wire [31:0] mtvec_in,
     input wire [31:0] mepc_in,
-    input wire [31:0] ex_mem_branch_target, 
-    input wire [31:0] id_ex_jal_target, 
-    input wire [31:0] pc_in, 
+    input wire [31:0] ex_mem_branch_target,
+    input wire [31:0] id_ex_jal_target,
+    input wire [31:0] pc_in,
     input wire [31:0] ex_mem_pc_in,
-    input wire id_ex_jalr, 
-    input wire id_ex_jal, 
+    input wire id_ex_jalr,
+    input wire id_ex_jal,
     input wire btb_hit,
-    input wire [31:0] alu_in1, 
+    input wire [31:0] alu_in1,
     input wire [31:0] id_ex_ext_imm,
-    input wire predict_taken, 
-    input wire actual_taken, 
+    input wire predict_taken,
+    input wire actual_taken,
     input wire bpu_correct,
     input wire [31:0] predict_target,
-    output reg [31:0] pc_out, 
+    output reg [31:0] pc_out,
     output wire [31:0] pc_plus_4,
     output wire [31:0] instr,
     output wire icache_read_req,
@@ -53,7 +53,7 @@ module instruction_fetch (
             pc_out = pc_in;
         end
     end
-    
+
     assign icache_read_req = 1'b1;
     assign icache_addr = pc_in;
     assign instr = icache_read_data;
@@ -65,7 +65,7 @@ endmodule
 module instruction_decode (
     input [31:0] if_id_pc_in,
     input [31:0] if_id_instr,
-    output [31:0] ext_imm, 
+    output [31:0] ext_imm,
     output reg [4:0] rs1,
     output reg [4:0] rs2,
     output reg [4:0] rd,
@@ -96,14 +96,7 @@ module instruction_decode (
     output [11:0] csr_addr,
     output [1:0] csr_op,
     output csr_we,
-    output wire wfi_req,
-    output fpu_en,
-    output f_reg_write,
-    output f_mem_to_reg,
-    output f_mem_write,
-    output f_to_x,
-    output x_to_f,
-    output [4:0] fpu_operation
+    output wire wfi_req
 );
 
     reg [19:0] u_imm;
@@ -111,8 +104,8 @@ module instruction_decode (
     reg [11:0] s_imm;
     reg [11:0] b_imm;
     reg [19:0] j_imm;
-    
-    always @(*) begin 
+
+    always @(*) begin
         opcode = if_id_instr[6:0];
         funct3 = if_id_instr[14:12];
         funct7 = if_id_instr[31:25];
@@ -125,16 +118,16 @@ module instruction_decode (
         b_imm = {if_id_instr[31], if_id_instr[7], if_id_instr[30:25], if_id_instr[11:8]};
         j_imm = {if_id_instr[31], if_id_instr[19:12], if_id_instr[20], if_id_instr[30:21]};
     end
-    
+
     wire [31:0] u_imm_ext = {u_imm, 12'b0};
     wire [31:0] i_imm_ext = {{20{i_imm[11]}}, i_imm};
     wire [31:0] s_imm_ext = {{20{s_imm[11]}}, s_imm};
     wire [31:0] b_imm_ext = {{19{b_imm[11]}}, b_imm, 1'b0};
     wire [31:0] j_imm_ext = {{11{j_imm[19]}}, j_imm, 1'b0};
-    
+
     assign ext_imm = (opcode == 7'b0110111 || opcode == 7'b0010111) ? u_imm_ext :
-                     (opcode == 7'b0000011 || opcode == 7'b0010011 || opcode == 7'b1100111 || opcode == 7'b0000111) ? i_imm_ext :
-                     (opcode == 7'b0100011 || opcode == 7'b0100111) ? s_imm_ext :
+                     (opcode == 7'b0000011 || opcode == 7'b0010011 || opcode == 7'b1100111) ? i_imm_ext :
+                     (opcode == 7'b0100011) ? s_imm_ext :
                      (opcode == 7'b1100011) ? b_imm_ext :
                      (opcode == 7'b1101111) ? j_imm_ext :
                      32'b0;
@@ -142,24 +135,23 @@ module instruction_decode (
     assign md_type = (opcode == 7'b0110011 && funct7 == 7'b0000001);
 
     assign jal_target = if_id_pc_in + j_imm_ext;
-    
+
     assign branch_target = if_id_pc_in + b_imm_ext;
-    
+
     wire is_system = (opcode == 7'b1110011);
     assign ecall = (if_id_instr == 32'h00000073);
     assign ebreak = (if_id_instr == 32'h00100073);
     assign mret = (if_id_instr == 32'h30200073);
     assign wfi_req = (if_id_instr == 32'h10500073);
-    
+
     assign csr_addr = if_id_instr[31:20];
     assign csr_we = is_system && (funct3 != 3'b000);
     assign csr_op = (is_system && funct3 != 3'b000) ? funct3[1:0] : 2'b00;
-    
+
     main_control_unit MCU (
         .opcode(opcode),
         .funct7(funct7),
         .funct3(funct3),
-        .rs2(rs2),
         .reg_write(reg_write),
         .alu_src(alu_src),
         .mem_write(mem_write),
@@ -173,16 +165,9 @@ module instruction_decode (
         .mem_unsigned(mem_unsigned),
         .alu_op(alu_op),
         .mem_size(mem_size),
-        .md_operation(md_operation),
-        .fpu_en(fpu_en),
-        .f_reg_write(f_reg_write),
-        .f_mem_to_reg(f_mem_to_reg),
-        .f_mem_write(f_mem_write),
-        .f_to_x(f_to_x),
-        .x_to_f(x_to_f),
-        .fpu_operation(fpu_operation)
+        .md_operation(md_operation)
     );
-    
+
     alu_control_unit ACU (
         .alu_op(alu_op),
         .funct3(funct3),
@@ -190,7 +175,7 @@ module instruction_decode (
         .opcode(opcode),
         .alu_ctrl(alu_ctrl)
     );
-    
+
 endmodule
 
 
@@ -214,18 +199,11 @@ module execute (
     input id_ex_csr_we,
     input [31:0] csr_read_data,
     input [4:0] id_ex_rs1,
-    input id_ex_fpu_en,
-    input [4:0] id_ex_fpu_operation,
-    input [31:0] id_ex_read_f_data1,
-    input [31:0] id_ex_read_f_data2,
-    input id_ex_f_to_x,
-    input id_ex_x_to_f,
     output reg [31:0] alu_result,
     output reg branch_taken,
     output reg [31:0] csr_write_data,
-    output mf_alu_stall,
-    output [31:0] fpu_result_out
-);  
+    output md_alu_stall
+);
 
     wire [31:0] mul_result;
     wire [31:0] div_result;
@@ -233,12 +211,6 @@ module execute (
     wire div_alu_done;
     wire mul_alu_stall;
     wire div_alu_stall;
-
-    wire fpu_stall;
-    wire fpu_done;
-    wire [31:0] fpu_result;
-    
-    wire [31:0] fpu_operand_a = id_ex_x_to_f ? alu_in1 : id_ex_read_f_data1;
 
     multiplier MUL (
         .clk(clk),
@@ -266,28 +238,14 @@ module execute (
         .md_alu_done(div_alu_done)
     );
 
-    fpu_unit FPU (
-        .clk(clk),
-        .reset_n(reset_n),
-        .stall_id_ex(stall_id_ex),
-        .fpu_start(id_ex_fpu_en),
-        .fpu_op(id_ex_fpu_operation),
-        .operand_a(fpu_operand_a),
-        .operand_b(id_ex_read_f_data2),
-        .result(fpu_result),
-        .fpu_stall(fpu_stall),
-        .fpu_done(fpu_done)
-    );
-
-    assign fpu_result_out = fpu_result;
-    assign mf_alu_stall = mul_alu_stall || div_alu_stall || fpu_stall;
+    assign md_alu_stall = mul_alu_stall || div_alu_stall;
 
     wire [31:0] csr_rs1_val = id_ex_funct3[2] ? {27'b0, id_ex_rs1} : alu_in1;
 
     always @(*) begin
         branch_taken = 1'b0;
         csr_write_data = 32'b0;
-        
+
         if (id_ex_csr_we) begin
             alu_result = csr_read_data;
             case (id_ex_csr_op)
@@ -296,8 +254,6 @@ module execute (
                 2'b11: csr_write_data = csr_read_data & ~csr_rs1_val;
                 default: csr_write_data = csr_rs1_val;
             endcase
-        end else if (id_ex_f_to_x) begin
-            alu_result = fpu_result;
         end else if (id_ex_lui) begin
             alu_result = id_ex_ext_imm;
         end else if (id_ex_auipc) begin
@@ -310,48 +266,48 @@ module execute (
             end else begin
                 alu_result = 32'd0;
             end
-        end else begin 
+        end else begin
             case (id_ex_alu_ctrl)
-                4'b0000: alu_result = alu_in1 & alu_in2;  
-                4'b0001: alu_result = alu_in1 | alu_in2;  
-                4'b0010: alu_result = alu_in1 + alu_in2;  
-                4'b0110: begin 
-                    alu_result = alu_in1 - alu_in2;  
+                4'b0000: alu_result = alu_in1 & alu_in2;
+                4'b0001: alu_result = alu_in1 | alu_in2;
+                4'b0010: alu_result = alu_in1 + alu_in2;
+                4'b0110: begin
+                    alu_result = alu_in1 - alu_in2;
                     if (id_ex_branch) begin
                         case (id_ex_funct3)
-                            3'b000: branch_taken = (alu_result == 32'd0); 
-                            3'b001: branch_taken = (alu_result != 32'd0); 
-                            3'b100: branch_taken = ($signed(alu_in1) < $signed(alu_in2)); 
-                            3'b101: branch_taken = ($signed(alu_in1) >= $signed(alu_in2)); 
-                            3'b110: branch_taken = (alu_in1 < alu_in2); 
-                            3'b111: branch_taken = (alu_in1 >= alu_in2); 
+                            3'b000: branch_taken = (alu_result == 32'd0);
+                            3'b001: branch_taken = (alu_result != 32'd0);
+                            3'b100: branch_taken = ($signed(alu_in1) < $signed(alu_in2));
+                            3'b101: branch_taken = ($signed(alu_in1) >= $signed(alu_in2));
+                            3'b110: branch_taken = (alu_in1 < alu_in2);
+                            3'b111: branch_taken = (alu_in1 >= alu_in2);
                             default: branch_taken = 1'b0;
                         endcase
                     end
                 end
-                4'b0100: alu_result = alu_in1 ^ alu_in2;  
+                4'b0100: alu_result = alu_in1 ^ alu_in2;
                 4'b0111: begin
                     if ($signed(alu_in1) < $signed(alu_in2)) begin
                         alu_result = 32'd1;
                     end else begin
                         alu_result = 32'd0;
                     end
-                end  
+                end
                 4'b1010: begin
                     if (alu_in1 < alu_in2) begin
                         alu_result = 32'd1;
                     end else begin
                         alu_result = 32'd0;
                     end
-                end  
-                4'b1000: alu_result = alu_in1 << alu_in2[4:0];  
-                4'b1001: alu_result = alu_in1 >> alu_in2[4:0];  
-                4'b1011: alu_result = $signed(alu_in1) >>> alu_in2[4:0];  
+                end
+                4'b1000: alu_result = alu_in1 << alu_in2[4:0];
+                4'b1001: alu_result = alu_in1 >> alu_in2[4:0];
+                4'b1011: alu_result = $signed(alu_in1) >>> alu_in2[4:0];
                 default: alu_result = alu_in1 + alu_in2;
             endcase
         end
     end
-    
+
 endmodule
 
 
@@ -373,7 +329,7 @@ module memory_access (
     assign dcache_addr = ex_mem_alu_result;
     assign dcache_write_data = ex_mem_mem_write_data;
     assign mem_read_data = dcache_read_data;
-    
+
 endmodule
 
 
@@ -388,5 +344,5 @@ module write_back (
 
     assign mem_wb_write_data = (mem_wb_jal) ? mem_wb_pc_plus_4 :
                                 mem_wb_mem_to_reg ? mem_wb_mem_read_data : mem_wb_alu_result;
-                                
+
 endmodule

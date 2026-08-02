@@ -3,19 +3,19 @@ Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
 Cadence and the Cadence logo are registered trademarks and Genus is a trademark
 of Cadence Design Systems, Inc. in the United States and other countries.
 
-[21:06:53.206218] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+[21:11:45.206194] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 Version: 23.14-s090_1, built Wed Feb 26 17:49:50 PST 2025
 Options: -files tcl/genus.tcl 
-Date:    Sun Aug 02 21:06:53 2026
+Date:    Sun Aug 02 21:11:45 2026
 Host:    user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*1physical cpu*AMD Ryzen 5 7545U 1024KB) (13556668KB)
-PID:     4090965
+PID:     4114791
 OS:      Ubuntu 26.04 LTS
 
 Checking out license: Genus_Synthesis
-[21:06:54.319426] Periodic Lic check successful
-[21:06:54.843722] Feature usage summary:
-[21:06:54.843722] Genus_Synthesis
+[21:11:46.377289] Periodic Lic check successful
+[21:11:46.377291] Feature usage summary:
+[21:11:46.377291] Genus_Synthesis
 
 
 
@@ -27,7 +27,7 @@ Checking out license: Genus_Synthesis
 Finished executable startup (1 second elapsed).
 
 Loading tool scripts...
-Finished loading tool scripts (12 seconds elapsed).
+Finished loading tool scripts (11 seconds elapsed).
 
 #@ Processing -files option
 @genus:root: 1> source tcl/genus.tcl
@@ -42,7 +42,7 @@ Finished loading tool scripts (12 seconds elapsed).
 @file(genus.tcl) 20: set TOP      "riscv_pipeline"
 @file(genus.tcl) 21: set SDC_FILE "./tcl/constraint.sdc"
 @file(genus.tcl) 23: source ./tcl/rtl_filelist.tcl
-Sourcing './tcl/rtl_filelist.tcl' (Sun Aug 02 21:07:06 JST 2026)...
+Sourcing './tcl/rtl_filelist.tcl' (Sun Aug 02 21:11:57 JST 2026)...
 #@ Begin verbose source ./tcl/rtl_filelist.tcl
 @file(rtl_filelist.tcl) 2: set RTL_FILES [list \
     ./rtl/control_unit.v \
@@ -296,8 +296,8 @@ WARNING: This version of the tool is 521 days old.
 @genus:root: 2> exit
 
 Lic Summary:
-[21:11:36.283785] Cdslmd servers: vm-fsemi-edu02-h4l0gt0b
-[21:11:36.808082] Feature usage summary:
-[21:11:36.808082] Genus_Synthesis
+[21:13:52.281075] Cdslmd servers: vm-fsemi-edu02-h4l0gt0b
+[21:13:52.281082] Feature usage summary:
+[21:13:52.281082] Genus_Synthesis
 
 Normal exit.

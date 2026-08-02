@@ -1,5 +1,5 @@
 ############################################################
-## Genus synthesis: RISC-V pipeline
+## Genus synthesis: RV32IM pipeline
 ## Based on the user's working SRAM Genus flow
 ## Hierarchy-aware single-corner TT flow
 ## Standard cells: ASAP7 RVT + LVT
@@ -16,6 +16,7 @@ if {[info exists ::env(ASAP7_HOME)]} {
 }
 
 set LIB      "${ASAP7}/asap7sc7p5t_28/LIB/CCS"
+set QRC_FILE "${ASAP7}/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06"
 set TOP      "riscv_pipeline"
 set SDC_FILE "./tcl/constraint.sdc"
 
@@ -27,13 +28,11 @@ foreach dir {outputs reports logs} {
     }
 }
 
-foreach old_report {
-    ./reports/timing_intent_pre_syn.rpt
-    ./reports/timing_intent_post_syn.rpt
-    ./reports/timing_lint_pre_syn.rpt
-    ./reports/timing_lint_post_syn.rpt
-} {
-    file delete -force $old_report
+# Never mix a failed run with reports/netlists from an older successful run.
+foreach pattern {./outputs/* ./reports/* ./logs/*} {
+    foreach stale_file [glob -nocomplain $pattern] {
+        file delete -force $stale_file
+    }
 }
 
 # ------------------------------------------------------------------------
@@ -59,12 +58,13 @@ if {$CORES < 1} {
 # Use local CPUs but do not configure separate super-thread servers.
 set_db / .auto_super_thread false
 set_db / .super_thread_servers {}
-set_db / .max_cpus_per_server 1
+set_db / .max_cpus_per_server $CORES
 
 set_db / .hdl_unconnected_value 0
 set_db / .hdl_track_filename_row_col true
 set_db / .auto_ungroup both
 set_db / .lp_insert_clock_gating false
+set_db / .read_qrc_tech_file_rc_corner true
 
 # ------------------------------------------------------------------------
 # 3. LIBRARIES
@@ -92,11 +92,17 @@ if {![file exists $SDC_FILE]} {
     error "Missing SDC file: [file normalize $SDC_FILE]"
 }
 
+if {![file exists $QRC_FILE]} {
+    error "Missing QRC technology file: [file normalize $QRC_FILE]"
+}
+
 set_db / .library $STD_LIBS
 
 # ------------------------------------------------------------------------
 # 4. MMMC CORNER: TT, 0.7 V, 25 C
 # ------------------------------------------------------------------------
+
+set_db / .library $STD_LIBS
 
 create_library_set \
     -name libset \
@@ -104,13 +110,14 @@ create_library_set \
 
 create_rc_corner \
     -name rccorner \
-    -pre_route_res 1 \
-    -post_route_res 1 \
-    -pre_route_cap 1 \
-    -post_route_cap 1 \
-    -post_route_cross_cap 1 \
-    -pre_route_clock_res 0 \
-    -pre_route_clock_cap 0 \
+    -qrc_tech $QRC_FILE \
+    -pre_route_res 1.0 \
+    -post_route_res 1.0 \
+    -pre_route_cap 1.0 \
+    -post_route_cap 1.0 \
+    -post_route_cross_cap 1.0 \
+    -pre_route_clock_res 0.0 \
+    -pre_route_clock_cap 0.0 \
     -temperature 25
 
 create_opcond \
@@ -141,7 +148,6 @@ create_analysis_view \
 set_analysis_view \
     -setup {tt} \
     -hold  {tt}
-
 # ------------------------------------------------------------------------
 # 5. READ AND ELABORATE RTL
 # ------------------------------------------------------------------------
@@ -197,7 +203,7 @@ if {[llength $PRESERVED_HIER_MODULES] == 0} {
 
 set CLK_PORT_OBJ [get_ports clk]
 
-if {[llength $CLK_PORT_OBJ] == 0} {
+if {[sizeof_collection $CLK_PORT_OBJ] == 0} {
     error "Top design '$TOP' does not contain port 'clk'."
 }
 
@@ -233,7 +239,7 @@ if {[info exists ::dc::sdc_failed_commands]} {
 
 set DEFINED_CLOCKS [get_clocks CLK]
 
-if {[llength $DEFINED_CLOCKS] == 0} {
+if {[sizeof_collection $DEFINED_CLOCKS] == 0} {
     error "Clock 'CLK' was not created by $SDC_FILE"
 }
 
@@ -257,10 +263,11 @@ if {[catch {
 # ------------------------------------------------------------------------
 
 set ALL_SEQS [all::all_seqs]
-set NON_DATA_INPUTS [get_ports [list clk reset_n]]
+set ASYNC_INPUT_NAMES [list meip_i msip_i mtip_i dbg_halt_req dbg_resume_req]
+set NON_DATA_INPUTS [get_ports [concat [list clk reset_n] $ASYNC_INPUT_NAMES]]
 set DATA_INPUTS [remove_from_collection [all_inputs] $NON_DATA_INPUTS]
 
-if {[llength $ALL_SEQS] > 0} {
+if {[sizeof_collection $ALL_SEQS] > 0} {
     define_cost_group -name I2C -design $TOP
     define_cost_group -name C2O -design $TOP
     define_cost_group -name C2C -design $TOP
@@ -283,7 +290,7 @@ if {[llength $ALL_SEQS] > 0} {
         -name  C2O
 
     # Input-to-register and input-to-output paths
-    if {[llength $DATA_INPUTS] > 0} {
+    if {[sizeof_collection $DATA_INPUTS] > 0} {
         path_group \
             -from  $DATA_INPUTS \
             -to    $ALL_SEQS \
@@ -393,7 +400,7 @@ write_do_lec \
 report_messages -all > reports/messages_all.rpt
 
 puts "===================================================="
-puts "GENUS RISC-V HIERARCHY SYNTHESIS COMPLETED"
+puts "GENUS RV32IM HIERARCHY SYNTHESIS COMPLETED"
 puts " - Std cells: RVT + LVT"
 puts " - PVT      : TT, 0.7 V, 25 C"
 puts " - Netlist  : $MAPPED_NETLIST"
@@ -407,4 +414,3 @@ if {$SPEF_GENERATED} {
 
 puts " - Hierarchy: $PRESERVED_HIER_MODULES"
 puts "===================================================="
-

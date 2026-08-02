@@ -3,7 +3,6 @@ set RTL_FILES [list \
     ./rtl/control_unit.v \
     ./rtl/forwarding_unit.v \
     ./rtl/multiplier_divider_unit.v \
-    ./rtl/floating_point_unit.v \
     ./rtl/branch_prediction_unit.v \
     ./rtl/pipeline_control_unit.v \
     ./rtl/pipeline_register.v \
