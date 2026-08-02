@@ -1,0 +1,14 @@
+[08/02 14:17:56      0s] 
+[08/02 14:17:56      0s] Cadence Innovus(TM) Implementation System.
+[08/02 14:17:56      0s] Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+[08/02 14:17:56      0s] 
+[08/02 14:17:56      0s] Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
+[08/02 14:17:56      0s] Options:	
+[08/02 14:17:56      0s] Date:		Sun Aug  2 14:17:56 2026
+[08/02 14:17:56      0s] Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
+[08/02 14:17:56      0s] OS:		Ubuntu 26.04 LTS
+[08/02 14:17:56      0s] 
+[08/02 14:17:56      0s] License:
+[08/02 14:18:08      0s] 		[14:18:08.206258] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+[08/02 14:19:22      0s] **ERROR: (IMPLIC-4):	No valid licenses found for this product.

@@ -1,23 +1,93 @@
+# =============================================================================
+# RISC-V top-level pin assignment.
+# Teacher rule: declare all pins and spread them over all four sides.
+# ASAP7 preferred directions: M6 horizontal, M7 vertical.
+# =============================================================================
+
+set bottom_pins {clk reset_n riscv_start}
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend bottom_pins [format {reset_vector_in[%d]} $i]
+}
+
+set left_pins {icache_read_req}
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend left_pins [format {icache_addr[%d]} $i]
+}
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend left_pins [format {icache_read_data[%d]} $i]
+}
+lappend left_pins icache_hit icache_stall icache_read_req_lane1
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend left_pins [format {icache_addr_lane1[%d]} $i]
+}
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend left_pins [format {icache_read_data_lane1[%d]} $i]
+}
+lappend left_pins icache_hit_lane1 icache_stall_lane1
+
+set right_pins {dcache_read_req dcache_write_req}
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend right_pins [format {dcache_addr[%d]} $i]
+}
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend right_pins [format {dcache_write_data[%d]} $i]
+}
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend right_pins [format {dcache_read_data[%d]} $i]
+}
+lappend right_pins dcache_hit dcache_stall {mem_size_top[1]} {mem_size_top[0]} mem_unsigned_top
+
+set top_pins {meip_i msip_i mtip_i riscv_done wfi_sleep_out dbg_halt_req dbg_resume_req dbg_halted}
+for {set i 15} {$i >= 0} {incr i -1} {
+    lappend top_pins [format {dbg_reg_read_addr[%d]} $i]
+}
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend top_pins [format {dbg_reg_read_data[%d]} $i]
+}
+lappend top_pins dbg_reg_write_en
+for {set i 15} {$i >= 0} {incr i -1} {
+    lappend top_pins [format {dbg_reg_write_addr[%d]} $i]
+}
+for {set i 31} {$i >= 0} {incr i -1} {
+    lappend top_pins [format {dbg_reg_write_data[%d]} $i]
+}
+
+# Fail before editPin if RTL/netlist and pin script no longer agree.
+set assigned_pins [concat $bottom_pins $left_pins $right_pins $top_pins]
+set design_pin_names [dbGet top.terms.name]
+
+foreach pin_name $assigned_pins {
+    if {[lsearch -exact $design_pin_names $pin_name] < 0} {
+        error "pins.tcl references a non-existent top pin: $pin_name"
+    }
+}
+
+foreach design_pin $design_pin_names {
+    if {[lsearch -exact $assigned_pins $design_pin] < 0} {
+        error "Top pin is not assigned to any side in pins.tcl: $design_pin"
+    }
+}
+
 setPinAssignMode -pinEditInBatch true
 
-# Bottom - Metal7 Vertical
-editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side \
--spreadDirection counterclockwise -side BOTTOM -layer M7 -honorConstraint 1 \
--pin { iclk iA[31] iA[30] iA[29] iA[28] iA[27] iA[26] iA[25] iA[24] iA[23] iA[22] iA[21] iA[20] iA[19] iA[18] iA[17] iA[16] iA[15] iA[14] iA[13] iA[12] iA[11] iA[10] iA[9] iA[8] iA[7] iA[6] iA[5] iA[4] iA[3] iA[2] iA[1] iA[0] }
+# Bottom/top use vertical M7 shapes.  Left/right use horizontal M6 shapes.
+# 0.128 x 0.288 um is on-grid and satisfies the scaled minimum area/length.
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 \
+    -spreadType side -spreadDirection counterclockwise \
+    -side BOTTOM -layer M7 -honorConstraint 1 -pin $bottom_pins
 
-# Right - Metal6 Horizontal
-editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side \
--spreadDirection counterclockwise -side RIGHT -layer M6 -honorConstraint 1 \
--pin { iB[31] iB[30] iB[29] iB[28] iB[27] iB[26] iB[25] iB[24] iB[23] iB[22] iB[21] iB[20] iB[19] iB[18] iB[17] iB[16] iB[15] iB[14] iB[13] iB[12] iB[11] iB[10] iB[9] iB[8] iB[7] iB[6] iB[5] iB[4] iB[3] iB[2] iB[1] iB[0] }
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 \
+    -spreadType side -spreadDirection counterclockwise \
+    -side LEFT -layer M6 -honorConstraint 1 -pin $left_pins
 
-# Top - Metal7 Vertical
-editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side \
--spreadDirection counterclockwise -side TOP -layer M7 -honorConstraint 1 \
--pin {rst_n oP[63] oP[62] oP[61] oP[60] oP[59] oP[58] oP[57] oP[56] oP[55] oP[54] oP[53] oP[52] oP[51] oP[50] oP[49] oP[48] oP[47] oP[46] oP[45] oP[44] oP[43] oP[42] oP[41] oP[40] oP[39] oP[38] oP[37] oP[36] oP[35] oP[34] oP[33] oP[32] }
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 \
+    -spreadType side -spreadDirection counterclockwise \
+    -side RIGHT -layer M6 -honorConstraint 1 -pin $right_pins
 
-# Left - Metal6 Horizontal
-editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side \
--spreadDirection counterclockwise -side LEFT -layer M6 -honorConstraint 1 \
--pin { oP[31] oP[30] oP[29] oP[28] oP[27] oP[26] oP[25] oP[24] oP[23] oP[22] oP[21] oP[20] oP[19] oP[18] oP[17] oP[16] oP[15] oP[14] oP[13] oP[12] oP[11] oP[10] oP[9] oP[8] oP[7] oP[6] oP[5] oP[4] oP[3] oP[2] oP[1] oP[0] }
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 \
+    -spreadType side -spreadDirection counterclockwise \
+    -side TOP -layer M7 -honorConstraint 1 -pin $top_pins
 
 setPinAssignMode -pinEditInBatch false
+
+puts "INFO: assigned [llength $assigned_pins] RISC-V top-level pins"

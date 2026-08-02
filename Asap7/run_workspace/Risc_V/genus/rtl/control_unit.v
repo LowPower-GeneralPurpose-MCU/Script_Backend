@@ -1,11 +1,7 @@
 //==================================================================================================
 // File: control_unit.v
 //==================================================================================================
-`timescale 1ns / 1ps
-
-module main_control_unit #(
-    parameter ENABLE_F_EXTENSION = 0
-) (
+module main_control_unit (
     input [6:0] opcode,
     input [6:0] funct7,
     input [2:0] funct3,
@@ -126,30 +122,6 @@ module main_control_unit #(
                     default: mem_size = 2'b10;
                 endcase
             end
-
-            7'b0101111: begin
-                if (funct3 == 3'b010) begin
-                    alu_src = 1'b1;
-                    alu_op = 2'b00;
-                    mem_size = 2'b10;
-                    reg_write = 1'b1;
-                    mem_to_reg = 1'b1;
-                    case (funct7[6:2])
-                        5'b00010: begin // LR.W
-                            mem_read = 1'b1;
-                            mem_write = 1'b0;
-                        end
-                        5'b00011: begin // SC.W
-                            mem_read = 1'b0;
-                            mem_write = 1'b1;
-                        end
-                        default: begin  // AMO*.W read old value and write new value
-                            mem_read = 1'b1;
-                            mem_write = 1'b1;
-                        end
-                    endcase
-                end
-            end
             
             7'b1100011: begin
                 branch = 1'b1;
@@ -182,144 +154,130 @@ module main_control_unit #(
             end
             
             7'b0000111: begin
-                if (ENABLE_F_EXTENSION) begin
-                    alu_src = 1'b1;
-                    mem_read = 1'b1;
-                    f_mem_to_reg = 1'b1;
-                    f_reg_write = 1'b1;
-                    alu_op = 2'b00;
-                    mem_size = 2'b10;
-                end
+                alu_src = 1'b1;
+                mem_read = 1'b1;
+                f_mem_to_reg = 1'b1;
+                f_reg_write = 1'b1;
+                alu_op = 2'b00;
+                mem_size = 2'b10;
             end
             
             7'b0100111: begin
-                if (ENABLE_F_EXTENSION) begin
-                    alu_src = 1'b1;
-                    mem_write = 1'b1;
-                    f_mem_write = 1'b1;
-                    alu_op = 2'b00;
-                    mem_size = 2'b10;
-                end
+                alu_src = 1'b1;
+                mem_write = 1'b1;
+                f_mem_write = 1'b1;
+                alu_op = 2'b00;
+                mem_size = 2'b10;
             end
             
             7'b1010011: begin
-                if (ENABLE_F_EXTENSION) begin
-                    fpu_en = 1'b1;
-                    case (funct7)
-                        7'b0000000: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b00000;
+                fpu_en = 1'b1;
+                case (funct7)
+                    7'b0000000: begin
+                        f_reg_write = 1'b1;
+                        fpu_operation = 5'b00000;
+                    end
+                    7'b0000100: begin
+                        f_reg_write = 1'b1;
+                        fpu_operation = 5'b00001;
+                    end
+                    7'b0001000: begin
+                        f_reg_write = 1'b1;
+                        fpu_operation = 5'b00010;
+                    end
+                    7'b0001100: begin
+                        f_reg_write = 1'b1;
+                        fpu_operation = 5'b01000;
+                    end
+                    7'b0101100: begin
+                        f_reg_write = 1'b1;
+                        fpu_operation = 5'b01001;
+                    end
+                    7'b0010000: begin
+                        f_reg_write = 1'b1;
+                        case (funct3)
+                            3'b000: fpu_operation = 5'b01100;
+                            3'b001: fpu_operation = 5'b01101;
+                            3'b010: fpu_operation = 5'b01110;
+                            default: fpu_operation = 5'b01100;
+                        endcase
+                    end
+                    7'b0010100: begin
+                        f_reg_write = 1'b1;
+                        case (funct3)
+                            3'b000: fpu_operation = 5'b01010;
+                            3'b001: fpu_operation = 5'b01011;
+                            default: fpu_operation = 5'b01010;
+                        endcase
+                    end
+                    7'b1010000: begin
+                        f_to_x = 1'b1;
+                        reg_write = 1'b1;
+                        case (funct3)
+                            3'b010: fpu_operation = 5'b00101;
+                            3'b001: fpu_operation = 5'b00110;
+                            3'b000: fpu_operation = 5'b00111;
+                            default: fpu_operation = 5'b00101;
+                        endcase
+                    end
+                    7'b1100000: begin
+                        f_to_x = 1'b1;
+                        reg_write = 1'b1;
+                        if (rs2[0]) begin
+                            fpu_operation = 5'b10010;
+                        end else begin
+                            fpu_operation = 5'b00011;
                         end
-                        7'b0000100: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b00001;
+                    end
+                    7'b1101000: begin
+                        x_to_f = 1'b1;
+                        f_reg_write = 1'b1;
+                        if (rs2[0]) begin
+                            fpu_operation = 5'b10011;
+                        end else begin
+                            fpu_operation = 5'b00100;
                         end
-                        7'b0001000: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b00010;
-                        end
-                        7'b0001100: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b01000;
-                        end
-                        7'b0101100: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b01001;
-                        end
-                        7'b0010000: begin
-                            f_reg_write = 1'b1;
-                            case (funct3)
-                                3'b000: fpu_operation = 5'b01100;
-                                3'b001: fpu_operation = 5'b01101;
-                                3'b010: fpu_operation = 5'b01110;
-                                default: fpu_operation = 5'b01100;
-                            endcase
-                        end
-                        7'b0010100: begin
-                            f_reg_write = 1'b1;
-                            case (funct3)
-                                3'b000: fpu_operation = 5'b01010;
-                                3'b001: fpu_operation = 5'b01011;
-                                default: fpu_operation = 5'b01010;
-                            endcase
-                        end
-                        7'b1010000: begin
-                            f_to_x = 1'b1;
-                            reg_write = 1'b1;
-                            case (funct3)
-                                3'b010: fpu_operation = 5'b00101;
-                                3'b001: fpu_operation = 5'b00110;
-                                3'b000: fpu_operation = 5'b00111;
-                                default: fpu_operation = 5'b00101;
-                            endcase
-                        end
-                        7'b1100000: begin
-                            f_to_x = 1'b1;
-                            reg_write = 1'b1;
-                            if (rs2[0]) begin
-                                fpu_operation = 5'b10010;
-                            end else begin
-                                fpu_operation = 5'b00011;
-                            end
-                        end
-                        7'b1101000: begin
-                            x_to_f = 1'b1;
-                            f_reg_write = 1'b1;
-                            if (rs2[0]) begin
-                                fpu_operation = 5'b10011;
-                            end else begin
-                                fpu_operation = 5'b00100;
-                            end
-                        end
-                        7'b1110000: begin
-                            f_to_x = 1'b1;
-                            reg_write = 1'b1;
-                            case (funct3)
-                                3'b000: fpu_operation = 5'b01111;
-                                3'b001: fpu_operation = 5'b10001;
-                                default: fpu_operation = 5'b01111;
-                            endcase
-                        end
-                        7'b1111000: begin
-                            x_to_f = 1'b1;
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b10000;
-                        end
-                        default: fpu_en = 1'b0;
-                    endcase
-                end
+                    end
+                    7'b1110000: begin
+                        f_to_x = 1'b1;
+                        reg_write = 1'b1;
+                        case (funct3)
+                            3'b000: fpu_operation = 5'b01111;
+                            3'b001: fpu_operation = 5'b10001;
+                            default: fpu_operation = 5'b01111;
+                        endcase
+                    end
+                    7'b1111000: begin
+                        x_to_f = 1'b1;
+                        f_reg_write = 1'b1;
+                        fpu_operation = 5'b10000;
+                    end
+                    default: fpu_en = 1'b0;
+                endcase
             end
             
             7'b1000011: begin
-                if (ENABLE_F_EXTENSION) begin
-                    fpu_en = 1'b1;
-                    f_reg_write = 1'b1;
-                    fpu_operation = 5'b10100;
-                end
+                fpu_en = 1'b1;
+                f_reg_write = 1'b1;
+                fpu_operation = 5'b10100;
             end
             
             7'b1000111: begin
-                if (ENABLE_F_EXTENSION) begin
-                    fpu_en = 1'b1;
-                    f_reg_write = 1'b1;
-                    fpu_operation = 5'b10101;
-                end
+                fpu_en = 1'b1;
+                f_reg_write = 1'b1;
+                fpu_operation = 5'b10101;
             end
             
             7'b1001011: begin
-                if (ENABLE_F_EXTENSION) begin
-                    fpu_en = 1'b1;
-                    f_reg_write = 1'b1;
-                    fpu_operation = 5'b10110;
-                end
+                fpu_en = 1'b1;
+                f_reg_write = 1'b1;
+                fpu_operation = 5'b10110;
             end
             
             7'b1001111: begin
-                if (ENABLE_F_EXTENSION) begin
-                    fpu_en = 1'b1;
-                    f_reg_write = 1'b1;
-                    fpu_operation = 5'b10111;
-                end
+                fpu_en = 1'b1;
+                f_reg_write = 1'b1;
+                fpu_operation = 5'b10111;
             end
             
             default: begin

@@ -1,29 +1,28 @@
-set ASAP7 "/home/user1/Desktop/asap7"
-set TECH_LEF "${ASAP7}/asap7sc7p5t_28/techlef_misc"
-set CELL_LEF "${ASAP7}/asap7sc7p5t_28/LEF/scaled"
+# Innovus init_design inputs for riscv_pipeline.
+source ./tcl/config.tcl
 
-# Tech LEF
-set tech_lef "${TECH_LEF}/asap7_tech_4x_201209.lef"
+set init_lef_file [concat [list $TECH_LEF] $CELL_LEFS]
 
-# Cell LEF
-set cell_lefs " ${CELL_LEF}/asap7sc7p5t_28_R_4x_220121a.lef "
-
-# Concat
-set init_lef_file [concat $tech_lef $cell_lefs]
+foreach required_file [concat $init_lef_file $TIMING_LIBS [list $QRC_FILE $SYN_NETLIST $FUNC_SDC]] {
+    if {![file isfile $required_file]} {
+        error "Missing required Innovus input: $required_file\nRun Genus first and/or set ASAP7_HOME correctly."
+    }
+}
 
 set ::TimeLib::tsgMarkCellLatchConstructFlag 1
 set conf_qxconf_file {NULL}
 set conf_qxlib_file {NULL}
 set defHierChar {/}
-set distributed_client_message_echo {1}
-set distributed_mmmc_disable_reports_auto_redirection {0}
-set init_abstract_view {abstract}
-set init_design_settop 0
-set init_gnd_net {VSS}
-set init_layout_view {layout}
-set init_mmmc_file {./tcl/viewDefinition.tcl}
-set init_pwr_net {VDD}
-set init_verilog "./outputs/Mul32_syn.v"
+set distributed_client_message_echo 1
+set distributed_mmmc_disable_reports_auto_redirection 0
+set init_abstract_view abstract
+set init_layout_view layout
+set init_design_settop 1
+set init_top_cell $TOP
+set init_gnd_net VSS
+set init_pwr_net VDD
+set init_mmmc_file ./tcl/viewDefinition.tcl
+set init_verilog $SYN_NETLIST
 set latch_time_borrow_mode max_borrow
 set pegDefaultResScaleFactor 1
 set pegDetailResScaleFactor 1

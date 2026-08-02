@@ -1,19 +1,28 @@
-set ASAP7 "/home/user1/Desktop/asap7"
-set LIB "${ASAP7}/asap7sc7p5t_28/LIB/CCS"
-set QRC "${ASAP7}/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06"
+# Single functional TT analysis view matching the Genus mapping libraries.
+source ./tcl/config.tcl
 
-set LIB_LIST [list ${LIB}/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib ${LIB}/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib ${LIB}/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib ]
+create_library_set -name libset_tt -timing $TIMING_LIBS
 
-create_library_set -name libset -timing $LIB_LIST
+create_op_cond -name opcond_tt_0p7v_25c \
+    -library_file [lindex $RVT_LIBS 0] \
+    -P 1.0 -V 0.7 -T 25
 
-create_rc_corner -name rccorner -preRoute_res 1 -postRoute_res 1 -preRoute_cap 1 -postRoute_cap 1 -postRoute_xcap 1 -preRoute_clkres 0 -preRoute_clkcap 0 -T 25 -qx_tech_file $QRC
+create_rc_corner -name rc_typ \
+    -preRoute_res 1.0 \
+    -postRoute_res 1.0 \
+    -preRoute_cap 1.0 \
+    -postRoute_cap 1.0 \
+    -postRoute_xcap 1.0 \
+    -preRoute_clkres 0.0 \
+    -preRoute_clkcap 0.0 \
+    -T 25 \
+    -qx_tech_file $QRC_FILE
 
-create_op_cond -name opcond -library_file ${LIB}/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib -P 1 -V 0.7 -T 25
+create_delay_corner -name dc_tt \
+    -library_set libset_tt \
+    -opcond_library opcond_tt_0p7v_25c \
+    -rc_corner rc_typ
 
-create_delay_corner -name corner -library_set libset -opcond_library opcond -rc_corner rccorner
-
-create_constraint_mode -name mode_normal -sdc_files ./outputs/Mul32_syn.sdc
-
-create_analysis_view -name tt -constraint_mode mode_normal -delay_corner corner
-
-set_analysis_view -setup {tt} -hold {tt}
+create_constraint_mode -name mode_func -sdc_files [list $FUNC_SDC]
+create_analysis_view -name view_tt -constraint_mode mode_func -delay_corner dc_tt
+set_analysis_view -setup [list view_tt] -hold [list view_tt]

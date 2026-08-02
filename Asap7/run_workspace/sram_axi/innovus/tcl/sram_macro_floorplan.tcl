@@ -216,10 +216,8 @@ for {set k 0} {$k < $SRAM_COUNT} {incr k} {
     set y [expr {
     	$SRAM_Y0 + $row * ($SRAM_H + $SRAM_MACRO_GAP_Y)
     }]
-    set site_w [lindex [dbGet head.coreSite.size_x] 0]
-    set site_h [lindex [dbGet head.coreSite.size_y] 0]
-    set snap_x [expr { round($x / $site_w) * $site_w}]
-    set snap_y [expr { round($y / $site_h) * $site_h}]
+    set snap_x [sram_snap_to_grid $x $ASAP7_SITE_WIDTH]
+    set snap_y [sram_snap_to_grid $y $ASAP7_SITE_WIDTH]
     # Keep the macro movable until the concurrent run and deterministic pack
     # have completed.
     dbSet $ptr.pStatus unplaced
@@ -269,7 +267,6 @@ foreach record $SRAM_RECORDS {
         [lindex $record 1]
 }
 
-# The slide uses two placement rows of halo during mixed placement.
 addHaloToBlock \
     -allBlock \
     $SRAM_MODEL_ROW_X2 $SRAM_MODEL_ROW_X2 \
@@ -365,23 +362,14 @@ if {$SRAM_PACK_4X4} {
             set y [expr {
             	$SRAM_Y0 +
             	$row * ($SRAM_H + $SRAM_MACRO_GAP_Y)
-            }]
-            set site_w [lindex [dbGet head.coreSite.size_x] 0]
-            set site_h [lindex [dbGet head.coreSite.size_y] 0]
-            set snap_x [expr {round($x / $site_w) * $site_w}]
-            set snap_y [expr {round($y / $site_h) * $site_h}]
+            }
+            set snap_x [sram_snap_to_grid $x $ASAP7_SITE_WIDTH]
+            set snap_y [sram_snap_to_grid $y $ASAP7_SITE_WIDTH]
             
             dbSet $ptr.pStatus unplaced
             placeInstance $name $snap_x $snap_y $SRAM_ISLAND_ORIENT
             dbSet $ptr.pStatus placed
             
-            #Not placement in SRAM
-            set urx [expr {$snap_x + $SRAM_W}]
-            set ury [expr {$snap_y + $SRAM_H}]
-            createRouteBlk -box $snap_x $snap_y $urx $ury \
-            		   -layer {1 2 3}\
-            		   -name ${name}_routeBlk \
-            		   -pgnetOnly false
             if {[dbGet $ptr.orient] ne $SRAM_ISLAND_ORIENT} {
             	close $packed_map
             	error "$name was not placed with orientation $SRAM_ISLAND_ORIENT"

@@ -1153,20 +1153,20 @@
 "object":"/designs/axi_ram/instances_seq/wstrb_hold_reg[3]",
 "type":"instance"},
 {"index": "1", 
- "date": "Sat Jul 25 17:52:13 UTC 2026",
- "seconds": 1785001933.601321,
+ "date": "Sun Aug 02 07:02:33 UTC 2026",
+ "seconds": 1785654153.4988918,
  "netlist": "fv/axi_ram/fv_map.v.gz", 
  "netlist_exists": "1", 
  "netlist_normalize": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/genus/fv/axi_ram/fv_map.v.gz", 
- "netlist_mtime": "1785001931", 
- "netlist_timestamp": "Sat Jul 25 17:52:11 UTC 2026", 
- "netlist_size": "20050", 
- "netlist_cksum": "436119614", 
+ "netlist_mtime": "1785654151", 
+ "netlist_timestamp": "Sun Aug 02 07:02:31 UTC 2026", 
+ "netlist_size": "20048", 
+ "netlist_cksum": "4098018309", 
  "design_name": "axi_ram", 
  "synth_workdir": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/genus", 
  "synthesis_command":"",
  "current_label": "fv_map", 
  "previous_label": "rtl", 
- "write_verif_file_runtime": 1.8431629999999999 
+ "write_verif_file_runtime": 1.792033 
  }
 ]
