@@ -10,7 +10,7 @@ set CLK_NAME   CLK
 set ASYNC_INPUT_NAMES [list meip_i msip_i mtip_i dbg_halt_req dbg_resume_req]
 
 # 1000 ps = 1 ns = 1 GHz.  Change only CLK_PERIOD when exploring frequency.
-set CLK_PERIOD 1000.0
+set CLK_PERIOD 10000.0
 set CLK_HALF   [expr {$CLK_PERIOD / 2.0}]
 
 set IN_DELAY_MAX  [expr {0.25 * $CLK_PERIOD}]

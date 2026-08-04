@@ -16,7 +16,6 @@ if {[info exists ::env(ASAP7_HOME)]} {
 }
 
 set LIB      "${ASAP7}/asap7sc7p5t_28/LIB/CCS"
-set QRC_FILE "${ASAP7}/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06"
 set TOP      "riscv_pipeline"
 set SDC_FILE "./tcl/constraint.sdc"
 
@@ -43,28 +42,16 @@ set_db / .init_lib_search_path [list $LIB]
 set_db / .script_search_path   {./tcl}
 set_db / .init_hdl_search_path {./rtl}
 
-# Detect the available local CPUs in the same way as the SRAM Genus flow.
-if {![catch {open "/proc/cpuinfo" r} cpu_file]} {
-    set CORES [regexp -all -line {^processor\s} [read $cpu_file]]
-    close $cpu_file
-} else {
-    set CORES 4
-}
 
-if {$CORES < 1} {
-    set CORES 1
-}
-
-# Use local CPUs but do not configure separate super-thread servers.
-set_db / .auto_super_thread false
-set_db / .super_thread_servers {}
+set CORES 4
 set_db / .max_cpus_per_server $CORES
+
+puts "Genus CPU configuration: $CORES local CPU, super-thread disabled"
 
 set_db / .hdl_unconnected_value 0
 set_db / .hdl_track_filename_row_col true
 set_db / .auto_ungroup both
 set_db / .lp_insert_clock_gating false
-set_db / .read_qrc_tech_file_rc_corner true
 
 # ------------------------------------------------------------------------
 # 3. LIBRARIES
@@ -92,17 +79,11 @@ if {![file exists $SDC_FILE]} {
     error "Missing SDC file: [file normalize $SDC_FILE]"
 }
 
-if {![file exists $QRC_FILE]} {
-    error "Missing QRC technology file: [file normalize $QRC_FILE]"
-}
-
 set_db / .library $STD_LIBS
 
 # ------------------------------------------------------------------------
 # 4. MMMC CORNER: TT, 0.7 V, 25 C
 # ------------------------------------------------------------------------
-
-set_db / .library $STD_LIBS
 
 create_library_set \
     -name libset \
@@ -110,7 +91,6 @@ create_library_set \
 
 create_rc_corner \
     -name rccorner \
-    -qrc_tech $QRC_FILE \
     -pre_route_res 1.0 \
     -post_route_res 1.0 \
     -pre_route_cap 1.0 \
@@ -148,6 +128,7 @@ create_analysis_view \
 set_analysis_view \
     -setup {tt} \
     -hold  {tt}
+
 # ------------------------------------------------------------------------
 # 5. READ AND ELABORATE RTL
 # ------------------------------------------------------------------------
@@ -414,3 +395,4 @@ if {$SPEF_GENERATED} {
 
 puts " - Hierarchy: $PRESERVED_HIER_MODULES"
 puts "===================================================="
+
