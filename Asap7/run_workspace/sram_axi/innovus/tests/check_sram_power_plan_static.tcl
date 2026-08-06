@@ -122,7 +122,8 @@ proc simulate_sram_island_power {script_path} {
     global SRAM_PG_MODEL_STRIPE_W SRAM_PG_MODEL_STRIPE_S
     global SRAM_PG_MODEL_STRIPE_PITCH ASAP7_ROW_HEIGHT
     global core_llx core_lly
-    global ring_m89_w ring_m89_s ring_m89_o ring_m89_span
+    global power_die_llx power_die_lly
+    global ring_m89_w ring_m89_s ring_m89_inner_o ring_m89_outer_o ring_m89_span
     global stripe_m45_w stripe_m45_s
 
     set SRAM_STRIPE_CAPTURE {}
@@ -155,10 +156,13 @@ proc simulate_sram_island_power {script_path} {
     set ASAP7_ROW_HEIGHT 1.080
     set core_llx 2.16
     set core_lly 2.16
+    set power_die_llx 0.0
+    set power_die_lly 0.0
     set ring_m89_w 0.480
     set ring_m89_s 0.480
-    set ring_m89_o 0.384
-    set ring_m89_span 2.144
+    set ring_m89_inner_o 0.192
+    set ring_m89_outer_o 1.152
+    set ring_m89_span 1.632
     set stripe_m45_w 0.096
     set stripe_m45_s 0.288
 
@@ -212,7 +216,7 @@ foreach old_child {
     core_pg_outside_island.tcl
 } {
     if {[string first "source ./tcl/$old_child" $power_text] >= 0} {
-        fail "power_plan.tcl must not source $old_child; the SRAM island must use the single M8/M9 core ring"
+        fail "power_plan.tcl must not source $old_child; the SRAM island must reuse the M8/M9 core-ring pair"
     }
 }
 
@@ -233,6 +237,7 @@ foreach proc_name {
     pg_track_aligned_global_offset
     pg_create_core_ring_side_pins
     pg_delete_core_pg_pins
+    pg_assert_complete_core_rings
     pg_assert_clean_connectivity_report
     pg_assert_clean_drc_report
 } {
@@ -257,8 +262,35 @@ foreach margin_var {die_core_margin_left die_core_margin_bottom die_core_margin_
 }
 
 set ring_snap_count [regexp -all -- {-snap_wire_center_to_grid[[:space:]]+Grid} $all_power_text]
-if {$ring_snap_count < 1} {
-    fail "The M8/M9 core addRing command must snap wire centers to the routing grid"
+if {$ring_snap_count < 2} {
+    fail "Both one-net M8/M9 core rings must snap wire centers to the routing grid"
+}
+
+set global_ring_count [regexp -all {addRing[[:space:]]+\\} $power_text]
+if {$global_ring_count != 2} {
+    fail "power_plan.tcl must create exactly two deterministic one-net M8/M9 core rings"
+}
+foreach net {VDD VSS} {
+    set one_net_pattern [format {-nets[[:space:]]+\{%s\}} $net]
+    assert_contains \
+        $power_text \
+        $one_net_pattern \
+        "The global M8/M9 ring must include an independent $net ring"
+}
+if {[regexp -- {addRing[[:space:]]+\\[[:space:]]+-nets[[:space:]]+\{(?:VDD[[:space:]]+VSS|VSS[[:space:]]+VDD)\}} $power_text]} {
+    fail "Do not rely on one two-net addRing call at the 2.16 um die/core margin"
+}
+
+assert_contains \
+    $power_text \
+    {pg_assert_complete_core_rings[[:space:]]+\\} \
+    "The flow must verify all four M8/M9 sides for both VDD and VSS after addRing"
+set complete_ring_check_index [string first "pg_assert_complete_core_rings \\" $power_text]
+set island_source_index [string first {source ./tcl/sram_island_power.tcl} $power_text]
+if {$complete_ring_check_index < 0 ||
+    $island_source_index < 0 ||
+    $complete_ring_check_index >= $island_source_index} {
+    fail "The complete-ring assertion must run before SRAM collectors are created"
 }
 
 assert_contains \
@@ -319,8 +351,12 @@ assert_contains \
     "The M8/M9 core ring must keep conservative pair spacing"
 assert_contains \
     $power_text \
-    {set[[:space:]]+ring_m89_o[[:space:]]+0\.384} \
-    "The M8/M9 core ring must fit in the 2.16 um die-to-core margin"
+    {set[[:space:]]+ring_m89_inner_o[[:space:]]+0\.192} \
+    "The inner M8/M9 core ring must leave deterministic grid-snap room"
+assert_contains \
+    $power_text \
+    {set[[:space:]]+ring_m89_outer_o[[:space:]]+\[expr} \
+    "The outer M8/M9 ring offset must be derived from inner offset, width, and spacing"
 assert_contains \
     $power_text \
     {set[[:space:]]+stripe_m45_w[[:space:]]+0\.096} \
@@ -361,6 +397,17 @@ assert_contains \
     $power_text \
     {pg_assert_clean_drc_report[[:space:]]+\$pg_drc_report} \
     "power_plan.tcl must stop before saveDesign when PG DRC is dirty"
+assert_contains \
+    $power_text \
+    {file[[:space:]]+delete[[:space:]]+-force[[:space:]]+\$stale_pg_report} \
+    "power_plan.tcl must delete stale PG reports before constructing a new power plan"
+set stale_report_delete_index [string first {file delete -force $stale_pg_report} $power_text]
+set first_global_ring_index [string first "\naddRing \\" $power_text]
+if {$stale_report_delete_index < 0 ||
+    $first_global_ring_index < 0 ||
+    $stale_report_delete_index >= $first_global_ring_index} {
+    fail "Stale PG reports must be deleted before the first global addRing command"
+}
 if {[string first {Special[[:space:]]+(Wire|Via)} $power_text] < 0} {
     fail "PG DRC guard must fail on special-route wire/via DRCs, while allowing fake SRAM macro-pin DRCs to be reviewed later"
 }
@@ -389,16 +436,19 @@ foreach line [split $child_text(sram_island_power.tcl) "\n"] {
 }
 
 if {[regexp {addRing[[:space:]]+\\} $sram_island_code_only]} {
-    fail "SRAM island must reuse the global M8/M9 core ring instead of adding an M4/M5 shared-cluster ring"
+    fail "SRAM island must build an open top/right local ring instead of a closed shared-cluster addRing"
 }
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-break_at[[:space:]]+none} \
-    "SRAM collectors must not stop at a removed local block ring"
+    "SRAM collectors must cross the open local-ring edges without jogging"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {-extend_to_closest_target[[:space:]]+ring} \
-    "SRAM collectors must extend straight to the global M8/M9 ring"
+    {-extend_to_closest_target[[:space:]]+area_boundary} \
+    "SRAM collectors must cross the existing M8/M9 ring and extend to the explicit area boundary"
+if {[regexp -- {-extend_to_first_ring|-max_extension_distance} $child_text(sram_island_power.tcl)]} {
+    fail "SRAM collectors must not stop before crossing the reused M8/M9 ring"
+}
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-stacked_via_bottom_layer[[:space:]]+M4} \
@@ -449,10 +499,14 @@ if {$global_upper_stripes == 0 || $global_upper_no_pin_stripes < $global_upper_s
 
 set simulated_sram_stripes \
     [simulate_sram_island_power [file join $tcl_dir sram_island_power.tcl]]
-if {[llength $simulated_sram_stripes] != 6} {
-    fail "SRAM island power must generate exactly 3 M4 row-gap and 3 M5 column-gap stripe pairs"
+if {[llength $simulated_sram_stripes] != 8} {
+    fail "SRAM island power must generate top/right local-ring pairs plus 3 M4 row-gap and 3 M5 column-gap pairs"
 }
 
+set horizontal_pair_count 0
+set vertical_pair_count 0
+set top_local_ring_found 0
+set right_local_ring_found 0
 foreach stripe $simulated_sram_stripes {
     lassign $stripe layer direction area create_pins width spacing
     if {$create_pins ne "0"} {
@@ -466,24 +520,34 @@ foreach stripe $simulated_sram_stripes {
     }
     lassign $area llx lly urx ury
 
-    if {$llx <= 0.0 || $lly <= 0.0 || $urx >= 1105.2 || $ury >= 970.848} {
-        fail "SRAM island gap stripes must not span to the die boundary: $area"
+    if {$llx < 0.0 || $lly < 0.0 || $urx >= 1105.2 || $ury >= 970.848} {
+        fail "SRAM island gap stripe area is outside the die: $area"
     }
 
     switch -- $direction {
         horizontal {
+            incr horizontal_pair_count
             if {$layer ne "M4"} {
                 fail "Horizontal SRAM island stripes must be on M4, got $layer"
             }
-            assert_close $llx 2.160 "M4 SRAM row-gap stripe must start at the core boundary and extend straight to the adjacent M4/M5 ring"
+            assert_close $llx 0.000 "M4 SRAM row-gap stripe must cross the reused left M9 core ring"
             assert_close $urx 502.848 "M4 SRAM row-gap stripe must stop at the SRAM island cut boundary"
+            if {abs($lly - 706.320) < 0.000001 &&
+                abs($ury - 708.480) < 0.000001} {
+                set top_local_ring_found 1
+            }
         }
         vertical {
+            incr vertical_pair_count
             if {$layer ne "M5"} {
                 fail "Vertical SRAM island stripes must be on M5, got $layer"
             }
-            assert_close $lly 2.160 "M5 SRAM column-gap stripe must start at the core boundary and extend straight to the adjacent M4/M5 ring"
+            assert_close $lly 0.000 "M5 SRAM column-gap stripe must cross the reused bottom M8 core ring"
             assert_close $ury 708.48 "M5 SRAM column-gap stripe must stop at the SRAM island cut boundary"
+            if {abs($llx - 500.688) < 0.000001 &&
+                abs($urx - 502.848) < 0.000001} {
+                set right_local_ring_found 1
+            }
         }
         default {
             fail "Unexpected SRAM island stripe direction: $direction"
@@ -491,8 +555,15 @@ foreach stripe $simulated_sram_stripes {
     }
 }
 
+if {$horizontal_pair_count != 4 || $vertical_pair_count != 4} {
+    fail "Open SRAM ring topology requires four M4 pairs and four M5 pairs"
+}
+if {!$top_local_ring_found || !$right_local_ring_found} {
+    fail "SRAM island must have an open local ring on its exposed top and right halo edges"
+}
+
 if {[llength $SRAM_RING_CAPTURE] != 0} {
-    fail "SRAM island power must not create a second local ring"
+    fail "SRAM island must not create a closed ring that duplicates the reused left/bottom global-ring edges"
 }
 
 if {[llength $SRAM_STRIPE_MODE_CAPTURE] != 2} {
@@ -505,13 +576,13 @@ foreach mode $SRAM_STRIPE_MODE_CAPTURE {
         fail "Every SRAM stripe mode must explicitly disable jogging"
     }
     if {[lsearch -exact $mode -extend_to_closest_target] < 0 ||
-        [lindex $mode [expr {[lsearch -exact $mode -extend_to_closest_target] + 1}]] ne "ring"} {
-        fail "Every SRAM stripe mode must extend to the nearest ring"
+        [lindex $mode [expr {[lsearch -exact $mode -extend_to_closest_target] + 1}]] ne "area_boundary"} {
+        fail "Every SRAM stripe mode must extend to its explicit area boundary"
     }
     if {$mode_index == 0} {
         set expected_stack {-stacked_via_bottom_layer M4 -stacked_via_top_layer M9}
     } else {
-        set expected_stack {-stacked_via_bottom_layer M5 -stacked_via_top_layer M8}
+        set expected_stack {-stacked_via_bottom_layer M4 -stacked_via_top_layer M8}
     }
     foreach {option expected} $expected_stack {
         set option_index [lsearch -exact $mode $option]

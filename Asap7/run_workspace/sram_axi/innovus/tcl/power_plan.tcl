@@ -3,7 +3,7 @@
 ##
 ## Layer roles:
 ##   M4/M5 : legal-width SRAM row/column collectors
-##   M8/M9 : the single global core ring shared by logic and SRAM
+##   M8/M9 : deterministic VDD/VSS core-ring pair shared by logic and SRAM
 ##   M1/M5 : post-placement standard-cell rails/taps
 ##
 ## Project restriction:
@@ -202,6 +202,70 @@ proc pg_find_left_m9_ring_box {net core_llx core_lly core_ury} {
     return $best_box
 }
 
+proc pg_assert_complete_core_rings {core_llx core_lly core_urx core_ury} {
+    set eps 0.000001
+
+    foreach net {VDD VSS} {
+        set net_ptr [lindex [dbGet -p top.nets.name $net] 0]
+        if {$net_ptr eq "" || $net_ptr eq "0x0"} {
+            error "Cannot find PG net $net while checking the M8/M9 core ring"
+        }
+
+        array set side_found {
+            top 0
+            bottom 0
+            left 0
+            right 0
+        }
+
+        foreach layer {M8 M9} {
+            set wire_ptrs [dbGet -p2 $net_ptr.sWires.layer.name $layer]
+            foreach wire_ptr $wire_ptrs {
+                set wire_box [join [dbGet $wire_ptr.box]]
+                if {[llength $wire_box] != 4} {
+                    continue
+                }
+                lassign $wire_box llx lly urx ury
+                set is_horizontal [expr {
+                    ($urx - $llx) > ($ury - $lly)
+                }]
+
+                if {$layer eq "M8" && $is_horizontal &&
+                    $llx <= $core_llx + $eps &&
+                    $urx >= $core_urx - $eps} {
+                    if {$ury <= $core_lly + $eps} {
+                        set side_found(bottom) 1
+                    }
+                    if {$lly >= $core_ury - $eps} {
+                        set side_found(top) 1
+                    }
+                }
+
+                if {$layer eq "M9" && !$is_horizontal &&
+                    $lly <= $core_lly + $eps &&
+                    $ury >= $core_ury - $eps} {
+                    if {$urx <= $core_llx + $eps} {
+                        set side_found(left) 1
+                    }
+                    if {$llx >= $core_urx - $eps} {
+                        set side_found(right) 1
+                    }
+                }
+            }
+        }
+
+        set missing_sides {}
+        foreach side {top bottom left right} {
+            if {!$side_found($side)} {
+                lappend missing_sides $side
+            }
+        }
+        if {[llength $missing_sides] != 0} {
+            error "Incomplete $net M8/M9 core ring; missing sides: [join $missing_sides {, }]"
+        }
+    }
+}
+
 proc pg_delete_core_pg_pins {} {
     foreach net {VDD VSS} {
         catch {deletePGPin -net $net}
@@ -274,6 +338,13 @@ proc pg_assert_clean_connectivity_report {report_path} {
     }
 }
 
+set pg_connectivity_report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
+set pg_drc_report ./verify_rpt/pg_drc_before_stdcell_place.rpt
+foreach stale_pg_report [list $pg_connectivity_report $pg_drc_report] {
+    file delete -force $stale_pg_report
+}
+
+setAddStripeMode -reset
 setAddStripeMode -allow_jog none
 
 clearGlobalNets
@@ -287,7 +358,7 @@ globalNetConnect VSS -type tielo -inst * -module {} -override
 applyGlobalNets
 
 # ------------------------------------------------------------------------
-# 1. SINGLE GLOBAL M8/M9 CORE RING
+# 1. GLOBAL M8/M9 VDD/VSS CORE-RING PAIR
 # ------------------------------------------------------------------------
 
 # Long M8/M9 wires require at least 120 nm native width (0.480 um in the
@@ -295,17 +366,22 @@ applyGlobalNets
 # parallel-run spacing table and the V8 cut spacing.
 set ring_m89_w 0.480
 set ring_m89_s 0.480
-set ring_m89_o 0.384
+set ring_m89_inner_o 0.192
+# The 0.960 um center-to-center separation is exactly three M8/M9 pitches,
+# so both independently generated rings receive the same grid-snap delta.
+set ring_m89_outer_o [expr {
+    $ring_m89_inner_o + $ring_m89_w + $ring_m89_s
+}]
 
 # The M4/M5 LEF58_WIDTHTABLE does not allow 0.288 um.  Keep the internal
 # SRAM collectors at the legal one-track width and use generous pair spacing.
 set stripe_m45_w 0.096
 set stripe_m45_s 0.288
 
-# Include one M9 pitch for grid snapping and straight stripe extension.
-set ring_m89_span [expr {
-    $ring_m89_o + 2.0 * $ring_m89_w + $ring_m89_s +
-    [pg_layer_pitch M9]
+# The actual outer edge is allowed another half track for center snapping.
+set ring_m89_span [expr {$ring_m89_outer_o + $ring_m89_w}]
+set ring_m89_guard_span [expr {
+    $ring_m89_span + 0.5 * [pg_layer_pitch M9]
 }]
 
 # Decode the complete die box once.  This avoids depending on release-specific
@@ -328,42 +404,54 @@ foreach {side margin} [list \
     bottom $die_core_margin_bottom \
     right $die_core_margin_right \
     top $die_core_margin_top] {
-    if {$ring_m89_span > $margin} {
-        error "M8/M9 core-ring reach $ring_m89_span exceeds $side die-to-core margin $margin"
+    if {$ring_m89_guard_span > $margin} {
+        error "M8/M9 core-ring guarded reach $ring_m89_guard_span exceeds $side die-to-core margin $margin"
     }
 }
 
+# Use one addRing call per net.  The earlier two-net call generated only six
+# side wires and left no VDD M9 segment on the left edge in the 23:01 run.
+# Independent calls make net ownership and each ring offset deterministic.
 addRing \
-    -nets {VSS VDD} \
+    -nets {VDD} \
     -type core_rings \
     -follow core \
     -layer {top M8 bottom M8 left M9 right M9} \
     -width $ring_m89_w \
     -spacing $ring_m89_s \
-    -offset $ring_m89_o \
+    -offset $ring_m89_inner_o \
     -snap_wire_center_to_grid Grid
 
-# Put each physical PG pin on a straight M9 side segment.  The previous
-# lower-left corner rectangles ended before the snapped ring corner and left
-# VSS disconnected (IMPVFC-96).
-if {$PG_CREATE_CORE_RING_PINS} {
-    pg_create_core_ring_side_pins \
-        $core_llx $core_lly $core_ury
-}
+addRing \
+    -nets {VSS} \
+    -type core_rings \
+    -follow core \
+    -layer {top M8 bottom M8 left M9 right M9} \
+    -width $ring_m89_w \
+    -spacing $ring_m89_s \
+    -offset $ring_m89_outer_o \
+    -snap_wire_center_to_grid Grid
+
+pg_assert_complete_core_rings \
+    $core_llx $core_lly $core_urx $core_ury
 
 # ------------------------------------------------------------------------
 # 2. REFERENCE-STYLE SRAM ISLAND POWER
 # ------------------------------------------------------------------------
 
-# Adapt the teacher's ring/stripe intent to this boundary-touching island:
-# M4/M5 gap collectors connect directly to the one M8/M9 core ring, then
-# SRAM block pins connect to those collectors.  No second local ring is made.
+# Adapt the teacher's ring/stripe intent to this lower-left boundary island:
+# keep an open M4-top/M5-right local ring, reuse global M9-left/M8-bottom, and
+# connect the internal gap collectors and SRAM block pins to this PG structure.
 source ./tcl/sram_island_power.tcl
 
-editTrim -nets {VDD VSS}
+# Create top-level PG pin shapes after the SRAM collectors.  A PG pin metadata
+# problem must not prevent Innovus from constructing the physical island PG.
+if {$PG_CREATE_CORE_RING_PINS} {
+    pg_create_core_ring_side_pins \
+        $core_llx $core_lly $core_ury
+}
 
-set pg_connectivity_report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
-set pg_drc_report ./verify_rpt/pg_drc_before_stdcell_place.rpt
+editTrim -nets {VDD VSS}
 
 verifyConnectivity \
     -type special \
@@ -381,8 +469,8 @@ saveDesign ./saved/axi_ram_powerplan.enc
 
 puts "===================================================="
 puts "HIERARCHICAL POWER PLAN COMPLETED"
-puts " - SRAM island     : M4/M5 collectors via-stacked to the global ring"
-puts " - Core ring       : one M8/M9 global ring shared by logic and SRAM"
+puts " - SRAM island     : open M4/M5 local ring plus six internal collectors"
+puts " - Core rings      : independent M8/M9 VDD-inner and VSS-outer rings"
 puts " - Core PG pins    : short M9 side taps on both VSS and VDD"
 puts " - Upper M8/M9 mesh: deferred until after placement"
 puts " - addStripe jog   : none"
