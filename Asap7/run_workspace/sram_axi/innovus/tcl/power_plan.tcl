@@ -2,13 +2,13 @@
 ## Hierarchical power planning for one 4x4 SRAM group
 ##
 ## Layer roles:
-##   M4/M5 : aligned core/SRAM rings and reference-style stripes
-##   M8/M9 : reserved for a later post-placement global mesh
+##   M4/M5 : legal-width SRAM row/column collectors
+##   M8/M9 : the single global core ring shared by logic and SRAM
 ##   M1/M5 : post-placement standard-cell rails/taps
 ##
 ## Project restriction:
 ##   - addStripe is not allowed to jog
-##   - SRAM blockPin sroute follows nearest blockring target
+##   - SRAM blockPin sroute targets the local collector stripes
 ##   - post-placement corePin sroute is not allowed to jog or change layer
 ##   - planned stripe transitions are made only by stacked ViaGen
 ############################################################
@@ -164,52 +164,42 @@ proc pg_track_aligned_global_offset {area_start area_stop global_first_edge laye
     return [pg_format_coord [expr {$edge - $area_start}]]
 }
 
-proc pg_core_ring_lane_rect {side net core_llx core_lly core_urx core_ury width spacing offset} {
-    switch -- $net {
-        VSS {
-            set net_delta 0.0
+proc pg_find_left_m9_ring_box {net core_llx core_lly core_ury} {
+    set net_ptr [lindex [dbGet -p top.nets.name $net] 0]
+    if {$net_ptr eq "" || $net_ptr eq "0x0"} {
+        error "Cannot find PG net $net while creating the M9 ring pin"
+    }
+
+    # addRing owns the exact grid-snap behavior.  Query its generated M9
+    # shapes instead of attempting to reconstruct the lane from nominal
+    # width/spacing/offset values.
+    set wire_ptrs [dbGet -p2 $net_ptr.sWires.layer.name M9]
+    set best_box {}
+    foreach wire_ptr $wire_ptrs {
+        set wire_box [join [dbGet $wire_ptr.box]]
+        if {[llength $wire_box] != 4} {
+            continue
         }
-        VDD {
-            set net_delta [expr {$width + $spacing}]
+        lassign $wire_box llx lly urx ury
+        set is_vertical [expr {($ury - $lly) > ($urx - $llx)}]
+        set covers_core_height [expr {
+            $lly <= $core_lly + 0.000001 &&
+            $ury >= $core_ury - 0.000001
+        }]
+        if {!$is_vertical || !$covers_core_height ||
+            $urx > $core_llx + 0.000001} {
+            continue
         }
-        default {
-            error "Unsupported core PG pin net: $net"
+
+        if {[llength $best_box] == 0 || $urx > [lindex $best_box 2]} {
+            set best_box $wire_box
         }
     }
 
-    switch -- $side {
-        bottom {
-            set center [pg_snap_value_to_layer_track \
-                [expr {$core_lly - $offset - $net_delta - $width / 2.0}] M4]
-            set lly [expr {$center - $width / 2.0}]
-            set ury [expr {$center + $width / 2.0}]
-            return [list M4 $core_llx $lly $core_urx $ury]
-        }
-        top {
-            set center [pg_snap_value_to_layer_track \
-                [expr {$core_ury + $offset + $net_delta + $width / 2.0}] M4]
-            set lly [expr {$center - $width / 2.0}]
-            set ury [expr {$center + $width / 2.0}]
-            return [list M4 $core_llx $lly $core_urx $ury]
-        }
-        left {
-            set center [pg_snap_value_to_layer_track \
-                [expr {$core_llx - $offset - $net_delta - $width / 2.0}] M5]
-            set llx [expr {$center - $width / 2.0}]
-            set urx [expr {$center + $width / 2.0}]
-            return [list M5 $llx $core_lly $urx $core_ury]
-        }
-        right {
-            set center [pg_snap_value_to_layer_track \
-                [expr {$core_urx + $offset + $net_delta + $width / 2.0}] M5]
-            set llx [expr {$center - $width / 2.0}]
-            set urx [expr {$center + $width / 2.0}]
-            return [list M5 $llx $core_lly $urx $core_ury]
-        }
-        default {
-            error "Unsupported core PG pin side: $side"
-        }
+    if {[llength $best_box] != 4} {
+        error "Cannot find the left M9 core-ring wire for PG net $net"
     }
+    return $best_box
 }
 
 proc pg_delete_core_pg_pins {} {
@@ -218,22 +208,24 @@ proc pg_delete_core_pg_pins {} {
     }
 }
 
-proc pg_create_core_ring_side_pins {core_llx core_lly core_urx core_ury width spacing offset} {
+proc pg_create_core_ring_side_pins {core_llx core_lly core_ury} {
     pg_delete_core_pg_pins
 
-    set pin_length [expr {6.0 * [pg_layer_pitch M5]}]
+    set pin_length [expr {6.0 * [pg_layer_pitch M9]}]
     set pin_center_y [expr {($core_lly + $core_ury) / 2.0}]
-    set pin_lly [expr {$pin_center_y - $pin_length / 2.0}]
-    set pin_ury [expr {$pin_center_y + $pin_length / 2.0}]
 
     foreach net {VSS VDD} {
-        lassign [pg_core_ring_lane_rect \
-            left $net $core_llx $core_lly $core_urx $core_ury \
-            $width $spacing $offset] \
-            left_layer left_llx left_lly left_urx left_ury
+        lassign [pg_find_left_m9_ring_box \
+            $net $core_llx $core_lly $core_ury] \
+            left_llx left_lly left_urx left_ury
+        set pin_lly [expr {max($left_lly, $pin_center_y - $pin_length / 2.0)}]
+        set pin_ury [expr {min($left_ury, $pin_center_y + $pin_length / 2.0)}]
+        if {$pin_ury - $pin_lly < [pg_layer_pitch M9]} {
+            error "Left M9 ring segment for $net is too short for a PG pin"
+        }
 
         createPGPin $net \
-            -geom $left_layer \
+            -geom M9 \
             [pg_format_coord $left_llx] [pg_format_coord $pin_lly] \
             [pg_format_coord $left_urx] [pg_format_coord $pin_ury] \
             -net $net
@@ -295,26 +287,25 @@ globalNetConnect VSS -type tielo -inst * -module {} -override
 applyGlobalNets
 
 # ------------------------------------------------------------------------
-# 1. M4/M5 CORE RING ALIGNED WITH THE SRAM-ISLAND RING
+# 1. SINGLE GLOBAL M8/M9 CORE RING
 # ------------------------------------------------------------------------
 
-# ASAP7 4x scales the native 24 nm M4/M5 minimum width to 0.096 um.
-# A V4 landing also needs 11 nm enclosure on both sides, so a one-track
-# 0.096 um final PG wire is too narrow for a robust legal landing.  Use a
-# three-track (0.288 um) final PG width and keep the one-track dimensions
-# only in the temporary macro-placement resource model.
-set ring_m45_w 0.288
-set ring_m45_s 0.288
-set ring_m45_o 0.384
-set stripe_m45_w 0.288
+# Long M8/M9 wires require at least 120 nm native width (0.480 um in the
+# 4x LEF).  A 0.480 um spacing is also conservative for both the M8/M9
+# parallel-run spacing table and the V8 cut spacing.
+set ring_m89_w 0.480
+set ring_m89_s 0.480
+set ring_m89_o 0.384
+
+# The M4/M5 LEF58_WIDTHTABLE does not allow 0.288 um.  Keep the internal
+# SRAM collectors at the legal one-track width and use generous pair spacing.
+set stripe_m45_w 0.096
 set stripe_m45_s 0.288
 
-# Include two routing tracks of snap allowance in the conservative reach.
-# This bounds both the die-margin check and the maximum straight extension
-# used by the SRAM gap stripes.
-set ring_m45_span [expr {
-    $ring_m45_o + 2.0 * $ring_m45_w + $ring_m45_s +
-    2.0 * [pg_layer_pitch M5]
+# Include one M9 pitch for grid snapping and straight stripe extension.
+set ring_m89_span [expr {
+    $ring_m89_o + 2.0 * $ring_m89_w + $ring_m89_s +
+    [pg_layer_pitch M9]
 }]
 
 # Decode the complete die box once.  This avoids depending on release-specific
@@ -337,8 +328,8 @@ foreach {side margin} [list \
     bottom $die_core_margin_bottom \
     right $die_core_margin_right \
     top $die_core_margin_top] {
-    if {$ring_m45_span > $margin} {
-        error "M4/M5 core-ring reach $ring_m45_span exceeds $side die-to-core margin $margin"
+    if {$ring_m89_span > $margin} {
+        error "M8/M9 core-ring reach $ring_m89_span exceeds $side die-to-core margin $margin"
     }
 }
 
@@ -346,27 +337,27 @@ addRing \
     -nets {VSS VDD} \
     -type core_rings \
     -follow core \
-    -layer {top M4 bottom M4 left M5 right M5} \
-    -width $ring_m45_w \
-    -spacing $ring_m45_s \
-    -offset $ring_m45_o \
+    -layer {top M8 bottom M8 left M9 right M9} \
+    -width $ring_m89_w \
+    -spacing $ring_m89_s \
+    -offset $ring_m89_o \
     -snap_wire_center_to_grid Grid
 
-# Put each physical PG pin on a straight M5 side segment.  The previous
+# Put each physical PG pin on a straight M9 side segment.  The previous
 # lower-left corner rectangles ended before the snapped ring corner and left
 # VSS disconnected (IMPVFC-96).
 if {$PG_CREATE_CORE_RING_PINS} {
     pg_create_core_ring_side_pins \
-        $core_llx $core_lly $core_urx $core_ury \
-        $ring_m45_w $ring_m45_s $ring_m45_o
+        $core_llx $core_lly $core_ury
 }
 
 # ------------------------------------------------------------------------
 # 2. REFERENCE-STYLE SRAM ISLAND POWER
 # ------------------------------------------------------------------------
 
-# Match the teacher's SRAM-island sequence: shared-cluster ring,
-# blockPin-to-blockring sroute, M4/M5 gap stripes in SRAM channels, trim.
+# Adapt the teacher's ring/stripe intent to this boundary-touching island:
+# M4/M5 gap collectors connect directly to the one M8/M9 core ring, then
+# SRAM block pins connect to those collectors.  No second local ring is made.
 source ./tcl/sram_island_power.tcl
 
 editTrim -nets {VDD VSS}
@@ -390,12 +381,12 @@ saveDesign ./saved/axi_ram_powerplan.enc
 
 puts "===================================================="
 puts "HIERARCHICAL POWER PLAN COMPLETED"
-puts " - SRAM island     : reference shared_cluster ring + M4/M5 stripes"
-puts " - Core ring       : M4/M5, aligned with island left/bottom ring"
-puts " - Core PG pins    : short M5 side taps on both VSS and VDD"
+puts " - SRAM island     : M4/M5 collectors via-stacked to the global ring"
+puts " - Core ring       : one M8/M9 global ring shared by logic and SRAM"
+puts " - Core PG pins    : short M9 side taps on both VSS and VDD"
 puts " - Upper M8/M9 mesh: deferred until after placement"
 puts " - addStripe jog   : none"
-puts " - SRAM blockPin  : nearest shared-cluster blockring"
+puts " - SRAM blockPin   : nearest local stripe"
 puts " - corePin sroute : no jog/no layer change after placement"
 puts " - PG connectivity : ./verify_rpt/pg_connectivity_before_stdcell_place.rpt"
 puts " - PG DRC          : ./verify_rpt/pg_drc_before_stdcell_place.rpt"

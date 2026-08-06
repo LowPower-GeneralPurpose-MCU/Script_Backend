@@ -1,13 +1,11 @@
 ############################################################
-## Final SRAM-island PG using the reference ring/stripe flow
+## SRAM-island collectors connected to the global M8/M9 ring
 ##
 ## Reference flow:
-##   1. Select all SRAMs in one group.
-##   2. Create a shared-cluster block ring.
-##   3. Connect SRAM block pins to the nearest block ring.
-##   4. Add no-jog M4/M5 stripes in the actual SRAM gaps.  Each stripe
-##      starts at the core boundary and extends straight to the nearest
-##      aligned M4/M5 ring, creating only a V4 crossover connection.
+##   1. Add no-jog M4/M5 collectors in the actual SRAM gaps.
+##   2. Extend each collector straight to the single global M8/M9 ring.
+##   3. Use stacked ViaGen connections only at the ring landing.
+##   4. Connect SRAM block pins to the nearest collector stripe.
 ##   5. Trim redundant PG stubs.
 ##
 ## ASAP7 layer mapping:
@@ -30,10 +28,7 @@ foreach required_variable {
     ASAP7_ROW_HEIGHT
     core_llx
     core_lly
-    ring_m45_w
-    ring_m45_s
-    ring_m45_o
-    ring_m45_span
+    ring_m89_span
     stripe_m45_w
     stripe_m45_s
 } {
@@ -48,46 +43,6 @@ if {[llength $SRAM_PTRS] != $SRAM_COUNT} {
 }
 
 deselectAll
-foreach ptr $SRAM_PTRS {
-    selectInst [lindex [dbGet $ptr.name] 0]
-}
-
-set sram_ring_w $ring_m45_w
-set sram_ring_s $ring_m45_s
-set sram_ring_o $ring_m45_o
-
-addRing \
-    -nets {VSS VDD} \
-    -type block_rings \
-    -around shared_cluster \
-    -layer {top M4 bottom M4 left M5 right M5} \
-    -width [list \
-        top $sram_ring_w \
-        bottom $sram_ring_w \
-        left $sram_ring_w \
-        right $sram_ring_w] \
-    -spacing [list \
-        top $sram_ring_s \
-        bottom $sram_ring_s \
-        left $sram_ring_s \
-        right $sram_ring_s] \
-    -offset [list \
-        top $sram_ring_o \
-        bottom $sram_ring_o \
-        left $sram_ring_o \
-        right $sram_ring_o] \
-    -snap_wire_center_to_grid Grid
-
-setSrouteMode \
-    -extendNearestTarget true \
-    -blockPinRouteWithPinWidth true \
-    -viaConnectToShape blockring
-
-sroute \
-    -connect {blockPin} \
-    -nets {VSS VDD} \
-    -blockPin useLef \
-    -blockPinTarget nearestTarget
 
 set sram_stripe_w $stripe_m45_w
 set sram_stripe_s $stripe_m45_s
@@ -107,11 +62,13 @@ set sram_pg_top $SRAM_ISLAND_CUT_URY
 
 setAddStripeMode \
     -allow_jog none \
-    -break_at block_ring \
+    -allow_nonpreferred_dir none \
+    -break_at none \
     -extend_to_closest_target ring \
-    -max_extension_distance $ring_m45_span \
+    -extend_to_first_ring true \
+    -max_extension_distance $ring_m89_span \
     -stacked_via_bottom_layer M4 \
-    -stacked_via_top_layer M5
+    -stacked_via_top_layer M9
 
 for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
     set gap_lly [expr {
@@ -139,11 +96,13 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
 
 setAddStripeMode \
     -allow_jog none \
-    -break_at block_ring \
+    -allow_nonpreferred_dir none \
+    -break_at none \
     -extend_to_closest_target ring \
-    -max_extension_distance $ring_m45_span \
-    -stacked_via_bottom_layer M4 \
-    -stacked_via_top_layer M5
+    -extend_to_first_ring true \
+    -max_extension_distance $ring_m89_span \
+    -stacked_via_bottom_layer M5 \
+    -stacked_via_top_layer M8
 
 for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
     set gap_llx [expr {
@@ -169,13 +128,26 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
         -allow_snapping_override_custom_spacing 1
 }
 
+# Route macro M3 PG pins only after the stripe targets exist.  Restricting the
+# target to stripe prevents a long direct block-pin route to the distant ring.
+setSrouteMode \
+    -extendNearestTarget true \
+    -blockPinRouteWithPinWidth true \
+    -viaConnectToShape stripe
+
+sroute \
+    -connect {blockPin} \
+    -nets {VSS VDD} \
+    -blockPin useLef \
+    -blockPinTarget {stripe}
+
 editTrim -nets {VSS VDD}
 clearDrc
 deselectAll
 
 puts "===================================================="
-puts "REFERENCE-STYLE SRAM ISLAND PG CREATED"
-puts " - Ring    : shared_cluster block ring, M4 horizontal / M5 vertical"
-puts " - BlockPin: nearest blockring target"
-puts " - Stripes : one M4/M5 pair in every SRAM gap, straight V4 connection to ring"
+puts "SRAM ISLAND COLLECTOR PG CREATED"
+puts " - Ring    : reused global M8/M9 core ring; no local M4/M5 ring"
+puts " - BlockPin: nearest M4/M5 stripe target"
+puts " - Stripes : one pair in every gap, straight via-stack connection to M8/M9"
 puts "===================================================="

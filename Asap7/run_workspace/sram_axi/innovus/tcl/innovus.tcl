@@ -208,7 +208,8 @@ checkFPlan \
 # ------------------------------------------------------------------------
 
 if {[catch {source ./tcl/power_plan.tcl} power_plan_error]} {
-    error "Power plan failed before pin assignment: $power_plan_error"
+    puts stderr "Power plan failed before pin assignment: $power_plan_error"
+    return
 }
 
 setPinConstraint -corner_to_pin_distance 8
