@@ -4,12 +4,16 @@
 # This file is intentionally valid in both Genus and Innovus.
 # =============================================================================
 
+set_units \
+    -time 1.0ps \
+    -capacitance 1.0fF
+
 set CLK_PORT   clk
 set RESET_PORT reset_n
 set CLK_NAME   CLK
 set ASYNC_INPUT_NAMES [list meip_i msip_i mtip_i dbg_halt_req dbg_resume_req]
 
-# 1000 ps = 1 ns = 1 GHz.  Change only CLK_PERIOD when exploring frequency.
+# 10000 ps = 10 ns = 100 MHz. Change only CLK_PERIOD when exploring frequency.
 set CLK_PERIOD 10000.0
 set CLK_HALF   [expr {$CLK_PERIOD / 2.0}]
 
@@ -44,6 +48,16 @@ set_input_transition -min 10.0 $DATA_INPUTS
 set_input_transition -max 40.0 $DATA_INPUTS
 set_input_delay -clock $CLK_NAME -max $IN_DELAY_MAX $DATA_INPUTS
 set_input_delay -clock $CLK_NAME -min $IN_DELAY_MIN $DATA_INPUTS
+
+if {[sizeof_collection $RESET_PORT_OBJ] > 0} {
+    set_input_transition -min 10.0 $RESET_PORT_OBJ
+    set_input_transition -max 40.0 $RESET_PORT_OBJ
+}
+
+if {[sizeof_collection $ASYNC_INPUTS] > 0} {
+    set_input_transition -min 10.0 $ASYNC_INPUTS
+    set_input_transition -max 40.0 $ASYNC_INPUTS
+}
 
 set_output_delay -clock $CLK_NAME -max $OUT_DELAY_MAX [all_outputs]
 set_output_delay -clock $CLK_NAME -min $OUT_DELAY_MIN [all_outputs]

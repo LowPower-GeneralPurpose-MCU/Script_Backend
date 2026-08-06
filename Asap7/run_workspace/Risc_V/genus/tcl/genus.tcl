@@ -19,6 +19,23 @@ set LIB      "${ASAP7}/asap7sc7p5t_28/LIB/CCS"
 set TOP      "riscv_pipeline"
 set SDC_FILE "./tcl/constraint.sdc"
 
+proc env_or_default {name default_value} {
+    if {[info exists ::env($name)] && $::env($name) ne ""} {
+        return $::env($name)
+    }
+
+    return $default_value
+}
+
+proc env_flag_is_true {name} {
+    if {![info exists ::env($name)]} {
+        return 0
+    }
+
+    set value [string tolower $::env($name)]
+    return [expr {$value eq "1" || $value eq "true" || $value eq "yes" || $value eq "on"}]
+}
+
 source ./tcl/rtl_filelist.tcl
 
 foreach dir {outputs reports logs} {
@@ -42,11 +59,33 @@ set_db / .init_lib_search_path [list $LIB]
 set_db / .script_search_path   {./tcl}
 set_db / .init_hdl_search_path {./rtl}
 
+# Keep the default run local and single-process. The previous unconditional
+# max_cpus_per_server setting could launch a super-thread helper that then
+# stalled at syn_generic on this host.
+set_db / .auto_super_thread false
 
-set CORES 4
-set_db / .max_cpus_per_server $CORES
+if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
+    set CORES [env_or_default GENUS_CPUS 4]
+    if {![string is integer -strict $CORES] || $CORES < 1} {
+        error "GENUS_CPUS must be a positive integer, got '$CORES'"
+    }
 
-puts "Genus CPU configuration: $CORES local CPU, super-thread disabled"
+    set ST_SERVERS [env_or_default GENUS_SUPER_THREAD_SERVERS localhost]
+    set ST_RSH [env_or_default GENUS_SUPER_THREAD_RSH ""]
+
+    set_db / .super_thread_servers $ST_SERVERS
+    if {$ST_RSH ne ""} {
+        set_db / .super_thread_rsh_command $ST_RSH
+    }
+    set_db / .max_cpus_per_server $CORES
+
+    puts "Genus CPU configuration: super-thread enabled, servers=$ST_SERVERS, cpus/server=$CORES"
+    if {[catch {test_super_thread_servers} st_error]} {
+        error "Super-thread server test failed before synthesis: $st_error"
+    }
+} else {
+    puts "Genus CPU configuration: super-thread disabled. Set GENUS_ENABLE_SUPER_THREAD=1 only after test_super_thread_servers passes."
+}
 
 set_db / .hdl_unconnected_value 0
 set_db / .hdl_track_filename_row_col true
@@ -303,15 +342,29 @@ if {[sizeof_collection $ALL_SEQS] > 0} {
 # 9. SYNTHESIS
 # ------------------------------------------------------------------------
 
-set_db / .syn_generic_effort high
+# Conservative default for debugging convergence. Re-enable datapath transforms
+# only after the script completes cleanly in the local run mode.
+if {[env_flag_is_true GENUS_ENABLE_DATAPATH_OPT]} {
+    puts "Genus datapath mode: optimized"
+} else {
+    puts "Genus datapath mode: debug-safe; datapath sharing/speculation disabled"
+    set_db / .dp_analytical_opt off
+    set_db / .dp_sharing none
+    set_db / .dp_speculation none
+}
+
+set SYN_EFFORT [env_or_default GENUS_SYN_EFFORT medium]
+puts "Genus synthesis effort: $SYN_EFFORT"
+
+set_db / .syn_generic_effort $SYN_EFFORT
 syn_generic
 report_area -depth 3 > reports/area_after_generic_depth3.rpt
 
-set_db / .syn_map_effort high
+set_db / .syn_map_effort $SYN_EFFORT
 syn_map
 report_area -depth 3 > reports/area_after_map_depth3.rpt
 
-set_db / .syn_opt_effort high
+set_db / .syn_opt_effort $SYN_EFFORT
 syn_opt
 
 # ------------------------------------------------------------------------
