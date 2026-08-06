@@ -4,9 +4,11 @@
 ## Reference flow:
 ##   1. Build an open local ring on the exposed top/right island edges.
 ##   2. Reuse the global M9-left/M8-bottom ring edges beside the island.
-##   3. Add no-jog M4/M5 collectors in the actual SRAM gaps.
-##   4. Use stacked ViaGen connections only at matching-net intersections.
-##   5. Connect SRAM block pins to the nearest collector stripe and trim stubs.
+##   3. Add a narrow M5 transition spine at the reused left edge so M4
+##      row collectors are electrically tied into the M8/M9 global network.
+##   4. Add no-jog M4/M5 collectors in the actual SRAM gaps.
+##   5. Use stacked ViaGen connections only at matching-net intersections.
+##   6. Connect SRAM block pins to the nearest collector stripe and trim stubs.
 ##
 ## ASAP7 layer mapping:
 ##   M4 is horizontal, M5 is vertical in asap7_tech_4x_201209.lef.
@@ -65,6 +67,8 @@ set sram_pg_top $SRAM_ISLAND_CUT_URY
 
 set sram_local_top_lly $SRAM_ISLAND_URY
 set sram_local_top_ury $SRAM_ISLAND_CUT_URY
+set sram_local_left_llx $sram_pg_left
+set sram_local_left_urx $SRAM_X0
 set sram_local_right_llx $SRAM_ISLAND_URX
 set sram_local_right_urx $SRAM_ISLAND_CUT_URX
 if {![info exists sram_edge_report]} {
@@ -73,6 +77,9 @@ if {![info exists sram_edge_report]} {
 
 if {$sram_local_top_ury - $sram_local_top_lly <= $sram_pair_total} {
     error "SRAM top halo is too small for the open M4 local-ring pair"
+}
+if {$sram_local_left_urx - $sram_local_left_llx <= $sram_pair_total} {
+    error "SRAM left die/core margin is too small for the M5 transition spine"
 }
 if {$sram_local_right_urx - $sram_local_right_llx <= $sram_pair_total} {
     error "SRAM right halo is too small for the open M5 local-ring pair"
@@ -189,16 +196,50 @@ proc sram_pg_assert_edge_wires {report_path edge_specs} {
     puts "SRAM island PG edge report: $report_path"
 }
 
+# The left global M9 ring is reused as the global edge, but the ASAP7 stack
+# still needs a local M5 transition spine.  Create it before the M4 row
+# collectors so the horizontal addStripe calls have an existing same-net M5
+# target and do not become floating segments before editTrim.
 setAddStripeMode \
     -allow_jog none \
     -allow_nonpreferred_dir none \
     -break_at none \
     -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M4 \
-    -stacked_via_top_layer M9
+    -stacked_via_top_layer M8
 
-# Exposed top edge of the open local ring.  The area begins at die-left so
-# this M4 pair crosses and via-stacks to the matching M9 global-ring net.
+set local_left_offset [pg_track_aligned_pair_offset \
+    $sram_local_left_llx $sram_local_left_urx \
+    M5 $sram_stripe_w $sram_stripe_s]
+set local_left_area [list \
+    $sram_local_left_llx $sram_pg_bottom \
+    $sram_local_left_urx $sram_pg_top]
+
+addStripe \
+    -nets {VSS VDD} \
+    -layer M5 \
+    -direction vertical \
+    -width $sram_stripe_w \
+    -spacing $sram_stripe_s \
+    -start_from left \
+    -start_offset $local_left_offset \
+    -number_of_sets 1 \
+    -create_pins 0 \
+    -area $local_left_area \
+    -snap_wire_center_to_grid Grid \
+    -allow_snapping_override_custom_spacing 1
+
+setAddStripeMode \
+    -allow_jog none \
+    -allow_nonpreferred_dir none \
+    -break_at none \
+    -extend_to_closest_target area_boundary \
+    -stacked_via_bottom_layer M4 \
+    -stacked_via_top_layer M5
+
+# Exposed top edge of the open local ring.  The M4 pair is stitched to M5
+# transition/column collectors.  In the latest Innovus log, direct M4->M9
+# stacking created 0 vias, so the reliable topology is M4->M5->M8/M9.
 set local_top_offset [pg_track_aligned_pair_offset \
     $sram_local_top_lly $sram_local_top_ury \
     M4 $sram_stripe_w $sram_stripe_s]
@@ -327,6 +368,7 @@ set sram_edge_specs [list \
     [list reused_left M9 vertical $reused_left_area] \
     [list reused_bottom M8 horizontal $reused_bottom_area] \
     [list local_top M4 horizontal $local_top_area] \
+    [list local_left M5 vertical $local_left_area] \
     [list local_right M5 vertical $local_right_area]]
 sram_pg_assert_edge_wires $sram_edge_report $sram_edge_specs
 clearDrc
@@ -335,7 +377,8 @@ deselectAll
 puts "===================================================="
 puts "SRAM ISLAND COLLECTOR PG CREATED"
 puts " - Local ring: open M4-top/M5-right pair around exposed island edges"
-puts " - Reused edge: global M9-left and M8-bottom; no duplicate local metal"
+puts " - Reused edge: global M9-left and M8-bottom; no duplicate closed ring"
+puts " - Left stitch: narrow M5 transition spine for M4->M5->M8 connectivity"
 puts " - BlockPin: nearest M4/M5 stripe target"
 puts " - Stripes : one VSS/VDD pair in every SRAM row/column gap"
 puts "===================================================="

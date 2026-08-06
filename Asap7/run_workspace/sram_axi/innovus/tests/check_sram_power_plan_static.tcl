@@ -63,14 +63,23 @@ proc dbGet {args} {
         [lindex $args 0] eq "-p2" &&
         [regexp {^net_(VDD|VSS)\.sWires\.layer\.name$} [lindex $args 1] -> net] &&
         [regexp {^M[0-9]+$} [lindex $args 2]]} {
-        return [list "wire_${net}_[lindex $args 2]_0"]
+        set layer [lindex $args 2]
+        if {$layer eq "M5"} {
+            return [list "wire_${net}_${layer}_left" "wire_${net}_${layer}_right"]
+        }
+        return [list "wire_${net}_${layer}_0"]
     }
 
     if {[llength $args] == 1 &&
-        [regexp {^wire_(VDD|VSS)_(M[0-9]+)_0\.box$} [lindex $args 0] -> net layer]} {
+        [regexp {^wire_(VDD|VSS)_(M[0-9]+)_(0|left|right)\.box$} [lindex $args 0] -> net layer which]} {
         switch -- $layer {
             M4 { return {0.816 706.860 502.032 707.724} }
-            M5 { return {501.192 1.548 502.128 707.628} }
+            M5 {
+                if {$which eq "left"} {
+                    return {0.816 1.548 1.752 707.628}
+                }
+                return {501.192 1.548 502.128 707.628}
+            }
             M8 { return {0.816 0.876 502.032 1.740} }
             M9 { return {0.720 0.972 1.656 707.628} }
             default { return {} }
@@ -432,6 +441,19 @@ assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {info[[:space:]]+exists[[:space:]]+LOGIC_RIGHT_FULL_BOX} \
     "core_lower_pg_nojog.tcl must rebuild the logic boxes when floorplan PG no longer sources core_pg_outside_island.tcl"
+foreach lower_pg_var {stripe_m5_offset stripe_m5_w stripe_m5_s stripe_m45_pitch} {
+    set lower_pg_pattern [format \
+        {if[[:space:]]+\{!\[info[[:space:]]+exists[[:space:]]+%s\]\}} \
+        $lower_pg_var]
+    assert_contains \
+        $child_text(core_lower_pg_nojog.tcl) \
+        $lower_pg_pattern \
+        "core_lower_pg_nojog.tcl must default/check $lower_pg_var before using it"
+}
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {-stacked_via_top_layer[[:space:]]+M8} \
+    "post-placement M5 taps must be allowed to via-stack to the M8 ring/upper mesh"
 
 assert_contains \
     $power_text \
@@ -525,12 +547,16 @@ assert_contains \
     "SRAM gap-stripe vias must start on M4"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {-stacked_via_top_layer[[:space:]]+M9} \
-    "Horizontal M4 collectors must be allowed to connect to the M9 side ring"
+    {-stacked_via_top_layer[[:space:]]+M5} \
+    "Horizontal M4 collectors must be allowed to connect to the M5 island transition spine"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-stacked_via_top_layer[[:space:]]+M8} \
     "Vertical M5 collectors must be allowed to connect to the M8 bottom ring"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {local_left} \
+    "SRAM island power must add a narrow M5 transition spine at the reused left global-ring edge"
 if {[string first "-extend_to design_boundary" $sram_island_code_only] >= 0} {
     fail "Area-constrained SRAM island stripes must not also use -extend_to design_boundary; Innovus IMPPP-330 rejects that combination"
 }
@@ -569,13 +595,14 @@ if {$global_upper_stripes == 0 || $global_upper_no_pin_stripes < $global_upper_s
 
 set simulated_sram_stripes \
     [simulate_sram_island_power [file join $tcl_dir sram_island_power.tcl]]
-if {[llength $simulated_sram_stripes] != 8} {
-    fail "SRAM island power must generate top/right local-ring pairs plus 3 M4 row-gap and 3 M5 column-gap pairs"
+if {[llength $simulated_sram_stripes] != 9} {
+    fail "SRAM island power must generate top/right local-ring pairs, one left M5 transition spine, plus 3 M4 row-gap and 3 M5 column-gap pairs"
 }
 
 set horizontal_pair_count 0
 set vertical_pair_count 0
 set top_local_ring_found 0
+set left_transition_found 0
 set right_local_ring_found 0
 foreach stripe $simulated_sram_stripes {
     lassign $stripe layer direction area create_pins width spacing
@@ -614,6 +641,10 @@ foreach stripe $simulated_sram_stripes {
             }
             assert_close $lly 0.000 "M5 SRAM column-gap stripe must cross the reused bottom M8 core ring"
             assert_close $ury 708.48 "M5 SRAM column-gap stripe must stop at the SRAM island cut boundary"
+            if {abs($llx - 0.000) < 0.000001 &&
+                abs($urx - 2.160) < 0.000001} {
+                set left_transition_found 1
+            }
             if {abs($llx - 500.688) < 0.000001 &&
                 abs($urx - 502.848) < 0.000001} {
                 set right_local_ring_found 1
@@ -625,19 +656,19 @@ foreach stripe $simulated_sram_stripes {
     }
 }
 
-if {$horizontal_pair_count != 4 || $vertical_pair_count != 4} {
-    fail "Open SRAM ring topology requires four M4 pairs and four M5 pairs"
+if {$horizontal_pair_count != 4 || $vertical_pair_count != 5} {
+    fail "Open SRAM ring topology requires four M4 pairs and five M5 pairs"
 }
-if {!$top_local_ring_found || !$right_local_ring_found} {
-    fail "SRAM island must have an open local ring on its exposed top and right halo edges"
+if {!$top_local_ring_found || !$right_local_ring_found || !$left_transition_found} {
+    fail "SRAM island must have top/right local collectors plus a left transition spine to keep M4 rows electrically tied to the reused global ring"
 }
 
 if {[llength $SRAM_RING_CAPTURE] != 0} {
     fail "SRAM island must not create a closed ring that duplicates the reused left/bottom global-ring edges"
 }
 
-if {[llength $SRAM_STRIPE_MODE_CAPTURE] != 2} {
-    fail "SRAM island power must configure one horizontal and one vertical collector mode"
+if {[llength $SRAM_STRIPE_MODE_CAPTURE] != 3} {
+    fail "SRAM island power must configure left-transition, horizontal, and right/column collector modes"
 }
 set mode_index 0
 foreach mode $SRAM_STRIPE_MODE_CAPTURE {
@@ -649,8 +680,8 @@ foreach mode $SRAM_STRIPE_MODE_CAPTURE {
         [lindex $mode [expr {[lsearch -exact $mode -extend_to_closest_target] + 1}]] ne "area_boundary"} {
         fail "Every SRAM stripe mode must extend to its explicit area boundary"
     }
-    if {$mode_index == 0} {
-        set expected_stack {-stacked_via_bottom_layer M4 -stacked_via_top_layer M9}
+    if {$mode_index == 1} {
+        set expected_stack {-stacked_via_bottom_layer M4 -stacked_via_top_layer M5}
     } else {
         set expected_stack {-stacked_via_bottom_layer M4 -stacked_via_top_layer M8}
     }
@@ -704,6 +735,18 @@ foreach flow_pair [list \
         $flow_text \
         {source[[:space:]]+\./tcl/sram_island_power\.tcl} \
         "$flow_name must directly source sram_island_power.tcl before pin assignment if the edge report is missing"
+    assert_contains \
+        $flow_text \
+        {source[[:space:]]+\./tcl/global_upper_pg_to_ring\.tcl} \
+        "$flow_name must build the post-placement M8/M9 upper PG mesh before lower M1/M5 taps"
+    assert_contains \
+        $flow_text \
+        {-net[[:space:]]+\{VDD[[:space:]]+VSS\}} \
+        "$flow_name post-placement PG verifyConnectivity must be restricted to VDD/VSS"
+    assert_contains \
+        $flow_text \
+        {pg_assert_clean_connectivity_report[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
+        "$flow_name must stop after placement if VDD/VSS PG connectivity is still dirty"
 
     set power_catch_index [string first {catch {source ./tcl/power_plan.tcl}} $flow_text]
     set pin_source_index [string first {source ./tcl/pins.tcl} $flow_text $power_catch_index]
@@ -713,6 +756,8 @@ foreach flow_pair [list \
     set edge_report_index [string first {set sram_edge_report ./reports/sram_island_pg_edges.rpt} $flow_text]
     set edge_delete_index [string first {file delete -force $sram_edge_report} $flow_text]
     set direct_sram_source_index [string first {source ./tcl/sram_island_power.tcl} $flow_text $power_catch_index]
+    set upper_pg_index [string first {source ./tcl/global_upper_pg_to_ring.tcl} $flow_text]
+    set lower_pg_index [string first {source ./tcl/core_lower_pg_nojog.tcl} $flow_text]
     if {$power_catch_index < 0 || $pin_source_index < 0 ||
         $failure_return_index < $power_catch_index ||
         $failure_return_index > $pin_source_index} {
@@ -733,6 +778,11 @@ foreach flow_pair [list \
     if {$direct_sram_source_index < $power_exit_index ||
         $direct_sram_source_index > $pin_source_index} {
         fail "$flow_name must run the direct SRAM island fallback after power_plan.tcl and before pins.tcl"
+    }
+    if {$upper_pg_index < 0 ||
+        $lower_pg_index < 0 ||
+        $upper_pg_index > $lower_pg_index} {
+        fail "$flow_name must create the upper M8/M9 PG mesh before lower M1/M5 tap generation"
     }
 
     assert_contains \

@@ -319,7 +319,7 @@ createPlaceBlockage \
     -name SRAM_ISLAND_GROUP_BLOCKAGE \
     -type hard \
     -noCutByCore \
-    -box $SRAM_ISLAND_BLOCKAGE_BOX
+    -box $SRAM_ISLAND_CUT_BOX
 
 set blockage_report \
     [open ./reports/sram_island_blockage_geometry.rpt w]
@@ -345,7 +345,8 @@ puts $blockage_report \
 puts $blockage_report \
     "blockage_clearance_top $blockage_clearance_top"
 puts $blockage_report "row_cut_box $SRAM_ISLAND_CUT_BOX"
-puts $blockage_report "place_blockage_box $SRAM_ISLAND_BLOCKAGE_BOX"
+puts $blockage_report "desired_blockage_box $SRAM_ISLAND_BLOCKAGE_BOX"
+puts $blockage_report "place_blockage_box $SRAM_ISLAND_CUT_BOX"
 puts $blockage_report "place_blockage_type hard"
 puts $blockage_report "no_cut_by_core true"
 close $blockage_report

@@ -296,11 +296,13 @@ timeDesign \
     -outDir ./reports/timing_preCTS
 
 # Standard-cell M1 rails exist after placement.  sroute is restricted to
-# straight same-layer connections; M1-to-M6 taps are explicit addStripe vias.
+# straight same-layer connections; M1-to-M8 taps are explicit addStripe vias.
+source ./tcl/global_upper_pg_to_ring.tcl
 source ./tcl/core_lower_pg_nojog.tcl
 
 verifyConnectivity \
     -type special \
+    -net {VDD VSS} \
     -noUnroutedNet \
     -report ./verify_rpt/pg_connectivity_before_trim.rpt
 
@@ -309,8 +311,11 @@ clearDrc
 
 verifyConnectivity \
     -type special \
+    -net {VDD VSS} \
     -noUnroutedNet \
     -report ./verify_rpt/pg_connectivity_after_trim.rpt
+
+pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt
 
 saveDesign ./saved/axi_ram_placed.enc
 

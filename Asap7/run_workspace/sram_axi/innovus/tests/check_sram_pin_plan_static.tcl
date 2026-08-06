@@ -63,4 +63,32 @@ foreach {side layer} {TOP M7 BOTTOM M7 LEFT M6 RIGHT M6} {
     }
 }
 
+set right_start_index [string first {set right_start [list} $pins_text]
+set right_end_index [string first {set right_end [list} $pins_text]
+set left_start_index [string first {set left_start [list} $pins_text]
+set bottom_start_index [string first {set bottom_start [list} $pins_text]
+set bottom_end_index [string first {set bottom_end [list} $pins_text]
+set edit_pin_index [string first {setPinAssignMode -pinEditInBatch true} $pins_text]
+
+if {$right_start_index < 0 ||
+    [string first {$pin_core_ury - $PIN_EDGE_CLEARANCE} $pins_text $right_start_index] < 0 ||
+    [string first {$pin_core_ury - $PIN_EDGE_CLEARANCE} $pins_text $right_start_index] > $right_end_index} {
+    fail "RIGHT pins must start from the top of the right edge when using clockwise spreading"
+}
+if {$right_end_index < 0 ||
+    [string first {$pin_core_lly + $PIN_EDGE_CLEARANCE} $pins_text $right_end_index] < 0 ||
+    [string first {$pin_core_lly + $PIN_EDGE_CLEARANCE} $pins_text $right_end_index] > $left_start_index} {
+    fail "RIGHT pins must end at the bottom of the right edge when using clockwise spreading"
+}
+if {$bottom_start_index < 0 ||
+    [string first {$pin_core_urx - $PIN_EDGE_CLEARANCE} $pins_text $bottom_start_index] < 0 ||
+    [string first {$pin_core_urx - $PIN_EDGE_CLEARANCE} $pins_text $bottom_start_index] > $bottom_end_index} {
+    fail "BOTTOM pins must start from the right of the bottom edge when using clockwise spreading"
+}
+if {$bottom_end_index < 0 ||
+    [string first {$pin_core_llx + $PIN_EDGE_CLEARANCE} $pins_text $bottom_end_index] < 0 ||
+    [string first {$pin_core_llx + $PIN_EDGE_CLEARANCE} $pins_text $bottom_end_index] > $edit_pin_index} {
+    fail "BOTTOM pins must end at the left of the bottom edge when using clockwise spreading"
+}
+
 puts "PASS: SRAM signal pin-plan Tcl static checks"

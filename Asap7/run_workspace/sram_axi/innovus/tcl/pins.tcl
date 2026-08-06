@@ -108,9 +108,9 @@ set top_end [list \
     [expr {$pin_core_urx - $PIN_EDGE_CLEARANCE}] $pin_core_ury]
 
 set right_start [list \
-    $pin_core_urx [expr {$pin_core_lly + $PIN_EDGE_CLEARANCE}]]
-set right_end [list \
     $pin_core_urx [expr {$pin_core_ury - $PIN_EDGE_CLEARANCE}]]
+set right_end [list \
+    $pin_core_urx [expr {$pin_core_lly + $PIN_EDGE_CLEARANCE}]]
 
 set left_start [list \
     $pin_core_llx [expr {$pin_core_lly + $PIN_EDGE_CLEARANCE}]]
@@ -118,9 +118,9 @@ set left_end [list \
     $pin_core_llx [expr {$pin_core_ury - $PIN_EDGE_CLEARANCE}]]
 
 set bottom_start [list \
-    [expr {$pin_core_llx + $PIN_EDGE_CLEARANCE}] $pin_core_lly]
-set bottom_end [list \
     [expr {$pin_core_urx - $PIN_EDGE_CLEARANCE}] $pin_core_lly]
+set bottom_end [list \
+    [expr {$pin_core_llx + $PIN_EDGE_CLEARANCE}] $pin_core_lly]
 
 setPinAssignMode -pinEditInBatch true
 

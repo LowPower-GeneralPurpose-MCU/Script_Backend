@@ -43,6 +43,13 @@ if {![regexp {set[[:space:]]+status[[:space:]]+\[lindex[[:space:]]+\[dbGet[[:spa
     fail "finish_macroFP.tcl must normalize dbGet placement status before validating it"
 }
 
+if {![regexp {createPlaceBlockage[[:space:]]+\\[^#]+-box[[:space:]]+\$SRAM_ISLAND_CUT_BOX} $finish_text]} {
+    fail "finish_macroFP.tcl must clamp the hard placement blockage to SRAM_ISLAND_CUT_BOX so it stays inside the core"
+}
+if {[regexp {createPlaceBlockage[[:space:]]+\\[^#]+-box[[:space:]]+\$SRAM_ISLAND_BLOCKAGE_BOX} $finish_text]} {
+    fail "finish_macroFP.tcl must not create a placement blockage from the unclamped die-edge SRAM_ISLAND_BLOCKAGE_BOX"
+}
+
 if {[file exists $stale_map]} {
     set fh [open $stale_map r]
     set lines [split [read $fh] "\n"]
