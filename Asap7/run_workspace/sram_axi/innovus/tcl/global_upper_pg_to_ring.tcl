@@ -5,7 +5,7 @@
 ##   - connect the external M6/M7 mesh to the M8/M9 core ring;
 ##   - keep all regular M8/M9 stripes off the complete SRAM island;
 ##   - preserve one common global stripe phase across split boxes;
-##   - use no sroute jogging and no sroute layer changes.
+##   - use straight addStripe shapes and let area-boundary targets close them.
 ##
 ## Geometry decomposition of the L-shaped non-SRAM region:
 ##
@@ -97,6 +97,7 @@ set global_m9_first_x [expr {$core_llx + $stripe_m9_offset}]
 # ------------------------------------------------------------
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M7 \
     -stacked_via_top_layer M9
 
@@ -127,6 +128,7 @@ foreach area [list $UPPER_TOP_FULL_BOX $UPPER_RIGHT_LOWER_BOX] {
 # ------------------------------------------------------------
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M8 \
     -stacked_via_top_layer M9
 

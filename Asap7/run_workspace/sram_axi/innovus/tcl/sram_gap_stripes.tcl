@@ -29,6 +29,7 @@ if {$SRAM_MACRO_GAP_Y <= $gap_pair_total} {
 # ------------------------------------------------------------
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M6 \
     -stacked_via_top_layer M8
 
@@ -62,6 +63,7 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
 # ------------------------------------------------------------
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M6 \
     -stacked_via_top_layer M7
 

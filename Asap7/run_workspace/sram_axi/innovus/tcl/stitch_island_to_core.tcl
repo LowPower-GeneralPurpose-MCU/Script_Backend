@@ -15,6 +15,7 @@
 # boundary to the right core boundary.
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M6 \
     -stacked_via_top_layer M9
 
@@ -46,6 +47,7 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
 # boundary to the top core boundary.
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M6 \
     -stacked_via_top_layer M8
 

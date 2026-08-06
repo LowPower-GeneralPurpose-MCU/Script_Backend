@@ -1,13 +1,12 @@
 ############################################################
-## Phase 1B: connect SRAM M4 PG pins to the local island PG
+## Phase 1B: connect SRAM M3 PG pins to the local island PG
 ##
 ## Project restriction:
-##   - no sroute jogging
-##   - no sroute layer changes
+##   - follow the SRAM-island blockPin style from the reference flow
+##   - do not pass explicit blockPin allowJogging/allowLayerChange switches
 ##
 ## M4 local straps and M5 local feeders are added explicitly.
-## Layer transitions are created only by addStripe/VIAGEN at legal
-## same-net intersections.
+## SRAM block pins connect to the nearest shared-cluster block ring.
 ############################################################
 
 globalNetConnect VDD \
@@ -27,6 +26,7 @@ set local_pair_total \
 # Rows 0..2 use the row gaps; row 3 uses the top escape channel.
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M4 \
     -stacked_via_top_layer M5
 
@@ -68,6 +68,7 @@ for {set r 0} {$r < $SRAM_ROWS} {incr r} {
 # Four M5 feeder pairs: three column gaps plus right escape channel.
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M4 \
     -stacked_via_top_layer M7
 
@@ -110,17 +111,14 @@ for {set c 0} {$c < $SRAM_COLS} {incr c} {
 setSrouteMode \
     -extendNearestTarget true \
     -blockPinRouteWithPinWidth true \
-    -viaConnectToShape {stripe blockring ring}
+    -viaConnectToShape blockring
 
-# Follow the slide's nearest-target block-pin connection, while retaining
-# the project restriction of no jog and no automatic layer change.
-# The nearest legal target can be a local stripe or the shared-cluster ring.
+# Follow the reference SRAM-island style: nearest target, blockring target
+# shape, and no explicit allowJogging/allowLayerChange switches here.
 sroute \
     -connect {blockPin} \
     -nets {VDD VSS} \
     -blockPin useLef \
-    -blockPinTarget nearestTarget \
-    -allowJogging 0 \
-    -allowLayerChange 0
+    -blockPinTarget nearestTarget
 
-puts "Local SRAM M4/M5 PG created; blockPin used nearest stripe/blockring with no jog/no layer change."
+puts "Local SRAM M4/M5 PG created; blockPin used nearest shared-cluster blockring target."

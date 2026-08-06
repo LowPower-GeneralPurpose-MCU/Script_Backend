@@ -8,8 +8,9 @@
 ##
 ## Project restriction:
 ##   - addStripe is not allowed to jog
-##   - sroute is not allowed to jog or change layer
-##   - planned layer transitions are made only by stacked ViaGen
+##   - SRAM blockPin sroute follows nearest blockring target
+##   - post-placement corePin sroute is not allowed to jog or change layer
+##   - planned stripe transitions are made only by stacked ViaGen
 ############################################################
 
 foreach required_file {
@@ -387,7 +388,7 @@ set stripe_m7_offset 12.800
 # Every X/Y macro gap receives at least one VDD/VSS pair.
 source ./tcl/sram_gap_stripes.tcl
 
-# SRAM M4 pins connect straight to explicit local M4/M5 structures.
+# SRAM M3 PG pins connect to explicit local M4/M5 collector structures.
 source ./tcl/sram_macro_power.tcl
 
 # L-shaped regular core grid; no stripe crosses the rectangular island.
@@ -398,6 +399,8 @@ source ./tcl/stitch_island_to_core.tcl
 
 # M8/M9 backbone extends to the die margin and connects the core ring.
 source ./tcl/global_upper_pg_to_ring.tcl
+
+editTrim -nets {VDD VSS}
 
 set pg_connectivity_report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
 set pg_drc_report ./verify_rpt/pg_drc_before_stdcell_place.rpt
@@ -420,8 +423,8 @@ puts "HIERARCHICAL POWER PLAN COMPLETED"
 puts " - SRAM group ring : M4/M5, shared_cluster"
 puts " - Core ring       : M8/M9"
 puts " - addStripe jog   : none"
-puts " - sroute jog      : 0"
-puts " - sroute layerchange: 0"
+puts " - SRAM blockPin  : nearest shared-cluster blockring"
+puts " - corePin sroute : no jog/no layer change after placement"
 puts " - PG connectivity : ./verify_rpt/pg_connectivity_before_stdcell_place.rpt"
 puts " - PG DRC          : ./verify_rpt/pg_drc_before_stdcell_place.rpt"
 puts "===================================================="

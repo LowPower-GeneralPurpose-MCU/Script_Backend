@@ -40,6 +40,7 @@ puts " - RIGHT LOW : $LOGIC_RIGHT_LOWER_BOX"
 set global_m7_first_x [expr {$core_llx + $stripe_m7_offset}]
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M6 \
     -stacked_via_top_layer M8
 
@@ -68,6 +69,7 @@ foreach area [list $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LEFT_BOX] {
 set global_m6_first_y [expr {$core_lly + $stripe_m6_offset}]
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M6 \
     -stacked_via_top_layer M7
 

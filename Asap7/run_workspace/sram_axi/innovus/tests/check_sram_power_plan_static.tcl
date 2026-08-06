@@ -63,6 +63,7 @@ foreach child $power_children {
 }
 
 set pnr_text [read_complete_file [file join $tcl_dir innovus_pnr.tcl]]
+set innovus_text [read_complete_file [file join $tcl_dir innovus.tcl]]
 
 foreach proc_name {
     pg_layer_pitch
@@ -127,6 +128,12 @@ if {$snap_override_count < $addstripe_count} {
     fail "Every addStripe in the SRAM power plan must allow snapping to override custom spacing"
 }
 
+set area_addstripe_count [regexp -all -- {-area[[:space:]]+\$[[:alnum:]_]+} $all_power_text]
+set area_boundary_count [regexp -all -- {-extend_to_closest_target[[:space:]]+area_boundary} $all_power_text]
+if {$area_boundary_count < $area_addstripe_count} {
+    fail "Area-limited SRAM/core/global stripes must extend to area_boundary so Innovus does not silently skip edge stripes"
+}
+
 foreach child {sram_gap_stripes.tcl sram_macro_power.tcl stitch_island_to_core.tcl} {
     assert_contains \
         $child_text($child) \
@@ -149,6 +156,19 @@ assert_contains \
     $power_text \
     {pg_assert_clean_drc_report[[:space:]]+\$pg_drc_report} \
     "power_plan.tcl must stop before saveDesign when PG DRC is dirty"
+assert_contains \
+    $power_text \
+    {editTrim[[:space:]]+-nets[[:space:]]+\{VDD[[:space:]]+VSS\}} \
+    "power_plan.tcl must trim dangling VDD/VSS wires before final PG verification"
+
+assert_contains \
+    $child_text(sram_macro_power.tcl) \
+    {-viaConnectToShape[[:space:]]+blockring} \
+    "SRAM blockPin sroute must target the shared-cluster blockring, matching the reference SRAM island flow"
+
+if {[regexp -- {-allowJogging|-allowLayerChange} $child_text(sram_macro_power.tcl)]} {
+    fail "SRAM blockPin sroute must not pass explicit allowJogging/allowLayerChange switches"
+}
 
 assert_contains \
     $pnr_text \
@@ -158,6 +178,16 @@ assert_contains \
     $pnr_text \
     {set[[:space:]]+status[[:space:]]+\[lindex[[:space:]]+\[dbGet[[:space:]]+\$ptr\.pStatus\][[:space:]]+0\]} \
     "innovus_pnr.tcl must normalize dbGet placement status before comparing it"
+foreach flow_pair [list \
+    [list innovus_pnr.tcl $pnr_text] \
+    [list innovus.tcl $innovus_text] \
+] {
+    lassign $flow_pair flow_name flow_text
+    assert_contains \
+        $flow_text \
+        {catch[[:space:]]+\{source[[:space:]]+\./tcl/power_plan\.tcl\}} \
+        "$flow_name must stop before pin assignment when power_plan.tcl reports dirty PG"
+}
 
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_drc_before_stdcell_place.rpt]
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_connectivity_before_stdcell_place.rpt]

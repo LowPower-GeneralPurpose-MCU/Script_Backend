@@ -195,7 +195,9 @@ checkFPlan \
 # 3. POWER PLAN AND TOP-LEVEL PINS
 # ------------------------------------------------------------------------
 
-source ./tcl/power_plan.tcl
+if {[catch {source ./tcl/power_plan.tcl} power_plan_error]} {
+    error "Power plan failed before pin assignment: $power_plan_error"
+}
 
 setPinConstraint -corner_to_pin_distance 8
 source ./tcl/pins.tcl

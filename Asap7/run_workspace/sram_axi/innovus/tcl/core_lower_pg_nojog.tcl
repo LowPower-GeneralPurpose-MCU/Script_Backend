@@ -18,6 +18,7 @@ sroute \
 set global_m5_first_x [expr {$core_llx + $stripe_m5_offset}]
 setAddStripeMode \
     -allow_jog none \
+    -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M1 \
     -stacked_via_top_layer M6
 
