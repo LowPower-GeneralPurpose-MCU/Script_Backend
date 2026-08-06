@@ -85,7 +85,7 @@ foreach record $SRAM_RECORDS {
     set name [lindex $record 1]
     set ptr  [lindex $record 2]
 
-    set orient [dbGet $ptr.orient]
+    set orient [lindex [dbGet $ptr.orient] 0]
     if {$orient ne "R0" && $orient ne "R180"} {
         close $actual_map
         error "$name has illegal orientation $orient; only R0/R180 are allowed"
@@ -112,7 +112,7 @@ foreach record $SRAM_RECORDS {
     set actual_ury [max_value $actual_ury $nominal_ury]
 
     dbSet $ptr.pStatus fixed
-    set status [dbGet $ptr.pStatus]
+    set status [lindex [dbGet $ptr.pStatus] 0]
     if {$status ne "fixed"} {
         close $actual_map
         error "$name was not FIXED after snapFPlan"

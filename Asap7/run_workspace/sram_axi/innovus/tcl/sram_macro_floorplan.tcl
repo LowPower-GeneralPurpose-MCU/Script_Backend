@@ -28,6 +28,19 @@ proc max_value {a b} {
     return [expr {$a > $b ? $a : $b}]
 }
 
+proc sram_snap_to_grid {value grid} {
+    if {![string is double -strict $value]} {
+        error "Invalid snap-to-grid value: $value"
+    }
+    if {![string is double -strict $grid]} {
+        error "Invalid snap-to-grid grid: $grid"
+    }
+    if {$grid <= 0.0} {
+        error "Invalid snap-to-grid grid: $grid"
+    }
+    return [format %.6f [expr {round($value / $grid) * $grid}]]
+}
+
 proc sram_compare_yx {a b} {
     set ay [lindex $a 0]
     set by [lindex $b 0]
@@ -225,7 +238,7 @@ for {set k 0} {$k < $SRAM_COUNT} {incr k} {
     dbSet $ptr.pStatus placed
 
     puts $planned_map \
-        "$bank $name $row $col $x $y $SRAM_ISLAND_ORIENT seed"
+        "$bank $name $row $col $snap_x $snap_y $SRAM_ISLAND_ORIENT seed"
 }
 close $planned_map
 
@@ -289,8 +302,8 @@ foreach record $SRAM_RECORDS {
     set name [lindex $record 1]
     set ptr  [lindex $record 2]
     lassign [sram_fp_decode_point $ptr $name] x y
-    set orient [dbGet $ptr.orient]
-    set status [dbGet $ptr.pStatus]
+    set orient [lindex [dbGet $ptr.orient] 0]
+    set status [lindex [dbGet $ptr.pStatus] 0]
 
     if {$status eq "unplaced"} {
         close $concurrent_map
@@ -362,7 +375,7 @@ if {$SRAM_PACK_4X4} {
             set y [expr {
             	$SRAM_Y0 +
             	$row * ($SRAM_H + $SRAM_MACRO_GAP_Y)
-            }
+            }]
             set snap_x [sram_snap_to_grid $x $ASAP7_SITE_WIDTH]
             set snap_y [sram_snap_to_grid $y $ASAP7_SITE_WIDTH]
             
@@ -370,9 +383,10 @@ if {$SRAM_PACK_4X4} {
             placeInstance $name $snap_x $snap_y $SRAM_ISLAND_ORIENT
             dbSet $ptr.pStatus placed
             
-            if {[dbGet $ptr.orient] ne $SRAM_ISLAND_ORIENT} {
+            set placed_orient [lindex [dbGet $ptr.orient] 0]
+            if {$placed_orient ne $SRAM_ISLAND_ORIENT} {
             	close $packed_map
-            	error "$name was not placed with orientation $SRAM_ISLAND_ORIENT"
+                error "$name was not placed with orientation $SRAM_ISLAND_ORIENT (actual: $placed_orient)"
             }
             puts $packed_map \
             	"$bank $name $row $col $snap_x $snap_y $SRAM_ISLAND_ORIENT"
@@ -393,7 +407,7 @@ if {$SRAM_PACK_4X4} {
     foreach record $SRAM_RECORDS {
         set name [lindex $record 1]
         set ptr  [lindex $record 2]
-        set status [dbGet $ptr.pStatus]
+        set status [lindex [dbGet $ptr.pStatus] 0]
 
         if {$status eq "unplaced"} {
             error "$name became unplaced during 4x4 packing"
