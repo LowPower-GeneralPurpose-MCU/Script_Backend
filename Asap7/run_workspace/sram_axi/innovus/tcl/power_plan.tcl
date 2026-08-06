@@ -13,6 +13,8 @@
 ##   - planned stripe transitions are made only by stacked ViaGen
 ############################################################
 
+puts "POWER PLAN SCRIPT ENTRY: [file normalize [info script]]"
+
 foreach required_file {
     ./outputs/sram_macro_geometry.tcl
     ./tcl/sram_island_power.tcl
@@ -434,6 +436,7 @@ addRing \
 
 pg_assert_complete_core_rings \
     $core_llx $core_lly $core_urx $core_ury
+puts "POWER PLAN CORE RINGS CHECKED"
 
 # ------------------------------------------------------------------------
 # 2. REFERENCE-STYLE SRAM ISLAND POWER
@@ -442,7 +445,9 @@ pg_assert_complete_core_rings \
 # Adapt the teacher's ring/stripe intent to this lower-left boundary island:
 # keep an open M4-top/M5-right local ring, reuse global M9-left/M8-bottom, and
 # connect the internal gap collectors and SRAM block pins to this PG structure.
+puts "POWER PLAN SOURCE SRAM ISLAND: [file normalize ./tcl/sram_island_power.tcl]"
 source ./tcl/sram_island_power.tcl
+puts "POWER PLAN SRAM ISLAND RETURNED"
 
 # Create top-level PG pin shapes after the SRAM collectors.  A PG pin metadata
 # problem must not prevent Innovus from constructing the physical island PG.

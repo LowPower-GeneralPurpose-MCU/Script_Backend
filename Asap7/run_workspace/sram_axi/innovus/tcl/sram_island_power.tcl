@@ -67,12 +67,126 @@ set sram_local_top_lly $SRAM_ISLAND_URY
 set sram_local_top_ury $SRAM_ISLAND_CUT_URY
 set sram_local_right_llx $SRAM_ISLAND_URX
 set sram_local_right_urx $SRAM_ISLAND_CUT_URX
+if {![info exists sram_edge_report]} {
+    set sram_edge_report ./reports/sram_island_pg_edges.rpt
+}
 
 if {$sram_local_top_ury - $sram_local_top_lly <= $sram_pair_total} {
     error "SRAM top halo is too small for the open M4 local-ring pair"
 }
 if {$sram_local_right_urx - $sram_local_right_llx <= $sram_pair_total} {
     error "SRAM right halo is too small for the open M5 local-ring pair"
+}
+
+proc sram_pg_overlap_length {wire_box area direction} {
+    lassign $wire_box w_llx w_lly w_urx w_ury
+    lassign $area a_llx a_lly a_urx a_ury
+
+    set overlap_llx [expr {max($w_llx, $a_llx)}]
+    set overlap_lly [expr {max($w_lly, $a_lly)}]
+    set overlap_urx [expr {min($w_urx, $a_urx)}]
+    set overlap_ury [expr {min($w_ury, $a_ury)}]
+
+    if {$overlap_urx <= $overlap_llx ||
+        $overlap_ury <= $overlap_lly} {
+        return 0.0
+    }
+
+    if {$direction eq "horizontal"} {
+        return [expr {$overlap_urx - $overlap_llx}]
+    }
+    if {$direction eq "vertical"} {
+        return [expr {$overlap_ury - $overlap_lly}]
+    }
+
+    error "Unsupported SRAM PG edge direction: $direction"
+}
+
+proc sram_pg_wire_has_direction {wire_box direction} {
+    lassign $wire_box llx lly urx ury
+    set is_horizontal [expr {($urx - $llx) >= ($ury - $lly)}]
+    if {$direction eq "horizontal"} {
+        return $is_horizontal
+    }
+    if {$direction eq "vertical"} {
+        return [expr {!$is_horizontal}]
+    }
+
+    error "Unsupported SRAM PG wire direction: $direction"
+}
+
+proc sram_pg_edge_wire_stats {net layer direction area} {
+    set net_ptr [lindex [dbGet -p top.nets.name $net] 0]
+    if {$net_ptr eq "" || $net_ptr eq "0x0"} {
+        return [list 0 0.0 0.0]
+    }
+
+    if {$direction eq "horizontal"} {
+        set required_length [expr {0.75 * ([lindex $area 2] - [lindex $area 0])}]
+    } elseif {$direction eq "vertical"} {
+        set required_length [expr {0.75 * ([lindex $area 3] - [lindex $area 1])}]
+    } else {
+        error "Unsupported SRAM PG edge direction: $direction"
+    }
+
+    set total_coverage 0.0
+    set wire_count 0
+    set wire_ptrs [dbGet -p2 $net_ptr.sWires.layer.name $layer]
+    if {$wire_ptrs eq "" || $wire_ptrs eq "0x0"} {
+        return [list 0 0.0 $required_length]
+    }
+
+    foreach wire_ptr $wire_ptrs {
+        set wire_box [join [dbGet $wire_ptr.box]]
+        if {[llength $wire_box] != 4} {
+            continue
+        }
+        if {![sram_pg_wire_has_direction $wire_box $direction]} {
+            continue
+        }
+
+        set overlap_length [sram_pg_overlap_length \
+            $wire_box $area $direction]
+        if {$overlap_length > 0.0} {
+            incr wire_count
+            set total_coverage [expr {$total_coverage + $overlap_length}]
+        }
+    }
+
+    return [list $wire_count $total_coverage $required_length]
+}
+
+proc sram_pg_assert_edge_wires {report_path edge_specs} {
+    file mkdir [file dirname $report_path]
+
+    set fh [open $report_path w]
+    puts $fh "edge net layer direction wires coverage_um required_um area"
+
+    set missing_edges {}
+    foreach edge_spec $edge_specs {
+        lassign $edge_spec edge_name layer direction area
+        foreach net {VSS VDD} {
+            lassign [sram_pg_edge_wire_stats \
+                $net $layer $direction $area] \
+                wire_count coverage required
+
+            puts $fh [format "%s %s %s %s %d %.6f %.6f {%s}" \
+                $edge_name $net $layer $direction \
+                $wire_count $coverage $required [join $area { }]]
+
+            if {$wire_count < 1 || $coverage < $required} {
+                lappend missing_edges \
+                    "$edge_name/$net/$layer coverage=[format %.6f $coverage] required=[format %.6f $required]"
+            }
+        }
+    }
+    close $fh
+
+    if {[llength $missing_edges] != 0} {
+        error "Missing SRAM island PG edge wires after editTrim: [join $missing_edges {; }]. See $report_path"
+    }
+
+    puts "SRAM island PG edge report: $report_path"
 }
 
 setAddStripeMode \
@@ -202,6 +316,19 @@ sroute \
     -blockPinTarget {stripe}
 
 editTrim -nets {VSS VDD}
+
+set reused_left_area [list \
+    $sram_pg_left $sram_pg_bottom \
+    $SRAM_X0 $sram_pg_top]
+set reused_bottom_area [list \
+    $sram_pg_left $sram_pg_bottom \
+    $sram_pg_right $SRAM_Y0]
+set sram_edge_specs [list \
+    [list reused_left M9 vertical $reused_left_area] \
+    [list reused_bottom M8 horizontal $reused_bottom_area] \
+    [list local_top M4 horizontal $local_top_area] \
+    [list local_right M5 vertical $local_right_area]]
+sram_pg_assert_edge_wires $sram_edge_report $sram_edge_specs
 clearDrc
 deselectAll
 

@@ -49,6 +49,34 @@ proc dbGet {args} {
         return [format {u_mem/G_SRAM_BANK[%d].u_sram} $index]
     }
 
+    if {[llength $args] == 3 &&
+        [lindex $args 0] eq "-p" &&
+        [lindex $args 1] eq "top.nets.name"} {
+        set net [lindex $args 2]
+        if {$net eq "VDD" || $net eq "VSS"} {
+            return "net_$net"
+        }
+        return ""
+    }
+
+    if {[llength $args] == 3 &&
+        [lindex $args 0] eq "-p2" &&
+        [regexp {^net_(VDD|VSS)\.sWires\.layer\.name$} [lindex $args 1] -> net] &&
+        [regexp {^M[0-9]+$} [lindex $args 2]]} {
+        return [list "wire_${net}_[lindex $args 2]_0"]
+    }
+
+    if {[llength $args] == 1 &&
+        [regexp {^wire_(VDD|VSS)_(M[0-9]+)_0\.box$} [lindex $args 0] -> net layer]} {
+        switch -- $layer {
+            M4 { return {0.816 706.860 502.032 707.724} }
+            M5 { return {501.192 1.548 502.128 707.628} }
+            M8 { return {0.816 0.876 502.032 1.740} }
+            M9 { return {0.720 0.972 1.656 707.628} }
+            default { return {} }
+        }
+    }
+
     if {[llength $args] == 1 && [lindex $args 0] eq "top.fPlan.box"} {
         return {0.0 0.0 1105.2 970.848}
     }
@@ -166,9 +194,18 @@ proc simulate_sram_island_power {script_path} {
     set stripe_m45_w 0.096
     set stripe_m45_s 0.288
 
+    if {[info exists ::env(TEMP)]} {
+        set sram_edge_report [file join \
+            $::env(TEMP) sram_island_pg_edges_static.rpt]
+    } else {
+        set sram_edge_report sram_island_pg_edges_static.rpt
+    }
+    file delete -force $sram_edge_report
+
     if {[catch {source $script_path} message]} {
         fail "Simulated SRAM island PG failed: $message"
     }
+    file delete -force $sram_edge_report
 
     return $SRAM_STRIPE_CAPTURE
 }
@@ -224,6 +261,17 @@ assert_contains \
     $power_text \
     {source[[:space:]]+\./tcl/sram_island_power\.tcl} \
     "power_plan.tcl must source the SRAM collector PG script"
+foreach marker {
+    {POWER PLAN SCRIPT ENTRY:}
+    {POWER PLAN CORE RINGS CHECKED}
+    {POWER PLAN SOURCE SRAM ISLAND:}
+    {POWER PLAN SRAM ISLAND RETURNED}
+} {
+    assert_contains \
+        $power_text \
+        $marker \
+        "power_plan.tcl must print marker '$marker' for log/source correlation"
+}
 if {[string first {source ./tcl/global_upper_pg_to_ring.tcl} $power_text] >= 0} {
     fail "The power/pins checkpoint must not add the post-placement M8/M9 mesh"
 }
@@ -424,6 +472,28 @@ assert_contains \
     {-viaConnectToShape[[:space:]]+stripe} \
     "SRAM blockPin sroute must target the internal M4/M5 collectors"
 
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {proc[[:space:]]+sram_pg_assert_edge_wires} \
+    "SRAM island power must define a runtime edge-wire guard"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {set[[:space:]]+sram_edge_report[[:space:]]+\./reports/sram_island_pg_edges\.rpt} \
+    "SRAM island power must write an explicit edge report for GUI/debug correlation"
+foreach edge_name {reused_left reused_bottom local_top local_right} {
+    assert_contains \
+        $child_text(sram_island_power.tcl) \
+        $edge_name \
+        "SRAM island edge report must cover $edge_name"
+}
+set island_trim_index [string first {editTrim -nets {VSS VDD}} $child_text(sram_island_power.tcl)]
+set island_edge_assert_index [string first {sram_pg_assert_edge_wires $sram_edge_report $sram_edge_specs} $child_text(sram_island_power.tcl)]
+if {$island_trim_index < 0 ||
+    $island_edge_assert_index < 0 ||
+    $island_edge_assert_index <= $island_trim_index} {
+    fail "SRAM island edge-wire guard must run after editTrim so the saved DB cannot miss top/right local ring wires"
+}
+
 if {[regexp -- {-allowJogging|-allowLayerChange} $child_text(sram_island_power.tcl)]} {
     fail "SRAM blockPin sroute must not pass explicit allowJogging/allowLayerChange switches"
 }
@@ -610,14 +680,30 @@ foreach flow_pair [list \
         $flow_text \
         {catch[[:space:]]+\{source[[:space:]]+\./tcl/power_plan\.tcl\}} \
         "$flow_name must stop before pin assignment when power_plan.tcl reports dirty PG"
+    assert_contains \
+        $flow_text \
+        {POWER PLAN ENTRY:} \
+        "$flow_name must print a power-plan entry marker before sourcing power_plan.tcl"
+    assert_contains \
+        $flow_text \
+        {POWER PLAN EXIT:} \
+        "$flow_name must print a power-plan exit marker after power_plan.tcl returns cleanly"
 
     set power_catch_index [string first {catch {source ./tcl/power_plan.tcl}} $flow_text]
     set pin_source_index [string first {source ./tcl/pins.tcl} $flow_text $power_catch_index]
     set failure_return_index [string first "\n    return\n" $flow_text $power_catch_index]
+    set power_entry_index [string first {POWER PLAN ENTRY:} $flow_text]
+    set power_exit_index [string first {POWER PLAN EXIT:} $flow_text $power_catch_index]
     if {$power_catch_index < 0 || $pin_source_index < 0 ||
         $failure_return_index < $power_catch_index ||
         $failure_return_index > $pin_source_index} {
         fail "$flow_name must return immediately on a power-plan failure instead of continuing into pins.tcl"
+    }
+    if {$power_entry_index < 0 ||
+        $power_entry_index > $power_catch_index ||
+        $power_exit_index < $power_catch_index ||
+        $power_exit_index > $pin_source_index} {
+        fail "$flow_name must bracket power_plan.tcl in the log before pin assignment"
     }
 
     assert_contains \

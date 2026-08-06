@@ -207,10 +207,12 @@ checkFPlan \
 # 3. POWER PLAN AND TOP-LEVEL PINS
 # ------------------------------------------------------------------------
 
+puts "POWER PLAN ENTRY: [file normalize ./tcl/power_plan.tcl]"
 if {[catch {source ./tcl/power_plan.tcl} power_plan_error]} {
     puts stderr "Power plan failed before pin assignment: $power_plan_error"
     return
 }
+puts "POWER PLAN EXIT: ./tcl/power_plan.tcl returned cleanly"
 
 setPinConstraint -corner_to_pin_distance 8
 source ./tcl/pins.tcl
