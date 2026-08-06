@@ -15,6 +15,9 @@ catch { setPlaceMode -macroPlaceMode 0 }
 catch { setPlaceMode -place_opt_run_global_place seed }
 catch { setPlaceMode -tdgp_basic_pg true }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
+catch { setSrouteMode -blockPinRouteWithPinWidth true }
+catch { setSrouteMode -extendNearestTarget true }
+catch { setSrouteMode -viaConnectToShape stripe }
 catch { setDelayCalMode -enable_hier_save_restore_flow false }
 catch { setDelayCalMode -engine aae }
 catch { setDelayCalMode -ignoreNetLoad false }
@@ -23,6 +26,11 @@ catch { setHierMode -optStage preCTS }
 catch { setImportMode -discardFloatingVNets false }
 catch { setImportMode -keepEmptyModule true }
 catch { setAddStripeMode -allow_jog none }
+catch { setAddStripeMode -allow_nonpreferred_dir none }
+catch { setAddStripeMode -break_at none }
+catch { setAddStripeMode -extend_to_closest_target area_boundary }
+catch { setAddStripeMode -stacked_via_bottom_layer M4 }
+catch { setAddStripeMode -stacked_via_top_layer M8 }
 catch { setRouteMode -earlyGlobalBlockTracks { { M4 0.024591 }  { M5 0.025831 } } }
 catch { setRouteMode -earlyGlobalCapacityScreen { { srambank_256x4x32_6t122 M4 1.024600 }  { srambank_256x4x32_6t122 M5 1.025800 } } }
 catch { setFPlanMode -cellsForExtraSites {} }

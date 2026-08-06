@@ -36,7 +36,9 @@ catch { setDelayCalMode -enable_high_fanout true }
 catch { setDelayCalMode -enable_ideal_seq_async_pins false }
 catch { setDelayCalMode -eng_enablePrePlacedFlow false }
 catch { setDelayCalMode -engine aae }
+catch { setDelayCalMode -equivalent_waveform_model none }
 catch { setDelayCalMode -ignoreNetLoad false }
+catch { setDelayCalMode -SIAware false }
 catch { setDelayCalMode -socv_accuracy_mode low }
 catch { setPinAssignMode -pinEditInBatch false }
 catch { setHierMode -optStage preCTS }
@@ -47,7 +49,7 @@ catch { setAddStripeMode -allow_jog none }
 catch { setAddStripeMode -allow_nonpreferred_dir none }
 catch { setAddStripeMode -break_at none }
 catch { setAddStripeMode -extend_to_closest_target area_boundary }
-catch { setAddStripeMode -stacked_via_bottom_layer M4 }
+catch { setAddStripeMode -stacked_via_bottom_layer M1 }
 catch { setAddStripeMode -stacked_via_top_layer M8 }
 catch { setRouteMode -earlyGlobalBlockTracks { { M4 0.024591 }  { M5 0.025831 } } }
 catch { setRouteMode -earlyGlobalCapacityScreen { { srambank_256x4x32_6t122 M4 1.024600 }  { srambank_256x4x32_6t122 M5 1.025800 } } }

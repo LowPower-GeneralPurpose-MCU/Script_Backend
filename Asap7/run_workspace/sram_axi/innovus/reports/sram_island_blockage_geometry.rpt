@@ -12,6 +12,7 @@ blockage_clearance_bottom 2.16
 blockage_clearance_right 2.16
 blockage_clearance_top 2.16
 row_cut_box 2.16 2.16 502.848 708.48
-place_blockage_box 0.0 0.0 502.848 708.48
+desired_blockage_box 0.0 0.0 502.848 708.48
+place_blockage_box 2.16 2.16 502.848 708.48
 place_blockage_type hard
 no_cut_by_core true
