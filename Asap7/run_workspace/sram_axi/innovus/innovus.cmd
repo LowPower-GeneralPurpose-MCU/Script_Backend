@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Thu Aug  6 21:18:22 2026                
+#  Created on Thu Aug  6 21:34:45 2026                
 #                                                     
 #######################################################
 
@@ -134,6 +134,8 @@ saveDesign ./saved/axi_ram_macroFP.enc
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_before_pnr.rpt
 setAddStripeMode -allow_jog none
 clearGlobalNets
+deletePGPin -net VDD
+deletePGPin -net VSS
 deleteAllPowerPreroutes
 globalNetConnect VDD -type pgpin -pin VDD -inst * -module {} -override
 globalNetConnect VSS -type pgpin -pin VSS -inst * -module {} -override
@@ -143,14 +145,8 @@ applyGlobalNets
 addRing -nets {VDD VSS} -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 0.384 -snap_wire_center_to_grid Grid
 deletePGPin -net VDD
 deletePGPin -net VSS
-createPGPin VDD -geom M8 2.160000 1.296000 1103.040000 1.776000 -net VDD
-createPGPin VSS -geom M8 2.160000 0.336000 1103.040000 0.816000 -net VSS
-createPGPin VDD -geom M8 2.160000 969.072000 1103.040000 969.552000 -net VDD
-createPGPin VSS -geom M8 2.160000 970.032000 1103.040000 970.512000 -net VSS
-createPGPin VDD -geom M9 1.296000 2.160000 1.776000 968.688000 -net VDD
-createPGPin VSS -geom M9 0.336000 2.160000 0.816000 968.688000 -net VSS
-createPGPin VDD -geom M9 1103.424000 2.160000 1103.904000 968.688000 -net VDD
-createPGPin VSS -geom M9 1104.384000 2.160000 1104.864000 968.688000 -net VSS
+createPGPin VDD -geom M9 1.360000 1.360000 1.840000 1.840000 -net VDD
+createPGPin VSS -geom M9 0.400000 0.400000 0.880000 0.880000 -net VSS
 deselectAll
 selectInst {u_mem/G_SRAM_BANK[0].u_sram}
 selectInst {u_mem/G_SRAM_BANK[1].u_sram}
@@ -182,12 +178,6 @@ addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.
 editTrim -nets {VSS VDD}
 clearDrc
 deselectAll
-setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M9
-addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 2.080000 -create_pins 0 -area {0.0 708.48 1105.2 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 19.360000 -create_pins 0 -area {502.848 0.0 1105.2 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M8 -stacked_via_top_layer M9
-addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 0.352000 -create_pins 0 -area {502.848 0.0 1105.2 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.360000 -create_pins 0 -area {0.0 708.48 502.848 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 editTrim -nets {VDD VSS}
 verifyConnectivity -type special -noUnroutedNet -report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
 verify_drc -report ./verify_rpt/pg_drc_before_stdcell_place.rpt
@@ -200,148 +190,34 @@ editPin -pin {{s_axi_rid[4]} {s_axi_rid[3]} {s_axi_rid[2]} {s_axi_rid[1]} {s_axi
 setPinAssignMode -pinEditInBatch false
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
 fit
-zoomBox -233.50550 106.06450 1206.60850 877.64625
-zoomBox -170.59425 261.02000 869.88850 818.48800
-zoomBox -79.47550 485.45300 382.19275 732.80475
-zoomBox -68.57375 512.30450 323.84425 722.55350
-zoomBox -33.67675 588.13925 171.16825 697.89075
-zoomBox -15.46075 627.72525 91.47025 685.01650
-zoomBox -10.28575 639.65550 66.97250 681.04875
-zoomBox -6.00600 651.34825 41.44050 676.76900
-zoomBox -2.75000 660.24325 22.01725 673.51300
-pan -0.13300 667.76750
-pan -0.15500 671.40075
-pan 0.07750 676.73950
-pan -0.07750 681.82375
-pan -0.26575 687.05175
-pan -0.22150 692.16900
-pan -0.18825 698.20575
-pan -0.21050 701.41800
-zoomBox -2.01375 701.48700 13.19675 709.63650
-zoomBox -5.82650 693.93850 28.45475 712.30575
-zoomBox -10.13300 685.38400 45.68875 715.29200
-pan 0.39950 704.22975
-pan -1.07350 712.11850
-pan 0.22475 719.48325
-pan 0.37450 727.39700
-pan -1.19825 734.81175
-zoomBox -9.42125 728.34875 38.02725 753.77050
-zoomBox -19.71975 708.91750 71.17675 757.61775
-zoomBox -33.25725 683.37475 114.75250 762.67525
-pan 2.51525 747.54500
-pan -3.04500 772.30150
-pan 1.19150 811.42225
-pan 1.12525 841.93775
-pan -1.19150 874.43900
-zoomBox -19.84000 869.32825 71.05725 918.02900
-zoomBox -10.08575 889.38100 37.36350 914.80325
-zoomBox -5.87700 897.83150 23.26300 913.44400
-zoomBox -3.99675 901.55975 17.05725 912.84000
-zoomBox -3.26250 903.01600 14.63350 912.60425
-selectMarker 0.3360 0.3360 1104.8640 970.5120 -1 3 7
-deselectAll
-selectPhyPin 1.2960 2.1600 1.7760 968.6880 9 VDD
-deselectAll
-selectPhyPin 0.3360 2.1600 0.8160 968.6880 9 VSS
-deselectAll
-selectPhyPin 1.2960 2.1600 1.7760 968.6880 9 VDD
-zoomBox -3.26250 901.09850 14.63350 910.68675
-zoomBox -1.98775 903.27725 10.94225 910.20475
-zoomBox -0.39875 905.72600 6.35100 909.34225
-zoomBox 0.56675 907.21375 3.56200 908.81850
-zoomBox -0.39900 905.72575 6.35150 909.34250
-zoomBox -2.57550 902.37225 12.63850 910.52350
-zoomBox -4.07825 900.05675 16.97950 911.33900
-zoomBox -7.48075 894.81400 26.80825 913.18525
-pan -0.49075 910.56025
-fit
-zoomBox -269.96500 319.51650 954.13225 975.36100
-zoomBox -198.86775 476.59875 685.54275 950.44650
-zoomBox -124.69150 637.31400 418.44700 928.31575
-zoomBox -106.98375 675.68100 354.68400 923.03250
-zoomBox -78.79450 735.89850 254.76050 914.61000
-zoomBox -67.78550 759.41600 215.73625 911.32075
-zoomBox -57.76200 780.62300 183.23150 909.74200
-zoomBox -30.50650 838.10050 95.29425 905.50175
-zoomBox -22.20050 855.52400 68.69050 904.22150
-zoomBox -15.92925 867.95450 49.74000 903.13875
-pan -1.58575 902.23975
-pan -1.14525 919.18550
-pan -0.20550 935.48525
-pan 0.20550 948.46625
-pan 0.70475 963.47400
-zoomBox -12.88650 950.81975 34.55975 976.24050
-zoomBox -10.66850 953.34375 29.66125 974.95150
-zoomBox -8.78275 955.48925 25.49750 973.85575
-zoomBox -17.39175 952.58625 30.05500 978.00725
-zoomBox -45.79925 943.00700 45.09425 991.70575
-pan 10.85350 985.35100
-zoomBox -57.28775 930.23075 68.51625 997.63375
-zoomBox -158.23025 888.11825 125.30075 1040.02800
-zoomBox -324.38600 818.79950 218.77075 1109.81100
-zoomBox -568.29075 750.57325 316.14950 1224.43700
-pan 204.10175 1203.76025
-pan 170.08475 918.17625
-pan 223.48350 721.19450
-pan 208.84825 472.00050
-zoomBox -9.40600 412.35325 1214.73275 1068.22000
-pan -8.21200 142.55050
-zoomBox 125.61250 259.89675 877.38675 662.68100
-zoomBox 188.96275 316.06275 732.12000 607.07450
-zoomBox 214.94250 339.49175 676.62625 586.85175
-zoomBox 274.53850 392.39550 558.07050 544.30575
-zoomBox 319.87550 432.64100 467.88125 511.93925
-zoomBox 327.60000 439.36275 453.40500 506.76625
-zoomBox 320.68950 431.51875 468.69550 510.81725
-pan -57.98450 111.82250
-panCenter 262.70475 511.81025
-pan -77.04800 290.07850
-pan -22.57175 367.72225
-zoomBox 91.73300 487.33900 217.53825 554.74275
-pan -42.53525 395.71850
-gui_select -rect {68.38375 534.20650 114.18225 532.80000}
-deselectAll
-pan -56.93875 437.57850
-pan -31.67625 494.68600
-zoomBox -28.44150 499.57600 62.45300 548.27525
-zoomBox -16.52025 512.17175 39.30050 542.07925
-zoomBox -7.45125 521.75350 21.68750 537.36550
-zoomBox -3.88650 525.71575 14.00875 535.30375
-pan -1.40850 529.65050
-zoomBox -3.67850 527.28275 9.25125 534.21025
-zoomBox -1.66675 529.17325 5.08325 532.78975
-zoomBox -1.05700 529.74625 3.82000 532.35925
-pan 0.01100 531.21100
-zoomBox -1.46200 529.90725 4.27600 532.98150
-zoomBox -4.00025 528.40075 6.99275 534.29050
-zoomBox -5.93400 526.93150 9.28125 535.08350
-pan -0.53075 536.74400
-pan -0.02050 540.34350
-pan -0.34700 543.99075
-zoomBox -6.83225 536.69025 8.38300 544.84225
-pan -0.38100 545.06725
-pan -0.21100 548.10200
-pan -0.06125 551.04850
-pan -0.11575 554.32150
-pan -0.04100 556.66925
-zoomBox -12.73475 545.54900 12.04100 558.82325
-zoomBox -21.02675 539.81925 19.31650 561.43425
-zoomBox -40.70400 526.22175 36.58150 567.62975
-pan 1.90100 581.51200
-pan -1.27875 588.80525
-pan -1.14075 612.17050
-pan 2.59225 624.89050
-pan 4.32050 640.40975
-zoomBox -56.87500 582.42825 68.97225 649.85450
-zoomBox -79.09750 561.50300 95.08575 654.82650
-zoomBox -129.95350 512.21325 153.67550 664.17550
-zoomBox -250.63575 395.24825 292.70950 686.36075
-zoomBox -481.82450 171.17950 559.05475 728.86000
-pan -17.68925 784.27800
-zoomBox -307.67075 457.83200 331.55925 800.31750
-zoomBox -189.52425 553.36425 203.04300 763.69325
-zoomBox -98.72350 626.37425 106.19950 736.16750
-zoomBox -59.85825 657.63625 65.99025 725.06325
-zoomBox -25.44925 685.31400 30.39100 715.23200
-zoomBox -8.35500 699.06425 12.70550 710.34800
-pan -0.32025 709.39725
+zoomBox -382.64375 68.32400 1311.60775 976.06700
+zoomBox -277.93125 258.40450 946.16525 914.24875
+zoomBox -172.73025 449.37200 579.01800 852.14225
+zoomBox -104.23175 563.27675 357.43575 810.62800
+zoomBox -61.36825 631.39575 222.15325 783.30050
+zoomBox -36.75800 668.15975 137.36075 761.44875
+zoomBox -18.29675 695.21950 72.59500 743.91725
+zoomBox -10.51700 706.62275 45.30225 736.52950
+zoomBox -8.65975 709.34500 38.78675 734.76575
+zoomBox -12.49850 704.07200 53.17150 739.25650
+pan -0.99850 709.72750
+pan -0.82225 705.96825
+zoomBox -7.52500 696.13475 26.75550 714.50150
+zoomBox -5.31700 697.56425 19.45075 710.83425
+zoomBox -4.40825 698.31525 16.64450 709.59475
+zoomBox -2.97925 699.49600 12.23175 707.64575
+pan 0.14275 703.80175
+zoomBox -4.33150 698.33725 16.72225 709.61750
+zoomBox -7.71600 692.71050 26.56725 711.07875
+zoomBox -11.21425 687.31625 36.23675 712.73950
+zoomBox -20.64200 675.54200 56.62450 716.93975
+zoomBox -14.79300 684.56550 41.03250 714.47550
+zoomBox -12.48975 688.10075 34.96175 713.52425
+zoomBox -21.62400 676.90000 55.64300 718.29800
+zoomBox -51.30125 640.50725 122.83950 733.80800
+zoomBox -118.18675 558.48725 274.28300 768.76400
+zoomBox -276.41175 381.77775 608.11675 855.68875
+zoomBox -399.17750 267.67250 825.08375 923.60500
+zoomBox -570.98800 113.94700 1123.49150 1021.81225
+zoomBox -1316.26125 -223.99375 1929.82975 1515.19100
+pan 37.74525 1064.68450

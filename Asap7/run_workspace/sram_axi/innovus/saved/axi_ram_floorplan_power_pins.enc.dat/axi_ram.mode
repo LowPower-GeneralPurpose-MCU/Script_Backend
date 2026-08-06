@@ -30,7 +30,7 @@ catch { setImportMode -keepEmptyModule true }
 catch { setAddStripeMode -allow_jog none }
 catch { setAddStripeMode -break_at block_ring }
 catch { setAddStripeMode -extend_to_closest_target area_boundary }
-catch { setAddStripeMode -stacked_via_bottom_layer M8 }
+catch { setAddStripeMode -stacked_via_bottom_layer M4 }
 catch { setAddStripeMode -stacked_via_top_layer M9 }
 catch { setRouteMode -earlyGlobalBlockTracks { { M4 0.024591 }  { M5 0.025831 } } }
 catch { setRouteMode -earlyGlobalCapacityScreen { { srambank_256x4x32_6t122 M4 1.024600 }  { srambank_256x4x32_6t122 M5 1.025800 } } }
