@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Thu Aug  6 18:00:22 2026                
+#  Created on Thu Aug  6 18:29:25 2026                
 #                                                     
 #######################################################
 
@@ -141,8 +141,16 @@ globalNetConnect VDD -type tiehi -inst * -module {} -override
 globalNetConnect VSS -type tielo -inst * -module {} -override
 applyGlobalNets
 addRing -nets {VDD VSS} -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 0.384 -snap_wire_center_to_grid Grid
-createPGPin VDD -geom M9 1.296 1.296 1.776 1.776 -net VDD
-createPGPin VSS -geom M9 0.336 0.336 0.816 0.816 -net VSS
+deletePGPin -net VDD
+deletePGPin -net VSS
+createPGPin VDD -geom M8 2.160000 1.296000 1103.040000 1.776000 -net VDD
+createPGPin VSS -geom M8 2.160000 0.336000 1103.040000 0.816000 -net VSS
+createPGPin VDD -geom M8 2.160000 969.072000 1103.040000 969.552000 -net VDD
+createPGPin VSS -geom M8 2.160000 970.032000 1103.040000 970.512000 -net VSS
+createPGPin VDD -geom M9 1.296000 2.160000 1.776000 968.688000 -net VDD
+createPGPin VSS -geom M9 0.336000 2.160000 0.816000 968.688000 -net VSS
+createPGPin VDD -geom M9 1103.424000 2.160000 1103.904000 968.688000 -net VDD
+createPGPin VSS -geom M9 1104.384000 2.160000 1104.864000 968.688000 -net VSS
 deselectAll
 selectInst {u_mem/G_SRAM_BANK[0].u_sram}
 selectInst {u_mem/G_SRAM_BANK[1].u_sram}
@@ -162,162 +170,153 @@ selectInst {u_mem/G_SRAM_BANK[14].u_sram}
 selectInst {u_mem/G_SRAM_BANK[15].u_sram}
 addRing -nets {VDD VSS} -type block_rings -around shared_cluster -layer {top M4 bottom M4 left M5 right M5} -width 0.096 -spacing 0.288 -offset 1.080 -snap_wire_center_to_grid Grid
 deselectAll
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M6 -stacked_via_top_layer M8
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M6 -stacked_via_top_layer M8
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -start_from left -start_offset 1.056000 -number_of_sets 1 -area {123.552 2.16 127.872 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -start_from left -start_offset 1.040000 -number_of_sets 1 -area {249.264 2.16 253.584 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -start_from left -start_offset 1.024000 -number_of_sets 1 -area {374.976 2.16 379.296 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -start_from bottom -start_offset 1.104000 -number_of_sets 1 -area {2.16 174.96 502.848 179.28} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -start_from bottom -start_offset 1.136000 -number_of_sets 1 -area {2.16 352.08 502.848 356.4} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -start_from bottom -start_offset 1.168000 -number_of_sets 1 -area {2.16 529.2 502.848 533.52} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 globalNetConnect VDD -type pgpin -pin VDD -inst * -module {} -override
 globalNetConnect VSS -type pgpin -pin VSS -inst * -module {} -override
 applyGlobalNets
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
 addStripe -nets {VDD VSS} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.836000 -number_of_sets 1 -area {2.16 174.96 502.848 179.28} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.932000 -number_of_sets 1 -area {2.16 352.08 502.848 356.4} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.836000 -number_of_sets 1 -area {2.16 529.2 502.848 533.52} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 0.780000 -number_of_sets 1 -area {2.16 706.32 502.848 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M4 -stacked_via_top_layer M7
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M7
 addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.968000 -number_of_sets 1 -area {123.552 2.16 127.872 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.824000 -number_of_sets 1 -area {249.264 2.16 253.584 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.872000 -number_of_sets 1 -area {374.976 2.16 379.296 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.768000 -number_of_sets 1 -area {500.688 2.16 502.848 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth true -viaConnectToShape {stripe blockring ring}
-sroute -connect blockPin -nets {VDD VSS} -blockPin useLef -blockPinTarget nearestTarget -allowJogging 0 -allowLayerChange 0
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M6 -stacked_via_top_layer M8
+setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth true -viaConnectToShape blockring
+sroute -connect blockPin -nets {VDD VSS} -blockPin useLef -blockPinTarget nearestTarget
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M6 -stacked_via_top_layer M8
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 25.856 -start_from left -start_offset 3.456000 -area {502.848 2.16 1103.04 968.688} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 25.856 -start_from left -start_offset 12.880000 -area {2.16 708.48 502.848 968.688} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 25.856 -start_from bottom -start_offset 4.672000 -area {2.16 708.48 1103.04 968.688} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 25.856 -start_from bottom -start_offset 12.880000 -area {502.848 2.16 1103.04 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M6 -stacked_via_top_layer M9
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M6 -stacked_via_top_layer M9
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -start_from bottom -start_offset 1.104000 -number_of_sets 1 -area {502.848 174.96 1103.04 179.28} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -start_from bottom -start_offset 1.136000 -number_of_sets 1 -area {502.848 352.08 1103.04 356.4} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -start_from bottom -start_offset 1.168000 -number_of_sets 1 -area {502.848 529.2 1103.04 533.52} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M6 -stacked_via_top_layer M8
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M6 -stacked_via_top_layer M8
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -start_from left -start_offset 1.056000 -number_of_sets 1 -area {123.552 708.48 127.872 968.688} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -start_from left -start_offset 1.040000 -number_of_sets 1 -area {249.264 708.48 253.584 968.688} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -start_from left -start_offset 1.024000 -number_of_sets 1 -area {374.976 708.48 379.296 968.688} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M7 -stacked_via_top_layer M9
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M9
 addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 2.080000 -area {0.0 708.48 1105.2 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 19.360000 -area {502.848 0.0 1105.2 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setAddStripeMode -allow_jog none -stacked_via_bottom_layer M8 -stacked_via_top_layer M9
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M8 -stacked_via_top_layer M9
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 0.352000 -area {502.848 0.0 1105.2 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.360000 -area {0.0 708.48 502.848 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+editTrim -nets {VDD VSS}
 verifyConnectivity -type special -noUnroutedNet -report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
 verify_drc -report ./verify_rpt/pg_drc_before_stdcell_place.rpt
 setPinConstraint -corner_to_pin_distance 8
 setPinAssignMode -pinEditInBatch true
-editPin -pin {clk rst_n {s_axi_awid[4]} {s_axi_awid[3]} {s_axi_awid[2]} {s_axi_awid[1]} {s_axi_awid[0]} {s_axi_awaddr[31]} {s_axi_awaddr[30]} {s_axi_awaddr[29]} {s_axi_awaddr[28]} {s_axi_awaddr[27]} {s_axi_awaddr[26]} {s_axi_awaddr[25]} {s_axi_awaddr[24]} {s_axi_awaddr[23]} {s_axi_awaddr[22]} {s_axi_awaddr[21]} {s_axi_awaddr[20]} {s_axi_awaddr[19]} {s_axi_awaddr[18]} {s_axi_awaddr[17]} {s_axi_awaddr[16]} {s_axi_awaddr[15]} {s_axi_awaddr[14]} {s_axi_awaddr[13]} {s_axi_awaddr[12]} {s_axi_awaddr[11]} {s_axi_awaddr[10]} {s_axi_awaddr[9]} {s_axi_awaddr[8]} {s_axi_awaddr[7]} {s_axi_awaddr[6]} {s_axi_awaddr[5]} {s_axi_awaddr[4]} {s_axi_awaddr[3]} {s_axi_awaddr[2]} {s_axi_awaddr[1]} {s_axi_awaddr[0]} {s_axi_awlen[7]} {s_axi_awlen[6]} {s_axi_awlen[5]} {s_axi_awlen[4]} {s_axi_awlen[3]} {s_axi_awlen[2]} {s_axi_awlen[1]} {s_axi_awlen[0]} {s_axi_awsize[2]} {s_axi_awsize[1]} {s_axi_awsize[0]} {s_axi_awburst[1]} {s_axi_awburst[0]} s_axi_awlock {s_axi_awcache[3]} {s_axi_awcache[2]} {s_axi_awcache[1]} {s_axi_awcache[0]} {s_axi_awprot[2]} {s_axi_awprot[1]} {s_axi_awprot[0]} {s_axi_awqos[3]} {s_axi_awqos[2]} {s_axi_awqos[1]} {s_axi_awqos[0]} {s_axi_awregion[3]} {s_axi_awregion[2]} {s_axi_awregion[1]} {s_axi_awregion[0]} s_axi_awvalid s_axi_awready} -side TOP -layer M7 -spreadType range -start {8.0 970.848} -end {1097.2 970.848} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
-editPin -pin {{s_axi_wdata[31]} {s_axi_wdata[30]} {s_axi_wdata[29]} {s_axi_wdata[28]} {s_axi_wdata[27]} {s_axi_wdata[26]} {s_axi_wdata[25]} {s_axi_wdata[24]} {s_axi_wdata[23]} {s_axi_wdata[22]} {s_axi_wdata[21]} {s_axi_wdata[20]} {s_axi_wdata[19]} {s_axi_wdata[18]} {s_axi_wdata[17]} {s_axi_wdata[16]} {s_axi_wdata[15]} {s_axi_wdata[14]} {s_axi_wdata[13]} {s_axi_wdata[12]} {s_axi_wdata[11]} {s_axi_wdata[10]} {s_axi_wdata[9]} {s_axi_wdata[8]} {s_axi_wdata[7]} {s_axi_wdata[6]} {s_axi_wdata[5]} {s_axi_wdata[4]} {s_axi_wdata[3]} {s_axi_wdata[2]} {s_axi_wdata[1]} {s_axi_wdata[0]} {s_axi_wstrb[3]} {s_axi_wstrb[2]} {s_axi_wstrb[1]} {s_axi_wstrb[0]} s_axi_wlast s_axi_wvalid s_axi_wready {s_axi_bid[4]} {s_axi_bid[3]} {s_axi_bid[2]} {s_axi_bid[1]} {s_axi_bid[0]} {s_axi_bresp[1]} {s_axi_bresp[0]} s_axi_bvalid s_axi_bready} -side RIGHT -layer M6 -spreadType range -start {1105.2 8.0} -end {1105.2 962.848} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
+editPin -pin {clk rst_n {s_axi_awid[4]} {s_axi_awid[3]} {s_axi_awid[2]} {s_axi_awid[1]} {s_axi_awid[0]} {s_axi_awaddr[31]} {s_axi_awaddr[30]} {s_axi_awaddr[29]} {s_axi_awaddr[28]} {s_axi_awaddr[27]} {s_axi_awaddr[26]} {s_axi_awaddr[25]} {s_axi_awaddr[24]} {s_axi_awaddr[23]} {s_axi_awaddr[22]} {s_axi_awaddr[21]} {s_axi_awaddr[20]} {s_axi_awaddr[19]} {s_axi_awaddr[18]} {s_axi_awaddr[17]} {s_axi_awaddr[16]} {s_axi_awaddr[15]} {s_axi_awaddr[14]} {s_axi_awaddr[13]} {s_axi_awaddr[12]} {s_axi_awaddr[11]} {s_axi_awaddr[10]} {s_axi_awaddr[9]} {s_axi_awaddr[8]} {s_axi_awaddr[7]} {s_axi_awaddr[6]} {s_axi_awaddr[5]} {s_axi_awaddr[4]} {s_axi_awaddr[3]} {s_axi_awaddr[2]} {s_axi_awaddr[1]} {s_axi_awaddr[0]} {s_axi_awlen[7]} {s_axi_awlen[6]} {s_axi_awlen[5]} {s_axi_awlen[4]} {s_axi_awlen[3]} {s_axi_awlen[2]} {s_axi_awlen[1]} {s_axi_awlen[0]} {s_axi_awsize[2]} {s_axi_awsize[1]} {s_axi_awsize[0]} {s_axi_awburst[1]} {s_axi_awburst[0]} s_axi_awlock {s_axi_awcache[3]} {s_axi_awcache[2]} {s_axi_awcache[1]} {s_axi_awcache[0]} {s_axi_awprot[2]} {s_axi_awprot[1]} {s_axi_awprot[0]} {s_axi_awqos[3]} {s_axi_awqos[2]} {s_axi_awqos[1]} {s_axi_awqos[0]} {s_axi_awregion[3]} {s_axi_awregion[2]} {s_axi_awregion[1]} {s_axi_awregion[0]} s_axi_awvalid s_axi_awready} -side TOP -layer M7 -spreadType range -start {10.16 968.688} -end {1095.04 968.688} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
+editPin -pin {{s_axi_wdata[31]} {s_axi_wdata[30]} {s_axi_wdata[29]} {s_axi_wdata[28]} {s_axi_wdata[27]} {s_axi_wdata[26]} {s_axi_wdata[25]} {s_axi_wdata[24]} {s_axi_wdata[23]} {s_axi_wdata[22]} {s_axi_wdata[21]} {s_axi_wdata[20]} {s_axi_wdata[19]} {s_axi_wdata[18]} {s_axi_wdata[17]} {s_axi_wdata[16]} {s_axi_wdata[15]} {s_axi_wdata[14]} {s_axi_wdata[13]} {s_axi_wdata[12]} {s_axi_wdata[11]} {s_axi_wdata[10]} {s_axi_wdata[9]} {s_axi_wdata[8]} {s_axi_wdata[7]} {s_axi_wdata[6]} {s_axi_wdata[5]} {s_axi_wdata[4]} {s_axi_wdata[3]} {s_axi_wdata[2]} {s_axi_wdata[1]} {s_axi_wdata[0]} {s_axi_wstrb[3]} {s_axi_wstrb[2]} {s_axi_wstrb[1]} {s_axi_wstrb[0]} s_axi_wlast s_axi_wvalid s_axi_wready {s_axi_bid[4]} {s_axi_bid[3]} {s_axi_bid[2]} {s_axi_bid[1]} {s_axi_bid[0]} {s_axi_bresp[1]} {s_axi_bresp[0]} s_axi_bvalid s_axi_bready} -side RIGHT -layer M6 -spreadType range -start {1103.04 10.16} -end {1103.04 960.688} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
+editPin -pin {{s_axi_arid[4]} {s_axi_arid[3]} {s_axi_arid[2]} {s_axi_arid[1]} {s_axi_arid[0]} {s_axi_araddr[31]} {s_axi_araddr[30]} {s_axi_araddr[29]} {s_axi_araddr[28]} {s_axi_araddr[27]} {s_axi_araddr[26]} {s_axi_araddr[25]} {s_axi_araddr[24]} {s_axi_araddr[23]} {s_axi_araddr[22]} {s_axi_araddr[21]} {s_axi_araddr[20]} {s_axi_araddr[19]} {s_axi_araddr[18]} {s_axi_araddr[17]} {s_axi_araddr[16]} {s_axi_araddr[15]} {s_axi_araddr[14]} {s_axi_araddr[13]} {s_axi_araddr[12]} {s_axi_araddr[11]} {s_axi_araddr[10]} {s_axi_araddr[9]} {s_axi_araddr[8]} {s_axi_araddr[7]} {s_axi_araddr[6]} {s_axi_araddr[5]} {s_axi_araddr[4]} {s_axi_araddr[3]} {s_axi_araddr[2]} {s_axi_araddr[1]} {s_axi_araddr[0]} {s_axi_arlen[7]} {s_axi_arlen[6]} {s_axi_arlen[5]} {s_axi_arlen[4]} {s_axi_arlen[3]} {s_axi_arlen[2]} {s_axi_arlen[1]} {s_axi_arlen[0]} {s_axi_arsize[2]} {s_axi_arsize[1]} {s_axi_arsize[0]} {s_axi_arburst[1]} {s_axi_arburst[0]} s_axi_arlock {s_axi_arcache[3]} {s_axi_arcache[2]} {s_axi_arcache[1]} {s_axi_arcache[0]} {s_axi_arprot[2]} {s_axi_arprot[1]} {s_axi_arprot[0]} {s_axi_arqos[3]} {s_axi_arqos[2]} {s_axi_arqos[1]} {s_axi_arqos[0]} {s_axi_arregion[3]} {s_axi_arregion[2]} {s_axi_arregion[1]} {s_axi_arregion[0]} s_axi_arvalid s_axi_arready} -side LEFT -layer M6 -spreadType range -start {2.16 10.16} -end {2.16 960.688} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
+editPin -pin {{s_axi_rid[4]} {s_axi_rid[3]} {s_axi_rid[2]} {s_axi_rid[1]} {s_axi_rid[0]} {s_axi_rdata[31]} {s_axi_rdata[30]} {s_axi_rdata[29]} {s_axi_rdata[28]} {s_axi_rdata[27]} {s_axi_rdata[26]} {s_axi_rdata[25]} {s_axi_rdata[24]} {s_axi_rdata[23]} {s_axi_rdata[22]} {s_axi_rdata[21]} {s_axi_rdata[20]} {s_axi_rdata[19]} {s_axi_rdata[18]} {s_axi_rdata[17]} {s_axi_rdata[16]} {s_axi_rdata[15]} {s_axi_rdata[14]} {s_axi_rdata[13]} {s_axi_rdata[12]} {s_axi_rdata[11]} {s_axi_rdata[10]} {s_axi_rdata[9]} {s_axi_rdata[8]} {s_axi_rdata[7]} {s_axi_rdata[6]} {s_axi_rdata[5]} {s_axi_rdata[4]} {s_axi_rdata[3]} {s_axi_rdata[2]} {s_axi_rdata[1]} {s_axi_rdata[0]} {s_axi_rresp[1]} {s_axi_rresp[0]} s_axi_rlast s_axi_rvalid s_axi_rready} -side BOTTOM -layer M7 -spreadType range -start {10.16 2.16} -end {1095.04 2.16} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
+setPinAssignMode -pinEditInBatch false
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
-zoomBox -190.82875 -127.44775 813.05150 771.23925
-zoomBox -485.12150 -367.37125 904.33200 876.48625
-zoomBox -1151.47800 -910.62100 1111.01525 1114.79350
-zoomBox -881.91050 -681.88375 1041.20875 1039.71850
-zoomBox -458.01575 -322.19475 931.43800 921.66300
-zoomBox -292.46775 -181.72150 888.56800 875.55750
-zoomBox 69.52375 125.44050 794.82750 774.74225
-zoomBox 168.98775 241.04800 693.01975 710.16850
-zoomBox 227.68200 328.33700 606.29500 667.27650
-zoomBox 280.97975 414.52100 513.49575 622.67250
-zoomBox 294.51525 435.32100 492.15425 612.25000
-zoomBox 306.13575 453.03925 474.12900 603.42900
-zoomBox 326.03725 481.20300 447.41250 589.85975
-zoomBox 346.09225 509.49800 420.63200 576.22700
-zoomBox 361.34850 531.02300 400.25900 565.85625
-zoomBox 367.77750 540.09375 391.67375 561.48600
-zoomBox 371.72575 545.66450 386.40125 558.80225
-zoomBox 372.66825 546.99450 385.14250 558.16150
-zoomBox 373.40650 548.08600 384.00975 557.57825
-zoomBox 373.87750 549.00575 382.89050 557.07425
-zoomBox 372.54300 546.88275 385.01800 558.05050
-zoomBox 369.49075 542.07600 389.80425 560.26100
-zoomBox 364.50375 534.24875 397.58150 563.86050
-zoomBox 356.35650 521.50400 410.21850 569.72200
-pan -3.90200 188.07200
-pan 0.13950 217.19800
-pan 0.90575 229.94900
-pan -0.97550 249.25000
-pan -1.88125 274.54350
-pan 1.67225 292.24200
-pan -0.06975 318.79000
-pan -0.13925 323.45850
-zoomBox 358.79625 683.18675 397.71175 718.02450
-zoomBox 361.44675 686.14700 394.52500 715.75900
-zoomBox 365.82850 691.14625 389.72750 712.54100
-zoomBox 358.66025 682.96775 397.57575 717.80550
-zoomBox 346.41825 670.40925 409.78600 727.13700
-zoomBox 355.22175 679.41775 401.00500 720.40350
-zoomBox 363.42650 687.64525 391.54325 712.81575
-zoomBox 369.66800 693.90400 384.34525 707.04325
-zoomBox 372.92625 697.17100 380.58800 704.03000
-zoomBox 373.45975 697.70625 379.97250 703.53650
-zoomBox 373.45975 697.12325 379.97250 702.95350
-zoomBox 372.42725 695.61825 381.44150 703.68800
-zoomBox 369.02050 690.65225 386.28975 706.11200
-pan -9.04800 321.72100
-zoomBox 359.97250 689.19550 377.24175 704.65525
-zoomBox 354.67775 685.42850 378.58025 706.82625
-zoomBox 342.69000 676.89900 381.61125 711.74175
-zoomBox 314.24275 656.65850 388.80375 723.40650
-pan -15.81875 325.72875
-zoomBox 298.42400 633.29675 372.98500 700.04475
+zoomBox 15.44750 130.08150 631.95550 681.98775
+zoomBox 111.46700 296.88475 490.08000 635.82425
+zoomBox 166.24200 373.13525 439.79000 618.01900
+zoomBox 177.97300 402.17075 410.48900 610.32225
+zoomBox 196.83725 447.99625 364.83050 598.38600
+zoomBox 211.91425 481.52725 333.28950 590.18400
+zoomBox 223.33025 505.62300 311.02375 584.12750
+zoomBox 234.79925 529.74350 288.65425 577.95525
+zoomBox 240.84800 544.01875 273.92175 573.62675
+zoomBox 242.29200 547.42650 270.40475 572.59350
+zoomBox 243.53025 550.32325 267.42625 571.71525
+zoomBox 245.73025 554.87850 262.99525 570.33425
+zoomBox 247.46550 558.11975 259.93950 569.28675
+zoomBox 249.17750 561.22700 256.83825 568.08500
+pan 0.06925 313.60550
+zoomBox 248.77100 561.97850 257.78375 570.04675
+zoomBox 248.21125 561.03175 258.81450 570.52400
+zoomBox 245.84925 556.98075 263.11525 572.43750
+zoomBox 243.49850 552.93975 267.39625 574.33325
 fit
-zoomBox -192.62150 225.86425 847.86125 783.33225
-zoomBox -40.67025 392.57100 420.99800 639.92275
-zoomBox -1.55150 443.08275 281.97075 594.98775
-zoomBox 45.61550 478.60475 219.73375 571.89350
-zoomBox 85.07000 505.99925 175.96175 554.69700
-zoomBox 102.19825 517.32400 158.01750 547.23075
-zoomBox 112.48575 523.46025 146.76600 541.82675
-pan 0.03075 415.26700
-zoomBox 114.99075 529.49575 144.12925 545.10750
-zoomBox 109.60025 525.69675 149.93025 547.30475
-pan -0.10825 426.32325
-pan 0.79375 439.97700
-pan -0.37875 443.27775
-zoomBox 109.90700 551.40275 150.23700 573.01075
-zoomBox 97.75725 545.87200 163.42900 581.05750
-zoomBox 68.92650 532.74750 194.73375 600.15225
-zoomBox 13.69575 507.60525 254.70375 636.73200
-pan -68.98275 484.10100
-zoomBox -46.60500 503.60075 158.25200 613.35875
-zoomBox -32.95325 512.72775 115.05675 592.02825
-zoomBox -19.23675 521.89775 71.65975 570.59800
-zoomBox -10.97875 525.18150 36.47000 550.60350
-zoomBox -8.99250 526.15225 31.33900 547.76100
-zoomBox -7.30450 526.97750 26.97750 545.34500
-zoomBox -5.86950 527.67875 23.27025 543.29125
-zoomBox -4.64975 528.27500 20.11900 541.54550
-zoomBox -7.52175 526.76850 26.76075 545.13625
-zoomBox -9.34800 525.81050 30.98425 547.41975
-zoomBox -14.56550 523.28850 41.25850 553.19775
-zoomBox -31.78025 514.96700 75.16150 572.26400
-zoomBox -53.92825 500.33200 120.20875 593.63075
-pan 3.19300 584.16575
-pan -2.33625 612.66925
-pan -2.49225 662.82300
-zoomBox -95.39600 563.80250 188.15700 715.72400
-zoomBox -135.48175 518.11575 256.97925 728.38775
-zoomBox -114.94600 546.47075 218.64575 725.20200
-zoomBox -71.94225 609.16350 132.92525 718.92700
-zoomBox -52.41550 636.90250 95.60100 716.20650
-zoomBox -37.42600 656.88850 69.51600 714.18575
-zoomBox -18.06300 681.96700 37.76200 711.87675
-pan -0.54925 711.23975
-zoomBox -31.89950 679.60725 59.00250 728.31050
-zoomBox -75.07050 635.51825 129.79925 745.28300
-pan -5.40575 751.91075
-pan -1.46600 795.06525
-pan 0.36650 838.40325
-pan -0.64150 880.82475
-pan -0.09175 920.03975
-pan -3.39000 963.56075
-pan -2.84025 991.41425
-zoomBox -64.02900 923.38600 83.98925 1002.69100
-zoomBox -46.00850 935.73050 60.93500 993.02850
-zoomBox -38.97075 940.55150 51.93150 989.25500
-zoomBox -19.88875 953.64875 27.56325 979.07250
-zoomBox -8.29575 961.60550 12.75925 972.88625
+zoomBox -274.43675 162.66150 949.66050 818.50600
+zoomBox -160.99750 303.14075 590.75150 705.91150
+zoomBox -60.56425 427.51375 272.99125 606.22550
+zoomBox -50.69650 442.79675 232.82575 594.70175
+zoomBox -30.92925 476.94875 143.18875 570.23725
+zoomBox -22.17925 492.05175 103.62100 559.45275
+zoomBox -18.71925 497.96750 88.21100 555.25850
+zoomBox -12.70825 507.13750 64.54950 548.53050
+zoomBox -5.22675 518.54950 35.10250 540.15700
+zoomBox -0.68175 525.48250 17.21300 535.07000
+zoomBox -0.19850 526.30275 15.01200 534.45225
+pan -0.63900 527.27700
+zoomBox -3.62075 523.67575 21.14750 536.94600
+zoomBox -7.34425 518.92200 32.98650 540.53025
+zoomBox -13.30550 509.18675 52.36650 544.37225
+zoomBox -27.80125 485.06275 98.00550 552.46725
+zoomBox -39.66525 465.07325 134.46175 558.36675
+pan 3.11500 545.23325
+pan 3.58225 575.91575
+pan -0.23350 610.49200
+pan 0.54525 651.06450
+zoomBox -23.27750 641.07225 102.52925 708.47675
+pan -1.91300 688.93725
+zoomBox -15.16025 680.66175 62.10100 722.05675
+zoomBox -9.00100 689.87500 38.44775 715.29700
+zoomBox -6.18075 694.36800 28.10125 712.73550
+pan 0.07650 705.30150
+zoomBox -11.21025 692.90700 44.61275 722.81575
+zoomBox -13.49250 689.42200 52.18175 724.60875
+zoomBox -9.44175 697.52350 38.00800 722.94600
+zoomBox -4.36000 707.63650 20.40900 720.90725
+zoomBox -2.20600 711.66325 13.00575 719.81325
+zoomBox -4.39925 707.70875 20.37075 720.98000
+zoomBox -9.60350 698.32550 37.84900 723.74950
+zoomBox -19.57300 680.34975 71.33175 729.05450
+zoomBox -33.03525 656.54175 114.98800 735.84950
+pan -2.64800 718.63900
+fit
+zoomBox -375.02200 98.54350 1319.22950 1006.28650
+zoomBox -315.46550 217.99725 1124.64825 989.57875
+zoomBox -191.20275 464.78350 693.20725 938.63100
+zoomBox -161.95325 520.13800 589.79525 922.90850
+zoomBox -99.55225 637.15625 362.11550 884.50775
+zoomBox -60.67300 709.17950 222.84925 861.08450
+zoomBox -36.84500 753.36200 137.27325 846.65075
+zoomBox -18.71825 786.97300 72.17300 835.67050
+zoomBox -9.25600 804.51800 38.19000 829.93850
+zoomBox -3.50750 815.17675 17.54500 826.45625
+zoomBox -1.31625 819.24050 9.67375 825.12875
+selectPhyPin 1.2960 2.1600 1.7760 968.6880 9 VDD
+deselectAll
+selectWire 0.9840 1.1360 1.4640 968.7520 9 VDD
+deselectAll
+selectPhyPin 0.3360 2.1600 0.8160 968.6880 9 VSS
+zoomBox -3.28375 817.69625 14.61225 827.28450
+pan -0.14400 818.77100
+zoomBox -9.65700 813.17150 24.62575 831.53950
+zoomBox -17.81725 810.15575 38.00725 840.06525
+pan -0.32475 819.01025
+pan -0.24975 809.82300
+pan 0.34950 799.61175
+pan 0.39950 791.74750
+pan -0.14975 782.46000
+pan 0.09975 778.11600
+pan 0.32450 771.62500
+zoomBox -21.24525 751.29300 44.43050 786.48075
+pan -1.14550 759.17425
+pan -0.11750 752.47725
+zoomBox -33.01175 723.92650 57.88975 772.62950
+zoomBox -67.66925 703.60100 106.46975 796.90100
+zoomBox -134.06225 664.66375 199.53375 843.39725
+zoomBox -95.51800 676.04900 145.50525 805.18400
+zoomBox -39.69150 692.53925 67.25200 749.83725
+zoomBox -33.01950 694.51225 57.88250 743.21550
+zoomBox -19.82650 700.15950 35.99875 730.06950
+zoomBox -14.00675 702.65375 26.32700 724.26375
