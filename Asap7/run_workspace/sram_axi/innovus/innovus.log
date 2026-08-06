@@ -4,17 +4,17 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
 Options:	
-Date:		Thu Aug  6 20:56:45 2026
+Date:		Thu Aug  6 21:18:04 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04 LTS
 
 License:
-		[20:56:50.206226] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[21:18:08.206242] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		invs	Innovus Implementation System	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 2982518 / 9abacaca-274f-41d9-9c04-e4c397e12675 / VZlZ28SSbV
+Info: Process UID = 3089948 / 04e3864e-3cae-4537-acdd-6fecdd35df10 / uBSXDJGpjF
 
 **INFO:  MMMC transition support version v31-84 
 
@@ -53,8 +53,8 @@ Info: Process UID = 2982518 / 9abacaca-274f-41d9-9c04-e4c397e12675 / VZlZ28SSbV
 <CMD> set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
 Set ASAP7_GDS_MAP_FILE before running the full one-shot flow
 <CMD> init_design
-#% Begin Load MMMC data ... (date=08/06 20:57:07, mem=1846.5M)
-#% End Load MMMC data ... (date=08/06 20:57:07, total cpu=0:00:00.0, real=0:00:00.0, peak res=1848.0M, current mem=1848.0M)
+#% Begin Load MMMC data ... (date=08/06 21:18:25, mem=1846.1M)
+#% End Load MMMC data ... (date=08/06 21:18:25, total cpu=0:00:00.1, real=0:00:00.0, peak res=1847.7M, current mem=1847.7M)
 rccorner
 
 Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef ...
@@ -96,17 +96,17 @@ Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
 Reading libset timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib' ...
 Read 1 cells in library 'srambank_256x4x32_6t122' 
-*** End library_loading (cpu=0.23min, real=0.22min, mem=429.0M, fe_cpu=0.46min, fe_real=0.58min, fe_mem=2254.3M) ***
-#% Begin Load netlist data ... (date=08/06 20:57:20, mem=1876.6M)
-*** Begin netlist parsing (mem=2254.3M) ***
+*** End library_loading (cpu=0.23min, real=0.22min, mem=428.0M, fe_cpu=0.46min, fe_real=0.58min, fe_mem=2253.7M) ***
+#% Begin Load netlist data ... (date=08/06 21:18:39, mem=1872.0M)
+*** Begin netlist parsing (mem=2253.7M) ***
 Created 405 new cells from 11 timing libraries.
 Reading netlist ...
 Backslashed names will retain backslash and a trailing blank character.
 Reading verilog netlist './outputs/axi_ram_syn.v'
 
-*** Memory Usage v#2 (Current mem = 2254.344M, initial mem = 839.699M) ***
-*** End netlist parsing (cpu=0:00:00.0, real=0:00:00.0, mem=2254.3M) ***
-#% End Load netlist data ... (date=08/06 20:57:20, total cpu=0:00:00.1, real=0:00:00.0, peak res=1923.9M, current mem=1923.9M)
+*** Memory Usage v#2 (Current mem = 2253.680M, initial mem = 847.699M) ***
+*** End netlist parsing (cpu=0:00:00.0, real=0:00:00.0, mem=2253.7M) ***
+#% End Load netlist data ... (date=08/06 21:18:39, total cpu=0:00:00.1, real=0:00:00.0, peak res=1919.2M, current mem=1919.2M)
 Set top cell to axi_ram.
 Hooked 405 DB cells to tlib cells.
 Starting recursive module instantiation check.
@@ -120,7 +120,7 @@ Set DBUPerIGU to techSite asap7sc7p5t width 864.
 ** info: there are 1240 stdCell insts with at least one signal pin.
 ** info: there are 16 macros.
 
-*** Memory Usage v#2 (Current mem = 2278.355M, initial mem = 839.699M) ***
+*** Memory Usage v#2 (Current mem = 2277.691M, initial mem = 847.699M) ***
 **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
 Type 'man IMPTS-16' for more detail.
 **WARN: (IMPTS-17):	Inconsistency detected in the capacitance units specified among the timing libraries being used. Default system capacitance unit of 1pF will be used. Use the 'setLibraryUnit' command to set a specific capacitance unit.
@@ -138,7 +138,7 @@ Importing multi-corner technology file(s) for preRoute extraction...
 /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
 Generating auto layer map file.
 
-Completed (cpu: 0:00:00.4 real: 0:00:02.0)
+Completed (cpu: 0:00:01.4 real: 0:00:02.0)
 Set Shrink Factor to 1.00000
 Summary of Active RC-Corners : 
  
@@ -163,7 +163,7 @@ Initializing multi-corner resistance tables ...
 Default value for postRoute extraction mode's effortLevel (-effortLevel option of setExtractRCMode) changed to 'medium'.
 *Info: initialize multi-corner CTS.
 Reading timing constraints file './outputs/axi_ram_syn.sdc' ...
-Current (total cpu=0:00:29.0, real=0:00:38.0, peak res=2375.3M, current mem=2375.3M)
+Current (total cpu=0:00:30.1, real=0:00:38.0, peak res=2376.8M, current mem=2376.8M)
 **WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ./outputs/axi_ram_syn.sdc, Line 9).
 
 **WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ./outputs/axi_ram_syn.sdc, Line 10).
@@ -192,8 +192,8 @@ set_clock_transition                              | 2              | 0
 set_max_transition                                | 1              | 0              
 ------------------------------------------------------------------------------------
 INFO (CTE): Reading of timing constraints file ./outputs/axi_ram_syn.sdc completed, with 2 WARNING
-Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2389.9M, current mem=2389.9M)
-Current (total cpu=0:00:29.1, real=0:00:38.0, peak res=2389.9M, current mem=2389.9M)
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2391.5M, current mem=2391.5M)
+Current (total cpu=0:00:30.2, real=0:00:38.0, peak res=2391.5M, current mem=2391.5M)
 **WARN: (TA-976):	Path groups asserted by the group_path/set_path_adjust_group constraint are considered by the software to be global in nature - they cannot be restricted to specific constraint modes. Due to this restriction, the group_path/set_path_adjust_group constraint is not supported directly in the constraint files which are configured in mode-specific commands such as create_constraint_mode. The current group_path/set_path_adjust_group entry will be ignored. You can enter the group_path/set_path_adjust_group constraint interactively or as part of a general command script -  where it will be interpreted as global and will be in effect for all modes.
 Total number of combinational cells: 338
 Total number of sequential cells: 66
@@ -245,10 +245,10 @@ Total CPU(s) requested: 12
 Total CPU(s) enabled with current License(s): 8
 Current free CPU(s): 8
 Additional license(s) checked out: 1 Innovus_CPU_Opt license(s) for 8 CPU(s)
-[20:57:24.249314] Periodic Lic check successful
-[20:57:24.773608] Feature usage summary:
-[20:57:24.773608] Innovus_Impl_System
-[20:57:24.773608] Innovus_CPU_Opt
+[21:18:43.174099] Periodic Lic check successful
+[21:18:43.174106] Feature usage summary:
+[21:18:43.174106] Innovus_Impl_System
+[21:18:43.174107] Innovus_CPU_Opt
 
 Total CPU(s) now enabled: 16
 <CMD> setMultiCpuUsage -localCpu 12
@@ -337,23 +337,23 @@ Pin Density = 0.001375.
 
 <CMD> saveFPlan ./outputs/FloorPlan.fp
 <CMD> saveDesign ./saved/axi_ram_hierFP.enc
-#% Begin save design ... (date=08/06 20:57:25, mem=2491.7M)
+#% Begin save design ... (date=08/06 21:18:43, mem=2496.2M)
 INFO: Current data have to be saved into a temporary db: 'axi_ram_hierFP.enc.dat.tmp' first. It will be renamed to the correct name 'axi_ram_hierFP.enc.dat' after the old db was deleted.
-% Begin Save ccopt configuration ... (date=08/06 20:57:25, mem=2491.7M)
+% Begin Save ccopt configuration ... (date=08/06 21:18:43, mem=2496.3M)
 **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
 Type 'man IMPTS-16' for more detail.
 **WARN: (EMS-27):	Message (IMPTS-16) has exceeded the current message display limit of 1.
 To increase the message display limit, refer to the product command reference manual.
-% End Save ccopt configuration ... (date=08/06 20:57:25, total cpu=0:00:00.0, real=0:00:00.0, peak res=2493.1M, current mem=2493.1M)
-% Begin Save netlist data ... (date=08/06 20:57:25, mem=2493.2M)
+% End Save ccopt configuration ... (date=08/06 21:18:43, total cpu=0:00:00.1, real=0:00:00.0, peak res=2497.7M, current mem=2497.7M)
+% Begin Save netlist data ... (date=08/06 21:18:43, mem=2497.8M)
 Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/vbin/axi_ram.v.bin in multi-threaded mode...
-% End Save netlist data ... (date=08/06 20:57:25, total cpu=0:00:00.1, real=0:00:00.0, peak res=2498.9M, current mem=2493.5M)
+% End Save netlist data ... (date=08/06 21:18:43, total cpu=0:00:00.1, real=0:00:00.0, peak res=2503.0M, current mem=2498.1M)
 Saving symbol-table file in separate thread ...
 Saving congestion map file in separate thread ...
 Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.route.congmap.gz ...
-% Begin Save AAE data ... (date=08/06 20:57:25, mem=2494.9M)
+% Begin Save AAE data ... (date=08/06 21:18:43, mem=2499.5M)
 Saving AAE Data ...
-% End Save AAE data ... (date=08/06 20:57:25, total cpu=0:00:00.1, real=0:00:00.0, peak res=2504.0M, current mem=2495.5M)
+% End Save AAE data ... (date=08/06 21:18:43, total cpu=0:00:00.1, real=0:00:00.0, peak res=2508.0M, current mem=2500.1M)
 Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/gui.pref.tcl ...
 Saving mode setting ...
 **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
@@ -365,23 +365,22 @@ Saving special route data file in separate thread ...
 Saving PG Conn data in separate thread ...
 Saving placement file in separate thread ...
 Saving route file in separate thread ...
-Saving property file in separate thread ...
 ** Saving stdCellPlacement_binary (version# 2) ...
 Save Adaptive View Pruning View Names to Binary file
 TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: savePGConnFile REAL = 0 : CPU = 0 : MEM = 0.
 Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.prop
 TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
-*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=2942.2M) ***
-*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=2942.2M) ***
+*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=2949.6M) ***
+*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=2949.6M) ***
 TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
 Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.techData.gz' ...
 Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/extraction/' ...
 TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
-% Begin Save power constraints data ... (date=08/06 20:57:25, mem=2506.8M)
-% End Save power constraints data ... (date=08/06 20:57:25, total cpu=0:00:00.1, real=0:00:00.0, peak res=2507.2M, current mem=2507.2M)
+% Begin Save power constraints data ... (date=08/06 21:18:44, mem=2511.7M)
+% End Save power constraints data ... (date=08/06 21:18:44, total cpu=0:00:00.0, real=0:00:00.0, peak res=2512.1M, current mem=2512.1M)
 rccorner
 rccorner
 rccorner
@@ -390,7 +389,7 @@ libset
 rccorner
 mode_normal
 ./outputs/axi_ram_syn.sdc
-#% End save design ... (date=08/06 20:57:26, total cpu=0:00:01.1, real=0:00:01.0, peak res=2535.1M, current mem=2509.7M)
+#% End save design ... (date=08/06 21:18:44, total cpu=0:00:01.1, real=0:00:01.0, peak res=2545.4M, current mem=2514.6M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -421,10 +420,10 @@ WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
 *** Applying global-net connections...
 *** Applied 2 GNC rules (cpu = 0:00:00.0)
 <CMD> addRing -nets {VSS VDD} -type block_rings -around each_block -layer {top M4 bottom M4 left M5 right M5} -width {top 0.096 bottom 0.096 left 0.096 right 0.096} -spacing {top 0.288 bottom 0.288 left 0.288 right 0.288} -offset {top 1.080 bottom 1.080 left 1.080 right 1.080}
-#% Begin addRing (date=08/06 20:57:26, mem=2510.1M)
+#% Begin addRing (date=08/06 21:18:44, mem=2515.0M)
 
-viaInitial starts at Thu Aug  6 20:57:26 2026
-viaInitial ends at Thu Aug  6 20:57:26 2026
+viaInitial starts at Thu Aug  6 21:18:44 2026
+viaInitial ends at Thu Aug  6 21:18:44 2026
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -438,7 +437,7 @@ setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm nod
 Type 'man IMPTS-17' for more detail.
 **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
 Type 'man IMPTS-16' for more detail.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3124.2M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3124.5M)
 Ring generation is complete.
 vias are now being generated.
 addRing created 128 wires.
@@ -454,13 +453,13 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addRing (date=08/06 20:57:26, total cpu=0:00:00.2, real=0:00:00.0, peak res=2537.9M, current mem=2537.9M)
+#% End addRing (date=08/06 21:18:44, total cpu=0:00:00.2, real=0:00:01.0, peak res=2539.7M, current mem=2539.7M)
 <CMD> setAddStripeMode -allow_jog none -break_at block_ring
 Stripe will break at block ring.
 addStripe will not allow jog to connect padcore ring and block ring.
 
 <CMD> addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -extend_to design_boundary -start_from bottom -start_offset 24.3
-#% Begin addStripe (date=08/06 20:57:26, mem=2537.9M)
+#% Begin addStripe (date=08/06 21:18:45, mem=2539.7M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -471,7 +470,7 @@ Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
 **WARN: (IMPPP-2030):	Layer M4 allows on grid right way wires only. Snap wire center to routing grid automatically.
-Initialize fgc environment(mem: 3124.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3124.2M)
+Initialize fgc environment(mem: 3124.5M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3124.5M)
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[0].u_sram' instance was increased to (2.140000 2.160000) (123.552002 174.960007) because the  obs (2.140000 7.204000) (123.531998 7.504000) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[1].u_sram' instance was increased to (127.851997 2.160000) (249.264008 174.960007) because the  obs (127.851997 7.204000) (249.244003 7.504000) on layer V3 was outside the original block boundary.
@@ -504,37 +503,37 @@ Type 'man IMPPP-133' for more detail.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[15].u_sram' instance was increased to (2.140000 533.520020) (123.552002 706.320007) because the  obs (2.140000 538.564026) (123.531998 538.864014) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3132.2M)
-Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3132.2M)
-Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3132.2M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3131.5M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3131.5M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3131.5M)
 Starting stripe generation ...
 Non-Default Mode Option Settings :
   -use_exact_spacing  1
-Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.2M)
-*** Stripes and vias are being generated (current mem: 3143.180)***
+Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+*** Stripes and vias are being generated (current mem: 3143.523)***
 Start to generate stripes.
-Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 3143.180M)
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 3143.523M)
 Start to generate vias.
-    Completing 10% (cpu time: 0:00:00.0, peak mem: 3143.180M)
-    Completing 20% (cpu time: 0:00:00.0, peak mem: 3143.180M)
-    Completing 30% (cpu time: 0:00:00.0, peak mem: 3143.180M)
-    Completing 40% (cpu time: 0:00:00.0, peak mem: 3143.180M)
-    Completing 50% (cpu time: 0:00:00.0, peak mem: 3143.180M)
-    Completing 60% (cpu time: 0:00:00.0, peak mem: 3143.180M)
-    Completing 70% (cpu time: 0:00:00.0, peak mem: 3143.180M)
-    Completing 80% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 90% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 100% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 3144.180M)
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 3143.523M)
 Stripe generation is complete.
 addStripe created 290 wires.
 ViaGen created 432 vias, deleted 0 via to avoid violation.
@@ -548,9 +547,9 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addStripe (date=08/06 20:57:26, total cpu=0:00:00.3, real=0:00:01.0, peak res=2563.1M, current mem=2560.3M)
+#% End addStripe (date=08/06 21:18:45, total cpu=0:00:00.3, real=0:00:00.0, peak res=2564.4M, current mem=2561.8M)
 <CMD> addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -extend_to design_boundary -start_from left -start_offset 24.3
-#% Begin addStripe (date=08/06 20:57:27, mem=2560.3M)
+#% Begin addStripe (date=08/06 21:18:45, mem=2561.8M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -561,7 +560,7 @@ Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
 **WARN: (IMPPP-2030):	Layer M5 allows on grid right way wires only. Snap wire center to routing grid automatically.
-Initialize fgc environment(mem: 3144.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
+Initialize fgc environment(mem: 3143.5M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[0].u_sram' instance was increased to (2.140000 2.160000) (123.552002 174.960007) because the  obs (2.140000 7.204000) (123.531998 7.504000) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[1].u_sram' instance was increased to (127.851997 2.160000) (249.264008 174.960007) because the  obs (127.851997 7.204000) (249.244003 7.504000) on layer V3 was outside the original block boundary.
@@ -594,13 +593,13 @@ Type 'man IMPPP-133' for more detail.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[15].u_sram' instance was increased to (2.140000 533.520020) (123.552002 706.320007) because the  obs (2.140000 538.564026) (123.531998 538.864014) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
 Starting stripe generation ...
 Non-Default Mode Option Settings :
   -use_exact_spacing  1
-Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
+Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
 **WARN: (IMPPP-4500):	Extended number of geometries exist around 182.088000, 176.088000 between the M4 and M5 layers. This may increase the run time.
 Type 'man IMPPP-4500' for more detail.
 **WARN: (IMPPP-4500):	Extended number of geometries exist around 182.088000, 178.152000 between the M4 and M5 layers. This may increase the run time.
@@ -625,7 +624,7 @@ Type 'man IMPPP-4500' for more detail.
 Type 'man IMPPP-4500' for more detail.
 **WARN: (IMPPP-4500):	Extended number of geometries exist around 182.520000, 532.008000 between the M4 and M5 layers. This may increase the run time.
 Type 'man IMPPP-4500' for more detail.
-Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
+Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
 **WARN: (IMPPP-4500):	Extended number of geometries exist around 311.688000, 176.088000 between the M4 and M5 layers. This may increase the run time.
 Type 'man IMPPP-4500' for more detail.
 **WARN: (IMPPP-4500):	Extended number of geometries exist around 311.688000, 178.152000 between the M4 and M5 layers. This may increase the run time.
@@ -644,29 +643,29 @@ Type 'man IMPPP-4500' for more detail.
 Type 'man IMPPP-4500' for more detail.
 **WARN: (EMS-27):	Message (IMPPP-4500) has exceeded the current message display limit of 20.
 To increase the message display limit, refer to the product command reference manual.
-Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3144.2M)
-*** Stripes and vias are being generated (current mem: 3144.180)***
+Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3143.5M)
+*** Stripes and vias are being generated (current mem: 3143.523)***
 Start to generate stripes.
-Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 3144.180M)
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 3143.523M)
 Start to generate vias.
-    Completing 10% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 20% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 30% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 40% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 50% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 60% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 70% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 80% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 90% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-    Completing 100% (cpu time: 0:00:00.0, peak mem: 3144.180M)
-  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 3144.180M)
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 3143.523M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 3143.523M)
 Stripe generation is complete.
 addStripe created 236 wires.
 ViaGen created 2386 vias, deleted 0 via to avoid violation.
@@ -680,7 +679,7 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addStripe (date=08/06 20:57:27, total cpu=0:00:00.3, real=0:00:00.0, peak res=2560.3M, current mem=2560.3M)
+#% End addStripe (date=08/06 21:18:45, total cpu=0:00:00.3, real=0:00:00.0, peak res=2561.8M, current mem=2561.8M)
 <CMD> editTrim -nets {VSS VDD}
 <CMD> create_pg_model_for_macro_place -file ./outputs/golden_mimic_sram_power_mesh.tcl
 **WARN: (IMPTS-17):	Inconsistency detected in the capacitance units specified among the timing libraries being used. Default system capacitance unit of 1pF will be used. Use the 'setLibraryUnit' command to set a specific capacitance unit.
@@ -713,15 +712,15 @@ create_pg_model_for_macro_place finished(cpu = 0:00:00.1).
 <CMD> unplaceAllBlocks
 <CMD> setHierMode -optStage preCTS
 <CMD> place_design -concurrent_macros
-[20:57:28.420017] Periodic Lic check successful
-[20:57:28.420035] Feature usage summary:
-[20:57:28.420035] Innovus_Impl_System
-[20:57:28.420035] Innovus_GigaPlace_GXL_Opt
-[20:57:28.420035] Innovus_CPU_Opt
+[21:18:46.385281] Periodic Lic check successful
+[21:18:46.909584] Feature usage summary:
+[21:18:46.909584] Innovus_Impl_System
+[21:18:46.909585] Innovus_GigaPlace_GXL_Opt
+[21:18:46.909585] Innovus_CPU_Opt
 
 (#155) This command "place_design -concurrent_macros" required an extra checkout of license invs_gigaplace_gxl.
 Additional license(s) checked out: 1 'invs_gigaplace_gxl' (Innovus_GigaPlace_GXL_Opt; INVS48; 23.1) license(s)
-*** placeDesign #1 [begin] () : totSession cpu/real = 0:00:32.0/0:00:36.8 (0.9), mem = 3181.4M
+*** placeDesign #1 [begin] () : totSession cpu/real = 0:00:33.1/0:00:36.6 (0.9), mem = 3180.8M
 **INFO: User settings:
 setDesignMode -process                    7
 setExtractRCMode -coupling_c_th           0.1
@@ -740,7 +739,7 @@ No user sequential activity specified, applying default sequential activity of "
 Starting place_opt_design V2 flow
 Estimated cell power/ground rail width = 0.135 um
 
-*** GlobalPlace #1 [begin] (placeDesign #1) : totSession cpu/real = 0:00:32.2/0:00:36.9 (0.9), mem = 3181.4M
+*** GlobalPlace #1 [begin] (placeDesign #1) : totSession cpu/real = 0:00:33.3/0:00:36.7 (0.9), mem = 3180.8M
 -earlyGlobalBlockTracks {}                # string, default="", private
 -earlyGlobalCapacityScreen {}             # string, default="", private
 **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
@@ -805,32 +804,32 @@ numThread_ = 12
 === lastAutoLevel = 11 
 Iteration  1: Total net bbox = 8.126e+04 (3.44e+04 4.68e+04)
               Est.  stn bbox = 8.550e+04 (3.63e+04 4.92e+04)
-              cpu = 0:00:00.6 real = 0:00:00.0 mem = 3950.4M
+              cpu = 0:00:00.6 real = 0:00:00.0 mem = 3952.3M
 Iteration  2: Total net bbox = 8.126e+04 (3.44e+04 4.68e+04)
               Est.  stn bbox = 8.550e+04 (3.63e+04 4.92e+04)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 3950.4M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 3952.3M
 Iteration  3: Total net bbox = 5.834e+03 (4.70e+03 1.14e+03)
               Est.  stn bbox = 7.686e+03 (6.41e+03 1.27e+03)
-              cpu = 0:00:00.4 real = 0:00:00.0 mem = 4319.0M
-*** Finished SKP initialization (cpu=0:00:02.3, real=0:00:01.0)***
+              cpu = 0:00:00.4 real = 0:00:00.0 mem = 4316.9M
+*** Finished SKP initialization (cpu=0:00:02.2, real=0:00:02.0)***
 SKP will use view:
   tt
 Iteration  4: Total net bbox = 8.244e+04 (4.25e+04 4.00e+04)
               Est.  stn bbox = 1.058e+05 (5.24e+04 5.34e+04)
-              cpu = 0:00:01.0 real = 0:00:00.0 mem = 5353.3M
+              cpu = 0:00:01.1 real = 0:00:00.0 mem = 5361.7M
 Iteration  5: Total net bbox = 8.244e+04 (4.25e+04 4.00e+04)
               Est.  stn bbox = 1.058e+05 (5.24e+04 5.34e+04)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5353.3M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5361.7M
 macro_flip: HPWL decrease ratio is 0.008069, horizontally flipped 6, vertically flipped 0
 Iteration  6: Total net bbox = 1.404e+05 (6.15e+04 7.88e+04)
               Est.  stn bbox = 1.745e+05 (7.56e+04 9.89e+04)
-              cpu = 0:00:04.8 real = 0:00:01.0 mem = 5705.4M
+              cpu = 0:00:04.8 real = 0:00:02.0 mem = 5713.7M
 Iteration  7: Total net bbox = 2.687e+05 (1.19e+05 1.50e+05)
               Est.  stn bbox = 3.048e+05 (1.34e+05 1.71e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5353.3M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5361.7M
 Iteration  8: Total net bbox = 2.687e+05 (1.19e+05 1.50e+05)
               Est.  stn bbox = 3.048e+05 (1.34e+05 1.71e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5353.3M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5361.7M
 macro_flip: HPWL decrease ratio is 0.001478, horizontally flipped 2, vertically flipped 0
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
@@ -838,51 +837,51 @@ Max route layer is changed from 127 to 10 because there is no routing track abov
 Removed 1 out of boundary tracks from layer 2
 Iteration  9: Total net bbox = 3.058e+05 (1.43e+05 1.63e+05)
               Est.  stn bbox = 3.423e+05 (1.58e+05 1.84e+05)
-              cpu = 0:00:06.1 real = 0:00:02.0 mem = 5465.3M
+              cpu = 0:00:06.1 real = 0:00:01.0 mem = 5473.7M
 Iteration 10: Total net bbox = 3.058e+05 (1.43e+05 1.63e+05)
               Est.  stn bbox = 3.423e+05 (1.58e+05 1.84e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5465.3M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5473.7M
 macro_flip: HPWL decrease ratio is 0.000747, horizontally flipped 0, vertically flipped 3
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Removed 1 out of boundary tracks from layer 2
 Iteration 11: Total net bbox = 3.098e+05 (1.45e+05 1.65e+05)
               Est.  stn bbox = 3.464e+05 (1.61e+05 1.86e+05)
-              cpu = 0:00:06.0 real = 0:00:02.0 mem = 5465.3M
+              cpu = 0:00:06.0 real = 0:00:02.0 mem = 5473.7M
 Iteration 12: Total net bbox = 3.098e+05 (1.45e+05 1.65e+05)
               Est.  stn bbox = 3.464e+05 (1.61e+05 1.86e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5465.3M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5473.7M
 macro_flip: HPWL decrease ratio is 0.000632, horizontally flipped 0, vertically flipped 1
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Removed 1 out of boundary tracks from layer 2
 Iteration 13: Total net bbox = 3.920e+05 (2.00e+05 1.92e+05)
               Est.  stn bbox = 4.311e+05 (2.17e+05 2.14e+05)
-              cpu = 0:00:06.7 real = 0:00:02.0 mem = 5465.3M
+              cpu = 0:00:06.7 real = 0:00:02.0 mem = 5473.7M
 Iteration 14: Total net bbox = 3.920e+05 (2.00e+05 1.92e+05)
               Est.  stn bbox = 4.311e+05 (2.17e+05 2.14e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5465.3M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5473.7M
 macro_flip: HPWL decrease ratio is 0.002041, horizontally flipped 6, vertically flipped 0
 redoMode_ 0 
 Iteration 15: Total net bbox = 3.917e+05 (2.00e+05 1.92e+05)
               Est.  stn bbox = 4.308e+05 (2.17e+05 2.14e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5465.3M
-Finished Global Placement (cpu=0:00:29.5, real=0:00:10.0, mem=5465.3M)
+              cpu = 0:00:00.0 real = 0:00:01.0 mem = 5473.7M
+Finished Global Placement (cpu=0:00:29.4, real=0:00:11.0, mem=5473.7M)
 0 delay mode for cte disabled.
 Info: 0 clock gating cells identified, 0 (on average) moved 0/5
-*** Finished Initial Placement (cpu=0:00:30.1, real=0:00:11.0, mem=4935.2M) ***
+*** Finished Initial Placement (cpu=0:00:30.0, real=0:00:11.0, mem=4943.6M) ***
 
 Effort level <high> specified for tdgp_reg2reg_default path_group
 Tdgp not enabled or already been cleared! skip clearing
-**placeDesign ... cpu = 0: 0:31, real = 0: 0:11, mem = 4935.2M **
-AAE DB initialization (MEM=2973.460938 CPU=0:00:00.0 REAL=0:00:00.0) 
-*** GlobalPlace #1 [finish] (placeDesign #1) : cpu/real = 0:00:31.1/0:00:11.5 (2.7), totSession cpu/real = 0:01:03.3/0:00:48.4 (1.3), mem = 4937.2M
-**place_opt_design ... cpu = 0:00:31, real = 0:00:12, mem = 4937.2M **
+**placeDesign ... cpu = 0: 0:31, real = 0: 0:11, mem = 4943.6M **
+AAE DB initialization (MEM=2979.453125 CPU=0:00:00.0 REAL=0:00:00.0) 
+*** GlobalPlace #1 [finish] (placeDesign #1) : cpu/real = 0:00:31.0/0:00:11.5 (2.7), totSession cpu/real = 0:01:04.3/0:00:48.1 (1.3), mem = 4945.6M
+**place_opt_design ... cpu = 0:00:31, real = 0:00:12, mem = 4945.6M **
 *** Finished GigaPlace ***
 INFO: refine_macro_place must be run to legalize macros.
-*** placeDesign #1 [finish] () : cpu/real = 0:00:31.3/0:00:11.7 (2.7), totSession cpu/real = 0:01:03.3/0:00:48.4 (1.3), mem = 4937.2M
+*** placeDesign #1 [finish] () : cpu/real = 0:00:31.2/0:00:11.6 (2.7), totSession cpu/real = 0:01:04.4/0:00:48.1 (1.3), mem = 4945.6M
 <CMD> place_design -concurrent_macros -incremental
-*** placeDesign #2 [begin] () : totSession cpu/real = 0:01:03.3/0:00:48.4 (1.3), mem = 4937.2M
+*** placeDesign #2 [begin] () : totSession cpu/real = 0:01:04.4/0:00:48.1 (1.3), mem = 4945.6M
 **INFO: User settings:
 setDesignMode -process                    7
 setExtractRCMode -coupling_c_th           0.1
@@ -907,7 +906,7 @@ setRouteMode -earlyGlobalCapacityScreen   {}
 -earlyGlobalCapacityScreen {}             # string, default="", user setting, private
 Starting place_opt_design V2 flow
 
-*** GlobalPlace #1 [begin] (placeDesign #2) : totSession cpu/real = 0:01:03.5/0:00:48.5 (1.3), mem = 4937.2M
+*** GlobalPlace #1 [begin] (placeDesign #2) : totSession cpu/real = 0:01:04.5/0:00:48.2 (1.3), mem = 4945.6M
 **WARN: (IMPSYT-13030):	-prePlaceOpt is disabled when -incremental option is on ***
 **WARN: (IMPSP-9516):	-prePlaceOpt is disabled when -incremental option is on.
 -earlyGlobalBlockTracks { { M4 0.024591 }  { M5 0.025831 } }
@@ -969,67 +968,67 @@ total 0 net based  with max net constraints
 Clock gating cells determined by native netlist tracing.
 numThread_ = 12 
 === lastAutoLevel = 11 
-*** Finished SKP initialization (cpu=0:00:02.1, real=0:00:02.0)***
+*** Finished SKP initialization (cpu=0:00:02.1, real=0:00:01.0)***
 SKP will use view:
   tt
 Iteration  6: Total net bbox = 1.454e+05 (6.53e+04 8.01e+04)
               Est.  stn bbox = 1.797e+05 (7.98e+04 1.00e+05)
-              cpu = 0:00:08.6 real = 0:00:03.0 mem = 5962.3M
+              cpu = 0:00:08.7 real = 0:00:02.0 mem = 5965.5M
 Iteration  7: Total net bbox = 2.897e+05 (1.35e+05 1.55e+05)
               Est.  stn bbox = 3.262e+05 (1.50e+05 1.76e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5610.2M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5613.4M
 Iteration  8: Total net bbox = 2.897e+05 (1.35e+05 1.55e+05)
               Est.  stn bbox = 3.262e+05 (1.50e+05 1.76e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5610.2M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5613.4M
 macro_flip: HPWL decrease ratio is 0.005452, horizontally flipped 8, vertically flipped 0
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Removed 1 out of boundary tracks from layer 2
 Iteration  9: Total net bbox = 3.089e+05 (1.45e+05 1.64e+05)
               Est.  stn bbox = 3.453e+05 (1.60e+05 1.85e+05)
-              cpu = 0:00:06.2 real = 0:00:02.0 mem = 5610.2M
+              cpu = 0:00:06.2 real = 0:00:02.0 mem = 5613.4M
 Iteration 10: Total net bbox = 3.089e+05 (1.45e+05 1.64e+05)
               Est.  stn bbox = 3.453e+05 (1.60e+05 1.85e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5610.2M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5613.4M
 macro_flip: HPWL decrease ratio is 0.001414, horizontally flipped 0, vertically flipped 4
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Removed 1 out of boundary tracks from layer 2
 Iteration 11: Total net bbox = 3.099e+05 (1.45e+05 1.65e+05)
               Est.  stn bbox = 3.465e+05 (1.61e+05 1.86e+05)
-              cpu = 0:00:07.0 real = 0:00:02.0 mem = 5610.2M
+              cpu = 0:00:07.0 real = 0:00:02.0 mem = 5613.4M
 Iteration 12: Total net bbox = 3.099e+05 (1.45e+05 1.65e+05)
               Est.  stn bbox = 3.465e+05 (1.61e+05 1.86e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5610.2M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5613.4M
 macro_flip: HPWL decrease ratio is 0.000000, horizontally flipped 0, vertically flipped 0
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Max route layer is changed from 127 to 10 because there is no routing track above this layer
 Removed 1 out of boundary tracks from layer 2
 Iteration 13: Total net bbox = 3.926e+05 (2.00e+05 1.92e+05)
               Est.  stn bbox = 4.317e+05 (2.17e+05 2.14e+05)
-              cpu = 0:00:07.1 real = 0:00:02.0 mem = 5610.2M
+              cpu = 0:00:07.3 real = 0:00:03.0 mem = 5613.4M
 Iteration 14: Total net bbox = 3.926e+05 (2.00e+05 1.92e+05)
               Est.  stn bbox = 4.317e+05 (2.17e+05 2.14e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5610.2M
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5613.4M
 macro_flip: HPWL decrease ratio is 0.002031, horizontally flipped 6, vertically flipped 0
 redoMode_ 0 
 Iteration 15: Total net bbox = 3.923e+05 (2.00e+05 1.92e+05)
               Est.  stn bbox = 4.314e+05 (2.17e+05 2.14e+05)
-              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5610.2M
-Finished Global Placement (cpu=0:00:29.8, real=0:00:09.0, mem=5610.2M)
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 5613.4M
+Finished Global Placement (cpu=0:00:30.0, real=0:00:09.0, mem=5613.4M)
 0 delay mode for cte disabled.
 Info: 0 clock gating cells identified, 0 (on average) moved 0/5
-*** Finished Initial Placement (cpu=0:00:30.5, real=0:00:10.0, mem=5080.1M) ***
+*** Finished Initial Placement (cpu=0:00:30.6, real=0:00:10.0, mem=5083.2M) ***
 
 Effort level <high> specified for tdgp_reg2reg_default path_group
 *** Finishing placeDesign concurrent flow ***
 Tdgp not enabled or already been cleared! skip clearing
-**placeDesign ... cpu = 0: 0:31, real = 0: 0:10, mem = 5080.1M **
-*** GlobalPlace #1 [finish] (placeDesign #2) : cpu/real = 0:00:30.8/0:00:10.0 (3.1), totSession cpu/real = 0:01:34.3/0:00:58.5 (1.6), mem = 5080.1M
-**place_opt_design ... cpu = 0:00:31, real = 0:00:10, mem = 5080.1M **
+**placeDesign ... cpu = 0: 0:31, real = 0: 0:10, mem = 5083.2M **
+*** GlobalPlace #1 [finish] (placeDesign #2) : cpu/real = 0:00:31.0/0:00:10.0 (3.1), totSession cpu/real = 0:01:35.5/0:00:58.2 (1.6), mem = 5083.2M
+**place_opt_design ... cpu = 0:00:31, real = 0:00:10, mem = 5083.2M **
 *** Finished GigaPlace ***
 INFO: refine_macro_place must be run to legalize macros.
-*** placeDesign #2 [finish] () : cpu/real = 0:00:31.0/0:00:10.1 (3.1), totSession cpu/real = 0:01:34.3/0:00:58.5 (1.6), mem = 5080.1M
+*** placeDesign #2 [finish] () : cpu/real = 0:00:31.1/0:00:10.1 (3.1), totSession cpu/real = 0:01:35.5/0:00:58.2 (1.6), mem = 5083.2M
 <CMD> unplaceAllInsts
 <CMD> placeInstance {u_mem/G_SRAM_BANK[9].u_sram} 2.160000 2.160000 R180
 <CMD> placeInstance {u_mem/G_SRAM_BANK[14].u_sram} 127.872000 2.160000 R180
@@ -1093,21 +1092,21 @@ Pin Density = 0.001349.
 
 <CMD> saveFPlan ./outputs/FloorPlan_withMacro.fp
 <CMD> saveDesign ./saved/axi_ram_macroFP.enc
-#% Begin save design ... (date=08/06 20:57:50, mem=3048.5M)
+#% Begin save design ... (date=08/06 21:19:08, mem=3051.5M)
 INFO: Current data have to be saved into a temporary db: 'axi_ram_macroFP.enc.dat.tmp' first. It will be renamed to the correct name 'axi_ram_macroFP.enc.dat' after the old db was deleted.
-% Begin Save ccopt configuration ... (date=08/06 20:57:50, mem=3048.5M)
+% Begin Save ccopt configuration ... (date=08/06 21:19:08, mem=3051.5M)
 **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
 Type 'man IMPTS-16' for more detail.
-% End Save ccopt configuration ... (date=08/06 20:57:50, total cpu=0:00:00.1, real=0:00:00.0, peak res=3048.8M, current mem=3048.8M)
-% Begin Save netlist data ... (date=08/06 20:57:50, mem=3048.8M)
+% End Save ccopt configuration ... (date=08/06 21:19:08, total cpu=0:00:00.1, real=0:00:00.0, peak res=3051.8M, current mem=3051.8M)
+% Begin Save netlist data ... (date=08/06 21:19:08, mem=3051.8M)
 Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_macroFP.enc.dat.tmp/vbin/axi_ram.v.bin in multi-threaded mode...
-% End Save netlist data ... (date=08/06 20:57:50, total cpu=0:00:00.1, real=0:00:00.0, peak res=3048.8M, current mem=3048.8M)
+% End Save netlist data ... (date=08/06 21:19:08, total cpu=0:00:00.1, real=0:00:01.0, peak res=3051.8M, current mem=3051.8M)
 Saving symbol-table file in separate thread ...
 Saving congestion map file in separate thread ...
 Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_macroFP.enc.dat.tmp/axi_ram.route.congmap.gz ...
-% Begin Save AAE data ... (date=08/06 20:57:50, mem=3049.0M)
+% Begin Save AAE data ... (date=08/06 21:19:09, mem=3052.1M)
 Saving AAE Data ...
-% End Save AAE data ... (date=08/06 20:57:50, total cpu=0:00:00.1, real=0:00:00.0, peak res=3049.0M, current mem=3048.2M)
+% End Save AAE data ... (date=08/06 21:19:09, total cpu=0:00:00.1, real=0:00:00.0, peak res=3052.1M, current mem=3051.3M)
 Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_macroFP.enc.dat.tmp/gui.pref.tcl ...
 Saving mode setting ...
 **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
@@ -1120,24 +1119,24 @@ Saving PG file in separate thread ...
 Saving placement file in separate thread ...
 Saving route file in separate thread ...
 Saving property file in separate thread ...
-Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_macroFP.enc.dat.tmp/axi_ram.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Thu Aug  6 20:57:50 2026)
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_macroFP.enc.dat.tmp/axi_ram.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Thu Aug  6 21:19:09 2026)
 ** Saving stdCellPlacement_binary (version# 2) ...
 TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
 Save Adaptive View Pruning View Names to Binary file
 Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_macroFP.enc.dat.tmp/axi_ram.prop
-*** Completed savePGFile (cpu=0:00:00.0 real=0:00:00.0 mem=5104.1M) ***
+*** Completed savePGFile (cpu=0:00:00.0 real=0:00:00.0 mem=5107.2M) ***
+*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=5107.2M) ***
 TAT_INFO: ::savePGFile REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
-*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=5104.1M) ***
-*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=5104.1M) ***
+*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=5107.2M) ***
 TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
 Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_macroFP.enc.dat.tmp/axi_ram.techData.gz' ...
 Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_macroFP.enc.dat.tmp/extraction/' ...
 TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
-% Begin Save power constraints data ... (date=08/06 20:57:50, mem=3050.2M)
-% End Save power constraints data ... (date=08/06 20:57:50, total cpu=0:00:00.1, real=0:00:01.0, peak res=3050.2M, current mem=3050.2M)
+% Begin Save power constraints data ... (date=08/06 21:19:09, mem=3053.3M)
+% End Save power constraints data ... (date=08/06 21:19:09, total cpu=0:00:00.1, real=0:00:00.0, peak res=3053.3M, current mem=3053.3M)
 rccorner
 rccorner
 rccorner
@@ -1146,7 +1145,7 @@ libset
 rccorner
 mode_normal
 ./outputs/axi_ram_syn.sdc
-#% End save design ... (date=08/06 20:57:51, total cpu=0:00:01.2, real=0:00:01.0, peak res=3051.1M, current mem=3051.1M)
+#% End save design ... (date=08/06 21:19:10, total cpu=0:00:01.2, real=0:00:02.0, peak res=3064.9M, current mem=3053.6M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -1206,7 +1205,7 @@ addStripe will not allow jog to connect padcore ring and block ring.
 *** Applying global-net connections...
 *** Applied 4 GNC rules (cpu = 0:00:00.0)
 <CMD> addRing -nets {VDD VSS} -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 0.384 -snap_wire_center_to_grid Grid
-#% Begin addRing (date=08/06 20:57:51, mem=3051.1M)
+#% Begin addRing (date=08/06 21:19:10, mem=3053.6M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -1216,7 +1215,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5080.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5083.2M)
 The power planner has cut rows, and such rows will be considered to be placement objects.
 Ring generation is complete.
 vias are now being generated.
@@ -1233,7 +1232,17 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addRing (date=08/06 20:57:51, total cpu=0:00:00.1, real=0:00:01.0, peak res=3051.1M, current mem=3051.0M)
+#% End addRing (date=08/06 21:19:10, total cpu=0:00:00.1, real=0:00:00.0, peak res=3053.6M, current mem=3053.6M)
+<CMD> deletePGPin -net VDD
+<CMD> deletePGPin -net VSS
+<CMD> createPGPin VDD -geom M8 2.160000 1.296000 1103.040000 1.776000 -net VDD
+<CMD> createPGPin VSS -geom M8 2.160000 0.336000 1103.040000 0.816000 -net VSS
+<CMD> createPGPin VDD -geom M8 2.160000 969.072000 1103.040000 969.552000 -net VDD
+<CMD> createPGPin VSS -geom M8 2.160000 970.032000 1103.040000 970.512000 -net VSS
+<CMD> createPGPin VDD -geom M9 1.296000 2.160000 1.776000 968.688000 -net VDD
+<CMD> createPGPin VSS -geom M9 0.336000 2.160000 0.816000 968.688000 -net VSS
+<CMD> createPGPin VDD -geom M9 1103.424000 2.160000 1103.904000 968.688000 -net VDD
+<CMD> createPGPin VSS -geom M9 1104.384000 2.160000 1104.864000 968.688000 -net VSS
 <CMD> deselectAll
 <CMD> selectInst {u_mem/G_SRAM_BANK[0].u_sram}
 <CMD> selectInst {u_mem/G_SRAM_BANK[1].u_sram}
@@ -1252,7 +1261,7 @@ setViaGenMode -optimize_cross_via is reset to default value: false.
 <CMD> selectInst {u_mem/G_SRAM_BANK[14].u_sram}
 <CMD> selectInst {u_mem/G_SRAM_BANK[15].u_sram}
 <CMD> addRing -nets {VSS VDD} -type block_rings -around shared_cluster -layer {top M4 bottom M4 left M5 right M5} -width {top 0.096 bottom 0.096 left 0.096 right 0.096} -spacing {top 0.288 bottom 0.288 left 0.288 right 0.288} -offset {top 1.080 bottom 1.080 left 1.080 right 1.080} -snap_wire_center_to_grid Grid
-#% Begin addRing (date=08/06 20:57:52, mem=3051.0M)
+#% Begin addRing (date=08/06 21:19:10, mem=3053.6M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -1262,7 +1271,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5080.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5083.2M)
 The power planner has cut rows, and such rows will be considered to be placement objects.
 Ring generation is complete.
 vias are now being generated.
@@ -1282,10 +1291,10 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addRing (date=08/06 20:57:52, total cpu=0:00:00.1, real=0:00:00.0, peak res=3051.0M, current mem=3051.0M)
+#% End addRing (date=08/06 21:19:10, total cpu=0:00:00.1, real=0:00:00.0, peak res=3053.7M, current mem=3053.7M)
 <CMD> setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth true -viaConnectToShape blockring
 <CMD> sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinTarget nearestTarget
-#% Begin sroute (date=08/06 20:57:52, mem=3051.1M)
+#% Begin sroute (date=08/06 21:19:10, mem=3053.7M)
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
 setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
@@ -1294,9 +1303,9 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
-*** Begin SPECIAL ROUTE on Thu Aug  6 20:57:52 2026 ***
+*** Begin SPECIAL ROUTE on Thu Aug  6 21:19:10 2026 ***
 SPECIAL ROUTE ran on directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus
-SPECIAL ROUTE ran on machine: user1-EliteMini (Linux 7.0.0-28-generic x86_64 3.29Ghz)
+SPECIAL ROUTE ran on machine: user1-EliteMini (Linux 7.0.0-28-generic x86_64 2.82Ghz)
 
 Begin option processing ...
 srouteConnectPowerBump set to false
@@ -1317,7 +1326,7 @@ sroutePadPinAllPorts set to true
 sroutePreserveExistingRoutes set to true
 srouteRoutePowerBarPortOnBothDir set to true
 srouteStopBlockPin set to "nearestTarget"
-End option processing: cpu: 0:00:00, real: 0:00:00, peak: 2703.00 megs.
+End option processing: cpu: 0:00:00, real: 0:00:00, peak: 2706.00 megs.
 
 Reading DB technology information...
 Finished reading DB technology information.
@@ -1330,11 +1339,13 @@ Read in 41 macros, 41 used
 Read in 56 components
   40 core components: 40 unplaced, 0 placed, 0 fixed
   16 block/ring components: 0 unplaced, 0 placed, 16 fixed
+Read in 8 physical pins
+  8 physical pins: 0 unplaced, 0 placed, 8 fixed
 Read in 228 logical pins
 Read in 17 blockages
 Read in 227 nets
 Read in 2 special nets, 2 routed
-Read in 112 terminals
+Read in 120 terminals
 2 nets selected.
 
 Begin power routing ...
@@ -1382,11 +1393,12 @@ Begin power routing ...
 To increase the message display limit, refer to the product command reference manual.
   Number of Block ports routed: 64
   Number of Power Bump ports routed: 0
-End power routing: cpu: 0:00:01, real: 0:00:00, peak: 2703.00 megs.
+End power routing: cpu: 0:00:01, real: 0:00:01, peak: 2706.00 megs.
 
 
 
  Begin updating DB with routing results ...
+ Updating DB with 8 io pins ...
  Updating DB with 0 via definition ...
 setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
@@ -1412,13 +1424,13 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End sroute (date=08/06 20:57:52, total cpu=0:00:00.8, real=0:00:01.0, peak res=3060.9M, current mem=3060.9M)
+#% End sroute (date=08/06 21:19:11, total cpu=0:00:00.8, real=0:00:01.0, peak res=3067.0M, current mem=3067.0M)
 <CMD> setAddStripeMode -allow_jog none -break_at block_ring -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M9
 Stripe will break at block ring.
 addStripe will not allow jog to connect padcore ring and block ring.
 
 <CMD> addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.836000 -number_of_sets 1 -create_pins 0 -area {0.336 174.96 502.848 179.28} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-#% Begin addStripe (date=08/06 20:57:53, mem=3060.9M)
+#% Begin addStripe (date=08/06 21:19:11, mem=3067.0M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -1428,7 +1440,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-Initialize fgc environment(mem: 5080.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5080.1M)
+Initialize fgc environment(mem: 5083.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5083.2M)
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[0].u_sram' instance was increased to (127.851997 356.399994) (249.264008 529.200012) because the  obs (127.851997 361.444000) (249.244003 361.743988) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[1].u_sram' instance was increased to (127.851997 533.520020) (249.264008 706.320007) because the  obs (127.851997 538.564026) (249.244003 538.864014) on layer V3 was outside the original block boundary.
@@ -1461,9 +1473,9 @@ Type 'man IMPPP-133' for more detail.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[15].u_sram' instance was increased to (253.563995 2.160000) (374.976013 174.960007) because the  obs (253.563995 7.204000) (374.955994 7.504000) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5080.1M)
-Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5080.1M)
-Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5080.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5083.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5083.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5083.2M)
 Starting stripe generation ...
 Non-Default Mode Option Settings :
   -use_exact_spacing  1
@@ -1493,11 +1505,11 @@ Type 'man IMPPP-354' for more detail.
 Stripe generation is complete.
 vias are now being generated.
 Multi-CPU acceleration using 12 CPU(s) with 4 iterations for via generation
-Completing iteration 1 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
-Completing iteration 2 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
-Completing iteration 3 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
-Completing iteration 4 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
-Via generation is complete (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
+Completing iteration 1 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
+Completing iteration 2 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
+Completing iteration 3 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
+Completing iteration 4 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
+Via generation is complete (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
 addStripe created 1 wire.
 ViaGen created 0 via, deleted 0 via to avoid violation.
 +--------+----------------+----------------+
@@ -1509,9 +1521,9 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addStripe (date=08/06 20:57:53, total cpu=0:00:00.1, real=0:00:00.0, peak res=3060.9M, current mem=3050.2M)
+#% End addStripe (date=08/06 21:19:11, total cpu=0:00:00.1, real=0:00:00.0, peak res=3067.0M, current mem=3052.6M)
 <CMD> addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.932000 -number_of_sets 1 -create_pins 0 -area {0.336 352.08 502.848 356.4} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-#% Begin addStripe (date=08/06 20:57:53, mem=3050.2M)
+#% Begin addStripe (date=08/06 21:19:11, mem=3052.6M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -1521,7 +1533,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-Initialize fgc environment(mem: 5068.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Initialize fgc environment(mem: 5071.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[0].u_sram' instance was increased to (127.851997 356.399994) (249.264008 529.200012) because the  obs (127.851997 361.444000) (249.244003 361.743988) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[1].u_sram' instance was increased to (127.851997 533.520020) (249.264008 706.320007) because the  obs (127.851997 538.564026) (249.244003 538.864014) on layer V3 was outside the original block boundary.
@@ -1554,19 +1566,19 @@ Type 'man IMPPP-133' for more detail.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[15].u_sram' instance was increased to (253.563995 2.160000) (374.976013 174.960007) because the  obs (253.563995 7.204000) (374.955994 7.504000) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 Starting stripe generation ...
 Non-Default Mode Option Settings :
   -use_exact_spacing  1
   -extend_to_area_boundary  1
-*** Stripes and vias are being generated (current mem: 5068.094)***
+*** Stripes and vias are being generated (current mem: 5071.219)***
 Start to generate stripes.
-Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5068.094M)
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5071.219M)
 Start to generate vias.
-    Completing 100% (cpu time: 0:00:00.0, peak mem: 5068.094M)
-  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5068.094M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 5071.219M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5071.219M)
 Stripe generation is complete.
 addStripe created 4 wires.
 ViaGen created 0 via, deleted 0 via to avoid violation.
@@ -1579,9 +1591,9 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addStripe (date=08/06 20:57:53, total cpu=0:00:00.1, real=0:00:00.0, peak res=3050.2M, current mem=3049.6M)
+#% End addStripe (date=08/06 21:19:11, total cpu=0:00:00.1, real=0:00:00.0, peak res=3052.6M, current mem=3051.9M)
 <CMD> addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.836000 -number_of_sets 1 -create_pins 0 -area {0.336 529.2 502.848 533.52} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-#% Begin addStripe (date=08/06 20:57:53, mem=3049.6M)
+#% Begin addStripe (date=08/06 21:19:11, mem=3051.9M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -1591,7 +1603,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-Initialize fgc environment(mem: 5068.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Initialize fgc environment(mem: 5071.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[0].u_sram' instance was increased to (127.851997 356.399994) (249.264008 529.200012) because the  obs (127.851997 361.444000) (249.244003 361.743988) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[1].u_sram' instance was increased to (127.851997 533.520020) (249.264008 706.320007) because the  obs (127.851997 538.564026) (249.244003 538.864014) on layer V3 was outside the original block boundary.
@@ -1624,9 +1636,9 @@ Type 'man IMPPP-133' for more detail.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[15].u_sram' instance was increased to (253.563995 2.160000) (374.976013 174.960007) because the  obs (253.563995 7.204000) (374.955994 7.504000) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 Starting stripe generation ...
 Non-Default Mode Option Settings :
   -use_exact_spacing  1
@@ -1656,11 +1668,11 @@ Type 'man IMPPP-354' for more detail.
 Stripe generation is complete.
 vias are now being generated.
 Multi-CPU acceleration using 12 CPU(s) with 4 iterations for via generation
-Completing iteration 1 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
-Completing iteration 2 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
-Completing iteration 3 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
-Completing iteration 4 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
-Via generation is complete (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5068.094M)
+Completing iteration 1 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
+Completing iteration 2 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
+Completing iteration 3 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
+Completing iteration 4 (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
+Via generation is complete (cpu time: 0:00:00.0, real time: 0:00:00.0 peak mem: 5071.219M)
 addStripe created 1 wire.
 ViaGen created 0 via, deleted 0 via to avoid violation.
 +--------+----------------+----------------+
@@ -1672,13 +1684,13 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addStripe (date=08/06 20:57:53, total cpu=0:00:00.2, real=0:00:00.0, peak res=3049.6M, current mem=3049.2M)
+#% End addStripe (date=08/06 21:19:11, total cpu=0:00:00.1, real=0:00:01.0, peak res=3051.9M, current mem=3051.7M)
 <CMD> setAddStripeMode -allow_jog none -break_at block_ring -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M9
 Stripe will break at block ring.
 addStripe will not allow jog to connect padcore ring and block ring.
 
 <CMD> addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.968000 -number_of_sets 1 -create_pins 0 -area {123.552 0.336 127.872 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-#% Begin addStripe (date=08/06 20:57:53, mem=3049.2M)
+#% Begin addStripe (date=08/06 21:19:12, mem=3051.7M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -1688,7 +1700,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-Initialize fgc environment(mem: 5068.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Initialize fgc environment(mem: 5071.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[0].u_sram' instance was increased to (127.851997 356.399994) (249.264008 529.200012) because the  obs (127.851997 361.444000) (249.244003 361.743988) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[1].u_sram' instance was increased to (127.851997 533.520020) (249.264008 706.320007) because the  obs (127.851997 538.564026) (249.244003 538.864014) on layer V3 was outside the original block boundary.
@@ -1721,19 +1733,19 @@ Type 'man IMPPP-133' for more detail.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[15].u_sram' instance was increased to (253.563995 2.160000) (374.976013 174.960007) because the  obs (253.563995 7.204000) (374.955994 7.504000) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 Starting stripe generation ...
 Non-Default Mode Option Settings :
   -use_exact_spacing  1
   -extend_to_area_boundary  1
-*** Stripes and vias are being generated (current mem: 5068.094)***
+*** Stripes and vias are being generated (current mem: 5071.219)***
 Start to generate stripes.
-Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5068.094M)
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5071.219M)
 Start to generate vias.
-    Completing 100% (cpu time: 0:00:00.0, peak mem: 5068.094M)
-  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5068.094M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 5071.219M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5071.219M)
 Stripe generation is complete.
 addStripe created 4 wires.
 ViaGen created 0 via, deleted 0 via to avoid violation.
@@ -1746,9 +1758,9 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addStripe (date=08/06 20:57:53, total cpu=0:00:00.1, real=0:00:00.0, peak res=3049.8M, current mem=3049.8M)
+#% End addStripe (date=08/06 21:19:12, total cpu=0:00:00.1, real=0:00:00.0, peak res=3052.2M, current mem=3052.2M)
 <CMD> addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.824000 -number_of_sets 1 -create_pins 0 -area {249.264 0.336 253.584 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-#% Begin addStripe (date=08/06 20:57:53, mem=3049.8M)
+#% Begin addStripe (date=08/06 21:19:12, mem=3052.2M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -1758,7 +1770,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-Initialize fgc environment(mem: 5068.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Initialize fgc environment(mem: 5071.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[0].u_sram' instance was increased to (127.851997 356.399994) (249.264008 529.200012) because the  obs (127.851997 361.444000) (249.244003 361.743988) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[1].u_sram' instance was increased to (127.851997 533.520020) (249.264008 706.320007) because the  obs (127.851997 538.564026) (249.244003 538.864014) on layer V3 was outside the original block boundary.
@@ -1791,9 +1803,9 @@ Type 'man IMPPP-133' for more detail.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[15].u_sram' instance was increased to (253.563995 2.160000) (374.976013 174.960007) because the  obs (253.563995 7.204000) (374.955994 7.504000) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 Starting stripe generation ...
 Non-Default Mode Option Settings :
   -use_exact_spacing  1
@@ -1807,13 +1819,13 @@ Non-Default Mode Option Settings :
 **WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (251.376007, 531.659973) (251.472000, 531.755981) to avoid Cut_Spacing  violation.
 **WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (251.376007, 707.916016) (251.472000, 708.012024) to avoid Cut_Spacing  violation.
 **WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (251.376007, 707.916016) (251.472000, 708.012024) to avoid Cut_Spacing  violation.
-*** Stripes and vias are being generated (current mem: 5068.094)***
+*** Stripes and vias are being generated (current mem: 5071.219)***
 Start to generate stripes.
-Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5068.094M)
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5071.219M)
 Start to generate vias.
 **WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (251.376007, 0.588000) (251.472000, 0.684000) to avoid Cut_Spacing  violation.
-    Completing 100% (cpu time: 0:00:00.0, peak mem: 5068.094M)
-  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5068.094M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 5071.219M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5071.219M)
 Stripe generation is complete.
 addStripe created 3 wires.
 ViaGen created 0 via, deleted 0 via to avoid violation.
@@ -1826,9 +1838,9 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addStripe (date=08/06 20:57:53, total cpu=0:00:00.1, real=0:00:00.0, peak res=3049.8M, current mem=3049.8M)
+#% End addStripe (date=08/06 21:19:12, total cpu=0:00:00.1, real=0:00:00.0, peak res=3052.3M, current mem=3052.3M)
 <CMD> addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {374.976 0.336 379.296 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-#% Begin addStripe (date=08/06 20:57:53, mem=3049.8M)
+#% Begin addStripe (date=08/06 21:19:12, mem=3052.3M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -1838,7 +1850,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-Initialize fgc environment(mem: 5068.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Initialize fgc environment(mem: 5071.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[0].u_sram' instance was increased to (127.851997 356.399994) (249.264008 529.200012) because the  obs (127.851997 361.444000) (249.244003 361.743988) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[1].u_sram' instance was increased to (127.851997 533.520020) (249.264008 706.320007) because the  obs (127.851997 538.564026) (249.244003 538.864014) on layer V3 was outside the original block boundary.
@@ -1871,19 +1883,19 @@ Type 'man IMPPP-133' for more detail.
 Type 'man IMPPP-133' for more detail.
 **WARN: (IMPPP-133):	The block boundary of the 'u_mem/G_SRAM_BANK[15].u_sram' instance was increased to (253.563995 2.160000) (374.976013 174.960007) because the  obs (253.563995 7.204000) (374.955994 7.504000) on layer V3 was outside the original block boundary.
 Type 'man IMPPP-133' for more detail.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
-Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5068.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5071.2M)
 Starting stripe generation ...
 Non-Default Mode Option Settings :
   -use_exact_spacing  1
   -extend_to_area_boundary  1
-*** Stripes and vias are being generated (current mem: 5068.094)***
+*** Stripes and vias are being generated (current mem: 5071.219)***
 Start to generate stripes.
-Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5068.094M)
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5071.219M)
 Start to generate vias.
-    Completing 100% (cpu time: 0:00:00.0, peak mem: 5068.094M)
-  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5068.094M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 5071.219M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5071.219M)
 Stripe generation is complete.
 addStripe created 4 wires.
 ViaGen created 0 via, deleted 0 via to avoid violation.
@@ -1896,16 +1908,266 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addStripe (date=08/06 20:57:54, total cpu=0:00:00.1, real=0:00:00.0, peak res=3049.9M, current mem=3049.9M)
+#% End addStripe (date=08/06 21:19:12, total cpu=0:00:00.1, real=0:00:00.0, peak res=3052.4M, current mem=3052.4M)
 <CMD> editTrim -nets {VSS VDD}
 <CMD> clearDrc
 <CMD> deselectAll
+<CMD> setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M9
+addStripe will not allow jog to connect padcore ring and block ring.
+
+<CMD> addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 2.080000 -create_pins 0 -area {0.0 708.48 1105.2 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+#% Begin addStripe (date=08/06 21:19:12, mem=3052.5M)
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+Initialize fgc environment(mem: 5079.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Starting stripe generation ...
+**WARN: (IMPPP-358):	The left edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+**WARN: (IMPPP-358):	The right edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+**WARN: (IMPPP-358):	The top edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+Non-Default Mode Option Settings :
+  -use_exact_spacing  1
+  -extend_to_area_boundary  1
+*** Stripes and vias are being generated (current mem: 5079.223)***
+Start to generate stripes.
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5079.223M)
+Start to generate vias.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V8 layer at (1103.583984, 710.572021) (1103.744019, 712.056030) to avoid Cut_Short  violation.
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5079.223M)
+Stripe generation is complete.
+addStripe created 16 wires.
+ViaGen created 40 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M8   |       16       |       NA       |
+|   V8   |       40       |        0       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addStripe (date=08/06 21:19:12, total cpu=0:00:00.1, real=0:00:00.0, peak res=3052.5M, current mem=3052.5M)
+<CMD> addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 19.360000 -create_pins 0 -area {502.848 0.0 1105.2 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+#% Begin addStripe (date=08/06 21:19:12, mem=3052.5M)
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+Initialize fgc environment(mem: 5079.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Starting stripe generation ...
+**WARN: (IMPPP-358):	The right edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+**WARN: (IMPPP-358):	The bottom edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+Non-Default Mode Option Settings :
+  -use_exact_spacing  1
+  -extend_to_area_boundary  1
+Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+*** Stripes and vias are being generated (current mem: 5079.223)***
+Start to generate stripes.
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5079.223M)
+Start to generate vias.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V8 layer at (1103.583984, 19.372000) (1103.744019, 20.856001) to avoid Cut_Short  violation.
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5079.223M)
+Stripe generation is complete.
+addStripe created 40 wires.
+ViaGen created 40 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M8   |       40       |       NA       |
+|   V8   |       40       |        0       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addStripe (date=08/06 21:19:12, total cpu=0:00:00.1, real=0:00:00.0, peak res=3052.6M, current mem=3052.6M)
+<CMD> setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M8 -stacked_via_top_layer M9
+addStripe will not allow jog to connect padcore ring and block ring.
+
+<CMD> addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 0.352000 -create_pins 0 -area {502.848 0.0 1105.2 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+#% Begin addStripe (date=08/06 21:19:12, mem=3052.6M)
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+Initialize fgc environment(mem: 5079.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Starting stripe generation ...
+**WARN: (IMPPP-358):	The right edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+**WARN: (IMPPP-358):	The bottom edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+**WARN: (IMPPP-358):	The top edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+Non-Default Mode Option Settings :
+  -use_exact_spacing  1
+  -extend_to_area_boundary  1
+Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+*** Stripes and vias are being generated (current mem: 5079.223)***
+Start to generate stripes.
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5079.223M)
+Start to generate vias.
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5079.223M)
+Stripe generation is complete.
+addStripe created 36 wires.
+ViaGen created 1116 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   V8   |      1116      |        0       |
+|   M9   |       36       |       NA       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addStripe (date=08/06 21:19:12, total cpu=0:00:00.1, real=0:00:00.0, peak res=3053.3M, current mem=3053.3M)
+<CMD> addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.360000 -create_pins 0 -area {0.0 708.48 502.848 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+#% Begin addStripe (date=08/06 21:19:12, mem=3053.3M)
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+Initialize fgc environment(mem: 5079.2M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Starting stripe generation ...
+**WARN: (IMPPP-358):	The left edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+**WARN: (IMPPP-358):	The top edge of the area you specified is out of design boundary and only stripes in design boundary will be generated. 
+  Use option -extend_to_closest_target {area_boundary} if stripes must be generated in specified area.
+Non-Default Mode Option Settings :
+  -use_exact_spacing  1
+  -extend_to_area_boundary  1
+Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 5079.2M)
+*** Stripes and vias are being generated (current mem: 5079.223)***
+Start to generate stripes.
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 5079.223M)
+Start to generate vias.
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 5079.223M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 5079.223M)
+Stripe generation is complete.
+addStripe created 28 wires.
+ViaGen created 266 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   V8   |       266      |        0       |
+|   M9   |       28       |       NA       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addStripe (date=08/06 21:19:12, total cpu=0:00:00.1, real=0:00:01.0, peak res=3053.3M, current mem=3053.3M)
 <CMD> editTrim -nets {VDD VSS}
 <CMD> verifyConnectivity -type special -noUnroutedNet -report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
 VERIFY_CONNECTIVITY use new engine.
 
 ******** Start: VERIFY CONNECTIVITY ********
-Start Time: Thu Aug  6 20:57:54 2026
+Start Time: Thu Aug  6 21:19:13 2026
 
 Design Name: axi_ram
 Database Units: 4000
@@ -1922,39 +2184,43 @@ Use 12 pthreads
 **WARN: (IMPVFC-97):	IO pin s_axi_awaddr[3] of net s_axi_awaddr[3] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
 **WARN: (IMPVFC-97):	IO pin s_axi_awprot[1] of net s_axi_awprot[1] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
 **WARN: (IMPVFC-97):	IO pin s_axi_wdata[31] of net s_axi_wdata[31] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin clk of net clk has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
 **WARN: (IMPVFC-97):	IO pin s_axi_awsize[2] of net s_axi_awsize[2] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
 **WARN: (IMPVFC-97):	IO pin s_axi_wdata[19] of net s_axi_wdata[19] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
 **WARN: (IMPVFC-97):	IO pin s_axi_awprot[0] of net s_axi_awprot[0] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
-**WARN: (IMPVFC-97):	IO pin s_axi_wdata[30] of net s_axi_wdata[30] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
 **WARN: (IMPVFC-97):	IO pin s_axi_wdata[7] of net s_axi_wdata[7] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
-**WARN: (IMPVFC-97):	IO pin clk of net clk has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin s_axi_wdata[30] of net s_axi_wdata[30] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin s_axi_awaddr[26] of net s_axi_awaddr[26] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
 **WARN: (IMPVFC-97):	IO pin s_axi_wlast of net s_axi_wlast has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
 **WARN: (IMPVFC-97):	IO pin s_axi_wdata[18] of net s_axi_wdata[18] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
-**WARN: (IMPVFC-97):	IO pin s_axi_arid[4] of net s_axi_arid[4] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
-**WARN: (IMPVFC-97):	IO pin s_axi_wdata[6] of net s_axi_wdata[6] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
-**WARN: (IMPVFC-97):	IO pin s_axi_araddr[24] of net s_axi_araddr[24] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin rst_n of net rst_n has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin s_axi_awaddr[14] of net s_axi_awaddr[14] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
 **WARN: (EMS-27):	Message (IMPVFC-97) has exceeded the current message display limit of 20.
 To increase the message display limit, refer to the product command reference manual.
 **WARN: (EMS-27):	Message (IMPVFC-97) has exceeded the current message display limit of 20.
 To increase the message display limit, refer to the product command reference manual.
 **WARN: (EMS-27):	Message (IMPVFC-97) has exceeded the current message display limit of 20.
 To increase the message display limit, refer to the product command reference manual.
+**WARN: (EMS-27):	Message (IMPVFC-97) has exceeded the current message display limit of 20.
+To increase the message display limit, refer to the product command reference manual.
+Net VSS: has special routes with opens.
 
 Begin Summary 
-  Found no problems or warnings.
+    2 Problem(s) (IMPVFC-200): Special Wires: Pieces of the net are not connected together.
+    2 total info(s) created.
 End Summary
 
-End Time: Thu Aug  6 20:57:54 2026
+End Time: Thu Aug  6 21:19:13 2026
 Time Elapsed: 0:00:00.0
 
 ******** End: VERIFY CONNECTIVITY ********
-  Verification Complete : 0 Viols.  0 Wrngs.
+  Verification Complete : 2 Viols.  0 Wrngs.
   (CPU Time: 0:00:00.0  MEM: 4.008M)
 
 <CMD> verify_drc -report ./verify_rpt/pg_drc_before_stdcell_place.rpt
 #-check_same_via_cell true               # bool, default=false, user setting
 #-report ./verify_rpt/pg_drc_before_stdcell_place.rpt # string, default="", user setting
- *** Starting Verify DRC (MEM: 5080.1) ***
+ *** Starting Verify DRC (MEM: 5083.2) ***
 
   VERIFY DRC ...... Starting Verification
   VERIFY DRC ...... Initializing
@@ -1962,104 +2228,42 @@ Time Elapsed: 0:00:00.0
   VERIFY DRC ...... Creating Sub-Areas
  VERIFY_DRC: checking all layers except Pad to Pad ...
   VERIFY DRC ...... Using new threading
+ VERIFY DRC ...... Thread : 10 finished.
+ VERIFY DRC ...... Thread : 3 finished.
+ VERIFY DRC ...... Thread : 0 finished.
+ VERIFY DRC ...... Thread : 11 finished.
+ VERIFY DRC ...... Thread : 9 finished.
  VERIFY DRC ...... Thread : 4 finished.
  VERIFY DRC ...... Thread : 1 finished.
- VERIFY DRC ...... Thread : 2 finished.
- VERIFY DRC ...... Thread : 5 finished.
- VERIFY DRC ...... Thread : 8 finished.
- VERIFY DRC ...... Thread : 3 finished.
- VERIFY DRC ...... Thread : 10 finished.
- VERIFY DRC ...... Thread : 0 finished.
- VERIFY DRC ...... Thread : 7 finished.
- VERIFY DRC ...... Thread : 9 finished.
- VERIFY DRC ...... Thread : 11 finished.
  VERIFY DRC ...... Thread : 6 finished.
+ VERIFY DRC ...... Thread : 7 finished.
+ VERIFY DRC ...... Thread : 2 finished.
+ VERIFY DRC ...... Thread : 8 finished.
+ VERIFY DRC ...... Thread : 5 finished.
  VERIFY_DRC: checking layers from Pad to Pad ...
 **WARN: (IMPVFG-1198):	The number of CPUs requested 12 is larger than that verify_drc used 1. In Multithreading mode, the number of CPUs verify_drc used is not larger than the number of subareas.
  Use 'setMultiCpuUsage -localCpu' to specify the less cup number if the verify area is not large.
   VERIFY DRC ...... Using new threading
 
-  Verification Complete : 16 Viols.
+  Verification Complete : 19 Viols.
 
  Violation Summary By Layer and Type:
 
-	         WidTbl   Totals
-	M3           16       16
-	Totals       16       16
+	         WidTbl   MinStp   Totals
+	M3           16        0       16
+	M9            0        3        3
+	Totals       16        3       19
 
- *** End Verify DRC (CPU TIME: 0:00:00.3  ELAPSED TIME: 0:00:00.0  MEM: 256.1M) ***
+ *** End Verify DRC (CPU TIME: 0:00:00.4  ELAPSED TIME: 0:00:00.0  MEM: 256.1M) ***
 
-<CMD> saveDesign ./saved/axi_ram_powerplan.enc
-#% Begin save design ... (date=08/06 20:57:54, mem=3057.3M)
-INFO: Current data have to be saved into a temporary db: 'axi_ram_powerplan.enc.dat.tmp' first. It will be renamed to the correct name 'axi_ram_powerplan.enc.dat' after the old db was deleted.
-% Begin Save ccopt configuration ... (date=08/06 20:57:54, mem=3057.3M)
-**WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
-Type 'man IMPTS-16' for more detail.
-% End Save ccopt configuration ... (date=08/06 20:57:54, total cpu=0:00:00.1, real=0:00:00.0, peak res=3057.6M, current mem=3057.6M)
-% Begin Save netlist data ... (date=08/06 20:57:54, mem=3057.6M)
-Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_powerplan.enc.dat.tmp/vbin/axi_ram.v.bin in multi-threaded mode...
-% End Save netlist data ... (date=08/06 20:57:54, total cpu=0:00:00.1, real=0:00:00.0, peak res=3057.6M, current mem=3057.6M)
-Saving symbol-table file in separate thread ...
-Saving congestion map file in separate thread ...
-Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_powerplan.enc.dat.tmp/axi_ram.route.congmap.gz ...
-% Begin Save AAE data ... (date=08/06 20:57:54, mem=3057.9M)
-Saving AAE Data ...
-% End Save AAE data ... (date=08/06 20:57:54, total cpu=0:00:00.1, real=0:00:00.0, peak res=3057.9M, current mem=3057.1M)
-Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_powerplan.enc.dat.tmp/gui.pref.tcl ...
-Saving mode setting ...
-**WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
-Saving global file ...
-*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_powerplan.enc.dat.tmp/axi_ram.bbox.lef
-Saving Drc markers ...
-... 16 markers are saved ...
-... 16 geometry drc markers are saved ...
-... 0 antenna drc markers are saved ...
-Saving special route data file in separate thread ...
-Saving PG file in separate thread ...
-Saving placement file in separate thread ...
-Saving route file in separate thread ...
-Saving property file in separate thread ...
-Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_powerplan.enc.dat.tmp/axi_ram.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Thu Aug  6 20:57:54 2026)
-TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
-** Saving stdCellPlacement_binary (version# 2) ...
-Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_powerplan.enc.dat.tmp/axi_ram.prop
-Save Adaptive View Pruning View Names to Binary file
-*** Completed savePGFile (cpu=0:00:00.0 real=0:00:00.0 mem=5360.2M) ***
-TAT_INFO: ::savePGFile REAL = 0 : CPU = 0 : MEM = 0.
-*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=5360.2M) ***
-TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
-*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=5360.2M) ***
-TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
-TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
-Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_powerplan.enc.dat.tmp/axi_ram.techData.gz' ...
-Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_powerplan.enc.dat.tmp/extraction/' ...
-TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
-TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
-% Begin Save power constraints data ... (date=08/06 20:57:54, mem=3058.9M)
-% End Save power constraints data ... (date=08/06 20:57:54, total cpu=0:00:00.1, real=0:00:01.0, peak res=3058.9M, current mem=3058.9M)
-rccorner
-rccorner
-rccorner
-Generated self-contained design axi_ram_powerplan.enc.dat.tmp
-libset
-rccorner
-mode_normal
-./outputs/axi_ram_syn.sdc
-#% End save design ... (date=08/06 20:57:55, total cpu=0:00:01.2, real=0:00:01.0, peak res=3059.2M, current mem=3059.2M)
-
-*** Summary of all messages that are not suppressed in this session:
-Severity  ID               Count  Summary                                  
-WARNING   IMPTS-16            16  Inconsistency detected in the time units...
-WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
-*** Message Summary: 17 warning(s), 0 error(s)
-
+Power plan failed before pin assignment: PG connectivity is not clean: review ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
 <CMD> setPinConstraint -corner_to_pin_distance 8
 **WARN: (IMPPTN-3837):	setPinConstraint command usage without specifying top-cell name will be obsolete in next major release. Command will enforce top-cell name using -cell option.
 Constraint is applied to top level cell axi_ram.
 <CMD> setPinAssignMode -pinEditInBatch true
 <CMD> editPin -pin {clk rst_n {s_axi_awid[4]} {s_axi_awid[3]} {s_axi_awid[2]} {s_axi_awid[1]} {s_axi_awid[0]} {s_axi_awaddr[31]} {s_axi_awaddr[30]} {s_axi_awaddr[29]} {s_axi_awaddr[28]} {s_axi_awaddr[27]} {s_axi_awaddr[26]} {s_axi_awaddr[25]} {s_axi_awaddr[24]} {s_axi_awaddr[23]} {s_axi_awaddr[22]} {s_axi_awaddr[21]} {s_axi_awaddr[20]} {s_axi_awaddr[19]} {s_axi_awaddr[18]} {s_axi_awaddr[17]} {s_axi_awaddr[16]} {s_axi_awaddr[15]} {s_axi_awaddr[14]} {s_axi_awaddr[13]} {s_axi_awaddr[12]} {s_axi_awaddr[11]} {s_axi_awaddr[10]} {s_axi_awaddr[9]} {s_axi_awaddr[8]} {s_axi_awaddr[7]} {s_axi_awaddr[6]} {s_axi_awaddr[5]} {s_axi_awaddr[4]} {s_axi_awaddr[3]} {s_axi_awaddr[2]} {s_axi_awaddr[1]} {s_axi_awaddr[0]} {s_axi_awlen[7]} {s_axi_awlen[6]} {s_axi_awlen[5]} {s_axi_awlen[4]} {s_axi_awlen[3]} {s_axi_awlen[2]} {s_axi_awlen[1]} {s_axi_awlen[0]} {s_axi_awsize[2]} {s_axi_awsize[1]} {s_axi_awsize[0]} {s_axi_awburst[1]} {s_axi_awburst[0]} s_axi_awlock {s_axi_awcache[3]} {s_axi_awcache[2]} {s_axi_awcache[1]} {s_axi_awcache[0]} {s_axi_awprot[2]} {s_axi_awprot[1]} {s_axi_awprot[0]} {s_axi_awqos[3]} {s_axi_awqos[2]} {s_axi_awqos[1]} {s_axi_awqos[0]} {s_axi_awregion[3]} {s_axi_awregion[2]} {s_axi_awregion[1]} {s_axi_awregion[0]} s_axi_awvalid s_axi_awready} -side TOP -layer M7 -spreadType range -start {10.16 968.688} -end {1095.04 968.688} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
 Successfully spread [70] pins.
-editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 5336.2M).
+editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 5339.3M).
 <CMD> editPin -pin {{s_axi_wdata[31]} {s_axi_wdata[30]} {s_axi_wdata[29]} {s_axi_wdata[28]} {s_axi_wdata[27]} {s_axi_wdata[26]} {s_axi_wdata[25]} {s_axi_wdata[24]} {s_axi_wdata[23]} {s_axi_wdata[22]} {s_axi_wdata[21]} {s_axi_wdata[20]} {s_axi_wdata[19]} {s_axi_wdata[18]} {s_axi_wdata[17]} {s_axi_wdata[16]} {s_axi_wdata[15]} {s_axi_wdata[14]} {s_axi_wdata[13]} {s_axi_wdata[12]} {s_axi_wdata[11]} {s_axi_wdata[10]} {s_axi_wdata[9]} {s_axi_wdata[8]} {s_axi_wdata[7]} {s_axi_wdata[6]} {s_axi_wdata[5]} {s_axi_wdata[4]} {s_axi_wdata[3]} {s_axi_wdata[2]} {s_axi_wdata[1]} {s_axi_wdata[0]} {s_axi_wstrb[3]} {s_axi_wstrb[2]} {s_axi_wstrb[1]} {s_axi_wstrb[0]} s_axi_wlast s_axi_wvalid s_axi_wready {s_axi_bid[4]} {s_axi_bid[3]} {s_axi_bid[2]} {s_axi_bid[1]} {s_axi_bid[0]} {s_axi_bresp[1]} {s_axi_bresp[0]} s_axi_bvalid s_axi_bready} -side RIGHT -layer M6 -spreadType range -start {1103.04 10.16} -end {1103.04 960.688} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
 Selected [48] pin for spreading. Could not spread (20 out of 48) pins, either because space provided for spreading pins are less than required or because of constraints on the selected pins or because of some blockage (pin blockage, routing blockage, power stripes etc.) on the selected region.
 
@@ -2110,10 +2314,10 @@ Ideal location for pin s_axi_wdata[7] is (1105.20, 970.70). It is placed at Loca
 Ideal location for pin s_axi_wdata[6] is (1105.20, 970.13). It is placed at Location (1105.20, 962.06), which  is deviated more than its ideal spacing 0.38
 Ideal location for pin s_axi_wdata[5] is (1105.20, 969.84). It is placed at Location (1105.20, 961.49), which  is deviated more than its ideal spacing 0.38
 Ideal location for pin s_axi_wdata[4] is (1105.20, 969.26). It is placed at Location (1105.20, 960.91), which  is deviated more than its ideal spacing 0.38
-editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 5336.2M).
+editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 5339.3M).
 <CMD> editPin -pin {{s_axi_arid[4]} {s_axi_arid[3]} {s_axi_arid[2]} {s_axi_arid[1]} {s_axi_arid[0]} {s_axi_araddr[31]} {s_axi_araddr[30]} {s_axi_araddr[29]} {s_axi_araddr[28]} {s_axi_araddr[27]} {s_axi_araddr[26]} {s_axi_araddr[25]} {s_axi_araddr[24]} {s_axi_araddr[23]} {s_axi_araddr[22]} {s_axi_araddr[21]} {s_axi_araddr[20]} {s_axi_araddr[19]} {s_axi_araddr[18]} {s_axi_araddr[17]} {s_axi_araddr[16]} {s_axi_araddr[15]} {s_axi_araddr[14]} {s_axi_araddr[13]} {s_axi_araddr[12]} {s_axi_araddr[11]} {s_axi_araddr[10]} {s_axi_araddr[9]} {s_axi_araddr[8]} {s_axi_araddr[7]} {s_axi_araddr[6]} {s_axi_araddr[5]} {s_axi_araddr[4]} {s_axi_araddr[3]} {s_axi_araddr[2]} {s_axi_araddr[1]} {s_axi_araddr[0]} {s_axi_arlen[7]} {s_axi_arlen[6]} {s_axi_arlen[5]} {s_axi_arlen[4]} {s_axi_arlen[3]} {s_axi_arlen[2]} {s_axi_arlen[1]} {s_axi_arlen[0]} {s_axi_arsize[2]} {s_axi_arsize[1]} {s_axi_arsize[0]} {s_axi_arburst[1]} {s_axi_arburst[0]} s_axi_arlock {s_axi_arcache[3]} {s_axi_arcache[2]} {s_axi_arcache[1]} {s_axi_arcache[0]} {s_axi_arprot[2]} {s_axi_arprot[1]} {s_axi_arprot[0]} {s_axi_arqos[3]} {s_axi_arqos[2]} {s_axi_arqos[1]} {s_axi_arqos[0]} {s_axi_arregion[3]} {s_axi_arregion[2]} {s_axi_arregion[1]} {s_axi_arregion[0]} s_axi_arvalid s_axi_arready} -side LEFT -layer M6 -spreadType range -start {2.16 10.16} -end {2.16 960.688} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
 Successfully spread [68] pins.
-editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 5336.2M).
+editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 5339.3M).
 <CMD> editPin -pin {{s_axi_rid[4]} {s_axi_rid[3]} {s_axi_rid[2]} {s_axi_rid[1]} {s_axi_rid[0]} {s_axi_rdata[31]} {s_axi_rdata[30]} {s_axi_rdata[29]} {s_axi_rdata[28]} {s_axi_rdata[27]} {s_axi_rdata[26]} {s_axi_rdata[25]} {s_axi_rdata[24]} {s_axi_rdata[23]} {s_axi_rdata[22]} {s_axi_rdata[21]} {s_axi_rdata[20]} {s_axi_rdata[19]} {s_axi_rdata[18]} {s_axi_rdata[17]} {s_axi_rdata[16]} {s_axi_rdata[15]} {s_axi_rdata[14]} {s_axi_rdata[13]} {s_axi_rdata[12]} {s_axi_rdata[11]} {s_axi_rdata[10]} {s_axi_rdata[9]} {s_axi_rdata[8]} {s_axi_rdata[7]} {s_axi_rdata[6]} {s_axi_rdata[5]} {s_axi_rdata[4]} {s_axi_rdata[3]} {s_axi_rdata[2]} {s_axi_rdata[1]} {s_axi_rdata[0]} {s_axi_rresp[1]} {s_axi_rresp[0]} s_axi_rlast s_axi_rvalid s_axi_rready} -side BOTTOM -layer M7 -spreadType range -start {10.16 2.16} -end {1095.04 2.16} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
 Selected [42] pin for spreading. Could not spread (14 out of 42) pins, either because space provided for spreading pins are less than required or because of constraints on the selected pins or because of some blockage (pin blockage, routing blockage, power stripes etc.) on the selected region.
 
@@ -2156,56 +2360,56 @@ Ideal location for pin s_axi_rdata[12] is (1103.47, 0.00). It is placed at Locat
 Ideal location for pin s_axi_rdata[11] is (1102.90, 0.00). It is placed at Location (1096.27, 0.00), which  is deviated more than its ideal spacing 0.44
 Ideal location for pin s_axi_rdata[10] is (1102.32, 0.00). It is placed at Location (1095.70, 0.00), which  is deviated more than its ideal spacing 0.44
 Ideal location for pin s_axi_rdata[9] is (1101.74, 0.00). It is placed at Location (1095.12, 0.00), which  is deviated more than its ideal spacing 0.44
-editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 5336.2M).
+editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 5339.3M).
 <CMD> setPinAssignMode -pinEditInBatch false
 <CMD> saveDesign ./saved/axi_ram_floorplan_power_pins.enc
-#% Begin save design ... (date=08/06 20:58:03, mem=3104.1M)
+#% Begin save design ... (date=08/06 21:19:13, mem=3063.7M)
 INFO: Current data have to be saved into a temporary db: 'axi_ram_floorplan_power_pins.enc.dat.tmp' first. It will be renamed to the correct name 'axi_ram_floorplan_power_pins.enc.dat' after the old db was deleted.
-% Begin Save ccopt configuration ... (date=08/06 20:58:03, mem=3104.1M)
+% Begin Save ccopt configuration ... (date=08/06 21:19:13, mem=3063.7M)
 **WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
 Type 'man IMPTS-16' for more detail.
-% End Save ccopt configuration ... (date=08/06 20:58:03, total cpu=0:00:00.1, real=0:00:00.0, peak res=3104.4M, current mem=3104.4M)
-% Begin Save netlist data ... (date=08/06 20:58:03, mem=3104.4M)
+% End Save ccopt configuration ... (date=08/06 21:19:13, total cpu=0:00:00.1, real=0:00:00.0, peak res=3063.7M, current mem=3063.7M)
+% Begin Save netlist data ... (date=08/06 21:19:13, mem=3063.7M)
 Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_floorplan_power_pins.enc.dat.tmp/vbin/axi_ram.v.bin in multi-threaded mode...
-% End Save netlist data ... (date=08/06 20:58:03, total cpu=0:00:00.1, real=0:00:01.0, peak res=3107.5M, current mem=3107.5M)
+% End Save netlist data ... (date=08/06 21:19:13, total cpu=0:00:00.1, real=0:00:00.0, peak res=3063.7M, current mem=3063.7M)
 Saving symbol-table file in separate thread ...
 Saving congestion map file in separate thread ...
 Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_floorplan_power_pins.enc.dat.tmp/axi_ram.route.congmap.gz ...
-% Begin Save AAE data ... (date=08/06 20:58:04, mem=3108.0M)
+% Begin Save AAE data ... (date=08/06 21:19:13, mem=3064.0M)
 Saving AAE Data ...
-% End Save AAE data ... (date=08/06 20:58:04, total cpu=0:00:00.1, real=0:00:00.0, peak res=3108.0M, current mem=3107.3M)
+% End Save AAE data ... (date=08/06 21:19:13, total cpu=0:00:00.1, real=0:00:00.0, peak res=3064.0M, current mem=3063.3M)
 Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_floorplan_power_pins.enc.dat.tmp/gui.pref.tcl ...
 Saving mode setting ...
 **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
 Saving global file ...
 *info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_floorplan_power_pins.enc.dat.tmp/axi_ram.bbox.lef
 Saving Drc markers ...
-... 16 markers are saved ...
-... 16 geometry drc markers are saved ...
+... 21 markers are saved ...
+... 19 geometry drc markers are saved ...
 ... 0 antenna drc markers are saved ...
 Saving special route data file in separate thread ...
 Saving PG file in separate thread ...
 Saving placement file in separate thread ...
 Saving route file in separate thread ...
 Saving property file in separate thread ...
-Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_floorplan_power_pins.enc.dat.tmp/axi_ram.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Thu Aug  6 20:58:04 2026)
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_floorplan_power_pins.enc.dat.tmp/axi_ram.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Thu Aug  6 21:19:13 2026)
 ** Saving stdCellPlacement_binary (version# 2) ...
 Save Adaptive View Pruning View Names to Binary file
-TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
+*** Completed savePGFile (cpu=0:00:00.0 real=0:00:00.0 mem=5363.3M) ***
 Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_floorplan_power_pins.enc.dat.tmp/axi_ram.prop
-*** Completed savePGFile (cpu=0:00:00.0 real=0:00:00.0 mem=5456.2M) ***
+TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::savePGFile REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
-*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=5456.2M) ***
-*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=5456.2M) ***
+*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=5363.3M) ***
+*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=5363.3M) ***
 TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
 Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_floorplan_power_pins.enc.dat.tmp/axi_ram.techData.gz' ...
 Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_floorplan_power_pins.enc.dat.tmp/extraction/' ...
 TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
-% Begin Save power constraints data ... (date=08/06 20:58:04, mem=3108.9M)
-% End Save power constraints data ... (date=08/06 20:58:04, total cpu=0:00:00.1, real=0:00:00.0, peak res=3108.9M, current mem=3108.9M)
+% Begin Save power constraints data ... (date=08/06 21:19:13, mem=3065.3M)
+% End Save power constraints data ... (date=08/06 21:19:13, total cpu=0:00:00.1, real=0:00:01.0, peak res=3065.3M, current mem=3065.3M)
 rccorner
 rccorner
 rccorner
@@ -2214,7 +2418,7 @@ libset
 rccorner
 mode_normal
 ./outputs/axi_ram_syn.sdc
-#% End save design ... (date=08/06 20:58:05, total cpu=0:00:01.2, real=0:00:02.0, peak res=3109.2M, current mem=3109.2M)
+#% End save design ... (date=08/06 21:19:14, total cpu=0:00:01.2, real=0:00:01.0, peak res=3065.6M, current mem=3065.6M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -2222,72 +2426,154 @@ WARNING   IMPTS-16            16  Inconsistency detected in the time units...
 WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
 *** Message Summary: 17 warning(s), 0 error(s)
 
-<CMD> zoomBox -264.48700 -167.00425 916.54875 890.27475
-<CMD> zoomBox -59.70425 -38.96200 793.59425 724.92225
-<CMD> zoomBox -286.95825 -181.84375 894.07775 875.43550
-<CMD> zoomBox -1029.84875 -661.71475 1232.64550 1363.70050
-<CMD> zoomBox -553.89075 -375.81525 1080.76125 1087.54725
 <CMD> fit
-<CMD> zoomBox -374.88825 93.32850 1319.36325 1001.07150
-<CMD> zoomBox -268.70400 325.04150 955.39300 980.88600
-<CMD> zoomBox -163.71450 552.13200 588.03450 954.90275
-<CMD> zoomBox -116.78675 652.79850 426.35225 943.80050
-<CMD> zoomBox -69.64000 753.55975 263.91550 932.27150
-<CMD> zoomBox -48.85925 798.01900 192.13450 927.13825
-<CMD> zoomBox -33.78575 830.08075 140.33275 923.36975
-<CMD> zoomBox -28.54150 842.07650 119.45950 921.37225
-<CMD> zoomBox -24.03425 852.28300 101.76700 919.68450
-<CMD> pan -1.12525 898.99075
-<CMD> pan 0.50650 934.37925
-<CMD> pan -0.67525 937.02325
-<CMD> zoomBox -43.22050 899.29675 130.89875 992.58600
-<CMD> zoomBox -84.07625 869.79250 199.44825 1021.69875
-<CMD> zoomBox -126.59325 846.36700 265.82850 1056.61800
+<CMD> zoomBox -233.50550 106.06450 1206.60850 877.64625
+<CMD> zoomBox -170.59425 261.02000 869.88850 818.48800
+<CMD> zoomBox -79.47550 485.45300 382.19275 732.80475
+<CMD> zoomBox -68.57375 512.30450 323.84425 722.55350
+<CMD> zoomBox -33.67675 588.13925 171.16825 697.89075
+<CMD> zoomBox -15.46075 627.72525 91.47025 685.01650
+<CMD> zoomBox -10.28575 639.65550 66.97250 681.04875
+<CMD> zoomBox -6.00600 651.34825 41.44050 676.76900
+<CMD> zoomBox -2.75000 660.24325 22.01725 673.51300
+<CMD> pan -0.13300 667.76750
+<CMD> pan -0.15500 671.40075
+<CMD> pan 0.07750 676.73950
+<CMD> pan -0.07750 681.82375
+<CMD> pan -0.26575 687.05175
+<CMD> pan -0.22150 692.16900
+<CMD> pan -0.18825 698.20575
+<CMD> pan -0.21050 701.41800
+<CMD> zoomBox -2.01375 701.48700 13.19675 709.63650
+<CMD> zoomBox -5.82650 693.93850 28.45475 712.30575
+<CMD> zoomBox -10.13300 685.38400 45.68875 715.29200
+<CMD> pan 0.39950 704.22975
+<CMD> pan -1.07350 712.11850
+<CMD> pan 0.22475 719.48325
+<CMD> pan 0.37450 727.39700
+<CMD> pan -1.19825 734.81175
+<CMD> zoomBox -9.42125 728.34875 38.02725 753.77050
+<CMD> zoomBox -19.71975 708.91750 71.17675 757.61775
+<CMD> zoomBox -33.25725 683.37475 114.75250 762.67525
+<CMD> pan 2.51525 747.54500
+<CMD> pan -3.04500 772.30150
+<CMD> pan 1.19150 811.42225
+<CMD> pan 1.12525 841.93775
+<CMD> pan -1.19150 874.43900
+<CMD> zoomBox -19.84000 869.32825 71.05725 918.02900
+<CMD> zoomBox -10.08575 889.38100 37.36350 914.80325
+<CMD> zoomBox -5.87700 897.83150 23.26300 913.44400
+<CMD> zoomBox -3.99675 901.55975 17.05725 912.84000
+<CMD> zoomBox -3.26250 903.01600 14.63350 912.60425
+<CMD> selectMarker 0.3360 0.3360 1104.8640 970.5120 -1 3 7
+<CMD> deselectAll
+<CMD> selectPhyPin 1.2960 2.1600 1.7760 968.6880 9 VDD
+<CMD> deselectAll
+<CMD> selectPhyPin 0.3360 2.1600 0.8160 968.6880 9 VSS
+<CMD> deselectAll
+<CMD> selectPhyPin 1.2960 2.1600 1.7760 968.6880 9 VDD
+<CMD> zoomBox -3.26250 901.09850 14.63350 910.68675
+<CMD> zoomBox -1.98775 903.27725 10.94225 910.20475
+<CMD> zoomBox -0.39875 905.72600 6.35100 909.34225
+<CMD> zoomBox 0.56675 907.21375 3.56200 908.81850
+<CMD> zoomBox -0.39900 905.72575 6.35150 909.34250
+<CMD> zoomBox -2.57550 902.37225 12.63850 910.52350
+<CMD> zoomBox -4.07825 900.05675 16.97950 911.33900
+<CMD> zoomBox -7.48075 894.81400 26.80825 913.18525
+<CMD> pan -0.49075 910.56025
 <CMD> fit
-<CMD> zoomBox -5.18150 -38.89500 1434.93275 732.68675
-<CMD> zoomBox 306.15950 -27.09900 1346.64200 530.36875
-<CMD> zoomBox 690.73325 -11.97425 1233.87225 279.02775
-<CMD> zoomBox 924.36875 -2.78600 1165.36275 126.33325
-<CMD> zoomBox 1028.03400 1.29075 1134.96500 58.58200
-<CMD> zoomBox 1014.25275 0.32875 1140.05400 67.73025
-<CMD> pan -2.25050 -1031.92775
-<CMD> zoomBox 975.27225 -33.68925 1180.11875 76.06300
-<CMD> zoomBox 888.11150 -71.69125 1280.53350 138.56000
-<CMD> zoomBox 818.07500 -102.22700 1361.22000 188.77825
-<CMD> zoomBox 590.30775 -192.97825 1630.80425 364.49700
-<CMD> pan -433.69550 -750.71225
-<CMD> pan -611.91975 -375.18400
-<CMD> zoomBox -282.02975 -133.63875 356.96525 208.72075
-<CMD> zoomBox -167.67625 -80.92800 224.74700 129.32375
-<CMD> zoomBox -80.68350 -40.82925 124.16425 68.92375
-<CMD> zoomBox -44.02450 -23.93125 81.77800 43.47100
-<CMD> zoomBox -27.83425 -16.46825 63.05825 32.23000
-<CMD> zoomBox -16.13675 -11.07625 49.53325 24.10825
-<CMD> pan -3.08375 17.66000
-<CMD> zoomBox -19.22050 -1.99525 46.44950 33.18925
-<CMD> zoomBox -32.23075 -16.11250 74.70250 41.18000
-<CMD> zoomBox -74.50200 -61.98100 166.49925 67.14225
-<CMD> pan -3.44900 61.56200
-<CMD> pan -3.23350 93.89650
-<CMD> pan -2.37125 145.95550
-<CMD> pan -2.80225 197.69100
-<CMD> gui_select -rect {1.91575 221.70200 2.23900 185.70275}
-<CMD> pan -0.86225 253.63000
-<CMD> pan -3.88025 308.49100
-<CMD> pan 3.44900 365.72350
-<CMD> pan -2.15575 412.60875
-<CMD> pan -1.50900 463.05100
-<CMD> pan 7.65250 505.19400
-<CMD> pan 2.47900 541.84000
-<CMD> pan -4.63475 606.61700
-<CMD> pan -1.40125 669.45425
-<CMD> pan 0.97000 728.84250
-<CMD> zoomBox -61.72475 667.73275 112.39850 761.02425
-<CMD> zoomBox -44.52375 686.51150 81.28075 753.91475
-<CMD> zoomBox -23.52025 707.97225 42.15075 743.15725
-<CMD> zoomBox -14.20450 716.55125 26.12575 738.15925
+<CMD> zoomBox -269.96500 319.51650 954.13225 975.36100
+<CMD> zoomBox -198.86775 476.59875 685.54275 950.44650
+<CMD> zoomBox -124.69150 637.31400 418.44700 928.31575
+<CMD> zoomBox -106.98375 675.68100 354.68400 923.03250
+<CMD> zoomBox -78.79450 735.89850 254.76050 914.61000
+<CMD> zoomBox -67.78550 759.41600 215.73625 911.32075
+<CMD> zoomBox -57.76200 780.62300 183.23150 909.74200
+<CMD> zoomBox -30.50650 838.10050 95.29425 905.50175
+<CMD> zoomBox -22.20050 855.52400 68.69050 904.22150
+<CMD> zoomBox -15.92925 867.95450 49.74000 903.13875
+<CMD> pan -1.58575 902.23975
+<CMD> pan -1.14525 919.18550
+<CMD> pan -0.20550 935.48525
+<CMD> pan 0.20550 948.46625
+<CMD> pan 0.70475 963.47400
+<CMD> zoomBox -12.88650 950.81975 34.55975 976.24050
+<CMD> zoomBox -10.66850 953.34375 29.66125 974.95150
+<CMD> zoomBox -8.78275 955.48925 25.49750 973.85575
+<CMD> zoomBox -17.39175 952.58625 30.05500 978.00725
+<CMD> zoomBox -45.79925 943.00700 45.09425 991.70575
+<CMD> pan 10.85350 985.35100
+<CMD> zoomBox -57.28775 930.23075 68.51625 997.63375
+<CMD> zoomBox -158.23025 888.11825 125.30075 1040.02800
+<CMD> zoomBox -324.38600 818.79950 218.77075 1109.81100
+<CMD> zoomBox -568.29075 750.57325 316.14950 1224.43700
+<CMD> pan 204.10175 1203.76025
+<CMD> pan 170.08475 918.17625
+<CMD> pan 223.48350 721.19450
+<CMD> pan 208.84825 472.00050
+<CMD> zoomBox -9.40600 412.35325 1214.73275 1068.22000
+<CMD> pan -8.21200 142.55050
+<CMD> zoomBox 125.61250 259.89675 877.38675 662.68100
+<CMD> zoomBox 188.96275 316.06275 732.12000 607.07450
+<CMD> zoomBox 214.94250 339.49175 676.62625 586.85175
+<CMD> zoomBox 274.53850 392.39550 558.07050 544.30575
+<CMD> zoomBox 319.87550 432.64100 467.88125 511.93925
+<CMD> zoomBox 327.60000 439.36275 453.40500 506.76625
+<CMD> zoomBox 320.68950 431.51875 468.69550 510.81725
+<CMD> pan -57.98450 111.82250
+<CMD> panCenter 262.70475 511.81025
+<CMD> pan -77.04800 290.07850
+<CMD> pan -22.57175 367.72225
+<CMD> zoomBox 91.73300 487.33900 217.53825 554.74275
+<CMD> pan -42.53525 395.71850
+<CMD> gui_select -rect {68.38375 534.20650 114.18225 532.80000}
+<CMD> deselectAll
+<CMD> pan -56.93875 437.57850
+<CMD> pan -31.67625 494.68600
+<CMD> zoomBox -28.44150 499.57600 62.45300 548.27525
+<CMD> zoomBox -16.52025 512.17175 39.30050 542.07925
+<CMD> zoomBox -7.45125 521.75350 21.68750 537.36550
+<CMD> zoomBox -3.88650 525.71575 14.00875 535.30375
+<CMD> pan -1.40850 529.65050
+<CMD> zoomBox -3.67850 527.28275 9.25125 534.21025
+<CMD> zoomBox -1.66675 529.17325 5.08325 532.78975
+<CMD> zoomBox -1.05700 529.74625 3.82000 532.35925
+<CMD> pan 0.01100 531.21100
+<CMD> zoomBox -1.46200 529.90725 4.27600 532.98150
+<CMD> zoomBox -4.00025 528.40075 6.99275 534.29050
+<CMD> zoomBox -5.93400 526.93150 9.28125 535.08350
+<CMD> pan -0.53075 536.74400
+<CMD> pan -0.02050 540.34350
+<CMD> pan -0.34700 543.99075
+<CMD> zoomBox -6.83225 536.69025 8.38300 544.84225
+<CMD> pan -0.38100 545.06725
+<CMD> pan -0.21100 548.10200
+<CMD> pan -0.06125 551.04850
+<CMD> pan -0.11575 554.32150
+<CMD> pan -0.04100 556.66925
+<CMD> zoomBox -12.73475 545.54900 12.04100 558.82325
+<CMD> zoomBox -21.02675 539.81925 19.31650 561.43425
+<CMD> zoomBox -40.70400 526.22175 36.58150 567.62975
+<CMD> pan 1.90100 581.51200
+<CMD> pan -1.27875 588.80525
+<CMD> pan -1.14075 612.17050
+<CMD> pan 2.59225 624.89050
+<CMD> pan 4.32050 640.40975
+<CMD> zoomBox -56.87500 582.42825 68.97225 649.85450
+<CMD> zoomBox -79.09750 561.50300 95.08575 654.82650
+<CMD> zoomBox -129.95350 512.21325 153.67550 664.17550
+<CMD> zoomBox -250.63575 395.24825 292.70950 686.36075
+<CMD> zoomBox -481.82450 171.17950 559.05475 728.86000
+<CMD> pan -17.68925 784.27800
+<CMD> zoomBox -307.67075 457.83200 331.55925 800.31750
+<CMD> zoomBox -189.52425 553.36425 203.04300 763.69325
+<CMD> zoomBox -98.72350 626.37425 106.19950 736.16750
+<CMD> zoomBox -59.85825 657.63625 65.99025 725.06325
+<CMD> zoomBox -25.44925 685.31400 30.39100 715.23200
+<CMD> zoomBox -8.35500 699.06425 12.70550 710.34800
+<CMD> pan -0.32025 709.39725
 
-*** Memory Usage v#2 (Current mem = 5432.223M, initial mem = 839.699M) ***
-*** Message Summary: 650 warning(s), 0 error(s)
+*** Memory Usage v#2 (Current mem = 5403.332M, initial mem = 847.699M) ***
+*** Message Summary: 661 warning(s), 0 error(s)
 
---- Ending "Innovus" (totcpu=0:01:54, real=0:04:04, mem=5432.2M) ---
+--- Ending "Innovus" (totcpu=0:02:07, real=0:04:56, mem=5403.3M) ---
