@@ -8,18 +8,13 @@ catch { setOptMode -opt_post_route_art_flow false }
 catch { setPathGroupOptions tdgp_reg2reg_default -effortLevel high }
 catch { setPathGroupOptions tdgp_reg2reg_default -late -slackAdjustment -0 }
 catch { setExtractRCMode  -engine preRoute -total_c_th 0 -relative_c_th 1 -coupling_c_th 0.1 }
-catch {setNanoRouteMode -quiet -route_detail_use_min_spacing_for_blockage auto}
 catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
-catch {setNanoRouteMode -quiet -route_strict_honor_route_rule "false"}
 
 catch { setPlaceMode -exp_slack_driven true }
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setPlaceMode -place_opt_run_global_place seed }
 catch { setPlaceMode -tdgp_basic_pg true }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
-catch { setSrouteMode -blockPinRouteWithPinWidth true }
-catch { setSrouteMode -extendNearestTarget true }
-catch { setSrouteMode -viaConnectToShape blockring }
 catch { setDelayCalMode -enable_hier_save_restore_flow false }
 catch { setDelayCalMode -engine aae }
 catch { setDelayCalMode -ignoreNetLoad false }
@@ -29,10 +24,6 @@ catch { setImportMode -discardFloatingVNets false }
 catch { setImportMode -keepEmptyModule true }
 catch { setAddStripeMode -allow_jog none }
 catch { setAddStripeMode -break_at block_ring }
-catch { setAddStripeMode -extend_to_closest_target ring }
-catch { setAddStripeMode -max_extension_distance 1.632 }
-catch { setAddStripeMode -stacked_via_bottom_layer M4 }
-catch { setAddStripeMode -stacked_via_top_layer M5 }
 catch { setRouteMode -earlyGlobalBlockTracks { { M4 0.024591 }  { M5 0.025831 } } }
 catch { setRouteMode -earlyGlobalCapacityScreen { { srambank_256x4x32_6t122 M4 1.024600 }  { srambank_256x4x32_6t122 M5 1.025800 } } }
 catch { setFPlanMode -cellsForExtraSites {} }
