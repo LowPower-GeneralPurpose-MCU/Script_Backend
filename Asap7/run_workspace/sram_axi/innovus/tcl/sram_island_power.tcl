@@ -6,8 +6,8 @@
 ##   2. Create a shared-cluster block ring.
 ##   3. Connect SRAM block pins to the nearest block ring.
 ##   4. Add no-jog M4/M5 stripes in the actual SRAM gaps.  The -area
-##      boxes span the die in the stripe direction; do not also use
-##      -extend_to design_boundary because Innovus rejects that pairing.
+##      boxes stay local to the SRAM island and overlap only the adjacent
+##      M8/M9 core ring, so they do not become a full-die PG mesh.
 ##   5. Trim redundant PG stubs.
 ##
 ## ASAP7 layer mapping:
@@ -25,12 +25,17 @@ foreach required_variable {
     SRAM_H
     SRAM_MACRO_GAP_X
     SRAM_MACRO_GAP_Y
+    SRAM_ISLAND_CUT_URX
+    SRAM_ISLAND_CUT_URY
     SRAM_PG_MODEL_RING_W
     SRAM_PG_MODEL_RING_S
     SRAM_PG_MODEL_STRIPE_W
     SRAM_PG_MODEL_STRIPE_S
     SRAM_PG_MODEL_STRIPE_PITCH
     ASAP7_ROW_HEIGHT
+    core_llx
+    core_lly
+    ring_m89_span
 } {
     if {![info exists $required_variable]} {
         error "Missing $required_variable before SRAM island power planning"
@@ -95,11 +100,14 @@ if {$SRAM_MACRO_GAP_X <= $sram_pair_total} {
     error "SRAM_MACRO_GAP_X=$SRAM_MACRO_GAP_X is too small for one M5 VSS/VDD pair"
 }
 
-set sram_die_box [join [dbGet top.fPlan.box]]
-if {[llength $sram_die_box] != 4} {
-    error "Cannot decode die box for SRAM island PG: [dbGet top.fPlan.box]"
+set sram_pg_left [expr {$core_llx - $ring_m89_span}]
+set sram_pg_bottom [expr {$core_lly - $ring_m89_span}]
+set sram_pg_right $SRAM_ISLAND_CUT_URX
+set sram_pg_top $SRAM_ISLAND_CUT_URY
+
+if {$sram_pg_left <= 0.0 || $sram_pg_bottom <= 0.0} {
+    error "SRAM island PG bridge would touch the die boundary; increase die-to-core margin or reduce M8/M9 ring span"
 }
-lassign $sram_die_box die_llx die_lly die_urx die_ury
 
 setAddStripeMode \
     -allow_jog none \
@@ -115,7 +123,7 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
     set gap_ury [expr {$gap_lly + $SRAM_MACRO_GAP_Y}]
     set stripe_offset [pg_track_aligned_pair_offset \
         $gap_lly $gap_ury M4 $sram_stripe_w $sram_stripe_s]
-    set stripe_area [list $die_llx $gap_lly $die_urx $gap_ury]
+    set stripe_area [list $sram_pg_left $gap_lly $sram_pg_right $gap_ury]
 
     addStripe \
         -nets {VSS VDD} \
@@ -126,6 +134,7 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
         -start_from bottom \
         -start_offset $stripe_offset \
         -number_of_sets 1 \
+        -create_pins 0 \
         -area $stripe_area \
         -snap_wire_center_to_grid Grid \
         -allow_snapping_override_custom_spacing 1
@@ -145,7 +154,7 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
     set gap_urx [expr {$gap_llx + $SRAM_MACRO_GAP_X}]
     set stripe_offset [pg_track_aligned_pair_offset \
         $gap_llx $gap_urx M5 $sram_stripe_w $sram_stripe_s]
-    set stripe_area [list $gap_llx $die_lly $gap_urx $die_ury]
+    set stripe_area [list $gap_llx $sram_pg_bottom $gap_urx $sram_pg_top]
 
     addStripe \
         -nets {VSS VDD} \
@@ -156,6 +165,7 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
         -start_from left \
         -start_offset $stripe_offset \
         -number_of_sets 1 \
+        -create_pins 0 \
         -area $stripe_area \
         -snap_wire_center_to_grid Grid \
         -allow_snapping_override_custom_spacing 1
@@ -169,5 +179,5 @@ puts "===================================================="
 puts "REFERENCE-STYLE SRAM ISLAND PG CREATED"
 puts " - Ring    : shared_cluster block ring, M4 horizontal / M5 vertical"
 puts " - BlockPin: nearest blockring target"
-puts " - Stripes : one M4/M5 pair in every SRAM gap, no jog, break_at block_ring"
+puts " - Stripes : one M4/M5 pair in every SRAM gap, local bridge to M8/M9 ring"
 puts "===================================================="

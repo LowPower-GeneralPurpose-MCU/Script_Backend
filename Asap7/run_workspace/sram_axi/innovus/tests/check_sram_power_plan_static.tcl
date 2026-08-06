@@ -26,6 +26,130 @@ proc assert_contains {text pattern message} {
     }
 }
 
+proc assert_close {actual expected message} {
+    set eps 0.000001
+    if {abs($actual - $expected) > $eps} {
+        fail "$message: expected $expected, got $actual"
+    }
+}
+
+proc dbGet {args} {
+    if {[llength $args] == 3 &&
+        [lindex $args 0] eq "-p2" &&
+        [lindex $args 1] eq "top.insts.cell.name"} {
+        set ptrs {}
+        for {set i 0} {$i < 16} {incr i} {
+            lappend ptrs "sram_ptr_$i"
+        }
+        return $ptrs
+    }
+
+    if {[llength $args] == 1 &&
+        [regexp {^sram_ptr_([0-9]+)\.name$} [lindex $args 0] -> index]} {
+        return [format {u_mem/G_SRAM_BANK[%d].u_sram} $index]
+    }
+
+    if {[llength $args] == 1 && [lindex $args 0] eq "top.fPlan.box"} {
+        return {0.0 0.0 1105.2 970.848}
+    }
+
+    fail "Unexpected dbGet call while simulating SRAM island PG: $args"
+}
+
+proc deselectAll {} {}
+proc selectInst {name} {}
+proc addRing {args} {}
+proc setSrouteMode {args} {}
+proc sroute {args} {}
+proc setAddStripeMode {args} {}
+proc editTrim {args} {}
+proc clearDrc {} {}
+
+proc pg_track_aligned_pair_offset {area_start area_stop layer width spacing} {
+    return 0.096000
+}
+
+proc addStripe {args} {
+    global SRAM_STRIPE_CAPTURE
+
+    array set opts {}
+    for {set i 0} {$i < [llength $args]} {incr i} {
+        set option [lindex $args $i]
+        if {![string match "-*" $option]} {
+            continue
+        }
+        if {$i + 1 >= [llength $args]} {
+            fail "Missing value for addStripe option $option"
+        }
+        incr i
+        set opts($option) [lindex $args $i]
+    }
+
+    foreach option {-layer -direction -area} {
+        if {![info exists opts($option)]} {
+            fail "SRAM addStripe is missing $option"
+        }
+    }
+
+    set create_pins ""
+    if {[info exists opts(-create_pins)]} {
+        set create_pins $opts(-create_pins)
+    }
+
+    lappend SRAM_STRIPE_CAPTURE \
+        [list $opts(-layer) $opts(-direction) $opts(-area) $create_pins]
+}
+
+proc simulate_sram_island_power {script_path} {
+    global SRAM_STRIPE_CAPTURE
+    global SRAM_MASTER SRAM_COUNT SRAM_ROWS SRAM_COLS
+    global SRAM_X0 SRAM_Y0 SRAM_W SRAM_H
+    global SRAM_MACRO_GAP_X SRAM_MACRO_GAP_Y
+    global SRAM_ISLAND_LLX SRAM_ISLAND_LLY SRAM_ISLAND_URX SRAM_ISLAND_URY
+    global SRAM_ISLAND_CUT_LLX SRAM_ISLAND_CUT_LLY
+    global SRAM_ISLAND_CUT_URX SRAM_ISLAND_CUT_URY
+    global SRAM_PG_MODEL_RING_W SRAM_PG_MODEL_RING_S
+    global SRAM_PG_MODEL_STRIPE_W SRAM_PG_MODEL_STRIPE_S
+    global SRAM_PG_MODEL_STRIPE_PITCH ASAP7_ROW_HEIGHT
+    global core_llx core_lly ring_m89_span
+
+    set SRAM_STRIPE_CAPTURE {}
+
+    set SRAM_MASTER srambank_256x4x32_6t122
+    set SRAM_COUNT 16
+    set SRAM_ROWS 4
+    set SRAM_COLS 4
+    set SRAM_X0 2.16
+    set SRAM_Y0 2.16
+    set SRAM_W 121.392
+    set SRAM_H 172.8
+    set SRAM_MACRO_GAP_X 4.32
+    set SRAM_MACRO_GAP_Y 4.32
+    set SRAM_ISLAND_LLX 2.16
+    set SRAM_ISLAND_LLY 2.16
+    set SRAM_ISLAND_URX 500.688
+    set SRAM_ISLAND_URY 706.32
+    set SRAM_ISLAND_CUT_LLX 2.16
+    set SRAM_ISLAND_CUT_LLY 2.16
+    set SRAM_ISLAND_CUT_URX 502.848
+    set SRAM_ISLAND_CUT_URY 708.48
+    set SRAM_PG_MODEL_RING_W 0.096
+    set SRAM_PG_MODEL_RING_S 0.288
+    set SRAM_PG_MODEL_STRIPE_W 0.096
+    set SRAM_PG_MODEL_STRIPE_S 0.288
+    set SRAM_PG_MODEL_STRIPE_PITCH 25.920
+    set ASAP7_ROW_HEIGHT 1.080
+    set core_llx 2.16
+    set core_lly 2.16
+    set ring_m89_span 1.824
+
+    if {[catch {source $script_path} message]} {
+        fail "Simulated SRAM island PG failed: $message"
+    }
+
+    return $SRAM_STRIPE_CAPTURE
+}
+
 proc warn_if_dirty_report {path} {
     if {![file exists $path]} {
         return
@@ -127,6 +251,15 @@ assert_contains \
     {deletePGPin[[:space:]]+-net[[:space:]]+\$net} \
     "Core PG pin creation must delete old VDD/VSS PG pin shapes before recreating them"
 
+assert_contains \
+    $power_text \
+    {set[[:space:]]+PG_CREATE_CORE_RING_PINS[[:space:]]+0} \
+    "Core ring PG pin shapes must be disabled by default until their geometry is derived from actual snapped ring shapes"
+assert_contains \
+    $power_text \
+    {if[[:space:]]+\{\$PG_CREATE_CORE_RING_PINS\}} \
+    "Manual core ring PG pin creation must be explicitly gated"
+
 if {[regexp -- {createPGPin[[:space:]]+VDD|createPGPin[[:space:]]+VSS} $power_text]} {
     fail "Core PG pins must not be hard-coded as one lower-left VDD/VSS shape"
 }
@@ -168,6 +301,12 @@ assert_contains \
     $power_text \
     {pg_assert_clean_drc_report[[:space:]]+\$pg_drc_report} \
     "power_plan.tcl must stop before saveDesign when PG DRC is dirty"
+if {[string first {Special[[:space:]]+(Wire|Via)} $power_text] < 0} {
+    fail "PG DRC guard must fail on special-route wire/via DRCs, while allowing fake SRAM macro-pin DRCs to be reviewed later"
+}
+if {[regexp {\$count[[:space:]]*>[[:space:]]*0} $power_text]} {
+    fail "PG DRC guard must not fail on total DRC count alone because fake SRAM macro-pin DRCs are expected in this flow"
+}
 assert_contains \
     $power_text \
     {editTrim[[:space:]]+-nets[[:space:]]+\{VDD[[:space:]]+VSS\}} \
@@ -216,6 +355,48 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {SRAM_MACRO_GAP_X} \
     "SRAM island vertical PG must be derived from the actual SRAM macro column gaps"
+
+set simulated_sram_stripes \
+    [simulate_sram_island_power [file join $tcl_dir sram_island_power.tcl]]
+if {[llength $simulated_sram_stripes] != 6} {
+    fail "SRAM island power must generate exactly 3 M4 row-gap and 3 M5 column-gap stripe pairs"
+}
+
+foreach stripe $simulated_sram_stripes {
+    lassign $stripe layer direction area create_pins
+    if {$create_pins ne "0"} {
+        fail "SRAM island addStripe must use -create_pins 0 so local gap stripes do not become boundary IO pins"
+    }
+
+    if {[llength $area] != 4} {
+        fail "SRAM island addStripe area must be a four-coordinate box"
+    }
+    lassign $area llx lly urx ury
+
+    if {$llx <= 0.0 || $lly <= 0.0 || $urx >= 1105.2 || $ury >= 970.848} {
+        fail "SRAM island gap stripes must not span to the die boundary: $area"
+    }
+
+    switch -- $direction {
+        horizontal {
+            if {$layer ne "M4"} {
+                fail "Horizontal SRAM island stripes must be on M4, got $layer"
+            }
+            assert_close $llx 0.336 "M4 SRAM row-gap stripe must start at the adjacent M8/M9 core-ring overlap, not the die edge"
+            assert_close $urx 502.848 "M4 SRAM row-gap stripe must stop at the SRAM island cut boundary"
+        }
+        vertical {
+            if {$layer ne "M5"} {
+                fail "Vertical SRAM island stripes must be on M5, got $layer"
+            }
+            assert_close $lly 0.336 "M5 SRAM column-gap stripe must start at the adjacent M8/M9 core-ring overlap, not the die edge"
+            assert_close $ury 708.48 "M5 SRAM column-gap stripe must stop at the SRAM island cut boundary"
+        }
+        default {
+            fail "Unexpected SRAM island stripe direction: $direction"
+        }
+    }
+}
 
 assert_contains \
     $pnr_text \
