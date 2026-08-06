@@ -102,7 +102,7 @@ file delete -force $sram_edge_report
 puts "POWER PLAN ENTRY: [file normalize ./tcl/power_plan.tcl]"
 if {[catch {source ./tcl/power_plan.tcl} power_plan_error]} {
     puts stderr "Power plan failed before pin assignment: $power_plan_error"
-    return
+    return -code error $power_plan_error
 }
 puts "POWER PLAN EXIT: ./tcl/power_plan.tcl returned cleanly"
 
@@ -112,7 +112,7 @@ if {![file exists $sram_edge_report]} {
     if {![info exists SRAM_ISLAND_URX]} {
         if {[catch {source ./outputs/sram_macro_geometry.tcl} sram_geometry_error]} {
             puts stderr "Cannot reload SRAM macro geometry before direct SRAM island PG: $sram_geometry_error"
-            return
+            return -code error $sram_geometry_error
         }
     }
 
@@ -120,7 +120,7 @@ if {![file exists $sram_edge_report]} {
         set direct_power_die_box [join [dbGet top.fPlan.box]]
         if {[llength $direct_power_die_box] != 4} {
             puts stderr "Cannot decode die box before direct SRAM island PG: [dbGet top.fPlan.box]"
-            return
+            return -code error "Cannot decode die box before direct SRAM island PG"
         }
         lassign $direct_power_die_box \
             power_die_llx power_die_lly power_die_urx power_die_ury
@@ -135,7 +135,7 @@ if {![file exists $sram_edge_report]} {
 
     if {[catch {source ./tcl/sram_island_power.tcl} direct_sram_power_error]} {
         puts stderr "Direct SRAM island power failed before pin assignment: $direct_sram_power_error"
-        return
+        return -code error $direct_sram_power_error
     }
     puts "POWER PLAN DIRECT SRAM ISLAND RETURNED"
 }
@@ -204,7 +204,10 @@ verifyConnectivity \
     -noUnroutedNet \
     -report ./verify_rpt/pg_connectivity_after_trim.rpt
 
-pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt
+if {[catch {pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt} post_place_pg_error]} {
+    puts stderr $post_place_pg_error
+    return -code error $post_place_pg_error
+}
 
 saveDesign ./saved/axi_ram_placed.enc
 

@@ -454,6 +454,22 @@ assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {-stacked_via_top_layer[[:space:]]+M8} \
     "post-placement M5 taps must be allowed to via-stack to the M8 ring/upper mesh"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {LOGIC_RIGHT_EDGE_TAP_BOX} \
+    "core_lower_pg_nojog.tcl must create an explicit first M5 tap beside the SRAM island right edge"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {foreach[[:space:]]+area[[:space:]]+\[list[[:space:]]+\$LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\$LOGIC_RIGHT_FULL_BOX[[:space:]]+\$LOGIC_TOP_LEFT_BOX\]} \
+    "the edge M5 tap must be generated before the repeated right/top M5 tap mesh"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {if[[:space:]]+\{\$area[[:space:]]+eq[[:space:]]+\$LOGIC_RIGHT_EDGE_TAP_BOX\}} \
+    "the SRAM-adjacent M5 tap must use one fixed pair instead of the global repeated phase"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {-number_of_sets[[:space:]]+\$area_sets} \
+    "the SRAM-adjacent M5 tap must be constrained to exactly one VDD/VSS pair"
 
 assert_contains \
     $power_text \
@@ -747,6 +763,14 @@ foreach flow_pair [list \
         $flow_text \
         {pg_assert_clean_connectivity_report[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
         "$flow_name must stop after placement if VDD/VSS PG connectivity is still dirty"
+    assert_contains \
+        $flow_text \
+        {catch[[:space:]]+\{pg_assert_clean_connectivity_report[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt\}} \
+        "$flow_name must catch the post-placement PG guard and rethrow it before saveDesign"
+    assert_contains \
+        $flow_text \
+        {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$post_place_pg_error} \
+        "$flow_name must hard-stop on dirty post-placement PG instead of saving axi_ram_placed.enc"
 
     set power_catch_index [string first {catch {source ./tcl/power_plan.tcl}} $flow_text]
     set pin_source_index [string first {source ./tcl/pins.tcl} $flow_text $power_catch_index]
@@ -758,10 +782,13 @@ foreach flow_pair [list \
     set direct_sram_source_index [string first {source ./tcl/sram_island_power.tcl} $flow_text $power_catch_index]
     set upper_pg_index [string first {source ./tcl/global_upper_pg_to_ring.tcl} $flow_text]
     set lower_pg_index [string first {source ./tcl/core_lower_pg_nojog.tcl} $flow_text]
+    set post_place_guard_index [string first {catch {pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt}} $flow_text]
+    set placed_save_index [string first {saveDesign ./saved/axi_ram_placed.enc} $flow_text]
+    set power_error_return_index [string first {return -code error $power_plan_error} $flow_text $power_catch_index]
     if {$power_catch_index < 0 || $pin_source_index < 0 ||
-        $failure_return_index < $power_catch_index ||
-        $failure_return_index > $pin_source_index} {
-        fail "$flow_name must return immediately on a power-plan failure instead of continuing into pins.tcl"
+        $power_error_return_index < $power_catch_index ||
+        $power_error_return_index > $pin_source_index} {
+        fail "$flow_name must return a Tcl error immediately on a power-plan failure instead of continuing into pins.tcl"
     }
     if {$power_entry_index < 0 ||
         $power_entry_index > $power_catch_index ||
@@ -783,6 +810,11 @@ foreach flow_pair [list \
         $lower_pg_index < 0 ||
         $upper_pg_index > $lower_pg_index} {
         fail "$flow_name must create the upper M8/M9 PG mesh before lower M1/M5 tap generation"
+    }
+    if {$post_place_guard_index < 0 ||
+        $placed_save_index < 0 ||
+        $post_place_guard_index > $placed_save_index} {
+        fail "$flow_name must guard PG connectivity before saving axi_ram_placed.enc"
     }
 
     assert_contains \
