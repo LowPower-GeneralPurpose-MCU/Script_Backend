@@ -19,16 +19,17 @@ catch { setPlaceMode -tdgp_basic_pg true }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
 catch { setSrouteMode -blockPinRouteWithPinWidth true }
 catch { setSrouteMode -extendNearestTarget true }
-catch { setSrouteMode -viaConnectToShape {stripe blockring ring} }
+catch { setSrouteMode -viaConnectToShape blockring }
 catch { setDelayCalMode -enable_hier_save_restore_flow false }
 catch { setDelayCalMode -engine aae }
 catch { setDelayCalMode -ignoreNetLoad false }
-catch { setPinAssignMode -pinEditInBatch true }
+catch { setPinAssignMode -pinEditInBatch false }
 catch { setHierMode -optStage preCTS }
 catch { setImportMode -discardFloatingVNets false }
 catch { setImportMode -keepEmptyModule true }
 catch { setAddStripeMode -allow_jog none }
 catch { setAddStripeMode -break_at block_ring }
+catch { setAddStripeMode -extend_to_closest_target area_boundary }
 catch { setAddStripeMode -stacked_via_bottom_layer M8 }
 catch { setAddStripeMode -stacked_via_top_layer M9 }
 catch { setRouteMode -earlyGlobalBlockTracks { { M4 0.024591 }  { M5 0.025831 } } }
