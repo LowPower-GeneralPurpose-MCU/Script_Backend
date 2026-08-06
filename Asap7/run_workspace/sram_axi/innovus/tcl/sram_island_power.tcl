@@ -5,9 +5,9 @@
 ##   1. Select all SRAMs in one group.
 ##   2. Create a shared-cluster block ring.
 ##   3. Connect SRAM block pins to the nearest block ring.
-##   4. Add no-jog M4/M5 stripes in the actual SRAM gaps.  The stripe
-##      areas span the die in the stripe direction, so the gap stripes
-##      reach the design boundary while still passing between SRAMs.
+##   4. Add no-jog M4/M5 stripes in the actual SRAM gaps.  The -area
+##      boxes span the die in the stripe direction; do not also use
+##      -extend_to design_boundary because Innovus rejects that pairing.
 ##   5. Trim redundant PG stubs.
 ##
 ## ASAP7 layer mapping:
@@ -127,7 +127,6 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
         -start_offset $stripe_offset \
         -number_of_sets 1 \
         -area $stripe_area \
-        -extend_to design_boundary \
         -snap_wire_center_to_grid Grid \
         -allow_snapping_override_custom_spacing 1
 }
@@ -158,7 +157,6 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
         -start_offset $stripe_offset \
         -number_of_sets 1 \
         -area $stripe_area \
-        -extend_to design_boundary \
         -snap_wire_center_to_grid Grid \
         -allow_snapping_override_custom_spacing 1
 }

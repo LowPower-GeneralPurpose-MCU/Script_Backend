@@ -162,6 +162,10 @@ assert_contains \
     "power_plan.tcl must stop before saveDesign when PG connectivity is dirty"
 assert_contains \
     $power_text \
+    {unconnected[[:space:]]+terminal|Terminal\(s\)[[:space:]]+are[[:space:]]+not[[:space:]]+connected|IMPVFC-96} \
+    "PG connectivity guard must reject unconnected VDD/VSS terminals, not only special-route opens"
+assert_contains \
+    $power_text \
     {pg_assert_clean_drc_report[[:space:]]+\$pg_drc_report} \
     "power_plan.tcl must stop before saveDesign when PG DRC is dirty"
 assert_contains \
@@ -178,6 +182,13 @@ if {[regexp -- {-allowJogging|-allowLayerChange} $child_text(sram_island_power.t
     fail "SRAM blockPin sroute must not pass explicit allowJogging/allowLayerChange switches"
 }
 
+set sram_island_code_only ""
+foreach line [split $child_text(sram_island_power.tcl) "\n"] {
+    if {![regexp {^[[:space:]]*#} $line]} {
+        append sram_island_code_only $line "\n"
+    }
+}
+
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-around[[:space:]]+shared_cluster} \
@@ -186,10 +197,9 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {-break_at[[:space:]]+block_ring} \
     "SRAM island stripes must break at block rings like the reference flow"
-assert_contains \
-    $child_text(sram_island_power.tcl) \
-    {-extend_to[[:space:]]+design_boundary} \
-    "SRAM island stripes must extend to the design boundary like the reference flow"
+if {[string first "-extend_to design_boundary" $sram_island_code_only] >= 0} {
+    fail "Area-constrained SRAM island stripes must not also use -extend_to design_boundary; Innovus IMPPP-330 rejects that combination"
+}
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {for[[:space:]]+\{set[[:space:]]+r[[:space:]]+0\}[[:space:]]+\{\$r[[:space:]]+<[[:space:]]+\[expr[[:space:]]+\{\$SRAM_ROWS[[:space:]]+-[[:space:]]+1\}\]\}} \

@@ -247,7 +247,7 @@ proc pg_assert_clean_connectivity_report {report_path} {
     set text [read $fh]
     close $fh
 
-    if {[regexp -nocase {special routes with opens|dangling[[:space:]]+Wire|shorted} $text]} {
+    if {[regexp -nocase {unconnected[[:space:]]+terminal|Terminal\(s\)[[:space:]]+are[[:space:]]+not[[:space:]]+connected|IMPVFC-96|special routes with opens|dangling[[:space:]]+Wire|shorted} $text]} {
         error "PG connectivity is not clean: review $report_path"
     }
 }
@@ -329,7 +329,8 @@ set stripe_m5_s 0.288
 set stripe_m5_offset 8.640
 
 # Match the teacher's SRAM-island sequence: shared-cluster ring,
-# blockPin-to-blockring sroute, M4/M5 stripes to design boundary, trim.
+# blockPin-to-blockring sroute, M4/M5 gap stripes whose areas span
+# the die boundary, trim.
 source ./tcl/sram_island_power.tcl
 
 editTrim -nets {VDD VSS}
