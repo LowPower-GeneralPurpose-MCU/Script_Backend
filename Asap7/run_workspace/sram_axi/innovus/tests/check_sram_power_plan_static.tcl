@@ -190,6 +190,22 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {-extend_to[[:space:]]+design_boundary} \
     "SRAM island stripes must extend to the design boundary like the reference flow"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {for[[:space:]]+\{set[[:space:]]+r[[:space:]]+0\}[[:space:]]+\{\$r[[:space:]]+<[[:space:]]+\[expr[[:space:]]+\{\$SRAM_ROWS[[:space:]]+-[[:space:]]+1\}\]\}} \
+    "SRAM island power must place explicit horizontal M4 pairs in every SRAM row gap"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {for[[:space:]]+\{set[[:space:]]+c[[:space:]]+0\}[[:space:]]+\{\$c[[:space:]]+<[[:space:]]+\[expr[[:space:]]+\{\$SRAM_COLS[[:space:]]+-[[:space:]]+1\}\]\}} \
+    "SRAM island power must place explicit vertical M5 pairs in every SRAM column gap"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {SRAM_MACRO_GAP_Y} \
+    "SRAM island horizontal PG must be derived from the actual SRAM macro row gaps"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {SRAM_MACRO_GAP_X} \
+    "SRAM island vertical PG must be derived from the actual SRAM macro column gaps"
 
 assert_contains \
     $pnr_text \
