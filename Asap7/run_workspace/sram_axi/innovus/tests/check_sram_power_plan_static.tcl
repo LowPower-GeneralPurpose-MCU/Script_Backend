@@ -45,11 +45,7 @@ proc warn_if_dirty_report {path} {
 
 set power_plan [file join $tcl_dir power_plan.tcl]
 set power_children {
-    sram_gap_stripes.tcl
-    sram_macro_power.tcl
-    core_pg_outside_island.tcl
-    stitch_island_to_core.tcl
-    global_upper_pg_to_ring.tcl
+    sram_island_power.tcl
     core_lower_pg_nojog.tcl
 }
 
@@ -64,6 +60,23 @@ foreach child $power_children {
 
 set pnr_text [read_complete_file [file join $tcl_dir innovus_pnr.tcl]]
 set innovus_text [read_complete_file [file join $tcl_dir innovus.tcl]]
+
+foreach old_child {
+    sram_gap_stripes.tcl
+    sram_macro_power.tcl
+    stitch_island_to_core.tcl
+    core_pg_outside_island.tcl
+    global_upper_pg_to_ring.tcl
+} {
+    if {[string first "source ./tcl/$old_child" $power_text] >= 0} {
+        fail "power_plan.tcl must not source $old_child; final SRAM island PG must follow the reference ring/stripe pattern"
+    }
+}
+
+assert_contains \
+    $power_text \
+    {source[[:space:]]+\./tcl/sram_island_power\.tcl} \
+    "power_plan.tcl must source the reference-style SRAM island PG script"
 
 foreach proc_name {
     pg_layer_pitch
@@ -96,7 +109,7 @@ foreach margin_var {die_core_margin_left die_core_margin_bottom die_core_margin_
     }
 }
 
-set ring_snap_count [regexp -all -- {-snap_wire_center_to_grid[[:space:]]+Grid} $power_text]
+set ring_snap_count [regexp -all -- {-snap_wire_center_to_grid[[:space:]]+Grid} $all_power_text]
 if {$ring_snap_count < 2} {
     fail "Both core and SRAM addRing commands must snap wire centers to the routing grid"
 }
@@ -134,19 +147,14 @@ if {$area_boundary_count < $area_addstripe_count} {
     fail "Area-limited SRAM/core/global stripes must extend to area_boundary so Innovus does not silently skip edge stripes"
 }
 
-foreach child {sram_gap_stripes.tcl sram_macro_power.tcl stitch_island_to_core.tcl} {
-    assert_contains \
-        $child_text($child) \
-        {pg_track_aligned_pair_offset} \
-        "$child must derive local one-pair offsets from the ASAP7 routing track grid"
-}
-
-foreach child {core_pg_outside_island.tcl global_upper_pg_to_ring.tcl core_lower_pg_nojog.tcl} {
-    assert_contains \
-        $child_text($child) \
-        {pg_track_aligned_global_offset} \
-        "$child must derive repeated-mesh offsets from the ASAP7 routing track grid"
-}
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {pg_track_aligned_global_offset} \
+    "core_lower_pg_nojog.tcl must derive repeated-mesh offsets from the ASAP7 routing track grid"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {info[[:space:]]+exists[[:space:]]+LOGIC_RIGHT_FULL_BOX} \
+    "core_lower_pg_nojog.tcl must rebuild the logic boxes when floorplan PG no longer sources core_pg_outside_island.tcl"
 
 assert_contains \
     $power_text \
@@ -162,13 +170,26 @@ assert_contains \
     "power_plan.tcl must trim dangling VDD/VSS wires before final PG verification"
 
 assert_contains \
-    $child_text(sram_macro_power.tcl) \
+    $child_text(sram_island_power.tcl) \
     {-viaConnectToShape[[:space:]]+blockring} \
     "SRAM blockPin sroute must target the shared-cluster blockring, matching the reference SRAM island flow"
 
-if {[regexp -- {-allowJogging|-allowLayerChange} $child_text(sram_macro_power.tcl)]} {
+if {[regexp -- {-allowJogging|-allowLayerChange} $child_text(sram_island_power.tcl)]} {
     fail "SRAM blockPin sroute must not pass explicit allowJogging/allowLayerChange switches"
 }
+
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-around[[:space:]]+shared_cluster} \
+    "SRAM island ring must use the shared_cluster topology from the reference flow"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-break_at[[:space:]]+block_ring} \
+    "SRAM island stripes must break at block rings like the reference flow"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-extend_to[[:space:]]+design_boundary} \
+    "SRAM island stripes must extend to the design boundary like the reference flow"
 
 assert_contains \
     $pnr_text \

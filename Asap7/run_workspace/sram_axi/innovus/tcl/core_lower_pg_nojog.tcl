@@ -15,6 +15,28 @@ sroute \
     -allowJogging 0 \
     -allowLayerChange 0
 
+if {![info exists LOGIC_RIGHT_FULL_BOX] || ![info exists LOGIC_TOP_LEFT_BOX]} {
+    foreach required_var {
+        SRAM_ISLAND_CUT_URX
+        SRAM_ISLAND_CUT_URY
+        core_llx
+        core_lly
+        core_urx
+        core_ury
+    } {
+        if {![info exists $required_var]} {
+            error "Missing $required_var before lower core PG box rebuild"
+        }
+    }
+
+    set LOGIC_RIGHT_FULL_BOX [list \
+        $SRAM_ISLAND_CUT_URX $core_lly \
+        $core_urx             $core_ury]
+    set LOGIC_TOP_LEFT_BOX [list \
+        $core_llx              $SRAM_ISLAND_CUT_URY \
+        $SRAM_ISLAND_CUT_URX   $core_ury]
+}
+
 set global_m5_first_x [expr {$core_llx + $stripe_m5_offset}]
 setAddStripeMode \
     -allow_jog none \

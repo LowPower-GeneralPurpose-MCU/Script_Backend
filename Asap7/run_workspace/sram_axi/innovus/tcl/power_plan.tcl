@@ -2,9 +2,9 @@
 ## Hierarchical power planning for one 4x4 SRAM group
 ##
 ## Layer roles:
-##   M4/M5 : SRAM shared-cluster ring and local straps/feeders
-##   M6/M7 : SRAM-gap grid and regular core mesh
-##   M8/M9 : global backbone and core ring
+##   M4/M5 : SRAM shared-cluster ring and reference-style stripes
+##   M8/M9 : top-level core ring
+##   M1/M5 : post-placement standard-cell rails/taps
 ##
 ## Project restriction:
 ##   - addStripe is not allowed to jog
@@ -15,11 +15,7 @@
 
 foreach required_file {
     ./outputs/sram_macro_geometry.tcl
-    ./tcl/sram_gap_stripes.tcl
-    ./tcl/sram_macro_power.tcl
-    ./tcl/core_pg_outside_island.tcl
-    ./tcl/stitch_island_to_core.tcl
-    ./tcl/global_upper_pg_to_ring.tcl
+    ./tcl/sram_island_power.tcl
 } {
     if {![file exists $required_file]} {
         error "Missing power-planning prerequisite: [file normalize $required_file]"
@@ -323,82 +319,18 @@ pg_create_core_ring_pin_shapes \
     $ring_m89_w $ring_m89_s $ring_m89_o
 
 # ------------------------------------------------------------------------
-# 2. ONE M4/M5 BLOCK RING AROUND THE SRAM HIERARCHY GROUP
-# ------------------------------------------------------------------------
-
-set SRAM_PTRS [dbGet -p2 top.insts.cell.name $SRAM_MASTER]
-if {[llength $SRAM_PTRS] != $SRAM_COUNT} {
-    error "Expected $SRAM_COUNT SRAM macros before group-ring creation"
-}
-
-deselectAll
-foreach ptr $SRAM_PTRS {
-    selectInst [lindex [dbGet $ptr.name] 0]
-}
-
-# Follow the hierarchy-layout slide's shared-cluster topology, but map it
-# to ASAP7 preferred directions:
-#   top/bottom: M4 horizontal
-#   left/right: M5 vertical
-#
-# The full radial span is:
-#   1.080 + 0.096 + 0.288 + 0.096 = 1.560 um
-# which fits completely inside the two-row (2.160 um) blockage border.
-set sram_ring_w 0.096
-set sram_ring_s 0.288
-set sram_ring_o $ASAP7_ROW_HEIGHT
-set sram_ring_span [expr {
-    $sram_ring_o + 2.0 * $sram_ring_w + $sram_ring_s
-}]
-if {$sram_ring_span > $SRAM_BLOCKAGE_BORDER} {
-    error "SRAM shared-cluster ring span $sram_ring_span exceeds blockage border $SRAM_BLOCKAGE_BORDER"
-}
-
-addRing \
-    -nets {VDD VSS} \
-    -type block_rings \
-    -around shared_cluster \
-    -layer {top M4 bottom M4 left M5 right M5} \
-    -width $sram_ring_w \
-    -spacing $sram_ring_s \
-    -offset $sram_ring_o \
-    -snap_wire_center_to_grid Grid
-
-deselectAll
-
-# ------------------------------------------------------------------------
-# 3. LOCAL ISLAND AND EXTERNAL CORE POWER
+# 2. REFERENCE-STYLE SRAM ISLAND POWER
 # ------------------------------------------------------------------------
 
 set stripe_m45_pitch 17.280
-set stripe_m67_pitch 25.856
 
 set stripe_m5_w 0.096
 set stripe_m5_s 0.288
 set stripe_m5_offset 8.640
 
-set stripe_m6_w 0.640
-set stripe_m6_s 0.896
-set stripe_m6_offset 12.800
-
-set stripe_m7_w 0.640
-set stripe_m7_s 0.896
-set stripe_m7_offset 12.800
-
-# Every X/Y macro gap receives at least one VDD/VSS pair.
-source ./tcl/sram_gap_stripes.tcl
-
-# SRAM M3 PG pins connect to explicit local M4/M5 collector structures.
-source ./tcl/sram_macro_power.tcl
-
-# L-shaped regular core grid; no stripe crosses the rectangular island.
-source ./tcl/core_pg_outside_island.tcl
-
-# Straight M6/M7 bridges from island to the external grid.
-source ./tcl/stitch_island_to_core.tcl
-
-# M8/M9 backbone extends to the die margin and connects the core ring.
-source ./tcl/global_upper_pg_to_ring.tcl
+# Match the teacher's SRAM-island sequence: shared-cluster ring,
+# blockPin-to-blockring sroute, M4/M5 stripes to design boundary, trim.
+source ./tcl/sram_island_power.tcl
 
 editTrim -nets {VDD VSS}
 
@@ -420,7 +352,7 @@ saveDesign ./saved/axi_ram_powerplan.enc
 
 puts "===================================================="
 puts "HIERARCHICAL POWER PLAN COMPLETED"
-puts " - SRAM group ring : M4/M5, shared_cluster"
+puts " - SRAM island     : reference shared_cluster ring + M4/M5 stripes"
 puts " - Core ring       : M8/M9"
 puts " - addStripe jog   : none"
 puts " - SRAM blockPin  : nearest shared-cluster blockring"
