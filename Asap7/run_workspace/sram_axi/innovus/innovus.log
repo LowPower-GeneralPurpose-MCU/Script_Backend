@@ -2283,3 +2283,8 @@ WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
 <CMD> zoomBox -17.63675 949.21800 38.18825 979.12775
 <CMD> zoomBox -55.03400 924.23125 92.98475 1003.53650
 <CMD> fit
+
+*** Memory Usage v#2 (Current mem = 5439.059M, initial mem = 847.699M) ***
+*** Message Summary: 655 warning(s), 0 error(s)
+
+--- Ending "Innovus" (totcpu=0:01:51, real=0:04:14, mem=5439.1M) ---
