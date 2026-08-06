@@ -23,7 +23,6 @@ catch { setHierMode -optStage preCTS }
 catch { setImportMode -discardFloatingVNets false }
 catch { setImportMode -keepEmptyModule true }
 catch { setAddStripeMode -allow_jog none }
-catch { setAddStripeMode -break_at block_ring }
 catch { setRouteMode -earlyGlobalBlockTracks { { M4 0.024591 }  { M5 0.025831 } } }
 catch { setRouteMode -earlyGlobalCapacityScreen { { srambank_256x4x32_6t122 M4 1.024600 }  { srambank_256x4x32_6t122 M5 1.025800 } } }
 catch { setFPlanMode -cellsForExtraSites {} }

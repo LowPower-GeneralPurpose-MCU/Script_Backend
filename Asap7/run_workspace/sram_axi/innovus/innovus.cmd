@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Thu Aug  6 23:00:26 2026                
+#  Created on Thu Aug  6 23:42:52 2026                
 #                                                     
 #######################################################
 
@@ -132,6 +132,7 @@ checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_macroFP.rpt
 saveFPlan ./outputs/FloorPlan_withMacro.fp
 saveDesign ./saved/axi_ram_macroFP.enc
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_before_pnr.rpt
+setAddStripeMode -reset
 setAddStripeMode -allow_jog none
 clearGlobalNets
 deletePGPin -net VDD
@@ -142,10 +143,8 @@ globalNetConnect VSS -type pgpin -pin VSS -inst * -module {} -override
 globalNetConnect VDD -type tiehi -inst * -module {} -override
 globalNetConnect VSS -type tielo -inst * -module {} -override
 applyGlobalNets
-addRing -nets {VSS VDD} -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 0.384 -snap_wire_center_to_grid Grid
-deletePGPin -net VDD
-deletePGPin -net VSS
-createPGPin VSS -geom M9 0.984000 484.464000 1.464000 486.384000 -net VSS
+addRing -nets VDD -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 0.192 -snap_wire_center_to_grid Grid
+addRing -nets VSS -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 1.152 -snap_wire_center_to_grid Grid
 setPinConstraint -corner_to_pin_distance 8
 setPinAssignMode -pinEditInBatch true
 editPin -pin {clk rst_n {s_axi_awid[4]} {s_axi_awid[3]} {s_axi_awid[2]} {s_axi_awid[1]} {s_axi_awid[0]} {s_axi_awaddr[31]} {s_axi_awaddr[30]} {s_axi_awaddr[29]} {s_axi_awaddr[28]} {s_axi_awaddr[27]} {s_axi_awaddr[26]} {s_axi_awaddr[25]} {s_axi_awaddr[24]} {s_axi_awaddr[23]} {s_axi_awaddr[22]} {s_axi_awaddr[21]} {s_axi_awaddr[20]} {s_axi_awaddr[19]} {s_axi_awaddr[18]} {s_axi_awaddr[17]} {s_axi_awaddr[16]} {s_axi_awaddr[15]} {s_axi_awaddr[14]} {s_axi_awaddr[13]} {s_axi_awaddr[12]} {s_axi_awaddr[11]} {s_axi_awaddr[10]} {s_axi_awaddr[9]} {s_axi_awaddr[8]} {s_axi_awaddr[7]} {s_axi_awaddr[6]} {s_axi_awaddr[5]} {s_axi_awaddr[4]} {s_axi_awaddr[3]} {s_axi_awaddr[2]} {s_axi_awaddr[1]} {s_axi_awaddr[0]} {s_axi_awlen[7]} {s_axi_awlen[6]} {s_axi_awlen[5]} {s_axi_awlen[4]} {s_axi_awlen[3]} {s_axi_awlen[2]} {s_axi_awlen[1]} {s_axi_awlen[0]} {s_axi_awsize[2]} {s_axi_awsize[1]} {s_axi_awsize[0]} {s_axi_awburst[1]} {s_axi_awburst[0]} s_axi_awlock {s_axi_awcache[3]} {s_axi_awcache[2]} {s_axi_awcache[1]} {s_axi_awcache[0]} {s_axi_awprot[2]} {s_axi_awprot[1]} {s_axi_awprot[0]} {s_axi_awqos[3]} {s_axi_awqos[2]} {s_axi_awqos[1]} {s_axi_awqos[0]} {s_axi_awregion[3]} {s_axi_awregion[2]} {s_axi_awregion[1]} {s_axi_awregion[0]} s_axi_awvalid s_axi_awready} -side TOP -layer M7 -spreadType range -start {10.16 968.688} -end {1095.04 968.688} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
@@ -154,49 +153,29 @@ editPin -pin {{s_axi_arid[4]} {s_axi_arid[3]} {s_axi_arid[2]} {s_axi_arid[1]} {s
 editPin -pin {{s_axi_rid[4]} {s_axi_rid[3]} {s_axi_rid[2]} {s_axi_rid[1]} {s_axi_rid[0]} {s_axi_rdata[31]} {s_axi_rdata[30]} {s_axi_rdata[29]} {s_axi_rdata[28]} {s_axi_rdata[27]} {s_axi_rdata[26]} {s_axi_rdata[25]} {s_axi_rdata[24]} {s_axi_rdata[23]} {s_axi_rdata[22]} {s_axi_rdata[21]} {s_axi_rdata[20]} {s_axi_rdata[19]} {s_axi_rdata[18]} {s_axi_rdata[17]} {s_axi_rdata[16]} {s_axi_rdata[15]} {s_axi_rdata[14]} {s_axi_rdata[13]} {s_axi_rdata[12]} {s_axi_rdata[11]} {s_axi_rdata[10]} {s_axi_rdata[9]} {s_axi_rdata[8]} {s_axi_rdata[7]} {s_axi_rdata[6]} {s_axi_rdata[5]} {s_axi_rdata[4]} {s_axi_rdata[3]} {s_axi_rdata[2]} {s_axi_rdata[1]} {s_axi_rdata[0]} {s_axi_rresp[1]} {s_axi_rresp[0]} s_axi_rlast s_axi_rvalid s_axi_rready} -side BOTTOM -layer M7 -spreadType range -start {10.16 2.16} -end {1095.04 2.16} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
 setPinAssignMode -pinEditInBatch false
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
-zoomBox -62.15225 67.44200 2035.87925 1191.52150
-zoomBox -47.65575 154.28125 1735.67125 1109.74900
-zoomBox -35.33350 228.09475 1480.49450 1040.24225
-zoomBox -18.77900 358.46350 1076.40700 945.24025
-zoomBox -9.80850 452.38325 781.46350 876.32950
-zoomBox -1.75250 545.92175 484.18800 806.27800
-pan -45.85575 558.97525
-zoomBox -36.02950 605.28775 315.06300 793.39550
-zoomBox -31.15400 624.01225 267.27450 783.90375
-zoomBox -21.82075 651.97500 193.79375 767.49650
-zoomBox -12.36975 680.06800 120.04475 751.01275
-zoomBox -22.23050 652.75625 193.38450 768.27800
-zoomBox -100.99300 606.75250 312.05800 828.05625
-zoomBox -204.64450 547.32425 467.94075 907.68075
-zoomBox -151.72350 583.38375 334.21950 843.74150
-zoomBox -92.76950 635.04200 205.66050 794.93425
-zoomBox -66.76975 658.22700 148.84600 773.74925
-zoomBox -40.61175 681.74350 91.80350 752.68875
-zoomBox -20.71250 699.63325 48.40925 736.66725
-zoomBox -17.31850 702.65650 41.43525 734.13550
-zoomBox -10.01875 707.66525 26.06375 726.99750
-zoomBox -14.24625 703.59300 35.69550 730.35075
-zoomBox -20.10575 697.95675 49.01825 734.99200
-zoomBox -17.00400 701.17950 41.75175 732.65950
-deleteSelectedFromFPlan
-zoomBox -27.47000 697.84875 53.85275 741.41975
-zoomBox -75.44025 689.64075 107.84125 787.83900
-pan 5.24600 731.22800
-pan -0.32800 684.91575
-pan 2.21325 653.27625
-zoomBox -87.85150 570.32850 127.77400 685.85600
-zoomBox -111.08075 557.70125 142.59650 693.61600
-pan 21.66925 593.33675
-zoomBox -51.72675 493.99900 131.55525 592.19750
-zoomBox -42.37000 499.79000 113.41975 583.25875
-zoomBox -21.94425 526.22375 47.18050 563.25925
-zoomBox -19.27350 529.68300 39.48275 561.16325
-zoomBox -33.80350 521.79050 61.87175 573.05125
-pan 4.70675 548.10600
-zoomBox -47.09750 495.51175 108.69400 578.98150
-zoomBox -106.49600 463.35625 191.95300 623.25875
-zoomBox -88.89775 473.84725 164.78425 609.76450
-zoomBox -61.22425 490.34425 122.06150 588.54475
-zoomBox -41.23000 502.26350 91.19425 573.21350
-zoomBox -80.86100 478.26125 134.77000 593.79175
-zoomBox -120.30825 454.37075 178.14325 614.27450
+zoomBox -11.20275 101.89925 605.30525 653.80550
+zoomBox 13.80650 205.69850 459.23350 604.45075
+zoomBox 43.70825 285.49050 365.52950 573.58925
+zoomBox 66.12100 343.48675 298.63725 551.63850
+zoomBox 88.63850 401.75400 231.43275 529.58525
+zoomBox 94.01400 415.66375 215.38925 524.32050
+zoomBox 102.46700 437.53725 190.16075 516.04175
+zoomBox 82.72200 403.03700 225.51650 530.86850
+zoomBox 35.86650 321.16675 309.41625 566.05225
+zoomBox 20.19175 290.62900 342.01500 578.72950
+zoomBox -75.49650 104.20875 541.01575 656.11875
+zoomBox -152.38475 -45.58600 700.91925 718.30325
+zoomBox -75.49650 104.20850 541.01600 656.11875
+pan -10.36825 342.40700
+zoomBox -60.38275 322.18125 463.65300 791.30500
+zoomBox -31.60025 412.29225 347.01600 751.23450
+zoomBox -23.44500 449.90875 298.37875 738.00975
+zoomBox -5.61300 532.16225 192.02725 709.09250
+pan -64.17550 580.72950
+zoomBox -61.93225 617.69475 80.86300 745.52700
+zoomBox -74.28725 601.33000 93.70700 751.72075
+zoomBox -55.71225 630.94125 65.66375 739.59875
+zoomBox -35.71800 662.26575 38.82250 728.99550
+zoomBox -30.45300 669.94650 32.90650 726.66675
+zoomBox -21.30950 681.70600 24.46775 722.68650
+pan 16.81850 703.66675
