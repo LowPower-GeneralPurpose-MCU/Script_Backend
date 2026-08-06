@@ -5,9 +5,9 @@
 ##   1. Select all SRAMs in one group.
 ##   2. Create a shared-cluster block ring.
 ##   3. Connect SRAM block pins to the nearest block ring.
-##   4. Add no-jog M4/M5 stripes in the actual SRAM gaps.  The -area
-##      boxes stay local to the SRAM island and overlap only the adjacent
-##      M8/M9 core ring, so they do not become a full-die PG mesh.
+##   4. Add no-jog M4/M5 stripes in the actual SRAM gaps.  Each stripe
+##      starts at the core boundary and extends straight to the nearest
+##      aligned M4/M5 ring, creating only a V4 crossover connection.
 ##   5. Trim redundant PG stubs.
 ##
 ## ASAP7 layer mapping:
@@ -27,15 +27,15 @@ foreach required_variable {
     SRAM_MACRO_GAP_Y
     SRAM_ISLAND_CUT_URX
     SRAM_ISLAND_CUT_URY
-    SRAM_PG_MODEL_RING_W
-    SRAM_PG_MODEL_RING_S
-    SRAM_PG_MODEL_STRIPE_W
-    SRAM_PG_MODEL_STRIPE_S
-    SRAM_PG_MODEL_STRIPE_PITCH
     ASAP7_ROW_HEIGHT
     core_llx
     core_lly
-    ring_m89_span
+    ring_m45_w
+    ring_m45_s
+    ring_m45_o
+    ring_m45_span
+    stripe_m45_w
+    stripe_m45_s
 } {
     if {![info exists $required_variable]} {
         error "Missing $required_variable before SRAM island power planning"
@@ -52,9 +52,9 @@ foreach ptr $SRAM_PTRS {
     selectInst [lindex [dbGet $ptr.name] 0]
 }
 
-set sram_ring_w $SRAM_PG_MODEL_RING_W
-set sram_ring_s $SRAM_PG_MODEL_RING_S
-set sram_ring_o $ASAP7_ROW_HEIGHT
+set sram_ring_w $ring_m45_w
+set sram_ring_s $ring_m45_s
+set sram_ring_o $ring_m45_o
 
 addRing \
     -nets {VSS VDD} \
@@ -89,8 +89,8 @@ sroute \
     -blockPin useLef \
     -blockPinTarget nearestTarget
 
-set sram_stripe_w $SRAM_PG_MODEL_STRIPE_W
-set sram_stripe_s $SRAM_PG_MODEL_STRIPE_S
+set sram_stripe_w $stripe_m45_w
+set sram_stripe_s $stripe_m45_s
 
 set sram_pair_total [expr {2.0 * $sram_stripe_w + $sram_stripe_s}]
 if {$SRAM_MACRO_GAP_Y <= $sram_pair_total} {
@@ -100,21 +100,18 @@ if {$SRAM_MACRO_GAP_X <= $sram_pair_total} {
     error "SRAM_MACRO_GAP_X=$SRAM_MACRO_GAP_X is too small for one M5 VSS/VDD pair"
 }
 
-set sram_pg_left [expr {$core_llx - $ring_m89_span}]
-set sram_pg_bottom [expr {$core_lly - $ring_m89_span}]
+set sram_pg_left $core_llx
+set sram_pg_bottom $core_lly
 set sram_pg_right $SRAM_ISLAND_CUT_URX
 set sram_pg_top $SRAM_ISLAND_CUT_URY
-
-if {$sram_pg_left <= 0.0 || $sram_pg_bottom <= 0.0} {
-    error "SRAM island PG bridge would touch the die boundary; increase die-to-core margin or reduce M8/M9 ring span"
-}
 
 setAddStripeMode \
     -allow_jog none \
     -break_at block_ring \
-    -extend_to_closest_target area_boundary \
+    -extend_to_closest_target ring \
+    -max_extension_distance $ring_m45_span \
     -stacked_via_bottom_layer M4 \
-    -stacked_via_top_layer M9
+    -stacked_via_top_layer M5
 
 for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
     set gap_lly [expr {
@@ -143,9 +140,10 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
 setAddStripeMode \
     -allow_jog none \
     -break_at block_ring \
-    -extend_to_closest_target area_boundary \
+    -extend_to_closest_target ring \
+    -max_extension_distance $ring_m45_span \
     -stacked_via_bottom_layer M4 \
-    -stacked_via_top_layer M9
+    -stacked_via_top_layer M5
 
 for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
     set gap_llx [expr {
@@ -179,5 +177,5 @@ puts "===================================================="
 puts "REFERENCE-STYLE SRAM ISLAND PG CREATED"
 puts " - Ring    : shared_cluster block ring, M4 horizontal / M5 vertical"
 puts " - BlockPin: nearest blockring target"
-puts " - Stripes : one M4/M5 pair in every SRAM gap, local bridge to M8/M9 ring"
+puts " - Stripes : one M4/M5 pair in every SRAM gap, straight V4 connection to ring"
 puts "===================================================="

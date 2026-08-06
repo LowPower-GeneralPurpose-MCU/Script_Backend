@@ -58,10 +58,16 @@ proc dbGet {args} {
 
 proc deselectAll {} {}
 proc selectInst {name} {}
-proc addRing {args} {}
+proc addRing {args} {
+    global SRAM_RING_CAPTURE
+    lappend SRAM_RING_CAPTURE $args
+}
 proc setSrouteMode {args} {}
 proc sroute {args} {}
-proc setAddStripeMode {args} {}
+proc setAddStripeMode {args} {
+    global SRAM_STRIPE_MODE_CAPTURE
+    lappend SRAM_STRIPE_MODE_CAPTURE $args
+}
 proc editTrim {args} {}
 proc clearDrc {} {}
 
@@ -97,11 +103,15 @@ proc addStripe {args} {
     }
 
     lappend SRAM_STRIPE_CAPTURE \
-        [list $opts(-layer) $opts(-direction) $opts(-area) $create_pins]
+        [list \
+            $opts(-layer) $opts(-direction) $opts(-area) $create_pins \
+            $opts(-width) $opts(-spacing)]
 }
 
 proc simulate_sram_island_power {script_path} {
     global SRAM_STRIPE_CAPTURE
+    global SRAM_STRIPE_MODE_CAPTURE
+    global SRAM_RING_CAPTURE
     global SRAM_MASTER SRAM_COUNT SRAM_ROWS SRAM_COLS
     global SRAM_X0 SRAM_Y0 SRAM_W SRAM_H
     global SRAM_MACRO_GAP_X SRAM_MACRO_GAP_Y
@@ -111,9 +121,13 @@ proc simulate_sram_island_power {script_path} {
     global SRAM_PG_MODEL_RING_W SRAM_PG_MODEL_RING_S
     global SRAM_PG_MODEL_STRIPE_W SRAM_PG_MODEL_STRIPE_S
     global SRAM_PG_MODEL_STRIPE_PITCH ASAP7_ROW_HEIGHT
-    global core_llx core_lly ring_m89_span
+    global core_llx core_lly
+    global ring_m45_w ring_m45_s ring_m45_o ring_m45_span
+    global stripe_m45_w stripe_m45_s
 
     set SRAM_STRIPE_CAPTURE {}
+    set SRAM_STRIPE_MODE_CAPTURE {}
+    set SRAM_RING_CAPTURE {}
 
     set SRAM_MASTER srambank_256x4x32_6t122
     set SRAM_COUNT 16
@@ -141,7 +155,12 @@ proc simulate_sram_island_power {script_path} {
     set ASAP7_ROW_HEIGHT 1.080
     set core_llx 2.16
     set core_lly 2.16
-    set ring_m89_span 1.824
+    set ring_m45_w 0.288
+    set ring_m45_s 0.288
+    set ring_m45_o 0.384
+    set ring_m45_span 1.632
+    set stripe_m45_w 0.288
+    set stripe_m45_s 0.288
 
     if {[catch {source $script_path} message]} {
         fail "Simulated SRAM island PG failed: $message"
@@ -201,18 +220,9 @@ assert_contains \
     $power_text \
     {source[[:space:]]+\./tcl/sram_island_power\.tcl} \
     "power_plan.tcl must source the reference-style SRAM island PG script"
-assert_contains \
-    $power_text \
-    {set[[:space:]]+PG_ENABLE_UPPER_MESH[[:space:]]+0} \
-    "Upper M8/M9 mesh must be disabled by default at the floorplan power/pins checkpoint"
-assert_contains \
-    $power_text \
-    {if[[:space:]]+\{\$PG_ENABLE_UPPER_MESH\}} \
-    "Optional upper M8/M9 mesh must be gated behind PG_ENABLE_UPPER_MESH"
-assert_contains \
-    $power_text \
-    {source[[:space:]]+\./tcl/global_upper_pg_to_ring\.tcl} \
-    "power_plan.tcl must keep the optional outside-island M8/M9 mesh available behind a gate"
+if {[string first {source ./tcl/global_upper_pg_to_ring.tcl} $power_text] >= 0} {
+    fail "The M4/M5 checkpoint topology must not source the incompatible M8/M9 upper-mesh script"
+}
 
 foreach proc_name {
     pg_layer_pitch
@@ -221,7 +231,7 @@ foreach proc_name {
     pg_positive_mod
     pg_track_aligned_pair_offset
     pg_track_aligned_global_offset
-    pg_create_core_ring_corner_pins
+    pg_create_core_ring_side_pins
     pg_delete_core_pg_pins
     pg_assert_clean_connectivity_report
     pg_assert_clean_drc_report
@@ -242,7 +252,7 @@ assert_contains \
 
 foreach margin_var {die_core_margin_left die_core_margin_bottom die_core_margin_right die_core_margin_top} {
     if {[string first "set $margin_var" $power_text] < 0} {
-        fail "power_plan.tcl must check $margin_var before adding the M8/M9 ring"
+        fail "power_plan.tcl must check $margin_var before adding the M4/M5 ring"
     }
 }
 
@@ -274,12 +284,36 @@ assert_contains \
     "power_plan.tcl must delete stale VDD/VSS PG pin shapes before recreating the ring"
 
 if {[regexp {foreach[[:space:]]+side[[:space:]]+\{bottom[[:space:]]+top[[:space:]]+left[[:space:]]+right\}} $power_text]} {
-    fail "Core PG pins must not be full-side duplicate ring shapes; create small corner pins only"
+    fail "Core PG pins must not be full-side duplicate ring shapes; create small side taps only"
 }
 
 if {[regexp -- {createPGPin[[:space:]]+VDD|createPGPin[[:space:]]+VSS} $power_text]} {
     fail "Core PG pins must not be hard-coded as one lower-left VDD/VSS shape"
 }
+
+assert_contains \
+    $power_text \
+    {-layer[[:space:]]+\{top[[:space:]]+M4[[:space:]]+bottom[[:space:]]+M4[[:space:]]+left[[:space:]]+M5[[:space:]]+right[[:space:]]+M5\}} \
+    "The checkpoint core ring must use ASAP7 M4 horizontal and M5 vertical layers"
+if {[regexp -- {-layer[[:space:]]+\{top[[:space:]]+M8[[:space:]]+bottom[[:space:]]+M8[[:space:]]+left[[:space:]]+M9[[:space:]]+right[[:space:]]+M9\}} $power_text]} {
+    fail "The floorplan power/pins checkpoint must not create the disconnected M8/M9 core ring"
+}
+assert_contains \
+    $power_text \
+    {set[[:space:]]+ring_m45_w[[:space:]]+0\.288} \
+    "Final M4/M5 ring must use a three-track width that can enclose one legal ASAP7 V4"
+assert_contains \
+    $power_text \
+    {set[[:space:]]+ring_m45_s[[:space:]]+0\.288} \
+    "Final M4/M5 ring spacing must satisfy the scaled ASAP7 cut/metal spacing rules"
+assert_contains \
+    $power_text \
+    {set[[:space:]]+ring_m45_o[[:space:]]+0\.384} \
+    "Core and SRAM-island M4/M5 rings must use the same routing-grid-aligned offset"
+assert_contains \
+    $power_text \
+    {-net[[:space:]]+\{VDD[[:space:]]+VSS\}} \
+    "PG verification must be restricted to VDD/VSS so pre-pin-assignment signal IOs do not create IMPVFC-97 warnings"
 
 if {[regexp -- {-snap_wire_center_to_grid[[:space:]]+grid} $all_power_text]} {
     fail "Use Innovus documented Grid spelling for snap_wire_center_to_grid"
@@ -289,12 +323,6 @@ set addstripe_count [regexp -all {addStripe[[:space:]]+\\} $all_power_text]
 set snap_override_count [regexp -all -- {-allow_snapping_override_custom_spacing[[:space:]]+1} $all_power_text]
 if {$snap_override_count < $addstripe_count} {
     fail "Every addStripe in the SRAM power plan must allow snapping to override custom spacing"
-}
-
-set area_addstripe_count [regexp -all -- {-area[[:space:]]+\$[[:alnum:]_]+} $all_power_text]
-set area_boundary_count [regexp -all -- {-extend_to_closest_target[[:space:]]+area_boundary} $all_power_text]
-if {$area_boundary_count < $area_addstripe_count} {
-    fail "Area-limited SRAM/core/global stripes must extend to area_boundary so Innovus does not silently skip edge stripes"
 }
 
 assert_contains \
@@ -353,6 +381,21 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {-break_at[[:space:]]+block_ring} \
     "SRAM island stripes must break at block rings like the reference flow"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-extend_to_closest_target[[:space:]]+ring} \
+    "SRAM gap stripes must extend to the adjacent M4/M5 ring instead of stopping at an arbitrary area boundary"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-stacked_via_bottom_layer[[:space:]]+M4} \
+    "SRAM gap-stripe vias must start on M4"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-stacked_via_top_layer[[:space:]]+M5} \
+    "SRAM gap-stripe vias must stop on M5 so only legal V4 crossings are generated"
+if {[regexp -- {-stacked_via_top_layer[[:space:]]+M[6-9]} $sram_island_code_only]} {
+    fail "SRAM island stripes must not request stacked vias above M5"
+}
 if {[string first "-extend_to design_boundary" $sram_island_code_only] >= 0} {
     fail "Area-constrained SRAM island stripes must not also use -extend_to design_boundary; Innovus IMPPP-330 rejects that combination"
 }
@@ -396,9 +439,15 @@ if {[llength $simulated_sram_stripes] != 6} {
 }
 
 foreach stripe $simulated_sram_stripes {
-    lassign $stripe layer direction area create_pins
+    lassign $stripe layer direction area create_pins width spacing
     if {$create_pins ne "0"} {
         fail "SRAM island addStripe must use -create_pins 0 so local gap stripes do not become boundary IO pins"
+    }
+    if {$width < 0.184} {
+        fail "SRAM island stripe width $width cannot enclose the scaled ASAP7 V4 cut plus M4/M5 enclosure"
+    }
+    if {$spacing < 0.132} {
+        fail "SRAM island stripe spacing $spacing violates the scaled ASAP7 V4 cut-spacing minimum"
     }
 
     if {[llength $area] != 4} {
@@ -415,18 +464,62 @@ foreach stripe $simulated_sram_stripes {
             if {$layer ne "M4"} {
                 fail "Horizontal SRAM island stripes must be on M4, got $layer"
             }
-            assert_close $llx 0.336 "M4 SRAM row-gap stripe must start at the adjacent M8/M9 core-ring overlap, not the die edge"
+            assert_close $llx 2.160 "M4 SRAM row-gap stripe must start at the core boundary and extend straight to the adjacent M4/M5 ring"
             assert_close $urx 502.848 "M4 SRAM row-gap stripe must stop at the SRAM island cut boundary"
         }
         vertical {
             if {$layer ne "M5"} {
                 fail "Vertical SRAM island stripes must be on M5, got $layer"
             }
-            assert_close $lly 0.336 "M5 SRAM column-gap stripe must start at the adjacent M8/M9 core-ring overlap, not the die edge"
+            assert_close $lly 2.160 "M5 SRAM column-gap stripe must start at the core boundary and extend straight to the adjacent M4/M5 ring"
             assert_close $ury 708.48 "M5 SRAM column-gap stripe must stop at the SRAM island cut boundary"
         }
         default {
             fail "Unexpected SRAM island stripe direction: $direction"
+        }
+    }
+}
+
+if {[llength $SRAM_RING_CAPTURE] != 1} {
+    fail "SRAM island power must create exactly one shared-cluster ring"
+}
+set ring_args [lindex $SRAM_RING_CAPTURE 0]
+foreach option {-width -spacing -offset} {
+    set option_index [lsearch -exact $ring_args $option]
+    if {$option_index < 0} {
+        fail "SRAM shared-cluster ring is missing $option"
+    }
+    set side_values [lindex $ring_args [expr {$option_index + 1}]]
+    foreach side {top bottom left right} {
+        set side_index [lsearch -exact $side_values $side]
+        if {$side_index < 0} {
+            fail "SRAM shared-cluster ring $option is missing side $side"
+        }
+        set actual [lindex $side_values [expr {$side_index + 1}]]
+        switch -- $option {
+            -width - -spacing {set expected 0.288}
+            -offset {set expected 0.384}
+        }
+        assert_close $actual $expected "SRAM shared-cluster ring $option $side"
+    }
+}
+
+foreach mode $SRAM_STRIPE_MODE_CAPTURE {
+    if {[lsearch -exact $mode -allow_jog] < 0 ||
+        [lindex $mode [expr {[lsearch -exact $mode -allow_jog] + 1}]] ne "none"} {
+        fail "Every SRAM stripe mode must explicitly disable jogging"
+    }
+    if {[lsearch -exact $mode -extend_to_closest_target] < 0 ||
+        [lindex $mode [expr {[lsearch -exact $mode -extend_to_closest_target] + 1}]] ne "ring"} {
+        fail "Every SRAM stripe mode must extend to the nearest ring"
+    }
+    foreach {option expected} {
+        -stacked_via_bottom_layer M4
+        -stacked_via_top_layer M5
+    } {
+        set option_index [lsearch -exact $mode $option]
+        if {$option_index < 0 || [lindex $mode [expr {$option_index + 1}]] ne $expected} {
+            fail "Every SRAM stripe mode must set $option to $expected"
         }
     }
 }
