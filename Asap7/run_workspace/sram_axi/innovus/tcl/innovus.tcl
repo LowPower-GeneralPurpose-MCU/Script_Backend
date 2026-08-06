@@ -207,12 +207,49 @@ checkFPlan \
 # 3. POWER PLAN AND TOP-LEVEL PINS
 # ------------------------------------------------------------------------
 
+set sram_edge_report ./reports/sram_island_pg_edges.rpt
+file delete -force $sram_edge_report
+
 puts "POWER PLAN ENTRY: [file normalize ./tcl/power_plan.tcl]"
 if {[catch {source ./tcl/power_plan.tcl} power_plan_error]} {
     puts stderr "Power plan failed before pin assignment: $power_plan_error"
     return
 }
 puts "POWER PLAN EXIT: ./tcl/power_plan.tcl returned cleanly"
+
+if {![file exists $sram_edge_report]} {
+    puts "POWER PLAN DIRECT SRAM ISLAND SOURCE: $sram_edge_report missing after power_plan.tcl"
+
+    if {![info exists SRAM_ISLAND_URX]} {
+        if {[catch {source ./outputs/sram_macro_geometry.tcl} sram_geometry_error]} {
+            puts stderr "Cannot reload SRAM macro geometry before direct SRAM island PG: $sram_geometry_error"
+            return
+        }
+    }
+
+    if {![info exists power_die_llx] || ![info exists power_die_lly]} {
+        set direct_power_die_box [join [dbGet top.fPlan.box]]
+        if {[llength $direct_power_die_box] != 4} {
+            puts stderr "Cannot decode die box before direct SRAM island PG: [dbGet top.fPlan.box]"
+            return
+        }
+        lassign $direct_power_die_box \
+            power_die_llx power_die_lly power_die_urx power_die_ury
+    }
+
+    if {![info exists stripe_m45_w]} {
+        set stripe_m45_w 0.096
+    }
+    if {![info exists stripe_m45_s]} {
+        set stripe_m45_s 0.288
+    }
+
+    if {[catch {source ./tcl/sram_island_power.tcl} direct_sram_power_error]} {
+        puts stderr "Direct SRAM island power failed before pin assignment: $direct_sram_power_error"
+        return
+    }
+    puts "POWER PLAN DIRECT SRAM ISLAND RETURNED"
+}
 
 setPinConstraint -corner_to_pin_distance 8
 source ./tcl/pins.tcl
