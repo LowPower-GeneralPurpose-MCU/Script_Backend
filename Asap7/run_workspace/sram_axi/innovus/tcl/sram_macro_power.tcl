@@ -45,7 +45,8 @@ for {set r 0} {$r < $SRAM_ROWS} {incr r} {
         error "M4 local channel is too small in row $r"
     }
 
-    set local_offset [expr {($channel_h - $local_pair_total) / 2.0}]
+    set local_offset [pg_track_aligned_pair_offset \
+        $channel_lly $channel_ury M4 $local_m4_w $local_m4_s]
     set area [list \
         $SRAM_ISLAND_CUT_LLX $channel_lly \
         $SRAM_ISLAND_CUT_URX $channel_ury]
@@ -60,7 +61,8 @@ for {set r 0} {$r < $SRAM_ROWS} {incr r} {
         -start_offset $local_offset \
         -number_of_sets 1 \
         -area $area \
-        -snap_wire_center_to_grid grid
+        -snap_wire_center_to_grid Grid \
+        -allow_snapping_override_custom_spacing 1
 }
 
 # Four M5 feeder pairs: three column gaps plus right escape channel.
@@ -85,7 +87,8 @@ for {set c 0} {$c < $SRAM_COLS} {incr c} {
         error "M5 local channel is too small in column $c"
     }
 
-    set local_offset [expr {($channel_w - $pair_total) / 2.0}]
+    set local_offset [pg_track_aligned_pair_offset \
+        $channel_llx $channel_urx M5 $local_m5_w $local_m5_s]
     set area [list \
         $channel_llx $SRAM_ISLAND_CUT_LLY \
         $channel_urx $SRAM_ISLAND_CUT_URY]
@@ -100,7 +103,8 @@ for {set c 0} {$c < $SRAM_COLS} {incr c} {
         -start_offset $local_offset \
         -number_of_sets 1 \
         -area $area \
-        -snap_wire_center_to_grid grid
+        -snap_wire_center_to_grid Grid \
+        -allow_snapping_override_custom_spacing 1
 }
 
 setSrouteMode \

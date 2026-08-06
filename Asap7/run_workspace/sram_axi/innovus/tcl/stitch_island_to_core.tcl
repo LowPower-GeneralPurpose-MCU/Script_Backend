@@ -22,8 +22,8 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
     set gap_lly [expr {$SRAM_Y0 + \
         ($r + 1) * $SRAM_H + $r * $SRAM_MACRO_GAP_Y}]
     set gap_ury [expr {$gap_lly + $SRAM_MACRO_GAP_Y}]
-    set bridge_offset \
-        [expr {($SRAM_MACRO_GAP_Y - $gap_pair_total) / 2.0}]
+    set bridge_offset [pg_track_aligned_pair_offset \
+        $gap_lly $gap_ury M6 $gap_pair_width $gap_pair_spacing]
     set bridge_area [list \
         $SRAM_ISLAND_CUT_URX $gap_lly \
         $core_urx             $gap_ury]
@@ -38,7 +38,8 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
         -start_offset $bridge_offset \
         -number_of_sets 1 \
         -area $bridge_area \
-        -snap_wire_center_to_grid grid
+        -snap_wire_center_to_grid Grid \
+        -allow_snapping_override_custom_spacing 1
 }
 
 # Continue each local vertical M7 column-gap pair from the SRAM blockage
@@ -52,8 +53,8 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
     set gap_llx [expr {$SRAM_X0 + \
         ($c + 1) * $SRAM_W + $c * $SRAM_MACRO_GAP_X}]
     set gap_urx [expr {$gap_llx + $SRAM_MACRO_GAP_X}]
-    set bridge_offset \
-        [expr {($SRAM_MACRO_GAP_X - $gap_pair_total) / 2.0}]
+    set bridge_offset [pg_track_aligned_pair_offset \
+        $gap_llx $gap_urx M7 $gap_pair_width $gap_pair_spacing]
     set bridge_area [list \
         $gap_llx $SRAM_ISLAND_CUT_URY \
         $gap_urx $core_ury]
@@ -68,7 +69,8 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
         -start_offset $bridge_offset \
         -number_of_sets 1 \
         -area $bridge_area \
-        -snap_wire_center_to_grid grid
+        -snap_wire_center_to_grid Grid \
+        -allow_snapping_override_custom_spacing 1
 }
 
 puts "===================================================="

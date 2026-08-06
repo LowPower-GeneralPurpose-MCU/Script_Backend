@@ -66,8 +66,8 @@ if {[llength $SRAM_PTRS] != $SRAM_COUNT} {
 
 foreach ptr $SRAM_PTRS {
     set macro_name [lindex [dbGet $ptr.name] 0]
-    set orientation [dbGet $ptr.orient]
-    set status [dbGet $ptr.pStatus]
+    set orientation [lindex [dbGet $ptr.orient] 0]
+    set status [lindex [dbGet $ptr.pStatus] 0]
 
     if {$orientation ne "R0" && $orientation ne "R180"} {
         error "$macro_name has illegal orientation $orientation"

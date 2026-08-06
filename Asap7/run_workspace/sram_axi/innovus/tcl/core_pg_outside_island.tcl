@@ -45,9 +45,10 @@ setAddStripeMode \
 
 foreach area [list $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LEFT_BOX] {
     set area_llx [lindex $area 0]
-    set area_offset [pg_positive_mod \
-        [expr {$global_m7_first_x - $area_llx}] \
-        $stripe_m67_pitch]
+    set area_urx [lindex $area 2]
+    set area_offset [pg_track_aligned_global_offset \
+        $area_llx $area_urx $global_m7_first_x \
+        M7 $stripe_m7_w $stripe_m7_s $stripe_m67_pitch]
 
     addStripe \
         -nets {VDD VSS} \
@@ -59,7 +60,8 @@ foreach area [list $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LEFT_BOX] {
         -start_from left \
         -start_offset $area_offset \
         -area $area \
-        -snap_wire_center_to_grid grid
+        -snap_wire_center_to_grid Grid \
+        -allow_snapping_override_custom_spacing 1
 }
 
 # M6 horizontal mesh outside island, globally phase-aligned.
@@ -71,9 +73,10 @@ setAddStripeMode \
 
 foreach area [list $LOGIC_TOP_FULL_BOX $LOGIC_RIGHT_LOWER_BOX] {
     set area_lly [lindex $area 1]
-    set area_offset [pg_positive_mod \
-        [expr {$global_m6_first_y - $area_lly}] \
-        $stripe_m67_pitch]
+    set area_ury [lindex $area 3]
+    set area_offset [pg_track_aligned_global_offset \
+        $area_lly $area_ury $global_m6_first_y \
+        M6 $stripe_m6_w $stripe_m6_s $stripe_m67_pitch]
 
     addStripe \
         -nets {VDD VSS} \
@@ -85,7 +88,8 @@ foreach area [list $LOGIC_TOP_FULL_BOX $LOGIC_RIGHT_LOWER_BOX] {
         -start_from bottom \
         -start_offset $area_offset \
         -area $area \
-        -snap_wire_center_to_grid grid
+        -snap_wire_center_to_grid Grid \
+        -allow_snapping_override_custom_spacing 1
 }
 
 puts "Regular M6/M7 core mesh created only outside the SRAM island."

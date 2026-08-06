@@ -23,9 +23,10 @@ setAddStripeMode \
 
 foreach area [list $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LEFT_BOX] {
     set area_llx [lindex $area 0]
-    set area_offset [pg_positive_mod \
-        [expr {$global_m5_first_x - $area_llx}] \
-        $stripe_m45_pitch]
+    set area_urx [lindex $area 2]
+    set area_offset [pg_track_aligned_global_offset \
+        $area_llx $area_urx $global_m5_first_x \
+        M5 $stripe_m5_w $stripe_m5_s $stripe_m45_pitch]
 
     addStripe \
         -nets {VDD VSS} \
@@ -37,7 +38,8 @@ foreach area [list $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LEFT_BOX] {
         -start_from left \
         -start_offset $area_offset \
         -area $area \
-        -snap_wire_center_to_grid grid
+        -snap_wire_center_to_grid Grid \
+        -allow_snapping_override_custom_spacing 1
 }
 
 puts "Post-placement M1/M5 core PG completed with no jog/no layer change."
