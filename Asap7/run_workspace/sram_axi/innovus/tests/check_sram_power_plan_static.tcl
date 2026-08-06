@@ -203,15 +203,16 @@ assert_contains \
     "power_plan.tcl must source the reference-style SRAM island PG script"
 assert_contains \
     $power_text \
+    {set[[:space:]]+PG_ENABLE_UPPER_MESH[[:space:]]+0} \
+    "Upper M8/M9 mesh must be disabled by default at the floorplan power/pins checkpoint"
+assert_contains \
+    $power_text \
+    {if[[:space:]]+\{\$PG_ENABLE_UPPER_MESH\}} \
+    "Optional upper M8/M9 mesh must be gated behind PG_ENABLE_UPPER_MESH"
+assert_contains \
+    $power_text \
     {source[[:space:]]+\./tcl/global_upper_pg_to_ring\.tcl} \
-    "power_plan.tcl must create the M8/M9 global mesh outside the SRAM island before the pins checkpoint"
-
-set sram_source_index [string first "source ./tcl/sram_island_power.tcl" $power_text]
-set upper_source_index [string first "source ./tcl/global_upper_pg_to_ring.tcl" $power_text]
-if {$sram_source_index < 0 || $upper_source_index < 0 ||
-    $upper_source_index <= $sram_source_index} {
-    fail "M8/M9 outside-island mesh must be created after the local SRAM M4/M5 island PG"
-}
+    "power_plan.tcl must keep the optional outside-island M8/M9 mesh available behind a gate"
 
 foreach proc_name {
     pg_layer_pitch
@@ -220,7 +221,8 @@ foreach proc_name {
     pg_positive_mod
     pg_track_aligned_pair_offset
     pg_track_aligned_global_offset
-    pg_create_core_ring_pin_shapes
+    pg_create_core_ring_corner_pins
+    pg_delete_core_pg_pins
     pg_assert_clean_connectivity_report
     pg_assert_clean_drc_report
 } {
@@ -251,10 +253,6 @@ if {$ring_snap_count < 2} {
 
 assert_contains \
     $power_text \
-    {foreach[[:space:]]+side[[:space:]]+\{bottom[[:space:]]+top[[:space:]]+left[[:space:]]+right\}} \
-    "Core PG pins must be created on all four sides of the core ring"
-assert_contains \
-    $power_text \
     {foreach[[:space:]]+net[[:space:]]+\{VDD[[:space:]]+VSS\}} \
     "Core PG pin creation must cover both VDD and VSS"
 assert_contains \
@@ -270,6 +268,14 @@ assert_contains \
     $power_text \
     {if[[:space:]]+\{\$PG_CREATE_CORE_RING_PINS\}} \
     "Manual core ring PG pin creation must be explicitly gated"
+assert_contains \
+    $power_text \
+    {pg_delete_core_pg_pins} \
+    "power_plan.tcl must delete stale VDD/VSS PG pin shapes before recreating the ring"
+
+if {[regexp {foreach[[:space:]]+side[[:space:]]+\{bottom[[:space:]]+top[[:space:]]+left[[:space:]]+right\}} $power_text]} {
+    fail "Core PG pins must not be full-side duplicate ring shapes; create small corner pins only"
+}
 
 if {[regexp -- {createPGPin[[:space:]]+VDD|createPGPin[[:space:]]+VSS} $power_text]} {
     fail "Core PG pins must not be hard-coded as one lower-left VDD/VSS shape"

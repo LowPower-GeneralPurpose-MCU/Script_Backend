@@ -16,7 +16,6 @@
 foreach required_file {
     ./outputs/sram_macro_geometry.tcl
     ./tcl/sram_island_power.tcl
-    ./tcl/global_upper_pg_to_ring.tcl
 } {
     if {![file exists $required_file]} {
         error "Missing power-planning prerequisite: [file normalize $required_file]"
@@ -27,6 +26,9 @@ source ./outputs/sram_macro_geometry.tcl
 
 if {![info exists PG_CREATE_CORE_RING_PINS]} {
     set PG_CREATE_CORE_RING_PINS 1
+}
+if {![info exists PG_ENABLE_UPPER_MESH]} {
+    set PG_ENABLE_UPPER_MESH 0
 }
 
 set core_llx [dbGet top.fPlan.coreBox_llx]
@@ -165,7 +167,7 @@ proc pg_track_aligned_global_offset {area_start area_stop global_first_edge laye
     return [pg_format_coord [expr {$edge - $area_start}]]
 }
 
-proc pg_core_ring_pin_rect {side net core_llx core_lly core_urx core_ury width spacing offset} {
+proc pg_core_ring_lane_rect {side net core_llx core_lly core_urx core_ury width spacing offset} {
     switch -- $net {
         VDD {
             set net_delta 0.0
@@ -180,23 +182,31 @@ proc pg_core_ring_pin_rect {side net core_llx core_lly core_urx core_ury width s
 
     switch -- $side {
         bottom {
-            set ury [expr {$core_lly - $offset - $net_delta}]
-            set lly [expr {$ury - $width}]
+            set center [pg_snap_value_to_layer_track \
+                [expr {$core_lly - $offset - $net_delta - $width / 2.0}] M8]
+            set lly [expr {$center - $width / 2.0}]
+            set ury [expr {$center + $width / 2.0}]
             return [list M8 $core_llx $lly $core_urx $ury]
         }
         top {
-            set lly [expr {$core_ury + $offset + $net_delta}]
-            set ury [expr {$lly + $width}]
+            set center [pg_snap_value_to_layer_track \
+                [expr {$core_ury + $offset + $net_delta + $width / 2.0}] M8]
+            set lly [expr {$center - $width / 2.0}]
+            set ury [expr {$center + $width / 2.0}]
             return [list M8 $core_llx $lly $core_urx $ury]
         }
         left {
-            set urx [expr {$core_llx - $offset - $net_delta}]
-            set llx [expr {$urx - $width}]
+            set center [pg_snap_value_to_layer_track \
+                [expr {$core_llx - $offset - $net_delta - $width / 2.0}] M9]
+            set llx [expr {$center - $width / 2.0}]
+            set urx [expr {$center + $width / 2.0}]
             return [list M9 $llx $core_lly $urx $core_ury]
         }
         right {
-            set llx [expr {$core_urx + $offset + $net_delta}]
-            set urx [expr {$llx + $width}]
+            set center [pg_snap_value_to_layer_track \
+                [expr {$core_urx + $offset + $net_delta + $width / 2.0}] M9]
+            set llx [expr {$center - $width / 2.0}]
+            set urx [expr {$center + $width / 2.0}]
             return [list M9 $llx $core_lly $urx $core_ury]
         }
         default {
@@ -205,24 +215,31 @@ proc pg_core_ring_pin_rect {side net core_llx core_lly core_urx core_ury width s
     }
 }
 
-proc pg_create_core_ring_pin_shapes {core_llx core_lly core_urx core_ury width spacing offset} {
+proc pg_delete_core_pg_pins {} {
     foreach net {VDD VSS} {
         catch {deletePGPin -net $net}
     }
+}
 
-    foreach side {bottom top left right} {
-        foreach net {VDD VSS} {
-            lassign [pg_core_ring_pin_rect \
-                $side $net $core_llx $core_lly $core_urx $core_ury \
-                $width $spacing $offset] \
-                layer llx lly urx ury
+proc pg_create_core_ring_corner_pins {core_llx core_lly core_urx core_ury width spacing offset} {
+    pg_delete_core_pg_pins
 
-            createPGPin $net \
-                -geom $layer \
-                [pg_format_coord $llx] [pg_format_coord $lly] \
-                [pg_format_coord $urx] [pg_format_coord $ury] \
-                -net $net
-        }
+    foreach net {VDD VSS} {
+        lassign [pg_core_ring_lane_rect \
+            left $net $core_llx $core_lly $core_urx $core_ury \
+            $width $spacing $offset] \
+            left_layer left_llx left_lly left_urx left_ury
+
+        lassign [pg_core_ring_lane_rect \
+            bottom $net $core_llx $core_lly $core_urx $core_ury \
+            $width $spacing $offset] \
+            bottom_layer bottom_llx bottom_lly bottom_urx bottom_ury
+
+        createPGPin $net \
+            -geom M9 \
+            [pg_format_coord $left_llx] [pg_format_coord $bottom_lly] \
+            [pg_format_coord $left_urx] [pg_format_coord $bottom_ury] \
+            -net $net
     }
 }
 
@@ -271,6 +288,7 @@ proc pg_assert_clean_connectivity_report {report_path} {
 setAddStripeMode -allow_jog none
 
 clearGlobalNets
+pg_delete_core_pg_pins
 deleteAllPowerPreroutes
 
 globalNetConnect VDD -type pgpin -pin VDD -inst * -module {} -override
@@ -329,11 +347,11 @@ addRing \
     -offset $ring_m89_o \
     -snap_wire_center_to_grid Grid
 
-# createPGPin -geom uses absolute rectangles.  These rectangles follow the
-# same inner-to-outer net order as the M8/M9 core ring and are created on all
-# four sides so both VDD and VSS are visible at the floorplan checkpoint.
+# createPGPin is only a small logical/physical tap on the core ring.  Do not
+# duplicate the whole ring as PG pins; full-side pin shapes obscure the ring
+# and can leave stale VDD/VSS lanes in interactive reruns.
 if {$PG_CREATE_CORE_RING_PINS} {
-    pg_create_core_ring_pin_shapes \
+    pg_create_core_ring_corner_pins \
         $core_llx $core_lly $core_urx $core_ury \
         $ring_m89_w $ring_m89_s $ring_m89_o
 }
@@ -352,10 +370,15 @@ set stripe_m5_offset 8.640
 # blockPin-to-blockring sroute, M4/M5 gap stripes in SRAM channels, trim.
 source ./tcl/sram_island_power.tcl
 
-# Add the top-metal global PG outside the complete SRAM island cut box.
-# This restores the missing outer network without creating full-die stripes
-# over SRAM macro bodies.
-source ./tcl/global_upper_pg_to_ring.tcl
+# Optional top-metal global mesh.  Keep this off at the floorplan/pins
+# checkpoint; standard-cell PG should be added after placement when the row
+# rails and real routing demand are known.
+if {$PG_ENABLE_UPPER_MESH} {
+    if {![file exists ./tcl/global_upper_pg_to_ring.tcl]} {
+        error "Missing optional upper PG script: [file normalize ./tcl/global_upper_pg_to_ring.tcl]"
+    }
+    source ./tcl/global_upper_pg_to_ring.tcl
+}
 
 editTrim -nets {VDD VSS}
 
@@ -379,6 +402,8 @@ puts "===================================================="
 puts "HIERARCHICAL POWER PLAN COMPLETED"
 puts " - SRAM island     : reference shared_cluster ring + M4/M5 stripes"
 puts " - Core ring       : M8/M9"
+puts " - Core PG pins    : lower-left corner taps only"
+puts " - Upper M8/M9 mesh: $PG_ENABLE_UPPER_MESH"
 puts " - addStripe jog   : none"
 puts " - SRAM blockPin  : nearest shared-cluster blockring"
 puts " - corePin sroute : no jog/no layer change after placement"
