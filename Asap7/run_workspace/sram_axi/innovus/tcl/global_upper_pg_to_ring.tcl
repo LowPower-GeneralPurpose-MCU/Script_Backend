@@ -117,6 +117,7 @@ foreach area [list $UPPER_TOP_FULL_BOX $UPPER_RIGHT_LOWER_BOX] {
         -set_to_set_distance $stripe_m89_pitch \
         -start_from bottom \
         -start_offset $area_offset \
+        -create_pins 0 \
         -area $area \
         -snap_wire_center_to_grid Grid \
         -allow_snapping_override_custom_spacing 1
@@ -148,6 +149,7 @@ foreach area [list $UPPER_RIGHT_FULL_BOX $UPPER_TOP_LEFT_BOX] {
         -set_to_set_distance $stripe_m89_pitch \
         -start_from left \
         -start_offset $area_offset \
+        -create_pins 0 \
         -area $area \
         -snap_wire_center_to_grid Grid \
         -allow_snapping_override_custom_spacing 1

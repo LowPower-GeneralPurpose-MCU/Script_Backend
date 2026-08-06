@@ -170,6 +170,7 @@ proc warn_if_dirty_report {path} {
 set power_plan [file join $tcl_dir power_plan.tcl]
 set power_children {
     sram_island_power.tcl
+    global_upper_pg_to_ring.tcl
     core_lower_pg_nojog.tcl
 }
 
@@ -190,7 +191,6 @@ foreach old_child {
     sram_macro_power.tcl
     stitch_island_to_core.tcl
     core_pg_outside_island.tcl
-    global_upper_pg_to_ring.tcl
 } {
     if {[string first "source ./tcl/$old_child" $power_text] >= 0} {
         fail "power_plan.tcl must not source $old_child; final SRAM island PG must follow the reference ring/stripe pattern"
@@ -201,6 +201,17 @@ assert_contains \
     $power_text \
     {source[[:space:]]+\./tcl/sram_island_power\.tcl} \
     "power_plan.tcl must source the reference-style SRAM island PG script"
+assert_contains \
+    $power_text \
+    {source[[:space:]]+\./tcl/global_upper_pg_to_ring\.tcl} \
+    "power_plan.tcl must create the M8/M9 global mesh outside the SRAM island before the pins checkpoint"
+
+set sram_source_index [string first "source ./tcl/sram_island_power.tcl" $power_text]
+set upper_source_index [string first "source ./tcl/global_upper_pg_to_ring.tcl" $power_text]
+if {$sram_source_index < 0 || $upper_source_index < 0 ||
+    $upper_source_index <= $sram_source_index} {
+    fail "M8/M9 outside-island mesh must be created after the local SRAM M4/M5 island PG"
+}
 
 foreach proc_name {
     pg_layer_pitch
@@ -253,8 +264,8 @@ assert_contains \
 
 assert_contains \
     $power_text \
-    {set[[:space:]]+PG_CREATE_CORE_RING_PINS[[:space:]]+0} \
-    "Core ring PG pin shapes must be disabled by default until their geometry is derived from actual snapped ring shapes"
+    {set[[:space:]]+PG_CREATE_CORE_RING_PINS[[:space:]]+1} \
+    "Core ring PG pin shapes must be enabled so both VDD and VSS physical PG pins are visible at the power/pins checkpoint"
 assert_contains \
     $power_text \
     {if[[:space:]]+\{\$PG_CREATE_CORE_RING_PINS\}} \
@@ -356,6 +367,22 @@ assert_contains \
     {SRAM_MACRO_GAP_X} \
     "SRAM island vertical PG must be derived from the actual SRAM macro column gaps"
 
+set global_upper_code_only ""
+foreach line [split $child_text(global_upper_pg_to_ring.tcl) "\n"] {
+    if {![regexp {^[[:space:]]*#} $line]} {
+        append global_upper_code_only $line "\n"
+    }
+}
+
+if {[string first "-extend_to design_boundary" $global_upper_code_only] >= 0} {
+    fail "M8/M9 outside-island stripes must use explicit -area boxes instead of -extend_to design_boundary"
+}
+set global_upper_stripes [regexp -all {addStripe[[:space:]]+\\} $global_upper_code_only]
+set global_upper_no_pin_stripes [regexp -all -- {-create_pins[[:space:]]+0} $global_upper_code_only]
+if {$global_upper_stripes == 0 || $global_upper_no_pin_stripes < $global_upper_stripes} {
+    fail "Every M8/M9 outside-island addStripe must use -create_pins 0; top-level PG pins are created explicitly from the core ring"
+}
+
 set simulated_sram_stripes \
     [simulate_sram_island_power [file join $tcl_dir sram_island_power.tcl]]
 if {[llength $simulated_sram_stripes] != 6} {
@@ -415,6 +442,19 @@ foreach flow_pair [list \
         $flow_text \
         {catch[[:space:]]+\{source[[:space:]]+\./tcl/power_plan\.tcl\}} \
         "$flow_name must stop before pin assignment when power_plan.tcl reports dirty PG"
+
+    assert_contains \
+        $flow_text \
+        {INNOVUS_STOP_AFTER_POWER_PINS} \
+        "$flow_name must support a checkpoint stop after power plan and top-level pin assignment"
+
+    set save_index [string first "saveDesign ./saved/axi_ram_floorplan_power_pins.enc" $flow_text]
+    set place_index [string first "place_opt_design" $flow_text]
+    set stop_index [string first "STOP_AFTER_POWER_PINS" $flow_text $save_index]
+    if {$save_index < 0 || $place_index < 0 || $stop_index < 0 ||
+        $stop_index >= $place_index} {
+        fail "$flow_name must check STOP_AFTER_POWER_PINS after saving the power/pins checkpoint and before place_opt_design"
+    }
 }
 
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_drc_before_stdcell_place.rpt]

@@ -11,6 +11,7 @@
 ##
 ## Default: INNOVUS_AUTO_RUN_ALL=1
 ## Set INNOVUS_AUTO_RUN_ALL=0 to stop after routed verification.
+## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
 set AUTO_RUN_ALL 1
@@ -21,6 +22,17 @@ if {[info exists ::env(INNOVUS_AUTO_RUN_ALL)]} {
         0 - false - no - off { set AUTO_RUN_ALL 0 }
         default {
             error "INNOVUS_AUTO_RUN_ALL must be 0/1, false/true, no/yes or off/on"
+        }
+    }
+}
+
+set STOP_AFTER_POWER_PINS 0
+if {[info exists ::env(INNOVUS_STOP_AFTER_POWER_PINS)]} {
+    switch -nocase -- $::env(INNOVUS_STOP_AFTER_POWER_PINS) {
+        1 - true - yes - on  { set STOP_AFTER_POWER_PINS 1 }
+        0 - false - no - off { set STOP_AFTER_POWER_PINS 0 }
+        default {
+            error "INNOVUS_STOP_AFTER_POWER_PINS must be 0/1, false/true, no/yes or off/on"
         }
     }
 }
@@ -42,7 +54,7 @@ source ./tcl/innovus.globals
 
 # Fail before the long implementation run if one-shot export cannot create a
 # mapped GDS.  Strict checkpoint mode does not require the map file yet.
-if {$AUTO_RUN_ALL} {
+if {$AUTO_RUN_ALL && !$STOP_AFTER_POWER_PINS} {
     if {$GDS_MAP_FILE eq ""} {
         error "Set ASAP7_GDS_MAP_FILE before running the full one-shot flow"
     }
@@ -176,8 +188,8 @@ if {[llength $SRAM_PTRS] != $SRAM_COUNT} {
 
 foreach ptr $SRAM_PTRS {
     set macro_name [lindex [dbGet $ptr.name] 0]
-    set orientation [dbGet $ptr.orient]
-    set status [dbGet $ptr.pStatus]
+    set orientation [lindex [dbGet $ptr.orient] 0]
+    set status [lindex [dbGet $ptr.pStatus] 0]
 
     if {$orientation ne "R0" && $orientation ne "R180"} {
         error "$macro_name has illegal orientation $orientation"
@@ -203,6 +215,16 @@ setPinConstraint -corner_to_pin_distance 8
 source ./tcl/pins.tcl
 
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
+
+if {$STOP_AFTER_POWER_PINS} {
+    puts "===================================================="
+    puts "CHECKPOINT MODE: FLOW STOPPED AFTER POWER PLAN AND TOP-LEVEL PINS"
+    puts " - ./saved/axi_ram_powerplan.enc"
+    puts " - ./saved/axi_ram_floorplan_power_pins.enc"
+    puts "Standard-cell placement has not been run."
+    puts "===================================================="
+    return
+}
 
 # ------------------------------------------------------------------------
 # 4. STANDARD-CELL PLACEMENT

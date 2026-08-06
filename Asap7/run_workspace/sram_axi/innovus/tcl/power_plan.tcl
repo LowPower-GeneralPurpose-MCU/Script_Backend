@@ -16,6 +16,7 @@
 foreach required_file {
     ./outputs/sram_macro_geometry.tcl
     ./tcl/sram_island_power.tcl
+    ./tcl/global_upper_pg_to_ring.tcl
 } {
     if {![file exists $required_file]} {
         error "Missing power-planning prerequisite: [file normalize $required_file]"
@@ -25,7 +26,7 @@ foreach required_file {
 source ./outputs/sram_macro_geometry.tcl
 
 if {![info exists PG_CREATE_CORE_RING_PINS]} {
-    set PG_CREATE_CORE_RING_PINS 0
+    set PG_CREATE_CORE_RING_PINS 1
 }
 
 set core_llx [dbGet top.fPlan.coreBox_llx]
@@ -328,8 +329,9 @@ addRing \
     -offset $ring_m89_o \
     -snap_wire_center_to_grid Grid
 
-# createPGPin -geom uses absolute rectangles.  Keep it off by default because
-# the rectangles must be derived from the snapped, same-net ring shapes.
+# createPGPin -geom uses absolute rectangles.  These rectangles follow the
+# same inner-to-outer net order as the M8/M9 core ring and are created on all
+# four sides so both VDD and VSS are visible at the floorplan checkpoint.
 if {$PG_CREATE_CORE_RING_PINS} {
     pg_create_core_ring_pin_shapes \
         $core_llx $core_lly $core_urx $core_ury \
@@ -349,6 +351,11 @@ set stripe_m5_offset 8.640
 # Match the teacher's SRAM-island sequence: shared-cluster ring,
 # blockPin-to-blockring sroute, M4/M5 gap stripes in SRAM channels, trim.
 source ./tcl/sram_island_power.tcl
+
+# Add the top-metal global PG outside the complete SRAM island cut box.
+# This restores the missing outer network without creating full-die stripes
+# over SRAM macro bodies.
+source ./tcl/global_upper_pg_to_ring.tcl
 
 editTrim -nets {VDD VSS}
 

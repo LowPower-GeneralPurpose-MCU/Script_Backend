@@ -12,6 +12,17 @@ set USER $::env(USER)
 if {[catch {file delete -force /tmp/$USER/innovus_pnr}]} {}
 set auto_file_dir "/tmp/$USER/innovus_pnr"
 
+set STOP_AFTER_POWER_PINS 0
+if {[info exists ::env(INNOVUS_STOP_AFTER_POWER_PINS)]} {
+    switch -nocase -- $::env(INNOVUS_STOP_AFTER_POWER_PINS) {
+        1 - true - yes - on  { set STOP_AFTER_POWER_PINS 1 }
+        0 - false - no - off { set STOP_AFTER_POWER_PINS 0 }
+        default {
+            error "INNOVUS_STOP_AFTER_POWER_PINS must be 0/1, false/true, no/yes or off/on"
+        }
+    }
+}
+
 foreach dir {outputs reports verify_rpt saved} {
     file mkdir $dir
 }
@@ -93,6 +104,16 @@ setPinConstraint -corner_to_pin_distance 8
 source ./tcl/pins.tcl
 
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
+
+if {$STOP_AFTER_POWER_PINS} {
+    puts "===================================================="
+    puts "CHECKPOINT MODE: FLOW STOPPED AFTER POWER PLAN AND TOP-LEVEL PINS"
+    puts " - ./saved/axi_ram_powerplan.enc"
+    puts " - ./saved/axi_ram_floorplan_power_pins.enc"
+    puts "Standard-cell placement has not been run."
+    puts "===================================================="
+    return
+}
 
 # ------------------------------------------------------------------------
 # 2. STANDARD-CELL PLACEMENT
