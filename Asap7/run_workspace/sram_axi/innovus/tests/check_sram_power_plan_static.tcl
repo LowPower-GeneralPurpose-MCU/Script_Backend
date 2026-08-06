@@ -71,6 +71,7 @@ foreach proc_name {
     pg_positive_mod
     pg_track_aligned_pair_offset
     pg_track_aligned_global_offset
+    pg_create_core_ring_pin_shapes
     pg_assert_clean_connectivity_report
     pg_assert_clean_drc_report
 } {
@@ -97,6 +98,23 @@ foreach margin_var {die_core_margin_left die_core_margin_bottom die_core_margin_
 set ring_snap_count [regexp -all -- {-snap_wire_center_to_grid[[:space:]]+Grid} $power_text]
 if {$ring_snap_count < 2} {
     fail "Both core and SRAM addRing commands must snap wire centers to the routing grid"
+}
+
+assert_contains \
+    $power_text \
+    {foreach[[:space:]]+side[[:space:]]+\{bottom[[:space:]]+top[[:space:]]+left[[:space:]]+right\}} \
+    "Core PG pins must be created on all four sides of the core ring"
+assert_contains \
+    $power_text \
+    {foreach[[:space:]]+net[[:space:]]+\{VDD[[:space:]]+VSS\}} \
+    "Core PG pin creation must cover both VDD and VSS"
+assert_contains \
+    $power_text \
+    {deletePGPin[[:space:]]+-net[[:space:]]+\$net} \
+    "Core PG pin creation must delete old VDD/VSS PG pin shapes before recreating them"
+
+if {[regexp -- {createPGPin[[:space:]]+VDD|createPGPin[[:space:]]+VSS} $power_text]} {
+    fail "Core PG pins must not be hard-coded as one lower-left VDD/VSS shape"
 }
 
 if {[regexp -- {-snap_wire_center_to_grid[[:space:]]+grid} $all_power_text]} {

@@ -1,10 +1,10 @@
 ############################################################
-## AXI pin planning around a lower-left SRAM macro island
+## AXI pin planning on the four core edges
 ##
 ## Macro-slide rules:
 ##   - favor Macro-to-Port connectivity
 ##   - keep signal escape directed toward the core
-##   - do not place top-level pins beside/under the macro island
+##   - spread top-level ports evenly on all four core sides
 ############################################################
 
 proc make_bus_pins {base msb lsb} {
@@ -86,48 +86,41 @@ foreach pin [concat $TOP_PINS $RIGHT_PINS $LEFT_PINS $BOTTOM_PINS] {
     lappend assigned_ports $pin
 }
 
-set pin_die_box [join [dbGet top.fPlan.box]]
-if {[llength $pin_die_box] != 4} {
-    error "Cannot decode die box for pin placement: [dbGet top.fPlan.box]"
-}
-lassign $pin_die_box die_llx die_lly die_urx die_ury
+set pin_core_llx [dbGet top.fPlan.coreBox_llx]
+set pin_core_lly [dbGet top.fPlan.coreBox_lly]
+set pin_core_urx [dbGet top.fPlan.coreBox_urx]
+set pin_core_ury [dbGet top.fPlan.coreBox_ury]
 
 set PIN_WIDTH 0.128
 set PIN_DEPTH 0.288
 set PIN_EDGE_CLEARANCE 8.000
-set PIN_ISLAND_CLEARANCE 8.000
+
+if {[expr {$pin_core_urx - $pin_core_llx}] <= 2.0 * $PIN_EDGE_CLEARANCE} {
+    error "Core width is too small for the requested pin edge clearance"
+}
+if {[expr {$pin_core_ury - $pin_core_lly}] <= 2.0 * $PIN_EDGE_CLEARANCE} {
+    error "Core height is too small for the requested pin edge clearance"
+}
 
 set top_start [list \
-    [expr {$die_llx + $PIN_EDGE_CLEARANCE}] $die_ury]
+    [expr {$pin_core_llx + $PIN_EDGE_CLEARANCE}] $pin_core_ury]
 set top_end [list \
-    [expr {$die_urx - $PIN_EDGE_CLEARANCE}] $die_ury]
+    [expr {$pin_core_urx - $PIN_EDGE_CLEARANCE}] $pin_core_ury]
 
 set right_start [list \
-    $die_urx [expr {$die_lly + $PIN_EDGE_CLEARANCE}]]
+    $pin_core_urx [expr {$pin_core_lly + $PIN_EDGE_CLEARANCE}]]
 set right_end [list \
-    $die_urx [expr {$die_ury - $PIN_EDGE_CLEARANCE}]]
+    $pin_core_urx [expr {$pin_core_ury - $PIN_EDGE_CLEARANCE}]]
 
-# LEFT pins occupy only the segment above the SRAM island.
-set left_start_y [expr {
-    $SRAM_ISLAND_CUT_URY + $PIN_ISLAND_CLEARANCE
-}]
-set left_end_y [expr {$die_ury - $PIN_EDGE_CLEARANCE}]
-if {$left_start_y >= $left_end_y} {
-    error "No legal LEFT pin range remains above the SRAM island"
-}
-set left_start [list $die_llx $left_start_y]
-set left_end   [list $die_llx $left_end_y]
+set left_start [list \
+    $pin_core_llx [expr {$pin_core_lly + $PIN_EDGE_CLEARANCE}]]
+set left_end [list \
+    $pin_core_llx [expr {$pin_core_ury - $PIN_EDGE_CLEARANCE}]]
 
-# BOTTOM pins occupy only the segment to the right of the SRAM island.
-set bottom_start_x [expr {
-    $SRAM_ISLAND_CUT_URX + $PIN_ISLAND_CLEARANCE
-}]
-set bottom_end_x [expr {$die_urx - $PIN_EDGE_CLEARANCE}]
-if {$bottom_start_x >= $bottom_end_x} {
-    error "No legal BOTTOM pin range remains right of the SRAM island"
-}
-set bottom_start [list $bottom_start_x $die_lly]
-set bottom_end   [list $bottom_end_x $die_lly]
+set bottom_start [list \
+    [expr {$pin_core_llx + $PIN_EDGE_CLEARANCE}] $pin_core_lly]
+set bottom_end [list \
+    [expr {$pin_core_urx - $PIN_EDGE_CLEARANCE}] $pin_core_lly]
 
 setPinAssignMode -pinEditInBatch true
 
@@ -193,6 +186,6 @@ puts "===================================================="
 puts "SEGMENTED AXI PIN ASSIGNMENT COMPLETED"
 puts " - TOP    / M7 : [llength $TOP_PINS] pins"
 puts " - RIGHT  / M6 : [llength $RIGHT_PINS] pins"
-puts " - LEFT   / M6 : [llength $LEFT_PINS] pins above island"
-puts " - BOTTOM / M7 : [llength $BOTTOM_PINS] pins right of island"
+puts " - LEFT   / M6 : [llength $LEFT_PINS] pins"
+puts " - BOTTOM / M7 : [llength $BOTTOM_PINS] pins"
 puts "===================================================="

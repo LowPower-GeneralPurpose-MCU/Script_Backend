@@ -163,6 +163,67 @@ proc pg_track_aligned_global_offset {area_start area_stop global_first_edge laye
     return [pg_format_coord [expr {$edge - $area_start}]]
 }
 
+proc pg_core_ring_pin_rect {side net core_llx core_lly core_urx core_ury width spacing offset} {
+    switch -- $net {
+        VDD {
+            set net_delta 0.0
+        }
+        VSS {
+            set net_delta [expr {$width + $spacing}]
+        }
+        default {
+            error "Unsupported core PG pin net: $net"
+        }
+    }
+
+    switch -- $side {
+        bottom {
+            set ury [expr {$core_lly - $offset - $net_delta}]
+            set lly [expr {$ury - $width}]
+            return [list M8 $core_llx $lly $core_urx $ury]
+        }
+        top {
+            set lly [expr {$core_ury + $offset + $net_delta}]
+            set ury [expr {$lly + $width}]
+            return [list M8 $core_llx $lly $core_urx $ury]
+        }
+        left {
+            set urx [expr {$core_llx - $offset - $net_delta}]
+            set llx [expr {$urx - $width}]
+            return [list M9 $llx $core_lly $urx $core_ury]
+        }
+        right {
+            set llx [expr {$core_urx + $offset + $net_delta}]
+            set urx [expr {$llx + $width}]
+            return [list M9 $llx $core_lly $urx $core_ury]
+        }
+        default {
+            error "Unsupported core PG pin side: $side"
+        }
+    }
+}
+
+proc pg_create_core_ring_pin_shapes {core_llx core_lly core_urx core_ury width spacing offset} {
+    foreach net {VDD VSS} {
+        catch {deletePGPin -net $net}
+    }
+
+    foreach side {bottom top left right} {
+        foreach net {VDD VSS} {
+            lassign [pg_core_ring_pin_rect \
+                $side $net $core_llx $core_lly $core_urx $core_ury \
+                $width $spacing $offset] \
+                layer llx lly urx ury
+
+            createPGPin $net \
+                -geom $layer \
+                [pg_format_coord $llx] [pg_format_coord $lly] \
+                [pg_format_coord $urx] [pg_format_coord $ury] \
+                -net $net
+        }
+    }
+}
+
 proc pg_assert_clean_drc_report {report_path} {
     if {![file exists $report_path]} {
         error "Missing PG DRC report: $report_path"
@@ -255,28 +316,10 @@ addRing \
     -offset $ring_m89_o \
     -snap_wire_center_to_grid Grid
 
-# PG pins overlap the lower-left ring intersection.
-set vdd_m9_right [expr {$core_llx - $ring_m89_o}]
-set vdd_m9_left  [expr {$vdd_m9_right - $ring_m89_w}]
-set vss_m9_right [expr {$vdd_m9_left - $ring_m89_s}]
-set vss_m9_left  [expr {$vss_m9_right - $ring_m89_w}]
-
-set vdd_m8_top    [expr {$core_lly - $ring_m89_o}]
-set vdd_m8_bottom [expr {$vdd_m8_top - $ring_m89_w}]
-set vss_m8_top    [expr {$vdd_m8_bottom - $ring_m89_s}]
-set vss_m8_bottom [expr {$vss_m8_top - $ring_m89_w}]
-
-createPGPin VDD \
-    -geom M9 \
-    $vdd_m9_left $vdd_m8_bottom \
-    $vdd_m9_right $vdd_m8_top \
-    -net VDD
-
-createPGPin VSS \
-    -geom M9 \
-    $vss_m9_left $vss_m8_bottom \
-    $vss_m9_right $vss_m8_top \
-    -net VSS
+# Expose VDD/VSS on all four sides of the M8/M9 core ring.
+pg_create_core_ring_pin_shapes \
+    $core_llx $core_lly $core_urx $core_ury \
+    $ring_m89_w $ring_m89_s $ring_m89_o
 
 # ------------------------------------------------------------------------
 # 2. ONE M4/M5 BLOCK RING AROUND THE SRAM HIERARCHY GROUP
