@@ -5,6 +5,11 @@
 
 source ./tcl/project_config.tcl
 
+# Cadence Innovus reads constraints using the active library unit, while the
+# Genus SDC uses ps/fF set_units commands that are skipped in constraint-mode
+# SDC files.  Pin the Innovus session to ns/pF before MMMC is read.
+setLibraryUnit -time 1ns -cap 1pf
+
 set TECH_LEF "${ASAP7}/asap7sc7p5t_28/techlef_misc"
 set CELL_LEF "${ASAP7}/asap7sc7p5t_28/LEF/scaled"
 

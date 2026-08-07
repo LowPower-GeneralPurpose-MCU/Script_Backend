@@ -23,6 +23,10 @@ if {[info exists ::env(ASAP7_GDS_MAP_FILE)] &&
 set STREAMOUT_UNITS 4000
 set POWER_NETS {VDD VSS}
 
+set SYN_SDC_FILE "./outputs/${DESIGN}_syn.sdc"
+set INNOVUS_SDC_FILE "./outputs/${DESIGN}_syn.innovus.sdc"
+set INNOVUS_GROUP_PATH_FILE "./outputs/${DESIGN}_syn.innovus_groups.tcl"
+
 # proto_design requires the separate invs_ehfs capability.  The provided
 # Innovus license does not contain it (IMPLIC-90 / IMPFM-801 in the log), so
 # use the deterministic hierarchy floorplan by default.  Enable proto only on

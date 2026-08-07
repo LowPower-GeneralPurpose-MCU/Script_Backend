@@ -51,6 +51,9 @@ if {![file exists ./tcl/innovus.globals]} {
 
 set init_design_uniquify 1
 source ./tcl/innovus.globals
+source ./tcl/prepare_innovus_sdc.tcl
+source ./tcl/flow_checks.tcl
+prepare_innovus_sdc $SYN_SDC_FILE $INNOVUS_SDC_FILE $INNOVUS_GROUP_PATH_FILE
 
 # Fail before the long implementation run if one-shot export cannot create a
 # mapped GDS.  Strict checkpoint mode does not require the map file yet.
@@ -64,6 +67,11 @@ if {$AUTO_RUN_ALL && !$STOP_AFTER_POWER_PINS} {
 }
 
 init_design
+
+if {[file exists $INNOVUS_GROUP_PATH_FILE] && [file size $INNOVUS_GROUP_PATH_FILE] > 0} {
+    puts "Reading global path groups: $INNOVUS_GROUP_PATH_FILE"
+    source $INNOVUS_GROUP_PATH_FILE
+}
 
 setDesignMode -process 7
 
@@ -274,7 +282,8 @@ if {$STOP_AFTER_POWER_PINS} {
 
 setDelayCalMode \
     -SIAware false \
-    -equivalent_waveform_model none
+    -equivalent_waveform_model none \
+    -ewm_type moments
 
 setPlaceMode -reset
 setPlaceMode \
@@ -283,12 +292,14 @@ setPlaceMode \
     -place_global_auto_blockage_in_channel soft \
     -place_detail_preroute_as_obs {2 3} \
     -place_global_cong_effort high \
+    -place_global_reorder_scan false \
     -place_design_refine_macro false
 
 place_opt_design
 refinePlace
 
 checkPlace ./verify_rpt/checkPlace_after_place.rpt
+assert_clean_check_place ./verify_rpt/checkPlace_after_place.rpt
 checkFPlan \
     -reportUtil \
     -outFile ./verify_rpt/reportUtil_after_place.rpt
@@ -333,7 +344,11 @@ saveDesign ./saved/axi_ram_placed.enc
 set BUFCells {
     BUFx4_ASAP7_75t_R
     BUFx8_ASAP7_75t_R
+    BUFx10_ASAP7_75t_R
     BUFx12_ASAP7_75t_R
+    BUFx12f_ASAP7_75t_R
+    BUFx16f_ASAP7_75t_R
+    BUFx24_ASAP7_75t_R
 }
 set INVCells {
     CKINVDCx8_ASAP7_75t_R
@@ -363,6 +378,10 @@ set_ccopt_property -net_type trunk route_type trunk_rule
 set_ccopt_property -net_type top   route_type top_rule
 set_ccopt_property routing_top_min_fanout 100
 set_ccopt_property target_max_trans 0.3ns
+set_ccopt_property -net_type leaf  target_max_trans 40ps
+set_ccopt_property -net_type trunk target_max_trans 80ps
+set_ccopt_property -net_type top   target_max_trans 120ps
+set_ccopt_property target_skew 50ps
 set_ccopt_property buffer_cells $BUFCells
 set_ccopt_property inverter_cells $INVCells
 set_ccopt_property use_inverters auto
@@ -374,6 +393,12 @@ setOptMode \
     -fixFanoutLoad true
 
 optDesign -prefix preCTS -preCTS
+refinePlace
+checkPlace ./verify_rpt/checkPlace_before_cts.rpt
+assert_clean_check_place ./verify_rpt/checkPlace_before_cts.rpt
+setNanoRouteMode -quiet \
+    -routeBottomRoutingLayer 1 \
+    -routeTopRoutingLayer 9
 
 # Do not extract/source ccopt.spec.  clock_opt_design avoids the
 # IMPCCOPT-2048 "clock trees are already defined" failure in this flow.
@@ -436,6 +461,8 @@ addFiller
 
 setNanoRouteMode -reset
 setNanoRouteMode -quiet \
+    -routeBottomRoutingLayer 1 \
+    -routeTopRoutingLayer 9 \
     -route_strict_honor_route_rule true \
     -route_strictly_honor_1d_routing true \
     -route_detail_no_taper_in_layers "1:9" \

@@ -10,6 +10,10 @@ set QRC   "${ASAP7}/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06"
 
 source ./tcl/sram_macro_setup.tcl
 
+# Keep the MMMC reader in the same ns/pF unit system as the generated
+# Innovus SDC.  This removes the IMPTS-16/17 unit fallback.
+setLibraryUnit -time 1ns -cap 1pf
+
 # RVT and LVT standard-cell timing libraries.  This list must match the
 # libraries used by Genus so every mapped cell has an Innovus timing model.
 set STD_LIB_LIST [list \
@@ -68,9 +72,18 @@ create_delay_corner \
     -opcond_library opcond \
     -rc_corner rccorner
 
+if {![file exists $INNOVUS_SDC_FILE]} {
+    if {![file exists ./tcl/prepare_innovus_sdc.tcl]} {
+        error "Missing $INNOVUS_SDC_FILE and ./tcl/prepare_innovus_sdc.tcl"
+    }
+
+    source ./tcl/prepare_innovus_sdc.tcl
+    prepare_innovus_sdc $SYN_SDC_FILE $INNOVUS_SDC_FILE $INNOVUS_GROUP_PATH_FILE
+}
+
 create_constraint_mode \
     -name mode_normal \
-    -sdc_files "./outputs/${DESIGN}_syn.sdc"
+    -sdc_files $INNOVUS_SDC_FILE
 
 create_analysis_view \
     -name tt \
