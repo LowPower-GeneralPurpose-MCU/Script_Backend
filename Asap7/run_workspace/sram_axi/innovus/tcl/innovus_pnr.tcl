@@ -88,6 +88,8 @@ foreach ptr $SRAM_PTRS {
     }
 }
 
+source ./tcl/sram_route_guard.tcl
+
 checkFPlan \
     -reportUtil \
     -outFile ./verify_rpt/reportUtil_before_pnr.rpt
@@ -175,7 +177,7 @@ setPlaceMode \
 place_opt_design
 refinePlace
 
-checkPlace
+checkPlace ./verify_rpt/checkPlace_after_place.rpt
 checkFPlan \
     -reportUtil \
     -outFile ./verify_rpt/reportUtil_after_place.rpt
@@ -267,7 +269,24 @@ optDesign -prefix preCTS -preCTS
 clock_opt_design
 
 # Propagated clocks are valid only after CTS.
-set_propagated_clock [all_clocks]
+proc apply_post_cts_propagated_clocks {} {
+    set active_constraint_modes [all_constraint_modes -active]
+
+    if {[catch {
+        set_interactive_constraint_modes $active_constraint_modes
+        set_propagated_clock [all_clocks]
+    } propagated_clock_setup_error]} {
+        catch {set_interactive_constraint_modes {}}
+        return -code error $propagated_clock_setup_error
+    }
+
+    set_interactive_constraint_modes {}
+}
+
+if {[catch {apply_post_cts_propagated_clocks} propagated_clock_error]} {
+    puts stderr "Post-CTS propagated-clock setup failed: $propagated_clock_error"
+    return -code error $propagated_clock_error
+}
 
 optDesign \
     -prefix postCTS \

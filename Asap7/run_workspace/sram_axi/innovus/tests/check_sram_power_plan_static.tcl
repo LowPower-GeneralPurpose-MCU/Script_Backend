@@ -254,6 +254,40 @@ foreach child $power_children {
 
 set pnr_text [read_complete_file [file join $tcl_dir innovus_pnr.tcl]]
 set innovus_text [read_complete_file [file join $tcl_dir innovus.tcl]]
+set route_guard_path [file join $tcl_dir sram_route_guard.tcl]
+if {![file exists $route_guard_path]} {
+    fail "Missing sram_route_guard.tcl; SRAM macro bodies must be protected before placement/CTS"
+}
+set route_guard_text [read_complete_file $route_guard_path]
+
+assert_contains \
+    $route_guard_text \
+    {createRouteBlk[[:space:]]+\\} \
+    "sram_route_guard.tcl must create Innovus route blockages over the SRAM macro bodies"
+assert_contains \
+    $route_guard_text \
+    {-exceptpgnet} \
+    "SRAM route blockages must use -exceptpgnet so VDD/VSS special routing can still cross the island"
+assert_contains \
+    $route_guard_text \
+    {-layer[[:space:]]+\$SRAM_ROUTE_GUARD_LAYERS} \
+    "SRAM route blockages must use an explicit configurable layer list"
+assert_contains \
+    $route_guard_text \
+    {set[[:space:]]+SRAM_ROUTE_GUARD_LAYERS[[:space:]]+\{M4[[:space:]]+M5\}} \
+    "ASAP7 SRAM route guard must reserve the M4/M5 macro-body layers called out by the macro slides"
+assert_contains \
+    $route_guard_text \
+    {setRouteMode[[:space:]]+\\[[:space:]]+-earlyGlobalReverseDirection[[:space:]]+\$sram_egr_reverse_regions} \
+    "SRAM route guard must use the documented setRouteMode -earlyGlobalReverseDirection option for early global route/CTS estimation"
+assert_contains \
+    $route_guard_text \
+    {set[[:space:]]+SRAM_ROUTE_GUARD_EGR_LAYER[[:space:]]+M5} \
+    "The SRAM early-global reverse-direction reservation must target the teacher-style M5 routing layer"
+assert_contains \
+    $route_guard_text \
+    {deleteRouteBlk[[:space:]]+-name[[:space:]]+SRAM_ROUTE_GUARD_\*} \
+    "SRAM route guard must delete stale named route blockages before recreating them"
 
 foreach old_child {
     sram_gap_stripes.tcl
@@ -771,6 +805,30 @@ foreach flow_pair [list \
         $flow_text \
         {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$post_place_pg_error} \
         "$flow_name must hard-stop on dirty post-placement PG instead of saving axi_ram_placed.enc"
+    assert_contains \
+        $flow_text \
+        {source[[:space:]]+\./tcl/sram_route_guard\.tcl} \
+        "$flow_name must source sram_route_guard.tcl before standard-cell placement"
+    assert_contains \
+        $flow_text \
+        {set_interactive_constraint_modes[[:space:]]+\$active_constraint_modes} \
+        "$flow_name must enable active interactive constraint modes before set_propagated_clock"
+    assert_contains \
+        $flow_text \
+        {set_propagated_clock[[:space:]]+\[all_clocks\]} \
+        "$flow_name must explicitly set clocks propagated only after CTS"
+    assert_contains \
+        $flow_text \
+        {set_interactive_constraint_modes[[:space:]]+\{\}} \
+        "$flow_name must clear interactive constraint modes after propagated-clock setup"
+    assert_contains \
+        $flow_text \
+        {catch[[:space:]]+\{apply_post_cts_propagated_clocks\}} \
+        "$flow_name must catch post-CTS propagated-clock setup failures"
+    assert_contains \
+        $flow_text \
+        {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$propagated_clock_error} \
+        "$flow_name must hard-stop when propagated-clock setup fails"
 
     set power_catch_index [string first {catch {source ./tcl/power_plan.tcl}} $flow_text]
     set pin_source_index [string first {source ./tcl/pins.tcl} $flow_text $power_catch_index]
@@ -785,6 +843,10 @@ foreach flow_pair [list \
     set post_place_guard_index [string first {catch {pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt}} $flow_text]
     set placed_save_index [string first {saveDesign ./saved/axi_ram_placed.enc} $flow_text]
     set power_error_return_index [string first {return -code error $power_plan_error} $flow_text $power_catch_index]
+    set route_guard_source_index [string first {source ./tcl/sram_route_guard.tcl} $flow_text]
+    set place_opt_index [string first {place_opt_design} $flow_text]
+    set propagated_clock_index [string first {set_propagated_clock [all_clocks]} $flow_text]
+    set clock_opt_index [string first {clock_opt_design} $flow_text]
     if {$power_catch_index < 0 || $pin_source_index < 0 ||
         $power_error_return_index < $power_catch_index ||
         $power_error_return_index > $pin_source_index} {
@@ -815,6 +877,15 @@ foreach flow_pair [list \
         $placed_save_index < 0 ||
         $post_place_guard_index > $placed_save_index} {
         fail "$flow_name must guard PG connectivity before saving axi_ram_placed.enc"
+    }
+    if {$route_guard_source_index < 0 ||
+        $place_opt_index < 0 ||
+        $route_guard_source_index > $place_opt_index} {
+        fail "$flow_name must install SRAM route blockages before place_opt_design"
+    }
+    if {$clock_opt_index < 0 ||
+        $propagated_clock_index < $clock_opt_index} {
+        fail "$flow_name must set propagated clocks only after CTS has run"
     }
 
     assert_contains \
