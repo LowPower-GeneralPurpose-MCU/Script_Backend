@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug  7 01:43:14 2026                
+#  Created on Fri Aug  7 10:22:06 2026                
 #                                                     
 #######################################################
 
@@ -131,6 +131,24 @@ createPlaceBlockage -name SRAM_ISLAND_GROUP_BLOCKAGE -type hard -noCutByCore -bo
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_macroFP.rpt
 saveFPlan ./outputs/FloorPlan_withMacro.fp
 saveDesign ./saved/axi_ram_macroFP.enc
+deleteRouteBlk -name SRAM_ROUTE_GUARD_*
+createRouteBlk -name SRAM_ROUTE_GUARD_00 -box {127.872 356.4 249.264 529.2} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_01 -box {127.872 533.52 249.264 706.32} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_02 -box {379.296 356.4 500.688 529.2} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_03 -box {379.296 533.52 500.688 706.32} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_04 -box {2.16 533.52 123.552 706.32} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_05 -box {2.16 356.4 123.552 529.2} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_06 -box {253.584 356.4 374.976 529.2} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_07 -box {253.584 533.52 374.976 706.32} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_08 -box {2.16 179.28 123.552 352.08} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_09 -box {2.16 2.16 123.552 174.96} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_10 -box {127.872 179.28 249.264 352.08} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_11 -box {253.584 179.28 374.976 352.08} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_12 -box {379.296 2.16 500.688 174.96} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_13 -box {379.296 179.28 500.688 352.08} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_14 -box {127.872 2.16 249.264 174.96} -layer {M4 M5} -exceptpgnet
+createRouteBlk -name SRAM_ROUTE_GUARD_15 -box {253.584 2.16 374.976 174.96} -layer {M4 M5} -exceptpgnet
+setRouteMode -earlyGlobalReverseDirection {(127.872000 356.400000 249.264000 529.200000) M5:M5 (127.872000 533.520000 249.264000 706.320000) M5:M5 (379.296000 356.400000 500.688000 529.200000) M5:M5 (379.296000 533.520000 500.688000 706.320000) M5:M5 (2.160000 533.520000 123.552000 706.320000) M5:M5 (2.160000 356.400000 123.552000 529.200000) M5:M5 (253.584000 356.400000 374.976000 529.200000) M5:M5 (253.584000 533.520000 374.976000 706.320000) M5:M5 (2.160000 179.280000 123.552000 352.080000) M5:M5 (2.160000 2.160000 123.552000 174.960000) M5:M5 (127.872000 179.280000 249.264000 352.080000) M5:M5 (253.584000 179.280000 374.976000 352.080000) M5:M5 (379.296000 2.160000 500.688000 174.960000) M5:M5 (379.296000 179.280000 500.688000 352.080000) M5:M5 (127.872000 2.160000 249.264000 174.960000) M5:M5 (253.584000 2.160000 374.976000 174.960000) M5:M5}
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_before_pnr.rpt
 setAddStripeMode -reset
 setAddStripeMode -allow_jog none
@@ -170,83 +188,37 @@ editPin -pin {{s_axi_arid[4]} {s_axi_arid[3]} {s_axi_arid[2]} {s_axi_arid[1]} {s
 editPin -pin {{s_axi_rid[4]} {s_axi_rid[3]} {s_axi_rid[2]} {s_axi_rid[1]} {s_axi_rid[0]} {s_axi_rdata[31]} {s_axi_rdata[30]} {s_axi_rdata[29]} {s_axi_rdata[28]} {s_axi_rdata[27]} {s_axi_rdata[26]} {s_axi_rdata[25]} {s_axi_rdata[24]} {s_axi_rdata[23]} {s_axi_rdata[22]} {s_axi_rdata[21]} {s_axi_rdata[20]} {s_axi_rdata[19]} {s_axi_rdata[18]} {s_axi_rdata[17]} {s_axi_rdata[16]} {s_axi_rdata[15]} {s_axi_rdata[14]} {s_axi_rdata[13]} {s_axi_rdata[12]} {s_axi_rdata[11]} {s_axi_rdata[10]} {s_axi_rdata[9]} {s_axi_rdata[8]} {s_axi_rdata[7]} {s_axi_rdata[6]} {s_axi_rdata[5]} {s_axi_rdata[4]} {s_axi_rdata[3]} {s_axi_rdata[2]} {s_axi_rdata[1]} {s_axi_rdata[0]} {s_axi_rresp[1]} {s_axi_rresp[0]} s_axi_rlast s_axi_rvalid s_axi_rready} -side BOTTOM -layer M7 -spreadType range -start {1095.04 2.16} -end {10.16 2.16} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
 setPinAssignMode -pinEditInBatch false
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
-zoomBox -119.33650 -73.09800 884.54375 825.58900
-zoomBox -166.54725 -118.24625 1014.48825 939.03250
-zoomBox -364.30825 -307.36725 1558.81075 1414.23475
-zoomBox -264.66950 -233.47775 1369.98175 1229.88400
-zoomBox -46.79675 -71.90950 957.08375 826.77775
-zoomBox 87.00425 27.31375 703.51250 579.22025
-zoomBox 169.17500 88.24925 547.78825 427.18900
-zoomBox 219.63800 125.67125 452.15400 333.82275
-zoomBox 250.62825 148.65300 393.42250 276.48425
-zoomBox 258.02650 154.88725 379.40175 263.54400
-pan -49.14675 -94.81725
-pan -70.65825 -25.10100
-pan -11.93350 54.97825
-selectInst {u_mem/G_SRAM_BANK[10].u_sram}
-zoomBox 111.78500 145.34950 309.42450 322.27900
-zoomBox 87.20525 67.11200 409.02850 355.21250
-zoomBox 42.73400 -61.59250 566.76975 407.53125
-fit
-zoomBox -373.68500 97.20625 1320.56675 1004.94925
-zoomBox -219.01425 415.90400 821.46825 973.37175
+selectRouteBlk -box 2.16 2.16 123.552 174.96 SRAM_ROUTE_GUARD_09 -layer M5
 deselectAll
-zoomBox -335.72250 249.50950 1104.39200 1021.09150
-zoomBox -427.33050 153.81000 1266.92200 1061.55350
-zoomBox -549.01075 46.16975 1444.22750 1114.10325
-zoomBox -235.98850 295.55550 988.10900 951.40025
-zoomBox -101.63550 455.04700 650.11375 857.81775
-zoomBox -59.09250 515.03650 484.04650 806.03850
-pan -29.39175 535.99250
-zoomBox -47.15050 511.50000 236.37175 663.40500
-zoomBox -28.90025 525.68925 145.21800 618.97800
-pan -2.49200 583.63500
+selectRouteBlk -box 379.296 356.4 500.688 529.2 SRAM_ROUTE_GUARD_02 -layer M5
+deselectAll
+selectRouteBlk -box 253.584 533.52 374.976 706.32 SRAM_ROUTE_GUARD_07 -layer M5
 fit
-zoomBox -194.97700 219.76200 1029.12000 875.60650
-zoomBox -47.52650 385.16825 704.22225 787.93875
-zoomBox -2.79475 427.78175 636.19175 770.13675
-zoomBox 69.13150 495.82250 530.79975 743.17425
-zoomBox 158.64450 580.49975 399.63850 709.61900
-zoomBox 196.36575 616.18300 344.36625 695.47850
-zoomBox 223.09975 643.45500 300.35725 684.84800
-pan -0.62175 426.95500
-pan -1.62375 439.56600
-zoomBox 191.04575 639.24825 316.84750 706.65000
-zoomBox 148.27100 603.22525 353.11800 712.97775
-zoomBox 112.90825 578.20725 396.43325 730.11375
-zoomBox 32.83725 521.55975 494.51050 768.91425
-zoomBox -19.31625 425.03750 732.44275 827.81350
-zoomBox -122.23425 345.23400 918.26300 902.70975
-zoomBox -96.02075 434.33475 655.73875 837.11100
-zoomBox -72.04375 503.93450 471.10275 794.94050
-zoomBox -44.86175 577.32725 288.69850 756.04150
-zoomBox -32.44300 610.32025 208.55450 739.44150
-zoomBox -23.38075 634.39675 150.74025 727.68700
-zoomBox -16.46575 652.67825 109.33675 720.08050
-zoomBox -7.86025 675.42975 57.80975 710.61425
-zoomBox -4.47200 685.62900 35.85800 707.23700
-pan -0.63125 696.12525
-zoomBox -4.24025 693.87450 30.04025 712.24125
-zoomBox -2.35325 698.73125 18.69925 710.01075
-zoomBox -1.90275 699.89075 15.99200 709.47825
-zoomBox -3.75825 695.71200 25.38025 711.32375
-zoomBox -4.60675 693.85150 29.67375 712.21825
-zoomBox -8.72975 687.07925 47.09025 716.98650
-zoomBox -18.51400 671.00900 88.42025 728.30200
-zoomBox -37.25700 640.22325 167.59550 749.97875
-zoomBox -61.89550 599.75475 271.67350 778.47375
-zoomBox -53.45925 613.69575 230.07425 765.60675
-zoomBox -32.07675 647.35975 142.04850 740.65225
-zoomBox -18.94550 668.03350 87.98950 725.32700
-zoomBox -10.88125 680.73000 54.79050 715.91550
-zoomBox -9.19850 684.47025 46.62275 714.37800
-zoomBox -5.51875 692.64875 28.76275 711.01600
+zoomBox -208.02625 149.60200 1232.08775 921.18375
+zoomBox -78.45025 299.73175 962.03250 857.19975
+zoomBox 23.94925 411.81625 775.69825 814.58700
+zoomBox 61.92325 454.22800 700.91000 796.58325
+zoomBox 94.20100 490.27825 637.34000 781.28025
+zoomBox 141.65500 547.84325 534.07300 758.09225
+pan 121.44600 424.44025
+zoomBox 331.18525 606.03025 614.70750 757.93525
+zoomBox 378.86300 631.47000 583.70800 741.22150
+zoomBox 413.64075 650.07925 561.64125 729.37475
+zoomBox 427.22300 657.97250 553.02325 725.37350
+zoomBox 448.53400 671.25850 539.42475 719.95575
+zoomBox 469.92875 684.60650 525.74725 714.51275
+pan 1.04850 216.07575
+zoomBox 458.99200 678.74600 536.24975 720.13900
+zoomBox 419.44350 654.79550 567.44550 734.09175
+zoomBox 343.68100 608.91375 627.20700 760.82075
+zoomBox 198.54375 521.01875 741.69075 812.02500
+zoomBox -79.49375 352.63925 961.00650 910.11650
 setDelayCalMode -SIAware false -equivalent_waveform_model none
 setPlaceMode -reset
 setPlaceMode -place_global_uniform_density true -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_design_refine_macro false
 place_opt_design
 refinePlace
-checkPlace
+checkPlace ./verify_rpt/checkPlace_after_place.rpt
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_place.rpt
 timeDesign -preCTS -outDir ./reports/timing_preCTS
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M9
@@ -258,42 +230,98 @@ addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.
 setSrouteMode -viaConnectToShape {stripe ring}
 sroute -connect corePin -nets {VDD VSS} -allowJogging 0 -allowLayerChange 0
 setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M1 -stacked_via_top_layer M8
-addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 16.080000 -create_pins 0 -area {502.848 0.0 1103.04 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {502.848 0.0 507.168 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 11.760000 -create_pins 0 -area {507.168 0.0 1103.04 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 24.288000 -create_pins 0 -area {2.16 708.48 502.848 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_before_trim.rpt
 editTrim -nets {VDD VSS}
 clearDrc
 verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
 saveDesign ./saved/axi_ram_placed.enc
-zoomBox -8.57500 687.78475 38.87350 713.20650
-zoomBox -10.96050 684.76275 44.86125 714.67075
-zoomBox -25.52250 666.31450 81.41450 723.60900
-zoomBox -53.41850 630.97375 151.43925 740.73200
-zoomBox -93.54275 583.59650 240.03425 762.31975
-zoomBox -188.75800 471.16925 450.27150 813.54725
-zoomBox -371.15975 255.79400 853.02025 911.68300
-zoomBox -610.93075 -27.32125 1382.44225 1040.68450
+zoomBox -328.64250 252.90825 1111.49650 1024.50325
+zoomBox -675.71150 110.41925 1317.56075 1178.37100
+zoomBox -199.63450 277.25275 1024.48425 933.10875
+zoomBox 149.97250 438.44875 788.97025 780.80975
+zoomBox 362.36450 536.37800 645.89125 688.28550
+zoomBox 443.33925 573.71375 591.34225 653.01050
+zoomBox 456.60400 579.82975 582.40650 647.23200
+zoomBox 492.53275 596.39550 558.20275 631.58000
+zoomBox 498.41825 599.10900 554.23800 629.01600
+zoomBox 467.87825 585.02775 574.81150 642.32025
+zoomBox 427.37225 565.85650 601.49525 659.14775
+zoomBox 331.25050 520.07750 664.81550 698.79425
+zoomBox 147.52100 432.65225 786.52750 775.01800
+create_route_type -name leaf_rule -bottom_preferred_layer M2 -top_preferred_layer M3
+create_route_type -name trunk_rule -shield_net VSS -bottom_preferred_layer M4 -top_preferred_layer M5
+create_route_type -name top_rule -shield_net VSS -bottom_preferred_layer M6 -top_preferred_layer M7
+set_ccopt_property -net_type leaf route_type leaf_rule
+set_ccopt_property -net_type trunk route_type trunk_rule
+set_ccopt_property -net_type top route_type top_rule
+set_ccopt_property routing_top_min_fanout 100
+set_ccopt_property target_max_trans 0.3ns
+set_ccopt_property buffer_cells {
+    BUFx4_ASAP7_75t_R
+    BUFx8_ASAP7_75t_R
+    BUFx12_ASAP7_75t_R
+}
+set_ccopt_property inverter_cells {
+    CKINVDCx8_ASAP7_75t_R
+    CKINVDCx12_ASAP7_75t_R
+    CKINVDCx16_ASAP7_75t_R
+}
+set_ccopt_property use_inverters auto
+setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 -powerEffort high -fixFanoutLoad true
+optDesign -prefix preCTS -preCTS
+clock_opt_design
+all_constraint_modes -active
+set_interactive_constraint_modes $active_constraint_modes
+set_propagated_clock [all_clocks]
+set_interactive_constraint_modes {}
+optDesign -prefix postCTS -postCTS -setup -hold
+timeDesign -postCTS -outDir ./reports/timing_postCTS
+selectRouteBlk -box 127.872 533.52 249.264 706.32 SRAM_ROUTE_GUARD_01 -layer M4
+zoomBox -105.12850 295.82300 935.38750 853.30875
+zoomBox -516.52525 73.01950 1177.78125 980.79200
+zoomBox -1492.77550 -455.69575 1752.98450 1283.31150
+zoomBox -1194.90875 -303.93200 1563.98725 1174.22425
+zoomBox -660.23400 -55.87750 1034.07350 851.89550
+zoomBox -532.59275 3.34000 907.56875 774.94700
+zoomBox -264.67325 127.60675 619.76650 601.47025
+zoomBox -194.89900 160.47650 556.87475 563.26050
+zoomBox -90.59050 214.49675 452.56625 505.50825
+zoomBox -265.35350 123.37575 619.08725 597.23975
+zoomBox -137.14350 250.21225 406.01400 541.22425
+deselectAll
+selectRouteBlk -box 2.16 356.4 123.552 529.2 SRAM_ROUTE_GUARD_05 -layer M4
+deselectAll
+selectRouteBlk -box 2.16 356.4 123.552 529.2 SRAM_ROUTE_GUARD_05 -layer M4
+deselectAll
+selectWire 54.2240 278.8640 54.3520 711.5680 7 u_mem/FE_OFN939_n
+zoomBox -259.85925 181.83325 624.58225 655.69775
+zoomBox -460.92450 66.76150 979.24150 838.37100
+zoomBox -797.63275 -135.99225 1547.43725 1120.44500
 fit
-zoomBox -196.15225 99.63300 1243.96175 871.21475
-zoomBox -96.16250 158.17800 1127.93475 814.02250
-zoomBox 80.82075 273.48300 965.23150 747.33100
-zoomBox 258.63000 389.32625 801.76900 680.32825
-zoomBox 335.87775 439.54400 728.29575 649.79300
-zoomBox 391.10450 475.43675 674.62675 627.34175
-zoomBox 430.19675 500.63025 635.04175 610.38175
-zoomBox 455.56825 517.63775 603.56875 596.93325
-zoomBox 430.01875 500.65575 634.86375 610.40725
-zoomBox 348.05950 445.37325 740.47900 655.62300
-zoomBox 236.02200 371.60050 875.01175 713.95725
-zoomBox 53.58800 251.47425 1094.07600 808.94500
-zoomBox -315.40225 79.25925 1378.85900 987.00750
-zoomBox -916.24100 -201.16400 1842.58100 1276.95250
-zoomBox -504.35200 0.50050 1488.89725 1068.44000
 fit
-zoomBox -329.29175 65.38225 1364.96000 973.12525
-zoomBox -78.42700 314.49275 962.05575 871.96075
-zoomBox 35.46550 425.67350 787.21425 828.44400
-zoomBox 80.14675 469.19475 719.13325 811.54975
-zoomBox 150.88375 538.10800 612.55150 785.45950
-zoomBox 13.05725 483.46925 652.04375 825.82425
-zoomBox -74.54025 449.47925 677.20850 852.24975
+fit
+zoomBox -327.50700 114.47550 1112.60725 886.05725
+zoomBox -275.24175 176.20850 948.85550 832.05300
+zoomBox -133.67475 343.42000 505.31225 685.77525
+zoomBox -91.80350 393.14200 369.86475 640.49375
+zoomBox -76.93750 411.84825 315.48050 622.09725
+zoomBox -45.24425 452.14225 195.74975 581.26150
+zoomBox -26.23800 476.63825 121.76250 555.93375
+zoomBox -11.78000 495.27300 65.47775 536.66600
+zoomBox -6.52750 502.83250 40.91900 528.25325
+zoomBox -5.30550 504.62125 35.02425 526.22900
+zoomBox -4.26650 506.14175 30.01375 524.50825
+pan -0.41375 513.16775
+zoomBox -7.09450 505.53875 40.35225 530.95975
+zoomBox -15.06150 494.44375 75.83300 543.14300
+zoomBox -30.32350 473.18900 143.80225 566.48175
+zoomBox -70.35375 417.43950 322.08250 627.69825
+zoomBox -136.24525 325.67375 615.53975 728.46375
+zoomBox -173.20975 285.20875 711.24350 759.07950
+fit
+zoomBox -671.36125 -65.31925 2087.44475 1412.78875
+zoomBox -815.93500 -75.98800 2429.71900 1662.96250
+saveDesign ./saved/axi_ram_postCTS.enc
