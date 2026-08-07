@@ -1,0 +1,117 @@
+*----------------------------------------------------------------------------------------
+*	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+*	
+*
+* 	Date & Time:	2026-Aug-07 02:14:10 (2026-Aug-06 17:14:10 GMT)
+*
+*----------------------------------------------------------------------------------------
+*
+*	Design: axi_ram
+*
+*	Liberty Libraries used: 
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib
+*	        tt: /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib
+*
+*	Power Domain used: 
+*              Rail:        VDD      Voltage:        0.7 
+*
+*       Power View : tt
+*
+*       User-Defined Activity : N.A.
+*
+*       Activity File: N.A.
+*
+*       Hierarchical Global Activity: N.A.
+*
+*       Global Activity: N.A.
+*
+*       Sequential Element Activity: 0.200000
+*
+*       Primary Input Activity: 0.200000
+*
+*       Default icg ratio: N.A.
+*
+*       Global Comb ClockGate Ratio: N.A.
+*
+*	Power Units = 1mW
+*
+*	Time Units = 1e-09 secs 
+*
+*       report_power -outfile ./timingReports/axi_ram_postCTS.power
+*
+-----------------------------------------------------------------------------------------
+
+
+Total Power 
+-----------------------------------------------------------------------------------------
+Total Internal Power:        0.06576883 	   72.1668%
+Total Switching Power:       0.02501256 	   27.4458%
+Total Leakage Power:         0.00035302 	    0.3874%
+Total Power:                 0.09113441 
+-----------------------------------------------------------------------------------------
+
+
+Group                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+Sequential                     0.0002078   3.903e-05   3.801e-05   0.0002848      0.3125 
+Macro                            0.06511   0.0001222           0     0.06523       71.58 
+IO                                     0           0           0           0           0 
+Combinational                  0.0003648     0.02467   0.0003031     0.02534        27.8 
+Clock (Combinational)          8.709e-05   0.0001823   1.194e-05   0.0002813      0.3087 
+Clock (Sequential)                     0           0           0           0           0 
+-----------------------------------------------------------------------------------------
+Total                            0.06577     0.02501    0.000353     0.09113         100 
+-----------------------------------------------------------------------------------------
+
+
+Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+VDD                       0.7    0.06577     0.02501    0.000353     0.09113         100 
+
+
+Clock                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+CLK                            8.709e-05   0.0001823   1.194e-05   0.0002813      0.3087 
+-----------------------------------------------------------------------------------------
+Total (excluding duplicates)   8.709e-05   0.0001823   1.194e-05   0.0002813      0.3087 
+-----------------------------------------------------------------------------------------
+Clock: CLK
+Clock Period: 1.000000 usec 
+Clock Toggle Rate:     2.0000 Mhz 
+Clock Static Probability:  0.5000
+
+
+
+-----------------------------------------------------------------------------------------
+*	Power Distribution Summary: 
+*                Highest Average Power: u_mem/G_SRAM_BANK[9].u_sram (srambank_256x4x32_6t122):         0.004088 
+*                Highest Leakage Power:  FE_OFC1631_s_axi_wstrb_2 (BUFx12f_ASAP7_75t_L):         8.05e-06 
+*          Total Cap:      5.12809e-10 F
+*          Total instances in design:  1671
+*          Total instances in design with no power:     0
+*          Total instances in design with no activity:     0
+*          Total Fillers and Decap:     0
+-----------------------------------------------------------------------------------------
+
+Total leakage power = 0.000353023 mW
+Cell usage statistics:  
+Library asap7sc7p5t_INVBUF_LVT_TT_ccs_211120 , 24 cells ( 1.436266%) , 7.81094e-05 mW ( 22.125893%  ) 
+Library asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120 , 41 cells ( 2.453620%) , 5.99043e-05 mW ( 16.968955%  ) 
+Library srambank_256x4x32_6t122 , 16 cells ( 0.957510%) , 0 mW ( 0.000000%  ) 
+Library asap7sc7p5t_OA_RVT_TT_ccs_211120 , 36 cells ( 2.154398%) , 1.7871e-06 mW ( 0.506229%  ) 
+Library asap7sc7p5t_AO_RVT_TT_ccs_211120 , 486 cells ( 29.084381%) , 3.21555e-05 mW ( 9.108620%  ) 
+Library asap7sc7p5t_SEQ_RVT_TT_ccs_220123 , 159 cells ( 9.515260%) , 3.80084e-05 mW ( 10.766572%  ) 
+Library asap7sc7p5t_INVBUF_RVT_TT_ccs_211120 , 532 cells ( 31.837221%) , 0.000107932 mW ( 30.573680%  ) 
+Library asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120 , 377 cells ( 22.561340%) , 3.51259e-05 mW ( 9.950051%  ) 
