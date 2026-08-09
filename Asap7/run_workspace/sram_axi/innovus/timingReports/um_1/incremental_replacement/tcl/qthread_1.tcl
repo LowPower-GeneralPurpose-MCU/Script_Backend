@@ -13,24 +13,18 @@ specific view and clock} dp 3 metric timing.min_pulse_width.endpoints.wns.analys
 ::goMC::um:set_metric_safe {timing.hold.analysis_views.number} {1}
 ::goMC::um:set_metric_safe {timing.setup.analysis_views} {tt}
 ::goMC::um:set_metric_safe {timing.setup.analysis_views.number} {1}
-::goMC::um:set_metric_safe {timing.setup.feps} {127}
-::goMC::um:set_metric_safe {timing.setup.feps.analysis_view:tt} {127}
-::goMC::um:set_metric_safe {timing.setup.feps.path_group:in2reg} {2}
-::goMC::um:set_metric_safe {timing.setup.feps.path_group:in2reg.analysis_view:tt} {2}
-::goMC::um:set_metric_safe {timing.setup.feps.path_group:reg2reg} {125}
-::goMC::um:set_metric_safe {timing.setup.feps.path_group:reg2reg.analysis_view:tt} {125}
-::goMC::um:set_metric_safe {timing.setup.tns} {-6.511 ns}
-::goMC::um:set_metric_safe {timing.setup.tns.analysis_view:tt} {-6.511 ns}
-::goMC::um:set_metric_safe {timing.setup.tns.path_group:in2reg} {-0.034 ns}
-::goMC::um:set_metric_safe {timing.setup.tns.path_group:in2reg.analysis_view:tt} {-0.034 ns}
-::goMC::um:set_metric_safe {timing.setup.tns.path_group:reg2reg} {-6.478 ns}
-::goMC::um:set_metric_safe {timing.setup.tns.path_group:reg2reg.analysis_view:tt} {-6.478 ns}
-::goMC::um:set_metric_safe {timing.setup.wns} {-0.217 ns}
-::goMC::um:set_metric_safe {timing.setup.wns.analysis_view:tt} {-0.217 ns}
-::goMC::um:set_metric_safe {timing.setup.wns.path_group:in2reg} {-0.028 ns}
-::goMC::um:set_metric_safe {timing.setup.wns.path_group:in2reg.analysis_view:tt} {-0.028 ns}
-::goMC::um:set_metric_safe {timing.setup.wns.path_group:reg2reg} {-0.217 ns}
-::goMC::um:set_metric_safe {timing.setup.wns.path_group:reg2reg.analysis_view:tt} {-0.217 ns}
+::goMC::um:set_metric_safe {timing.setup.feps} {194}
+::goMC::um:set_metric_safe {timing.setup.feps.analysis_view:tt} {194}
+::goMC::um:set_metric_safe {timing.setup.feps.path_group:reg2reg} {194}
+::goMC::um:set_metric_safe {timing.setup.feps.path_group:reg2reg.analysis_view:tt} {194}
+::goMC::um:set_metric_safe {timing.setup.tns} {-8.665 ns}
+::goMC::um:set_metric_safe {timing.setup.tns.analysis_view:tt} {-8.665 ns}
+::goMC::um:set_metric_safe {timing.setup.tns.path_group:reg2reg} {-8.665 ns}
+::goMC::um:set_metric_safe {timing.setup.tns.path_group:reg2reg.analysis_view:tt} {-8.665 ns}
+::goMC::um:set_metric_safe {timing.setup.wns} {-0.201 ns}
+::goMC::um:set_metric_safe {timing.setup.wns.analysis_view:tt} {-0.201 ns}
+::goMC::um:set_metric_safe {timing.setup.wns.path_group:reg2reg} {-0.201 ns}
+::goMC::um:set_metric_safe {timing.setup.wns.path_group:reg2reg.analysis_view:tt} {-0.201 ns}
 ::goMC::um:set_metric_safe {timing.setup.worst_path.capture_clock} {}
 ::goMC::um:set_metric_safe {timing.setup.worst_path.launch_clock} {CLK}
 ::goMC::um:set_metric_safe {timing.setup.worst_path.view} {tt}

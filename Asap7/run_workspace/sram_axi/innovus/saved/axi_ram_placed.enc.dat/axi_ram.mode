@@ -36,7 +36,7 @@ catch { setPlaceMode -place_global_uniform_density true }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
 catch { setSrouteMode -blockPinRouteWithPinWidth true }
 catch { setSrouteMode -extendNearestTarget true }
-catch { setSrouteMode -viaConnectToShape {stripe ring} }
+catch { setSrouteMode -viaConnectToShape {ring stripe blockring} }
 catch { setDelayCalMode -enable_hier_save_restore_flow false }
 catch { setDelayCalMode -enable_high_fanout true }
 catch { setDelayCalMode -enable_ideal_seq_async_pins false }

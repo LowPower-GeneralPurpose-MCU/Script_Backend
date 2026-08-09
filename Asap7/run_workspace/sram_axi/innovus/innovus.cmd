@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Sun Aug  9 23:14:11 2026                
+#  Created on Mon Aug 10 01:49:59 2026                
 #                                                     
 #######################################################
 
@@ -19,6 +19,7 @@ getVersion
 getVersion
 getVersion
 win
+set enc_source_continue_on_error false
 set auto_file_dir /tmp/user1/innovus_master
 set init_design_uniquify 1
 setLibraryUnit -time 1ns -cap 1pf
@@ -977,6 +978,7 @@ group_path -name I2C -from [list \
   [get_cells {wstrb_hold_reg[2]}]  \
   [get_cells {wstrb_hold_reg[3]}] ]
 setDesignMode -process 7
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
 setMultiCpuUsage -acquireLicense 12
 setMultiCpuUsage -localCpu 12
 setDistributeHost -local
@@ -1061,23 +1063,6 @@ createPlaceBlockage -name SRAM_ISLAND_GROUP_BLOCKAGE -type hard -noCutByCore -bo
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_macroFP.rpt
 saveFPlan ./outputs/FloorPlan_withMacro.fp
 saveDesign ./saved/axi_ram_macroFP.enc
-deleteRouteBlk -name SRAM_ROUTE_GUARD_*
-createRouteBlk -name SRAM_ROUTE_GUARD_00 -box {127.872 356.4 249.264 529.2} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_01 -box {127.872 533.52 249.264 706.32} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_02 -box {379.296 356.4 500.688 529.2} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_03 -box {379.296 533.52 500.688 706.32} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_04 -box {2.16 533.52 123.552 706.32} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_05 -box {2.16 356.4 123.552 529.2} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_06 -box {253.584 356.4 374.976 529.2} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_07 -box {253.584 533.52 374.976 706.32} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_08 -box {2.16 179.28 123.552 352.08} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_09 -box {2.16 2.16 123.552 174.96} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_10 -box {127.872 179.28 249.264 352.08} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_11 -box {253.584 179.28 374.976 352.08} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_12 -box {379.296 2.16 500.688 174.96} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_13 -box {379.296 179.28 500.688 352.08} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_14 -box {127.872 2.16 249.264 174.96} -layer {M4 M5} -exceptpgnet
-createRouteBlk -name SRAM_ROUTE_GUARD_15 -box {253.584 2.16 374.976 174.96} -layer {M4 M5} -exceptpgnet
 setRouteMode -earlyGlobalReverseDirection {(127.872000 356.400000 249.264000 529.200000) M5:M5 (127.872000 533.520000 249.264000 706.320000) M5:M5 (379.296000 356.400000 500.688000 529.200000) M5:M5 (379.296000 533.520000 500.688000 706.320000) M5:M5 (2.160000 533.520000 123.552000 706.320000) M5:M5 (2.160000 356.400000 123.552000 529.200000) M5:M5 (253.584000 356.400000 374.976000 529.200000) M5:M5 (253.584000 533.520000 374.976000 706.320000) M5:M5 (2.160000 179.280000 123.552000 352.080000) M5:M5 (2.160000 2.160000 123.552000 174.960000) M5:M5 (127.872000 179.280000 249.264000 352.080000) M5:M5 (253.584000 179.280000 374.976000 352.080000) M5:M5 (379.296000 2.160000 500.688000 174.960000) M5:M5 (379.296000 179.280000 500.688000 352.080000) M5:M5 (127.872000 2.160000 249.264000 174.960000) M5:M5 (253.584000 2.160000 374.976000 174.960000) M5:M5}
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_before_pnr.rpt
 setAddStripeMode -reset
@@ -1118,6 +1103,10 @@ editPin -pin {{s_axi_arid[4]} {s_axi_arid[3]} {s_axi_arid[2]} {s_axi_arid[1]} {s
 editPin -pin {{s_axi_rid[4]} {s_axi_rid[3]} {s_axi_rid[2]} {s_axi_rid[1]} {s_axi_rid[0]} {s_axi_rdata[31]} {s_axi_rdata[30]} {s_axi_rdata[29]} {s_axi_rdata[28]} {s_axi_rdata[27]} {s_axi_rdata[26]} {s_axi_rdata[25]} {s_axi_rdata[24]} {s_axi_rdata[23]} {s_axi_rdata[22]} {s_axi_rdata[21]} {s_axi_rdata[20]} {s_axi_rdata[19]} {s_axi_rdata[18]} {s_axi_rdata[17]} {s_axi_rdata[16]} {s_axi_rdata[15]} {s_axi_rdata[14]} {s_axi_rdata[13]} {s_axi_rdata[12]} {s_axi_rdata[11]} {s_axi_rdata[10]} {s_axi_rdata[9]} {s_axi_rdata[8]} {s_axi_rdata[7]} {s_axi_rdata[6]} {s_axi_rdata[5]} {s_axi_rdata[4]} {s_axi_rdata[3]} {s_axi_rdata[2]} {s_axi_rdata[1]} {s_axi_rdata[0]} {s_axi_rresp[1]} {s_axi_rresp[0]} s_axi_rlast s_axi_rvalid s_axi_rready} -side BOTTOM -layer M7 -spreadType range -start {1095.04 2.16} -end {10.16 2.16} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
 setPinAssignMode -pinEditInBatch false
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
+zoomBox -168.42675 -129.98050 835.45375 768.70675
+zoomBox -273.39075 -242.04925 907.64525 815.23000
+zoomBox -396.87775 -373.89475 992.57625 869.96325
+zoomBox -810.24475 -825.66175 1452.24925 1199.75325
 setDelayCalMode -SIAware false -equivalent_waveform_model none -ewm_type moments
 setPlaceMode -reset
 setPlaceMode -place_global_uniform_density true -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_global_reorder_scan false -place_design_refine_macro false
@@ -1126,26 +1115,34 @@ refinePlace
 checkPlace ./verify_rpt/checkPlace_after_place.rpt
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_place.rpt
 timeDesign -preCTS -outDir ./reports/timing_preCTS
-setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M9
+setSrouteMode -viaConnectToShape {ring stripe blockring}
+sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
+setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M1 -stacked_via_top_layer M5
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {502.848 0.0 507.168 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 11.760000 -create_pins 0 -area {507.168 0.0 1103.04 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 24.288000 -create_pins 0 -area {2.16 708.48 502.848 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
+addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from left -start_offset 0.384000 -area {502.848 2.16 1103.04 968.688} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from left -start_offset 17.232000 -area {2.16 708.48 502.848 968.688} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M5 -stacked_via_top_layer M7
+addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from bottom -start_offset 2.112000 -area {2.16 708.48 1103.04 968.688} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from bottom -start_offset 17.232000 -area {502.848 2.16 1103.04 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
 addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 2.080000 -create_pins 0 -area {0.0 708.48 1105.2 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 19.360000 -create_pins 0 -area {502.848 0.0 1105.2 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M8 -stacked_via_top_layer M9
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 0.352000 -create_pins 0 -area {502.848 0.0 1105.2 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.360000 -create_pins 0 -area {0.0 708.48 502.848 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setSrouteMode -viaConnectToShape {stripe ring}
-sroute -connect corePin -nets {VDD VSS} -allowJogging 0 -allowLayerChange 0
-setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M1 -stacked_via_top_layer M8
-addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {502.848 0.0 507.168 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 11.760000 -create_pins 0 -area {507.168 0.0 1103.04 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 24.288000 -create_pins 0 -area {2.16 708.48 502.848 970.848} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_before_trim.rpt
 editTrim -nets {VDD VSS}
 clearDrc
 verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
 saveDesign ./saved/axi_ram_placed.enc
+zoomBox -517.84750 -685.17075 1405.27250 1036.43225
+fit
 create_route_type -name leaf_rule -bottom_preferred_layer M2 -top_preferred_layer M3
-create_route_type -name trunk_rule -shield_net VSS -bottom_preferred_layer M4 -top_preferred_layer M5
-create_route_type -name top_rule -shield_net VSS -bottom_preferred_layer M6 -top_preferred_layer M7
+create_route_type -name trunk_rule -bottom_preferred_layer M4 -top_preferred_layer M5
+create_route_type -name top_rule -bottom_preferred_layer M6 -top_preferred_layer M7
 set_ccopt_property -net_type leaf route_type leaf_rule
 set_ccopt_property -net_type trunk route_type trunk_rule
 set_ccopt_property -net_type top route_type top_rule
@@ -1174,40 +1171,19 @@ setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 -powerEffort high -fixFa
 optDesign -prefix preCTS -preCTS
 refinePlace
 checkPlace ./verify_rpt/checkPlace_before_cts.rpt
-setNanoRouteMode -quiet -routeBottomRoutingLayer 1 -routeTopRoutingLayer 9
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
 clock_opt_design
 all_constraint_modes -active
 set_interactive_constraint_modes $active_constraint_modes
 set_propagated_clock [all_clocks]
 set_interactive_constraint_modes {}
 optDesign -prefix postCTS -postCTS -setup -hold
+applyGlobalNets
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_postcts.rpt
 timeDesign -postCTS -outDir ./reports/timing_postCTS
 saveDesign ./saved/axi_ram_postCTS.enc
-setFillerMode -core {
-    FILLER_ASAP7_75t_R
-    FILLERxp5_ASAP7_75t_R
-    FILLER_ASAP7_75t_L
-    FILLERxp5_ASAP7_75t_L
-} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
-addFiller
-setNanoRouteMode -reset
-setNanoRouteMode -quiet -routeBottomRoutingLayer 1 -routeTopRoutingLayer 9 -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 1:9 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven true -route_detail_fix_antenna true -route_detail_merge_abutting_cut true -route_detail_end_iteration 5
-routeDesign -globalDetail
-ecoRoute -fix_drc
-setAnalysisMode -analysisType onChipVariation
-setDelayCalMode -SIAware true -equivalent_waveform_model propagation
-setExtractRCMode -engine postRoute -effortLevel medium
-optDesign -postRoute -setup -hold -prefix postRoute
-ecoRoute -fix_drc
-timeDesign -postRoute -outDir ./reports/timing_postRoute
-verify_drc -report ./verify_rpt/drc_postroute.rpt
-verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
-saveDesign ./saved/axi_ram_routed.enc
-ecoRoute -fix_drc
-verify_drc -report ./verify_rpt/drc_postroute.rpt
-verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
-timeDesign -postRoute -outDir ./reports/timing_postRoute_recheck
-saveDesign ./saved/axi_ram_routed.enc
-verify_drc -report ./verify_rpt/drc_after_fill.rpt
-verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_after_fill.rpt
-saveDesign ./saved/axi_ram_filled.enc
+selectMarker 1.2480 1.2640 1103.7840 968.4480 -1 3 7
+setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
+addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
+applyGlobalNets
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_filler.rpt
