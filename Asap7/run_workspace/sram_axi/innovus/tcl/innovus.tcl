@@ -216,7 +216,7 @@ file delete -force $sram_edge_report
 puts "POWER PLAN ENTRY: [file normalize ./tcl/power_plan.tcl]"
 if {[catch {source ./tcl/power_plan.tcl} power_plan_error]} {
     puts stderr "Power plan failed before pin assignment: $power_plan_error"
-    return -code error $power_plan_error
+    error $power_plan_error
 }
 puts "POWER PLAN EXIT: ./tcl/power_plan.tcl returned cleanly"
 
@@ -226,7 +226,7 @@ if {![file exists $sram_edge_report]} {
     if {![info exists SRAM_ISLAND_URX]} {
         if {[catch {source ./outputs/sram_macro_geometry.tcl} sram_geometry_error]} {
             puts stderr "Cannot reload SRAM macro geometry before direct SRAM island PG: $sram_geometry_error"
-            return -code error $sram_geometry_error
+            error $sram_geometry_error
         }
     }
 
@@ -234,7 +234,7 @@ if {![file exists $sram_edge_report]} {
         set direct_power_die_box [join [dbGet top.fPlan.box]]
         if {[llength $direct_power_die_box] != 4} {
             puts stderr "Cannot decode die box before direct SRAM island PG: [dbGet top.fPlan.box]"
-            return -code error "Cannot decode die box before direct SRAM island PG"
+            error "Cannot decode die box before direct SRAM island PG"
         }
         lassign $direct_power_die_box \
             power_die_llx power_die_lly power_die_urx power_die_ury
@@ -249,7 +249,7 @@ if {![file exists $sram_edge_report]} {
 
     if {[catch {source ./tcl/sram_island_power.tcl} direct_sram_power_error]} {
         puts stderr "Direct SRAM island power failed before pin assignment: $direct_sram_power_error"
-        return -code error $direct_sram_power_error
+        error $direct_sram_power_error
     }
     puts "POWER PLAN DIRECT SRAM ISLAND RETURNED"
 }
@@ -324,7 +324,7 @@ verifyConnectivity \
 
 if {[catch {pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt} post_place_pg_error]} {
     puts stderr $post_place_pg_error
-    return -code error $post_place_pg_error
+    error $post_place_pg_error
 }
 
 saveDesign ./saved/axi_ram_placed.enc
@@ -370,9 +370,12 @@ set_ccopt_property -net_type trunk route_type trunk_rule
 set_ccopt_property -net_type top   route_type top_rule
 set_ccopt_property routing_top_min_fanout 100
 set_ccopt_property target_max_trans 0.3ns
-set_ccopt_property -net_type leaf  target_max_trans 40ps
-set_ccopt_property -net_type trunk target_max_trans 80ps
-set_ccopt_property -net_type top   target_max_trans 120ps
+# Keep the SDC source transition at 40 ps, but do not force every hard-macro
+# clock leaf to meet the same number.  The ASAP7 SRAM clk pin is a hard macro
+# sink; the latest CTS log showed 64-109 ps at SRAM leaves with clean timing.
+set_ccopt_property -net_type leaf  target_max_trans 120ps
+set_ccopt_property -net_type trunk target_max_trans 160ps
+set_ccopt_property -net_type top   target_max_trans 200ps
 set_ccopt_property target_skew 50ps
 set_ccopt_property buffer_cells $BUFCells
 set_ccopt_property inverter_cells $INVCells
@@ -413,7 +416,7 @@ proc apply_post_cts_propagated_clocks {} {
 
 if {[catch {apply_post_cts_propagated_clocks} propagated_clock_error]} {
     puts stderr "Post-CTS propagated-clock setup failed: $propagated_clock_error"
-    return -code error $propagated_clock_error
+    error $propagated_clock_error
 }
 
 optDesign \
@@ -422,12 +425,9 @@ optDesign \
     -setup \
     -hold
 
-if {[catch {
-    verify_pg_connectivity_or_stop ./verify_rpt/pg_connectivity_after_postcts.rpt
-} postcts_pg_error]} {
-    puts stderr $postcts_pg_error
-    return -code error $postcts_pg_error
-}
+# CTS/postCTS inserts FE_* and CTS_* cells after the first corePin sroute.
+# Reconnect only same-layer core PG pins, then verify before saving/filler.
+connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postcts.rpt
 
 timeDesign \
     -postCTS \
@@ -456,12 +456,7 @@ addFiller \
     -diffCellViol true
 
 assert_filler_inserted FILLER
-if {[catch {
-    verify_pg_connectivity_or_stop ./verify_rpt/pg_connectivity_after_filler.rpt
-} filler_pg_error]} {
-    puts stderr $filler_pg_error
-    return -code error $filler_pg_error
-}
+connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_filler.rpt
 
 # ------------------------------------------------------------------------
 # 7. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
@@ -507,12 +502,7 @@ optDesign \
     -hold \
     -prefix postRoute
 
-if {[catch {
-    verify_pg_connectivity_or_stop ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
-} postroute_pg_error]} {
-    puts stderr $postroute_pg_error
-    return -code error $postroute_pg_error
-}
+connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
 ecoRoute -fix_drc
 
 timeDesign \

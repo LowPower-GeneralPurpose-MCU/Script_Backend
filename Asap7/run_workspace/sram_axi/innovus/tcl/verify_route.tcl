@@ -26,7 +26,7 @@ if {[catch {
 } route_verify_error]} {
     puts stderr "Route recheck is not clean: $route_verify_error"
     puts stderr "Do not add metal fill yet."
-    return -code error $route_verify_error
+    error $route_verify_error
 }
 
 timeDesign \

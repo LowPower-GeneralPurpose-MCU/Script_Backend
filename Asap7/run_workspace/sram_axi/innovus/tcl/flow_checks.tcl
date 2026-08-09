@@ -93,6 +93,9 @@ proc verify_antenna_if_enabled {report_file} {
 }
 
 proc connect_core_pg_pins_nojog {{report_file ""}} {
+    applyGlobalNets
+
+    setSrouteMode -reset
     setSrouteMode \
         -viaConnectToShape {ring stripe blockring}
 
@@ -104,6 +107,7 @@ proc connect_core_pg_pins_nojog {{report_file ""}} {
         -allowLayerChange 0
 
     editTrim -nets {VDD VSS}
+    clearDrc
 
     if {$report_file ne ""} {
         verifyConnectivity \

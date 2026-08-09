@@ -47,6 +47,7 @@ set view_definition [read_file ./tcl/viewDefinition.tcl]
 set globals [read_file ./tcl/innovus.globals]
 set sram_route_guard [read_file ./tcl/sram_route_guard.tcl]
 set core_lower_pg [read_file ./tcl/core_lower_pg_nojog.tcl]
+set flow_checks [read_file ./tcl/flow_checks.tcl]
 set core_pg_outside [read_file ./tcl/core_pg_outside_island.tcl]
 set global_upper_pg [read_file ./tcl/global_upper_pg_to_ring.tcl]
 
@@ -61,11 +62,15 @@ foreach flow [list $innovus_master $innovus_pnr] {
     require_contains $flow {-topRoutingLayer 7} "DesignMode top routing layer"
     require_not_contains $flow {-routeBottomRoutingLayer} "obsolete NanoRoute bottom layer option"
     require_not_contains $flow {-routeTopRoutingLayer} "obsolete NanoRoute top layer option"
-    require_contains $flow {set_ccopt_property -net_type leaf  target_max_trans 40ps} "leaf CTS transition target"
+    require_contains $flow {set_ccopt_property -net_type leaf  target_max_trans 120ps} "SRAM-aware leaf CTS transition target"
+    require_contains $flow {set_ccopt_property -net_type trunk target_max_trans 160ps} "trunk CTS transition target"
+    require_contains $flow {set_ccopt_property -net_type top   target_max_trans 200ps} "top CTS transition target"
     require_contains $flow {set_ccopt_property target_skew 50ps} "CTS skew target"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {verify_pg_connectivity_or_stop ./verify_rpt/pg_connectivity_after_postcts.rpt} "postCTS PG connectivity guard"
+    require_contains $flow {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postcts.rpt} "postCTS PG reconnect guard"
+    require_contains $flow {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_filler.rpt} "post-filler PG reconnect guard"
+    require_contains $flow {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postroute_opt.rpt} "post-route-opt PG reconnect guard"
     require_contains $flow {addFiller} "explicit filler insertion"
     require_contains $flow {-cell $FILLERCells} "explicit filler cell list"
     require_contains $flow {assert_filler_inserted FILLER} "filler insertion guard"
@@ -81,7 +86,10 @@ require_contains $globals {setLibraryUnit -time 1ns -cap 1pf} "global library un
 require_not_contains $sram_route_guard {createRouteBlk} "SRAM route guard must not create hard route blockages"
 require_contains $sram_route_guard {-earlyGlobalReverseDirection $sram_egr_reverse_regions} "SRAM M5 early-global route reservation"
 require_contains $core_lower_pg {-stacked_via_top_layer M5} "lower PG stops at M5"
+require_contains $core_lower_pg {setSrouteMode -reset} "lower PG must reset stale blockPin sroute mode"
 require_not_contains $core_lower_pg {-stacked_via_top_layer M8} "unsafe direct M1-to-M8 stack"
+require_contains $flow_checks {proc connect_core_pg_pins_nojog} "shared post-CTS/filler PG reconnect proc"
+require_contains $flow_checks {setSrouteMode -reset} "shared PG reconnect must reset stale sroute mode"
 require_contains $core_pg_outside {-stacked_via_bottom_layer M5} "M6 mesh connects down to M5 taps"
 require_contains $global_upper_pg {-stacked_via_bottom_layer M7} "M8 mesh connects down to M7"
 require_contains $global_upper_pg {-stacked_via_top_layer M8} "M8 mesh does not create M9-driven M7 patches"

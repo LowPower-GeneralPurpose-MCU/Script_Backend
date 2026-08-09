@@ -816,7 +816,7 @@ foreach flow_pair [list \
         "$flow_name must catch the post-placement PG guard and rethrow it before saveDesign"
     assert_contains \
         $flow_text \
-        {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$post_place_pg_error} \
+        {error[[:space:]]+\$post_place_pg_error} \
         "$flow_name must hard-stop on dirty post-placement PG instead of saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
@@ -840,7 +840,7 @@ foreach flow_pair [list \
         "$flow_name must catch post-CTS propagated-clock setup failures"
     assert_contains \
         $flow_text \
-        {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$propagated_clock_error} \
+        {error[[:space:]]+\$propagated_clock_error} \
         "$flow_name must hard-stop when propagated-clock setup fails"
 
     set power_catch_index [string first {catch {source ./tcl/power_plan.tcl}} $flow_text]
@@ -856,7 +856,7 @@ foreach flow_pair [list \
     set middle_pg_index [string first {source ./tcl/core_pg_outside_island.tcl} $flow_text]
     set post_place_guard_index [string first {catch {pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt}} $flow_text]
     set placed_save_index [string first {saveDesign ./saved/axi_ram_placed.enc} $flow_text]
-    set power_error_return_index [string first {return -code error $power_plan_error} $flow_text $power_catch_index]
+    set power_error_return_index [string first {error $power_plan_error} $flow_text $power_catch_index]
     set route_guard_source_index [string first {source ./tcl/sram_route_guard.tcl} $flow_text]
     set place_opt_index [string first {place_opt_design} $flow_text]
     set propagated_clock_index [string first {set_propagated_clock [all_clocks]} $flow_text]
@@ -864,7 +864,7 @@ foreach flow_pair [list \
     if {$power_catch_index < 0 || $pin_source_index < 0 ||
         $power_error_return_index < $power_catch_index ||
         $power_error_return_index > $pin_source_index} {
-        fail "$flow_name must return a Tcl error immediately on a power-plan failure instead of continuing into pins.tcl"
+        fail "$flow_name must raise a Tcl error immediately on a power-plan failure instead of continuing into pins.tcl"
     }
     if {$power_entry_index < 0 ||
         $power_entry_index > $power_catch_index ||

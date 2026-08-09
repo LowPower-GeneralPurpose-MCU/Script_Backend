@@ -6,6 +6,7 @@
 ## No regular M5 mesh is created inside the SRAM island.
 ############################################################
 
+setSrouteMode -reset
 setSrouteMode \
     -viaConnectToShape {ring stripe blockring}
 
