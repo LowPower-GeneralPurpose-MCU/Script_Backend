@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug  7 19:31:47 2026                
+#  Created on Sun Aug  9 23:14:11 2026                
 #                                                     
 #######################################################
 
@@ -1190,13 +1190,6 @@ setFillerMode -core {
     FILLERxp5_ASAP7_75t_L
 } -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
 addFiller
-zoomBox -308.09625 -331.58425 1081.35725 912.27325
-zoomBox -851.25300 -1036.04200 1810.50375 1346.79850
-zoomBox -423.16800 -594.57950 1499.95125 1127.02275
-zoomBox -140.80175 -318.42675 1248.65200 925.43100
-zoomBox 142.88175 -40.98550 996.18025 722.89875
-zoomBox 76.84375 -127.47775 1080.72450 771.20975
-zoomBox -199.78175 -489.78375 1434.87050 973.57900
 setNanoRouteMode -reset
 setNanoRouteMode -quiet -routeBottomRoutingLayer 1 -routeTopRoutingLayer 9 -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 1:9 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven true -route_detail_fix_antenna true -route_detail_merge_abutting_cut true -route_detail_end_iteration 5
 routeDesign -globalDetail
@@ -1218,21 +1211,3 @@ saveDesign ./saved/axi_ram_routed.enc
 verify_drc -report ./verify_rpt/drc_after_fill.rpt
 verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_after_fill.rpt
 saveDesign ./saved/axi_ram_filled.enc
-zoomBox 24.38525 -260.92200 1205.42175 796.35775
-zoomBox 111.93150 -171.54225 1115.81275 727.14575
-zoomBox -75.61800 -354.60275 1313.83725 889.25625
-zoomBox -18.99725 -207.92825 1162.03975 849.35200
-zoomBox 32.33875 -91.73450 1036.22025 806.95375
-zoomBox 76.16925 2.16025 929.46850 766.04525
-zoomBox 172.01000 207.47275 696.04250 676.59375
-zoomBox 215.84250 295.70225 594.45625 634.64225
-zoomBox 171.25725 207.66050 695.29025 676.78200
-zoomBox 70.30450 8.31100 923.60500 772.19700
-zoomBox -94.77375 -315.60275 1294.68375 928.25825
-zoomBox -259.08525 -638.01250 1664.03950 1083.59475
-fit
-fit
-zoomBox -293.72400 27.27350 1400.52800 935.01675
-zoomBox -135.60400 166.04900 1088.49325 821.89350
-zoomBox -312.64800 29.16575 1381.60400 936.90900
-zoomBox -812.04825 -86.37150 1532.93725 1170.02050
