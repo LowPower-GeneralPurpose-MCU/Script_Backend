@@ -5,8 +5,9 @@ catch { setAnalysisMode -clkSrcPath true }
 catch { setAnalysisMode -clockPropagation sdcControl }
 catch { setOptMode -opt_honor_fences true }
 catch { setOptMode -opt_post_route_art_flow false }
-catch { setPathGroupOptions tdgp_reg2reg_default -effortLevel high }
-catch { setPathGroupOptions tdgp_reg2reg_default -late -slackAdjustment -0 }
+catch { setPathGroupOptions I2C -late -slackAdjustment -0 }
+catch { setPathGroupOptions C2O -late -slackAdjustment -0 }
+catch { setPathGroupOptions C2C -late -slackAdjustment -0 }
 catch { setExtractRCMode  -engine preRoute -total_c_th 0 -relative_c_th 1 -coupling_c_th 0.1 }
 catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
 

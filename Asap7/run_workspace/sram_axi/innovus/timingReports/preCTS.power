@@ -2,7 +2,7 @@
 *	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
 *	
 *
-* 	Date & Time:	2026-Aug-07 10:27:49 (2026-Aug-07 01:27:49 GMT)
+* 	Date & Time:	2026-Aug-07 19:35:58 (2026-Aug-07 10:35:58 GMT)
 *
 *----------------------------------------------------------------------------------------
 *
@@ -53,51 +53,53 @@
 
 Total Power 
 -----------------------------------------------------------------------------------------
-Total Internal Power:        0.07309422 	   73.7413%
-Total Switching Power:       0.02489542 	   25.1158%
-Total Leakage Power:         0.00113288 	    1.1429%
-Total Power:                 0.09912251 
+Total Internal Power:       65.34326945 	   99.4489%
+Total Switching Power:       0.36188525 	    0.5508%
+Total Leakage Power:         0.00019424 	    0.0003%
+Total Power:                65.70534894 
 -----------------------------------------------------------------------------------------
 
 
 Group                           Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-Sequential                      0.004791   3.894e-05   3.791e-05    0.004868       4.911 
-Macro                            0.06784   0.0001476           0     0.06798       68.59 
+Sequential                        0.2055     0.04928   3.652e-05      0.2548      0.3878 
+Macro                              65.11      0.1386           0       65.25        99.3 
 IO                                     0           0           0           0           0 
-Combinational                  0.0004668     0.02471    0.001095     0.02627        26.5 
+Combinational                    0.02908       0.174   0.0001577      0.2032      0.3093 
 Clock (Combinational)                  0           0           0           0           0 
 Clock (Sequential)                     0           0           0           0           0 
 -----------------------------------------------------------------------------------------
-Total                            0.07309      0.0249    0.001133     0.09912         100 
+Total                              65.34      0.3619   0.0001942       65.71         100 
 -----------------------------------------------------------------------------------------
 
 
 Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-VDD                       0.7    0.07309      0.0249    0.001133     0.09912         100 
+VDD                       0.7      65.34      0.3619   0.0001942       65.71         100 
 
 
 -----------------------------------------------------------------------------------------
 *	Power Distribution Summary: 
-*                Highest Average Power: u_mem/G_SRAM_BANK[3].u_sram (srambank_256x4x32_6t122):         0.004269 
-*                Highest Leakage Power: FE_OFC1680_s_axi_awburst_1 (BUFx12f_ASAP7_75t_L):         8.05e-06 
-*          Total Cap:      5.14377e-10 F
-*          Total instances in design:  1962
+*                Highest Average Power: u_mem/G_SRAM_BANK[9].u_sram (srambank_256x4x32_6t122):            4.087 
+*                Highest Leakage Power:         u_mem/g9675__2346 (AND4x1_ASAP7_75t_L):        2.423e-06 
+*          Total Cap:      1.3455e-11 F
+*          Total instances in design:  1532
 *          Total instances in design with no power:     0
 *          Total instances in design with no activity:     0
 *          Total Fillers and Decap:     0
 -----------------------------------------------------------------------------------------
 
-Total leakage power = 0.00113288 mW
+Total leakage power = 0.000194243 mW
 Cell usage statistics:  
-Library asap7sc7p5t_INVBUF_LVT_TT_ccs_211120 , 106 cells ( 5.402650%) , 0.000792835 mW ( 69.984043%  ) 
-Library asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120 , 50 cells ( 2.548420%) , 0.000131779 mW ( 11.632253%  ) 
-Library srambank_256x4x32_6t122 , 16 cells ( 0.815494%) , 0 mW ( 0.000000%  ) 
-Library asap7sc7p5t_OA_RVT_TT_ccs_211120 , 36 cells ( 1.834862%) , 1.7871e-06 mW ( 0.157749%  ) 
-Library asap7sc7p5t_AO_RVT_TT_ccs_211120 , 486 cells ( 24.770643%) , 3.07986e-05 mW ( 2.718608%  ) 
-Library asap7sc7p5t_SEQ_RVT_TT_ccs_220123 , 159 cells ( 8.103975%) , 3.79061e-05 mW ( 3.345999%  ) 
-Library asap7sc7p5t_INVBUF_RVT_TT_ccs_211120 , 741 cells ( 37.767582%) , 0.000104845 mW ( 9.254769%  ) 
-Library asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120 , 368 cells ( 18.756372%) , 3.2928e-05 mW ( 2.906579%  ) 
+Library asap7sc7p5t_INVBUF_LVT_TT_ccs_211120 , 42 cells ( 2.741514%) , 4.16116e-05 mW ( 21.422439%  ) 
+Library asap7sc7p5t_OA_LVT_TT_ccs_211120 , 1 cells ( 0.065274%) , 7.13468e-07 mW ( 0.367306%  ) 
+Library srambank_256x4x32_6t122 , 16 cells ( 1.044386%) , 0 mW ( 0.000000%  ) 
+Library asap7sc7p5t_OA_RVT_TT_ccs_211120 , 35 cells ( 2.284595%) , 1.71312e-06 mW ( 0.881945%  ) 
+Library asap7sc7p5t_AO_LVT_TT_ccs_211120 , 14 cells ( 0.913838%) , 7.70985e-06 mW ( 3.969171%  ) 
+Library asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120 , 26 cells ( 1.697128%) , 1.53949e-05 mW ( 7.925551%  ) 
+Library asap7sc7p5t_AO_RVT_TT_ccs_211120 , 472 cells ( 30.809399%) , 2.88163e-05 mW ( 14.835157%  ) 
+Library asap7sc7p5t_SEQ_RVT_TT_ccs_220123 , 159 cells ( 10.378591%) , 3.65248e-05 mW ( 18.803639%  ) 
+Library asap7sc7p5t_INVBUF_RVT_TT_ccs_211120 , 375 cells ( 24.477806%) , 2.53901e-05 mW ( 13.071268%  ) 
+Library asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120 , 392 cells ( 25.587467%) , 3.63692e-05 mW ( 18.723524%  ) 

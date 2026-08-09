@@ -32,6 +32,6 @@ create_delay_corner -name corner\
    -rc_corner rccorner
 create_constraint_mode -name mode_normal\
    -sdc_files\
-    [list ${::IMEX::libVar}/mmmc/axi_ram_syn.sdc]
+    [list ${::IMEX::libVar}/mmmc/axi_ram_syn.innovus.sdc]
 create_analysis_view -name tt -constraint_mode mode_normal -delay_corner corner
 set_analysis_view -setup [list tt] -hold [list tt]

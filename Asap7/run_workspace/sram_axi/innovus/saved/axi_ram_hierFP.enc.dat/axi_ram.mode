@@ -1,5 +1,8 @@
 catch { setDesignMode -process 7 }
 catch { setAnalysisMode -analysisType single }
+catch { setPathGroupOptions I2C -late -slackAdjustment -0 }
+catch { setPathGroupOptions C2O -late -slackAdjustment -0 }
+catch { setPathGroupOptions C2C -late -slackAdjustment -0 }
 catch { setExtractRCMode  -engine preRoute -total_c_th 0 -relative_c_th 1 -coupling_c_th 0.1 }
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
