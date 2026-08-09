@@ -2,7 +2,9 @@ if {![namespace exists ::IMEX]} { namespace eval ::IMEX {} }
 set ::IMEX::dataVar [file dirname [file normalize [info script]]]
 set ::IMEX::libVar ${::IMEX::dataVar}/libs
 
+catch { setDesignMode -bottomRoutingLayer 2 }
 catch { setDesignMode -process 7 }
+catch { setDesignMode -topRoutingLayer 7 }
 catch { setAnalysisMode -analysisType onChipVariation }
 catch { setAnalysisMode -checkType setup }
 catch { setAnalysisMode -clkSrcPath true }
@@ -36,28 +38,30 @@ catch {setNanoRouteMode -quiet -route_detail_antenna_factor 1.000000}
 catch {setNanoRouteMode -quiet -route_detail_end_iteration "5"}
 catch {setNanoRouteMode -quiet -route_detail_fix_antenna true}
 catch {setNanoRouteMode -quiet -route_detail_merge_abutting_cut true}
-catch {setNanoRouteMode -quiet -route_detail_no_taper_in_layers "1:9"}
+catch {setNanoRouteMode -quiet -route_detail_no_taper_in_layers "2:7"}
 catch {setNanoRouteMode -quiet -route_detail_no_taper_on_output_pin true}
 catch {setNanoRouteMode -quiet -route_detail_post_route_spread_wire "auto"}
 catch {setNanoRouteMode -quiet -drouteStartIteration 0}
 catch {setNanoRouteMode -quiet -route_detail_use_lef_pin_taper_rule true}
 catch {setNanoRouteMode -quiet -route_detail_use_min_spacing_for_blockage auto}
 catch {setNanoRouteMode -quiet -route_detail_use_multi_cut_via_effort "low"}
-catch {setNanoRouteMode -quiet -extract_design_signature 82500636}
+catch {setNanoRouteMode -quiet -extract_design_signature 94237417}
 catch {setNanoRouteMode -quiet -extract_rc_model_file "${::IMEX::libVar}/misc/rc_model.bin"}
 catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
-catch {setNanoRouteMode -quiet -route_global_exp_timing_driven_use_tif_timing_engine_for_import_design false}
-catch {setNanoRouteMode -quiet -route_bottom_routing_layer 1}
+catch {setNanoRouteMode -quiet -route_global_exp_timing_driven_use_tif_timing_engine_for_import_design true}
+catch {setNanoRouteMode -quiet -route_exp_design_mode_bottom_routing_layer 2}
+catch {setNanoRouteMode -quiet -route_exp_design_mode_top_routing_layer 7}
+catch {setNanoRouteMode -quiet -route_re_insert_filler_cell_list "FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L"}
+catch {setNanoRouteMode -quiet -route_re_insert_filler_cell_list_from_file false}
 catch {setNanoRouteMode -quiet -route_si_effort "high"}
 catch {setNanoRouteMode -quiet -routeStrictlyHonor1dRouting "true"}
 catch {setNanoRouteMode -quiet -route_strict_honor_route_rule "true"}
-catch {setNanoRouteMode -quiet -route_top_routing_layer 9}
 catch {setNanoRouteMode -quiet -route_use_auto_via "false"}
 catch {setNanoRouteMode -quiet -route_with_si_driven true}
 catch {setNanoRouteMode -quiet -route_with_si_post_route_fix false}
 catch {setNanoRouteMode -quiet -route_with_timing_driven true}
 catch {setNanoRouteMode -quiet -route_with_via_only_for_stdcell_pin "true"}
-catch {setNanoRouteMode -quiet -timingEngine ".timing_file_4042688.tif.gz"}
+catch {setNanoRouteMode -quiet -timingEngine ".timing_file_124340.tif.gz"}
 
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setPlaceMode -place_design_refine_macro false }
@@ -94,13 +98,13 @@ catch { setAddStripeMode -allow_jog none }
 catch { setAddStripeMode -allow_nonpreferred_dir none }
 catch { setAddStripeMode -break_at none }
 catch { setAddStripeMode -extend_to_closest_target area_boundary }
-catch { setAddStripeMode -stacked_via_bottom_layer M1 }
-catch { setAddStripeMode -stacked_via_top_layer M8 }
+catch { setAddStripeMode -stacked_via_bottom_layer M8 }
+catch { setAddStripeMode -stacked_via_top_layer M9 }
 catch { setRouteMode -earlyGlobalBlockTracks { { M4 0.024591 }  { M5 0.025831 } } }
 catch { setRouteMode -earlyGlobalCapacityScreen { { srambank_256x4x32_6t122 M4 1.024600 }  { srambank_256x4x32_6t122 M5 1.025800 } } }
 catch { setRouteMode -earlyGlobalReverseDirection {(127.872000 356.400000 249.264000 529.200000) M5:M5 (127.872000 533.520000 249.264000 706.320000) M5:M5 (379.296000 356.400000 500.688000 529.200000) M5:M5 (379.296000 533.520000 500.688000 706.320000) M5:M5 (2.160000 533.520000 123.552000 706.320000) M5:M5 (2.160000 356.400000 123.552000 529.200000) M5:M5 (253.584000 356.400000 374.976000 529.200000) M5:M5 (253.584000 533.520000 374.976000 706.320000) M5:M5 (2.160000 179.280000 123.552000 352.080000) M5:M5 (2.160000 2.160000 123.552000 174.960000) M5:M5 (127.872000 179.280000 249.264000 352.080000) M5:M5 (253.584000 179.280000 374.976000 352.080000) M5:M5 (379.296000 2.160000 500.688000 174.960000) M5:M5 (379.296000 179.280000 500.688000 352.080000) M5:M5 (127.872000 2.160000 249.264000 174.960000) M5:M5 (253.584000 2.160000 374.976000 174.960000) M5:M5} }
 catch { setRouteMode -earlyGlobalRouteSecondPG false }
-catch { setFillerMode -core {} }
+catch { setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} }
 catch { setFillerMode -diffCellViol true }
 catch { setFillerMode -honorPrerouteAsObs true }
 catch { setFillerMode -preserveUserOrder true }

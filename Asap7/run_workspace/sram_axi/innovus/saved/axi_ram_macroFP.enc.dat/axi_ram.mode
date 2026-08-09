@@ -1,4 +1,6 @@
+catch { setDesignMode -bottomRoutingLayer 2 }
 catch { setDesignMode -process 7 }
+catch { setDesignMode -topRoutingLayer 7 }
 catch { setAnalysisMode -analysisType single }
 catch { setAnalysisMode -checkType setup }
 catch { setAnalysisMode -clkSrcPath true }
@@ -10,6 +12,8 @@ catch { setPathGroupOptions C2O -late -slackAdjustment -0 }
 catch { setPathGroupOptions C2C -late -slackAdjustment -0 }
 catch { setExtractRCMode  -engine preRoute -total_c_th 0 -relative_c_th 1 -coupling_c_th 0.1 }
 catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
+catch {setNanoRouteMode -quiet -route_exp_design_mode_bottom_routing_layer 2}
+catch {setNanoRouteMode -quiet -route_exp_design_mode_top_routing_layer 7}
 
 catch { setPlaceMode -exp_slack_driven true }
 catch { setPlaceMode -macroPlaceMode 0 }

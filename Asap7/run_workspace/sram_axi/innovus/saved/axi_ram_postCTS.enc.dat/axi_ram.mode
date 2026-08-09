@@ -1,4 +1,6 @@
+catch { setDesignMode -bottomRoutingLayer 2 }
 catch { setDesignMode -process 7 }
+catch { setDesignMode -topRoutingLayer 7 }
 catch { setAnalysisMode -analysisType single }
 catch { setAnalysisMode -checkType setup }
 catch { setAnalysisMode -clkSrcPath true }
@@ -29,8 +31,8 @@ catch { setPathGroupOptions C2O -late -slackAdjustment -0 }
 catch { setExtractRCMode  -engine preRoute -total_c_th 0 -relative_c_th 1 -coupling_c_th 0.1 }
 catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
 catch {setNanoRouteMode -quiet -route_global_exp_timing_driven_std_delay 5.000000}
-catch {setNanoRouteMode -quiet -route_bottom_routing_layer 1}
-catch {setNanoRouteMode -quiet -route_top_routing_layer 9}
+catch {setNanoRouteMode -quiet -route_exp_design_mode_bottom_routing_layer 2}
+catch {setNanoRouteMode -quiet -route_exp_design_mode_top_routing_layer 7}
 
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setPlaceMode -place_design_refine_macro false }
@@ -64,8 +66,8 @@ catch { setAddStripeMode -allow_jog none }
 catch { setAddStripeMode -allow_nonpreferred_dir none }
 catch { setAddStripeMode -break_at none }
 catch { setAddStripeMode -extend_to_closest_target area_boundary }
-catch { setAddStripeMode -stacked_via_bottom_layer M1 }
-catch { setAddStripeMode -stacked_via_top_layer M8 }
+catch { setAddStripeMode -stacked_via_bottom_layer M8 }
+catch { setAddStripeMode -stacked_via_top_layer M9 }
 catch { setRouteMode -earlyGlobalBlockTracks { { M4 0.024591 }  { M5 0.025831 } } }
 catch { setRouteMode -earlyGlobalCapacityScreen { { srambank_256x4x32_6t122 M4 1.024600 }  { srambank_256x4x32_6t122 M5 1.025800 } } }
 catch { setRouteMode -earlyGlobalReverseDirection {(127.872000 356.400000 249.264000 529.200000) M5:M5 (127.872000 533.520000 249.264000 706.320000) M5:M5 (379.296000 356.400000 500.688000 529.200000) M5:M5 (379.296000 533.520000 500.688000 706.320000) M5:M5 (2.160000 533.520000 123.552000 706.320000) M5:M5 (2.160000 356.400000 123.552000 529.200000) M5:M5 (253.584000 356.400000 374.976000 529.200000) M5:M5 (253.584000 533.520000 374.976000 706.320000) M5:M5 (2.160000 179.280000 123.552000 352.080000) M5:M5 (2.160000 2.160000 123.552000 174.960000) M5:M5 (127.872000 179.280000 249.264000 352.080000) M5:M5 (253.584000 179.280000 374.976000 352.080000) M5:M5 (379.296000 2.160000 500.688000 174.960000) M5:M5 (379.296000 179.280000 500.688000 352.080000) M5:M5 (127.872000 2.160000 249.264000 174.960000) M5:M5 (253.584000 2.160000 374.976000 174.960000) M5:M5} }

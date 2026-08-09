@@ -1,4 +1,6 @@
+catch { setDesignMode -bottomRoutingLayer 2 }
 catch { setDesignMode -process 7 }
+catch { setDesignMode -topRoutingLayer 7 }
 catch { setAnalysisMode -analysisType single }
 catch { setPathGroupOptions I2C -late -slackAdjustment -0 }
 catch { setPathGroupOptions C2O -late -slackAdjustment -0 }
