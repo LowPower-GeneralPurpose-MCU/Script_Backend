@@ -73,8 +73,11 @@ set SRAM_ISLAND_ESCAPE_RIGHT $SRAM_BLOCKAGE_BORDER
 set LOGIC_REGION_WIDTH  600.000
 set LOGIC_REGION_HEIGHT 260.000
 
-# The generated SRAM has the main signal pins near its local BOTTOM edge.
-# R180 moves those pins to physical TOP, generally toward the core area.
+# The generated ASAP7 SRAM LEF exposes signal pins on M3/M4/M5/V3/V4 across
+# much of the macro height, with some data/write pins near both local bottom
+# and local top.  R180 keeps the original corner-island convention and moves
+# the low-index bottom pins toward the top side of each macro, but routability
+# must be judged from route DRC after the hard route guard is disabled.
 # Only R0/R180 are legal; no R90/R270 is used.
 set SRAM_ISLAND_ORIENT "R180"
 

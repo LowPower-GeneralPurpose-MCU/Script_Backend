@@ -7,11 +7,12 @@
 ############################################################
 
 setSrouteMode \
-    -viaConnectToShape {stripe ring}
+    -viaConnectToShape {ring stripe blockring}
 
 sroute \
     -connect {corePin} \
     -nets {VDD VSS} \
+    -corePinCheckStdcellGeoms \
     -allowJogging 0 \
     -allowLayerChange 0
 

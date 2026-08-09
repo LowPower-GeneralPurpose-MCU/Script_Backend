@@ -26,6 +26,12 @@ proc assert_contains {text pattern message} {
     }
 }
 
+proc assert_not_contains {text pattern message} {
+    if {[regexp $pattern $text]} {
+        fail $message
+    }
+}
+
 proc assert_close {actual expected message} {
     set eps 0.000001
     if {abs($actual - $expected) > $eps} {
@@ -257,26 +263,14 @@ set pnr_text [read_complete_file [file join $tcl_dir innovus_pnr.tcl]]
 set innovus_text [read_complete_file [file join $tcl_dir innovus.tcl]]
 set route_guard_path [file join $tcl_dir sram_route_guard.tcl]
 if {![file exists $route_guard_path]} {
-    fail "Missing sram_route_guard.tcl; SRAM macro bodies must be protected before placement/CTS"
+    fail "Missing sram_route_guard.tcl; SRAM macro bodies must be reserved before placement/CTS"
 }
 set route_guard_text [read_complete_file $route_guard_path]
 
-assert_contains \
+assert_not_contains \
     $route_guard_text \
     {createRouteBlk[[:space:]]+\\} \
-    "sram_route_guard.tcl must create Innovus route blockages over the SRAM macro bodies"
-assert_contains \
-    $route_guard_text \
-    {-exceptpgnet} \
-    "SRAM route blockages must use -exceptpgnet so VDD/VSS special routing can still cross the island"
-assert_contains \
-    $route_guard_text \
-    {-layer[[:space:]]+\$SRAM_ROUTE_GUARD_LAYERS} \
-    "SRAM route blockages must use an explicit configurable layer list"
-assert_contains \
-    $route_guard_text \
-    {set[[:space:]]+SRAM_ROUTE_GUARD_LAYERS[[:space:]]+\{M4[[:space:]]+M5[[:space:]]+M6[[:space:]]+M7\}} \
-    "ASAP7 SRAM route guard must reserve M4/M5 macro-body layers and M6/M7 upper routes over SRAM"
+    "sram_route_guard.tcl must not create hard routing blockages over ASAP7 SRAM pin-access layers"
 assert_contains \
     $route_guard_text \
     {setRouteMode[[:space:]]+\\[[:space:]]+-earlyGlobalReverseDirection[[:space:]]+\$sram_egr_reverse_regions} \
@@ -285,10 +279,10 @@ assert_contains \
     $route_guard_text \
     {set[[:space:]]+SRAM_ROUTE_GUARD_EGR_LAYER[[:space:]]+M5} \
     "The SRAM early-global reverse-direction reservation must target the teacher-style M5 routing layer"
-assert_contains \
+assert_not_contains \
     $route_guard_text \
-    {deleteRouteBlk[[:space:]]+-name[[:space:]]+SRAM_ROUTE_GUARD_\*} \
-    "SRAM route guard must delete stale named route blockages before recreating them"
+    {deleteRouteBlk} \
+    "sram_route_guard.tcl must not manage route blockage objects in the clean flow"
 
 foreach old_child {
     sram_gap_stripes.tcl
@@ -903,7 +897,7 @@ foreach flow_pair [list \
     if {$route_guard_source_index < 0 ||
         $place_opt_index < 0 ||
         $route_guard_source_index > $place_opt_index} {
-        fail "$flow_name must install SRAM route blockages before place_opt_design"
+        fail "$flow_name must install SRAM route reservation before place_opt_design"
     }
     if {$clock_opt_index < 0 ||
         $propagated_clock_index < $clock_opt_index} {

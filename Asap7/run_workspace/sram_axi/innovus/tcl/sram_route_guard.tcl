@@ -1,12 +1,16 @@
 ############################################################
-## SRAM macro-body route guard for placement, eGR, and CTS
+## SRAM macro-body route reservation for placement, eGR, CTS, and route
 ##
 ## Intent:
-##   - Keep signal/clock routing off the SRAM macro body on the layers that
-##     the macro slides call out as SRAM-blocked local routing resources.
-##   - Keep VDD/VSS special routing legal through the island collectors.
-##   - Feed early global route/CTS the same M5 reservation style used in the
-##     reference flow, but with the documented Innovus option name.
+##   - Match the teacher reference style: reserve a preferred-direction
+##     early-global route layer over each SRAM macro body.
+##   - Do not create hard routing blockages over the SRAM body.  The generated
+##     ASAP7 SRAM abstract has internal signal pins/OBS on M3/M4/M5/V3/V4;
+##     adding extra route blockages over those layers makes NanoRoute fight
+##     its own pin-access problem and shows up as "Regular Wire & Routing
+##     Blockage" DRC.
+##   - Standard-cell keepout around the SRAM island is a placement problem and
+##     is handled by createPlaceBlockage in finish_macroFP.tcl.
 ############################################################
 
 foreach required_variable {
@@ -18,9 +22,6 @@ foreach required_variable {
     }
 }
 
-if {![info exists SRAM_ROUTE_GUARD_LAYERS]} {
-    set SRAM_ROUTE_GUARD_LAYERS {M4 M5 M6 M7}
-}
 if {![info exists SRAM_ROUTE_GUARD_EGR_LAYER]} {
     set SRAM_ROUTE_GUARD_EGR_LAYER M5
 }
@@ -39,11 +40,8 @@ if {[llength $SRAM_ROUTE_GUARD_PTRS] != $SRAM_COUNT} {
 file mkdir [file dirname $sram_route_guard_report]
 file delete -force $sram_route_guard_report
 
-# Keep this script rerunnable inside an interactive Innovus session.
-catch {deleteRouteBlk -name SRAM_ROUTE_GUARD_*}
-
 set guard_report_fh [open $sram_route_guard_report w]
-puts $guard_report_fh "index instance llx lly urx ury route_block_layers egr_reverse_layer status"
+puts $guard_report_fh "index instance llx lly urx ury route_blockage_created egr_reverse_layer status"
 
 set guard_index 0
 set sram_egr_reverse_regions ""
@@ -73,23 +71,15 @@ foreach ptr $SRAM_ROUTE_GUARD_PTRS {
         error "$macro_name must be FIXED before SRAM route guard setup; current status is $macro_status"
     }
 
-    set guard_name [format "SRAM_ROUTE_GUARD_%02d" $guard_index]
-    createRouteBlk \
-        -name $guard_name \
-        -box [list $llx $lly $urx $ury] \
-        -layer $SRAM_ROUTE_GUARD_LAYERS \
-        -exceptpgnet
-
     append sram_egr_reverse_regions [format \
         "(%.6f %.6f %.6f %.6f) %s:%s " \
         $llx $lly $urx $ury \
         $SRAM_ROUTE_GUARD_EGR_LAYER $SRAM_ROUTE_GUARD_EGR_LAYER]
 
-    puts $guard_report_fh [format "%02d %s %.6f %.6f %.6f %.6f {%s} %s %s" \
+    puts $guard_report_fh [format "%02d %s %.6f %.6f %.6f %.6f %s %s %s" \
         $guard_index $macro_name \
         $llx $lly $urx $ury \
-        [join $SRAM_ROUTE_GUARD_LAYERS { }] \
-        $SRAM_ROUTE_GUARD_EGR_LAYER $macro_status]
+        no $SRAM_ROUTE_GUARD_EGR_LAYER $macro_status]
     incr guard_index
 }
 close $guard_report_fh
@@ -101,3 +91,4 @@ if {$sram_egr_reverse_regions ne ""} {
 }
 
 puts "SRAM route guard report: $sram_route_guard_report"
+puts "SRAM route blockages are not created; using M5 early-global reverse-direction reservation only."

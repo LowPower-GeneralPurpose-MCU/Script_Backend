@@ -5,7 +5,7 @@
 
 ecoRoute -fix_drc
 
-connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_verify_route_pg.rpt
+verify_pg_connectivity_or_stop ./verify_rpt/pg_connectivity_after_verify_route_pg.rpt
 
 verify_drc \
     -report ./verify_rpt/drc_postroute.rpt

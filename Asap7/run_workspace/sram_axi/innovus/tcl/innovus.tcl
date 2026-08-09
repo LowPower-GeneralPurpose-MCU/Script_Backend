@@ -357,13 +357,11 @@ create_route_type \
 
 create_route_type \
     -name trunk_rule \
-    -shield_net VSS \
     -bottom_preferred_layer M4 \
     -top_preferred_layer M5
 
 create_route_type \
     -name top_rule \
-    -shield_net VSS \
     -bottom_preferred_layer M6 \
     -top_preferred_layer M7
 
@@ -424,7 +422,12 @@ optDesign \
     -setup \
     -hold
 
-connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postcts.rpt
+if {[catch {
+    verify_pg_connectivity_or_stop ./verify_rpt/pg_connectivity_after_postcts.rpt
+} postcts_pg_error]} {
+    puts stderr $postcts_pg_error
+    return -code error $postcts_pg_error
+}
 
 timeDesign \
     -postCTS \
@@ -453,7 +456,12 @@ addFiller \
     -diffCellViol true
 
 assert_filler_inserted FILLER
-connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_filler.rpt
+if {[catch {
+    verify_pg_connectivity_or_stop ./verify_rpt/pg_connectivity_after_filler.rpt
+} filler_pg_error]} {
+    puts stderr $filler_pg_error
+    return -code error $filler_pg_error
+}
 
 # ------------------------------------------------------------------------
 # 7. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
@@ -463,6 +471,7 @@ setNanoRouteMode -reset
 setDesignMode \
     -bottomRoutingLayer 2 \
     -topRoutingLayer 7
+source ./tcl/sram_route_guard.tcl
 setNanoRouteMode -quiet \
     -route_strict_honor_route_rule true \
     -route_strictly_honor_1d_routing true \
@@ -472,13 +481,16 @@ setNanoRouteMode -quiet \
     -route_with_via_only_for_stdcell_pin true \
     -route_detail_use_multi_cut_via_effort low \
     -route_with_timing_driven true \
-    -route_with_si_driven true \
+    -route_with_si_driven false \
     -route_detail_fix_antenna true \
     -route_detail_merge_abutting_cut true \
-    -route_detail_end_iteration 5
+    -route_detail_end_iteration 20
 
 routeDesign -globalDetail
 routeDesign -viaOpt -wireOpt -trackOpt
+setNanoRouteMode -quiet \
+    -route_with_timing_driven false \
+    -route_with_si_driven false
 ecoRoute -fix_drc
 
 setAnalysisMode -analysisType onChipVariation
@@ -495,7 +507,12 @@ optDesign \
     -hold \
     -prefix postRoute
 
-connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
+if {[catch {
+    verify_pg_connectivity_or_stop ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
+} postroute_pg_error]} {
+    puts stderr $postroute_pg_error
+    return -code error $postroute_pg_error
+}
 ecoRoute -fix_drc
 
 timeDesign \
