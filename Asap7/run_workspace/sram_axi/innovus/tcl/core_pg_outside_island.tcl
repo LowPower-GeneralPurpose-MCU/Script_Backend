@@ -3,6 +3,9 @@
 ##
 ## The L-shaped logic region is decomposed into non-overlapping boxes.
 ## A common global phase keeps separately generated segments aligned.
+## M6 is later tied down to M5 taps and up to M7; M8/M9 connection is
+## handled in global_upper_pg_to_ring.tcl.  Avoid direct M1->M8 stacks,
+## because ASAP7 M5 and M7 tracks do not share the same pitch/grid.
 ############################################################
 
 proc pg_positive_mod {value period} {
@@ -36,13 +39,35 @@ puts "External horizontal PG boxes:"
 puts " - TOP FULL  : $LOGIC_TOP_FULL_BOX"
 puts " - RIGHT LOW : $LOGIC_RIGHT_LOWER_BOX"
 
+if {![info exists stripe_m67_pitch]} {
+    set stripe_m67_pitch 34.560
+}
+if {![info exists stripe_m6_w]} {
+    set stripe_m6_w 0.640
+}
+if {![info exists stripe_m6_s]} {
+    set stripe_m6_s 0.896
+}
+if {![info exists stripe_m6_offset]} {
+    set stripe_m6_offset 17.280
+}
+if {![info exists stripe_m7_w]} {
+    set stripe_m7_w 0.640
+}
+if {![info exists stripe_m7_s]} {
+    set stripe_m7_s 0.896
+}
+if {![info exists stripe_m7_offset]} {
+    set stripe_m7_offset 17.280
+}
+
 # M7 vertical mesh outside island, globally phase-aligned.
 set global_m7_first_x [expr {$core_llx + $stripe_m7_offset}]
 setAddStripeMode \
     -allow_jog none \
     -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M6 \
-    -stacked_via_top_layer M8
+    -stacked_via_top_layer M7
 
 foreach area [list $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LEFT_BOX] {
     set area_llx [lindex $area 0]
@@ -70,7 +95,7 @@ set global_m6_first_y [expr {$core_lly + $stripe_m6_offset}]
 setAddStripeMode \
     -allow_jog none \
     -extend_to_closest_target area_boundary \
-    -stacked_via_bottom_layer M6 \
+    -stacked_via_bottom_layer M5 \
     -stacked_via_top_layer M7
 
 foreach area [list $LOGIC_TOP_FULL_BOX $LOGIC_RIGHT_LOWER_BOX] {

@@ -239,8 +239,9 @@ proc warn_if_dirty_report {path} {
 set power_plan [file join $tcl_dir power_plan.tcl]
 set power_children {
     sram_island_power.tcl
-    global_upper_pg_to_ring.tcl
     core_lower_pg_nojog.tcl
+    core_pg_outside_island.tcl
+    global_upper_pg_to_ring.tcl
 }
 
 set power_text [read_complete_file $power_plan]
@@ -274,8 +275,8 @@ assert_contains \
     "SRAM route blockages must use an explicit configurable layer list"
 assert_contains \
     $route_guard_text \
-    {set[[:space:]]+SRAM_ROUTE_GUARD_LAYERS[[:space:]]+\{M4[[:space:]]+M5\}} \
-    "ASAP7 SRAM route guard must reserve the M4/M5 macro-body layers called out by the macro slides"
+    {set[[:space:]]+SRAM_ROUTE_GUARD_LAYERS[[:space:]]+\{M4[[:space:]]+M5[[:space:]]+M6[[:space:]]+M7\}} \
+    "ASAP7 SRAM route guard must reserve M4/M5 macro-body layers and M6/M7 upper routes over SRAM"
 assert_contains \
     $route_guard_text \
     {setRouteMode[[:space:]]+\\[[:space:]]+-earlyGlobalReverseDirection[[:space:]]+\$sram_egr_reverse_regions} \
@@ -486,8 +487,28 @@ foreach lower_pg_var {stripe_m5_offset stripe_m5_w stripe_m5_s stripe_m45_pitch}
 }
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
+    {-stacked_via_top_layer[[:space:]]+M5} \
+    "post-placement lower taps must stop at M5 before the M6/M7 core mesh"
+if {[regexp -- {-stacked_via_bottom_layer[[:space:]]+M1[[:space:]]+\\[[:space:]]+-stacked_via_top_layer[[:space:]]+M8} \
+        $child_text(core_lower_pg_nojog.tcl)]} {
+    fail "core_lower_pg_nojog.tcl must not use a direct M1-to-M8 stack because it can generate off-grid M7 intermediate metal"
+}
+assert_contains \
+    $child_text(core_pg_outside_island.tcl) \
+    {-stacked_via_bottom_layer[[:space:]]+M5} \
+    "outside-island M6 mesh must connect down to the M5 standard-cell taps"
+assert_contains \
+    $child_text(core_pg_outside_island.tcl) \
+    {-stacked_via_top_layer[[:space:]]+M7} \
+    "outside-island M6 mesh must connect up to the M7 mesh"
+assert_contains \
+    $child_text(global_upper_pg_to_ring.tcl) \
+    {-stacked_via_bottom_layer[[:space:]]+M7} \
+    "upper M8 mesh must connect down to the M7 core mesh"
+assert_contains \
+    $child_text(global_upper_pg_to_ring.tcl) \
     {-stacked_via_top_layer[[:space:]]+M8} \
-    "post-placement M5 taps must be allowed to via-stack to the M8 ring/upper mesh"
+    "M8 stripe pass must stop at M8; M8-to-M9 vias are created by the M9 stripe pass"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {LOGIC_RIGHT_EDGE_TAP_BOX} \
@@ -528,12 +549,10 @@ if {$stale_report_delete_index < 0 ||
     $stale_report_delete_index >= $first_global_ring_index} {
     fail "Stale PG reports must be deleted before the first global addRing command"
 }
-if {[string first {Special[[:space:]]+(Wire|Via)} $power_text] < 0} {
-    fail "PG DRC guard must fail on special-route wire/via DRCs, while allowing fake SRAM macro-pin DRCs to be reviewed later"
-}
-if {[regexp {\$count[[:space:]]*>[[:space:]]*0} $power_text]} {
-    fail "PG DRC guard must not fail on total DRC count alone because fake SRAM macro-pin DRCs are expected in this flow"
-}
+assert_contains \
+    $power_text \
+    {PG[[:space:]]+DRC[[:space:]]+is[[:space:]]+not[[:space:]]+clean:[[:space:]]+\$report_path[[:space:]]+has[[:space:]]+\$count[[:space:]]+total[[:space:]]+violations} \
+    "PG DRC guard must stop on any nonzero PG-stage DRC before placement/route"
 assert_contains \
     $power_text \
     {editTrim[[:space:]]+-nets[[:space:]]+\{VDD[[:space:]]+VSS\}} \
@@ -840,6 +859,7 @@ foreach flow_pair [list \
     set direct_sram_source_index [string first {source ./tcl/sram_island_power.tcl} $flow_text $power_catch_index]
     set upper_pg_index [string first {source ./tcl/global_upper_pg_to_ring.tcl} $flow_text]
     set lower_pg_index [string first {source ./tcl/core_lower_pg_nojog.tcl} $flow_text]
+    set middle_pg_index [string first {source ./tcl/core_pg_outside_island.tcl} $flow_text]
     set post_place_guard_index [string first {catch {pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt}} $flow_text]
     set placed_save_index [string first {saveDesign ./saved/axi_ram_placed.enc} $flow_text]
     set power_error_return_index [string first {return -code error $power_plan_error} $flow_text $power_catch_index]
@@ -870,8 +890,10 @@ foreach flow_pair [list \
     }
     if {$upper_pg_index < 0 ||
         $lower_pg_index < 0 ||
-        $upper_pg_index > $lower_pg_index} {
-        fail "$flow_name must create the upper M8/M9 PG mesh before lower M1/M5 tap generation"
+        $middle_pg_index < 0 ||
+        $lower_pg_index > $middle_pg_index ||
+        $middle_pg_index > $upper_pg_index} {
+        fail "$flow_name must build post-placement PG upward: M1/M5 taps, then M6/M7 mesh, then M8/M9 upper mesh"
     }
     if {$post_place_guard_index < 0 ||
         $placed_save_index < 0 ||

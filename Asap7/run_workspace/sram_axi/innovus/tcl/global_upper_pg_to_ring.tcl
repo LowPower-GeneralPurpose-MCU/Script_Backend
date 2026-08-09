@@ -93,13 +93,15 @@ set global_m9_first_x [expr {$core_llx + $stripe_m9_offset}]
 
 # ------------------------------------------------------------
 # M8 horizontal upper mesh, outside SRAM island only.
-# ViaGen may connect down to existing M7 and up to existing M9 ring.
+# First connect down only to existing M7 mesh.  M8->M9 is created by the
+# following M9 stripe pass, which avoids generating off-grid intermediate M7
+# shapes at M9 stripe x-coordinates.
 # ------------------------------------------------------------
 setAddStripeMode \
     -allow_jog none \
     -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M7 \
-    -stacked_via_top_layer M9
+    -stacked_via_top_layer M8
 
 foreach area [list $UPPER_TOP_FULL_BOX $UPPER_RIGHT_LOWER_BOX] {
     set area_lly [lindex $area 1]

@@ -6,6 +6,32 @@ if {![info exists ROUTE_VERIFY_CLEAN] || !$ROUTE_VERIFY_CLEAN} {
     error "Set ROUTE_VERIFY_CLEAN 1 only after reviewing clean post-route reports"
 }
 
+set FINAL_REPORTS_CLEAN 0
+
+assert_clean_drc_report ./verify_rpt/drc_postroute.rpt
+assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt
+
+set RUN_LEGACY_METAL_FILL 0
+if {[info exists ::env(INNOVUS_RUN_LEGACY_METAL_FILL)]} {
+    switch -nocase -- $::env(INNOVUS_RUN_LEGACY_METAL_FILL) {
+        1 - true - yes - on  { set RUN_LEGACY_METAL_FILL 1 }
+        0 - false - no - off { set RUN_LEGACY_METAL_FILL 0 }
+        default {
+            error "INNOVUS_RUN_LEGACY_METAL_FILL must be 0/1, false/true, no/yes or off/on"
+        }
+    }
+}
+
+if {!$RUN_LEGACY_METAL_FILL} {
+    write_skipped_report ./verify_rpt/drc_after_fill.rpt \
+        "Skipped legacy in-design metal fill. Cadence reports setMetalFill/addMetalFill as obsolete in this Innovus version; enable INNOVUS_RUN_LEGACY_METAL_FILL=1 only after post-route DRC/connectivity are clean or switch to the Pegasus signoff fill flow."
+    write_skipped_report ./verify_rpt/antenna_after_fill.rpt \
+        "Skipped because metal fill was not run."
+    write_skipped_report ./verify_rpt/connectivity_after_fill.rpt \
+        "Skipped because metal fill was not run."
+    puts "Legacy metal fill skipped. Set INNOVUS_RUN_LEGACY_METAL_FILL=1 only when the routed design is clean and you intentionally accept the legacy fill warnings."
+} else {
+
 # M1-M3
 setMetalFill \
     -layer {M1 M2 M3} \
@@ -81,14 +107,17 @@ addMetalFill -snap -squareShape
 verify_drc \
     -report ./verify_rpt/drc_after_fill.rpt
 
-verifyProcessAntenna \
-    -report ./verify_rpt/antenna_after_fill.rpt
+verify_antenna_if_enabled ./verify_rpt/antenna_after_fill.rpt
 
 verifyConnectivity \
     -type all \
     -error 1000 \
     -warning 1000 \
     -report ./verify_rpt/connectivity_after_fill.rpt
+
+assert_clean_drc_report ./verify_rpt/drc_after_fill.rpt
+assert_clean_connectivity_report ./verify_rpt/connectivity_after_fill.rpt
+set FINAL_REPORTS_CLEAN 1
 
 saveDesign ./saved/axi_ram_filled.enc
 
@@ -101,3 +130,4 @@ puts "When clean:"
 puts "  set FINAL_VERIFY_CLEAN 1"
 puts "  source ./tcl/export_gds.tcl"
 puts "===================================================="
+}

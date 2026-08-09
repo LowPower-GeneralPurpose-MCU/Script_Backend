@@ -11,6 +11,7 @@
 set USER $::env(USER)
 if {[catch {file delete -force /tmp/$USER/innovus_pnr}]} {}
 set auto_file_dir "/tmp/$USER/innovus_pnr"
+set enc_source_continue_on_error false
 
 set STOP_AFTER_POWER_PINS 0
 if {[info exists ::env(INNOVUS_STOP_AFTER_POWER_PINS)]} {
@@ -40,6 +41,9 @@ if {[file exists $INNOVUS_GROUP_PATH_FILE] && [file size $INNOVUS_GROUP_PATH_FIL
 }
 
 setDesignMode -process 7
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
 
 if {![catch {open "/proc/cpuinfo"} cpu_file]} {
     set CORES [regexp -all -line {^processor\s} [read $cpu_file]]
@@ -197,10 +201,11 @@ timeDesign \
     -preCTS \
     -outDir ./reports/timing_preCTS
 
-# Standard-cell M1 rails exist after placement.  sroute is restricted to
-# straight same-layer connections; M1-to-M8 taps are explicit addStripe vias.
-source ./tcl/global_upper_pg_to_ring.tcl
+# Standard-cell M1 rails exist after placement.  Build the PG stack upward in
+# legal ASAP7 grid steps: M1->M5 taps, M5/M6/M7 core mesh, then M7/M8/M9 upper mesh.
 source ./tcl/core_lower_pg_nojog.tcl
+source ./tcl/core_pg_outside_island.tcl
+source ./tcl/global_upper_pg_to_ring.tcl
 
 verifyConnectivity \
     -type special \
@@ -285,9 +290,9 @@ optDesign -prefix preCTS -preCTS
 refinePlace
 checkPlace ./verify_rpt/checkPlace_before_cts.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_before_cts.rpt
-setNanoRouteMode -quiet \
-    -routeBottomRoutingLayer 1 \
-    -routeTopRoutingLayer 9
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
 
 # Do not extract/source ccopt.spec.  clock_opt_design avoids the
 # IMPCCOPT-2048 "clock trees are already defined" failure in this flow.
@@ -319,6 +324,8 @@ optDesign \
     -setup \
     -hold
 
+connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postcts.rpt
+
 timeDesign \
     -postCTS \
     -outDir ./reports/timing_postCTS
@@ -329,12 +336,9 @@ saveDesign ./saved/axi_ram_postCTS.enc
 # 4. FILLER BEFORE ROUTING
 # ------------------------------------------------------------------------
 
-set FILLERCells {
-    FILLER_ASAP7_75t_R
-    FILLERxp5_ASAP7_75t_R
-    FILLER_ASAP7_75t_L
-    FILLERxp5_ASAP7_75t_L
-}
+set FILLERCells [list \
+    FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R \
+    FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L]
 
 setFillerMode \
     -core $FILLERCells \
@@ -342,19 +346,27 @@ setFillerMode \
     -honorPrerouteAsObs true \
     -diffCellViol true
 
-addFiller
+addFiller \
+    -cell $FILLERCells \
+    -prefix FILLER \
+    -honorPrerouteAsObs true \
+    -diffCellViol true
+
+assert_filler_inserted FILLER
+connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_filler.rpt
 
 # ------------------------------------------------------------------------
 # 5. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
 # ------------------------------------------------------------------------
 
 setNanoRouteMode -reset
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
 setNanoRouteMode -quiet \
-    -routeBottomRoutingLayer 1 \
-    -routeTopRoutingLayer 9 \
     -route_strict_honor_route_rule true \
     -route_strictly_honor_1d_routing true \
-    -route_detail_no_taper_in_layers "1:9" \
+    -route_detail_no_taper_in_layers "2:7" \
     -route_detail_no_taper_on_output_pin true \
     -route_use_auto_via false \
     -route_with_via_only_for_stdcell_pin true \
@@ -366,6 +378,7 @@ setNanoRouteMode -quiet \
     -route_detail_end_iteration 5
 
 routeDesign -globalDetail
+routeDesign -viaOpt -wireOpt -trackOpt
 ecoRoute -fix_drc
 
 setAnalysisMode -analysisType onChipVariation
@@ -382,6 +395,7 @@ optDesign \
     -hold \
     -prefix postRoute
 
+connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
 ecoRoute -fix_drc
 
 timeDesign \
@@ -391,8 +405,7 @@ timeDesign \
 verify_drc \
     -report ./verify_rpt/drc_postroute.rpt
 
-verifyProcessAntenna \
-    -report ./verify_rpt/antenna_postroute.rpt
+verify_antenna_if_enabled ./verify_rpt/antenna_postroute.rpt
 
 verifyConnectivity \
     -type all \
@@ -401,6 +414,15 @@ verifyConnectivity \
     -report ./verify_rpt/connectivity_postroute.rpt
 
 saveDesign ./saved/axi_ram_routed.enc
+
+set ROUTE_REPORTS_CLEAN 0
+if {[catch {
+    assert_clean_drc_report ./verify_rpt/drc_postroute.rpt
+    assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt
+    set ROUTE_REPORTS_CLEAN 1
+} route_report_error]} {
+    puts stderr "Post-route reports are not clean: $route_report_error"
+}
 
 puts "===================================================="
 puts "ROUTED CHECKPOINT CREATED"

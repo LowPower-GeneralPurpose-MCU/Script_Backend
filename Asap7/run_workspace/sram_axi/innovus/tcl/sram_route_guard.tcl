@@ -19,7 +19,7 @@ foreach required_variable {
 }
 
 if {![info exists SRAM_ROUTE_GUARD_LAYERS]} {
-    set SRAM_ROUTE_GUARD_LAYERS {M4 M5}
+    set SRAM_ROUTE_GUARD_LAYERS {M4 M5 M6 M7}
 }
 if {![info exists SRAM_ROUTE_GUARD_EGR_LAYER]} {
     set SRAM_ROUTE_GUARD_EGR_LAYER M5

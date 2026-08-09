@@ -16,6 +16,7 @@
 
 set AUTO_RUN_ALL 1
 set MASTER_ONE_SHOT 1
+set enc_source_continue_on_error false
 if {[info exists ::env(INNOVUS_AUTO_RUN_ALL)]} {
     switch -nocase -- $::env(INNOVUS_AUTO_RUN_ALL) {
         1 - true - yes - on  { set AUTO_RUN_ALL 1 }
@@ -55,17 +56,6 @@ source ./tcl/prepare_innovus_sdc.tcl
 source ./tcl/flow_checks.tcl
 prepare_innovus_sdc $SYN_SDC_FILE $INNOVUS_SDC_FILE $INNOVUS_GROUP_PATH_FILE
 
-# Fail before the long implementation run if one-shot export cannot create a
-# mapped GDS.  Strict checkpoint mode does not require the map file yet.
-if {$AUTO_RUN_ALL && !$STOP_AFTER_POWER_PINS} {
-    if {$GDS_MAP_FILE eq ""} {
-        error "Set ASAP7_GDS_MAP_FILE before running the full one-shot flow"
-    }
-    if {![file exists $GDS_MAP_FILE]} {
-        error "Missing GDS map file: [file normalize $GDS_MAP_FILE]"
-    }
-}
-
 init_design
 
 if {[file exists $INNOVUS_GROUP_PATH_FILE] && [file size $INNOVUS_GROUP_PATH_FILE] > 0} {
@@ -74,6 +64,9 @@ if {[file exists $INNOVUS_GROUP_PATH_FILE] && [file size $INNOVUS_GROUP_PATH_FIL
 }
 
 setDesignMode -process 7
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
 
 if {![catch {open "/proc/cpuinfo"} cpu_file]} {
     set CORES [regexp -all -line {^processor\s} [read $cpu_file]]
@@ -94,8 +87,8 @@ setDistributeHost -local
 if {$AUTO_RUN_ALL} {
     puts "===================================================="
     puts "ONE-SHOT MODE ENABLED"
-    puts "Reports will be generated, but Tcl does not prove signoff cleanliness."
-    puts "The exported GDS still requires report review and Calibre DRC/LVS."
+    puts "Route/fill/export stages now stop unless their reports are clean."
+    puts "Final GDS export also requires ASAP7_GDS_MAP_FILE."
     puts "===================================================="
 }
 
@@ -308,10 +301,11 @@ timeDesign \
     -preCTS \
     -outDir ./reports/timing_preCTS
 
-# Standard-cell M1 rails exist after placement.  sroute is restricted to
-# straight same-layer connections; M1-to-M8 taps are explicit addStripe vias.
-source ./tcl/global_upper_pg_to_ring.tcl
+# Standard-cell M1 rails exist after placement.  Build the PG stack upward in
+# legal ASAP7 grid steps: M1->M5 taps, M5/M6/M7 core mesh, then M7/M8/M9 upper mesh.
 source ./tcl/core_lower_pg_nojog.tcl
+source ./tcl/core_pg_outside_island.tcl
+source ./tcl/global_upper_pg_to_ring.tcl
 
 verifyConnectivity \
     -type special \
@@ -396,9 +390,9 @@ optDesign -prefix preCTS -preCTS
 refinePlace
 checkPlace ./verify_rpt/checkPlace_before_cts.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_before_cts.rpt
-setNanoRouteMode -quiet \
-    -routeBottomRoutingLayer 1 \
-    -routeTopRoutingLayer 9
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
 
 # Do not extract/source ccopt.spec.  clock_opt_design avoids the
 # IMPCCOPT-2048 "clock trees are already defined" failure in this flow.
@@ -430,6 +424,8 @@ optDesign \
     -setup \
     -hold
 
+connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postcts.rpt
+
 timeDesign \
     -postCTS \
     -outDir ./reports/timing_postCTS
@@ -440,12 +436,9 @@ saveDesign ./saved/axi_ram_postCTS.enc
 # 6. FILLER BEFORE ROUTING
 # ------------------------------------------------------------------------
 
-set FILLERCells {
-    FILLER_ASAP7_75t_R
-    FILLERxp5_ASAP7_75t_R
-    FILLER_ASAP7_75t_L
-    FILLERxp5_ASAP7_75t_L
-}
+set FILLERCells [list \
+    FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R \
+    FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L]
 
 setFillerMode \
     -core $FILLERCells \
@@ -453,19 +446,27 @@ setFillerMode \
     -honorPrerouteAsObs true \
     -diffCellViol true
 
-addFiller
+addFiller \
+    -cell $FILLERCells \
+    -prefix FILLER \
+    -honorPrerouteAsObs true \
+    -diffCellViol true
+
+assert_filler_inserted FILLER
+connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_filler.rpt
 
 # ------------------------------------------------------------------------
 # 7. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
 # ------------------------------------------------------------------------
 
 setNanoRouteMode -reset
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
 setNanoRouteMode -quiet \
-    -routeBottomRoutingLayer 1 \
-    -routeTopRoutingLayer 9 \
     -route_strict_honor_route_rule true \
     -route_strictly_honor_1d_routing true \
-    -route_detail_no_taper_in_layers "1:9" \
+    -route_detail_no_taper_in_layers "2:7" \
     -route_detail_no_taper_on_output_pin true \
     -route_use_auto_via false \
     -route_with_via_only_for_stdcell_pin true \
@@ -477,6 +478,7 @@ setNanoRouteMode -quiet \
     -route_detail_end_iteration 5
 
 routeDesign -globalDetail
+routeDesign -viaOpt -wireOpt -trackOpt
 ecoRoute -fix_drc
 
 setAnalysisMode -analysisType onChipVariation
@@ -493,6 +495,7 @@ optDesign \
     -hold \
     -prefix postRoute
 
+connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
 ecoRoute -fix_drc
 
 timeDesign \
@@ -502,14 +505,22 @@ timeDesign \
 verify_drc \
     -report ./verify_rpt/drc_postroute.rpt
 
-verifyProcessAntenna \
-    -report ./verify_rpt/antenna_postroute.rpt
+verify_antenna_if_enabled ./verify_rpt/antenna_postroute.rpt
 
 verifyConnectivity \
     -type all \
     -error 1000 \
     -warning 1000 \
     -report ./verify_rpt/connectivity_postroute.rpt
+
+set ROUTE_REPORTS_CLEAN 0
+if {[catch {
+    assert_clean_drc_report ./verify_rpt/drc_postroute.rpt
+    assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt
+    set ROUTE_REPORTS_CLEAN 1
+} route_report_error]} {
+    puts stderr "Post-route reports are not clean: $route_report_error"
+}
 
 saveDesign ./saved/axi_ram_routed.enc
 
@@ -524,20 +535,41 @@ puts "===================================================="
 # 8. ROUTE RECHECK, METAL FILL AND FINAL EXPORT
 # ------------------------------------------------------------------------
 
+if {!$ROUTE_REPORTS_CLEAN} {
+    puts "===================================================="
+    puts "STRICT CHECKPOINT MODE: FLOW STOPPED AFTER ROUTE"
+    puts "Repair DRC/connectivity before metal fill."
+    puts " - ./verify_rpt/drc_postroute.rpt"
+    puts " - ./verify_rpt/connectivity_postroute.rpt"
+    puts " - ./saved/axi_ram_routed.enc"
+    puts "===================================================="
+    return
+}
+
 source ./tcl/verify_route.tcl
 
 if {$AUTO_RUN_ALL} {
-    # These approval variables permit the component scripts to run in one
-    # command.  They do not replace engineering review of the generated
-    # reports and external Calibre signoff.
     set ROUTE_VERIFY_CLEAN 1
     source ./tcl/add_fill_and_verify.tcl
 
-    set FINAL_VERIFY_CLEAN 1
-    source ./tcl/export_gds.tcl
+    if {[info exists FINAL_REPORTS_CLEAN] && $FINAL_REPORTS_CLEAN} {
+        if {$GDS_MAP_FILE eq ""} {
+            puts "Skipping final GDS export because ASAP7_GDS_MAP_FILE is not set."
+        } else {
+            set FINAL_VERIFY_CLEAN 1
+            source ./tcl/export_gds.tcl
+        }
+    } else {
+        puts "===================================================="
+        puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE FINAL EXPORT"
+        puts "Metal fill was skipped or post-fill reports are not clean."
+        puts "Set INNOVUS_RUN_LEGACY_METAL_FILL=1 only after routed reports are clean,"
+        puts "or use the Pegasus signoff fill flow recommended by Cadence."
+        puts "===================================================="
+    }
 
     puts "===================================================="
-    puts "ONE-COMMAND INNOVUS FLOW COMPLETED"
+    puts "ONE-COMMAND INNOVUS FLOW REACHED A SAFE CHECKPOINT"
     puts "Review every report in ./verify_rpt and run Calibre signoff."
     puts "===================================================="
 } else {

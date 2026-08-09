@@ -20,14 +20,16 @@ if {![file exists $SRAM_GDS]} {
 verify_drc \
     -report ./verify_rpt/drc_final.rpt
 
-verifyProcessAntenna \
-    -report ./verify_rpt/antenna_final.rpt
+verify_antenna_if_enabled ./verify_rpt/antenna_final.rpt
 
 verifyConnectivity \
     -type all \
     -error 1000 \
     -warning 1000 \
     -report ./verify_rpt/connectivity_final.rpt
+
+assert_clean_drc_report ./verify_rpt/drc_final.rpt
+assert_clean_connectivity_report ./verify_rpt/connectivity_final.rpt
 
 saveNetlist \
     ./outputs/axi_ram_pnr_lec.v \

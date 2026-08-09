@@ -2,7 +2,7 @@
 ## Post-placement lower PG for standard-cell region
 ##
 ## 1. Create straight same-layer M1 follow-pin rails.
-## 2. Add external M5 vertical taps with explicit M1->M8 VIAGEN stacks.
+## 2. Add external M5 vertical taps with explicit M1->M5 VIAGEN stacks.
 ## No regular M5 mesh is created inside the SRAM island.
 ############################################################
 
@@ -99,7 +99,7 @@ setAddStripeMode \
     -break_at none \
     -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M1 \
-    -stacked_via_top_layer M8
+    -stacked_via_top_layer M5
 
 foreach area [list $LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LEFT_BOX] {
     set area_llx [lindex $area 0]
