@@ -359,10 +359,12 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
 
 # Route macro M3 PG pins only after the stripe targets exist.  Restricting the
 # target to stripe prevents a long direct block-pin route to the distant ring.
+# Do not force the access wire to inherit the SRAM LEF pin width: the generated
+# ASAP7 SRAM abstract has narrow M3 PG pins that trigger WIDTHTABLE warnings.
 setSrouteMode -reset
 setSrouteMode \
     -extendNearestTarget true \
-    -blockPinRouteWithPinWidth true \
+    -blockPinRouteWithPinWidth false \
     -viaConnectToShape stripe
 
 sroute \

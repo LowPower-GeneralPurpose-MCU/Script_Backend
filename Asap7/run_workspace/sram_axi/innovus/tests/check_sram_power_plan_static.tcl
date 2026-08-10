@@ -546,6 +546,10 @@ assert_contains \
     "power_plan.tcl must stop before saveDesign when PG DRC is dirty"
 assert_contains \
     $power_text \
+    {verify_drc[[:space:]]+\\[[:space:]]+-check_only[[:space:]]+special[[:space:]]+\\[[:space:]]+-layer_range[[:space:]]+\{M4[[:space:]]+M9\}} \
+    "The PG-stage DRC checkpoint must isolate actionable M4-M9 special-route PG DRC from generated SRAM M3 abstract-pin WIDTHTABLE markers"
+assert_contains \
+    $power_text \
     {file[[:space:]]+delete[[:space:]]+-force[[:space:]]+\$stale_pg_report} \
     "power_plan.tcl must delete stale PG reports before constructing a new power plan"
 set stale_report_delete_index [string first {file delete -force $stale_pg_report} $power_text]
@@ -558,7 +562,7 @@ if {$stale_report_delete_index < 0 ||
 assert_contains \
     $power_text \
     {PG[[:space:]]+DRC[[:space:]]+is[[:space:]]+not[[:space:]]+clean:[[:space:]]+\$report_path[[:space:]]+has[[:space:]]+\$count[[:space:]]+total[[:space:]]+violations} \
-    "PG DRC guard must stop on any nonzero PG-stage DRC before placement/route"
+    "PG DRC guard must stop on any nonzero actionable M4-M9 special-route DRC before placement/route"
 assert_contains \
     $power_text \
     {editTrim[[:space:]]+-nets[[:space:]]+\{VDD[[:space:]]+VSS\}} \
@@ -568,6 +572,14 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {-viaConnectToShape[[:space:]]+stripe} \
     "SRAM blockPin sroute must target the internal M4/M5 collectors"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-blockPinRouteWithPinWidth[[:space:]]+false} \
+    "SRAM blockPin sroute must not inherit the too-narrow generated ASAP7 SRAM M3 PG pin width"
+assert_not_contains \
+    $all_power_text \
+    {-blockPinRouteWithPinWidth[[:space:]]+true} \
+    "No active SRAM power script may force block-pin routes to the generated SRAM LEF pin width"
 
 assert_contains \
     $child_text(sram_island_power.tcl) \

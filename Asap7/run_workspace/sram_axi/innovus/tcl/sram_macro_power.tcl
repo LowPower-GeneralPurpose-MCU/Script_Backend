@@ -110,7 +110,7 @@ for {set c 0} {$c < $SRAM_COLS} {incr c} {
 
 setSrouteMode \
     -extendNearestTarget true \
-    -blockPinRouteWithPinWidth true \
+    -blockPinRouteWithPinWidth false \
     -viaConnectToShape blockring
 
 # Follow the reference SRAM-island style: nearest target, blockring target

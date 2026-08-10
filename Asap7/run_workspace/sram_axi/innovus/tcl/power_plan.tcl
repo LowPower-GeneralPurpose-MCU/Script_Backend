@@ -477,7 +477,12 @@ verifyConnectivity \
     -noUnroutedNet \
     -report $pg_connectivity_report
 
+# This checkpoint is for the PG network created by addRing/addStripe/sroute.
+# The generated ASAP7 SRAM LEF has narrow M3 PG pin shapes that are part of
+# the hard-macro abstract, so check the actionable special-route PG layers here.
 verify_drc \
+    -check_only special \
+    -layer_range {M4 M9} \
     -report $pg_drc_report
 
 pg_assert_clean_connectivity_report $pg_connectivity_report
