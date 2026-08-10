@@ -561,8 +561,12 @@ if {$stale_report_delete_index < 0 ||
 }
 assert_contains \
     $power_text \
-    {PG[[:space:]]+DRC[[:space:]]+is[[:space:]]+not[[:space:]]+clean:[[:space:]]+\$report_path[[:space:]]+has[[:space:]]+\$count[[:space:]]+total[[:space:]]+violations} \
+    {PG[[:space:]]+DRC[[:space:]]+is[[:space:]]+not[[:space:]]+clean:[[:space:]]+\$report_path[[:space:]]+has[[:space:]]+\$pg_drc_count[[:space:]]+special-route[[:space:]]+violations} \
     "PG DRC guard must stop on any nonzero actionable M4-M9 special-route DRC before placement/route"
+assert_contains \
+    $power_text \
+    {treated[[:space:]]+as[[:space:]]+hard-macro[[:space:]]+abstract/library[[:space:]]+markers} \
+    "PG DRC guard must not fail solely on generated SRAM hard-macro Pin-of-Cell markers"
 assert_contains \
     $power_text \
     {editTrim[[:space:]]+-nets[[:space:]]+\{VDD[[:space:]]+VSS\}} \
@@ -576,6 +580,14 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {-blockPinRouteWithPinWidth[[:space:]]+false} \
     "SRAM blockPin sroute must not inherit the too-narrow generated ASAP7 SRAM M3 PG pin width"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-blockPinLayerRange[[:space:]]+\{M3[[:space:]]+M3\}} \
+    "SRAM blockPin sroute must avoid generated SRAM M4 rail ports that create top-level PG DRC markers"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-blockPinWidthRange[[:space:]]+\{0\.0[[:space:]]+0\.150\}} \
+    "SRAM blockPin sroute must prefer narrow M3 access pins instead of wide internal LEF shapes"
 assert_not_contains \
     $all_power_text \
     {-blockPinRouteWithPinWidth[[:space:]]+true} \
