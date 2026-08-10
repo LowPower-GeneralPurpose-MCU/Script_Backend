@@ -56,6 +56,10 @@ array set PG_TRACK_OFFSET {
     M9 0.000
 }
 
+if {![info exists PG_BOUNDARY_EPS]} {
+    set PG_BOUNDARY_EPS 0.192
+}
+
 proc pg_format_coord {value} {
     return [format %.6f $value]
 }

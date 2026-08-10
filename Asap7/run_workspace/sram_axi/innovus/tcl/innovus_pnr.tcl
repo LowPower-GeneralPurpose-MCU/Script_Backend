@@ -154,7 +154,9 @@ if {![file exists $sram_edge_report]} {
     puts "POWER PLAN DIRECT SRAM ISLAND RETURNED"
 }
 
-setPinConstraint -corner_to_pin_distance 8
+setPinConstraint \
+    -cell $DESIGN \
+    -corner_to_pin_distance 8
 source ./tcl/pins.tcl
 
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
@@ -180,7 +182,7 @@ setDelayCalMode \
 
 setPlaceMode -reset
 setPlaceMode \
-    -place_global_uniform_density true \
+    -place_global_uniform_density false \
     -place_global_module_aware_spare true \
     -place_global_auto_blockage_in_channel soft \
     -place_detail_preroute_as_obs {2 3} \

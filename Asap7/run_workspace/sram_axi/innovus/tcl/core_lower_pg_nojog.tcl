@@ -84,14 +84,14 @@ if {![info exists LOGIC_RIGHT_EDGE_TAP_BOX] ||
     }
 
     set LOGIC_RIGHT_EDGE_TAP_BOX [list \
-        $SRAM_ISLAND_CUT_URX $lower_pg_die_lly \
-        $logic_edge_tap_urx  $lower_pg_die_ury]
+        $SRAM_ISLAND_CUT_URX $core_lly \
+        $logic_edge_tap_urx  $core_ury]
     set LOGIC_RIGHT_FULL_BOX [list \
-        $logic_edge_tap_urx $lower_pg_die_lly \
-        $core_urx           $lower_pg_die_ury]
+        $logic_edge_tap_urx $core_lly \
+        $core_urx           $core_ury]
     set LOGIC_TOP_LEFT_BOX [list \
         $core_llx              $SRAM_ISLAND_CUT_URY \
-        $SRAM_ISLAND_CUT_URX   $lower_pg_die_ury]
+        $SRAM_ISLAND_CUT_URX   $core_ury]
 }
 
 set global_m5_first_x [expr {$core_llx + $stripe_m5_offset}]

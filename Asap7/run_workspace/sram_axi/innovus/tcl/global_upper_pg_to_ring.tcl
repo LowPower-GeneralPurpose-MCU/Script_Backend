@@ -50,25 +50,33 @@ if {[llength $DIE_BOX] != 4} {
     error "Cannot decode die box: [dbGet top.fPlan.box]"
 }
 lassign $DIE_BOX die_llx die_lly die_urx die_ury
+if {![info exists PG_BOUNDARY_EPS]} {
+    set PG_BOUNDARY_EPS 0.192
+}
+
+set upper_die_llx [expr {$die_llx + $PG_BOUNDARY_EPS}]
+set upper_die_lly [expr {$die_lly + $PG_BOUNDARY_EPS}]
+set upper_die_urx [expr {$die_urx - $PG_BOUNDARY_EPS}]
+set upper_die_ury [expr {$die_ury - $PG_BOUNDARY_EPS}]
 
 # L-shaped region outside the complete rectangular island cut box.
 # Horizontal-layer decomposition.
 set UPPER_TOP_FULL_BOX [list \
-    $die_llx $SRAM_ISLAND_CUT_URY \
-    $die_urx $die_ury]
+    $upper_die_llx $SRAM_ISLAND_CUT_URY \
+    $upper_die_urx $upper_die_ury]
 
 set UPPER_RIGHT_LOWER_BOX [list \
-    $SRAM_ISLAND_CUT_URX $die_lly \
-    $die_urx $SRAM_ISLAND_CUT_URY]
+    $SRAM_ISLAND_CUT_URX $upper_die_lly \
+    $upper_die_urx $SRAM_ISLAND_CUT_URY]
 
 # Vertical-layer decomposition.
 set UPPER_RIGHT_FULL_BOX [list \
-    $SRAM_ISLAND_CUT_URX $die_lly \
-    $die_urx $die_ury]
+    $SRAM_ISLAND_CUT_URX $upper_die_lly \
+    $upper_die_urx $upper_die_ury]
 
 set UPPER_TOP_LEFT_BOX [list \
-    $die_llx $SRAM_ISLAND_CUT_URY \
-    $SRAM_ISLAND_CUT_URX $die_ury]
+    $upper_die_llx $SRAM_ISLAND_CUT_URY \
+    $SRAM_ISLAND_CUT_URX $upper_die_ury]
 
 puts " - Die box          : $DIE_BOX"
 puts " - SRAM cut UR      : $SRAM_ISLAND_CUT_URX $SRAM_ISLAND_CUT_URY"

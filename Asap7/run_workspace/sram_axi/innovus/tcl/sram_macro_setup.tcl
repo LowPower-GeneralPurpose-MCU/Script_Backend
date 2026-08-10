@@ -68,10 +68,28 @@ set SRAM_ISLAND_ESCAPE_TOP   $SRAM_BLOCKAGE_BORDER
 set SRAM_ISLAND_ESCAPE_RIGHT $SRAM_BLOCKAGE_BORDER
 
 # Standard-cell/controller area retained to the right and above island.
-# With the current macro size this gives a core close to the reference
-# corner-island floorplan aspect ratio.
-set LOGIC_REGION_WIDTH  600.000
-set LOGIC_REGION_HEIGHT 260.000
+# The latest full Innovus run reported pure std-cell density around 0.3%
+# because the old 600 x 260 um reserve left a huge amount of unused row area.
+# Keep enough right/top routing channel for the AXI wrapper, but do not fill
+# the die with empty rows.  Override these from the shell if a larger design or
+# route-congestion study needs more room.
+proc sram_env_double_or_default {env_name default min_value} {
+    if {![info exists ::env($env_name)] || $::env($env_name) eq ""} {
+        return $default
+    }
+    if {![string is double -strict $::env($env_name)]} {
+        error "$env_name must be a numeric value in microns"
+    }
+
+    set value [expr {double($::env($env_name))}]
+    if {$value < $min_value} {
+        error "$env_name=$value is too small; minimum allowed is $min_value um"
+    }
+    return [format %.3f $value]
+}
+
+set LOGIC_REGION_WIDTH  [sram_env_double_or_default SRAM_LOGIC_REGION_WIDTH  120.000 80.000]
+set LOGIC_REGION_HEIGHT [sram_env_double_or_default SRAM_LOGIC_REGION_HEIGHT  60.000 40.000]
 
 # The generated ASAP7 SRAM LEF exposes signal pins on M3/M4/M5/V3/V4 across
 # much of the macro height, with some data/write pins near both local bottom

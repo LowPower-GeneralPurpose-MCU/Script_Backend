@@ -58,19 +58,31 @@ if {$SRAM_MACRO_GAP_X <= $sram_pair_total} {
     error "SRAM_MACRO_GAP_X=$SRAM_MACRO_GAP_X is too small for one M5 VSS/VDD pair"
 }
 
-# Start at the die boundary so each area crosses the already existing global
-# ring.  editTrim later removes the stub outside the matching-net landing.
-set sram_pg_left $power_die_llx
-set sram_pg_bottom $power_die_lly
-set sram_pg_right $SRAM_ISLAND_CUT_URX
-set sram_pg_top $SRAM_ISLAND_CUT_URY
+if {![info exists power_die_urx] || ![info exists power_die_ury]} {
+    set sram_pg_die_box [join [dbGet top.fPlan.box]]
+    if {[llength $sram_pg_die_box] != 4} {
+        error "Cannot decode die box before SRAM island PG: [dbGet top.fPlan.box]"
+    }
+    lassign $sram_pg_die_box \
+        power_die_llx power_die_lly power_die_urx power_die_ury
+}
+if {![info exists PG_BOUNDARY_EPS]} {
+    set PG_BOUNDARY_EPS 0.192
+}
+
+# Keep the local collector areas inside the design boundary, while still
+# crossing the M8/M9 ring lanes in the die-to-core margin.
+set sram_pg_left [expr {$power_die_llx + $PG_BOUNDARY_EPS}]
+set sram_pg_bottom [expr {$power_die_lly + $PG_BOUNDARY_EPS}]
+set sram_pg_right [expr {min($SRAM_ISLAND_CUT_URX, $power_die_urx - $PG_BOUNDARY_EPS)}]
+set sram_pg_top [expr {min($SRAM_ISLAND_CUT_URY, $power_die_ury - $PG_BOUNDARY_EPS)}]
 
 set sram_local_top_lly $SRAM_ISLAND_URY
-set sram_local_top_ury $SRAM_ISLAND_CUT_URY
+set sram_local_top_ury $sram_pg_top
 set sram_local_left_llx $sram_pg_left
 set sram_local_left_urx $SRAM_X0
 set sram_local_right_llx $SRAM_ISLAND_URX
-set sram_local_right_urx $SRAM_ISLAND_CUT_URX
+set sram_local_right_urx $sram_pg_right
 if {![info exists sram_edge_report]} {
     set sram_edge_report ./reports/sram_island_pg_edges.rpt
 }

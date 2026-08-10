@@ -135,6 +135,13 @@ set CORE_H [snap_up [expr {
     $LOGIC_REGION_HEIGHT
 }] $FLOORPLAN_GRID]
 
+puts "===================================================="
+puts "FLOORPLAN SIZE SUMMARY"
+puts " - SRAM island       : [format %.3f $SRAM_ISLAND_W] x [format %.3f $SRAM_ISLAND_H]"
+puts " - Logic reserve     : [format %.3f $LOGIC_REGION_WIDTH] x [format %.3f $LOGIC_REGION_HEIGHT]"
+puts " - Core size snapped : [format %.3f $CORE_W] x [format %.3f $CORE_H]"
+puts "===================================================="
+
 floorPlan \
     -s $CORE_W $CORE_H \
     $margin_dist $margin_dist $margin_dist $margin_dist
@@ -254,7 +261,9 @@ if {![file exists $sram_edge_report]} {
     puts "POWER PLAN DIRECT SRAM ISLAND RETURNED"
 }
 
-setPinConstraint -corner_to_pin_distance 8
+setPinConstraint \
+    -cell $DESIGN \
+    -corner_to_pin_distance 8
 source ./tcl/pins.tcl
 
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
@@ -280,7 +289,7 @@ setDelayCalMode \
 
 setPlaceMode -reset
 setPlaceMode \
-    -place_global_uniform_density true \
+    -place_global_uniform_density false \
     -place_global_module_aware_spare true \
     -place_global_auto_blockage_in_channel soft \
     -place_detail_preroute_as_obs {2 3} \

@@ -78,6 +78,8 @@ foreach flow [list $innovus_master $innovus_pnr] {
     require_contains $flow {source ./tcl/core_lower_pg_nojog.tcl} "lower PG source"
     require_contains $flow {source ./tcl/core_pg_outside_island.tcl} "outside-island M6/M7 PG source"
     require_contains $flow {source ./tcl/global_upper_pg_to_ring.tcl} "upper PG source"
+    require_contains $flow {-cell $DESIGN} "top-cell name on setPinConstraint"
+    require_contains $flow {-place_global_uniform_density false} "compact SRAM-wrapper placement mode"
 }
 
 require_contains $view_definition {-sdc_files $INNOVUS_SDC_FILE} "MMMC uses normalized SDC"

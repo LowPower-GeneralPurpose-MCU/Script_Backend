@@ -89,6 +89,7 @@ puts "===================================================="
 puts "HIERARCHY FLOORPLAN BASE"
 puts " - Core              : $CORE_W x $CORE_H um"
 puts " - Reserved SRAM area: $SRAM_ISLAND_W x $SRAM_ISLAND_H um"
+puts " - Logic reserve     : $LOGIC_REGION_WIDTH x $LOGIC_REGION_HEIGHT um"
 puts " - SRAM macros       : unplaced in this session"
 puts "===================================================="
 

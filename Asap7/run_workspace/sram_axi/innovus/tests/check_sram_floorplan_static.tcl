@@ -22,9 +22,24 @@ proc assert_file_complete {path} {
 
 set macro_floorplan [file join $tcl_dir sram_macro_floorplan.tcl]
 set finish_macro_fp [file join $tcl_dir finish_macroFP.tcl]
+set macro_setup [file join $tcl_dir sram_macro_setup.tcl]
 
 set macro_text [assert_file_complete $macro_floorplan]
 set finish_text [assert_file_complete $finish_macro_fp]
+set setup_text [assert_file_complete $macro_setup]
+
+if {![regexp {set[[:space:]]+LOGIC_REGION_WIDTH[[:space:]]+\[sram_env_double_or_default[[:space:]]+SRAM_LOGIC_REGION_WIDTH[[:space:]]+120\.000[[:space:]]+80\.000\]} $setup_text]} {
+    fail "sram_macro_setup.tcl must default to a compact 120um right-side logic channel with env override"
+}
+
+if {![regexp {set[[:space:]]+LOGIC_REGION_HEIGHT[[:space:]]+\[sram_env_double_or_default[[:space:]]+SRAM_LOGIC_REGION_HEIGHT[[:space:]]+60\.000[[:space:]]+40\.000\]} $setup_text]} {
+    fail "sram_macro_setup.tcl must default to a compact 60um top logic channel with env override"
+}
+
+if {[regexp {set[[:space:]]+LOGIC_REGION_WIDTH[[:space:]]+600\.000} $setup_text] ||
+    [regexp {set[[:space:]]+LOGIC_REGION_HEIGHT[[:space:]]+260\.000} $setup_text]} {
+    fail "sram_macro_setup.tcl must not keep the old oversized logic reserve that produced sub-1% std-cell density"
+}
 
 if {![regexp {proc[[:space:]]+sram_snap_to_grid[[:space:]]+\{} $macro_text]} {
     fail "sram_macro_floorplan.tcl must define sram_snap_to_grid before placing SRAMs"

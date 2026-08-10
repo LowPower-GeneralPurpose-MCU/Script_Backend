@@ -340,6 +340,10 @@ assert_contains \
     $power_text \
     {array[[:space:]]+set[[:space:]]+PG_TRACK_OFFSET} \
     "power_plan.tcl must declare ASAP7 PG track offset data"
+assert_contains \
+    $power_text \
+    {set[[:space:]]+PG_BOUNDARY_EPS[[:space:]]+0\.192} \
+    "power_plan.tcl must define a small boundary inset for area-constrained PG stripes"
 
 foreach margin_var {die_core_margin_left die_core_margin_bottom die_core_margin_right die_core_margin_top} {
     if {[string first "set $margin_var" $power_text] < 0} {
@@ -509,6 +513,14 @@ assert_contains \
     "core_lower_pg_nojog.tcl must create an explicit first M5 tap beside the SRAM island right edge"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
+    {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$SRAM_ISLAND_CUT_URX[[:space:]]+\$core_lly} \
+    "core_lower_pg_nojog.tcl must rebuild lower PG boxes from core rows, not die boundary"
+if {[regexp {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$SRAM_ISLAND_CUT_URX[[:space:]]+\$lower_pg_die_lly} \
+        $child_text(core_lower_pg_nojog.tcl)]} {
+    fail "core_lower_pg_nojog.tcl must not use die-bottom/die-top for standard-cell corePin areas"
+}
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
     {foreach[[:space:]]+area[[:space:]]+\[list[[:space:]]+\$LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\$LOGIC_RIGHT_FULL_BOX[[:space:]]+\$LOGIC_TOP_LEFT_BOX\]} \
     "the edge M5 tap must be generated before the repeated right/top M5 tap mesh"
 assert_contains \
@@ -650,6 +662,14 @@ foreach line [split $child_text(global_upper_pg_to_ring.tcl) "\n"] {
 if {[string first "-extend_to design_boundary" $global_upper_code_only] >= 0} {
     fail "M8/M9 outside-island stripes must use explicit -area boxes instead of -extend_to design_boundary"
 }
+assert_contains \
+    $child_text(global_upper_pg_to_ring.tcl) \
+    {set[[:space:]]+upper_die_llx[[:space:]]+\[expr[[:space:]]+\{\$die_llx[[:space:]]+\+[[:space:]]+\$PG_BOUNDARY_EPS\}\]} \
+    "M8/M9 outside-island stripe boxes must be inset from the die boundary to avoid IMPPP-358"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {set[[:space:]]+sram_pg_left[[:space:]]+\[expr[[:space:]]+\{\$power_die_llx[[:space:]]+\+[[:space:]]+\$PG_BOUNDARY_EPS\}\]} \
+    "SRAM island stripe boxes must be inset from die-left while still crossing the reused M9 ring"
 set global_upper_stripes [regexp -all {addStripe[[:space:]]+\\} $global_upper_code_only]
 set global_upper_no_pin_stripes [regexp -all -- {-create_pins[[:space:]]+0} $global_upper_code_only]
 if {$global_upper_stripes == 0 || $global_upper_no_pin_stripes < $global_upper_stripes} {
@@ -690,7 +710,7 @@ foreach stripe $simulated_sram_stripes {
             if {$layer ne "M4"} {
                 fail "Horizontal SRAM island stripes must be on M4, got $layer"
             }
-            assert_close $llx 0.000 "M4 SRAM row-gap stripe must cross the reused left M9 core ring"
+            assert_close $llx 0.192 "M4 SRAM row-gap stripe must cross the reused left M9 core ring without touching die boundary"
             assert_close $urx 502.848 "M4 SRAM row-gap stripe must stop at the SRAM island cut boundary"
             if {abs($lly - 706.320) < 0.000001 &&
                 abs($ury - 708.480) < 0.000001} {
@@ -702,9 +722,9 @@ foreach stripe $simulated_sram_stripes {
             if {$layer ne "M5"} {
                 fail "Vertical SRAM island stripes must be on M5, got $layer"
             }
-            assert_close $lly 0.000 "M5 SRAM column-gap stripe must cross the reused bottom M8 core ring"
+            assert_close $lly 0.192 "M5 SRAM column-gap stripe must cross the reused bottom M8 core ring without touching die boundary"
             assert_close $ury 708.48 "M5 SRAM column-gap stripe must stop at the SRAM island cut boundary"
-            if {abs($llx - 0.000) < 0.000001 &&
+            if {abs($llx - 0.192) < 0.000001 &&
                 abs($urx - 2.160) < 0.000001} {
                 set left_transition_found 1
             }
