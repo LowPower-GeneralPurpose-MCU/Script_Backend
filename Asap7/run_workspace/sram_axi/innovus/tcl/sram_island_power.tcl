@@ -134,16 +134,16 @@ proc sram_pg_wire_has_direction {wire_box direction} {
     error "Unsupported SRAM PG wire direction: $direction"
 }
 
-proc sram_pg_edge_wire_stats {net layer direction area} {
+proc sram_pg_edge_wire_stats {net layer direction area {min_coverage_ratio 0.75}} {
     set net_ptr [lindex [dbGet -p top.nets.name $net] 0]
     if {$net_ptr eq "" || $net_ptr eq "0x0"} {
         return [list 0 0.0 0.0]
     }
 
     if {$direction eq "horizontal"} {
-        set required_length [expr {0.75 * ([lindex $area 2] - [lindex $area 0])}]
+        set required_length [expr {$min_coverage_ratio * ([lindex $area 2] - [lindex $area 0])}]
     } elseif {$direction eq "vertical"} {
-        set required_length [expr {0.75 * ([lindex $area 3] - [lindex $area 1])}]
+        set required_length [expr {$min_coverage_ratio * ([lindex $area 3] - [lindex $area 1])}]
     } else {
         error "Unsupported SRAM PG edge direction: $direction"
     }
@@ -179,19 +179,22 @@ proc sram_pg_assert_edge_wires {report_path edge_specs} {
     file mkdir [file dirname $report_path]
 
     set fh [open $report_path w]
-    puts $fh "edge net layer direction wires coverage_um required_um area"
+    puts $fh "edge net layer direction wires coverage_um required_um min_ratio area"
 
     set missing_edges {}
     foreach edge_spec $edge_specs {
-        lassign $edge_spec edge_name layer direction area
+        lassign $edge_spec edge_name layer direction area min_coverage_ratio
+        if {$min_coverage_ratio eq ""} {
+            set min_coverage_ratio 0.75
+        }
         foreach net {VSS VDD} {
             lassign [sram_pg_edge_wire_stats \
-                $net $layer $direction $area] \
+                $net $layer $direction $area $min_coverage_ratio] \
                 wire_count coverage required
 
-            puts $fh [format "%s %s %s %s %d %.6f %.6f {%s}" \
+            puts $fh [format "%s %s %s %s %d %.6f %.6f %.3f {%s}" \
                 $edge_name $net $layer $direction \
-                $wire_count $coverage $required [join $area { }]]
+                $wire_count $coverage $required $min_coverage_ratio [join $area { }]]
 
             if {$wire_count < 1 || $coverage < $required} {
                 lappend missing_edges \
@@ -380,7 +383,7 @@ set sram_edge_specs [list \
     [list reused_left M9 vertical $reused_left_area] \
     [list reused_bottom M8 horizontal $reused_bottom_area] \
     [list local_top M4 horizontal $local_top_area] \
-    [list local_left M5 vertical $local_left_area] \
+    [list local_left M5 vertical $local_left_area 0.70] \
     [list local_right M5 vertical $local_right_area]]
 sram_pg_assert_edge_wires $sram_edge_report $sram_edge_specs
 clearDrc

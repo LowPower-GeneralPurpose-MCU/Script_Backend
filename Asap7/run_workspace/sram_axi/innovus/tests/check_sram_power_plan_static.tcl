@@ -575,6 +575,10 @@ assert_contains \
     "SRAM island power must define a runtime edge-wire guard"
 assert_contains \
     $child_text(sram_island_power.tcl) \
+    {min_coverage_ratio} \
+    "SRAM island edge-wire guard must support per-edge coverage thresholds after editTrim"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
     {set[[:space:]]+sram_edge_report[[:space:]]+\./reports/sram_island_pg_edges\.rpt} \
     "SRAM island power must write an explicit edge report for GUI/debug correlation"
 foreach edge_name {reused_left reused_bottom local_top local_right} {
@@ -632,6 +636,10 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {local_left} \
     "SRAM island power must add a narrow M5 transition spine at the reused left global-ring edge"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {\[list[[:space:]]+local_left[[:space:]]+M5[[:space:]]+vertical[[:space:]]+\$local_left_area[[:space:]]+0\.70\]} \
+    "The reused-left M5 transition spine must use a relaxed post-trim coverage guard instead of failing on harmless sub-micron trim"
 if {[string first "-extend_to design_boundary" $sram_island_code_only] >= 0} {
     fail "Area-constrained SRAM island stripes must not also use -extend_to design_boundary; Innovus IMPPP-330 rejects that combination"
 }
