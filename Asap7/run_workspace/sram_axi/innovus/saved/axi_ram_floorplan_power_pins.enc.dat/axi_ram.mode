@@ -11,16 +11,18 @@ catch { setPathGroupOptions I2C -late -slackAdjustment -0 }
 catch { setPathGroupOptions C2O -late -slackAdjustment -0 }
 catch { setPathGroupOptions C2C -late -slackAdjustment -0 }
 catch { setExtractRCMode  -engine preRoute -total_c_th 0 -relative_c_th 1 -coupling_c_th 0.1 }
+catch {setNanoRouteMode -quiet -route_detail_use_min_spacing_for_blockage auto}
 catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
 catch {setNanoRouteMode -quiet -route_exp_design_mode_bottom_routing_layer 2}
 catch {setNanoRouteMode -quiet -route_exp_design_mode_top_routing_layer 7}
+catch {setNanoRouteMode -quiet -route_strict_honor_route_rule "false"}
 
 catch { setPlaceMode -exp_slack_driven true }
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setPlaceMode -place_opt_run_global_place seed }
 catch { setPlaceMode -tdgp_basic_pg true }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
-catch { setSrouteMode -blockPinRouteWithPinWidth true }
+catch { setSrouteMode -blockPinRouteWithPinWidth false }
 catch { setSrouteMode -extendNearestTarget true }
 catch { setSrouteMode -viaConnectToShape stripe }
 catch { setDelayCalMode -enable_hier_save_restore_flow false }
