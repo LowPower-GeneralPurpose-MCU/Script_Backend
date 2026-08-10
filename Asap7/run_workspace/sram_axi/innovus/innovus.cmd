@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Mon Aug 10 10:56:12 2026                
+#  Created on Mon Aug 10 11:05:36 2026                
 #                                                     
 #######################################################
 
@@ -1094,4 +1094,13 @@ setSrouteMode -reset
 setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth true -viaConnectToShape stripe
 sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinTarget stripe
 editTrim -nets {VSS VDD}
+clearDrc
+deselectAll
+deletePGPin -net VDD
+deletePGPin -net VSS
+createPGPin VSS -geom M9 0.264000 384.456000 0.744000 386.376000 -net VSS
+createPGPin VDD -geom M9 1.344000 384.456000 1.824000 386.376000 -net VDD
+editTrim -nets {VDD VSS}
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
+verify_drc -report ./verify_rpt/pg_drc_before_stdcell_place.rpt
 win
