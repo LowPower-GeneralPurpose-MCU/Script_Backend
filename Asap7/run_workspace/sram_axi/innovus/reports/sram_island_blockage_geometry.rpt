@@ -1,5 +1,5 @@
-die_box 0.0 0.0 1105.2 970.848
-core_box 2.16 2.16 1103.04 968.688
+die_box 0.0 0.0 625.248 770.832
+core_box 2.16 2.16 623.088 768.672
 macro_bbox 2.16 2.16 500.688 706.32
 row_height 1.080
 inter_macro_gap_rows 4

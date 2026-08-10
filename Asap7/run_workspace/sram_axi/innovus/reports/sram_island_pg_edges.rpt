@@ -1,11 +1,11 @@
 edge net layer direction wires coverage_um required_um area
-reused_left VSS M9 vertical 1 708.112000 531.360000 {0.0 0.0 2.16 708.48}
-reused_left VDD M9 vertical 1 706.960000 531.360000 {0.0 0.0 2.16 708.48}
-reused_bottom VSS M8 horizontal 1 502.424000 377.136000 {0.0 0.0 502.848 2.16}
-reused_bottom VDD M8 horizontal 1 501.344000 377.136000 {0.0 0.0 502.848 2.16}
-local_top VSS M4 horizontal 1 500.784000 377.136000 {0.0 706.32 502.848 708.48}
-local_top VDD M4 horizontal 1 500.784000 377.136000 {0.0 706.32 502.848 708.48}
-local_left VSS M5 vertical 1 706.920000 531.360000 {0.0 0.0 2.16 708.48}
-local_left VDD M5 vertical 1 530.400000 531.360000 {0.0 0.0 2.16 708.48}
-local_right VSS M5 vertical 1 706.920000 531.360000 {500.688 0.0 502.848 708.48}
-local_right VDD M5 vertical 1 706.152000 531.360000 {500.688 0.0 502.848 708.48}
+reused_left VSS M9 vertical 1 708.112000 531.216000 {0.192 0.192 2.16 708.48}
+reused_left VDD M9 vertical 1 706.960000 531.216000 {0.192 0.192 2.16 708.48}
+reused_bottom VSS M8 horizontal 1 502.424000 376.992000 {0.192 0.192 502.848 2.16}
+reused_bottom VDD M8 horizontal 1 501.344000 376.992000 {0.192 0.192 502.848 2.16}
+local_top VSS M4 horizontal 1 500.784000 376.992000 {0.192 706.32 502.848 708.48}
+local_top VDD M4 horizontal 1 500.784000 376.992000 {0.192 706.32 502.848 708.48}
+local_left VSS M5 vertical 1 706.920000 531.216000 {0.192 0.192 2.16 708.48}
+local_left VDD M5 vertical 1 530.400000 531.216000 {0.192 0.192 2.16 708.48}
+local_right VSS M5 vertical 1 706.920000 531.216000 {500.688 0.192 502.848 708.48}
+local_right VDD M5 vertical 1 706.152000 531.216000 {500.688 0.192 502.848 708.48}
