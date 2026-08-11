@@ -30,6 +30,10 @@ if {$reuse_active_design} {
     }
 
     restoreDesign $HIER_CHECKPOINT $TOP
+
+    setDesignMode \
+        -bottomRoutingLayer 2 \
+        -topRoutingLayer 7
 }
 
 setMultiColorsHier
@@ -164,6 +168,28 @@ globalNetConnect VSS -type tielo -inst * -module {} -override
 applyGlobalNets
 
 set vss_ring_offset [expr {$RING_OFFSET + $RING_WIDTH + $RING_SPACING}]
+set ring_guard_span [expr {$vss_ring_offset + $RING_WIDTH + 0.160}]
+
+set power_die_box [join [dbGet top.fPlan.box]]
+if {[llength $power_die_box] != 4} {
+    error "Cannot decode die box for power planning: [dbGet top.fPlan.box]"
+}
+lassign $power_die_box \
+    power_die_llx power_die_lly power_die_urx power_die_ury
+
+set die_core_margin_left [expr {$core_llx - $power_die_llx}]
+set die_core_margin_bottom [expr {$core_lly - $power_die_lly}]
+set die_core_margin_right [expr {$power_die_urx - $core_urx}]
+set die_core_margin_top [expr {$power_die_ury - $core_ury}]
+foreach {side margin} [list \
+    left $die_core_margin_left \
+    bottom $die_core_margin_bottom \
+    right $die_core_margin_right \
+    top $die_core_margin_top] {
+    if {$ring_guard_span > $margin} {
+        error "M8/M9 core-ring guarded reach $ring_guard_span exceeds $side die-to-core margin $margin"
+    }
+}
 
 addRing -nets {VDD} \
     -type core_rings \
@@ -242,6 +268,18 @@ assert_clean_drc_report ./verify_rpt/drc_after_pg.rpt
 
 saveDesign ./saved/${TOP}_powerplan.enc
 
+if {[env_flag INNOVUS_STOP_AFTER_POWER_PINS 0]} {
+    puts "============================================================"
+    puts "FLOW STOPPED AFTER POWER PLAN AND TOP-LEVEL PINS"
+    puts "Inspect:"
+    puts " - saved/${TOP}_powerplan.enc"
+    puts " - verify_rpt/connectivity_after_pg.rpt"
+    puts " - verify_rpt/drc_after_pg.rpt"
+    puts "Continue in the same Innovus session by pasting the next PnR section."
+    puts "============================================================"
+    return
+}
+
 # ----------------------------------------------------------------------------
 # Standard-cell placement
 # ----------------------------------------------------------------------------
@@ -303,6 +341,18 @@ checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_postPlace.rpt
 report_timing > ./reports/timing_postPlace.rpt
 report_area   > ./reports/area_postPlace.rpt
 saveDesign ./saved/${TOP}_postPlace.enc
+
+if {[env_flag INNOVUS_STOP_AFTER_PLACE 0]} {
+    puts "============================================================"
+    puts "FLOW STOPPED AFTER PLACEMENT AND POST-PLACE PG"
+    puts "Inspect:"
+    puts " - saved/${TOP}_postPlace.enc"
+    puts " - verify_rpt/connectivity_after_postplace_pg.rpt"
+    puts " - verify_rpt/drc_after_postplace_pg.rpt"
+    puts "Continue in the same Innovus session by pasting the next PnR section."
+    puts "============================================================"
+    return
+}
 
 # ----------------------------------------------------------------------------
 # Pre-CTS optimization and clock-tree synthesis
@@ -366,6 +416,17 @@ report_timing > ./reports/timing_postCTS.rpt
 report_area   > ./reports/area_postCTS.rpt
 saveDesign ./saved/${TOP}_postCTS.enc
 
+if {[env_flag INNOVUS_STOP_AFTER_CTS 0]} {
+    puts "============================================================"
+    puts "FLOW STOPPED AFTER CTS"
+    puts "Inspect:"
+    puts " - saved/${TOP}_postCTS.enc"
+    puts " - reports/timing_postCTS.rpt"
+    puts "Continue in the same Innovus session by pasting the next PnR section."
+    puts "============================================================"
+    return
+}
+
 # Teacher flow places filler cells before detailed routing.
 setFillerMode -core $FILLER_CELLS \
     -preserveUserOrder true \
@@ -424,6 +485,18 @@ verifyConnectivity -type all -error 1000 -warning 100 \
 verify_antenna_if_enabled ./verify_rpt/antenna_postRoute_final.rpt
 assert_clean_drc_report ./verify_rpt/drc_postRoute_final.rpt
 assert_clean_connectivity_report ./verify_rpt/connectivity_postRoute_final.rpt
+
+if {[env_flag INNOVUS_STOP_AFTER_ROUTE 0]} {
+    puts "============================================================"
+    puts "FLOW STOPPED AFTER ROUTE AND FINAL ROUTE CHECKS"
+    puts "Inspect:"
+    puts " - saved/${TOP}_postRoute.enc"
+    puts " - verify_rpt/drc_postRoute_final.rpt"
+    puts " - verify_rpt/connectivity_postRoute_final.rpt"
+    puts "Continue in the same Innovus session by pasting the export section."
+    puts "============================================================"
+    return
+}
 
 set RUN_LEGACY_METAL_FILL [env_flag INNOVUS_RUN_LEGACY_METAL_FILL 0]
 
@@ -498,6 +571,9 @@ puts "SPEF             : outputs/${TOP}_pnr.spef"
 puts "Review verify_rpt before Calibre signoff."
 puts "============================================================"
 
+if {[info exists ::INNOVUS_KEEP_OPEN] && $::INNOVUS_KEEP_OPEN} {
+    return
+}
 if {!$reuse_active_design} {
     exit
 }

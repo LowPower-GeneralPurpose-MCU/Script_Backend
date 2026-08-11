@@ -14,6 +14,10 @@ source ./tcl/innovus.globals
 setGenerateViaMode -auto false
 init_design
 
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
+
 if {[sizeof_collection [all_clocks]] == 0} {
     error "No clock was created. Check clk in $FUNC_SDC."
 }
@@ -83,6 +87,9 @@ puts "============================================================"
 # When this stage is sourced by innovus.tcl, reaching EOF returns control to the
 # common driver so that PnR can continue in the same Innovus session.  When the
 # stage is launched directly, keep the original behavior and terminate Innovus.
+if {[info exists ::INNOVUS_KEEP_OPEN] && $::INNOVUS_KEEP_OPEN} {
+    return
+}
 if {![info exists ::INNOVUS_COMBINED_FLOW] || !$::INNOVUS_COMBINED_FLOW} {
     exit
 }

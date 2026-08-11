@@ -71,12 +71,12 @@ if {[info exists ::env(INNOVUS_RUN_PROTO_DESIGN)]} {
     }
 }
 
-# M8/M9 ring geometry.  All values are multiples of the 0.320 um M8/M9
-# pitch in the scaled 4x tech LEF.  Width 0.640 um also satisfies the scaled
-# long-wire width requirement from the ASAP7 DRM.
-set RING_WIDTH   0.640
-set RING_SPACING 0.320
-set RING_OFFSET  0.320
+# M8/M9 ring geometry follows the clean SRAM macro flow.  The 0.480 um
+# width/spacing pair is conservative for the ASAP7 4x M8/M9 spacing table and
+# avoids the M9 VDD/VSS edge-spacing violation seen with 0.640/0.320.
+set RING_WIDTH   0.480
+set RING_SPACING 0.480
+set RING_OFFSET  0.192
 set CORE_MARGIN  3.840
 
 # M4/M5 low-level PG uses the SRAM reference's one-track legal width.  Wider
