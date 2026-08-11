@@ -36,6 +36,32 @@ proc env_flag_is_true {name} {
     return [expr {$value eq "1" || $value eq "true" || $value eq "yes" || $value eq "on"}]
 }
 
+proc try_set_root_attr {name value} {
+    if {[catch {set_db / .$name $value} set_error]} {
+        puts "WARNING: Unable to set $name to '$value': $set_error"
+        return 0
+    }
+
+    return 1
+}
+
+proc try_reset_root_attr {name} {
+    if {[catch {reset_db $name} reset_error]} {
+        puts "WARNING: Unable to reset $name: $reset_error"
+        return 0
+    }
+
+    return 1
+}
+
+proc print_root_attr {name} {
+    if {[catch {get_db / .$name} attr_value]} {
+        puts "Genus root attribute $name: unavailable ($attr_value)"
+    } else {
+        puts "Genus root attribute $name = '$attr_value'"
+    }
+}
+
 source ./tcl/rtl_filelist.tcl
 
 foreach dir {outputs reports logs} {
@@ -59,14 +85,10 @@ set_db / .init_lib_search_path [list $LIB]
 set_db / .script_search_path   {./tcl}
 set_db / .init_hdl_search_path {./rtl}
 
-# Keep the default run local. The -cpu command-line option, super_thread_servers,
-# and max_cpus_per_server all enter Genus super-threading mode on this host.
-set_db / .auto_super_thread false
-foreach st_attr {super_thread_servers max_cpus_per_server} {
-    if {[catch {reset_db $st_attr} reset_error]} {
-        puts "WARNING: Unable to reset $st_attr: $reset_error"
-    }
-}
+# Keep the default run in a single Genus process. Any positive
+# max_cpus_per_server value can launch a super-thread server in Genus 23.14.
+try_set_root_attr auto_super_thread false
+try_set_root_attr st_launch_wait_time [env_or_default GENUS_ST_LAUNCH_WAIT 1]
 
 if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
     set CORES [env_or_default GENUS_CPUS 4]
@@ -77,18 +99,24 @@ if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
     set ST_SERVERS [env_or_default GENUS_SUPER_THREAD_SERVERS localhost]
     set ST_RSH [env_or_default GENUS_SUPER_THREAD_RSH ""]
 
-    set_db / .super_thread_servers $ST_SERVERS
+    try_set_root_attr super_thread_servers $ST_SERVERS
     if {$ST_RSH ne ""} {
-        set_db / .super_thread_rsh_command $ST_RSH
+        try_set_root_attr super_thread_rsh_command $ST_RSH
     }
-    set_db / .max_cpus_per_server $CORES
+    try_set_root_attr max_cpus_per_server $CORES
 
     puts "Genus CPU configuration: super-thread enabled, servers=$ST_SERVERS, cpus/server=$CORES"
     if {[catch {test_super_thread_servers} st_error]} {
         error "Super-thread server test failed before synthesis: $st_error"
     }
 } else {
-    puts "Genus CPU configuration: super-thread disabled. Do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set."
+    try_reset_root_attr super_thread_servers
+    try_set_root_attr max_cpus_per_server 0
+    puts "Genus CPU configuration: single-process debug mode; do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set."
+}
+
+foreach st_attr {auto_super_thread super_thread_servers max_cpus_per_server st_launch_wait_time} {
+    print_root_attr $st_attr
 }
 
 set_db / .hdl_unconnected_value 0
@@ -357,7 +385,7 @@ if {[env_flag_is_true GENUS_ENABLE_DATAPATH_OPT]} {
     set_db / .dp_speculation none
 }
 
-set SYN_EFFORT [env_or_default GENUS_SYN_EFFORT medium]
+set SYN_EFFORT [env_or_default GENUS_SYN_EFFORT low]
 puts "Genus synthesis effort: $SYN_EFFORT"
 
 set_db / .syn_generic_effort $SYN_EFFORT
