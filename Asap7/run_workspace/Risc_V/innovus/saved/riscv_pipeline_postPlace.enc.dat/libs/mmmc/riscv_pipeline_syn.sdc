@@ -1,1 +1,0 @@
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/outputs/riscv_pipeline_syn.sdc
