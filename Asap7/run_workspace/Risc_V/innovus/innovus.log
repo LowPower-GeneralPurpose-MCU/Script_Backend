@@ -3,18 +3,18 @@ Cadence Innovus(TM) Implementation System.
 Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
-Options:	
-Date:		Fri Jul 31 15:13:15 2026
+Options:	-files tcl/innovus.tcl 
+Date:		Tue Aug 11 23:55:54 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04 LTS
 
 License:
-		[15:13:19.206242] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[23:55:58.206306] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		invs	Innovus Implementation System	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 663669 / 1994b2d1-6dbc-41e3-88d1-c6419ec77b87 / mLE0hYdB3S
+Info: Process UID = 1729083 / 41d9c9d6-a949-47a3-a501-848dc5ad4e7d / 3l5cGSloAI
 
 **INFO:  MMMC transition support version v31-84 
 
@@ -24,10 +24,28 @@ Info: Process UID = 663669 / 1994b2d1-6dbc-41e3-88d1-c6419ec77b87 / mLE0hYdB3S
 <CMD> getVersion
 <CMD> getVersion
 [INFO] Loading PVS 21.12 fill procedures
-<CMD> win
-<CMD> set auto_file_dir /tmp/user1/innovus_master
+Sourcing file "tcl/innovus.tcl" ...
+source tcl/innovus.tcl
+<CMD> set auto_file_dir /tmp/user1/innovus_riscv_1729083
+<CMD> setDesignMode -process 7
+##  Process: 7             (User Set)               
+##     Node: (not set)                           
+
+##  Check design process and node:  
+##  Design tech node is not set.
+
+Applying the recommended capacitance filtering threshold values for 7nm process node: total_c_th=0, relative_c_th=1 and coupling_c_th=0.1.
+	These values will be used by all post-route extraction engines, including TQuantus, IQuantus and Quantus QRC extraction.
+	Capacitance filtering mode(-capFilterMode option of the setExtractRCMode) is 'relAndCoup' for all engines.
+	The accuracy mode for postRoute effortLevel low extraction will be set to 'high'.
+	Default value for EffortLevel(-effortLevel option of the setExtractRCMode) in postRoute extraction mode will be 'medium' if Quantus QRC technology file is specified else 'low'.
+<CMD> setMultiCpuUsage -acquireLicense 8
+<CMD> setMultiCpuUsage -localCpu 8
+<CMD> setDistributeHost -local
+The timeout for a remote job to respond is 3600 seconds.
+Submit command for task runs will be: local
 <CMD> set init_design_uniquify 1
-<CMD> set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef}
+<CMD> set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef}
 <CMD> set ::TimeLib::tsgMarkCellLatchConstructFlag 1
 <CMD> set conf_qxconf_file NULL
 <CMD> set conf_qxlib_file NULL
@@ -37,11 +55,11 @@ Info: Process UID = 663669 / 1994b2d1-6dbc-41e3-88d1-c6419ec77b87 / mLE0hYdB3S
 <CMD> set init_abstract_view abstract
 <CMD> set init_layout_view layout
 <CMD> set init_design_settop 1
-<CMD> set init_top_cell axi_ram
+<CMD> set init_top_cell riscv_pipeline
 <CMD> set init_gnd_net VSS
 <CMD> set init_pwr_net VDD
 <CMD> set init_mmmc_file ./tcl/viewDefinition.tcl
-<CMD> set init_verilog ./outputs/axi_ram_syn.v
+<CMD> set init_verilog ../genus/outputs/riscv_pipeline_syn.v
 <CMD> get_message -id GLOBAL-100 -suppress
 <CMD> get_message -id GLOBAL-100 -suppress
 <CMD> set latch_time_borrow_mode max_borrow
@@ -51,88 +69,76 @@ Info: Process UID = 663669 / 1994b2d1-6dbc-41e3-88d1-c6419ec77b87 / mLE0hYdB3S
 <CMD> get_message -id GLOBAL-100 -suppress
 <CMD> set report_inactive_arcs_format {from to when arc_type sense reason}
 <CMD> set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
-Set ASAP7_GDS_MAP_FILE before running the full one-shot flow
+<CMD> setGenerateViaMode -auto false
 <CMD> init_design
-#% Begin Load MMMC data ... (date=07/31 15:13:44, mem=1847.1M)
-#% End Load MMMC data ... (date=07/31 15:13:44, total cpu=0:00:00.0, real=0:00:00.0, peak res=1847.5M, current mem=1847.5M)
-rccorner
+#% Begin Load MMMC data ... (date=08/11 23:56:12, mem=1771.8M)
+#% End Load MMMC data ... (date=08/11 23:56:12, total cpu=0:00:00.1, real=0:00:00.0, peak res=1773.3M, current mem=1773.3M)
+rc_typ
 
 Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef ...
 
-Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef ...
+Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef ...
 Set DBUPerIGU to M1 pitch 576.
 
-Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef ...
-
-Loading LEF file /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef ...
+Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef ...
 
 ##  Check design process and node:  
-##  Both design process and tech node are not set.
+##  Design tech node is not set.
 
 Loading view definition file from ./tcl/viewDefinition.tcl
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib' ...
+Starting library reading in 'Multi-threaded flow' (with '8' threads)
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib.
 **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 46726)
 **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 75682)
-Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib' ...
-Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_TT_ccs_211120' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib' ...
-Read 42 cells in library 'asap7sc7p5t_AO_RVT_TT_ccs_211120' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib' ...
-Read 34 cells in library 'asap7sc7p5t_OA_RVT_TT_ccs_211120' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib' ...
-Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_TT_ccs_220123' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib' ...
+Read 56 cells in library asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib.
+Read 37 cells in library asap7sc7p5t_INVBUF_RVT_TT_ccs_211120.
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib.
+Read 42 cells in library asap7sc7p5t_AO_RVT_TT_ccs_211120.
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib.
+Read 34 cells in library asap7sc7p5t_OA_RVT_TT_ccs_211120.
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib.
+Read 33 cells in library asap7sc7p5t_SEQ_RVT_TT_ccs_220123.
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib.
 **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 46726)
 **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 75682)
-Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib' ...
-Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_TT_ccs_211120' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib' ...
-Read 42 cells in library 'asap7sc7p5t_AO_LVT_TT_ccs_211120' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib' ...
-Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
-Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
-Reading libset timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib' ...
-Read 1 cells in library 'srambank_256x4x32_6t122' 
-*** End library_loading (cpu=0.22min, real=0.22min, mem=429.0M, fe_cpu=0.46min, fe_real=0.70min, fe_mem=2255.0M) ***
-#% Begin Load netlist data ... (date=07/31 15:13:57, mem=1872.6M)
-*** Begin netlist parsing (mem=2255.0M) ***
-Created 405 new cells from 11 timing libraries.
+Read 56 cells in library asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib.
+Read 37 cells in library asap7sc7p5t_INVBUF_LVT_TT_ccs_211120.
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib.
+Read 42 cells in library asap7sc7p5t_AO_LVT_TT_ccs_211120.
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib.
+Read 34 cells in library asap7sc7p5t_OA_LVT_TT_ccs_211120.
+Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib.
+Read 33 cells in library asap7sc7p5t_SEQ_LVT_TT_ccs_220123.
+Library reading multithread flow ended.
+*** End library_loading (cpu=0.50min, real=0.08min, mem=2766.1M, fe_cpu=0.72min, fe_real=0.38min, fe_mem=4583.6M) ***
+#% Begin Load netlist data ... (date=08/11 23:56:17, mem=1839.4M)
+*** Begin netlist parsing (mem=4583.6M) ***
+Created 404 new cells from 10 timing libraries.
 Reading netlist ...
 Backslashed names will retain backslash and a trailing blank character.
-Reading verilog netlist './outputs/axi_ram_syn.v'
+Reading verilog netlist '../genus/outputs/riscv_pipeline_syn.v'
 
-*** Memory Usage v#2 (Current mem = 2255.016M, initial mem = 847.699M) ***
-*** End netlist parsing (cpu=0:00:00.0, real=0:00:00.0, mem=2255.0M) ***
-#% End Load netlist data ... (date=07/31 15:13:57, total cpu=0:00:00.1, real=0:00:00.0, peak res=1920.0M, current mem=1920.0M)
-Set top cell to axi_ram.
-Hooked 405 DB cells to tlib cells.
+*** Memory Usage v#2 (Current mem = 4583.551M, initial mem = 839.699M) ***
+*** End netlist parsing (cpu=0:00:00.1, real=0:00:00.0, mem=4583.6M) ***
+#% End Load netlist data ... (date=08/11 23:56:17, total cpu=0:00:00.2, real=0:00:00.0, peak res=1900.2M, current mem=1900.2M)
+Set top cell to riscv_pipeline.
+Hooked 404 DB cells to tlib cells.
 Starting recursive module instantiation check.
 No recursion found.
-Building hierarchical netlist for Cell axi_ram ...
+Building hierarchical netlist for Cell riscv_pipeline ...
 ***** UseNewTieNetMode *****.
 *** Netlist is unique.
 Set DBUPerIGU to techSite asap7sc7p5t width 864.
-** info: there are 427 modules.
-** info: there are 1240 stdCell insts.
-** info: there are 1240 stdCell insts with at least one signal pin.
-** info: there are 16 macros.
+** info: there are 444 modules.
+** info: there are 30331 stdCell insts.
+** info: there are 30331 stdCell insts with at least one signal pin.
 
-*** Memory Usage v#2 (Current mem = 2279.027M, initial mem = 847.699M) ***
-**WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
-Type 'man IMPTS-16' for more detail.
-**WARN: (IMPTS-17):	Inconsistency detected in the capacitance units specified among the timing libraries being used. Default system capacitance unit of 1pF will be used. Use the 'setLibraryUnit' command to set a specific capacitance unit.
-Type 'man IMPTS-17' for more detail.
-**WARN: (EMS-27):	Message (IMPTS-16) has exceeded the current message display limit of 1.
-To increase the message display limit, refer to the product command reference manual.
+*** Memory Usage v#2 (Current mem = 4583.551M, initial mem = 839.699M) ***
 Start create_tracks
-**WARN: (EMS-27):	Message (IMPTS-17) has exceeded the current message display limit of 1.
-To increase the message display limit, refer to the product command reference manual.
-Extraction setup Started for TopCell axi_ram 
+Extraction setup Started for TopCell riscv_pipeline 
 Initializing multi-corner RC extraction with 1 active RC Corners ...
-Captable file(s) not specified in multi-corner setup. PreRoute extraction will use technology file. For postRoute extraction, default value for effort level would be 'medium' and effort level 'low' would not be allowed.
 Generating auto layer map file.
 Importing multi-corner technology file(s) for preRoute extraction...
 /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
@@ -142,8 +148,8 @@ Completed (cpu: 0:00:01.4 real: 0:00:01.0)
 Set Shrink Factor to 1.00000
 Summary of Active RC-Corners : 
  
- Analysis View: tt
-    RC-Corner Name        : rccorner
+ Analysis View: view_tt
+    RC-Corner Name        : rc_typ
     RC-Corner Index       : 0
     RC-Corner Temperature : 25 Celsius
     RC-Corner Cap Table   : ''
@@ -162,13 +168,15 @@ Updating RC Grid density data for preRoute extraction ...
 Initializing multi-corner resistance tables ...
 Default value for postRoute extraction mode's effortLevel (-effortLevel option of setExtractRCMode) changed to 'medium'.
 *Info: initialize multi-corner CTS.
-Reading timing constraints file './outputs/axi_ram_syn.sdc' ...
-Current (total cpu=0:00:29.7, real=0:00:45.0, peak res=2380.4M, current mem=2380.4M)
-**WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ./outputs/axi_ram_syn.sdc, Line 9).
+Multithreaded Timing Analysis is initialized with 8 threads
 
-**WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ./outputs/axi_ram_syn.sdc, Line 10).
+Reading timing constraints file '../genus/outputs/riscv_pipeline_syn.sdc' ...
+Current (total cpu=0:00:46.0, real=0:00:26.0, peak res=4308.7M, current mem=2368.9M)
+**WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ../genus/outputs/riscv_pipeline_syn.sdc, Line 9).
 
-axi_ram
+**WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ../genus/outputs/riscv_pipeline_syn.sdc, Line 10).
+
+riscv_pipeline
 ------------------------------------------------------------------------------------
 CONSTRAINT READING SUMMARY                                                          
 ------------------------------------------------------------------------------------
@@ -177,23 +185,24 @@ Constraint                                        | Success        | Fail
 set_clock_uncertainty                             | 2              | 0              
 set_clock_latency                                 | 2              | 0              
 set_wire_load_mode                                | 1              | 0              
+set_input_transition                              | 344            | 0              
 set_units                                         | 2              | 0              
 current_design                                    | 3              | 0              
-get_ports                                         | 857            | 0              
+get_ports                                         | 1094           | 0              
 create_clock                                      | 1              | 0              
-set_input_transition                              | 350            | 0              
-get_clocks                                        | 460            | 0              
-set_load                                          | 52             | 0              
-set_input_delay                                   | 350            | 0              
+get_clocks                                        | 612            | 0              
+set_load                                          | 137            | 0              
+set_input_delay                                   | 332            | 0              
 set_clock_gating_check                            | 1              | 0              
-set_output_delay                                  | 104            | 0              
+set_output_delay                                  | 274            | 0              
 set_max_fanout                                    | 1              | 0              
+set_false_path                                    | 1              | 0              
 set_clock_transition                              | 2              | 0              
 set_max_transition                                | 1              | 0              
 ------------------------------------------------------------------------------------
-INFO (CTE): Reading of timing constraints file ./outputs/axi_ram_syn.sdc completed, with 2 WARNING
-Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2395.1M, current mem=2395.1M)
-Current (total cpu=0:00:29.9, real=0:00:45.0, peak res=2395.1M, current mem=2395.1M)
+INFO (CTE): Reading of timing constraints file ../genus/outputs/riscv_pipeline_syn.sdc completed, with 2 WARNING
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2403.9M, current mem=2403.9M)
+Current (total cpu=0:00:46.2, real=0:00:26.0, peak res=4308.7M, current mem=2403.9M)
 **WARN: (TA-976):	Path groups asserted by the group_path/set_path_adjust_group constraint are considered by the software to be global in nature - they cannot be restricted to specific constraint modes. Due to this restriction, the group_path/set_path_adjust_group constraint is not supported directly in the constraint files which are configured in mode-specific commands such as create_constraint_mode. The current group_path/set_path_adjust_group entry will be ignored. You can enter the group_path/set_path_adjust_group constraint interactively or as part of a general command script -  where it will be interpreted as global and will be in effect for all modes.
 Total number of combinational cells: 338
 Total number of sequential cells: 66
@@ -221,49 +230,77 @@ Total number of identified unusable delay cells: 0
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
-WARNING   IMPTS-16            10  Inconsistency detected in the time units...
-WARNING   IMPTS-17             6  Inconsistency detected in the capacitanc...
 WARNING   TA-976               1  Path groups asserted by the group_path/s...
 WARNING   TCLCMD-1461          2  Skipped unsupported command: %s          
 WARNING   TECHLIB-1277         4  The %s '%s' has been defined for %s %s '...
-*** Message Summary: 23 warning(s), 0 error(s)
+*** Message Summary: 7 warning(s), 0 error(s)
 
-<CMD> setDesignMode -process 7
-##  Process: 7             (User Set)               
-##     Node: (not set)                           
-
-##  Check design process and node:  
-##  Design tech node is not set.
-
-Applying the recommended capacitance filtering threshold values for 7nm process node: total_c_th=0, relative_c_th=1 and coupling_c_th=0.1.
-	These values will be used by all post-route extraction engines, including TQuantus, IQuantus and Quantus QRC extraction.
-	Capacitance filtering mode(-capFilterMode option of the setExtractRCMode) is 'relAndCoup' for all engines.
-	The accuracy mode for postRoute effortLevel low extraction will be set to 'high'.
-	Default value for EffortLevel(-effortLevel option of the setExtractRCMode) in postRoute extraction mode is 'medium'.
-<CMD> setMultiCpuUsage -acquireLicense 12
-Total CPU(s) requested: 12
-Total CPU(s) enabled with current License(s): 8
-Current free CPU(s): 8
-Additional license(s) checked out: 1 Innovus_CPU_Opt license(s) for 8 CPU(s)
-[15:14:01.274162] Periodic Lic check successful
-[15:14:01.274169] Feature usage summary:
-[15:14:01.274169] Innovus_Impl_System
-[15:14:01.274169] Innovus_CPU_Opt
-
-Total CPU(s) now enabled: 16
-<CMD> setMultiCpuUsage -localCpu 12
-<CMD> setDistributeHost -local
-The timeout for a remote job to respond is 3600 seconds.
-Submit command for task runs will be: local
-<CMD> floorPlan -s 1180.8 1046.4 2.16 2.16 2.16 2.16
-The core height changes from 1046.400000 to 1046.448000 when snapping to grid "PlacementGrid".
+<CMD> floorPlan -r 1.00 0.72 3.840 3.840 3.840 3.840
+Adjusting coreMargin left    to finFet grid (PlacementGrid) : after adjusting :3.888
+Adjusting coreMargin bottom  to finFet grid (PlacementGrid) : after adjusting :3.888
+Adjusting coreMargin right   to finFet grid (PlacementGrid) : after adjusting :3.888
+Adjusting coreMargin top     to finFet grid (PlacementGrid) : after adjusting :3.888
+Adjusting core size to PlacementGrid : width :309.024 height : 307.872
 Start create_tracks
 **WARN: (IMPFP-325):	Floorplan of the design is resized. All current floorplan objects are automatically derived based on specified new floorplan. This may change blocks, fixed standard cells, existing routes and blockages.
-<CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_proto.rpt
+<CMD> timeDesign -proto -prePlace
+AAE DB initialization (MEM=2424.207031 CPU=0:00:00.0 REAL=0:00:00.0) 
+-earlyGlobalRoutePartitionHonorFence {}   # string, default=""
+0 delay mode for cte disabled.
+*** Finished with optVirtual (cpu=0:00:22, real=0:00:10, mem=6002.74M).
+*** timeDesign #1 [begin] () : totSession cpu/real = 0:01:08.8/0:00:30.1 (2.3), mem = 6002.7M
+
+OptSummary:
+
+------------------------------------------------------------------
+          timeDesign Summary
+------------------------------------------------------------------
+
+Setup views included:
+ view_tt 
+
++--------------------+---------+---------+---------+
+|     Setup mode     |   all   | reg2reg | default |
++--------------------+---------+---------+---------+
+|           WNS (ns):|  4.105  |  7.163  |  4.105  |
+|           TNS (ns):|  0.000  |  0.000  |  0.000  |
+|    Violating Paths:|    0    |    0    |    0    |
+|          All Paths:|  11364  |  11228  |  5823   |
++--------------------+---------+---------+---------+
+
++----------------+-------------------------------+------------------+
+|                |              Real             |       Total      |
+|    DRVs        +------------------+------------+------------------|
+|                |  Nr nets(terms)  | Worst Vio  |  Nr nets(terms)  |
++----------------+------------------+------------+------------------+
+|   max_cap      |      1 (1)       |   -5.539   |      1 (1)       |
+|   max_tran     |      0 (0)       |   0.000    |      0 (0)       |
+|   max_fanout   |     43 (43)      |   -5121    |     44 (44)      |
+|   max_length   |      0 (0)       |     0      |      0 (0)       |
++----------------+------------------+------------+------------------+
+
+Density: 72.005%
+------------------------------------------------------------------
+Reported timing to dir ./timingReports
+Total CPU time: 3.77 sec
+Total Real time: 1.0 sec
+Total Memory Usage: 6004.820312 Mbytes
+*** timeDesign #1 [finish] () : cpu/real = 0:00:03.8/0:00:01.6 (2.4), totSession cpu/real = 0:01:12.6/0:00:31.7 (2.3), mem = 6004.8M
+<CMD> set_proto_design_mode -timing_aware true -congestion_aware true
+<CMD> proto_design
+#% Begin proto_design (date=08/11 23:56:31, mem=2814.4M)
+**ERROR: (IMPLIC-90):	(#145) This command "proto_design" does not have the capability to run using 'invs' (Innovus_Impl_System; INVS100; 23.1).
+Type 'man IMPLIC-90' for more detail.
+You must get access to one of the following optional licenses before you can run the command:  'invs_ehfs' (Innovus_EHFS_Opt; INVS46; 23.1).
+**ERROR: (IMPFM-801):	Please check out invs_ehfs license before running the command. 
+#% End proto_design (date=08/11 23:56:36, total cpu=0:00:00.1, real=0:00:05.0, peak res=2814.4M, current mem=2814.1M)
+<CMD> snapFPlan -guide
+<CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP.rpt
 Checking routing tracks.....
 Checking other grids.....
 Checking FINFET Grid is on Manufacture Grid.....
 Checking core/die box is on Grid.....
+**WARN: (IMPFP-7237):	CORE's corner: (312.9120000000 , 311.6880000000) is NOT on PlacementGrid,  Please use command getFPlanMode to check current Grid settings, use command setFPlanMode to change which grid to snap to. And use command get_snap_grid_info to get grids' offset and pitch. Command floorPlan can be used to fix this issue.
 Checking snap rule ......
 Checking Row is on grid......
 Checking AreaIO row.....
@@ -280,135 +317,141 @@ No. of regular pre-routes not on tracks : 0
 
 Reporting Utilizations.....
 
-Core utilization  = 27.337001
+Core utilization  = 71.971845
 Effective Utilizations
 Extracting standard cell pins and blockage ...... 
 Pin and blockage extraction finished
 Extracting macro/IO cell pins and blockage ...... 
 Pin and blockage extraction finished
-Multithreaded Timing Analysis is initialized with 12 threads
+Average macro density = 0.000.
+Average module density = 0.720.
+Pure std cell Density 0.720054
+ Density for the design = 0.720.
+       = stdcell_area 293458 sites (68458 um^2) / alloc_area 407550 sites (95073 um^2).
+Pin Density = 0.3112.
+            = total # of pins 126834 / total area 407550.
 
-Average macro density = 0.272.
-Average macro with halo density = 0.272.
-Average module density = 0.274.
-Pure std cell Density 0.002408
- Density for the design = 0.274.
-       = (stdcell_area 9276 sites (2164 um^2) + block_area 1438720 sites (335625 um^2)) / alloc_area 5291088 sites (1234305 um^2).
-Density for the design with macro halo = 0.274.
-       = (stdcell_area 9276 sites (2164 um^2) + block_area with halo 1438720 sites (335625 um^2)) / alloc_area 5291088 sites (1234305 um^2).
-Pin Density = 0.001184.
-            = total # of pins 6263 / total area 5291088.
-*** Message Summary: 0 warning(s), 0 error(s)
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPFP-7237           1  CORE's corner: %s is NOT on %s,  Please ...
+*** Message Summary: 1 warning(s), 0 error(s)
 
-<CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_final.rpt
-Checking routing tracks.....
-Checking other grids.....
-Checking FINFET Grid is on Manufacture Grid.....
-Checking core/die box is on Grid.....
-Checking snap rule ......
-Checking Row is on grid......
-Checking AreaIO row.....
-Checking row out of die ...
-Checking routing blockage.....
-Checking placement blockage.....
-placeBlkGrid grid_type = 1 
-Checking components.....
-Checking IO Pads out of die...
-Checking constraints (guide/region/fence).....
-
-Checking Preroutes.....
-No. of regular pre-routes not on tracks : 0 
-
-Reporting Utilizations.....
-
-Core utilization  = 27.337001
-Effective Utilizations
-Average macro density = 0.272.
-Average macro with halo density = 0.272.
-Average module density = 0.274.
-Pure std cell Density 0.002408
- Density for the design = 0.274.
-       = (stdcell_area 9276 sites (2164 um^2) + block_area 1438720 sites (335625 um^2)) / alloc_area 5291088 sites (1234305 um^2).
-Density for the design with macro halo = 0.274.
-       = (stdcell_area 9276 sites (2164 um^2) + block_area with halo 1438720 sites (335625 um^2)) / alloc_area 5291088 sites (1234305 um^2).
-Pin Density = 0.001184.
-            = total # of pins 6263 / total area 5291088.
-*** Message Summary: 0 warning(s), 0 error(s)
-
-<CMD> saveFPlan ./outputs/FloorPlan.fp
-<CMD> saveDesign ./saved/axi_ram_hierFP.enc
-#% Begin save design ... (date=07/31 15:14:01, mem=2500.7M)
-INFO: Current data have to be saved into a temporary db: 'axi_ram_hierFP.enc.dat.tmp' first. It will be renamed to the correct name 'axi_ram_hierFP.enc.dat' after the old db was deleted.
-% Begin Save ccopt configuration ... (date=07/31 15:14:01, mem=2500.7M)
-**WARN: (IMPTS-16):	Inconsistency detected in the time units specified among the timing libraries being used. Default system time unit of 1ns will be used. Use the 'setLibraryUnit' command to set a specific time unit.
-Type 'man IMPTS-16' for more detail.
-**WARN: (EMS-27):	Message (IMPTS-16) has exceeded the current message display limit of 1.
-To increase the message display limit, refer to the product command reference manual.
-% End Save ccopt configuration ... (date=07/31 15:14:01, total cpu=0:00:00.1, real=0:00:00.0, peak res=2502.2M, current mem=2502.2M)
-% Begin Save netlist data ... (date=07/31 15:14:01, mem=2502.2M)
-Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/vbin/axi_ram.v.bin in multi-threaded mode...
-% End Save netlist data ... (date=07/31 15:14:01, total cpu=0:00:00.1, real=0:00:00.0, peak res=2507.5M, current mem=2502.3M)
+<CMD> saveFPlan ./outputs/riscv_pipeline_hierFP.fp
+<CMD> saveDesign ./saved/riscv_pipeline_hierFP.enc
+#% Begin save design ... (date=08/11 23:56:36, mem=2816.3M)
+INFO: Current data have to be saved into a temporary db: 'riscv_pipeline_hierFP.enc.dat.tmp' first. It will be renamed to the correct name 'riscv_pipeline_hierFP.enc.dat' after the old db was deleted.
+% Begin Save ccopt configuration ... (date=08/11 23:56:36, mem=2816.4M)
+% End Save ccopt configuration ... (date=08/11 23:56:36, total cpu=0:00:00.1, real=0:00:00.0, peak res=2817.8M, current mem=2817.8M)
+% Begin Save netlist data ... (date=08/11 23:56:36, mem=2817.8M)
+Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/vbin/riscv_pipeline.v.bin in multi-threaded mode...
+% End Save netlist data ... (date=08/11 23:56:36, total cpu=0:00:00.1, real=0:00:00.0, peak res=2818.0M, current mem=2818.0M)
 Saving symbol-table file in separate thread ...
 Saving congestion map file in separate thread ...
-Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.route.congmap.gz ...
-% Begin Save AAE data ... (date=07/31 15:14:01, mem=2503.7M)
+Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/riscv_pipeline.route.congmap.gz ...
+% Begin Save AAE data ... (date=08/11 23:56:36, mem=2818.7M)
 Saving AAE Data ...
-% End Save AAE data ... (date=07/31 15:14:01, total cpu=0:00:00.0, real=0:00:00.0, peak res=2512.2M, current mem=2504.4M)
-Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/gui.pref.tcl ...
+% End Save AAE data ... (date=08/11 23:56:36, total cpu=0:00:00.1, real=0:00:00.0, peak res=2818.7M, current mem=2818.7M)
+Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/gui.pref.tcl ...
 Saving mode setting ...
 **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
 Saving global file ...
-*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.bbox.lef
+*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/riscv_pipeline.bbox.lef
 Saving Drc markers ...
-... No Drc file written since there is no markers found.
+... 1 markers are saved ...
+... 0 geometry drc markers are saved ...
+... 0 antenna drc markers are saved ...
 Saving special route data file in separate thread ...
 Saving PG Conn data in separate thread ...
 Saving placement file in separate thread ...
 Saving route file in separate thread ...
 Saving property file in separate thread ...
 ** Saving stdCellPlacement_binary (version# 2) ...
-Save Adaptive View Pruning View Names to Binary file
-Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.prop
+Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/riscv_pipeline.prop
 TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: savePGConnFile REAL = 0 : CPU = 0 : MEM = 0.
+Save Adaptive View Pruning View Names to Binary file
+*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=6028.8M) ***
 TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
-*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=2956.1M) ***
-*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=2956.1M) ***
+*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=6028.8M) ***
 TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
-Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/axi_ram.techData.gz' ...
-Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/saved/axi_ram_hierFP.enc.dat.tmp/extraction/' ...
+Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/riscv_pipeline.techData.gz' ...
+Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/extraction/' ...
 TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
-% Begin Save power constraints data ... (date=07/31 15:14:02, mem=2516.1M)
-% End Save power constraints data ... (date=07/31 15:14:02, total cpu=0:00:00.1, real=0:00:00.0, peak res=2516.5M, current mem=2516.5M)
-rccorner
-rccorner
-rccorner
-Generated self-contained design axi_ram_hierFP.enc.dat.tmp
-libset
-rccorner
-mode_normal
-./outputs/axi_ram_syn.sdc
-#% End save design ... (date=07/31 15:14:02, total cpu=0:00:01.0, real=0:00:01.0, peak res=2548.7M, current mem=2519.1M)
+% Begin Save power constraints data ... (date=08/11 23:56:37, mem=2826.0M)
+% End Save power constraints data ... (date=08/11 23:56:37, total cpu=0:00:00.1, real=0:00:00.0, peak res=2826.4M, current mem=2826.4M)
+rc_typ
+rc_typ
+rc_typ
+Generated self-contained design riscv_pipeline_hierFP.enc.dat.tmp
+libset_tt
+rc_typ
+mode_func
+../genus/outputs/riscv_pipeline_syn.sdc
+#% End save design ... (date=08/11 23:56:37, total cpu=0:00:01.3, real=0:00:01.0, peak res=2828.3M, current mem=2828.3M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
-WARNING   IMPTS-16            16  Inconsistency detected in the time units...
 WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
-*** Message Summary: 17 warning(s), 0 error(s)
+*** Message Summary: 1 warning(s), 0 error(s)
 
-**WARN: (IMPDBTCL-204):	'coreSite' is not a recognized object/attribute for object type 'head'. For help use 'dbSchema head' to get list of all supported (settable/unsettable) objects and attributes.
-Type 'man IMPDBTCL-204' for more detail.
-**WARN: (IMPDBTCL-204):	'coreSite' is not a recognized object/attribute for object type 'head'. For help use 'dbSchema head' to get list of all supported (settable/unsettable) objects and attributes.
-Type 'man IMPDBTCL-204' for more detail.
-integer value too large to represent
-<CMD> addHaloToBlock -allBlock 4.32 4.32 4.32 4.32
-<CMD> snapFPlan -block
-Packed SRAM macro bodies lie outside the core boundary
-<CMD> fit
+<CMD> report_area > ./reports/area_hierFP.rpt
+<CMD> report_timing > ./reports/timing_hierFP.rpt
+<CMD> setMultiColorsHier
+<CMD> all_constraint_modes
+mode_func
+<CMD> set_interactive_constraint_modes [all_constraint_modes]
+<CMD> setAddStripeMode -trim_antenna_back_to_shape core_ring
+The power planner will set stripe antenna targets to core ring.
+<CMD> setAddStripeMode -split_vias true
+<CMD> setAddStripeMode -via_using_exact_crossover_size false
+<CMD> clearGlobalNets
+<CMD> deleteAllPowerPreroutes
+<CMD> globalNetConnect VDD -type pgpin -pin VDD -inst * -module {}
+<CMD> globalNetConnect VSS -type pgpin -pin VSS -inst * -module {}
+<CMD> globalNetConnect VDD -type tiehi -inst * -module {}
+<CMD> globalNetConnect VSS -type tielo -inst * -module {}
+<CMD> applyGlobalNets
+*** Checked 4 GNC rules.
+*** Applying global-net connections...
+*** Applied 4 GNC rules (cpu = 0:00:00.0)
+<CMD> addRing -nets {VDD VSS} -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.640 -spacing 0.320 -offset 0.320
+#% Begin addRing (date=08/11 23:56:38, mem=2839.5M)
 
-*** Memory Usage v#2 (Current mem = 3037.988M, initial mem = 847.699M) ***
-*** Message Summary: 43 warning(s), 0 error(s)
+viaInitial starts at Tue Aug 11 23:56:38 2026
+viaInitial ends at Tue Aug 11 23:56:38 2026
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
---- Ending "Innovus" (totcpu=0:00:33.6, real=0:01:44, mem=3038.0M) ---
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6006.8M)
+Ring generation is complete.
+vias are now being generated.
+addRing created 8 wires.
+ViaGen created 8 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M8   |        4       |       NA       |
+|   V8   |        8       |        0       |
+|   M9   |        4       |       NA       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addRing (date=08/11 23:56:38, total cpu=0:00:00.1, real=0:00:00.0, peak res=2843.4M, current mem=2843.4M)
+**ERROR: (IMPSYT-6692):	Invalid return code while executing 'tcl/innovus.tcl' was returned and script processing was stopped. Review the following error in 'tcl/innovus.tcl' then restart.
+**ERROR: (IMPSYT-6693):	Error message: tcl/innovus.tcl: can't use non-numeric string as operand of "-".
+<CMD> win
+
+*** Memory Usage v#2 (Current mem = 6086.859M, initial mem = 839.699M) ***
+*** Message Summary: 14 warning(s), 4 error(s)
+
+--- Ending "Innovus" (totcpu=0:01:17, real=0:00:54.0, mem=6086.9M) ---

@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Jul 31 15:13:32 2026                
+#  Created on Tue Aug 11 23:56:11 2026                
 #                                                     
 #######################################################
 
@@ -18,10 +18,13 @@ suppressMessage ENCEXT-2799
 getVersion
 getVersion
 getVersion
-win
-set auto_file_dir /tmp/user1/innovus_master
+set auto_file_dir /tmp/user1/innovus_riscv_1729083
+setDesignMode -process 7
+setMultiCpuUsage -acquireLicense 8
+setMultiCpuUsage -localCpu 8
+setDistributeHost -local
 set init_design_uniquify 1
-set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef}
+set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef}
 set ::TimeLib::tsgMarkCellLatchConstructFlag 1
 set conf_qxconf_file NULL
 set conf_qxlib_file NULL
@@ -31,11 +34,11 @@ set distributed_mmmc_disable_reports_auto_redirection 0
 set init_abstract_view abstract
 set init_layout_view layout
 set init_design_settop 1
-set init_top_cell axi_ram
+set init_top_cell riscv_pipeline
 set init_gnd_net VSS
 set init_pwr_net VDD
 set init_mmmc_file ./tcl/viewDefinition.tcl
-set init_verilog ./outputs/axi_ram_syn.v
+set init_verilog ../genus/outputs/riscv_pipeline_syn.v
 get_message -id GLOBAL-100 -suppress
 get_message -id GLOBAL-100 -suppress
 set latch_time_borrow_mode max_borrow
@@ -45,16 +48,30 @@ get_message -id GLOBAL-100 -suppress
 get_message -id GLOBAL-100 -suppress
 set report_inactive_arcs_format {from to when arc_type sense reason}
 set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
+setGenerateViaMode -auto false
 init_design
-setDesignMode -process 7
-setMultiCpuUsage -acquireLicense 12
-setMultiCpuUsage -localCpu 12
-setDistributeHost -local
-floorPlan -s 1180.8 1046.4 2.16 2.16 2.16 2.16
-checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_proto.rpt
-checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_final.rpt
-saveFPlan ./outputs/FloorPlan.fp
-saveDesign ./saved/axi_ram_hierFP.enc
-addHaloToBlock -allBlock 4.32 4.32 4.32 4.32
-snapFPlan -block
-fit
+floorPlan -r 1.00 0.72 3.840 3.840 3.840 3.840
+timeDesign -proto -prePlace
+set_proto_design_mode -timing_aware true -congestion_aware true
+proto_design
+snapFPlan -guide
+checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP.rpt
+saveFPlan ./outputs/riscv_pipeline_hierFP.fp
+saveDesign ./saved/riscv_pipeline_hierFP.enc
+report_area > ./reports/area_hierFP.rpt
+report_timing > ./reports/timing_hierFP.rpt
+setMultiColorsHier
+all_constraint_modes
+set_interactive_constraint_modes [all_constraint_modes]
+setAddStripeMode -trim_antenna_back_to_shape core_ring
+setAddStripeMode -split_vias true
+setAddStripeMode -via_using_exact_crossover_size false
+clearGlobalNets
+deleteAllPowerPreroutes
+globalNetConnect VDD -type pgpin -pin VDD -inst * -module {}
+globalNetConnect VSS -type pgpin -pin VSS -inst * -module {}
+globalNetConnect VDD -type tiehi -inst * -module {}
+globalNetConnect VSS -type tielo -inst * -module {}
+applyGlobalNets
+addRing -nets {VDD VSS} -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.640 -spacing 0.320 -offset 0.320
+win

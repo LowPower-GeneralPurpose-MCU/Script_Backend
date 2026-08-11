@@ -1,0 +1,22 @@
+    Hinst Name       Module Name            Inst Count           Total Area
+------------------------------------------------------------------------
+riscv_pipeline                                   30331            68457.882
+  BPU                branch_prediction_unit      13893            35047.754
+    BPU/BHT          branch_history_table          196              378.380
+    BPU/BTB          branch_target_buffer        13684            34656.777
+  CSR_RF             csr_register_file            2263             4942.503
+  EX                 execute                      6234            10659.963
+    EX/DIV           divider                      1504             3056.668
+    EX/MUL           multiplier                   2795             5008.755
+  EX_MEM             ex_mem_register               490             1722.306
+  FU                 forwarding_unit               161              323.793
+  ID                 instruction_decode            426              606.295
+    ID/ACU           alu_control_unit               25               25.661
+    ID/MCU           main_control_unit              54               60.420
+  ID_EX              id_ex_register                596             2100.686
+  IF                 instruction_fetch             504              694.475
+  IF_ID              if_id_register                222              761.193
+  MEM_WB             mem_wb_register               229              803.883
+  PCU                pipeline_control_unit          86              134.369
+  RF                 register_file                4679             9630.732
+  WB                 write_back                     44               99.611
