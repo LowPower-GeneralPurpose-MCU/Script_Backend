@@ -355,17 +355,10 @@ setPlaceMode \
 place_design
 refinePlace
 
-# Post-placement lower PG: create M1 follow-pin rails first, then stitch them
-# up to the M5/M6 mesh.  This mirrors the clean SRAM lower-PG topology but
-# keeps the RISC-V flow macro-free.
-setSrouteMode -reset
-setSrouteMode -viaConnectToShape {ring stripe}
-sroute -nets {VDD VSS} \
-    -connect {corePin} \
-    -corePinCheckStdcellGeoms \
-    -allowJogging 0 \
-    -allowLayerChange 0
-
+# Post-placement lower PG: create M5 taps first, then let sroute build M1
+# follow-pin rails only to those tap landing shapes.  In the previous order
+# sroute targeted upper M6/M7 shapes and emitted IMPPP-610 missing-via warnings,
+# leaving the bottom VDD follow-pin rail as a disconnected special-route island.
 setAddStripeMode -reset
 setAddStripeMode \
     -allow_jog none \
@@ -375,14 +368,25 @@ setAddStripeMode \
     -stacked_via_bottom_layer M1 \
     -stacked_via_top_layer M6
 
+set lower_pg_area [list $core_llx $power_die_lly $core_urx $power_die_ury]
 addStripe -nets {VDD VSS} \
     -layer M5 -direction vertical \
     -width $M45_WIDTH -spacing $M45_SPACING \
     -set_to_set_distance $M45_SET_PITCH \
     -start_from left -start_offset $M45_OFFSET \
     -create_pins 0 \
+    -area $lower_pg_area \
     -snap_wire_center_to_grid Grid \
     -allow_snapping_override_custom_spacing 1
+
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {stripe}
+sroute -nets {VDD VSS} \
+    -connect {corePin} \
+    -corePinTarget {stripe} \
+    -corePinCheckStdcellGeoms \
+    -allowJogging 0 \
+    -allowLayerChange 0
 
 editTrim -nets {VDD VSS}
 clearDrc

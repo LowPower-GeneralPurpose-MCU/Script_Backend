@@ -41,4 +41,10 @@ setMultiCpuUsage -acquireLicense $CORES
 setMultiCpuUsage -localCpu $CORES
 setDistributeHost -local
 
+# ASAP7 stdcell PG pins can sit exactly on, or slightly outside, the abstract
+# cell boundary.  Innovus expands those local boundaries during PG via creation
+# and emits one IMPPP-133 per touched cell; it is noisy but not a DRC/connectivity
+# issue.  Keep real PG warnings, such as missing via-rule IMPPP-610, visible.
+catch {suppressMessage IMPPP-133}
+
 puts "INFO: Innovus CPUs=$CORES, auto_file_dir=$auto_file_dir"
