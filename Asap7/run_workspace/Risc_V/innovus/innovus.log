@@ -4,17 +4,17 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
 Options:	-files tcl/innovus.tcl 
-Date:		Tue Aug 11 23:55:54 2026
+Date:		Wed Aug 12 00:08:00 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04 LTS
 
 License:
-		[23:55:58.206306] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[00:08:04.206178] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		invs	Innovus Implementation System	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 1729083 / 41d9c9d6-a949-47a3-a501-848dc5ad4e7d / 3l5cGSloAI
+Info: Process UID = 1789970 / 054ca1b3-c3c3-48ea-bd46-7d58ad674e94 / U25TvoiWaY
 
 **INFO:  MMMC transition support version v31-84 
 
@@ -26,7 +26,8 @@ Info: Process UID = 1729083 / 41d9c9d6-a949-47a3-a501-848dc5ad4e7d / 3l5cGSloAI
 [INFO] Loading PVS 21.12 fill procedures
 Sourcing file "tcl/innovus.tcl" ...
 source tcl/innovus.tcl
-<CMD> set auto_file_dir /tmp/user1/innovus_riscv_1729083
+<CMD> set enc_source_continue_on_error false
+<CMD> set auto_file_dir /tmp/user1/innovus_riscv_1789970
 <CMD> setDesignMode -process 7
 ##  Process: 7             (User Set)               
 ##     Node: (not set)                           
@@ -71,8 +72,8 @@ Submit command for task runs will be: local
 <CMD> set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
 <CMD> setGenerateViaMode -auto false
 <CMD> init_design
-#% Begin Load MMMC data ... (date=08/11 23:56:12, mem=1771.8M)
-#% End Load MMMC data ... (date=08/11 23:56:12, total cpu=0:00:00.1, real=0:00:00.0, peak res=1773.3M, current mem=1773.3M)
+#% Begin Load MMMC data ... (date=08/12 00:08:19, mem=1772.8M)
+#% End Load MMMC data ... (date=08/12 00:08:19, total cpu=0:00:00.0, real=0:00:00.0, peak res=1774.3M, current mem=1774.3M)
 rc_typ
 
 Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef ...
@@ -112,17 +113,17 @@ Read 34 cells in library asap7sc7p5t_OA_LVT_TT_ccs_211120.
 Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib.
 Read 33 cells in library asap7sc7p5t_SEQ_LVT_TT_ccs_220123.
 Library reading multithread flow ended.
-*** End library_loading (cpu=0.50min, real=0.08min, mem=2766.1M, fe_cpu=0.72min, fe_real=0.38min, fe_mem=4583.6M) ***
-#% Begin Load netlist data ... (date=08/11 23:56:17, mem=1839.4M)
-*** Begin netlist parsing (mem=4583.6M) ***
+*** End library_loading (cpu=0.53min, real=0.07min, mem=2945.1M, fe_cpu=0.76min, fe_real=0.38min, fe_mem=4762.9M) ***
+#% Begin Load netlist data ... (date=08/12 00:08:23, mem=1843.7M)
+*** Begin netlist parsing (mem=4762.9M) ***
 Created 404 new cells from 10 timing libraries.
 Reading netlist ...
 Backslashed names will retain backslash and a trailing blank character.
 Reading verilog netlist '../genus/outputs/riscv_pipeline_syn.v'
 
-*** Memory Usage v#2 (Current mem = 4583.551M, initial mem = 839.699M) ***
-*** End netlist parsing (cpu=0:00:00.1, real=0:00:00.0, mem=4583.6M) ***
-#% End Load netlist data ... (date=08/11 23:56:17, total cpu=0:00:00.2, real=0:00:00.0, peak res=1900.2M, current mem=1900.2M)
+*** Memory Usage v#2 (Current mem = 4762.887M, initial mem = 847.699M) ***
+*** End netlist parsing (cpu=0:00:00.1, real=0:00:00.0, mem=4762.9M) ***
+#% End Load netlist data ... (date=08/12 00:08:23, total cpu=0:00:00.2, real=0:00:00.0, peak res=1903.9M, current mem=1903.9M)
 Set top cell to riscv_pipeline.
 Hooked 404 DB cells to tlib cells.
 Starting recursive module instantiation check.
@@ -135,7 +136,7 @@ Set DBUPerIGU to techSite asap7sc7p5t width 864.
 ** info: there are 30331 stdCell insts.
 ** info: there are 30331 stdCell insts with at least one signal pin.
 
-*** Memory Usage v#2 (Current mem = 4583.551M, initial mem = 839.699M) ***
+*** Memory Usage v#2 (Current mem = 4762.887M, initial mem = 847.699M) ***
 Start create_tracks
 Extraction setup Started for TopCell riscv_pipeline 
 Initializing multi-corner RC extraction with 1 active RC Corners ...
@@ -144,7 +145,7 @@ Importing multi-corner technology file(s) for preRoute extraction...
 /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
 Generating auto layer map file.
 
-Completed (cpu: 0:00:01.4 real: 0:00:01.0)
+Completed (cpu: 0:00:01.4 real: 0:00:02.0)
 Set Shrink Factor to 1.00000
 Summary of Active RC-Corners : 
  
@@ -171,7 +172,7 @@ Default value for postRoute extraction mode's effortLevel (-effortLevel option o
 Multithreaded Timing Analysis is initialized with 8 threads
 
 Reading timing constraints file '../genus/outputs/riscv_pipeline_syn.sdc' ...
-Current (total cpu=0:00:46.0, real=0:00:26.0, peak res=4308.7M, current mem=2368.9M)
+Current (total cpu=0:00:48.2, real=0:00:26.0, peak res=4522.2M, current mem=2379.6M)
 **WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ../genus/outputs/riscv_pipeline_syn.sdc, Line 9).
 
 **WARN: (TCLCMD-1461):	Skipped unsupported command: set_units (File ../genus/outputs/riscv_pipeline_syn.sdc, Line 10).
@@ -201,8 +202,8 @@ set_clock_transition                              | 2              | 0
 set_max_transition                                | 1              | 0              
 ------------------------------------------------------------------------------------
 INFO (CTE): Reading of timing constraints file ../genus/outputs/riscv_pipeline_syn.sdc completed, with 2 WARNING
-Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2403.9M, current mem=2403.9M)
-Current (total cpu=0:00:46.2, real=0:00:26.0, peak res=4308.7M, current mem=2403.9M)
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2414.8M, current mem=2414.8M)
+Current (total cpu=0:00:48.3, real=0:00:26.0, peak res=4522.2M, current mem=2414.8M)
 **WARN: (TA-976):	Path groups asserted by the group_path/set_path_adjust_group constraint are considered by the software to be global in nature - they cannot be restricted to specific constraint modes. Due to this restriction, the group_path/set_path_adjust_group constraint is not supported directly in the constraint files which are configured in mode-specific commands such as create_constraint_mode. The current group_path/set_path_adjust_group entry will be ignored. You can enter the group_path/set_path_adjust_group constraint interactively or as part of a general command script -  where it will be interpreted as global and will be in effect for all modes.
 Total number of combinational cells: 338
 Total number of sequential cells: 66
@@ -235,72 +236,20 @@ WARNING   TCLCMD-1461          2  Skipped unsupported command: %s
 WARNING   TECHLIB-1277         4  The %s '%s' has been defined for %s %s '...
 *** Message Summary: 7 warning(s), 0 error(s)
 
-<CMD> floorPlan -r 1.00 0.72 3.840 3.840 3.840 3.840
-Adjusting coreMargin left    to finFet grid (PlacementGrid) : after adjusting :3.888
-Adjusting coreMargin bottom  to finFet grid (PlacementGrid) : after adjusting :3.888
-Adjusting coreMargin right   to finFet grid (PlacementGrid) : after adjusting :3.888
-Adjusting coreMargin top     to finFet grid (PlacementGrid) : after adjusting :3.888
-Adjusting core size to PlacementGrid : width :309.024 height : 307.872
+<CMD> floorPlan -s 309.120 308.352 3.840 3.840 3.840 3.840
+The core width changes from 309.120000 to 309.168000 when snapping to grid "PlacementGrid".
+The core height changes from 308.352000 to 308.304000 when snapping to grid "PlacementGrid".
+**WARN: (IMPFP-4026):	Adjusting core to 'Left' to 3.888000 due to track/row misalignment. To force the value, specify the -noSnapToGrid option or use fpiSetSnapRule command to specify the die/core to different grid.
+**WARN: (IMPFP-4026):	Adjusting core to 'Bottom' to 3.888000 due to track/row misalignment. To force the value, specify the -noSnapToGrid option or use fpiSetSnapRule command to specify the die/core to different grid.
+**WARN: (IMPFP-4026):	Adjusting core to 'Right' to 3.888000 due to track/row misalignment. To force the value, specify the -noSnapToGrid option or use fpiSetSnapRule command to specify the die/core to different grid.
+**WARN: (IMPFP-4026):	Adjusting core to 'Top' to 3.888000 due to track/row misalignment. To force the value, specify the -noSnapToGrid option or use fpiSetSnapRule command to specify the die/core to different grid.
 Start create_tracks
 **WARN: (IMPFP-325):	Floorplan of the design is resized. All current floorplan objects are automatically derived based on specified new floorplan. This may change blocks, fixed standard cells, existing routes and blockages.
-<CMD> timeDesign -proto -prePlace
-AAE DB initialization (MEM=2424.207031 CPU=0:00:00.0 REAL=0:00:00.0) 
--earlyGlobalRoutePartitionHonorFence {}   # string, default=""
-0 delay mode for cte disabled.
-*** Finished with optVirtual (cpu=0:00:22, real=0:00:10, mem=6002.74M).
-*** timeDesign #1 [begin] () : totSession cpu/real = 0:01:08.8/0:00:30.1 (2.3), mem = 6002.7M
-
-OptSummary:
-
-------------------------------------------------------------------
-          timeDesign Summary
-------------------------------------------------------------------
-
-Setup views included:
- view_tt 
-
-+--------------------+---------+---------+---------+
-|     Setup mode     |   all   | reg2reg | default |
-+--------------------+---------+---------+---------+
-|           WNS (ns):|  4.105  |  7.163  |  4.105  |
-|           TNS (ns):|  0.000  |  0.000  |  0.000  |
-|    Violating Paths:|    0    |    0    |    0    |
-|          All Paths:|  11364  |  11228  |  5823   |
-+--------------------+---------+---------+---------+
-
-+----------------+-------------------------------+------------------+
-|                |              Real             |       Total      |
-|    DRVs        +------------------+------------+------------------|
-|                |  Nr nets(terms)  | Worst Vio  |  Nr nets(terms)  |
-+----------------+------------------+------------+------------------+
-|   max_cap      |      1 (1)       |   -5.539   |      1 (1)       |
-|   max_tran     |      0 (0)       |   0.000    |      0 (0)       |
-|   max_fanout   |     43 (43)      |   -5121    |     44 (44)      |
-|   max_length   |      0 (0)       |     0      |      0 (0)       |
-+----------------+------------------+------------+------------------+
-
-Density: 72.005%
-------------------------------------------------------------------
-Reported timing to dir ./timingReports
-Total CPU time: 3.77 sec
-Total Real time: 1.0 sec
-Total Memory Usage: 6004.820312 Mbytes
-*** timeDesign #1 [finish] () : cpu/real = 0:00:03.8/0:00:01.6 (2.4), totSession cpu/real = 0:01:12.6/0:00:31.7 (2.3), mem = 6004.8M
-<CMD> set_proto_design_mode -timing_aware true -congestion_aware true
-<CMD> proto_design
-#% Begin proto_design (date=08/11 23:56:31, mem=2814.4M)
-**ERROR: (IMPLIC-90):	(#145) This command "proto_design" does not have the capability to run using 'invs' (Innovus_Impl_System; INVS100; 23.1).
-Type 'man IMPLIC-90' for more detail.
-You must get access to one of the following optional licenses before you can run the command:  'invs_ehfs' (Innovus_EHFS_Opt; INVS46; 23.1).
-**ERROR: (IMPFM-801):	Please check out invs_ehfs license before running the command. 
-#% End proto_design (date=08/11 23:56:36, total cpu=0:00:00.1, real=0:00:05.0, peak res=2814.4M, current mem=2814.1M)
-<CMD> snapFPlan -guide
 <CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP.rpt
 Checking routing tracks.....
 Checking other grids.....
 Checking FINFET Grid is on Manufacture Grid.....
 Checking core/die box is on Grid.....
-**WARN: (IMPFP-7237):	CORE's corner: (312.9120000000 , 311.6880000000) is NOT on PlacementGrid,  Please use command getFPlanMode to check current Grid settings, use command setFPlanMode to change which grid to snap to. And use command get_snap_grid_info to get grids' offset and pitch. Command floorPlan can be used to fix this issue.
 Checking snap rule ......
 Checking Row is on grid......
 Checking AreaIO row.....
@@ -317,7 +266,7 @@ No. of regular pre-routes not on tracks : 0
 
 Reporting Utilizations.....
 
-Core utilization  = 71.971845
+Core utilization  = 71.820722
 Effective Utilizations
 Extracting standard cell pins and blockage ...... 
 Pin and blockage extraction finished
@@ -325,62 +274,55 @@ Extracting macro/IO cell pins and blockage ......
 Pin and blockage extraction finished
 Average macro density = 0.000.
 Average module density = 0.720.
-Pure std cell Density 0.720054
+Pure std cell Density 0.719551
  Density for the design = 0.720.
-       = stdcell_area 293458 sites (68458 um^2) / alloc_area 407550 sites (95073 um^2).
-Pin Density = 0.3112.
-            = total # of pins 126834 / total area 407550.
-
-*** Summary of all messages that are not suppressed in this session:
-Severity  ID               Count  Summary                                  
-WARNING   IMPFP-7237           1  CORE's corner: %s is NOT on %s,  Please ...
-*** Message Summary: 1 warning(s), 0 error(s)
+       = stdcell_area 293458 sites (68458 um^2) / alloc_area 407835 sites (95140 um^2).
+Pin Density = 0.3110.
+            = total # of pins 126834 / total area 407835.
+*** Message Summary: 0 warning(s), 0 error(s)
 
 <CMD> saveFPlan ./outputs/riscv_pipeline_hierFP.fp
 <CMD> saveDesign ./saved/riscv_pipeline_hierFP.enc
-#% Begin save design ... (date=08/11 23:56:36, mem=2816.3M)
+#% Begin save design ... (date=08/12 00:08:27, mem=2455.4M)
 INFO: Current data have to be saved into a temporary db: 'riscv_pipeline_hierFP.enc.dat.tmp' first. It will be renamed to the correct name 'riscv_pipeline_hierFP.enc.dat' after the old db was deleted.
-% Begin Save ccopt configuration ... (date=08/11 23:56:36, mem=2816.4M)
-% End Save ccopt configuration ... (date=08/11 23:56:36, total cpu=0:00:00.1, real=0:00:00.0, peak res=2817.8M, current mem=2817.8M)
-% Begin Save netlist data ... (date=08/11 23:56:36, mem=2817.8M)
+% Begin Save ccopt configuration ... (date=08/12 00:08:27, mem=2455.4M)
+% End Save ccopt configuration ... (date=08/12 00:08:27, total cpu=0:00:00.0, real=0:00:00.0, peak res=2457.0M, current mem=2457.0M)
+% Begin Save netlist data ... (date=08/12 00:08:27, mem=2457.0M)
 Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/vbin/riscv_pipeline.v.bin in multi-threaded mode...
-% End Save netlist data ... (date=08/11 23:56:36, total cpu=0:00:00.1, real=0:00:00.0, peak res=2818.0M, current mem=2818.0M)
+% End Save netlist data ... (date=08/12 00:08:27, total cpu=0:00:00.1, real=0:00:00.0, peak res=2458.4M, current mem=2458.4M)
 Saving symbol-table file in separate thread ...
 Saving congestion map file in separate thread ...
 Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/riscv_pipeline.route.congmap.gz ...
-% Begin Save AAE data ... (date=08/11 23:56:36, mem=2818.7M)
+% Begin Save AAE data ... (date=08/12 00:08:27, mem=2459.8M)
 Saving AAE Data ...
-% End Save AAE data ... (date=08/11 23:56:36, total cpu=0:00:00.1, real=0:00:00.0, peak res=2818.7M, current mem=2818.7M)
+% End Save AAE data ... (date=08/12 00:08:27, total cpu=0:00:00.1, real=0:00:00.0, peak res=2459.9M, current mem=2459.9M)
 Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/gui.pref.tcl ...
 Saving mode setting ...
 **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
 Saving global file ...
 *info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/riscv_pipeline.bbox.lef
 Saving Drc markers ...
-... 1 markers are saved ...
-... 0 geometry drc markers are saved ...
-... 0 antenna drc markers are saved ...
+... No Drc file written since there is no markers found.
 Saving special route data file in separate thread ...
 Saving PG Conn data in separate thread ...
 Saving placement file in separate thread ...
 Saving route file in separate thread ...
-Saving property file in separate thread ...
 ** Saving stdCellPlacement_binary (version# 2) ...
 Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/riscv_pipeline.prop
 TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: savePGConnFile REAL = 0 : CPU = 0 : MEM = 0.
 Save Adaptive View Pruning View Names to Binary file
-*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=6028.8M) ***
 TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
-*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=6028.8M) ***
+*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=5047.9M) ***
+*** Completed saveRoute (cpu=0:00:00.0 real=0:00:00.0 mem=5047.9M) ***
 TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
 Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/riscv_pipeline.techData.gz' ...
 Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_hierFP.enc.dat.tmp/extraction/' ...
 TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
 TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
-% Begin Save power constraints data ... (date=08/11 23:56:37, mem=2826.0M)
-% End Save power constraints data ... (date=08/11 23:56:37, total cpu=0:00:00.1, real=0:00:00.0, peak res=2826.4M, current mem=2826.4M)
+% Begin Save power constraints data ... (date=08/12 00:08:27, mem=2470.3M)
+% End Save power constraints data ... (date=08/12 00:08:27, total cpu=0:00:00.0, real=0:00:00.0, peak res=2470.6M, current mem=2470.6M)
 rc_typ
 rc_typ
 rc_typ
@@ -389,7 +331,7 @@ libset_tt
 rc_typ
 mode_func
 ../genus/outputs/riscv_pipeline_syn.sdc
-#% End save design ... (date=08/11 23:56:37, total cpu=0:00:01.3, real=0:00:01.0, peak res=2828.3M, current mem=2828.3M)
+#% End save design ... (date=08/12 00:08:28, total cpu=0:00:01.2, real=0:00:01.0, peak res=2473.2M, current mem=2473.2M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -398,6 +340,22 @@ WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
 
 <CMD> report_area > ./reports/area_hierFP.rpt
 <CMD> report_timing > ./reports/timing_hierFP.rpt
+AAE_INFO: opIsDesignInPostRouteState() is 0
+AAE DB initialization (MEM=2486.105469 CPU=0:00:00.0 REAL=0:00:00.0) 
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: riscv_pipeline
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in Single mode...
+Start delay calculation (fullDC) (8 T). (MEM=2690.49)
+siFlow : Timing analysis mode is single, using late cdB files
+Total number of fetched objects 30504
+End delay calculation. (MEM=2815.47 CPU=0:00:08.0 REAL=0:00:01.0)
+End delay calculation (fullDC). (MEM=2707.23 CPU=0:00:09.5 REAL=0:00:02.0)
 <CMD> setMultiColorsHier
 <CMD> all_constraint_modes
 mode_func
@@ -417,10 +375,10 @@ The power planner will set stripe antenna targets to core ring.
 *** Applying global-net connections...
 *** Applied 4 GNC rules (cpu = 0:00:00.0)
 <CMD> addRing -nets {VDD VSS} -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.640 -spacing 0.320 -offset 0.320
-#% Begin addRing (date=08/11 23:56:38, mem=2839.5M)
+#% Begin addRing (date=08/12 00:08:31, mem=2713.5M)
 
-viaInitial starts at Tue Aug 11 23:56:38 2026
-viaInitial ends at Tue Aug 11 23:56:38 2026
+viaInitial starts at Wed Aug 12 00:08:32 2026
+viaInitial ends at Wed Aug 12 00:08:32 2026
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -430,7 +388,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6006.8M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
 Ring generation is complete.
 vias are now being generated.
 addRing created 8 wires.
@@ -446,12 +404,2612 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addRing (date=08/11 23:56:38, total cpu=0:00:00.1, real=0:00:00.0, peak res=2843.4M, current mem=2843.4M)
+#% End addRing (date=08/12 00:08:32, total cpu=0:00:00.1, real=0:00:00.0, peak res=2741.6M, current mem=2741.6M)
+<CMD> createPGPin VDD -geom M9 2.928 2.928 3.568 3.568 -net VDD
+<CMD> createPGPin VSS -geom M9 1.968 1.968 2.608 2.608 -net VSS
+<CMD> setAddStripeMode -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
+<CMD> addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.288 -set_to_set_distance 25.600 -start_from left -start_offset 12.800 -snap_wire_center_to_grid grid
+#% Begin addStripe (date=08/12 00:08:32, mem=2741.6M)
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+Initialize fgc environment(mem: 6076.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Starting stripe generation ...
+Non-Default Mode Option Settings :
+  -use_exact_spacing  1
+  -trim_antenna_back_to_shape  core_ring
+Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+*** Stripes and vias are being generated (current mem: 6076.137)***
+Start to generate stripes.
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 6076.137M)
+Start to generate vias.
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 6076.137M)
+Stripe generation is complete.
+addStripe created 24 wires.
+ViaGen created 48 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M7   |       24       |       NA       |
+|   V7   |       48       |        0       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addStripe (date=08/12 00:08:32, total cpu=0:00:00.1, real=0:00:00.0, peak res=2742.8M, current mem=2742.8M)
+<CMD> setAddStripeMode -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
+<CMD> addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.288 -set_to_set_distance 25.600 -start_from bottom -start_offset 12.800 -snap_wire_center_to_grid grid
+#% Begin addStripe (date=08/12 00:08:32, mem=2742.8M)
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+Initialize fgc environment(mem: 6076.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Starting stripe generation ...
+Non-Default Mode Option Settings :
+  -use_exact_spacing  1
+  -trim_antenna_back_to_shape  core_ring
+The core ring for VDD is incomplete. The core ring will not be used as a boundary for stripes. In this situation, the power planner will generate stripes only within the core area.
+The core ring for VSS is incomplete. The core ring will not be used as a boundary for stripes. In this situation, the power planner will generate stripes only within the core area.
+Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+*** Stripes and vias are being generated (current mem: 6076.137)***
+Start to generate stripes.
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 6076.137M)
+Start to generate vias.
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 6076.137M)
+Stripe generation is complete.
+addStripe created 24 wires.
+ViaGen created 288 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M6   |       24       |       NA       |
+|   V6   |       288      |        0       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addStripe (date=08/12 00:08:32, total cpu=0:00:00.1, real=0:00:00.0, peak res=2742.8M, current mem=2742.8M)
+<CMD> setAddStripeMode -stacked_via_bottom_layer M5 -stacked_via_top_layer M6
+<CMD> addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.480 -spacing 0.288 -set_to_set_distance 12.288 -start_from left -start_offset 6.144 -snap_wire_center_to_grid grid
+#% Begin addStripe (date=08/12 00:08:32, mem=2742.8M)
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+Initialize fgc environment(mem: 6076.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Starting stripe generation ...
+Non-Default Mode Option Settings :
+  -use_exact_spacing  1
+  -trim_antenna_back_to_shape  core_ring
+The core ring for VDD is incomplete. The core ring will not be used as a boundary for stripes. In this situation, the power planner will generate stripes only within the core area.
+The core ring for VSS is incomplete. The core ring will not be used as a boundary for stripes. In this situation, the power planner will generate stripes only within the core area.
+Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+*** Stripes and vias are being generated (current mem: 6076.137)***
+Start to generate stripes.
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 6076.137M)
+Start to generate vias.
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 6076.137M)
+Stripe generation is complete.
+addStripe created 50 wires.
+ViaGen created 600 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M5   |       50       |       NA       |
+|   V5   |       600      |        0       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addStripe (date=08/12 00:08:32, total cpu=0:00:00.1, real=0:00:00.0, peak res=2742.8M, current mem=2742.8M)
+<CMD> setAddStripeMode -stacked_via_bottom_layer M1 -stacked_via_top_layer M5
+<CMD> addStripe -nets {VDD VSS} -layer M4 -direction horizontal -width 0.480 -spacing 0.288 -set_to_set_distance 12.288 -start_from bottom -start_offset 6.144 -snap_wire_center_to_grid grid
+#% Begin addStripe (date=08/12 00:08:32, mem=2742.8M)
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+Initialize fgc environment(mem: 6076.1M) ...  done(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading wires (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Loading via instances (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Starting stripe generation ...
+Non-Default Mode Option Settings :
+  -use_exact_spacing  1
+  -trim_antenna_back_to_shape  core_ring
+The core ring for VDD is incomplete. The core ring will not be used as a boundary for stripes. In this situation, the power planner will generate stripes only within the core area.
+The core ring for VSS is incomplete. The core ring will not be used as a boundary for stripes. In this situation, the power planner will generate stripes only within the core area.
+Completing 10% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 20% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 30% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 40% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 50% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 60% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 70% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 80% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 90% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+Completing 100% stripe generation(cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 6076.1M)
+*** Stripes and vias are being generated (current mem: 6076.137)***
+Start to generate stripes.
+Stripe generate is completed (cpu time: 0:00:00.0, peak mem: 6076.137M)
+Start to generate vias.
+    Completing 10% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 20% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 30% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 40% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 50% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 60% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 70% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 80% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 90% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+    Completing 100% (cpu time: 0:00:00.0, peak mem: 6076.137M)
+  stripes and vias are completed(total cpu time: 0:00:00.0, peak mem: 6076.137M)
+Stripe generation is complete.
+addStripe created 50 wires.
+ViaGen created 1250 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M4   |       50       |       NA       |
+|   V4   |      1250      |        0       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addStripe (date=08/12 00:08:32, total cpu=0:00:00.1, real=0:00:00.0, peak res=2742.8M, current mem=2742.8M)
+<CMD> setSrouteMode -viaConnectToShape {ring stripe}
+<CMD> sroute -nets {VDD VSS} -connect corePin -corePinTarget stripe -allowJogging 0 -allowLayerChange 0
+#% Begin sroute (date=08/12 00:08:32, mem=2742.9M)
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+*** Begin SPECIAL ROUTE on Wed Aug 12 00:08:32 2026 ***
+SPECIAL ROUTE ran on directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus
+SPECIAL ROUTE ran on machine: user1-EliteMini (Linux 7.0.0-28-generic x86_64 3.29Ghz)
+
+Begin option processing ...
+srouteConnectPowerBump set to false
+routeSelectNet set to "VDD VSS"
+routeSpecial set to true
+srouteConnectBlockPin set to false
+srouteConnectConverterPin set to false
+srouteConnectPadPin set to false
+srouteConnectStripe set to false
+srouteCorePinTarget set to "stripe"
+srouteFollowCorePinEnd set to 3
+srouteFollowPadPin set to false
+srouteNoLayerChangeRoute set to true
+srouteNoViaOnWireShape set to "padring blockring blockpin coverpin noshape blockwire corewire followpin iowire"
+sroutePadPinAllPorts set to true
+sroutePreserveExistingRoutes set to true
+srouteRoutePowerBarPortOnBothDir set to true
+srouteStraightConnections set to "straightWithDrcClean"
+End option processing: cpu: 0:00:00, real: 0:00:00, peak: 3689.00 megs.
+
+Reading DB technology information...
+Finished reading DB technology information.
+Reading floorplan and netlist information...
+Finished reading floorplan and netlist information.
+**WARN: (IMPSR-4302):	Cap-table/qrcTechFile is found in the design, so the same information from the technology file will be ignored.
+Read in 21 layers, 10 routing layers, 1 overlap layer
+Read in 1 nondefault rule, 0 used
+Read in 424 macros, 70 used
+Read in 70 components
+  70 core components: 70 unplaced, 0 placed, 0 fixed
+Read in 2 physical pins
+  2 physical pins: 0 unplaced, 0 placed, 2 fixed
+Read in 310 logical pins
+Read in 310 nets
+Read in 2 special nets, 2 routed
+Read in 142 terminals
+2 nets selected.
+
+Begin power routing ...
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (145.01, 280.37).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (170.64, 280.37).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (157.440002, 243.600006) (157.919998, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (169.751999, 243.600006) (170.231995, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (182.063995, 243.600006) (182.544006, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (194.376007, 243.600006) (194.856003, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (206.688004, 243.600006) (207.167999, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (219.000000, 243.600006) (219.479996, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (231.311996, 243.600006) (231.792007, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (243.408005, 243.600006) (243.888000, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (255.720001, 243.600006) (256.200012, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (268.032013, 243.600006) (268.511993, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (280.343994, 243.600006) (280.824005, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (292.656006, 243.600006) (293.135986, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (304.967987, 243.600006) (305.447998, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (10.128000, 243.600006) (10.608000, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (22.224001, 243.600006) (22.704000, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (34.535999, 243.600006) (35.015999, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (46.848000, 243.600006) (47.327999, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (59.160000, 243.600006) (59.639999, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (71.472000, 243.600006) (71.952003, 243.695999) to avoid Cut_Short  violation.
+**WARN: (IMPPP-570):	The power planner trimmed the newly generated via on the V4 layer at (83.783997, 243.600006) (84.264000, 243.695999) to avoid Cut_Short  violation.
+**WARN: (EMS-27):	Message (IMPPP-570) has exceeded the current message display limit of 20.
+To increase the message display limit, refer to the product command reference manual.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M5 & M6, size: 0.64 x 0.07 at (145.01, 222.05).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M5 & M6, size: 0.64 x 0.07 at (145.01, 196.13).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (17.14, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (42.48, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (68.11, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (93.74, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (119.38, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (145.01, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (170.64, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (196.27, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (221.90, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (247.54, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (272.88, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.64 x 0.07 at (298.51, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.48 x 0.07 at (157.68, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.48 x 0.07 at (169.99, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.48 x 0.07 at (182.30, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (IMPPP-610):	The power planner failed to find a matching VIARULE, so no via was created between layer: M4 & M5, size: 0.48 x 0.07 at (194.62, 170.21).
+Type 'man IMPPP-610' for more detail.
+**WARN: (EMS-27):	Message (IMPPP-610) has exceeded the current message display limit of 20.
+To increase the message display limit, refer to the product command reference manual.
+CPU time for VDD FollowPin 1 seconds
+CPU time for VSS FollowPin 1 seconds
+  Number of Core ports routed: 0  open: 572
+  Number of Followpin connections: 286
+End power routing: cpu: 0:00:03, real: 0:00:04, peak: 3689.00 megs.
+
+
+
+ Begin updating DB with routing results ...
+ Updating DB with 2 io pins ...
+ Updating DB with 0 via definition ...
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+sroute created 286 wires.
+ViaGen created 18599 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M1   |       286      |       NA       |
+|   V1   |      4670      |        0       |
+|   V2   |      4670      |        0       |
+|   V3   |      4670      |        0       |
+|   V4   |      4445      |        0       |
+|   V5   |       72       |        0       |
+|   V6   |       72       |        0       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End sroute (date=08/12 00:08:36, total cpu=0:00:03.5, real=0:00:04.0, peak res=2822.9M, current mem=2812.2M)
+<CMD> editTrim -nets {VDD VSS}
+<CMD> clearDrc
+<CMD> verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_pg.rpt
+VERIFY_CONNECTIVITY use new engine.
+
+******** Start: VERIFY CONNECTIVITY ********
+Start Time: Wed Aug 12 00:08:36 2026
+
+Design Name: riscv_pipeline
+Database Units: 4000
+Design Boundary: (0.0000, 0.0000) (316.9440, 316.0800)
+Error Limit = 1000; Warning Limit = 100
+Check all nets
+Use 8 pthreads
+**WARN: (IMPVFC-96):	Instance pin C of net EX/MUL/n_1125 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8953 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin B of net EX/MUL/n_1125 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8862 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin Y of net EX/MUL/n_1125 has not been placed. Please make sure instance EX/MUL/g13715 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin C of net EX/MUL/n_1126 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8945 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin B of net EX/MUL/n_1126 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8860 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin Y of net EX/MUL/n_1126 has not been placed. Please make sure instance EX/MUL/g13712 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin C of net EX/MUL/n_1133 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8961 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin B of net EX/MUL/n_1133 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8829 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin Y of net EX/MUL/n_1133 has not been placed. Please make sure instance EX/MUL/g13768 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin C of net EX/MUL/n_1141 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8947 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin B of net EX/MUL/n_1141 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8848 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin Y of net EX/MUL/n_1141 has not been placed. Please make sure instance EX/MUL/g13762 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin C of net EX/MUL/n_1134 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8910 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin B of net EX/MUL/n_1134 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8826 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin Y of net EX/MUL/n_1134 has not been placed. Please make sure instance EX/MUL/g13761 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin C of net EX/MUL/n_1127 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8940 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin B of net EX/MUL/n_1127 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8879 is placed and rerun verifyConnectivity.
+**WARN: (EMS-27):	Message (IMPVFC-96) has exceeded the current message display limit of 20.
+To increase the message display limit, refer to the product command reference manual.
+**WARN: (IMPVFC-96):	Instance pin C of net EX/MUL/n_1149 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8918 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin C of net EX/MUL/n_1128 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8927 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-96):	Instance pin C of net EX/MUL/n_1142 has not been placed. Please make sure instance EX/MUL/csa_tree_add_158_55_I4_id_g8907 is placed and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin meip_i of net meip_i has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin reset_n of net reset_n has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin reset_vector_in[26] of net reset_vector_in[26] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin reset_vector_in[28] of net reset_vector_in[28] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin reset_vector_in[18] of net reset_vector_in[18] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin reset_vector_in[20] of net reset_vector_in[20] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin reset_vector_in[12] of net reset_vector_in[12] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin reset_vector_in[10] of net reset_vector_in[10] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin reset_vector_in[4] of net reset_vector_in[4] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin icache_addr[30] of net icache_addr[30] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin icache_addr[22] of net icache_addr[22] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin icache_addr[14] of net icache_addr[14] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin icache_addr[6] of net icache_addr[6] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin icache_read_data[30] of net icache_read_data[30] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin icache_read_data[22] of net icache_read_data[22] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin icache_read_data[14] of net icache_read_data[14] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin icache_read_data[6] of net icache_read_data[6] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin icache_stall of net icache_stall has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (IMPVFC-97):	IO pin dcache_addr[26] of net dcache_addr[26] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+**WARN: (EMS-27):	Message (IMPVFC-97) has exceeded the current message display limit of 20.
+To increase the message display limit, refer to the product command reference manual.
+**WARN: (IMPVFC-97):	IO pin reset_vector_in[2] of net reset_vector_in[2] has not been assigned. Please make sure it is assigned and rerun verifyConnectivity.
+Net VSS: dangling Wire.
+
+Begin Summary 
+    27 Problem(s) (IMPVFC-94): The net has dangling wire(s).
+    27 total info(s) created.
+End Summary
+
+End Time: Wed Aug 12 00:08:36 2026
+Time Elapsed: 0:00:00.0
+
+******** End: VERIFY CONNECTIVITY ********
+  Verification Complete : 27 Viols.  0 Wrngs.
+  (CPU Time: 0:00:00.2  MEM: -1.992M)
+
+<CMD> verify_drc -report ./verify_rpt/drc_after_pg.rpt
+#-check_same_via_cell true               # bool, default=false, user setting
+#-report ./verify_rpt/drc_after_pg.rpt   # string, default="", user setting
+ *** Starting Verify DRC (MEM: 6082.1) ***
+
+  VERIFY DRC ...... Starting Verification
+  VERIFY DRC ...... Initializing
+  VERIFY DRC ...... Deleting Existing Violations
+  VERIFY DRC ...... Creating Sub-Areas
+ VERIFY_DRC: checking all layers except Pad to Pad ...
+  VERIFY DRC ...... Using new threading
+ VERIFY DRC ...... Thread : 6 finished.
+ VERIFY DRC ...... Thread : 4 finished.
+ VERIFY DRC ...... Thread : 0 finished.
+ VERIFY DRC ...... Thread : 2 finished.
+ VERIFY DRC ...... Thread : 3 finished.
+ VERIFY DRC ...... Thread : 5 finished.
+ VERIFY DRC ...... Thread : 1 finished.
+ VERIFY DRC ...... Thread : 7 finished.
+**WARN: (IMPVFG-1103):	VERIFY DRC did not complete: Number of violations hits the Error Limit [1000]
+
+  Verification Complete : 1000 Viols.
+
+ Violation Summary By Layer and Type:
+
+	          Short   CShort     Rect   MetSpc   OffGrd   Totals
+	M4          743        0       88       59        0      890
+	V4            0       92        0        0        0       92
+	M5            0        0        0        4        0        4
+	M6            0        0        0        0       14       14
+	Totals      743       92       88       63       14     1000
+
+ *** End Verify DRC (CPU TIME: 0:00:00.3  ELAPSED TIME: 0:00:00.0  MEM: 0.0M) ***
+
+<CMD> setPinConstraint -corner_to_pin_distance 8
+**WARN: (IMPPTN-3837):	setPinConstraint command usage without specifying top-cell name will be obsolete in next major release. Command will enforce top-cell name using -cell option.
+Constraint is applied to top level cell riscv_pipeline.
+<CMD> setPinAssignMode -pinEditInBatch true
+<CMD> editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side BOTTOM -layer M7 -honorConstraint 1 -pin {clk reset_n riscv_start {reset_vector_in[31]} {reset_vector_in[30]} {reset_vector_in[29]} {reset_vector_in[28]} {reset_vector_in[27]} {reset_vector_in[26]} {reset_vector_in[25]} {reset_vector_in[24]} {reset_vector_in[23]} {reset_vector_in[22]} {reset_vector_in[21]} {reset_vector_in[20]} {reset_vector_in[19]} {reset_vector_in[18]} {reset_vector_in[17]} {reset_vector_in[16]} {reset_vector_in[15]} {reset_vector_in[14]} {reset_vector_in[13]} {reset_vector_in[12]} {reset_vector_in[11]} {reset_vector_in[10]} {reset_vector_in[9]} {reset_vector_in[8]} {reset_vector_in[7]} {reset_vector_in[6]} {reset_vector_in[5]} {reset_vector_in[4]} {reset_vector_in[3]} {reset_vector_in[2]} {reset_vector_in[1]} {reset_vector_in[0]}}
+Successfully spread [35] pins.
+editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 6082.1M).
+<CMD> editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side LEFT -layer M6 -honorConstraint 1 -pin {icache_read_req {icache_addr[31]} {icache_addr[30]} {icache_addr[29]} {icache_addr[28]} {icache_addr[27]} {icache_addr[26]} {icache_addr[25]} {icache_addr[24]} {icache_addr[23]} {icache_addr[22]} {icache_addr[21]} {icache_addr[20]} {icache_addr[19]} {icache_addr[18]} {icache_addr[17]} {icache_addr[16]} {icache_addr[15]} {icache_addr[14]} {icache_addr[13]} {icache_addr[12]} {icache_addr[11]} {icache_addr[10]} {icache_addr[9]} {icache_addr[8]} {icache_addr[7]} {icache_addr[6]} {icache_addr[5]} {icache_addr[4]} {icache_addr[3]} {icache_addr[2]} {icache_addr[1]} {icache_addr[0]} {icache_read_data[31]} {icache_read_data[30]} {icache_read_data[29]} {icache_read_data[28]} {icache_read_data[27]} {icache_read_data[26]} {icache_read_data[25]} {icache_read_data[24]} {icache_read_data[23]} {icache_read_data[22]} {icache_read_data[21]} {icache_read_data[20]} {icache_read_data[19]} {icache_read_data[18]} {icache_read_data[17]} {icache_read_data[16]} {icache_read_data[15]} {icache_read_data[14]} {icache_read_data[13]} {icache_read_data[12]} {icache_read_data[11]} {icache_read_data[10]} {icache_read_data[9]} {icache_read_data[8]} {icache_read_data[7]} {icache_read_data[6]} {icache_read_data[5]} {icache_read_data[4]} {icache_read_data[3]} {icache_read_data[2]} {icache_read_data[1]} {icache_read_data[0]} icache_hit icache_stall}
+Successfully spread [67] pins.
+editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 6082.1M).
+<CMD> editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side RIGHT -layer M6 -honorConstraint 1 -pin {dcache_read_req dcache_write_req {dcache_addr[31]} {dcache_addr[30]} {dcache_addr[29]} {dcache_addr[28]} {dcache_addr[27]} {dcache_addr[26]} {dcache_addr[25]} {dcache_addr[24]} {dcache_addr[23]} {dcache_addr[22]} {dcache_addr[21]} {dcache_addr[20]} {dcache_addr[19]} {dcache_addr[18]} {dcache_addr[17]} {dcache_addr[16]} {dcache_addr[15]} {dcache_addr[14]} {dcache_addr[13]} {dcache_addr[12]} {dcache_addr[11]} {dcache_addr[10]} {dcache_addr[9]} {dcache_addr[8]} {dcache_addr[7]} {dcache_addr[6]} {dcache_addr[5]} {dcache_addr[4]} {dcache_addr[3]} {dcache_addr[2]} {dcache_addr[1]} {dcache_addr[0]} {dcache_write_data[31]} {dcache_write_data[30]} {dcache_write_data[29]} {dcache_write_data[28]} {dcache_write_data[27]} {dcache_write_data[26]} {dcache_write_data[25]} {dcache_write_data[24]} {dcache_write_data[23]} {dcache_write_data[22]} {dcache_write_data[21]} {dcache_write_data[20]} {dcache_write_data[19]} {dcache_write_data[18]} {dcache_write_data[17]} {dcache_write_data[16]} {dcache_write_data[15]} {dcache_write_data[14]} {dcache_write_data[13]} {dcache_write_data[12]} {dcache_write_data[11]} {dcache_write_data[10]} {dcache_write_data[9]} {dcache_write_data[8]} {dcache_write_data[7]} {dcache_write_data[6]} {dcache_write_data[5]} {dcache_write_data[4]} {dcache_write_data[3]} {dcache_write_data[2]} {dcache_write_data[1]} {dcache_write_data[0]} {dcache_read_data[31]} {dcache_read_data[30]} {dcache_read_data[29]} {dcache_read_data[28]} {dcache_read_data[27]} {dcache_read_data[26]} {dcache_read_data[25]} {dcache_read_data[24]} {dcache_read_data[23]} {dcache_read_data[22]} {dcache_read_data[21]} {dcache_read_data[20]} {dcache_read_data[19]} {dcache_read_data[18]} {dcache_read_data[17]} {dcache_read_data[16]} {dcache_read_data[15]} {dcache_read_data[14]} {dcache_read_data[13]} {dcache_read_data[12]} {dcache_read_data[11]} {dcache_read_data[10]} {dcache_read_data[9]} {dcache_read_data[8]} {dcache_read_data[7]} {dcache_read_data[6]} {dcache_read_data[5]} {dcache_read_data[4]} {dcache_read_data[3]} {dcache_read_data[2]} {dcache_read_data[1]} {dcache_read_data[0]} dcache_hit dcache_stall {mem_size_top[1]} {mem_size_top[0]} mem_unsigned_top}
+Successfully spread [103] pins.
+editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 6082.1M).
+<CMD> editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side TOP -layer M7 -honorConstraint 1 -pin {meip_i msip_i mtip_i riscv_done wfi_sleep_out dbg_halt_req dbg_resume_req dbg_halted {dbg_reg_read_addr[15]} {dbg_reg_read_addr[14]} {dbg_reg_read_addr[13]} {dbg_reg_read_addr[12]} {dbg_reg_read_addr[11]} {dbg_reg_read_addr[10]} {dbg_reg_read_addr[9]} {dbg_reg_read_addr[8]} {dbg_reg_read_addr[7]} {dbg_reg_read_addr[6]} {dbg_reg_read_addr[5]} {dbg_reg_read_addr[4]} {dbg_reg_read_addr[3]} {dbg_reg_read_addr[2]} {dbg_reg_read_addr[1]} {dbg_reg_read_addr[0]} {dbg_reg_read_data[31]} {dbg_reg_read_data[30]} {dbg_reg_read_data[29]} {dbg_reg_read_data[28]} {dbg_reg_read_data[27]} {dbg_reg_read_data[26]} {dbg_reg_read_data[25]} {dbg_reg_read_data[24]} {dbg_reg_read_data[23]} {dbg_reg_read_data[22]} {dbg_reg_read_data[21]} {dbg_reg_read_data[20]} {dbg_reg_read_data[19]} {dbg_reg_read_data[18]} {dbg_reg_read_data[17]} {dbg_reg_read_data[16]} {dbg_reg_read_data[15]} {dbg_reg_read_data[14]} {dbg_reg_read_data[13]} {dbg_reg_read_data[12]} {dbg_reg_read_data[11]} {dbg_reg_read_data[10]} {dbg_reg_read_data[9]} {dbg_reg_read_data[8]} {dbg_reg_read_data[7]} {dbg_reg_read_data[6]} {dbg_reg_read_data[5]} {dbg_reg_read_data[4]} {dbg_reg_read_data[3]} {dbg_reg_read_data[2]} {dbg_reg_read_data[1]} {dbg_reg_read_data[0]} dbg_reg_write_en {dbg_reg_write_addr[15]} {dbg_reg_write_addr[14]} {dbg_reg_write_addr[13]} {dbg_reg_write_addr[12]} {dbg_reg_write_addr[11]} {dbg_reg_write_addr[10]} {dbg_reg_write_addr[9]} {dbg_reg_write_addr[8]} {dbg_reg_write_addr[7]} {dbg_reg_write_addr[6]} {dbg_reg_write_addr[5]} {dbg_reg_write_addr[4]} {dbg_reg_write_addr[3]} {dbg_reg_write_addr[2]} {dbg_reg_write_addr[1]} {dbg_reg_write_addr[0]} {dbg_reg_write_data[31]} {dbg_reg_write_data[30]} {dbg_reg_write_data[29]} {dbg_reg_write_data[28]} {dbg_reg_write_data[27]} {dbg_reg_write_data[26]} {dbg_reg_write_data[25]} {dbg_reg_write_data[24]} {dbg_reg_write_data[23]} {dbg_reg_write_data[22]} {dbg_reg_write_data[21]} {dbg_reg_write_data[20]} {dbg_reg_write_data[19]} {dbg_reg_write_data[18]} {dbg_reg_write_data[17]} {dbg_reg_write_data[16]} {dbg_reg_write_data[15]} {dbg_reg_write_data[14]} {dbg_reg_write_data[13]} {dbg_reg_write_data[12]} {dbg_reg_write_data[11]} {dbg_reg_write_data[10]} {dbg_reg_write_data[9]} {dbg_reg_write_data[8]} {dbg_reg_write_data[7]} {dbg_reg_write_data[6]} {dbg_reg_write_data[5]} {dbg_reg_write_data[4]} {dbg_reg_write_data[3]} {dbg_reg_write_data[2]} {dbg_reg_write_data[1]} {dbg_reg_write_data[0]}}
+Successfully spread [105] pins.
+editPin : finished (cpu = 0:00:00.0 real = 0:00:00.0, mem = 6082.1M).
+<CMD> setPinAssignMode -pinEditInBatch false
+<CMD> saveDesign ./saved/riscv_pipeline_powerplan.enc
+#% Begin save design ... (date=08/12 00:08:36, mem=2836.1M)
+% Begin Save ccopt configuration ... (date=08/12 00:08:36, mem=2836.1M)
+% End Save ccopt configuration ... (date=08/12 00:08:36, total cpu=0:00:00.1, real=0:00:00.0, peak res=2836.4M, current mem=2836.4M)
+% Begin Save netlist data ... (date=08/12 00:08:36, mem=2836.4M)
+Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_powerplan.enc.dat/vbin/riscv_pipeline.v.bin in multi-threaded mode...
+% End Save netlist data ... (date=08/12 00:08:36, total cpu=0:00:00.1, real=0:00:00.0, peak res=2836.5M, current mem=2836.5M)
+Saving symbol-table file in separate thread ...
+Saving congestion map file in separate thread ...
+Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_powerplan.enc.dat/riscv_pipeline.route.congmap.gz ...
+% Begin Save AAE data ... (date=08/12 00:08:36, mem=2837.0M)
+Saving AAE Data ...
+% End Save AAE data ... (date=08/12 00:08:36, total cpu=0:00:00.1, real=0:00:00.0, peak res=2837.0M, current mem=2836.2M)
+Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_powerplan.enc.dat/gui.pref.tcl ...
+Saving mode setting ...
+**WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+Saving global file ...
+*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_powerplan.enc.dat/riscv_pipeline.bbox.lef
+Saving Drc markers ...
+... 1027 markers are saved ...
+... 1000 geometry drc markers are saved ...
+... 0 antenna drc markers are saved ...
+Saving special route data file in separate thread ...
+Saving PG file in separate thread ...
+Saving placement file in separate thread ...
+Saving route file in separate thread ...
+Saving property file in separate thread ...
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_powerplan.enc.dat/riscv_pipeline.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Wed Aug 12 00:08:37 2026)
+Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_powerplan.enc.dat/riscv_pipeline.prop
+** Saving stdCellPlacement_binary (version# 2) ...
+Save Adaptive View Pruning View Names to Binary file
+*** Completed saveProperty (cpu=0:00:00.0 real=0:00:00.0 mem=6154.2M) ***
+TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
+*** Completed savePGFile (cpu=0:00:00.1 real=0:00:00.0 mem=6130.2M) ***
+TAT_INFO: ::savePGFile REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
+*** Completed saveRoute (cpu=0:00:00.1 real=0:00:00.0 mem=6114.2M) ***
+TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
+Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_powerplan.enc.dat/riscv_pipeline.techData.gz' ...
+Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_powerplan.enc.dat/extraction/' ...
+TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
+% Begin Save power constraints data ... (date=08/12 00:08:37, mem=2840.6M)
+% End Save power constraints data ... (date=08/12 00:08:37, total cpu=0:00:00.1, real=0:00:00.0, peak res=2840.6M, current mem=2840.6M)
+rc_typ
+rc_typ
+rc_typ
+Generated self-contained design riscv_pipeline_powerplan.enc.dat
+libset_tt
+rc_typ
+mode_func
+../genus/outputs/riscv_pipeline_syn.sdc
+#% End save design ... (date=08/12 00:08:37, total cpu=0:00:01.3, real=0:00:01.0, peak res=2840.6M, current mem=2839.9M)
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
+*** Message Summary: 1 warning(s), 0 error(s)
+
+<CMD> setDelayCalMode -SIAware false -equivalent_waveform_model none
+<CMD> setHierMode -optStage preCTS
+<CMD> setPlaceMode -reset
+<CMD> setPlaceMode -place_global_uniform_density true -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_design_refine_macro false
+<CMD> place_design
+*** placeDesign #1 [begin] () : totSession cpu/real = 0:01:09.2/0:00:31.7 (2.2), mem = 6082.1M
+*** Starting placeDesign default flow ***
+*** Start deleteBufferTree ***
+Info: Detect buffers to remove automatically.
+Analyzing netlist ...
+Updating netlist
+
+*summary: 3060 instances (buffers/inverters) removed
+*** Finish deleteBufferTree (0:00:02.3) ***
+**INFO: Enable pre-place timing setting for timing analysis
+Set Using Default Delay Limit as 101.
+**WARN: (IMPDC-1629):	The default delay limit was set to 101. This is less than the default of 1000 and may result in inaccurate delay calculation for nets with a fanout higher than the setting.  If needed, the default delay limit may be adjusted by running the command 'set delaycal_use_default_delay_limit'.
+Set Default Net Delay as 0 ps.
+Set Default Net Load as 0 pF. 
+Set Default Input Pin Transition as 1 ps.
+**INFO: Analyzing IO path groups for slack adjustment
+Effort level <high> specified for reg2reg_tmp.1789970 path_group
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: riscv_pipeline
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in Single mode...
+Start delay calculation (fullDC) (8 T). (MEM=2880.71)
+**WARN: (IMPESI-3478):	Simulation based Equivalent Waveform Model without waveform propagation setting is not properly supported, using moment based EWM instead.
+Total number of fetched objects 27709
+End delay calculation. (MEM=3302.7 CPU=0:00:10.9 REAL=0:00:02.0)
+End delay calculation (fullDC). (MEM=3302.7 CPU=0:00:11.5 REAL=0:00:02.0)
+**INFO: Disable pre-place timing setting for timing analysis
+Set Using Default Delay Limit as 1000.
+Set Default Net Delay as 1000 ps.
+Set Default Input Pin Transition as 0.1 ps.
+Set Default Net Load as 0.5 pF. 
+**INFO: Pre-place timing setting for timing analysis already disabled
+Deleted 0 physical inst  (cell - / prefix -).
+INFO: #ExclusiveGroups=0
+INFO: There are no Exclusive Groups.
+*** Starting "NanoPlace(TM) placement v#9 (mem=5976.6M)" ...
+Estimated loop count for BSM: 31020
+*** Build Buffered Sizing Timing Model (Used Compact Buffer Set) ...(cpu=0:00:00.5 mem=6040.6M) ***
+*** Build Virtual Sizing Timing Model
+(cpu=0:00:00.8 mem=6040.6M) ***
+No user-set net weight.
+Net fanout histogram:
+2		: 17191 (62.0%) nets
+3		: 2994 (10.8%) nets
+4     -	14	: 6733 (24.3%) nets
+15    -	39	: 432 (1.6%) nets
+40    -	79	: 333 (1.2%) nets
+80    -	159	: 20 (0.1%) nets
+160   -	319	: 4 (0.0%) nets
+320   -	639	: 0 (0.0%) nets
+640   -	1279	: 0 (0.0%) nets
+1280  -	2559	: 0 (0.0%) nets
+2560  -	5119	: 0 (0.0%) nets
+5120+		: 2 (0.0%) nets
+**WARN: (IMPSP-196):	User sets both -place_global_uniform_density and -place_global_initial_padding_level options. Overriding -place_global_initial_padding_level to 5.
+Scan chains were not defined.
+#std cell=27536 (0 fixed + 27536 movable) #buf cell=0 #inv cell=1457 #block=0 (0 floating + 0 preplaced)
+#ioInst=0 #net=27709 #term=121244 #term/net=4.38, #fixedIo=0, #floatIo=0, #fixedPin=0, #floatPin=309
+stdCell: 27536 single + 0 double + 0 multi
+Total standard cell length = 61.4451 (mm), area = 0.0664 (mm^2)
+Estimated cell power/ground rail width = 0.101 um
+Average module density = 0.698.
+Density for the design = 0.698.
+       = stdcell_area 284468 sites (66361 um^2) / alloc_area 407835 sites (95140 um^2).
+Pin Density = 0.2973.
+            = total # of pins 121244 / total area 407835.
+No spares found within logical modules, disabling '-moduleAwareSpare'.
+Enabling multi-CPU acceleration with 8 CPU(s) for placement
+[spp] 0
+Clock gating cells determined by native netlist tracing.
+=== lastAutoLevel = 9 
+Iteration  1: Total net bbox = 1.488e+05 (7.64e+04 7.24e+04)
+              Est.  stn bbox = 1.681e+05 (8.65e+04 8.17e+04)
+              cpu = 0:00:00.1 real = 0:00:00.0 mem = 6228.2M
+Iteration  2: Total net bbox = 1.488e+05 (7.64e+04 7.24e+04)
+              Est.  stn bbox = 1.681e+05 (8.65e+04 8.17e+04)
+              cpu = 0:00:00.0 real = 0:00:00.0 mem = 6228.2M
+Iteration  3: Total net bbox = 1.463e+05 (7.58e+04 7.05e+04)
+              Est.  stn bbox = 1.845e+05 (9.70e+04 8.75e+04)
+              cpu = 0:00:05.1 real = 0:00:01.0 mem = 6452.3M
+Active setup views:
+    view_tt
+Iteration  4: Total net bbox = 3.170e+05 (1.07e+05 2.10e+05)
+              Est.  stn bbox = 4.065e+05 (1.38e+05 2.69e+05)
+              cpu = 0:00:06.9 real = 0:00:01.0 mem = 6452.3M
+Iteration  5: Total net bbox = 3.907e+05 (1.68e+05 2.23e+05)
+              Est.  stn bbox = 5.004e+05 (2.19e+05 2.81e+05)
+              cpu = 0:00:07.9 real = 0:00:02.0 mem = 6452.3M
+Iteration  6: Total net bbox = 3.814e+05 (1.67e+05 2.14e+05)
+              Est.  stn bbox = 5.207e+05 (2.33e+05 2.88e+05)
+              cpu = 0:00:11.5 real = 0:00:02.0 mem = 6580.3M
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+[NR-eGR] Started Early Global Route kernel ( Curr Mem: 4.85 MB )
+Iteration  7: Total net bbox = 3.991e+05 (1.85e+05 2.14e+05)
+              Est.  stn bbox = 5.391e+05 (2.51e+05 2.88e+05)
+              cpu = 0:00:00.8 real = 0:00:00.0 mem = 6436.3M
+Iteration  8: Total net bbox = 3.991e+05 (1.85e+05 2.14e+05)
+              Est.  stn bbox = 5.391e+05 (2.51e+05 2.88e+05)
+              cpu = 0:00:10.9 real = 0:00:06.0 mem = 6430.3M
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Iteration  9: Total net bbox = 4.085e+05 (1.93e+05 2.16e+05)
+              Est.  stn bbox = 5.638e+05 (2.68e+05 2.96e+05)
+              cpu = 0:00:17.0 real = 0:00:03.0 mem = 6436.3M
+Iteration 10: Total net bbox = 4.085e+05 (1.93e+05 2.16e+05)
+              Est.  stn bbox = 5.638e+05 (2.68e+05 2.96e+05)
+              cpu = 0:00:10.9 real = 0:00:06.0 mem = 6430.3M
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Iteration 11: Total net bbox = 4.262e+05 (2.04e+05 2.22e+05)
+              Est.  stn bbox = 5.827e+05 (2.79e+05 3.03e+05)
+              cpu = 0:00:14.8 real = 0:00:03.0 mem = 6436.3M
+Iteration 12: Total net bbox = 4.262e+05 (2.04e+05 2.22e+05)
+              Est.  stn bbox = 5.827e+05 (2.79e+05 3.03e+05)
+              cpu = 0:00:10.8 real = 0:00:06.0 mem = 6430.3M
+Iteration 13: Total net bbox = 4.361e+05 (2.05e+05 2.31e+05)
+              Est.  stn bbox = 5.883e+05 (2.78e+05 3.10e+05)
+              cpu = 0:00:29.4 real = 0:00:05.0 mem = 6436.3M
+Iteration 14: Total net bbox = 4.361e+05 (2.05e+05 2.31e+05)
+              Est.  stn bbox = 5.883e+05 (2.78e+05 3.10e+05)
+              cpu = 0:00:00.1 real = 0:00:00.0 mem = 6436.3M
+*** cost = 4.361e+05 (2.05e+05 2.31e+05) (cpu for global=0:02:07) real=0:00:36.0***
+Placement multithread real runtime: 0:00:36.0 with 8 threads.
+Info: 0 clock gating cells identified, 0 (on average) moved 0/7
+Solver runtime cpu: 0:01:29 real: 0:00:14.5
+Core Placement runtime cpu: 0:01:33 real: 0:00:17.0
+Begin: Reorder Scan Chains
+**WARN: (IMPSP-9025):	No scan chain specified/traced.
+Type 'man IMPSP-9025' for more detail.
+End: Reorder Scan Chains
+*** Starting refinePlace (0:03:42 mem=6436.3M) ***
+Total net bbox length = 4.361e+05 (2.052e+05 2.309e+05) (ext = 3.539e+04)
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Move report: Detail placement moves 27535 insts, mean move: 0.52 um, max move: 25.89 um 
+	Max move on inst (BPU/BTB/g70221): (113.22, 142.12) --> (134.78, 146.45)
+	Runtime: CPU: 0:00:08.3 REAL: 0:00:02.0 MEM: 6532.3MB
+Summary Report:
+Instances move: 27535 (out of 27536 movable)
+Instances flipped: 1
+Mean displacement: 0.52 um
+Max displacement: 25.89 um (Instance: BPU/BTB/g70221) (113.216, 142.121) -> (134.784, 146.448)
+	Length: 6 sites, height: 1 rows, site name: asap7sc7p5t, cell type: AND2x2_ASAP7_75t_L
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 4.230e+05 (1.912e+05 2.318e+05) (ext = 3.531e+04)
+Runtime: CPU: 0:00:08.4 REAL: 0:00:02.0 MEM: 6532.3MB
+*** Finished refinePlace (0:03:51 mem=6532.3M) ***
+*** End of Placement (cpu=0:02:24, real=0:00:42.0, mem=6564.3M) ***
+default core: bins with density > 0.750 = 25.92 % ( 218 / 841 )
+Density distribution unevenness ratio = 4.612%
+*** Free Virtual Timing Model ...(mem=6564.3M)
+**INFO: Enable pre-place timing setting for timing analysis
+Set Using Default Delay Limit as 101.
+**WARN: (IMPDC-1629):	The default delay limit was set to 101. This is less than the default of 1000 and may result in inaccurate delay calculation for nets with a fanout higher than the setting.  If needed, the default delay limit may be adjusted by running the command 'set delaycal_use_default_delay_limit'.
+Set Default Net Delay as 0 ps.
+Set Default Net Load as 0 pF. 
+**INFO: Analyzing IO path groups for slack adjustment
+Effort level <high> specified for reg2reg_tmp.1789970 path_group
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: riscv_pipeline
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in Single mode...
+Start delay calculation (fullDC) (8 T). (MEM=3290.92)
+Total number of fetched objects 27709
+End delay calculation. (MEM=3636.02 CPU=0:00:12.3 REAL=0:00:01.0)
+End delay calculation (fullDC). (MEM=3636.02 CPU=0:00:12.8 REAL=0:00:02.0)
+**INFO: Disable pre-place timing setting for timing analysis
+Set Using Default Delay Limit as 1000.
+Set Default Net Delay as 1000 ps.
+Set Default Net Load as 0.5 pF. 
+Info: Disable timing driven in postCTS congRepair.
+
+Starting congRepair ...
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+[NR-eGR] Early global route reroute all routable nets
+[NR-eGR] Track table information for default rule: 
+[NR-eGR] M1 has single uniform track structure
+[NR-eGR] M2 has non-uniform track structure
+[NR-eGR] M3 has single uniform track structure
+[NR-eGR] M4 has single uniform track structure
+[NR-eGR] M5 has single uniform track structure
+[NR-eGR] M6 has single uniform track structure
+[NR-eGR] M7 has single uniform track structure
+[NR-eGR] M8 has single uniform track structure
+[NR-eGR] M9 has single uniform track structure
+[NR-eGR] Pad has single uniform track structure
+[NR-eGR] Read 37072 PG shapes
+[NR-eGR] Read 0 clock shapes
+[NR-eGR] Read 0 other shapes
+[NR-eGR] #Routing Blockages  : 0
+[NR-eGR] #Bump Blockages     : 0
+[NR-eGR] #Instance Blockages : 43952
+[NR-eGR] #PG Blockages       : 37072
+[NR-eGR] #Halo Blockages     : 0
+[NR-eGR] #Boundary Blockages : 0
+[NR-eGR] #Clock Blockages    : 0
+[NR-eGR] #Other Blockages    : 0
+[NR-eGR] #prerouted nets         : 0
+[NR-eGR] #prerouted special nets : 0
+[NR-eGR] #prerouted wires        : 0
+[NR-eGR] Read 27709 nets ( ignored 0 )
+[NR-eGR] There are 1 clock nets ( 0 with NDR ).
+[NR-eGR] ============ Routing rule table ============
+[NR-eGR] Rule id: 0  Rule name: (Default)  Nets: 27709
+[NR-eGR] ========================================
+[NR-eGR] 
+[NR-eGR] Layer group 1: route 27709 net(s) in layer range [2, 10]
+[NR-eGR] Early Global Route overflow of layer group 1: 0.01% H + 0.00% V. EstWL: 5.732230e+05um
+[NR-eGR] Congestion Analysis By layer: (blocked Gcells are excluded) 
+[NR-eGR]                        OverCon           OverCon            
+[NR-eGR]                         #Gcell            #Gcell     %Gcell
+[NR-eGR]        Layer             (1-2)             (3-4)    OverCon
+[NR-eGR] ---------------------------------------------------------------
+[NR-eGR]      M1 ( 1)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M2 ( 2)        36( 0.17%)         3( 0.01%)   ( 0.18%) 
+[NR-eGR]      M3 ( 3)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M4 ( 4)        44( 0.21%)         6( 0.03%)   ( 0.23%) 
+[NR-eGR]      M5 ( 5)         9( 0.04%)         0( 0.00%)   ( 0.04%) 
+[NR-eGR]      M6 ( 6)         2( 0.01%)         0( 0.00%)   ( 0.01%) 
+[NR-eGR]      M7 ( 7)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M8 ( 8)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M9 ( 9)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]     Pad (10)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR] ---------------------------------------------------------------
+[NR-eGR]        Total        91( 0.05%)         9( 0.01%)   ( 0.06%) 
+[NR-eGR] 
+[NR-eGR] Overflow after Early Global Route 0.00% H + 0.00% V
+[NR-eGR] Finished Early Global Route kernel ( CPU: 1.40 sec, Real: 0.53 sec, Curr Mem: 4.93 MB )
+Early Global Route congestion estimation runtime: 0.58 seconds, mem = 6458.7M
+Local HotSpot Analysis: normalized max congestion hotspot area = 0.00, normalized total congestion hotspot area = 0.00 (area is in unit of 4 std-cell row bins)
+Skipped repairing congestion.
+[NR-eGR] Connected 0 must-join pins/ports (post-process)
+[NR-eGR] Total eGR-routed clock nets wire length: 18829um, number of vias: 17257
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR]              Length (um)    Vias 
+[NR-eGR] ---------------------------------
+[NR-eGR]  M1   (1V)             0  115813 
+[NR-eGR]  M2   (2H)        179654  177625 
+[NR-eGR]  M3   (3V)        244445   12490 
+[NR-eGR]  M4   (4H)         45916    5019 
+[NR-eGR]  M5   (5V)         53648    3659 
+[NR-eGR]  M6   (6H)         49900    1093 
+[NR-eGR]  M7   (7V)         24283     577 
+[NR-eGR]  M8   (8H)         14627      55 
+[NR-eGR]  M9   (9V)          1940       0 
+[NR-eGR]  Pad  (10H)            0       0 
+[NR-eGR] ---------------------------------
+[NR-eGR]       Total       614413  316331 
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR] Total half perimeter of net bounding box: 423020um
+[NR-eGR] Total length: 614413um, number of vias: 316331
+[NR-eGR] --------------------------------------------------------------------------
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Early Global Route wiring runtime: 0.24 seconds, mem = 6490.8M
+Tdgp not enabled or already been cleared! skip clearing
+End of congRepair (cpu=0:00:02.3, real=0:00:01.0)
+*** Finishing placeDesign default flow ***
+**placeDesign ... cpu = 0: 3: 0, real = 0: 0:52, mem = 6490.8M **
+Tdgp not enabled or already been cleared! skip clearing
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPDC-1629           2  The default delay limit was set to %d. T...
+WARNING   IMPESI-3478          1  Simulation based Equivalent Waveform Mod...
+WARNING   IMPSP-196            1  User sets both -place_global_uniform_den...
+WARNING   IMPSP-9025           1  No scan chain specified/traced.          
+WARNING   NRIF-95              4  Option setNanoRouteMode -routeTopRouting...
+*** Message Summary: 9 warning(s), 0 error(s)
+
+*** placeDesign #1 [finish] () : cpu/real = 0:03:00.2/0:00:51.5 (3.5), totSession cpu/real = 0:04:09.4/0:01:23.2 (3.0), mem = 6490.8M
+<CMD> refinePlace
+*** Starting refinePlace (0:04:10 mem=6490.8M) ***
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Move report: Detail placement moves 0 insts, mean move: 0.00 um, max move: 0.00 um 
+	Runtime: CPU: 0:00:05.2 REAL: 0:00:01.0 MEM: 6458.7MB
+Summary Report:
+Instances move: 0 (out of 27536 movable)
+Instances flipped: 0
+Mean displacement: 0.00 um
+Max displacement: 0.00 um 
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Runtime: CPU: 0:00:05.3 REAL: 0:00:01.0 MEM: 6458.7MB
+*** Finished refinePlace (0:04:15 mem=6458.7M) ***
+<CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_postPlace.rpt
+Checking routing tracks.....
+Checking other grids.....
+Checking FINFET Grid is on Manufacture Grid.....
+Checking core/die box is on Grid.....
+Checking snap rule ......
+Checking Row is on grid......
+Checking AreaIO row.....
+Checking row out of die ...
+Checking routing blockage.....
+Checking placement blockage.....
+placeBlkGrid grid_type = 1 
+Checking components.....
+Checking IO Pads out of die...
+Checking constraints (guide/region/fence).....
+
+Checking Preroutes.....
+No. of regular pre-routes not on tracks : 0 
+
+Reporting Utilizations.....
+
+Core utilization  = 69.620515
+Effective Utilizations
+Average macro density = 0.000.
+Average module density = 0.698.
+Pure std cell Density 0.697508
+ Density for the design = 0.698.
+       = stdcell_area 284468 sites (66361 um^2) / alloc_area 407835 sites (95140 um^2).
+Pin Density = 0.2973.
+            = total # of pins 121244 / total area 407835.
+*** Message Summary: 0 warning(s), 0 error(s)
+
+<CMD> report_timing > ./reports/timing_postPlace.rpt
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: riscv_pipeline
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Extraction called for design 'riscv_pipeline' of instances=27536 and nets=28438 using extraction engine 'preRoute' .
+PreRoute RC Extraction called for design riscv_pipeline.
+RC Extraction called in multi-corner(1) mode.
+RCMode: PreRoute
+      RC Corner Indexes            0   
+Capacitance Scaling Factor   : 1.00000 
+Resistance Scaling Factor    : 1.00000 
+Clock Cap. Scaling Factor    : 1.00000 
+Clock Res. Scaling Factor    : 1.00000 
+Shrink Factor                : 1.00000
+PreRoute extraction is honoring NDR/Shielding/ExtraSpace for clock nets.
+Using Quantus QRC technology file ...
+Updating RC Grid density data for preRoute extraction ...
+Initializing multi-corner resistance tables ...
+PreRoute RC Extraction DONE (CPU Time: 0:00:00.2  Real Time: 0:00:00.0  MEM: 6472.758M)
+Calculate delays in Single mode...
+Start delay calculation (fullDC) (8 T). (MEM=3184.25)
+Total number of fetched objects 27709
+End delay calculation. (MEM=3621.75 CPU=0:00:17.1 REAL=0:00:03.0)
+End delay calculation (fullDC). (MEM=3621.75 CPU=0:00:17.9 REAL=0:00:03.0)
+<CMD> report_area > ./reports/area_postPlace.rpt
+<CMD> saveDesign ./saved/riscv_pipeline_postPlace.enc
+#% Begin save design ... (date=08/12 00:09:34, mem=3158.3M)
+% Begin Save ccopt configuration ... (date=08/12 00:09:34, mem=3158.3M)
+% End Save ccopt configuration ... (date=08/12 00:09:34, total cpu=0:00:00.1, real=0:00:00.0, peak res=3158.3M, current mem=3158.3M)
+% Begin Save netlist data ... (date=08/12 00:09:34, mem=3158.3M)
+Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_postPlace.enc.dat/vbin/riscv_pipeline.v.bin in multi-threaded mode...
+% End Save netlist data ... (date=08/12 00:09:34, total cpu=0:00:00.1, real=0:00:00.0, peak res=3160.6M, current mem=3160.6M)
+Saving symbol-table file in separate thread ...
+Saving congestion map file in separate thread ...
+Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_postPlace.enc.dat/riscv_pipeline.route.congmap.gz ...
+% Begin Save AAE data ... (date=08/12 00:09:34, mem=3161.3M)
+Saving AAE Data ...
+% End Save AAE data ... (date=08/12 00:09:34, total cpu=0:00:00.1, real=0:00:00.0, peak res=3161.3M, current mem=3160.5M)
+Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_postPlace.enc.dat/gui.pref.tcl ...
+Saving mode setting ...
+**WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+Saving global file ...
+*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_postPlace.enc.dat/riscv_pipeline.bbox.lef
+Saving Drc markers ...
+... 1027 markers are saved ...
+... 1000 geometry drc markers are saved ...
+... 0 antenna drc markers are saved ...
+Saving special route data file in separate thread ...
+Saving PG file in separate thread ...
+Saving placement file in separate thread ...
+Saving property file in separate thread ...
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_postPlace.enc.dat/riscv_pipeline.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Wed Aug 12 00:09:35 2026)
+** Saving stdCellPlacement_binary (version# 2) ...
+Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_postPlace.enc.dat/riscv_pipeline.prop
+Save Adaptive View Pruning View Names to Binary file
+*** Completed saveProperty (cpu=0:00:00.1 real=0:00:00.0 mem=6620.3M) ***
+*** Completed savePGFile (cpu=0:00:00.1 real=0:00:00.0 mem=6620.3M) ***
+TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::savePGFile REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
+*** Completed saveRoute (cpu=0:00:00.2 real=0:00:00.0 mem=6596.3M) ***
+TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
+Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_postPlace.enc.dat/riscv_pipeline.techData.gz' ...
+Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_postPlace.enc.dat/extraction/' ...
+TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
+% Begin Save power constraints data ... (date=08/12 00:09:35, mem=3158.6M)
+% End Save power constraints data ... (date=08/12 00:09:35, total cpu=0:00:00.1, real=0:00:00.0, peak res=3158.6M, current mem=3158.6M)
+rc_typ
+rc_typ
+rc_typ
+Generated self-contained design riscv_pipeline_postPlace.enc.dat
+libset_tt
+rc_typ
+mode_func
+../genus/outputs/riscv_pipeline_syn.sdc
+#% End save design ... (date=08/12 00:09:36, total cpu=0:00:01.6, real=0:00:02.0, peak res=3161.3M, current mem=3159.0M)
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
+*** Message Summary: 1 warning(s), 0 error(s)
+
+<CMD> create_route_type -name leaf_rule -bottom_preferred_layer M2 -top_preferred_layer M3
+<CMD> create_route_type -name trunk_rule -shield_net VSS -bottom_preferred_layer M4 -top_preferred_layer M5
+<CMD> create_route_type -name top_rule -shield_net VSS -bottom_preferred_layer M6 -top_preferred_layer M7
+<CMD> set_ccopt_property -net_type leaf route_type leaf_rule
+<CMD> set_ccopt_property -net_type trunk route_type trunk_rule
+<CMD> set_ccopt_property -net_type top route_type top_rule
+<CMD> set_ccopt_property routing_top_min_fanout 100
+<CMD> set_ccopt_property target_max_trans 0.300ns
+<CMD> set_ccopt_property buffer_cells {BUFx4_ASAP7_75t_R BUFx8_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx4_ASAP7_75t_L BUFx8_ASAP7_75t_L BUFx12_ASAP7_75t_L}
+<CMD> set_ccopt_property inverter_cells {CKINVDCx8_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx8_ASAP7_75t_L CKINVDCx12_ASAP7_75t_L CKINVDCx16_ASAP7_75t_L}
+<CMD> set_ccopt_property use_inverters auto
+<CMD> setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 -powerEffort high -fixFanoutLoad true
+<CMD> optDesign -prefix preCTS -preCTS
+Executing: place_opt_design -opt -prefix preCTS
+#% Begin place_opt_design (date=08/12 00:09:36, mem=3159.4M)
+**INFO: User settings:
+setDesignMode -process                               7
+setExtractRCMode -coupling_c_th                      3
+setExtractRCMode -engine                             preRoute
+setExtractRCMode -relative_c_th                      0.03
+setExtractRCMode -total_c_th                         5
+setDelayCalMode -enable_hier_save_restore_flow       false
+setDelayCalMode -engine                              aae
+setDelayCalMode -equivalent_waveform_model           none
+setDelayCalMode -ignoreNetLoad                       false
+setDelayCalMode -SIAware                             false
+setOptMode -opt_fix_fanout_load                      true
+setOptMode -opt_honor_fences                         true
+setOptMode -opt_leakage_to_dynamic_ratio             0.5
+setOptMode -opt_power_effort                         high
+setOptMode -opt_area_recovery                        true
+setOptMode -opt_post_route_art_flow                  false
+setPlaceMode -macroPlaceMode                         0
+setPlaceMode -place_design_refine_macro              false
+setPlaceMode -place_detail_preroute_as_obs           {2 3}
+setPlaceMode -place_global_auto_blockage_in_channel  soft
+setPlaceMode -place_global_cong_effort               high
+setPlaceMode -place_global_module_aware_spare        true
+setPlaceMode -place_global_uniform_density           true
+setAnalysisMode -analysisType                        single
+setAnalysisMode -clkSrcPath                          true
+setAnalysisMode -clockPropagation                    sdcControl
+setAnalysisMode -virtualIPO                          false
+
+*** place_opt_design #1 [begin] () : totSession cpu/real = 0:04:38.1/0:01:30.3 (3.1), mem = 6564.3M
+No user sequential activity specified, applying default sequential activity of "0.2" for Dynamic Power reporting.
+'set_default_switching_activity' finished successfully.
+*** Starting GigaPlace ***
+-earlyGlobalBlockTracks {}                # string, default="", private
+-earlyGlobalCapacityScreen {}             # string, default="", private
+There is no track adjustment
+Starting place_opt_design V2 flow
+*** GlobalPlace #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:04:38.2/0:01:30.4 (3.1), mem = 6564.3M
+*** GlobalPlace #1 [finish] (place_opt_design #1) : cpu/real = 0:00:00.0/0:00:00.0 (0.0), totSession cpu/real = 0:04:38.2/0:01:30.4 (3.1), mem = 6564.3M
+Enable CTE adjustment.
+Enable Layer aware incrSKP.
+**optDesign ... cpu = 0:00:00, real = 0:00:00, mem = 3154.6M, totSessionCpu=0:04:38 **
+GigaOpt running with 8 threads.
+*** InitOpt #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:04:38.3/0:01:30.4 (3.1), mem = 6564.3M
+**INFO: setDesignMode -flowEffort standard -> setting 'setOptMode -allEndPoints true' for the duration of this command.
+AAE DB initialization (MEM=3071.050781 CPU=0:00:00.0 REAL=0:00:00.0) 
+Info: Using SynthesisEngine executable '/Cadence/DDI/INNOVUS231/bin/innovus_'.
+      SynthesisEngine workers will not check out additional licenses.
+**INFO: No dynamic/leakage power view specified, setting up the setup view "view_tt" as power view
+** WARN:  (VOLTUS_POWR-3212): The 'set_power_analysis_mode -leakage_power_view |-dynamic_power_view|-analysis_view' will be obsolete in 18.20 release. Use 'set_analysis_view -leakage <> | -dynamic <>' to set leakage and dynamic power views.
+
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: riscv_pipeline
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+CLK(100MHz) 
+Starting Levelizing
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT)
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 10%
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 20%
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 30%
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 40%
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 50%
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 60%
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 70%
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 80%
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 90%
+
+Finished Levelizing
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT)
+
+Starting Activity Propagation
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT)
+** INFO:  (VOLTUS_POWR-1356): No default input activity has been set. Defaulting to 0.2.
+Use 'set_default_switching_activity -input_activity' command to change the default activity value.
+
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 10%
+2026-Aug-12 00:09:51 (2026-Aug-11 15:09:51 GMT): 20%
+
+Finished Activity Propagation
+2026-Aug-12 00:09:52 (2026-Aug-11 15:09:52 GMT)
+**INFO: Using Advanced Metric Collection system.
+**optDesign ... cpu = 0:00:32, real = 0:00:21, mem = 3305.1M, totSessionCpu=0:05:11 **
+#optDebug: { P: 7 W: 1201 FE: standard PE: high LDR: 0.5}
+*** optDesign -preCTS ***
+DRC Margin: user margin 0.0; extra margin 0.2
+Setup Target Slack: user slack 0; extra slack 0.0
+Hold Target Slack: user slack 0
+**WARN: (IMPOPT-3195):	Analysis mode has changed.
+Type 'man IMPOPT-3195' for more detail.
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+[NR-eGR] Early global route reroute all routable nets
+[NR-eGR] Track table information for default rule: 
+[NR-eGR] M1 has single uniform track structure
+[NR-eGR] M2 has non-uniform track structure
+[NR-eGR] M3 has single uniform track structure
+[NR-eGR] M4 has single uniform track structure
+[NR-eGR] M5 has single uniform track structure
+[NR-eGR] M6 has single uniform track structure
+[NR-eGR] M7 has single uniform track structure
+[NR-eGR] M8 has single uniform track structure
+[NR-eGR] M9 has single uniform track structure
+[NR-eGR] Pad has single uniform track structure
+[NR-eGR] Read 37072 PG shapes
+[NR-eGR] Read 0 clock shapes
+[NR-eGR] Read 0 other shapes
+[NR-eGR] #Routing Blockages  : 0
+[NR-eGR] #Bump Blockages     : 0
+[NR-eGR] #Instance Blockages : 43952
+[NR-eGR] #PG Blockages       : 37072
+[NR-eGR] #Halo Blockages     : 0
+[NR-eGR] #Boundary Blockages : 0
+[NR-eGR] #Clock Blockages    : 0
+[NR-eGR] #Other Blockages    : 0
+[NR-eGR] #prerouted nets         : 0
+[NR-eGR] #prerouted special nets : 0
+[NR-eGR] #prerouted wires        : 0
+[NR-eGR] Read 27709 nets ( ignored 0 )
+[NR-eGR] There are 1 clock nets ( 0 with NDR ).
+[NR-eGR] ============ Routing rule table ============
+[NR-eGR] Rule id: 0  Rule name: (Default)  Nets: 27709
+[NR-eGR] ========================================
+[NR-eGR] 
+[NR-eGR] Layer group 1: route 27709 net(s) in layer range [2, 10]
+[NR-eGR] Early Global Route overflow of layer group 1: 0.01% H + 0.00% V. EstWL: 5.810270e+05um
+[NR-eGR] Congestion Analysis By layer: (blocked Gcells are excluded) 
+[NR-eGR]                        OverCon           OverCon           OverCon            
+[NR-eGR]                         #Gcell            #Gcell            #Gcell     %Gcell
+[NR-eGR]        Layer             (1-2)             (3-4)               (5)    OverCon
+[NR-eGR] --------------------------------------------------------------------------------
+[NR-eGR]      M1 ( 1)         0( 0.00%)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M2 ( 2)        48( 0.22%)         1( 0.00%)         0( 0.00%)   ( 0.23%) 
+[NR-eGR]      M3 ( 3)         0( 0.00%)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M4 ( 4)        53( 0.25%)         7( 0.03%)         1( 0.00%)   ( 0.29%) 
+[NR-eGR]      M5 ( 5)         6( 0.03%)         0( 0.00%)         0( 0.00%)   ( 0.03%) 
+[NR-eGR]      M6 ( 6)         0( 0.00%)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M7 ( 7)         1( 0.00%)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M8 ( 8)         0( 0.00%)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M9 ( 9)         0( 0.00%)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]     Pad (10)         0( 0.00%)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR] --------------------------------------------------------------------------------
+[NR-eGR]        Total       108( 0.06%)         8( 0.00%)         1( 0.00%)   ( 0.07%) 
+[NR-eGR] 
+[NR-eGR] Overflow after Early Global Route 0.00% H + 0.00% V
+[NR-eGR] Connected 0 must-join pins/ports (post-process)
+[NR-eGR] Total eGR-routed clock nets wire length: 19702um, number of vias: 17114
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR]              Length (um)    Vias 
+[NR-eGR] ---------------------------------
+[NR-eGR]  M1   (1V)             0  115813 
+[NR-eGR]  M2   (2H)        181174  176834 
+[NR-eGR]  M3   (3V)        246190   13352 
+[NR-eGR]  M4   (4H)         46622    5357 
+[NR-eGR]  M5   (5V)         54323    3853 
+[NR-eGR]  M6   (6H)         50185    1169 
+[NR-eGR]  M7   (7V)         26178     631 
+[NR-eGR]  M8   (8H)         16144      47 
+[NR-eGR]  M9   (9V)          1681       0 
+[NR-eGR]  Pad  (10H)            0       0 
+[NR-eGR] ---------------------------------
+[NR-eGR]       Total       622497  317056 
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR] Total half perimeter of net bounding box: 423020um
+[NR-eGR] Total length: 622497um, number of vias: 317056
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR] Finished Early Global Route kernel ( CPU: 2.24 sec, Real: 0.78 sec, Curr Mem: 4.43 MB )
+[NR-eGR] Finished Early Global Route ( CPU: 2.25 sec, Real: 0.79 sec, Curr Mem: 4.39 MB )
+Extraction called for design 'riscv_pipeline' of instances=27536 and nets=28438 using extraction engine 'preRoute' .
+PreRoute RC Extraction called for design riscv_pipeline.
+RC Extraction called in multi-corner(1) mode.
+RCMode: PreRoute
+      RC Corner Indexes            0   
+Capacitance Scaling Factor   : 1.00000 
+Resistance Scaling Factor    : 1.00000 
+Clock Cap. Scaling Factor    : 1.00000 
+Clock Res. Scaling Factor    : 1.00000 
+Shrink Factor                : 1.00000
+PreRoute extraction is honoring NDR/Shielding/ExtraSpace for clock nets.
+Using Quantus QRC technology file ...
+Updating RC Grid density data for preRoute extraction ...
+Initializing multi-corner resistance tables ...
+PreRoute RC Extraction DONE (CPU Time: 0:00:00.3  Real Time: 0:00:00.0  MEM: 5485.180M)
+Starting delay calculation for Setup views
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: riscv_pipeline
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in Single mode...
+Start delay calculation (fullDC) (8 T). (MEM=3634.36)
+siFlow : Timing analysis mode is single, using late cdB files
+Total number of fetched objects 27709
+End delay calculation. (MEM=3798.82 CPU=0:00:09.4 REAL=0:00:01.0)
+End delay calculation (fullDC). (MEM=3664.61 CPU=0:00:11.1 REAL=0:00:03.0)
+*** Done Building Timing Graph (cpu=0:00:16.8 real=0:00:03.0 totSessionCpu=0:05:31 mem=6558.3M)
+
+OptSummary:
+
+------------------------------------------------------------------
+             Initial Summary
+------------------------------------------------------------------
+
+Setup views included:
+ view_tt 
+
++--------------------+---------+
+|     Setup mode     |   all   |
++--------------------+---------+
+|           WNS (ns):|  3.742  |
+|           TNS (ns):|  0.000  |
+|    Violating Paths:|    0    |
+|          All Paths:|  11364  |
++--------------------+---------+
+
++----------------+-------------------------------+------------------+
+|                |              Real             |       Total      |
+|    DRVs        +------------------+------------+------------------|
+|                |  Nr nets(terms)  | Worst Vio  |  Nr nets(terms)  |
++----------------+------------------+------------+------------------+
+|   max_cap      |    264 (264)     |   -6.220   |    264 (264)     |
+|   max_tran     |   500 (24806)    |   -1.261   |   500 (24806)    |
+|   max_fanout   |    733 (733)     |   -5121    |    734 (734)     |
+|   max_length   |      0 (0)       |     0      |      0 (0)       |
++----------------+------------------+------------+------------------+
+
+Density: 69.751%
+------------------------------------------------------------------
+**optDesign ... cpu = 0:00:53, real = 0:00:27, mem = 3561.2M, totSessionCpu=0:05:31 **
+*** InitOpt #1 [finish] (place_opt_design #1) : cpu/real = 0:00:53.1/0:00:26.8 (2.0), totSession cpu/real = 0:05:31.4/0:01:57.2 (2.8), mem = 6564.3M
+** INFO : this run is activating medium effort placeOptDesign flow
+*** ExcludedClockNetOpt #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:05:31.6/0:01:57.3 (2.8), mem = 6564.3M
+*** Starting optimizing excluded clock nets MEM= 6564.3M) ***
+*info: No excluded clock nets to be optimized.
+*** Finished optimizing excluded clock nets (CPU Time= 0:00:00.0  MEM= 6564.3M) ***
+*** ExcludedClockNetOpt #1 [finish] (place_opt_design #1) : cpu/real = 0:00:00.0/0:00:00.0 (0.0), totSession cpu/real = 0:05:31.6/0:01:57.3 (2.8), mem = 6564.3M
+The useful skew maximum allowed delay is: 0.3
+*** ForceDownSizing #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:05:34.4/0:01:58.1 (2.8), mem = 6566.3M
+ Design has 27536 nets in selected transition density range, driven by 22 HVT insts, 0 MVT insts and 27514 LVT insts
+env CDS_WORKAREA is set to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus
+
+Power Net Detected:
+        Voltage	    Name
+             0V	    VSS
+           0.7V	    VDD
+Using Power View: view_tt.
+
+Begin Power Analysis
+
+             0V	    VSS
+           0.7V	    VDD
+
+Begin Processing Timing Library for Power Calculation
+
+Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3609.91MB/unknown/unknown)
+
+
+
+Begin Processing Power Net/Grid for Power Calculation
+
+Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3609.91MB/unknown/unknown)
+
+Begin Processing Timing Window Data for Power Calculation
+
+CLK(100MHz) Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3609.91MB/unknown/unknown)
+
+Begin Processing User Attributes
+
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3609.91MB/unknown/unknown)
+
+Begin Processing Signal Activity
+
+
+Starting Levelizing
+2026-Aug-12 00:10:04 (2026-Aug-11 15:10:04 GMT)
+2026-Aug-12 00:10:04 (2026-Aug-11 15:10:04 GMT): 10%
+2026-Aug-12 00:10:04 (2026-Aug-11 15:10:04 GMT): 20%
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT): 30%
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT): 40%
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT): 50%
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT): 60%
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT): 70%
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT): 80%
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT): 90%
+
+Finished Levelizing
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT)
+
+Starting Activity Propagation
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT)
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT): 10%
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT): 20%
+
+Finished Activity Propagation
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT)
+Ended Processing Signal Activity: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=3610.41MB/unknown/unknown)
+
+Begin Power Computation
+
+      ----------------------------------------------------------
+      # of cell(s) missing both power/leakage table: 0
+      # of cell(s) missing power table: 0
+      # of cell(s) missing leakage table: 0
+      ----------------------------------------------------------
+
+
+
+Starting Calculating power
+2026-Aug-12 00:10:05 (2026-Aug-11 15:10:05 GMT)
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT): 10%
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT): 20%
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT): 30%
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT): 40%
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT): 50%
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT): 60%
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT): 70%
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT): 80%
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT): 90%
+
+Finished Calculating power
+2026-Aug-12 00:10:06 (2026-Aug-11 15:10:06 GMT)
+      # of MSMV cell(s) missing power_level: 0
+Ended Power Computation: (cpu=0:00:04, real=0:00:01, mem(process/total/peak)=3621.23MB/unknown/unknown)
+
+Begin Processing User Attributes
+
+Begin Processing set_power
+Ended Processing set_power: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=3621.23MB/unknown/unknown)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3621.23MB/unknown/unknown)
+
+Ended Power Analysis: (cpu=0:00:06, real=0:00:02, mem(process/total/peak)=3621.23MB/unknown/unknown)
+
+Begin Boundary Leakage Calculation
+Ended Boundary Leakage Calculation: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=3621.36MB/unknown/unknown)
+Begin Static Power Report Generation
+*----------------------------------------------------------------------------------------
+*	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+*	
+*
+* 	Date & Time:	2026-Aug-12 00:10:07 (2026-Aug-11 15:10:07 GMT)
+*
+*----------------------------------------------------------------------------------------
+*
+*	Design: riscv_pipeline
+*
+*	Parasitic Files used:
+*
+*	Power Units = 1mW
+*
+*	Time Units = 1e-12 secs
+*
+*       report_power
+*
+-----------------------------------------------------------------------------------------
+*
+
+
+
+Total Power
+-----------------------------------------------------------------------------------------
+Total Internal Power:        0.95721249 	   77.0701%
+Total Switching Power:       0.25159655 	   20.2573%
+Total Leakage Power:         0.03319385 	    2.6726%
+Total Power:                 1.24200289
+-----------------------------------------------------------------------------------------
+
+
+Group                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+Sequential                        0.8107      0.1036      0.0165      0.9308       74.94
+Macro                                  0           0           0           0           0
+IO                                     0           0           0           0           0
+Combinational                     0.1465       0.148     0.01669      0.3112       25.06
+Clock (Combinational)                  0           0           0           0           0
+Clock (Sequential)                     0           0           0           0           0
+-----------------------------------------------------------------------------------------
+Total                             0.9572      0.2516     0.03319       1.242         100
+-----------------------------------------------------------------------------------------
+
+
+Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+VDD                       0.7     0.9572      0.2516     0.03319       1.242         100
+ 
+ 
+-----------------------------------------------------------------------------------------
+*	Power Distribution Summary: 
+*              Highest Average Power:         reset_sync_reg[1] (DFFASRHQNx1_ASAP7_75t_L):          0.03082
+*              Highest Leakage Power:         reset_sync_reg[0] (DFFASRHQNx1_ASAP7_75t_L):        2.842e-06
+*                Total Cap:      6.74826e-11 F
+*                Total instances in design: 27536
+*                Total instances in design with no power:     0
+*                Total instances in design with no activty:     0
+
+*                Total Fillers and Decap:     0
+-----------------------------------------------------------------------------------------
+ 
+** INFO:  (VOLTUS_POWR-3465): There are 0 decaps and 0 fillers in the design
+
+Ended Static Power Report Generation: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=3628.09MB/unknown/unknown)
+
+Begin: Forced Downsizing 
+** Forced Downsizing WNS Slack 0.000  TNS Slack 0.000  Density 69.751 
+(I,S,L,T): view_tt: 1.11921, 0.395026, 0.0316352, 1.54587
++---------+---------+--------+--------+------------+--------+
+| Density | Commits |  WNS   |  TNS   |    Real    |  Mem   |
++---------+---------+--------+--------+------------+--------+
+|   69.75%|        -|   0.000|   0.000|   0:00:00.0| 6628.3M|
+Total number of fetched objects 27709
+End delay calculation. (MEM=3874.79 CPU=0:00:09.4 REAL=0:00:01.0)
+|   69.75%|    27513|   0.000|   0.000|   0:00:03.0| 6564.3M|
++---------+---------+--------+--------+------------+--------+
+
+Change summary: 6113 (0/0/6113) / 21400 (0/4/21396) sequential/combinational (up/down/same) sizing moves committed. 
+** Forced Downsizing WNS Slack 0.000  TNS Slack 0.000  Density 69.749 
+End: Forced Downsizing 
+*** ForceDownSizing #1 [finish] (place_opt_design #1) : cpu/real = 0:00:25.5/0:00:06.5 (3.9), totSession cpu/real = 0:06:00.0/0:02:04.6 (2.9), mem = 6564.3M
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+optDesignOneStep: Power Flow
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+*** SimplifyNetlist #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:06:00.2/0:02:04.8 (2.9), mem = 6564.3M
+Info: 1 clock net  excluded from IPO operation.
+(I,S,L,T): view_tt: 0.820773, 0.371508, 0.00312612, 1.19541
+
+Footprint cell information for calculating maxBufDist
+*info: There are 27 candidate Buffer cells
+*info: There are 42 candidate Inverter cells
+
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+
+Netlist preparation processing... 
+Removed 0 instance
+*info: Marking 0 isolation instances dont touch
+*info: Marking 0 level shifter instances dont touch
+(I,S,L,T): view_tt: 0.820773, 0.371508, 0.00312612, 1.19541
+*** SimplifyNetlist #1 [finish] (place_opt_design #1) : cpu/real = 0:00:03.0/0:00:02.3 (1.3), totSession cpu/real = 0:06:03.2/0:02:07.1 (2.9), mem = 6583.4M
+Running new flow changes for HFN
+Begin: GigaOpt high fanout net optimization
+*** DrvOpt #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:06:03.5/0:02:07.4 (2.9), mem = 6583.4M
+Info: 1 clock net  excluded from IPO operation.
+(I,S,L,T): view_tt: 0.820773, 0.371508, 0.00312612, 1.19541
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+Dumping Information for Job ...
+**WARN: (IMPOPT-7330):	Net n_107 has fanout exceed delaycal_use_default_delay_limit 1000, max-tran violations may increase due to buffering.
+
++---------+---------+--------+--------+------------+--------+
+| Density | Commits |  WNS   |  TNS   |    Real    |  Mem   |
++---------+---------+--------+--------+------------+--------+
+|   69.75%|        -|   0.000|   0.000|   0:00:00.0| 6711.4M|
+Dumping Information for Job ...
+**WARN: (IMPOPT-7330):	Net n_107 has fanout exceed delaycal_use_default_delay_limit 1000, max-tran violations may increase due to buffering.
+
+|   70.36%|      337|   0.000|   0.000|   0:00:00.0| 6799.4M|
++---------+---------+--------+--------+------------+--------+
+
+*** Finish pre-CTS High Fanout Net Fixing (cpu=0:00:02.5 real=0:00:00.0 mem=6799.4M) ***
+Bottom Preferred Layer:
+    None
+Via Pillar Rule:
+    None
+(I,S,L,T): view_tt: 0.826296, 0.3738, 0.00321179, 1.20331
+*** DrvOpt #1 [finish] (place_opt_design #1) : cpu/real = 0:00:05.3/0:00:02.3 (2.3), totSession cpu/real = 0:06:08.8/0:02:09.7 (2.8), mem = 6671.4M
+End: GigaOpt high fanout net optimization
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+optDesignOneStep: Power Flow
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+Info: 1 clock net  excluded from IPO operation.
+
+Begin: Area Power Optimization
+Begin: Area Power Reclaim Optimization
+*** AreaOpt #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:06:09.4/0:02:10.1 (2.8), mem = 6799.4M
+(I,S,L,T): view_tt: 0.826296, 0.3738, 0.00321179, 1.20331
+Reclaim Optimization WNS Slack 0.000  TNS Slack 0.000 Density 70.36
++---------+---------+--------+--------+------------+--------+
+| Density | Commits |  WNS   |  TNS   |    Real    |  Mem   |
++---------+---------+--------+--------+------------+--------+
+|   70.36%|        -|   0.000|   0.000|   0:00:00.0| 6799.4M|
+|   70.36%|        0|   0.000|   0.000|   0:00:00.0| 6799.4M|
+|   70.35%|        7|   0.000|   0.000|   0:00:00.0| 6799.4M|
+|   70.14%|      330|   0.000|   0.000|   0:00:01.0| 6823.4M|
+|   70.10%|      157|   0.000|   0.000|   0:00:01.0| 6839.4M|
+|   70.09%|       32|   0.000|   0.000|   0:00:00.0| 6839.4M|
+|   70.09%|        4|   0.000|   0.000|   0:00:00.0| 6839.4M|
+|   70.09%|        1|   0.000|   0.000|   0:00:01.0| 6839.4M|
+|   70.09%|       29|   0.000|   0.000|   0:00:00.0| 6839.4M|
++---------+---------+--------+--------+------------+--------+
+Reclaim Optimization End WNS Slack 0.000  TNS Slack 0.000 Density 70.09
+Bottom Preferred Layer:
+    None
+Via Pillar Rule:
+    None
+
+Number of times islegalLocAvaiable called = 29 skipped = 0, called in commitmove = 29, skipped in commitmove = 0
+End: Core Area Reclaim Optimization (cpu = 0:00:14.9) (real = 0:00:04.0) **
+(I,S,L,T): view_tt: 0.824059, 0.372377, 0.00337214, 1.19981
+*** AreaOpt #1 [finish] (place_opt_design #1) : cpu/real = 0:00:15.1/0:00:04.4 (3.5), totSession cpu/real = 0:06:24.5/0:02:14.5 (2.9), mem = 6839.4M
+End: Area Reclaim Optimization (cpu=0:00:15, real=0:00:04, mem=6711.41M, totSessionCpu=0:06:25).
+skipped the cell partition in DRV
+Leakage Power Opt: re-selecting buf/inv list 
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+optDesignOneStep: Power Flow
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+Begin: GigaOpt DRV Optimization
+*** DrvOpt #2 [begin] (place_opt_design #1) : totSession cpu/real = 0:06:25.0/0:02:14.9 (2.9), mem = 6711.4M
+Info: 1 clock net  excluded from IPO operation.
+(I,S,L,T): view_tt: 0.824059, 0.372377, 0.00337214, 1.19981
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+|        max-tran       |        max-cap        |  max-fanout |  max-length |       setup       |        |        |        |       |          |         |
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| nets | terms|  wViol  | nets | terms|  wViol  | nets | terms| nets | terms|   WNS   |   TNS   |  #Buf  |  #Inv  | #Resize|Density|   Real   |   Mem   |
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+|  1180| 29161|    -3.33|   493|   493|    -0.12|   732|   732|     0|     0|     3.53|     0.00|       0|       0|       0| 70.09%|          |         |
+|     0|     0|     0.00|     0|     0|     0.00|     0|     0|     0|     0|     3.73|     0.00|    1393|     159|     343| 72.01%| 0:00:04.0|  6907.4M|
+|     0|     0|     0.00|     0|     0|     0.00|     0|     0|     0|     0|     3.73|     0.00|       0|       0|       0| 72.01%| 0:00:00.0|  6907.4M|
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+Bottom Preferred Layer:
++-----------+------------+----------+
+|   Layer   |   OPT_LA   |   Rule   |
++-----------+------------+----------+
+| M4 (z=4)  |         20 | default  |
++-----------+------------+----------+
+Via Pillar Rule:
+    None
+
+*** Finish DRV Fixing (cpu=0:00:27.8 real=0:00:05.0 mem=6907.4M) ***
+
+(I,S,L,T): view_tt: 0.774851, 0.374035, 0.00344168, 1.15233
+*** DrvOpt #2 [finish] (place_opt_design #1) : cpu/real = 0:00:30.9/0:00:06.9 (4.5), totSession cpu/real = 0:06:56.0/0:02:21.8 (2.9), mem = 6779.3M
+End: GigaOpt DRV Optimization
+Leakage Power Opt: resetting the buf/inv selection
+**optDesign ... cpu = 0:02:18, real = 0:00:52, mem = 4165.1M, totSessionCpu=0:06:56 **
+Info: 1 clock net  excluded from IPO operation.
+*** GlobalSizing #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:06:56.3/0:02:22.2 (2.9), mem = 6779.3M
+(I,S,L,T): view_tt: 0.774851, 0.374035, 0.00344168, 1.15233
+*info: 1 clock net excluded
+*info: 726 no-driver nets excluded.
+Begin: GigaOpt Global Sizing 
+** GigaOpt GlsOpt WNS Slack 0.000  TNS Slack 0.000 Density 72.01
++---------+---------+--------+--------+------------+--------+
+| Density | Commits |  WNS   |  TNS   |    Real    |  Mem   |
++---------+---------+--------+--------+------------+--------+
+|   72.01%|        -|   0.000|   0.000|   0:00:00.0| 6907.4M|
+Warning: Working set is empty ...
++---------+---------+--------+--------+------------+--------+
+(I,S,L,T): view_tt: 0.774851, 0.374035, 0.00344168, 1.15233
+*** GlobalSizing #1 [finish] (place_opt_design #1) : cpu/real = 0:00:03.9/0:00:02.4 (1.6), totSession cpu/real = 0:07:00.1/0:02:24.6 (2.9), mem = 6779.3M
+
+Active setup views:
+ view_tt
+  Dominating endpoints: 0
+  Dominating TNS: -0.000
+
+Leakage Power Opt: re-selecting buf/inv list 
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+optDesignOneStep: Power Flow
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+Begin: GigaOpt Global Optimization
+*info: use new DP (enabled)
+Info: 1 clock net  excluded from IPO operation.
+*** GlobalOpt #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:07:00.7/0:02:25.1 (2.9), mem = 6779.3M
+(I,S,L,T): view_tt: 0.774851, 0.374035, 0.00344168, 1.15233
+*info: 1 clock net excluded
+*info: 726 no-driver nets excluded.
+** GigaOpt Global Opt WNS Slack 0.000  TNS Slack 0.000 
++--------+--------+---------+------------+--------+----------+---------+-------------------------------------------+
+|  WNS   |  TNS   | Density |    Real    |  Mem   |Worst View|Pathgroup|                 End Point                 |
++--------+--------+---------+------------+--------+----------+---------+-------------------------------------------+
+|   0.000|   0.000|   72.01%|   0:00:00.0| 6907.4M|   view_tt|       NA| NA                                        |
++--------+--------+---------+------------+--------+----------+---------+-------------------------------------------+
+
+*** Finish pre-CTS Global Setup Fixing (cpu=0:00:00.0 real=0:00:00.0 mem=6907.4M) ***
+
+*** Finish pre-CTS Setup Fixing (cpu=0:00:00.0 real=0:00:00.0 mem=6907.4M) ***
+Bottom Preferred Layer:
++-----------+------------+----------+
+|   Layer   |   OPT_LA   |   Rule   |
++-----------+------------+----------+
+| M4 (z=4)  |         20 | default  |
++-----------+------------+----------+
+Via Pillar Rule:
+    None
+** GigaOpt Global Opt End WNS Slack 0.000  TNS Slack 0.000 
+(I,S,L,T): view_tt: 0.774851, 0.374035, 0.00344168, 1.15233
+*** GlobalOpt #1 [finish] (place_opt_design #1) : cpu/real = 0:00:03.9/0:00:02.3 (1.7), totSession cpu/real = 0:07:04.5/0:02:27.4 (2.9), mem = 6779.3M
+End: GigaOpt Global Optimization
+Leakage Power Opt: resetting the buf/inv selection
+*** Timing Is met
+*** Check timing (0:00:00.0)
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+optDesignOneStep: Power Flow
+#InfoCS: Num dontuse cells 0, Num usable cells 444
+Info: 1 clock net  excluded from IPO operation.
+
+Begin: Area Power Optimization
+Begin: Area Power Reclaim Optimization
+*** AreaOpt #2 [begin] (place_opt_design #1) : totSession cpu/real = 0:07:05.1/0:02:27.9 (2.9), mem = 6907.4M
+(I,S,L,T): view_tt: 0.774851, 0.374035, 0.00344168, 1.15233
+Reclaim Optimization WNS Slack 0.000  TNS Slack 0.000 Density 72.01
++---------+---------+--------+--------+------------+--------+
+| Density | Commits |  WNS   |  TNS   |    Real    |  Mem   |
++---------+---------+--------+--------+------------+--------+
+|   72.01%|        -|   0.000|   0.000|   0:00:00.0| 6907.4M|
+|   72.01%|        2|   0.000|   0.000|   0:00:00.0| 6945.5M|
+|   72.01%|       20|   0.000|   0.000|   0:00:01.0| 6945.5M|
+|   71.97%|       30|   0.000|   0.000|   0:00:00.0| 6945.5M|
+|   71.69%|     1110|   0.000|   0.000|   0:00:03.0| 6945.5M|
+|   71.69%|        7|   0.000|   0.000|   0:00:00.0| 6945.5M|
+|   71.69%|        0|   0.000|   0.000|   0:00:01.0| 6945.5M|
+|   71.69%|       32|   0.000|   0.000|   0:00:00.0| 6945.5M|
+|   71.69%|        0|   0.000|   0.000|   0:00:00.0| 6945.5M|
++---------+---------+--------+--------+------------+--------+
+Reclaim Optimization End WNS Slack 0.000  TNS Slack 0.000 Density 71.69
+Bottom Preferred Layer:
+    None
+Via Pillar Rule:
+    None
+
+Number of times islegalLocAvaiable called = 32 skipped = 0, called in commitmove = 32, skipped in commitmove = 0
+End: Core Area Reclaim Optimization (cpu = 0:00:27.6) (real = 0:00:06.0) **
+(I,S,L,T): view_tt: 0.774777, 0.373481, 0.00342617, 1.15168
+*** AreaOpt #2 [finish] (place_opt_design #1) : cpu/real = 0:00:27.9/0:00:06.7 (4.2), totSession cpu/real = 0:07:33.1/0:02:34.7 (2.9), mem = 6945.5M
+End: Area Reclaim Optimization (cpu=0:00:28, real=0:00:06, mem=6817.51M, totSessionCpu=0:07:33).
+*** IncrReplace #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:07:33.4/0:02:35.0 (2.9), mem = 6817.5M
+
+*** Start incrementalPlace ***
+No Views given, use default active views for adaptive view pruning
+Active views:
+  view_tt
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+[NR-eGR] Started Early Global Route kernel ( Curr Mem: 6.17 MB )
+[NR-eGR] Early global route reroute all routable nets
+[NR-eGR] Track table information for default rule: 
+[NR-eGR] M1 has single uniform track structure
+[NR-eGR] M2 has non-uniform track structure
+[NR-eGR] M3 has single uniform track structure
+[NR-eGR] M4 has single uniform track structure
+[NR-eGR] M5 has single uniform track structure
+[NR-eGR] M6 has single uniform track structure
+[NR-eGR] M7 has single uniform track structure
+[NR-eGR] M8 has single uniform track structure
+[NR-eGR] M9 has single uniform track structure
+[NR-eGR] Pad has single uniform track structure
+[NR-eGR] Read 37072 PG shapes
+[NR-eGR] Read 0 clock shapes
+[NR-eGR] Read 0 other shapes
+[NR-eGR] #Routing Blockages  : 0
+[NR-eGR] #Bump Blockages     : 0
+[NR-eGR] #Instance Blockages : 43952
+[NR-eGR] #PG Blockages       : 37072
+[NR-eGR] #Halo Blockages     : 0
+[NR-eGR] #Boundary Blockages : 0
+[NR-eGR] #Clock Blockages    : 0
+[NR-eGR] #Other Blockages    : 0
+[NR-eGR] #prerouted nets         : 0
+[NR-eGR] #prerouted special nets : 0
+[NR-eGR] #prerouted wires        : 0
+[NR-eGR] Read 29557 nets ( ignored 0 )
+[NR-eGR] There are 1 clock nets ( 0 with NDR ).
+[NR-eGR] ============ Routing rule table ============
+[NR-eGR] Rule id: 0  Rule name: (Default)  Nets: 29557
+[NR-eGR] ========================================
+[NR-eGR] 
+[NR-eGR] Layer group 1: route 29557 net(s) in layer range [2, 10]
+[NR-eGR] Early Global Route overflow of layer group 1: 0.00% H + 0.00% V. EstWL: 5.827183e+05um
+[NR-eGR] Congestion Analysis By layer: (blocked Gcells are excluded) 
+[NR-eGR]                        OverCon           OverCon            
+[NR-eGR]                         #Gcell            #Gcell     %Gcell
+[NR-eGR]        Layer             (1-2)               (3)    OverCon
+[NR-eGR] ---------------------------------------------------------------
+[NR-eGR]      M1 ( 1)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M2 ( 2)        46( 0.21%)         2( 0.01%)   ( 0.22%) 
+[NR-eGR]      M3 ( 3)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M4 ( 4)        53( 0.25%)         5( 0.02%)   ( 0.27%) 
+[NR-eGR]      M5 ( 5)         8( 0.04%)         0( 0.00%)   ( 0.04%) 
+[NR-eGR]      M6 ( 6)         4( 0.02%)         0( 0.00%)   ( 0.02%) 
+[NR-eGR]      M7 ( 7)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M8 ( 8)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M9 ( 9)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]     Pad (10)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR] ---------------------------------------------------------------
+[NR-eGR]        Total       111( 0.06%)         7( 0.00%)   ( 0.07%) 
+[NR-eGR] 
+[NR-eGR] Overflow after Early Global Route 0.00% H + 0.00% V
+[NR-eGR] Finished Early Global Route kernel ( CPU: 1.25 sec, Real: 0.54 sec, Curr Mem: 6.20 MB )
+Early Global Route congestion estimation runtime: 0.55 seconds, mem = 6817.5M
+Local HotSpot Analysis: normalized max congestion hotspot area = 0.00, normalized total congestion hotspot area = 0.00 (area is in unit of 4 std-cell row bins)
+
+=== incrementalPlace Internal Loop 1 ===
+      flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   incrNP_iter_start
+No spares found within logical modules, disabling '-moduleAwareSpare'.
+[spp] 0
+*** Finished SKP initialization (cpu=0:00:06.0, real=0:00:02.0)***
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+[NR-eGR] Started Early Global Route kernel ( Curr Mem: 6.64 MB )
+SKP will use view:
+  view_tt
+Iteration  7: Total net bbox = 4.759e+05 (2.20e+05 2.56e+05)
+              Est.  stn bbox = 6.168e+05 (2.91e+05 3.26e+05)
+              cpu = 0:00:23.9 real = 0:00:04.0 mem = 7459.7M
+Iteration  8: Total net bbox = 4.870e+05 (2.26e+05 2.61e+05)
+              Est.  stn bbox = 6.292e+05 (2.97e+05 3.32e+05)
+              cpu = 0:00:42.5 real = 0:00:07.0 mem = 7459.7M
+Iteration  9: Total net bbox = 4.887e+05 (2.27e+05 2.62e+05)
+              Est.  stn bbox = 6.318e+05 (2.98e+05 3.33e+05)
+              cpu = 0:00:33.8 real = 0:00:05.0 mem = 7459.7M
+Iteration 10: Total net bbox = 5.058e+05 (2.34e+05 2.71e+05)
+              Est.  stn bbox = 6.497e+05 (3.06e+05 3.43e+05)
+              cpu = 0:00:27.6 real = 0:00:04.0 mem = 7459.7M
+Iteration 11: Total net bbox = 4.889e+05 (2.15e+05 2.74e+05)
+              Est.  stn bbox = 6.257e+05 (2.80e+05 3.46e+05)
+              cpu = 0:00:17.6 real = 0:00:03.0 mem = 7491.7M
+Move report: Timing Driven Placement moves 29384 insts, mean move: 6.73 um, max move: 72.97 um 
+	Max move on inst (BPU/BTB/FE_OFC922_n_672): (102.82, 119.45) --> (96.81, 52.48)
+
+Finished Incremental Placement (cpu=0:02:35, real=0:00:26.0, mem=7235.6M)
+Begin: Reorder Scan Chains
+**WARN: (IMPSP-9025):	No scan chain specified/traced.
+Type 'man IMPSP-9025' for more detail.
+End: Reorder Scan Chains
+*** Starting refinePlace (0:10:11 mem=7235.6M) ***
+Total net bbox length = 5.083e+05 (2.341e+05 2.743e+05) (ext = 3.602e+04)
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Move report: Detail placement moves 29383 insts, mean move: 0.39 um, max move: 19.14 um 
+	Max move on inst (BPU/BTB/FE_OFC717_FE_DBTN235_n_772): (36.23, 274.07) --> (18.36, 272.81)
+	Runtime: CPU: 0:00:02.9 REAL: 0:00:02.0 MEM: 7331.6MB
+Summary Report:
+Instances move: 29383 (out of 29384 movable)
+Instances flipped: 1
+Mean displacement: 0.39 um
+Max displacement: 19.14 um (Instance: BPU/BTB/FE_OFC717_FE_DBTN235_n_772) (36.2328, 274.072) -> (18.36, 272.808)
+	Length: 5 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB2xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 4.953e+05 (2.199e+05 2.754e+05) (ext = 3.591e+04)
+Runtime: CPU: 0:00:03.0 REAL: 0:00:02.0 MEM: 7331.6MB
+*** Finished refinePlace (0:10:14 mem=7331.6M) ***
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+[NR-eGR] Early global route reroute all routable nets
+[NR-eGR] Track table information for default rule: 
+[NR-eGR] M1 has single uniform track structure
+[NR-eGR] M2 has non-uniform track structure
+[NR-eGR] M3 has single uniform track structure
+[NR-eGR] M4 has single uniform track structure
+[NR-eGR] M5 has single uniform track structure
+[NR-eGR] M6 has single uniform track structure
+[NR-eGR] M7 has single uniform track structure
+[NR-eGR] M8 has single uniform track structure
+[NR-eGR] M9 has single uniform track structure
+[NR-eGR] Pad has single uniform track structure
+[NR-eGR] Read 0 clock shapes
+[NR-eGR] Read 0 other shapes
+[NR-eGR] #Routing Blockages  : 0
+[NR-eGR] #Bump Blockages     : 0
+[NR-eGR] #Instance Blockages : 43952
+[NR-eGR] #PG Blockages       : 37072
+[NR-eGR] #Halo Blockages     : 0
+[NR-eGR] #Boundary Blockages : 0
+[NR-eGR] #Clock Blockages    : 0
+[NR-eGR] #Other Blockages    : 0
+[NR-eGR] #prerouted nets         : 0
+[NR-eGR] #prerouted special nets : 0
+[NR-eGR] #prerouted wires        : 0
+[NR-eGR] Read 29557 nets ( ignored 0 )
+[NR-eGR] There are 1 clock nets ( 0 with NDR ).
+[NR-eGR] ============ Routing rule table ============
+[NR-eGR] Rule id: 0  Rule name: (Default)  Nets: 29557
+[NR-eGR] ========================================
+[NR-eGR] 
+[NR-eGR] Layer group 1: route 29557 net(s) in layer range [2, 10]
+[NR-eGR] Early Global Route overflow of layer group 1: 0.00% H + 0.00% V. EstWL: 5.747782e+05um
+[NR-eGR] Congestion Analysis By layer: (blocked Gcells are excluded) 
+[NR-eGR]                        OverCon           OverCon            
+[NR-eGR]                         #Gcell            #Gcell     %Gcell
+[NR-eGR]        Layer             (1-2)               (3)    OverCon
+[NR-eGR] ---------------------------------------------------------------
+[NR-eGR]      M1 ( 1)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M2 ( 2)        44( 0.21%)         1( 0.00%)   ( 0.21%) 
+[NR-eGR]      M3 ( 3)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M4 ( 4)        58( 0.27%)         2( 0.01%)   ( 0.28%) 
+[NR-eGR]      M5 ( 5)         9( 0.04%)         0( 0.00%)   ( 0.04%) 
+[NR-eGR]      M6 ( 6)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M7 ( 7)         3( 0.01%)         0( 0.00%)   ( 0.01%) 
+[NR-eGR]      M8 ( 8)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M9 ( 9)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]     Pad (10)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR] ---------------------------------------------------------------
+[NR-eGR]        Total       114( 0.06%)         3( 0.00%)   ( 0.07%) 
+[NR-eGR] 
+[NR-eGR] Overflow after Early Global Route 0.00% H + 0.00% V
+[NR-eGR] Finished Early Global Route kernel ( CPU: 1.23 sec, Real: 0.53 sec, Curr Mem: 6.85 MB )
+Early Global Route congestion estimation runtime: 0.55 seconds, mem = 7363.6M
+Local HotSpot Analysis: normalized max congestion hotspot area = 0.00, normalized total congestion hotspot area = 0.00 (area is in unit of 4 std-cell row bins)
+[NR-eGR] Connected 0 must-join pins/ports (post-process)
+[NR-eGR] Total eGR-routed clock nets wire length: 18382um, number of vias: 16945
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR]              Length (um)    Vias 
+[NR-eGR] ---------------------------------
+[NR-eGR]  M1   (1V)             0  119504 
+[NR-eGR]  M2   (2H)        169529  181865 
+[NR-eGR]  M3   (3V)        240670   14803 
+[NR-eGR]  M4   (4H)         47584    6131 
+[NR-eGR]  M5   (5V)         64325    4200 
+[NR-eGR]  M6   (6H)         48583    1253 
+[NR-eGR]  M7   (7V)         26574     648 
+[NR-eGR]  M8   (8H)         17070      70 
+[NR-eGR]  M9   (9V)          2729       0 
+[NR-eGR]  Pad  (10H)            0       0 
+[NR-eGR] ---------------------------------
+[NR-eGR]       Total       617064  328474 
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR] Total half perimeter of net bounding box: 495294um
+[NR-eGR] Total length: 617064um, number of vias: 328474
+[NR-eGR] --------------------------------------------------------------------------
+Max route layer is changed from 127 to 10 because there is no routing track above this layer
+Early Global Route wiring runtime: 0.55 seconds, mem = 7226.1M
+[hotspot] +------------+---------------+---------------+
+[hotspot] |            |   max hotspot | total hotspot |
+[hotspot] +------------+---------------+---------------+
+[hotspot] | normalized |          0.00 |          0.00 |
+[hotspot] +------------+---------------+---------------+
+Local HotSpot Analysis: normalized max congestion hotspot area = 0.00, normalized total congestion hotspot area = 0.00 (area is in unit of 4 std-cell row bins)
+[hotspot] Hotspot report including placement blocked areas
+[hotspot] +------------+---------------+---------------+
+[hotspot] |            |   max hotspot | total hotspot |
+[hotspot] +------------+---------------+---------------+
+[hotspot] | normalized |          7.08 |          7.08 |
+[hotspot] +------------+---------------+---------------+
+Local HotSpot Analysis (blockage included): normalized max congestion hotspot area = 7.08, normalized total congestion hotspot area = 7.08 (area is in unit of 4 std-cell row bins)
+[hotspot] top 5 congestion hotspot bounding boxes and scores of normalized hotspot
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] | top |            hotspot bbox             | hotspot score |           module              |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  1  |    95.69   303.05   112.97   318.17 |        1.05   | BPU/BTB                       |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  2  |   112.97   303.05   130.25   318.17 |        1.05   | BPU/BTB                       |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  3  |   130.25   303.05   147.53   318.17 |        1.05   | BPU/BTB                       |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  4  |   147.53   303.05   164.81   318.17 |        1.05   | RF                            |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  5  |   164.81   303.05   182.09   318.17 |        1.05   | RF                            |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+0 delay mode for cte disabled.
+
+*** Finished incrementalPlace (cpu=0:02:43, real=0:00:29.0)***
+Start to check current routing status for nets...
+All nets are already routed correctly.
+End to check current routing status for nets (mem=7000.0M)
+Extraction called for design 'riscv_pipeline' of instances=29384 and nets=30286 using extraction engine 'preRoute' .
+PreRoute RC Extraction called for design riscv_pipeline.
+RC Extraction called in multi-corner(1) mode.
+RCMode: PreRoute
+      RC Corner Indexes            0   
+Capacitance Scaling Factor   : 1.00000 
+Resistance Scaling Factor    : 1.00000 
+Clock Cap. Scaling Factor    : 1.00000 
+Clock Res. Scaling Factor    : 1.00000 
+Shrink Factor                : 1.00000
+PreRoute extraction is honoring NDR/Shielding/ExtraSpace for clock nets.
+Using Quantus QRC technology file ...
+Updating RC Grid density data for preRoute extraction ...
+Initializing multi-corner resistance tables ...
+PreRoute RC Extraction DONE (CPU Time: 0:00:00.3  Real Time: 0:00:00.0  MEM: 6999.992M)
+**optDesign ... cpu = 0:05:39, real = 0:01:34, mem = 3973.5M, totSessionCpu=0:10:17 **
+Starting delay calculation for Setup views
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: riscv_pipeline
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in Single mode...
+Start delay calculation (fullDC) (8 T). (MEM=4181.43)
+Total number of fetched objects 29557
+End delay calculation. (MEM=4263.93 CPU=0:00:09.3 REAL=0:00:01.0)
+End delay calculation (fullDC). (MEM=4263.93 CPU=0:00:10.3 REAL=0:00:01.0)
+*** Done Building Timing Graph (cpu=0:00:13.7 real=0:00:02.0 totSessionCpu=0:10:31 mem=7129.1M)
+*** IncrReplace #1 [finish] (place_opt_design #1) : cpu/real = 0:02:57.7/0:00:32.5 (5.5), totSession cpu/real = 0:10:31.1/0:03:07.4 (3.4), mem = 7129.1M
+skipped the cell partition in DRV
+*** Timing Is met
+*** Check timing (0:00:00.0)
+*** Timing Is met
+*** Check timing (0:00:00.0)
+*** Timing Is met
+*** Check timing (0:00:00.0)
+Info: 1 clock net  excluded from IPO operation.
+Begin: Area Reclaim Optimization
+*** AreaOpt #3 [begin] (place_opt_design #1) : totSession cpu/real = 0:10:36.3/0:03:08.9 (3.4), mem = 7263.1M
+(I,S,L,T): view_tt: 0.774677, 0.373894, 0.00342617, 1.152
+Reclaim Optimization WNS Slack 0.000  TNS Slack 0.000 Density 71.69
++---------+---------+--------+--------+------------+--------+
+| Density | Commits |  WNS   |  TNS   |    Real    |  Mem   |
++---------+---------+--------+--------+------------+--------+
+|   71.69%|        -|   0.000|   0.000|   0:00:00.0| 7263.1M|
+|   71.60%|      504|   0.000|   0.000|   0:00:13.0| 7629.8M|
++---------+---------+--------+--------+------------+--------+
+Reclaim Optimization End WNS Slack 0.000  TNS Slack 0.000 Density 71.60
+Bottom Preferred Layer:
++-----------+------------+----------+
+|   Layer   |   OPT_LA   |   Rule   |
++-----------+------------+----------+
+| M4 (z=4)  |          2 | default  |
++-----------+------------+----------+
+Via Pillar Rule:
+    None
+
+Number of times islegalLocAvaiable called = 0 skipped = 0, called in commitmove = 0, skipped in commitmove = 0
+End: Core Area Reclaim Optimization (cpu = 0:01:08) (real = 0:00:13.0) **
+(I,S,L,T): view_tt: 0.774094, 0.374053, 0.00323536, 1.15138
+*** AreaOpt #3 [finish] (place_opt_design #1) : cpu/real = 0:01:07.9/0:00:13.4 (5.1), totSession cpu/real = 0:11:44.1/0:03:22.3 (3.5), mem = 7629.8M
+End: Area Reclaim Optimization (cpu=0:01:08, real=0:00:13, mem=7501.74M, totSessionCpu=0:11:44).
+Info: 1 clock net  excluded from IPO operation.
+
+Begin: Area Power Optimization
+Begin: Area Power Reclaim Optimization
+*** AreaOpt #4 [begin] (place_opt_design #1) : totSession cpu/real = 0:11:44.9/0:03:22.9 (3.5), mem = 7629.8M
+(I,S,L,T): view_tt: 0.774094, 0.374053, 0.00323536, 1.15138
+Reclaim Optimization WNS Slack 0.000  TNS Slack 0.000 Density 71.60
++---------+---------+--------+--------+------------+--------+
+| Density | Commits |  WNS   |  TNS   |    Real    |  Mem   |
++---------+---------+--------+--------+------------+--------+
+|   71.60%|        -|   0.000|   0.000|   0:00:00.0| 7629.8M|
+|   71.60%|        2|   0.000|   0.000|   0:00:00.0| 7629.8M|
+|   71.60%|        5|   0.000|   0.000|   0:00:01.0| 7629.8M|
+|   71.59%|       34|   0.000|   0.000|   0:00:01.0| 7629.8M|
+|   71.59%|        0|   0.000|   0.000|   0:00:00.0| 7629.8M|
+|   71.59%|       13|   0.000|   0.000|   0:00:00.0| 7629.8M|
+|   71.59%|        0|   0.000|   0.000|   0:00:01.0| 7629.8M|
++---------+---------+--------+--------+------------+--------+
+Reclaim Optimization End WNS Slack 0.000  TNS Slack 0.000 Density 71.59
+Bottom Preferred Layer:
+    None
+Via Pillar Rule:
+    None
+
+Number of times islegalLocAvaiable called = 13 skipped = 0, called in commitmove = 13, skipped in commitmove = 0
+End: Core Area Reclaim Optimization (cpu = 0:00:10.3) (real = 0:00:03.0) **
+(I,S,L,T): view_tt: 0.77418, 0.373977, 0.00323867, 1.1514
+*** AreaOpt #4 [finish] (place_opt_design #1) : cpu/real = 0:00:10.6/0:00:03.0 (3.5), totSession cpu/real = 0:11:55.5/0:03:26.0 (3.5), mem = 7629.8M
+End: Area Reclaim Optimization (cpu=0:00:11, real=0:00:03, mem=7501.74M, totSessionCpu=0:11:56).
+-opt_exp_set_preroute_early_power_reclaim_recovery_split_flow false
+                                           # bool, default=false, private
+Begin: GigaOpt postEco DRV Optimization
+*** DrvOpt #3 [begin] (place_opt_design #1) : totSession cpu/real = 0:11:56.1/0:03:26.4 (3.5), mem = 7501.7M
+Info: 1 clock net  excluded from IPO operation.
+(I,S,L,T): view_tt: 0.77418, 0.373977, 0.00323867, 1.1514
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_tt has been selected for calibration 
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+|        max-tran       |        max-cap        |  max-fanout |  max-length |       setup       |        |        |        |       |          |         |
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+| nets | terms|  wViol  | nets | terms|  wViol  | nets | terms| nets | terms|   WNS   |   TNS   |  #Buf  |  #Inv  | #Resize|Density|   Real   |   Mem   |
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+|    28|   169|    -0.05|     0|     0|     0.00|     0|     0|     0|     0|     3.76|     0.00|       0|       0|       0| 71.59%|          |         |
+|     0|     0|     0.00|     0|     0|     0.00|     0|     0|     0|     0|     3.76|     0.00|      23|       0|       4| 71.62%| 0:00:00.0|  7629.8M|
+|     0|     0|     0.00|     0|     0|     0.00|     0|     0|     0|     0|     3.76|     0.00|       0|       0|       0| 71.62%| 0:00:00.0|  7629.8M|
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+Bottom Preferred Layer:
++-----------+------------+----------+
+|   Layer   |   OPT_LA   |   Rule   |
++-----------+------------+----------+
+| M4 (z=4)  |          1 | default  |
++-----------+------------+----------+
+Via Pillar Rule:
+    None
+
+*** Finish DRV Fixing (cpu=0:00:01.9 real=0:00:01.0 mem=7629.8M) ***
+
+(I,S,L,T): view_tt: 0.774142, 0.374039, 0.00323996, 1.15142
+*** DrvOpt #3 [finish] (place_opt_design #1) : cpu/real = 0:00:04.7/0:00:01.9 (2.4), totSession cpu/real = 0:12:00.8/0:03:28.4 (3.5), mem = 7501.7M
+End: GigaOpt postEco DRV Optimization
+**WARN: (IMPOPT-7329):	Skipping refinePlace due to user configuration.
+GigaOpt: WNS changes after postEco optimization: 0.000 -> 0.000 (bump = 0.0)
+GigaOpt: Skipping nonLegal postEco optimization
+Design TNS changes after trial route: 0.000 -> 0.000
+GigaOpt: Skipping post-eco TNS optimization
+**optDesign ... cpu = 0:07:24, real = 0:01:59, mem = 4291.4M, totSessionCpu=0:12:02 **
+
+OptSummary:
+
+------------------------------------------------------------------
+        Before Power Reclaim
+------------------------------------------------------------------
+
+Setup views included:
+ view_tt 
+
++--------------------+---------+---------+---------+
+|     Setup mode     |   all   | reg2reg | default |
++--------------------+---------+---------+---------+
+|           WNS (ns):|  3.764  |  6.101  |  3.764  |
+|           TNS (ns):|  0.000  |  0.000  |  0.000  |
+|    Violating Paths:|    0    |    0    |    0    |
+|          All Paths:|  11364  |  11228  |  5823   |
++--------------------+---------+---------+---------+
+
++----------------+-------------------------------+------------------+
+|                |              Real             |       Total      |
+|    DRVs        +------------------+------------+------------------|
+|                |  Nr nets(terms)  | Worst Vio  |  Nr nets(terms)  |
++----------------+------------------+------------+------------------+
+|   max_cap      |      0 (0)       |   0.000    |      0 (0)       |
+|   max_tran     |      0 (0)       |   0.000    |      0 (0)       |
+|   max_fanout   |      0 (0)       |     0      |      1 (1)       |
+|   max_length   |      0 (0)       |     0      |      0 (0)       |
++----------------+------------------+------------+------------------+
+
+Density: 71.617%
+Routing Overflow: 0.00% H and 0.00% V
+------------------------------------------------------------------
+Info: 1 clock net  excluded from IPO operation.
+
+Begin: Power Optimization
+             0V	    VSS
+           0.7V	    VDD
+CLK(100MHz) 
+Starting Levelizing
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT)
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT): 10%
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT): 20%
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT): 30%
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT): 40%
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT): 50%
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT): 60%
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT): 70%
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT): 80%
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT): 90%
+
+Finished Levelizing
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT)
+
+Starting Activity Propagation
+2026-Aug-12 00:11:36 (2026-Aug-11 15:11:36 GMT)
+2026-Aug-12 00:11:37 (2026-Aug-11 15:11:37 GMT): 10%
+2026-Aug-12 00:11:37 (2026-Aug-11 15:11:37 GMT): 20%
+
+Finished Activity Propagation
+2026-Aug-12 00:11:37 (2026-Aug-11 15:11:37 GMT)
+OptDebug: Start of Power Reclaim:
++----------+-----+-----+
+|Path Group|  WNS|  TNS|
++----------+-----+-----+
+|default   |3.764|0.000|
+|reg2reg   |6.101|0.000|
+|HEPG      |6.101|0.000|
+|All Paths |3.764|0.000|
++----------+-----+-----+
+
+Begin: Core Power Optimization
+*** PowerOpt #1 [begin] (place_opt_design #1) : totSession cpu/real = 0:12:05.5/0:03:31.8 (3.4), mem = 7629.8M
+(I,S,L,T): view_tt: 0.774142, 0.374039, 0.00323996, 1.15142
+** INFO: The user may notice some TNS degradation **
++---------+---------+--------+--------+------------+--------+
+| Density | Commits |  WNS   |  TNS   |    Real    |  Mem   |
++---------+---------+--------+--------+------------+--------+
+|   71.62%|        -|  -0.125|   0.000|   0:00:00.0| 7629.8M|
+|   71.62%|       42|  -0.125|   0.000|   0:00:01.0| 7629.8M|
++---------+---------+--------+--------+------------+--------+
+Bottom Preferred Layer:
++-----------+------------+----------+
+|   Layer   |   OPT_LA   |   Rule   |
++-----------+------------+----------+
+| M4 (z=4)  |          1 | default  |
++-----------+------------+----------+
+Via Pillar Rule:
+    None
+
+Number of insts committed for which the initial cell was dont use = 0
+
+Number of times islegalLocAvaiable called = 0 skipped = 0, called in commitmove = 0, skipped in commitmove = 0
+Info : Out of 66 seq cells, 0 cells are internal dont use, and 0 cells are db dont use.
+End: Core Power Optimization (cpu = 0:00:04.8) (real = 0:00:02.0) **
+(I,S,L,T): view_tt: 0.774137, 0.374, 0.00323919, 1.15138
+*** PowerOpt #1 [finish] (place_opt_design #1) : cpu/real = 0:00:05.0/0:00:01.6 (3.1), totSession cpu/real = 0:12:10.5/0:03:33.4 (3.4), mem = 7629.8M
+OPT: Doing preprocessing before recovery...
+OptDebug: Start of preprocessForPowerRecovery:
++----------+-----+-----+
+|Path Group|  WNS|  TNS|
++----------+-----+-----+
+|default   |3.764|0.000|
+|reg2reg   |6.101|0.000|
+|HEPG      |6.101|0.000|
+|All Paths |3.764|0.000|
++----------+-----+-----+
+
+OptDebug: End of preprocessForPowerRecovery:
++----------+-----+-----+
+|Path Group|  WNS|  TNS|
++----------+-----+-----+
+|default   |3.764|0.000|
+|reg2reg   |6.101|0.000|
+|HEPG      |6.101|0.000|
+|All Paths |3.764|0.000|
++----------+-----+-----+
+
+Checking setup slack degradation ...
+Begin: Core Power Optimization
+*** PowerOpt #2 [begin] (place_opt_design #1) : totSession cpu/real = 0:12:11.5/0:03:34.1 (3.4), mem = 7597.8M
+(I,S,L,T): view_tt: 0.774137, 0.374, 0.00323919, 1.15138
+Reclaim Optimization WNS Slack 0.000  TNS Slack 0.000 Density 71.62
++---------+---------+--------+--------+------------+--------+
+| Density | Commits |  WNS   |  TNS   |    Real    |  Mem   |
++---------+---------+--------+--------+------------+--------+
+|   71.62%|        -|   0.000|   0.000|   0:00:00.0| 7629.8M|
+|   71.62%|        0|   0.000|   0.000|   0:00:01.0| 7629.8M|
+|   71.61%|       35|   0.000|   0.000|   0:00:01.0| 7629.8M|
+|   71.61%|       29|   0.000|   0.000|   0:00:00.0| 7629.8M|
++---------+---------+--------+--------+------------+--------+
+Reclaim Optimization End WNS Slack 0.000  TNS Slack 0.000 Density 71.61
+Bottom Preferred Layer:
++-----------+------------+----------+
+|   Layer   |   OPT_LA   |   Rule   |
++-----------+------------+----------+
+| M4 (z=4)  |          1 | default  |
++-----------+------------+----------+
+Via Pillar Rule:
+    None
+
+Number of insts committed for which the initial cell was dont use = 0
+
+Number of times islegalLocAvaiable called = 0 skipped = 0, called in commitmove = 0, skipped in commitmove = 0
+Info : Out of 66 seq cells, 0 cells are internal dont use, and 0 cells are db dont use.
+End: Core Power Optimization (cpu = 0:00:10.9) (real = 0:00:02.0) **
+(I,S,L,T): view_tt: 0.774164, 0.37397, 0.00323218, 1.15137
+*** PowerOpt #2 [finish] (place_opt_design #1) : cpu/real = 0:00:11.2/0:00:02.7 (4.2), totSession cpu/real = 0:12:22.8/0:03:36.8 (3.4), mem = 7629.8M
+*** Finished re-routing un-routed nets (7629.8M) ***
+
+*** Finish Physical Update (cpu=0:00:00.5 real=0:00:01.0 mem=7629.8M) ***
+Checking setup slack degradation ...
+OptDebug: End of Power Reclaim:
++----------+-----+-----+
+|Path Group|  WNS|  TNS|
++----------+-----+-----+
+|default   |3.761|0.000|
+|reg2reg   |6.101|0.000|
+|HEPG      |6.101|0.000|
+|All Paths |3.761|0.000|
++----------+-----+-----+
+
+End: Power Optimization (cpu=0:00:19, real=0:00:06, mem=7501.73M, totSessionCpu=0:12:24).
+**optDesign ... cpu = 0:07:46, real = 0:02:07, mem = 4288.7M, totSessionCpu=0:12:24 **
+Register exp ratio and priority group on 1 nets on 29595 nets : 
+z=4 : 1 nets
+
+Active setup views:
+ view_tt
+  Dominating endpoints: 0
+  Dominating TNS: -0.000
+
+Extraction called for design 'riscv_pipeline' of instances=29422 and nets=30329 using extraction engine 'preRoute' .
+PreRoute RC Extraction called for design riscv_pipeline.
+RC Extraction called in multi-corner(1) mode.
+RCMode: PreRoute
+      RC Corner Indexes            0   
+Capacitance Scaling Factor   : 1.00000 
+Resistance Scaling Factor    : 1.00000 
+Clock Cap. Scaling Factor    : 1.00000 
+Clock Res. Scaling Factor    : 1.00000 
+Shrink Factor                : 1.00000
+PreRoute extraction is honoring NDR/Shielding/ExtraSpace for clock nets.
+Using Quantus QRC technology file ...
+Grid density data update skipped
+Initializing multi-corner resistance tables ...
+PreRoute RC Extraction DONE (CPU Time: 0:00:00.3  Real Time: 0:00:00.0  MEM: 7364.164M)
+Skewing Data Summary (End_of_FINAL)
+
+Skew summary for view view_tt:
+* Accumulated skew : count = 0
+
+<optDesign CMD> Restore Using all VT Cells
+Starting delay calculation for Setup views
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: riscv_pipeline
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in Single mode...
+Start delay calculation (fullDC) (8 T). (MEM=4255.28)
+Total number of fetched objects 29595
+End delay calculation. (MEM=4344.11 CPU=0:00:09.1 REAL=0:00:01.0)
+End delay calculation (fullDC). (MEM=4344.11 CPU=0:00:10.0 REAL=0:00:01.0)
+*** Done Building Timing Graph (cpu=0:00:13.4 real=0:00:03.0 totSessionCpu=0:12:40 mem=7359.7M)
+OPTC: user 20.0
+Reported timing to dir ./timingReports
+**optDesign ... cpu = 0:08:02, real = 0:02:11, mem = 4216.9M, totSessionCpu=0:12:40 **
+env CDS_WORKAREA is set to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus
+Using Power View: view_tt.
+
+Begin Power Analysis
+
+             0V	    VSS
+           0.7V	    VDD
+Begin Processing Timing Library for Power Calculation
+
+Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4219.34MB/unknown/unknown)
+
+
+
+Begin Processing Power Net/Grid for Power Calculation
+
+Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4219.34MB/unknown/unknown)
+
+Begin Processing Timing Window Data for Power Calculation
+
+Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4219.34MB/unknown/unknown)
+
+Begin Processing User Attributes
+
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4219.34MB/unknown/unknown)
+
+Begin Processing Signal Activity
+
+
+Starting Levelizing
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT)
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 10%
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 20%
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 30%
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 40%
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 50%
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 60%
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 70%
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 80%
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 90%
+
+Finished Levelizing
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT)
+
+Starting Activity Propagation
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT)
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 10%
+2026-Aug-12 00:11:48 (2026-Aug-11 15:11:48 GMT): 20%
+
+Finished Activity Propagation
+2026-Aug-12 00:11:49 (2026-Aug-11 15:11:49 GMT)
+Ended Processing Signal Activity: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=4220.96MB/unknown/unknown)
+
+Begin Power Computation
+
+      ----------------------------------------------------------
+      # of cell(s) missing both power/leakage table: 0
+      # of cell(s) missing power table: 0
+      # of cell(s) missing leakage table: 0
+      ----------------------------------------------------------
+
+
+
+Starting Calculating power
+2026-Aug-12 00:11:49 (2026-Aug-11 15:11:49 GMT)
+2026-Aug-12 00:11:49 (2026-Aug-11 15:11:49 GMT): 10%
+2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT): 20%
+2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT): 30%
+2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT): 40%
+2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT): 50%
+2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT): 60%
+2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT): 70%
+2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT): 80%
+2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT): 90%
+
+Finished Calculating power
+2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT)
+      # of MSMV cell(s) missing power_level: 0
+Ended Power Computation: (cpu=0:00:05, real=0:00:01, mem(process/total/peak)=4227.22MB/unknown/unknown)
+
+Begin Processing User Attributes
+
+Begin Processing set_power
+Ended Processing set_power: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=4227.22MB/unknown/unknown)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4227.22MB/unknown/unknown)
+
+Ended Power Analysis: (cpu=0:00:06, real=0:00:02, mem(process/total/peak)=4227.22MB/unknown/unknown)
+
+Begin Boundary Leakage Calculation
+Ended Boundary Leakage Calculation: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=4227.22MB/unknown/unknown)
+Begin Static Power Report Generation
+*----------------------------------------------------------------------------------------
+*	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+*	
+*
+* 	Date & Time:	2026-Aug-12 00:11:50 (2026-Aug-11 15:11:50 GMT)
+*
+*----------------------------------------------------------------------------------------
+
+*
+
+*	Design: riscv_pipeline
+
+*
+
+*	Power Domain used: 
+
+*              Rail:        VDD      Voltage:        0.7 
+
+*
+
+*	Power Units = 1mW
+
+*
+
+*	Time Units = 1e-12 secs 
+
+*
+
+*       report_power -outfile ./timingReports/preCTS.power
+
+*
+
+-----------------------------------------------------------------------------------------
+
+*
+
+
+
+Total Power
+-----------------------------------------------------------------------------------------
+Total Internal Power:        0.82732312 	   77.6512%
+Total Switching Power:       0.23471703 	   22.0302%
+Total Leakage Power:         0.00339433 	    0.3186%
+Total Power:                 1.06543448
+-----------------------------------------------------------------------------------------
+
+
+Group                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+Sequential                        0.7468     0.06337    0.001728      0.8119        76.2
+Macro                                  0           0           0           0           0
+IO                                     0           0           0           0           0
+Combinational                    0.08051      0.1713    0.001667      0.2535        23.8
+Clock (Combinational)                  0           0           0           0           0
+Clock (Sequential)                     0           0           0           0           0
+-----------------------------------------------------------------------------------------
+Total                             0.8273      0.2347    0.003394       1.065         100
+-----------------------------------------------------------------------------------------
+
+
+Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+VDD                       0.7     0.8273      0.2347    0.003394       1.065         100
+** INFO:  (VOLTUS_POWR-3465): There are 0 decaps and 0 fillers in the design
+
+Ended Static Power Report Generation: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=4235.85MB/unknown/unknown)
+
+
+Output file is ./timingReports/preCTS.power.
+
+OptSummary:
+
+------------------------------------------------------------------
+     optDesign Final Summary
+------------------------------------------------------------------
+
+Setup views included:
+ view_tt 
+
++--------------------+---------+---------+---------+
+|     Setup mode     |   all   | reg2reg | default |
++--------------------+---------+---------+---------+
+|           WNS (ns):|  3.761  |  6.101  |  3.761  |
+|           TNS (ns):|  0.000  |  0.000  |  0.000  |
+|    Violating Paths:|    0    |    0    |    0    |
+|          All Paths:|  11364  |  11228  |  5823   |
++--------------------+---------+---------+---------+
+
++----------------+-------------------------------+------------------+
+|                |              Real             |       Total      |
+|    DRVs        +------------------+------------+------------------|
+|                |  Nr nets(terms)  | Worst Vio  |  Nr nets(terms)  |
++----------------+------------------+------------+------------------+
+|   max_cap      |      0 (0)       |   0.000    |      0 (0)       |
+|   max_tran     |      0 (0)       |   0.000    |      0 (0)       |
+|   max_fanout   |      0 (0)       |     0      |      1 (1)       |
+|   max_length   |      0 (0)       |     0      |      0 (0)       |
++----------------+------------------+------------+------------------+
+
+Density: 71.612%
+Routing Overflow: 0.00% H and 0.00% V
+------------------------------------------------------------------
+Begin: Collecting metrics
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+| Snapshot                    | WNS                  | TNS                  | Density (%) | Power estimated                                            | Hotspot                   | Resource               | DRVs       | Layer-OPT |
+|                             | HEPG (ns) | ALL (ns) | HEPG (ns) | ALL (ns) |             | Total (mW) | Leakage (mW) | Switching (mW) | Internal (mW) | Max (bins) | Total (bins) | Real (s) | Memory (MB) | Tran | Cap | M4        |
+|-----------------------------+-----------+----------+-----------+----------+-------------+------------+--------------+----------------+---------------+------------+--------------+----------+-------------+------+-----+-----------|
+| initial_summary             |           |    3.741 |           |        0 |       69.75 |            |              |                |               |            |              | 0:00:04  |        6564 |  500 | 264 |           |
+| force_downsizing_area_power |           |    3.534 |           |        0 |       69.75 |       1.55 |         0.03 |           0.40 |          1.12 |            |              | 0:00:06  |        6564 |      |     |           |
+| simplify_netlist            |           |          |           |          |             |       1.20 |         0.00 |           0.37 |          0.82 |            |              | 0:00:02  |        6583 |      |     |           |
+| drv_fixing                  |     0.000 |    3.534 |         0 |        0 |       70.36 |       1.20 |         0.00 |           0.37 |          0.83 |            |              | 0:00:03  |        6671 |      |     |           |
+| area_reclaiming             |     0.000 |    3.534 |         0 |        0 |       70.09 |       1.20 |         0.00 |           0.37 |          0.82 |            |              | 0:00:04  |        6711 |      |     |           |
+| drv_fixing_2                |     0.000 |    3.728 |         0 |        0 |       72.01 |       1.15 |         0.00 |           0.37 |          0.77 |            |              | 0:00:07  |        6779 |    0 |   0 |        20 |
+| global_sizing               |           |          |           |          |             |       1.15 |         0.00 |           0.37 |          0.77 |            |              | 0:00:02  |        6779 |      |     |           |
+| global_opt                  |           |    3.728 |           |        0 |       72.01 |       1.15 |         0.00 |           0.37 |          0.77 |            |              | 0:00:02  |        6779 |      |     |        20 |
+| area_reclaiming_2           |     0.000 |    3.744 |         0 |        0 |       71.69 |       1.15 |         0.00 |           0.37 |          0.77 |            |              | 0:00:08  |        6818 |      |     |           |
+| incremental_replacement     |           |          |           |          |             |            |              |                |               |       7.08 |         7.08 | 0:00:32  |        7129 |      |     |           |
+| area_reclaiming_3           |     6.101 |    3.757 |         0 |        0 |       71.60 |       1.15 |         0.00 |           0.37 |          0.77 |            |              | 0:00:14  |        7502 |      |     |         2 |
+| area_reclaiming_4           |     6.101 |    3.764 |         0 |        0 |       71.59 |       1.15 |         0.00 |           0.37 |          0.77 |            |              | 0:00:04  |        7502 |      |     |           |
+| drv_eco_fixing              |     6.101 |    3.764 |         0 |        0 |       71.62 |       1.15 |         0.00 |           0.37 |          0.77 |            |              | 0:00:02  |        7502 |    0 |   0 |         1 |
+| power_reclaiming            |     6.101 |    3.764 |         0 |        0 |       71.62 |       1.15 |         0.00 |           0.37 |          0.77 |            |              | 0:00:02  |        7630 |      |     |         1 |
+| power_reclaiming_2          |     6.101 |    3.761 |         0 |        0 |       71.61 |       1.15 |         0.00 |           0.37 |          0.77 |            |              | 0:00:03  |        7630 |      |     |         1 |
+| final_summary               |     6.101 |    3.761 |           |        0 |       71.61 |            |              |                |               |            |              | 0:00:05  |        7430 |    0 |   0 |           |
+ ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+End: Collecting metrics
+**optDesign ... cpu = 0:08:13, real = 0:02:16, mem = 4220.5M, totSessionCpu=0:12:51 **
+**WARN: (IMPOPT-3195):	Analysis mode has changed.
+Type 'man IMPOPT-3195' for more detail.
+*** Finished optDesign ***
+      flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   final
+      flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   opt_design_prects
+Info: final physical memory for 9 CRR processes is 1046.44MB.
+Info: Summary of CRR changes:
+      - Timing transform commits:       0
+Disable CTE adjustment.
+Disable Layer aware incrSKP.
+**place_opt_design ... cpu = 0:08:14, real = 0:02:26, mem = 7429.7M **
+*** Finished GigaPlace ***
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPSP-9025           1  No scan chain specified/traced.          
+WARNING   IMPOPT-3195          2  Analysis mode has changed.               
+WARNING   IMPOPT-7330          2  Net %s has fanout exceed delaycal_use_de...
+WARNING   IMPOPT-7329          1  Skipping refinePlace due to user configu...
+WARNING   NRIF-95              2  Option setNanoRouteMode -routeTopRouting...
+*** Message Summary: 8 warning(s), 0 error(s)
+
+*** place_opt_design #1 [finish] () : cpu/real = 0:08:14.2/0:02:26.0 (3.4), totSession cpu/real = 0:12:52.2/0:03:56.4 (3.3), mem = 7429.7M
+#% End place_opt_design (date=08/12 00:12:02, total cpu=0:08:14, real=0:02:26, peak res=4778.1M, current mem=4087.6M)
+<CMD> report_timing > ./reports/timing_preCTS.rpt
+<CMD> create_ccopt_clock_tree_spec -filename ./outputs/ccopt.spec
+Creating clock tree spec for modes (timing configs): mode_func
+extract_clock_generator_skew_groups=true: create_ccopt_clock_tree_spec will generate skew groups with a name prefix of "_clock_gen" to balance clock generator connected flops with the clock generator they drive.
+Reset timing graph...
+Ignoring AAE DB Resetting ...
+Reset timing graph done.
+Ignoring AAE DB Resetting ...
+Analyzing clock structure...
+Analyzing clock structure done.
+Reset timing graph...
+Ignoring AAE DB Resetting ...
+Reset timing graph done.
+Wrote: ./outputs/ccopt.spec
+<CMD> get_ccopt_clock_trees
+<CMD_INTERNAL> ccopt_check_and_flatten_ilms_no_restore
+<CMD> set_ccopt_property cts_is_sdc_clock_root -pin clk true
+<CMD> create_ccopt_clock_tree -name CLK -source clk -no_skew_group
+Extracting original clock gating for CLK...
+  clock_tree CLK contains 6114 sinks and 0 clock gates.
+Extracting original clock gating for CLK done.
+<CMD> set_ccopt_property target_max_trans_sdc -delay_corner dc_tt -early -clock_tree CLK 10.0
+<CMD> set_ccopt_property target_max_trans_sdc -delay_corner dc_tt -late -clock_tree CLK 40.0
+<CMD> set_ccopt_property source_latency -delay_corner dc_tt -early -rise -clock_tree CLK 100.0
+<CMD> set_ccopt_property source_latency -delay_corner dc_tt -early -fall -clock_tree CLK 100.0
+<CMD> set_ccopt_property source_latency -delay_corner dc_tt -late -rise -clock_tree CLK 150.0
+<CMD> set_ccopt_property source_latency -delay_corner dc_tt -late -fall -clock_tree CLK 150.0
+<CMD> set_ccopt_property clock_period -pin clk 10000
+<CMD> set_ccopt_property timing_connectivity_info {}
+<CMD> create_ccopt_skew_group -name CLK/mode_func -sources clk -auto_sinks
+The skew group CLK/mode_func was created. It contains 6114 sinks and 1 sources.
+<CMD> set_ccopt_property include_source_latency -skew_group CLK/mode_func true
+<CMD> set_ccopt_property extracted_from_clock_name -skew_group CLK/mode_func CLK
+<CMD> set_ccopt_property extracted_from_constraint_mode_names -skew_group CLK/mode_func {mode_func  }
+<CMD> set_ccopt_property extracted_from_delay_corners -skew_group CLK/mode_func dc_tt
+<CMD> check_ccopt_clock_tree_convergence
+Checking clock tree convergence...
+Checking clock tree convergence done.
+<CMD> get_ccopt_property auto_design_state_for_ilms
+<CMD> ccopt_design -prefix postCTS
+#% Begin ccopt_design (date=08/12 00:12:04, mem=3942.5M)
+Turning off fast DC mode.
+**ERROR: (IMPCCOPT-2440):	The input db is PODv2. Please try clock_opt_design.
+#% End ccopt_design (date=08/12 00:12:04, total cpu=0:00:00.1, real=0:00:00.0, peak res=3942.5M, current mem=3942.5M)
 **ERROR: (IMPSYT-6692):	Invalid return code while executing 'tcl/innovus.tcl' was returned and script processing was stopped. Review the following error in 'tcl/innovus.tcl' then restart.
-**ERROR: (IMPSYT-6693):	Error message: tcl/innovus.tcl: can't use non-numeric string as operand of "-".
+Error info: tcl/innovus.tcl: 
+    while executing
+"ccopt_design -monolithicflow_only -prefix postCTS"
+    ("eval" body line 1)
+    invoked from within
+"eval ccopt_design $step $args"
+    (procedure "ccopt_design" line 47)
+    invoked from within
+"ccopt_design -prefix postCTS"
+    (file "./tcl/innovus_PnR.tcl" line 219)
+    invoked from within
+"::se_source_orig ./tcl/innovus_PnR.tcl"
+    ("uplevel" body line 1)
+    invoked from within
+"uplevel [concat ::se_source_orig  $args] "
+    (procedure "source" line 225)
+    invoked from within
+"source ./tcl/innovus_PnR.tcl"
+    ("all" arm line 1)
+    invoked from within
+"switch -- $FLOW_STAGE {
+    hierfp {
+        # Standalone hierarchy-floorplan session.  The stage script exits after
+        # saving the checkpoint, ..."
+    (file "tcl/innovus.tcl" line 39)
+    invoked from within
+"::se_source_orig tcl/innovus.tcl"
+    ("uplevel" body line 1)
+    invoked from within
+"uplevel [concat ::se_source_orig  $args] "
+    (procedure "source" line 225)
+    invoked from within
+"source tcl/innovus.tcl"
+    invoked from within
+"::se::run_command_from_console "source tcl/innovus.tcl""
+    ("eval" body line 1)
+    invoked from within
+"eval {::se::run_command_from_console "source tcl/innovus.tcl"}"
+    (in namespace inscope "::" script line 1)
+    invoked from within
+"namespace inscope :: eval "::se::run_command_from_console \"source $fileName\""".
 <CMD> win
+<CMD> zoomBox -2.14400 13.91050 325.11350 306.87575
+<CMD> zoomBox 74.80025 78.76600 275.77750 258.68350
+<CMD> zoomBox 100.55725 116.35550 245.76350 246.34600
+<CMD> zoomBox 122.59275 153.61275 211.76775 233.44350
+<CMD> zoomBox 135.99175 176.09275 190.75650 225.11900
+<CMD> zoomBox 142.53825 185.62800 182.10600 221.04950
+<CMD> zoomBox 135.49975 176.23025 190.26500 225.25675
+<CMD> zoomBox 125.60725 163.03250 201.40700 230.88950
+<CMD> zoomBox 103.05650 132.96475 226.48375 243.45850
+<CMD> zoomBox 48.95875 61.32175 285.40650 272.99300
+<CMD> zoomBox -22.92325 -30.74050 362.09275 313.93100
+<CMD> zoomBox -140.59650 -178.14525 486.33825 383.09525
+invalid command name "exir"
 
-*** Memory Usage v#2 (Current mem = 6086.859M, initial mem = 839.699M) ***
-*** Message Summary: 14 warning(s), 4 error(s)
+*** Memory Usage v#2 (Current mem = 7438.195M, initial mem = 847.699M) ***
+*** Message Summary: 122103 warning(s), 2 error(s)
 
---- Ending "Innovus" (totcpu=0:01:17, real=0:00:54.0, mem=6086.9M) ---
+--- Ending "Innovus" (totcpu=0:12:59, real=0:04:33, mem=7438.2M) ---
