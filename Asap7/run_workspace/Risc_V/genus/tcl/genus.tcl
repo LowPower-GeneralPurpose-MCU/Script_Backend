@@ -59,11 +59,14 @@ set_db / .init_lib_search_path [list $LIB]
 set_db / .script_search_path   {./tcl}
 set_db / .init_hdl_search_path {./rtl}
 
-# Keep the default run local and single-process. The previous unconditional
-# max_cpus_per_server setting could launch a super-thread helper that then
-# stalled at syn_generic on this host.
+# Keep the default run local. The -cpu command-line option, super_thread_servers,
+# and max_cpus_per_server all enter Genus super-threading mode on this host.
 set_db / .auto_super_thread false
-set_db / .super_thread_servers {}
+foreach st_attr {super_thread_servers max_cpus_per_server} {
+    if {[catch {reset_db $st_attr} reset_error]} {
+        puts "WARNING: Unable to reset $st_attr: $reset_error"
+    }
+}
 
 if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
     set CORES [env_or_default GENUS_CPUS 4]
@@ -85,8 +88,7 @@ if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
         error "Super-thread server test failed before synthesis: $st_error"
     }
 } else {
-    set_db / .max_cpus_per_server 1
-    puts "Genus CPU configuration: super-thread disabled, local single-process run. Set GENUS_ENABLE_SUPER_THREAD=1 only after test_super_thread_servers passes."
+    puts "Genus CPU configuration: super-thread disabled. Do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set."
 }
 
 set_db / .hdl_unconnected_value 0
