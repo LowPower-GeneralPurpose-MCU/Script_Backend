@@ -17,6 +17,8 @@ set driver_file [file normalize [info script]]
 set run_dir [file dirname [file dirname $driver_file]]
 cd $run_dir
 
+set enc_source_continue_on_error false
+
 if {[info exists ::env(INNOVUS_STAGE)]} {
     set FLOW_STAGE [string tolower [string trim $::env(INNOVUS_STAGE)]]
 } else {

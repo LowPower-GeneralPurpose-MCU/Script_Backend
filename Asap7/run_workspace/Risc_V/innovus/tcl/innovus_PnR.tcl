@@ -50,12 +50,12 @@ set CoreSize [dbGet top.fPlan.coreBox_size]
 set DieSize  [dbGet top.fPlan.box_size]
 set FPx      [dbGet top.fPlan.box_sizex]
 set FPy      [dbGet top.fPlan.box_sizey]
-set CoreBox  [dbGet top.fPlan.coreBox]
 
-set core_llx [lindex $CoreBox 0]
-set core_lly [lindex $CoreBox 1]
-set core_urx [lindex $CoreBox 2]
-set core_ury [lindex $CoreBox 3]
+set core_llx [dbGet top.fPlan.coreBox_llx]
+set core_lly [dbGet top.fPlan.coreBox_lly]
+set core_urx [dbGet top.fPlan.coreBox_urx]
+set core_ury [dbGet top.fPlan.coreBox_ury]
+set CoreBox  [list $core_llx $core_lly $core_urx $core_ury]
 
 set size_report [open ./outputs/FPlanFinal.size w]
 puts $size_report "Top: $TOP"

@@ -54,6 +54,22 @@ set STREAM_MAP  ./tcl/streamOut.map
 # 72% is selected to leave routing headroom for this control-heavy CPU.
 set CORE_UTIL   0.72
 set CORE_ASPECT 1.00
+set FLOORPLAN_GRID 0.384
+set CORE_WIDTH  309.120
+set CORE_HEIGHT 308.352
+
+# proto_design requires the optional invs_ehfs license. The available license
+# reports IMPLIC-90/IMPFM-801, so keep it disabled unless explicitly requested.
+set RUN_PROTO_DESIGN 0
+if {[info exists ::env(INNOVUS_RUN_PROTO_DESIGN)]} {
+    switch -nocase -- $::env(INNOVUS_RUN_PROTO_DESIGN) {
+        1 - true - yes - on  { set RUN_PROTO_DESIGN 1 }
+        0 - false - no - off { set RUN_PROTO_DESIGN 0 }
+        default {
+            error "INNOVUS_RUN_PROTO_DESIGN must be 0/1, false/true, no/yes or off/on"
+        }
+    }
+}
 
 # M8/M9 ring geometry.  All values are multiples of the 0.320 um M8/M9
 # pitch in the scaled 4x tech LEF.  Width 0.640 um also satisfies the scaled

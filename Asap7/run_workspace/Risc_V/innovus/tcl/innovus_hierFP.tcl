@@ -23,7 +23,17 @@ if {$design_name ne $TOP} {
     error "Loaded top '$design_name', expected '$TOP'."
 }
 
-floorPlan -r $CORE_ASPECT $CORE_UTIL \
+proc assert_grid_multiple {name value grid} {
+    set snapped [expr {round($value / $grid) * $grid}]
+    if {abs($snapped - $value) > 0.0005} {
+        error "$name=$value is not aligned to grid $grid"
+    }
+}
+
+assert_grid_multiple CORE_WIDTH $CORE_WIDTH $FLOORPLAN_GRID
+assert_grid_multiple CORE_HEIGHT $CORE_HEIGHT $FLOORPLAN_GRID
+
+floorPlan -s $CORE_WIDTH $CORE_HEIGHT \
     $CORE_MARGIN $CORE_MARGIN $CORE_MARGIN $CORE_MARGIN
 
 set CoreArea [dbGet top.fPlan.area]
@@ -33,19 +43,24 @@ set DieSize  [dbGet top.fPlan.box_size]
 puts "============================================================"
 puts "INITIAL RISC-V FLOORPLAN"
 puts "Core utilization target : $CORE_UTIL"
+puts "Requested core size     : $CORE_WIDTH x $CORE_HEIGHT um"
 puts "Core size                : $CoreSize um"
 puts "Die size                 : $DieSize um"
 puts "Floorplan area           : $CoreArea um^2"
 puts "============================================================"
 
-# Generate timing/congestion-aware hierarchy guides from the module boundaries
-# preserved by Genus.  The guides may be manually adjusted in the GUI before
-# executing the save commands again.
-timeDesign -proto -prePlace
-set_proto_design_mode -timing_aware true -congestion_aware true
-proto_design
+# Generate timing/congestion-aware hierarchy guides only when the optional
+# EHFS license is available.  The deterministic flat floorplan remains valid
+# for the default student Innovus license.
+if {$RUN_PROTO_DESIGN} {
+    timeDesign -proto -prePlace
+    set_proto_design_mode -timing_aware true -congestion_aware true
+    proto_design
+    snapFPlan -guide
+} else {
+    puts "INFO: proto_design skipped; using deterministic RISC-V floorplan base."
+}
 
-snapFPlan -guide
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP.rpt
 saveFPlan ./outputs/${TOP}_hierFP.fp
 saveDesign ./saved/${TOP}_hierFP.enc
@@ -57,7 +72,11 @@ puts "============================================================"
 puts "Hierarchy floorplan saved."
 puts "Checkpoint : saved/${TOP}_hierFP.enc"
 puts "Floorplan  : outputs/${TOP}_hierFP.fp"
-puts "Inspect every guide: target density < 80%, preferably ~75%."
+if {$RUN_PROTO_DESIGN} {
+    puts "Inspect every guide: target density < 80%, preferably ~75%."
+} else {
+    puts "proto_design was skipped; no automatic hierarchy guides were created."
+}
 puts "Then run the PnR stage."
 puts "============================================================"
 
