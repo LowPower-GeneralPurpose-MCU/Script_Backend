@@ -3,19 +3,19 @@ Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
 Cadence and the Cadence logo are registered trademarks and Genus is a trademark
 of Cadence Design Systems, Inc. in the United States and other countries.
 
-[23:26:27.206258] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+[23:36:13.206226] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 Version: 23.14-s090_1, built Wed Feb 26 17:49:50 PST 2025
 Options: -disable_user_startup -batch -files tcl/genus.tcl -log genus -overwrite 
-Date:    Tue Aug 11 23:26:27 2026
+Date:    Tue Aug 11 23:36:13 2026
 Host:    user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*1physical cpu*AMD Ryzen 5 7545U 1024KB) (13556668KB)
-PID:     1583877
+PID:     1632004
 OS:      Ubuntu 26.04 LTS
 
 Checking out license: Genus_Synthesis
-[23:26:28.121890] Periodic Lic check successful
-[23:26:28.121896] Feature usage summary:
-[23:26:28.121897] Genus_Synthesis
+[23:36:14.219361] Periodic Lic check successful
+[23:36:14.219363] Feature usage summary:
+[23:36:14.219363] Genus_Synthesis
 
 
 
@@ -42,8 +42,11 @@ Finished loading tool scripts (10 seconds elapsed).
 @file(genus.tcl) 20: set SDC_FILE "./tcl/constraint.sdc"
 @file(genus.tcl) 22: proc env_or_default ...
 @file(genus.tcl) 30: proc env_flag_is_true ...
-@file(genus.tcl) 39: source ./tcl/rtl_filelist.tcl
-Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 23:26:38 JST 2026)...
+@file(genus.tcl) 39: proc try_set_root_attr ...
+@file(genus.tcl) 48: proc try_reset_root_attr ...
+@file(genus.tcl) 57: proc print_root_attr ...
+@file(genus.tcl) 65: source ./tcl/rtl_filelist.tcl
+Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 23:36:24 JST 2026)...
 #@ Begin verbose source ./tcl/rtl_filelist.tcl
 @file(rtl_filelist.tcl) 2: set RTL_FILES [list \
     ./rtl/control_unit.v \
@@ -61,30 +64,27 @@ Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 23:26:38 JST 2026)...
     }
 }
 #@ End verbose source ./tcl/rtl_filelist.tcl
-@file(genus.tcl) 41: foreach dir {outputs reports logs} {
+@file(genus.tcl) 67: foreach dir {outputs reports logs} {
     if {![file exists $dir]} {
         file mkdir $dir
     }
 }
-@file(genus.tcl) 48: foreach pattern {./outputs/* ./reports/* ./logs/*} {
+@file(genus.tcl) 74: foreach pattern {./outputs/* ./reports/* ./logs/*} {
     foreach stale_file [glob -nocomplain $pattern] {
         file delete -force $stale_file
     }
 }
-@file(genus.tcl) 58: set_db / .init_lib_search_path [list $LIB]
+@file(genus.tcl) 84: set_db / .init_lib_search_path [list $LIB]
   Setting attribute of root '/': 'init_lib_search_path' = /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS
-@file(genus.tcl) 59: set_db / .script_search_path   {./tcl}
+@file(genus.tcl) 85: set_db / .script_search_path   {./tcl}
   Setting attribute of root '/': 'script_search_path' = ./tcl
-@file(genus.tcl) 60: set_db / .init_hdl_search_path {./rtl}
+@file(genus.tcl) 86: set_db / .init_hdl_search_path {./rtl}
   Setting attribute of root '/': 'init_hdl_search_path' = ./rtl
-@file(genus.tcl) 64: set_db / .auto_super_thread false
+@file(genus.tcl) 90: try_set_root_attr auto_super_thread false
   Setting attribute of root '/': 'auto_super_thread' = false
-@file(genus.tcl) 65: foreach st_attr {super_thread_servers max_cpus_per_server} {
-    if {[catch {reset_db $st_attr} reset_error]} {
-        puts "WARNING: Unable to reset $st_attr: $reset_error"
-    }
-}
-@file(genus.tcl) 71: if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
+@file(genus.tcl) 91: try_set_root_attr st_launch_wait_time [env_or_default GENUS_ST_LAUNCH_WAIT 1]
+  Setting attribute of root '/': 'st_launch_wait_time' = 1
+@file(genus.tcl) 93: if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
     set CORES [env_or_default GENUS_CPUS 4]
     if {![string is integer -strict $CORES] || $CORES < 1} {
         error "GENUS_CPUS must be a positive integer, got '$CORES'"
@@ -93,31 +93,41 @@ Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 23:26:38 JST 2026)...
     set ST_SERVERS [env_or_default GENUS_SUPER_THREAD_SERVERS localhost]
     set ST_RSH [env_or_default GENUS_SUPER_THREAD_RSH ""]
 
-    set_db / .super_thread_servers $ST_SERVERS
+    try_set_root_attr super_thread_servers $ST_SERVERS
     if {$ST_RSH ne ""} {
-        set_db / .super_thread_rsh_command $ST_RSH
+        try_set_root_attr super_thread_rsh_command $ST_RSH
     }
-    set_db / .max_cpus_per_server $CORES
+    try_set_root_attr max_cpus_per_server $CORES
 
     puts "Genus CPU configuration: super-thread enabled, servers=$ST_SERVERS, cpus/server=$CORES"
     if {[catch {test_super_thread_servers} st_error]} {
         error "Super-thread server test failed before synthesis: $st_error"
     }
 } else {
-    puts "Genus CPU configuration: super-thread disabled. Do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set."
+    try_reset_root_attr super_thread_servers
+    try_set_root_attr max_cpus_per_server 0
+    puts "Genus CPU configuration: single-process debug mode; do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set."
 }
-Genus CPU configuration: super-thread disabled. Do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set.
-@file(genus.tcl) 94: set_db / .hdl_unconnected_value 0
+  Setting attribute of root '/': 'max_cpus_per_server' = 0
+Genus CPU configuration: single-process debug mode; do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set.
+@file(genus.tcl) 118: foreach st_attr {auto_super_thread super_thread_servers max_cpus_per_server st_launch_wait_time} {
+    print_root_attr $st_attr
+}
+Genus root attribute auto_super_thread = 'false'
+Genus root attribute super_thread_servers = ''
+Genus root attribute max_cpus_per_server = '0'
+Genus root attribute st_launch_wait_time = '1'
+@file(genus.tcl) 122: set_db / .hdl_unconnected_value 0
   Setting attribute of root '/': 'hdl_unconnected_value' = 0
-@file(genus.tcl) 95: set_db / .hdl_track_filename_row_col true
+@file(genus.tcl) 123: set_db / .hdl_track_filename_row_col true
 Info   : Enabled hdl_track_filename_row_col attribute.
        : Setting this attribute to 'true' can have an impact on the run time. Use this attribute only when filename, line number, and column information are needed in reports.
   Setting attribute of root '/': 'hdl_track_filename_row_col' = true
-@file(genus.tcl) 96: set_db / .auto_ungroup both
+@file(genus.tcl) 124: set_db / .auto_ungroup both
   Setting attribute of root '/': 'auto_ungroup' = both
-@file(genus.tcl) 97: set_db / .lp_insert_clock_gating false
+@file(genus.tcl) 125: set_db / .lp_insert_clock_gating false
   Setting attribute of root '/': 'lp_insert_clock_gating' = false
-@file(genus.tcl) 103: set STD_LIBS [list \
+@file(genus.tcl) 131: set STD_LIBS [list \
     "${LIB}/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib" \
     "${LIB}/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib" \
     "${LIB}/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib" \
@@ -128,15 +138,15 @@ Info   : Enabled hdl_track_filename_row_col attribute.
     "${LIB}/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib" \
     "${LIB}/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib" \
     "${LIB}/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib"]
-@file(genus.tcl) 115: foreach lib $STD_LIBS {
+@file(genus.tcl) 143: foreach lib $STD_LIBS {
     if {![file exists $lib]} {
         error "Missing Liberty file: [file normalize $lib]"
     }
 }
-@file(genus.tcl) 121: if {![file exists $SDC_FILE]} {
+@file(genus.tcl) 149: if {![file exists $SDC_FILE]} {
     error "Missing SDC file: [file normalize $SDC_FILE]"
 }
-@file(genus.tcl) 125: set_db / .library $STD_LIBS
+@file(genus.tcl) 153: set_db / .library $STD_LIBS
 
   Message Summary for Library all 10 libraries:
   *********************************************
@@ -165,10 +175,10 @@ Info    : Created nominal operating condition. [LBR-412]
 Info    : Created nominal operating condition. [LBR-412]
         : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib'.
   Setting attribute of root '/': 'library' = /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib
-@file(genus.tcl) 131: create_library_set \
+@file(genus.tcl) 159: create_library_set \
     -name libset \
     -timing $STD_LIBS
-@file(genus.tcl) 135: create_rc_corner \
+@file(genus.tcl) 163: create_rc_corner \
     -name rccorner \
     -pre_route_res 1.0 \
     -post_route_res 1.0 \
@@ -178,30 +188,30 @@ Info    : Created nominal operating condition. [LBR-412]
     -pre_route_clock_res 0.0 \
     -pre_route_clock_cap 0.0 \
     -temperature 25
-@file(genus.tcl) 146: create_opcond \
+@file(genus.tcl) 174: create_opcond \
     -name opcond \
     -process 1 \
     -voltage 0.7 \
     -temperature 25
-@file(genus.tcl) 152: create_timing_condition \
+@file(genus.tcl) 180: create_timing_condition \
     -name timecond \
     -library_sets libset \
     -opcond opcond
-@file(genus.tcl) 157: create_delay_corner \
+@file(genus.tcl) 185: create_delay_corner \
     -name corner \
     -timing_condition timecond \
     -rc_corner rccorner
-@file(genus.tcl) 162: create_constraint_mode \
+@file(genus.tcl) 190: create_constraint_mode \
     -name mode_normal \
     -sdc_files $SDC_FILE
-@file(genus.tcl) 166: create_analysis_view \
+@file(genus.tcl) 194: create_analysis_view \
     -name tt \
     -constraint_mode mode_normal \
     -delay_corner corner
-@file(genus.tcl) 171: set_analysis_view \
+@file(genus.tcl) 199: set_analysis_view \
     -setup {tt} \
     -hold  {tt}
-@file(genus.tcl) 179: foreach rtl $RTL_FILES {
+@file(genus.tcl) 207: foreach rtl $RTL_FILES {
     if {![file exists $rtl]} {
         error "Missing RTL file: [file normalize $rtl]"
     }
@@ -246,7 +256,7 @@ Warning : Unused attribute. [VLOGPT-506]
        |
 Warning : Unused attribute. [VLOGPT-506]
         : Attribute 'async_reg' in file '././rtl/riscv_pipeline.v' on line 64, column 8.
-@file(genus.tcl) 188: elaborate $TOP
+@file(genus.tcl) 216: elaborate $TOP
   Libraries have 334 usable logic and 46 usable sequential lib-cells.
 Info    : Elaborating Design. [ELAB-1]
         : Elaborating top-level block 'riscv_pipeline' from file '././rtl/riscv_pipeline.v'.
@@ -270,16 +280,16 @@ Stage: post_elab
 | ume_constant_bmux |       0 |       0 |        0.00 | 
 | ume_merge         |       0 |       0 |        0.00 | 
 | ume_ssm           |       0 |       0 |        0.01 | 
-| ume_cse           |       0 |       0 |        0.04 | 
+| ume_cse           |       0 |       0 |        0.03 | 
 | ume_shrink        |       0 |       0 |        0.00 | 
 | ume_sweep         |       0 |       0 |        0.00 | 
 -------------------------------------------------------
 Starting optimize datapath shifters [v1.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
-Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.000s)
 Starting clip mux common data inputs [v1.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
-Completed clip mux common data inputs (accepts: 1, rejects: 0, runtime: 0.004s)
+Completed clip mux common data inputs (accepts: 1, rejects: 0, runtime: 0.002s)
 Starting clip the non-user hierarchies [v2.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
-Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.000s)
 Starting basic netlist cleanup [v1.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
 Completed basic netlist cleanup (accepts: 0, rejects: 0, runtime: 0.001s)
 
@@ -294,10 +304,10 @@ Stage: post_elab
 --------------------------------------------------------------------
 UM:   flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
 UM:*                                                                   elaborate
-@file(genus.tcl) 189: uniquify $TOP
-@file(genus.tcl) 190: check_design -unresolved > reports/check_design_unresolved.rpt
+@file(genus.tcl) 217: uniquify $TOP
+@file(genus.tcl) 218: check_design -unresolved > reports/check_design_unresolved.rpt
 
-@file(genus.tcl) 192: init_design
+@file(genus.tcl) 220: init_design
 Started checking and loading power intent for design riscv_pipeline...
 ======================================================================
 No power intent for design 'riscv_pipeline'.
@@ -328,14 +338,14 @@ Statistics for commands executed by read_sdc:
  "sizeof_collection"        - successful      3 , failed      0 (runtime  0.00)
 read_sdc completed in 00:00:00 (hh:mm:ss)
   Setting attribute of root '/': 'read_qrc_tech_file_rc_corner' = true
-@file(genus.tcl) 193: set_interactive_constraint_modes mode_normal
-@file(genus.tcl) 200: set HIER_MODULE_PATTERNS [list \
+@file(genus.tcl) 221: set_interactive_constraint_modes mode_normal
+@file(genus.tcl) 228: set HIER_MODULE_PATTERNS [list \
     "*execute*" \
     "register_file" \
     "csr_register_file" \
     "branch_prediction_unit"]
-@file(genus.tcl) 206: set PRESERVED_HIER_MODULES {}
-@file(genus.tcl) 208: foreach module_pattern $HIER_MODULE_PATTERNS {
+@file(genus.tcl) 234: set PRESERVED_HIER_MODULES {}
+@file(genus.tcl) 236: foreach module_pattern $HIER_MODULE_PATTERNS {
     set matched_modules [get_db modules $module_pattern]
 
     if {[llength $matched_modules] == 0} {
@@ -357,29 +367,29 @@ Preserve physical hierarchy: register_file
 Preserve physical hierarchy: csr_register_file
   Setting attribute of module 'branch_prediction_unit': 'ungroup_ok' = false
 Preserve physical hierarchy: branch_prediction_unit
-@file(genus.tcl) 223: if {[llength $PRESERVED_HIER_MODULES] == 0} {
+@file(genus.tcl) 251: if {[llength $PRESERVED_HIER_MODULES] == 0} {
     puts "WARNING: no RISC-V hierarchy module was protected."
     puts "         Inspect reports/area_hierarchy_elaborated.rpt."
 }
-@file(genus.tcl) 228: set CLK_PORT_OBJ [get_ports clk]
-@file(genus.tcl) 230: if {[sizeof_collection $CLK_PORT_OBJ] == 0} {
+@file(genus.tcl) 256: set CLK_PORT_OBJ [get_ports clk]
+@file(genus.tcl) 258: if {[sizeof_collection $CLK_PORT_OBJ] == 0} {
     error "Top design '$TOP' does not contain port 'clk'."
 }
-@file(genus.tcl) 234: report_hierarchy      > reports/hierarchy_elaborated.rpt
-@file(genus.tcl) 235: report_area -depth 3  > reports/area_hierarchy_elaborated.rpt
+@file(genus.tcl) 262: report_hierarchy      > reports/hierarchy_elaborated.rpt
+@file(genus.tcl) 263: report_area -depth 3  > reports/area_hierarchy_elaborated.rpt
 Warning : The details given in report might be incorrect or incomplete. [RPT-80]
         : The design design:riscv_pipeline should be mapped to get accurate area details.
         : Map the design using syn_map before using the '-detail' option of the 'report_area' command.
-@file(genus.tcl) 236: report_metric -format html -file reports/elaborated_metric.html
-@file(genus.tcl) 242: puts "===================================================="
+@file(genus.tcl) 264: report_metric -format html -file reports/elaborated_metric.html
+@file(genus.tcl) 270: puts "===================================================="
 ====================================================
-@file(genus.tcl) 243: puts "VERIFYING MMMC SDC"
+@file(genus.tcl) 271: puts "VERIFYING MMMC SDC"
 VERIFYING MMMC SDC
-@file(genus.tcl) 244: puts " - File: [file normalize $SDC_FILE]"
+@file(genus.tcl) 272: puts " - File: [file normalize $SDC_FILE]"
  - File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/tcl/constraint.sdc
-@file(genus.tcl) 245: puts "===================================================="
+@file(genus.tcl) 273: puts "===================================================="
 ====================================================
-@file(genus.tcl) 249: if {[info exists ::dc::sdc_failed_commands]} {
+@file(genus.tcl) 277: if {[info exists ::dc::sdc_failed_commands]} {
     set FAILED_SDC $::dc::sdc_failed_commands
 
     if {[llength $FAILED_SDC] > 0} {
@@ -393,37 +403,37 @@ VERIFYING MMMC SDC
         error "SDC contains failed commands. See reports/failed_sdc_commands.rpt"
     }
 }
-@file(genus.tcl) 264: set DEFINED_CLOCKS [get_clocks CLK]
-@file(genus.tcl) 266: if {[sizeof_collection $DEFINED_CLOCKS] == 0} {
+@file(genus.tcl) 292: set DEFINED_CLOCKS [get_clocks CLK]
+@file(genus.tcl) 294: if {[sizeof_collection $DEFINED_CLOCKS] == 0} {
     error "Clock 'CLK' was not created by $SDC_FILE"
 }
-@file(genus.tcl) 270: puts "===================================================="
+@file(genus.tcl) 298: puts "===================================================="
 ====================================================
-@file(genus.tcl) 271: puts "SDC CHECK PASSED"
+@file(genus.tcl) 299: puts "SDC CHECK PASSED"
 SDC CHECK PASSED
-@file(genus.tcl) 272: puts " - Clock port   : $CLK_PORT_OBJ"
+@file(genus.tcl) 300: puts " - Clock port   : $CLK_PORT_OBJ"
  - Clock port   : 0x16
-@file(genus.tcl) 273: puts " - Clock object : $DEFINED_CLOCKS"
+@file(genus.tcl) 301: puts " - Clock object : $DEFINED_CLOCKS"
  - Clock object : 0x17
-@file(genus.tcl) 274: puts "===================================================="
+@file(genus.tcl) 302: puts "===================================================="
 ====================================================
-@file(genus.tcl) 276: check_timing_intent -verbose \
+@file(genus.tcl) 304: check_timing_intent -verbose \
     > reports/timing_intent_pre_syn.rpt
 Info    : Timing analysis will be done for this view. [TUI-744]
         : View is 'analysis_view:riscv_pipeline/tt'.
         : Worst paths will be shown in this view.
-@file(genus.tcl) 279: if {[catch {
+@file(genus.tcl) 307: if {[catch {
     report_timing -lint > reports/timing_lint_pre_syn.rpt
 } timing_lint_error]} {
     puts "WARNING: report_timing -lint failed: $timing_lint_error"
 }
 Info    : Timing analysis will be done for this view. [TUI-744]
         : View is 'analysis_view:riscv_pipeline/tt'.
-@file(genus.tcl) 289: set ALL_SEQS [all::all_seqs]
-@file(genus.tcl) 290: set ASYNC_INPUT_NAMES [list meip_i msip_i mtip_i dbg_halt_req dbg_resume_req]
-@file(genus.tcl) 291: set NON_DATA_INPUTS [get_ports [concat [list clk reset_n] $ASYNC_INPUT_NAMES]]
-@file(genus.tcl) 292: set DATA_INPUTS [remove_from_collection [all_inputs] $NON_DATA_INPUTS]
-@file(genus.tcl) 294: if {[sizeof_collection $ALL_SEQS] > 0} {
+@file(genus.tcl) 317: set ALL_SEQS [all::all_seqs]
+@file(genus.tcl) 318: set ASYNC_INPUT_NAMES [list meip_i msip_i mtip_i dbg_halt_req dbg_resume_req]
+@file(genus.tcl) 319: set NON_DATA_INPUTS [get_ports [concat [list clk reset_n] $ASYNC_INPUT_NAMES]]
+@file(genus.tcl) 320: set DATA_INPUTS [remove_from_collection [all_inputs] $NON_DATA_INPUTS]
+@file(genus.tcl) 322: if {[sizeof_collection $ALL_SEQS] > 0} {
     define_cost_group -name I2C -design $TOP
     define_cost_group -name C2O -design $TOP
     define_cost_group -name C2C -design $TOP
@@ -481,7 +491,7 @@ COST GROUPS CREATED
  - I2O : input    -> output
  - View: tt
 ====================================================
-@file(genus.tcl) 351: if {[env_flag_is_true GENUS_ENABLE_DATAPATH_OPT]} {
+@file(genus.tcl) 379: if {[env_flag_is_true GENUS_ENABLE_DATAPATH_OPT]} {
     puts "Genus datapath mode: optimized"
 } else {
     puts "Genus datapath mode: debug-safe; datapath sharing/speculation disabled"
@@ -493,21 +503,20 @@ Genus datapath mode: debug-safe; datapath sharing/speculation disabled
   Setting attribute of root '/': 'dp_analytical_opt' = off
   Setting attribute of root '/': 'dp_sharing' = none
   Setting attribute of root '/': 'dp_speculation' = none
-@file(genus.tcl) 360: set SYN_EFFORT [env_or_default GENUS_SYN_EFFORT medium]
-@file(genus.tcl) 361: puts "Genus synthesis effort: $SYN_EFFORT"
-Genus synthesis effort: medium
-@file(genus.tcl) 363: set_db / .syn_generic_effort $SYN_EFFORT
-  Setting attribute of root '/': 'syn_generic_effort' = medium
-@file(genus.tcl) 364: syn_generic
+@file(genus.tcl) 388: set SYN_EFFORT [env_or_default GENUS_SYN_EFFORT low]
+@file(genus.tcl) 389: puts "Genus synthesis effort: $SYN_EFFORT"
+Genus synthesis effort: low
+@file(genus.tcl) 391: set_db / .syn_generic_effort $SYN_EFFORT
+  Setting attribute of root '/': 'syn_generic_effort' = low
+@file(genus.tcl) 392: syn_generic
 stamp 'PBS_Generic-Start' being created for table 'pbs_debug'
 
   Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
 --------------------+---------------------+--------------+--------------------+-----------+----------------------
- 00:00:41(00:00:19) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:26:47 (Aug11) |  723.4 MB | PBS_Generic-Start
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
 --------------------+---------------------+--------------+--------------------+-----------+----------------------
-Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
 Info: (*N*) indicates data that was populated from previously saved time_info database
-Info: CPU time includes time of parent + longest thread
 Info    : Deleting instances not driving any primary outputs. [GLO-34]
         : Deleting 65 sequential instances.
         : Optimizations such as constant propagation or redundancy removal could change the connections so a hierarchical instance does not drive any primary outputs anymore. To see the list of deleted hierarchical instances, set the 'information_level' attribute to 2 or above. If the message is truncated set the message attribute 'truncate' to false to see the complete list. To prevent this optimization, set the 'delete_unloaded_insts' root/subdesign attribute to 'false' or 'preserve' instance attribute to 'true'.
@@ -524,7 +533,7 @@ Found 0 unmapped ChipWare ICG instances
 Mapped 0 of 0 ChipWare ICG instances
 ##Generic Timing Info: typical gate delay   18.0 ps   std_slew:    3.9 ps   std_load:  0.8 fF  for library domain _default_
 Starting mux data reorder optimization [v1.0] (stage: pre_to_gen_setup, startdef: riscv_pipeline, recur: true)
-Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.002s)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.003s)
 
 Stage: pre_to_gen_setup
 -----------------------------------------------------
@@ -537,46 +546,46 @@ Running DP early redundancy removal
 Completed DP early redundancy removal on riscv_pipeline (runtime = 0.1s)
 Multi-threaded constant propagation [4|0] ...
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[31]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][31]'. The constant is '0'.
         : To prevent this optimization, set 'optimize_constant_feedback_seqs' root attribute to 'false'. The instance attribute 'optimize_constant_feedback_seq' controls this optimization. 
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[30]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][30]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[29]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][29]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[28]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][28]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[27]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][27]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[26]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][26]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[25]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][25]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[24]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][24]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[23]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][23]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[22]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][22]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[21]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][21]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[20]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][20]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[19]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][19]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[18]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][18]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[17]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][17]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[16]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][16]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[15]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][15]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[14]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][14]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[13]'. The constant is '1'.
+        : The instance is 'RF/rf_main_reg[0][13]'. The constant is '0'.
 Info    : Replacing the synchronous part of an always feeding back flip-flop with a logic constant. [GLO-45]
-        : The instance is 'CSR_RF/mstatus_reg[10]'. The constant is '0'.
+        : The instance is 'RF/rf_main_reg[0][12]'. The constant is '0'.
 Warning : Maximum message print count reached. [MESG-11]
         : Maximum print count of '20' reached for message 'GLO-45'.
 Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
@@ -837,12 +846,12 @@ Info    : Deleting instances not driving any primary outputs. [GLO-34]
 Info    : Deleting instances not driving any primary outputs. [GLO-34]
         : Deleting 4 hierarchical instances.
 Info    : Synthesizing. [SYNTH-1]
-        : Synthesizing 'riscv_pipeline' to generic gates using 'medium' effort.
+        : Synthesizing 'riscv_pipeline' to generic gates using 'low' effort.
 Running Synthesis Turbo Flow Version 3.
 Info    : Partition Based Synthesis execution skipped. [PHYS-752]
         : Design size is less than the partition size '100000' for distributed generic optimization to kick in.
 Starting mux data reorder optimization [v1.0] (stage: pre_to_gen_setup, startdef: riscv_pipeline, recur: true)
-Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.021s)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.024s)
 
 Stage: pre_to_gen_setup
 -----------------------------------------------------
@@ -870,7 +879,7 @@ Stage: pre_hlo_rtlopt
 -----------------------------------------------
 | ume_ssm   |       0 |       0 |        0.00 | 
 | ume_sweep |       1 |       0 |        0.01 | 
-| ume_share |       0 |       0 |        0.01 | 
+| ume_share |       0 |       0 |        0.00 | 
 | ume_ssm   |       0 |       0 |        0.00 | 
 | ume_sweep |       0 |       0 |        0.00 | 
 | ume_share |       0 |       0 |        0.00 | 
@@ -1128,49 +1137,49 @@ Resetting costing type to std
   Setting attribute of root '/': 'hier_sandbox_support_folded' = 0
 End SDR optimization UME_region 
 Starting timing based select reordering [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.214s)
+Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 0.776s)
 Starting recase case-box optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed recase case-box optimization (accepts: 0, rejects: 0, runtime: 0.132s)
+Completed recase case-box optimization (accepts: 0, rejects: 0, runtime: 0.090s)
 Starting infer macro optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed infer macro optimization (accepts: 0, rejects: 63, runtime: 0.062s)
+Completed infer macro optimization (accepts: 0, rejects: 63, runtime: 0.064s)
 Starting decode mux sandwich optimization [v2.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed decode mux sandwich optimization (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting decode mux optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed decode mux optimization (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed decode mux optimization (accepts: 0, rejects: 0, runtime: 0.000s)
 Starting chop wide muxes [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed chop wide muxes (accepts: 0, rejects: 0, runtime: 0.171s)
+Completed chop wide muxes (accepts: 0, rejects: 0, runtime: 0.168s)
 Starting common data mux cascade opt [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed common data mux cascade opt (accepts: 0, rejects: 0, runtime: 0.003s)
 Starting mux input consolidation [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.007s)
+Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.008s)
 Starting constant-data mux optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed constant-data mux optimization (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting chain-to-tree inequality transform [v2.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed chain-to-tree inequality transform (accepts: 0, rejects: 0, runtime: 0.092s)
+Completed chain-to-tree inequality transform (accepts: 0, rejects: 0, runtime: 0.080s)
 Starting reconvergence optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed reconvergence optimization (accepts: 0, rejects: 0, runtime: 0.006s)
+Completed reconvergence optimization (accepts: 0, rejects: 0, runtime: 0.003s)
 Starting logic restructure optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed logic restructure optimization (accepts: 0, rejects: 0, runtime: 0.017s)
+Completed logic restructure optimization (accepts: 0, rejects: 0, runtime: 0.014s)
 Starting identity transform [v3.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed identity transform (accepts: 0, rejects: 6, runtime: 0.011s)
+Completed identity transform (accepts: 0, rejects: 6, runtime: 0.010s)
 Starting reduce operator chain [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed reduce operator chain (accepts: 0, rejects: 0, runtime: 0.002s)
+Completed reduce operator chain (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting common data mux cascade opt [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed common data mux cascade opt (accepts: 0, rejects: 0, runtime: 0.002s)
+Completed common data mux cascade opt (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting mux input consolidation [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.007s)
+Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.008s)
 Starting optimize datapath elements [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed optimize datapath elements (accepts: 7, rejects: 0, runtime: 0.005s)
+Completed optimize datapath elements (accepts: 7, rejects: 0, runtime: 0.004s)
 Starting datapath recasting [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed datapath recasting (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting word-level redundancy removal [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Info    : Setting up the version of high level Redundancy Removal Optimizations. [HLO_RR-1]
         : hlo_rr=1: Enables RRv1, on by default.
-Completed word-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.133s)
+Completed word-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.105s)
 Starting clip mux common data inputs [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed clip mux common data inputs (accepts: 0, rejects: 0, runtime: 0.002s)
+Completed clip mux common data inputs (accepts: 0, rejects: 0, runtime: 0.003s)
 Starting clip the non-user hierarchies [v2.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.003s)
 Starting basic netlist cleanup [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed basic netlist cleanup (accepts: 0, rejects: 0, runtime: 0.000s)
 
@@ -1178,8 +1187,8 @@ Stage: pre_rtlopt
 -----------------------------------------------------------------
 | Transform                   | Accepts | Rejects | Runtime (s) | 
 -----------------------------------------------------------------
-| hlo_timing_reorder          |       0 |       0 |        1.21 | 
-| hlo_recase_casebox          |       0 |       0 |        0.13 | 
+| hlo_timing_reorder          |       0 |       0 |        0.78 | 
+| hlo_recase_casebox          |       0 |       0 |        0.09 | 
 | hlo_infer_macro             |       0 |      63 |        0.06 | 
 | hlo_decode_mux_sandwich     |       0 |       0 |        0.00 | 
 | hlo_mux_decode              |       0 |       0 |        0.00 | 
@@ -1187,16 +1196,16 @@ Stage: pre_rtlopt
 | hlo_mux_cascade_opt         |       0 |       0 |        0.00 | 
 | hlo_mux_consolidation       |       0 |       0 |        0.01 | 
 | hlo_constant_mux_opt        |       0 |       0 |        0.00 | 
-| hlo_inequality_transform    |       0 |       0 |        0.09 | 
-| hlo_reconv_opt              |       0 |       0 |        0.01 | 
-| hlo_restructure             |       0 |       0 |        0.02 | 
+| hlo_inequality_transform    |       0 |       0 |        0.08 | 
+| hlo_reconv_opt              |       0 |       0 |        0.00 | 
+| hlo_restructure             |       0 |       0 |        0.01 | 
 | hlo_identity_transform      |       0 |       6 |        0.01 | 
 | hlo_reduce_operator_chain   |       0 |       0 |        0.00 | 
 | hlo_mux_cascade_opt         |       0 |       0 |        0.00 | 
 | hlo_mux_consolidation       |       0 |       0 |        0.01 | 
 | hlo_optimize_datapath       |       7 |       0 |        0.00 | 
 | hlo_datapath_recast         |       0 |       0 |        0.00 | 
-| hlo_redundancy_removal_word |       0 |       4 |        2.13 | 
+| hlo_redundancy_removal_word |       0 |       4 |        2.11 | 
 | hlo_clip_mux_input          |       0 |       0 |        0.00 | 
 | hlo_clip                    |       0 |       0 |        0.00 | 
 | hlo_cleanup                 |       0 |       0 |        0.00 | 
@@ -1208,7 +1217,7 @@ Stage: post_hlo_rtlopt
 ----------------------------------------------------------
 | Trick                | Accepts | Rejects | Runtime (s) | 
 ----------------------------------------------------------
-| ume_sweep_aggressive |       0 |       0 |        0.01 | 
+| ume_sweep_aggressive |       0 |       0 |        0.00 | 
 | ume_runtime          |       0 |       0 |        0.00 | 
 ----------------------------------------------------------
 Info    : Replacing a flip-flop with a logic constant 0. [GLO-12]
@@ -1258,31 +1267,31 @@ CAS: Converted binary mux mux_rf_main[read_reg1]_53_55 (def: register_file, data
 CAS: Converted binary mux mux_rf_main[read_reg2]_56_55 (def: register_file, data: 32, sel: 5, width: 32) to onehot mux
 Number of big hc bmuxes before = 0
 Info    : Optimizing RTL. [RTLOPT-1]
-        : Optimizing RTL in 'riscv_pipeline' using 'medium' effort.
+        : Optimizing RTL in 'riscv_pipeline' using 'low' effort.
 Number of non-ctl's : 7
 mux_alu_ctrl_162_3 mux_alu_ctrl_179_4 mux_alu_ctrl_162_27 mux_alu_ctrl_179_27 mux_alu_ctrl_157_16 mux_alu_ctrl_161_18 mux_alu_ctrl_171_20 
 SOP DEBUG : Module= alu_control_unit, Cluster= ctl_162_27, ctl= 7, Non-ctl= 7
-Selected impl_type 1 (pla_form1 (optimized)) for sop cluster ctl_162_27.
+Selected impl_type 11 (pla_form1 (unoptimized)) for sop cluster ctl_162_27.
 Number of non-ctl's : 133
 g5487 g5489 g5553 g5555 g5558 g5560 g5563 g5565 g5568 g5570 g5573 g5575 g5578 g5580 g5583 g5585 g5588 g5590 g5593 g5595 g5598 g5600 g5603 g5605 g5608 g5610 g5613 g5615 g5618 g5620 g5623 g5625 g5628 g5630 g5633 g5635 g5638 g5640 g5643 g5645 g5648 g5650 g5653 g5655 g5658 g5660 g5663 g5665 g5668 g5670 g5673 g5675 g5678 g5680 g5683 g5685 g5688 g5690 g5693 g5695 g5698 g5700 g5703 g5705 g5708 g5710 g5713 g5715 g5718 g5720 g5723 g5725 g5728 g5730 g5733 g5735 g5738 g5740 g5743 g5745 g5748 g5750 g5753 g5755 g5758 g5760 g5763 g5765 g5768 g5770 g5773 g5775 g5778 g5780 g5783 g5785 g5788 g5790 g5793 g5795 g5798 g5800 g5803 g5805 g5808 g5810 g5813 g5815 g5818 g5820 g5823 g5825 g5828 g5830 g5833 g5835 g5838 g5840 g5843 g5845 g5848 g5850 g5853 g5855 g5858 g5860 g5863 g5865 g5868 g5870 mux_tags[0]_115_22 mux_targets[0]_115_22 mux_valids[0]_115_22 
 SOP DEBUG : Module= branch_target_buffer, Cluster= ctl_update_btb_115_22, ctl= 1, Non-ctl= 133
-Selected impl_type 0 (ctl + 1-hot mux form) for sop cluster ctl_update_btb_115_22.
+Selected impl_type 11 (pla_form1 (unoptimized)) for sop cluster ctl_update_btb_115_22.
 Number of non-ctl's : 17
 g55 g469 g471 g472 g475 g483 g485 g487 g491 g492 mux_mask_329_19 mux_mask_tmp_392_15 mux_quo_tmp_392_15 mux_quotient_329_19 mux_rem_tmp_392_15 mux_remainder_329_19 mux_state_329_19 
 SOP DEBUG : Module= divider, Cluster= ctl_state_329_19, ctl= 1, Non-ctl= 17
-Selected impl_type 0 (ctl + 1-hot mux form) for sop cluster ctl_state_329_19.
+Selected impl_type 11 (pla_form1 (unoptimized)) for sop cluster ctl_state_329_19.
 Number of non-ctl's : 21
 mux_reg_write_40_10 g2 g3 g4 g5 g7 g20 g21 g22 g23 g24 mux_cmbsop_alu_op_40_15 mux_md_operation_40_15 mux_mem_size_40_15 mux_mem_unsigned_40_15 mux_reg_write_40_15 mux_cmbsop_mem_size_70_23 mux_md_operation_45_27 mux_mem_size_102_23 mux_md_operation_44_27 mux_reg_write_137_29 
 SOP DEBUG : Module= main_control_unit, Cluster= ctl_40_9, ctl= 8, Non-ctl= 21
-Selected impl_type 1 (pla_form1 (optimized)) for sop cluster ctl_40_9.
+Selected impl_type 11 (pla_form1 (unoptimized)) for sop cluster ctl_40_9.
 Number of non-ctl's : 1
 mux_cmbsop_a_signed_flag_next_89_27 
 SOP DEBUG : Module= multiplier, Cluster= ctl_89_27, ctl= 1, Non-ctl= 1
-Selected impl_type 0 (ctl + 1-hot mux form) for sop cluster ctl_89_27.
+Selected impl_type 11 (pla_form1 (unoptimized)) for sop cluster ctl_89_27.
 Number of non-ctl's : 5
 mux_uses_rs1_55_54 g168 mux_uses_rs1_55_15 mux_uses_rs2_55_15 mux_uses_rs1_63_275 
 SOP DEBUG : Module= pipeline_control_unit, Cluster= ctl_55_15, ctl= 3, Non-ctl= 5
-Selected impl_type 1 (pla_form1 (optimized)) for sop cluster ctl_55_15.
+Selected impl_type 11 (pla_form1 (unoptimized)) for sop cluster ctl_55_15.
 Info    : Grouping carry-save logic. [RTLOPT-19]
         : Grouping carry-save logic in 'branch_history_table' using 'medium' effort and no timing models.
 Info    : Accepted carry-save configuration. [RTLOPT-20]
@@ -1317,48 +1326,31 @@ Info    : Done optimizing RTL. [RTLOPT-2]
         : Done optimizing RTL in 'riscv_pipeline'.
 Number of big hc bmuxes after = 0
 Starting bit-level redundancy removal [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed bit-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.422s)
+Completed bit-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.262s)
 Starting logic reduction [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed logic reduction (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting mux data reorder optimization [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.000s)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting timing based select reordering [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.286s)
+Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 0.873s)
 
 Stage: post_rtlopt
 ----------------------------------------------------------------
 | Transform                  | Accepts | Rejects | Runtime (s) | 
 ----------------------------------------------------------------
-| hlo_redundancy_removal_bit |       0 |       4 |        2.42 | 
+| hlo_redundancy_removal_bit |       0 |       4 |        2.26 | 
 | hlo_logic_reduction        |       0 |       0 |        0.00 | 
 | hlo_mux_reorder            |       0 |       0 |        0.00 | 
-| hlo_timing_reorder         |       0 |       0 |        1.29 | 
+| hlo_timing_reorder         |       0 |       0 |        0.87 | 
 ----------------------------------------------------------------
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
-Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
 Starting timing based select reordering [v1.0] (stage: post_muxopt, startdef: riscv_pipeline, recur: true)
-Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.216s)
+Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 0.842s)
 
 Stage: post_muxopt
 --------------------------------------------------------
 | Transform          | Accepts | Rejects | Runtime (s) | 
 --------------------------------------------------------
-| hlo_timing_reorder |       0 |       0 |        1.22 | 
+| hlo_timing_reorder |       0 |       0 |        0.84 | 
 --------------------------------------------------------
 ==================================
 Stage : to_generic 
@@ -1427,20 +1419,715 @@ Stage : to_generic
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Mapper: Libraries have:
 	domain _default_: 334 combo usable cells and 46 sequential usable cells
-Info    : Attempting to launch a super-threading server. [ST-120]
-        : Attempting to Launch server 1 of 8.
-        : The tool is entering super-threading mode and is launching a CPU server process.  This is enabled by the root attribute 'super_thread_servers' or 'auto_super_thread'.
+Info    : Deleting instances not driving any primary outputs. [GLO-34]
+        : Deleting 5 hierarchical instances.
+==================================
+Stage : first_condense 
+==================================
+  =================
+   Message Summary
+  =================
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|  Id  |Sev |Count|                                                                                                                                        Message Text                                                                                                                                         |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|GLO-34|Info|    1|Deleting instances not driving any primary outputs.                                                                                                                                                                                                                                          |
+|      |    |     |Optimizations such as constant propagation or redundancy removal could change the connections so a hierarchical instance does not drive any primary outputs anymore. To see the list of deleted hierarchical instances, set the 'information_level' attribute to 2 or above. If the message  |
+|      |    |     | is truncated set the message attribute 'truncate' to false to see the complete list. To prevent this optimization, set the 'delete_unloaded_insts' root/subdesign attribute to 'false' or 'preserve' instance attribute to 'true'.                                                          |
+|ST-128|Info|    1|Super thread servers are launched successfully.                                                                                                                                                                                                                                              |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ 
+Global mapping target info
+==========================
+Cost Group 'C2C' target slack:   297 ps
+Target path end-point (Pin: EX/MUL/md_result_reg_reg[31]/d)
 
-Another Ctrl-C within 1 second will terminate the tool.
-CURRENT RESOURCES: RT {elapsed: 158s, ST: 95s, FG: 95s, CPU: 0.4%}, MEM {curr: 2.0G, peak: 3.7G, phys curr: 1.4G, phys peak: 1.5G}, SYS {load: 0.7, cpu: 12, total: 12.9G, free: 4.6G}
+Cost Group 'C2O' target slack:   131 ps
+Target path end-point (Port: riscv_pipeline/dbg_reg_read_data[3])
 
-Another Ctrl-C within 1 second will terminate the tool.
-CURRENT RESOURCES: RT {elapsed: 185s, ST: 95s, FG: 95s, CPU: 0.5%}, MEM {curr: 2.0G, peak: 3.7G, phys curr: 1.4G, phys peak: 1.5G}, SYS {load: 0.7, cpu: 12, total: 12.9G, free: 4.6G}
+Cost Group 'I2C' target slack:   222 ps
+Target path end-point (Pin: pc_reg_reg[31]/d)
 
-Another Ctrl-C within 1 second will terminate the tool.
-CURRENT RESOURCES: RT {elapsed: 186s, ST: 95s, FG: 95s, CPU: 0.5%}, MEM {curr: 2.0G, peak: 3.7G, phys curr: 1.4G, phys peak: 1.5G}, SYS {load: 0.7, cpu: 12, total: 12.9G, free: 4.6G}
-Abnormal exit.
-Warning : Failed to establish connection with super-threading server. [ST-111]
-        : The server was process '1589406' on this host.
-        : The tool is exiting super-threading mode and failed to establish a connection with a CPU server process.  This could be due to a high cpu load on that host or a networking issue.  If a job queueing mechanism (such as LSF) is being used, perhaps the job was held up in the queue.
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/.st_launch_user1-EliteMini_1583877
+Cost Group 'I2O' target slack:   131 ps
+Target path end-point (Port: riscv_pipeline/dbg_reg_read_data[3])
+
+Info    : Using '2' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '8' more seconds during global map.
+Info    : Using '3' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '9' more seconds during global map.
+Info    : Using '6' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '10' more seconds during global map.
+
+State Retention Synthesis Status
+================================
+
+Category                        Flops   Percentage
+--------------------------------------------------
+Total instances                  6114        100.0
+Excluded from State Retention    6114        100.0
+    - Will not convert           6114        100.0
+      - Preserved                   0          0.0
+      - Power intent excluded    6114        100.0
+    - Could not convert             0          0.0
+      - Scan type                   0          0.0
+      - No suitable cell            0          0.0
+State Retention instances           0          0.0
+--------------------------------------------------
+
+Info    : Using '2' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '8' more seconds during global map.
+Info    : Using '3' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '9' more seconds during global map.
+Info    : Using '6' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '10' more seconds during global map.
+PBS_Generic_Opt-Post - Elapsed_Time 86, CPU_Time 84.999811
+stamp 'PBS_Generic_Opt-Post' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) | 100.0(100.0) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+PBS_Generic-Postgen HBO Optimizations - Elapsed_Time 1, CPU_Time 1.0
+stamp 'PBS_Generic-Postgen HBO Optimizations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) |  98.9( 98.9) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:57(00:01:58) |  00:00:01(00:00:01) |   1.1(  1.1) |   23:38:13 (Aug11) |   1.27 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Starting post syn_generic ultra-effort Boolean optimization
+Redundancy removal succeeded.
+Done post syn_generic ultra-effort Boolean optimization (2.00 cpu seconds) (2.00 elapsed cpu seconds)
+Info    : Done synthesizing. [SYNTH-2]
+        : Done synthesizing 'riscv_pipeline' to generic gates.
+##>=================== Cadence Confidential (Generic-Logical) ===================
+##>=================== Cadence Confidential (Generic-Logical) ===================
+      flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   syn_gen
+@file(genus.tcl) 393: report_area -depth 3 > reports/area_after_generic_depth3.rpt
+Warning : The details given in report might be incorrect or incomplete. [RPT-80]
+        : The design design:riscv_pipeline should be mapped to get accurate area details.
+@file(genus.tcl) 395: set_db / .syn_map_effort $SYN_EFFORT
+  Setting attribute of root '/': 'syn_map_effort' = low
+@file(genus.tcl) 396: syn_map
+#----------------------------------------------------------------------------------------
+# Root attributes for category: opt
+#----------------------------------------------------------------------------------------
+# Feature                           | Attribute                    | Value            
+#----------------------------------------------------------------------------------------
+# Avoid tied inputs                 | avoid_tied_inputs            | false (default)  
+# Allow floating outputs            | opt_allow_floating_outputs   | false (default)  
+# Power optimization effort         | design_power_effort          | none (default)   
+# Do not use qbar sequential pins   | dont_use_qbar_seq_pins       | false (default)  
+#----------------------------------------------------------------------------------------
+
+##Generic Timing Info: typical gate delay   18.0 ps   std_slew:    3.9 ps   std_load:  0.8 fF  for library domain _default_
+Mapping ChipWare ICG instances in riscv_pipeline
+Found 0 unmapped ChipWare ICG instances
+Mapped 0 of 0 ChipWare ICG instances
+Info    : Mapping. [SYNTH-4]
+        : Mapping 'riscv_pipeline' using 'low' effort.
+Mapper: Libraries have:
+	domain _default_: 334 combo usable cells and 46 sequential usable cells
+PBS_TechMap-Start - Elapsed_Time 0, CPU_Time 0.0
+stamp 'PBS_TechMap-Start' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) |  94.7( 94.7) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:57(00:01:58) |  00:00:01(00:00:01) |   1.1(  1.1) |   23:38:13 (Aug11) |   1.27 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:02:02) |  00:00:04(00:00:04) |   4.3(  4.3) |   23:38:17 (Aug11) |   1.23 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+PBS_TechMap-Premap HBO Optimizations - Elapsed_Time 2, CPU_Time 1.0
+stamp 'PBS_TechMap-Premap HBO Optimizations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) |  93.7( 92.7) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:57(00:01:58) |  00:00:01(00:00:01) |   1.1(  1.0) |   23:38:13 (Aug11) |   1.27 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:02:02) |  00:00:04(00:00:04) |   4.2(  4.2) |   23:38:17 (Aug11) |   1.23 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:02:04) |  00:00:01(00:00:02) |   1.1(  2.1) |   23:38:19 (Aug11) |   1.23 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info    : Partition Based Synthesis execution skipped. [PHYS-752]
+        : Design size is less than the partition size '100000' for distributed mapping optimization to kick in.
+Mapper: Libraries have:
+	domain _default_: 334 combo usable cells and 46 sequential usable cells
+Updating ST server settings
+==================================
+Stage : first_condense 
+==================================
+  =================
+   Message Summary
+  =================
+---------------------------------------------------------------------------------------------------------------------
+|   Id   |  Sev  |Count|                                        Message Text                                        |
+---------------------------------------------------------------------------------------------------------------------
+|PHYS-752|Info   |    1|Partition Based Synthesis execution skipped.                                                |
+|RPT-80  |Warning|    1|The details given in report might be incorrect or incomplete.                               |
+|        |       |     |Map the design using syn_map before using the '-detail' option of the 'report_area' command.|
+|SYNTH-2 |Info   |    1|Done synthesizing.                                                                          |
+|SYNTH-4 |Info   |    1|Mapping.                                                                                    |
+---------------------------------------------------------------------------------------------------------------------
+ 
+Global mapping target info
+==========================
+Cost Group 'C2C' target slack:   297 ps
+Target path end-point (Pin: EX/MUL/md_result_reg_reg[31]/d)
+
+Cost Group 'C2O' target slack:   131 ps
+Target path end-point (Port: riscv_pipeline/dbg_reg_read_data[0])
+
+Cost Group 'I2C' target slack:   222 ps
+Target path end-point (Pin: pc_reg_reg[31]/d)
+
+Cost Group 'I2O' target slack:   131 ps
+Target path end-point (Port: riscv_pipeline/dbg_reg_read_data[3])
+
+ 
+Global mapping status
+=====================
+                                   Group   
+                                  Tot Wrst 
+                           Total  Weighted 
+Operation                   Area   Slacks  
+ global_map                 4278        0 
+
+    Cost Group            Target    Slack    Diff.  Constr.
+-----------------------------------------------------------
+           I2O               131     3956             10000 
+           C2O               131     6693             10000 
+           I2C               222     6909             10000 
+           C2C               297     7495             10000 
+
+ 
+Global incremental target info
+==============================
+Cost Group 'C2C' target slack:   198 ps
+Target path end-point (Pin: EX/MUL/md_result_reg_reg[31]/D (DFFASRHQNx1_ASAP7_75t_L/D))
+
+Cost Group 'C2O' target slack:    87 ps
+Target path end-point (Port: riscv_pipeline/dbg_reg_read_data[0])
+
+Cost Group 'I2C' target slack:   148 ps
+Target path end-point (Pin: pc_reg_reg[13]/D (DFFHQNx1_ASAP7_75t_L/D))
+
+Cost Group 'I2O' target slack:    87 ps
+Target path end-point (Port: riscv_pipeline/dbg_reg_read_data[3])
+
+==================================
+Stage : global_incr_map 
+==================================
+  =================
+   Message Summary
+  =================
+----------------------------------------------------------------
+| Id |Sev |Count|                 Message Text                 |
+----------------------------------------------------------------
+|PA-7|Info|  188|Resetting power analysis results.             |
+|    |    |     |All computed switching activities are removed.|
+----------------------------------------------------------------
+ 
+Global incremental optimization status
+======================================
+                                   Group   
+                                  Tot Wrst 
+                           Total  Weighted 
+Operation                   Area   Slacks  
+ global_incr                4280        0 
+
+    Cost Group            Target    Slack    Diff.  Constr.
+-----------------------------------------------------------
+           I2O                87     4026             10000 
+           C2O                87     6699             10000 
+           I2C               148     6841             10000 
+           C2C               198     7526             10000 
+
+Info    : Using '2' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '36' more seconds during global map.
+Info    : Using '4' number of super-threading servers using the attribute 'super_thread_servers' could have
+          saved '45' more seconds during global map.
+
+State Retention Synthesis Status
+================================
+
+Category                        Flops   Percentage
+--------------------------------------------------
+Total instances                  6114        100.0
+Excluded from State Retention    6114        100.0
+    - Will not convert           6114        100.0
+      - Preserved                   0          0.0
+      - Power intent excluded    6114        100.0
+    - Could not convert             0          0.0
+      - Scan type                   0          0.0
+      - No suitable cell            0          0.0
+State Retention instances           0          0.0
+--------------------------------------------------
+
+INFO: skipping constant propagation
+PBS_Techmap-Global Mapping - Elapsed_Time 128, CPU_Time 127.99724599999999
+stamp 'PBS_Techmap-Global Mapping' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) |  39.9( 39.7) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:57(00:01:58) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:38:13 (Aug11) |   1.27 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:02:02) |  00:00:04(00:00:04) |   1.8(  1.8) |   23:38:17 (Aug11) |   1.23 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:02:04) |  00:00:01(00:00:02) |   0.4(  0.9) |   23:38:19 (Aug11) |   1.23 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:10(00:04:12) |  00:02:07(00:02:08) |  57.4( 57.1) |   23:40:27 (Aug11) |   1.29 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+Info    : Wrote formal verification information. [CFM-5]
+        : Wrote 'fv/riscv_pipeline/fv_map.fv.json' for netlist 'fv/riscv_pipeline/fv_map.v.gz'.
+Info    : Wrote dofile. [CFM-1]
+        : Dofile is 'fv/riscv_pipeline/rtl_to_fv_map.do'.
+        : RTL names flow is enabled.
+PBS_TechMap-Datapath Postmap Operations - Elapsed_Time 9, CPU_Time 9.0
+stamp 'PBS_TechMap-Datapath Postmap Operations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) |  38.4( 38.2) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:57(00:01:58) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:38:13 (Aug11) |   1.27 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:02:02) |  00:00:04(00:00:04) |   1.7(  1.7) |   23:38:17 (Aug11) |   1.23 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:02:04) |  00:00:01(00:00:02) |   0.4(  0.9) |   23:38:19 (Aug11) |   1.23 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:10(00:04:12) |  00:02:07(00:02:08) |  55.2( 54.9) |   23:40:27 (Aug11) |   1.29 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:19(00:04:21) |  00:00:09(00:00:09) |   3.9(  3.9) |   23:40:36 (Aug11) |   1.26 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+PBS_TechMap-Postmap HBO Optimizations - Elapsed_Time 1, CPU_Time 1.0
+stamp 'PBS_TechMap-Postmap HBO Optimizations' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) |  38.2( 38.0) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:57(00:01:58) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:38:13 (Aug11) |   1.27 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:02:02) |  00:00:04(00:00:04) |   1.7(  1.7) |   23:38:17 (Aug11) |   1.23 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:02:04) |  00:00:01(00:00:02) |   0.4(  0.9) |   23:38:19 (Aug11) |   1.23 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:10(00:04:12) |  00:02:07(00:02:08) |  54.9( 54.7) |   23:40:27 (Aug11) |   1.29 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:19(00:04:21) |  00:00:09(00:00:09) |   3.9(  3.8) |   23:40:36 (Aug11) |   1.26 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:20(00:04:22) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:40:37 (Aug11) |   1.26 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+ Doing ConstProp on design:riscv_pipeline ... 
+
+Time taken by ConstProp Step: 00:00:02
+PBS_TechMap-Postmap Clock Gating - Elapsed_Time 2, CPU_Time 2.0
+stamp 'PBS_TechMap-Postmap Clock Gating' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) |  37.9( 37.7) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:57(00:01:58) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:38:13 (Aug11) |   1.27 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:02:02) |  00:00:04(00:00:04) |   1.7(  1.7) |   23:38:17 (Aug11) |   1.23 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:02:04) |  00:00:01(00:00:02) |   0.4(  0.8) |   23:38:19 (Aug11) |   1.23 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:10(00:04:12) |  00:02:07(00:02:08) |  54.5( 54.2) |   23:40:27 (Aug11) |   1.29 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:19(00:04:21) |  00:00:09(00:00:09) |   3.8(  3.8) |   23:40:36 (Aug11) |   1.26 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:20(00:04:22) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:40:37 (Aug11) |   1.26 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:22(00:04:24) |  00:00:02(00:00:02) |   0.9(  0.8) |   23:40:39 (Aug11) |   1.26 GB | PBS_TechMap-Postmap Clock Gating
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+-------------------------------------------------------------------------------
+ hi_fo_buf                  4279        0         0         0        0      133
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+       hi_fo_buf         1  (        0 /        0 )  0.04
+
+ 
+Incremental optimization status
+===============================
+                                   Group   
+                                  Tot Wrst     Total - - - - DRC Totals - - - -
+                           Total  Weighted      Neg      Max       Max     Max  
+Operation                   Area   Slacks      Slack    Trans      Cap   Fanout 
+ init_delay                 4279        0         0         0        0      133
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+       crit_upsz         0  (        0 /        0 )  0.00
+    plc_bal_star         0  (        0 /        0 )  0.00
+     drc_buftimb         0  (        0 /        0 )  0.00
+          plc_st         0  (        0 /        0 )  0.00
+    plc_st_fence         0  (        0 /        0 )  0.00
+        plc_star         0  (        0 /        0 )  0.00
+      plc_laf_st         0  (        0 /        0 )  0.00
+ plc_laf_st_fence         0  (        0 /        0 )  0.00
+     drc_buftims         0  (        0 /        0 )  0.00
+            fopt         0  (        0 /        0 )  0.00
+   plc_laf_lo_st         0  (        0 /        0 )  0.00
+       plc_lo_st         0  (        0 /        0 )  0.00
+        mb_split         0  (        0 /        0 )  0.00
+
+ 
+Local TNS optimization status
+=============================
+                                   Group   
+                                  Tot Wrst     Total - - - - DRC Totals - - - -
+                           Total  Weighted      Neg      Max       Max     Max  
+Operation                   Area   Slacks      Slack    Trans      Cap   Fanout 
+ init_tns                   4279        0         0         0        0      133
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+    plc_bal_star         0  (        0 /        0 )  0.00
+     drc_buftimb         0  (        0 /        0 )  0.00
+     drc_buftims         0  (        0 /        0 )  0.00
+       crit_upsz         0  (        0 /        0 )  0.00
+   plc_laf_lo_st         0  (        0 /        0 )  0.00
+       plc_lo_st         0  (        0 /        0 )  0.00
+            fopt         0  (        0 /        0 )  0.00
+       crit_dnsz         0  (        0 /        0 )  0.00
+             dup         0  (        0 /        0 )  0.00
+        setup_dn         0  (        0 /        0 )  0.00
+        mb_split         0  (        0 /        0 )  0.00
+
+PBS_TechMap-Postmap Cleanup - Elapsed_Time 1, CPU_Time 1.0
+stamp 'PBS_TechMap-Postmap Cleanup' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) |  37.7( 37.6) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:57(00:01:58) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:38:13 (Aug11) |   1.27 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:02:02) |  00:00:04(00:00:04) |   1.7(  1.7) |   23:38:17 (Aug11) |   1.23 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:02:04) |  00:00:01(00:00:02) |   0.4(  0.8) |   23:38:19 (Aug11) |   1.23 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:10(00:04:12) |  00:02:07(00:02:08) |  54.2( 54.0) |   23:40:27 (Aug11) |   1.29 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:19(00:04:21) |  00:00:09(00:00:09) |   3.8(  3.8) |   23:40:36 (Aug11) |   1.26 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:20(00:04:22) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:40:37 (Aug11) |   1.26 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:22(00:04:24) |  00:00:02(00:00:02) |   0.8(  0.8) |   23:40:39 (Aug11) |   1.26 GB | PBS_TechMap-Postmap Clock Gating
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:23(00:04:25) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:40:40 (Aug11) |   1.26 GB | PBS_TechMap-Postmap Cleanup
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+PBS_Techmap-Post_MBCI - Elapsed_Time 0, CPU_Time 0.0
+stamp 'PBS_Techmap-Post_MBCI' being created for table 'pbs_debug'
+
+  Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:00:28(00:00:28) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:36:43 (Aug11) |  681.6 MB | PBS_Generic-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:56(00:01:57) |  00:01:28(00:01:29) |  37.7( 37.6) |   23:38:12 (Aug11) |   1.27 GB | PBS_Generic_Opt-Post
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:01:57(00:01:58) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:38:13 (Aug11) |   1.27 GB | PBS_Generic-Postgen HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:01(00:02:02) |  00:00:04(00:00:04) |   1.7(  1.7) |   23:38:17 (Aug11) |   1.23 GB | PBS_TechMap-Start
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:02:02(00:02:04) |  00:00:01(00:00:02) |   0.4(  0.8) |   23:38:19 (Aug11) |   1.23 GB | PBS_TechMap-Premap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:10(00:04:12) |  00:02:07(00:02:08) |  54.2( 54.0) |   23:40:27 (Aug11) |   1.29 GB | PBS_Techmap-Global Mapping
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:19(00:04:21) |  00:00:09(00:00:09) |   3.8(  3.8) |   23:40:36 (Aug11) |   1.26 GB | PBS_TechMap-Datapath Postmap Operations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:20(00:04:22) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:40:37 (Aug11) |   1.26 GB | PBS_TechMap-Postmap HBO Optimizations
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:22(00:04:24) |  00:00:02(00:00:02) |   0.8(  0.8) |   23:40:39 (Aug11) |   1.26 GB | PBS_TechMap-Postmap Clock Gating
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:23(00:04:25) |  00:00:01(00:00:01) |   0.4(  0.4) |   23:40:40 (Aug11) |   1.26 GB | PBS_TechMap-Postmap Cleanup
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+ 00:04:23(00:04:25) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:40:40 (Aug11) |   1.26 GB | PBS_Techmap-Post_MBCI
+--------------------+---------------------+--------------+--------------------+-----------+----------------------
+Number of threads: 0 * 1   (id: pbs_debug, time_info v1.57)
+Info: (*N*) indicates data that was populated from previously saved time_info database
+##>=================== Cadence Confidential (Mapping-Logical) ===================
+##>Main Thread Summary:
+##>----------------------------------------------------------------------------------------
+##>STEP                           Elapsed       WNS       TNS     Insts      Area    Memory
+##>----------------------------------------------------------------------------------------
+##>M:Initial                            1         -         -     54252      6195      1233
+##>M:Early Clock Gating                 0         -         -         -         -         -
+##>M:Pre Cleanup                        1         -         -     54252      6195      1233
+##>M:Setup                              0         -         -         -         -         -
+##>M:Launch ST                          0         -         -         -         -         -
+##>M:Design Partition                   0         -         -         -         -         -
+##>M:Create Partition Netlists          0         -         -         -         -         -
+##>M:Init Power                         0         -         -         -         -         -
+##>M:Budgeting                          0         -         -         -         -         -
+##>M:Derenv-DB                          0         -         -         -         -         -
+##>M:Debug Outputs                      0         -         -         -         -         -
+##>M:ST loading                         0         -         -         -         -         -
+##>M:Distributed                        0         -         -         -         -         -
+##>M:Timer                              0         -         -         -         -         -
+##>M:Assembly                           0         -         -         -         -         -
+##>M:DFT                                0         -         -         -         -         -
+##>M:DP Operations                      9         -         -     30345      4280      1264
+##>M:Const Prop                         0      4025         0     30345      4280      1264
+##>M:Cleanup                            1      4025         0     30337      4279      1263
+##>M:MBCI                               0         -         -     30337      4279      1263
+##>M:PostGen Opt                        0         -         -         -         -         -
+##>M:Const Gate Removal                 0         -         -         -         -         -
+##>M:Early Clock Gating Cleanup         0         -         -         -         -         -
+##>M:Misc                             131
+##>----------------------------------------------------------------------------------------
+##>Total Elapsed                      143
+##>========================================================================================
+Info    : Done mapping. [SYNTH-5]
+        : Done mapping 'riscv_pipeline'.
+      flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   syn_map
+@file(genus.tcl) 397: report_area -depth 3 > reports/area_after_map_depth3.rpt
+@file(genus.tcl) 399: set_db / .syn_opt_effort $SYN_EFFORT
+  Setting attribute of root '/': 'syn_opt_effort' = low
+@file(genus.tcl) 400: syn_opt
+Warning : The selected flow setting will be removed in a future release. [SYNTH-33]
+        : The use of 'syn_opt' for logical only optimization will be obsolete in a future release.
+	Transition to 'syn_opt -logical' or 'syn_opt -spatial'.
+
+        : Contact Cadence support to understand current flows.
+Info    : Incrementally optimizing. [SYNTH-7]
+        : Incrementally optimizing 'riscv_pipeline' using 'low' effort.
+ 
+Incremental optimization status
+===============================
+                                   Group   
+                                  Tot Wrst     Total - - - - DRC Totals - - - -
+                           Total  Weighted      Neg      Max       Max     Max  
+Operation                   Area   Slacks      Slack    Trans      Cap   Fanout 
+ init_iopt                  4279        0         0         0        0      133
+-------------------------------------------------------------------------------
+ const_prop                 4279        0         0         0        0      133
+ simp_cc_inputs             4279        0         0         0        0      132
+ 
+Incremental optimization status
+===============================
+                                   Group   
+                                  Tot Wrst     Total - - - - DRC Totals - - - -
+                           Total  Weighted      Neg      Max       Max     Max  
+Operation                   Area   Slacks      Slack    Trans      Cap   Fanout 
+ init_delay                 4279        0         0         0        0      132
+
+           Trick     Calls     Accepts   Attempts    Time(secs) 
+-----------------------------------------------------------
+       crit_upsz         0  (        0 /        0 )  0.00
+    plc_bal_star         0  (        0 /        0 )  0.00
+     drc_buftimb         0  (        0 /        0 )  0.00
+          plc_st         0  (        0 /        0 )  0.00
+    plc_st_fence         0  (        0 /        0 )  0.00
+        plc_star         0  (        0 /        0 )  0.00
+      plc_laf_st         0  (        0 /        0 )  0.00
+ plc_laf_st_fence         0  (        0 /        0 )  0.00
+     drc_buftims         0  (        0 /        0 )  0.00
+            fopt         0  (        0 /        0 )  0.00
+   plc_laf_lo_st         0  (        0 /        0 )  0.00
+       plc_lo_st         0  (        0 /        0 )  0.00
+        mb_split         0  (        0 /        0 )  0.00
+
+==================================
+Stage : incr_opt 
+==================================
+  =================
+   Message Summary
+  =================
+---------------------------------------------------------------------------------------
+|   Id   |  Sev  |Count|                         Message Text                         |
+---------------------------------------------------------------------------------------
+|CFM-1   |Info   |    1|Wrote dofile.                                                 |
+|CFM-5   |Info   |    1|Wrote formal verification information.                        |
+|PA-7    |Info   |    4|Resetting power analysis results.                             |
+|        |       |     |All computed switching activities are removed.                |
+|SYNTH-5 |Info   |    1|Done mapping.                                                 |
+|SYNTH-7 |Info   |    1|Incrementally optimizing.                                     |
+|SYNTH-33|Warning|    1|The selected flow setting will be removed in a future release.|
+|        |       |     |Contact Cadence support to understand current flows.          |
+---------------------------------------------------------------------------------------
+Info    : Done incrementally optimizing. [SYNTH-8]
+        : Done incrementally optimizing 'riscv_pipeline'.
+      flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   syn_opt
+@file(genus.tcl) 406: report_area              > reports/area_syn.rpt
+@file(genus.tcl) 407: report_area -depth 3     > reports/area_hierarchy_syn.rpt
+@file(genus.tcl) 408: report_timing -max_paths 50 > reports/timing_syn.rpt
+@file(genus.tcl) 410: foreach cg [vfind / -cost_group *] {
+    set cg_name [file tail $cg]
+
+    report_timing \
+        -cost_group [list $cg] \
+        -max_paths 20 \
+        > "reports/timing_${cg_name}_syn.rpt"
+}
+@file(genus.tcl) 419: report_power      > reports/power_syn.rpt
+Info    : Joules engine is used. [RPT-16]
+        : Joules engine is being used for the command report_power.
+Info   : ACTP-0001 [ACTPInfo] Activity propagation started for stim#0 netlist
+       : riscv_pipeline
+Info   : ACTP-0009 [ACTPInfo] Activity Propagation Progress Report :   0%   1%   2%   3%   4%   5%   6%   7%   8%   9%  10%  11%  12%  13%  14%  15%  16%  17%  18%  19%  20%  21%  22%  23%  24%  25%  26%  27%  28%  29%  30%  31%  32%  33%  34%  35%  36%  37%  38%  39%  40%  41%  42%  43%  44%  45%  46%  47%  48%  49%  50%  51%  52%  53%  54%  55%  56%  57%  58%  59%  60%  61%  62%  63%  64%  65%  66%  67%  68%  69%  70%  71%  72%  73%  74%  75%  76%  77%  78%  79%  80%  81%  82%  83%  84%  85%  86%  87%  88%  89%  90%  91%  92%  93%  94%  95%  96%  97%  98%  99% 100%
+Info   : ACTP-0001 Activity propagation ended for stim#0
+Info   : PWRA-0001 [PwrInfo] compute_power effective options 
+       : -mode : vectorless
+       : -skip_propagation : 1
+       : -frequency_scaling_factor : 1.0
+       : -use_clock_freq : stim
+       : -stim :/stim#0
+       : -fromGenus : 1
+Info   : ACTP-0001 Timing initialization started
+Info   : ACTP-0001 Timing initialization ended
+Info   : PWRA-0002 [PwrInfo] Skipping activity propagation due to -skip_ap
+       : option....
+Warning: PWRA-0302 [PwrWarn] Frequency scaling is not applicable for vectorless
+       : flow. Ignoring frequency scaling.
+Warning: PWRA-0304 [PwrWarn] -stim option is not applicable with vectorless mode
+       : of power analysis, ignored this option.
+Info   : PWRA-0002 Started 'vectorless' power computation.
+Info   : PWRA-0009 [PwrInfo] Power Computation Progress Report :   0%   1%   2%   3%   4%   5%   6%   7%   8%   9%  10%  11%  12%  13%  14%  15%  16%  17%  18%  19%  20%  21%  22%  23%  24%  25%  26%  27%  28%  29%  30%  31%  32%  33%  34%  35%  36%  37%  38%  39%  40%  41%  42%  43%  44%  45%  46%  47%  48%  49%  50%  51%  52%  53%  54%  55%  56%  57%  58%  59%  60%  61%  62%  63%  64%  65%  66%  67%  68%  69%  70%  71%  72%  73%  74%  75%  76%  77%  78%  79%  80%  81%  82%  83%  84%  85%  86%  87%  88%  89%  90%  91%  92%  93%  94%  95%  96%  97%  98%  99% 100%
+Info   : PWRA-0002 Finished power computation.
+Info   : PWRA-0007 [PwrInfo] Completed successfully.
+       : Info=6, Warn=2, Error=0, Fatal=0
+Output file: reports/power_syn.rpt
+@file(genus.tcl) 420: report_gates      > reports/gates_syn.rpt
+@file(genus.tcl) 421: report_dp         > reports/datapath_syn.rpt
+Beginning report datapath command
+@file(genus.tcl) 422: report_qor        > reports/qor_syn.rpt
+@file(genus.tcl) 423: report_hierarchy  > reports/hierarchy_syn.rpt
+@file(genus.tcl) 425: report_metric \
+    -format html \
+    -file reports/metric_syn.html
+@file(genus.tcl) 429: report sequential -deleted \
+    > reports/deleted_sequential_syn.rpt
+@file(genus.tcl) 432: check_timing_intent -verbose \
+    > reports/timing_intent_post_syn.rpt
+Info    : Timing analysis will be done for this view. [TUI-744]
+        : View is 'analysis_view:riscv_pipeline/tt'.
+@file(genus.tcl) 435: if {[catch {
+    report_timing -lint > reports/timing_lint_post_syn.rpt
+} timing_lint_error]} {
+    puts "WARNING: report_timing -lint failed: $timing_lint_error"
+}
+Info    : Timing analysis will be done for this view. [TUI-744]
+        : View is 'analysis_view:riscv_pipeline/tt'.
+@file(genus.tcl) 445: set MAPPED_NETLIST "./outputs/${TOP}_syn.v"
+@file(genus.tcl) 446: set MAPPED_SDC     "./outputs/${TOP}_syn.sdc"
+@file(genus.tcl) 447: set MAPPED_SPEF    "./outputs/${TOP}_syn.spef"
+@file(genus.tcl) 449: write_hdl > $MAPPED_NETLIST
+@file(genus.tcl) 450: write_sdc -view tt > $MAPPED_SDC
+Finished SDC export (command execution time mm:ss (real) = 00:02).
+@file(genus.tcl) 452: set SPEF_GENERATED 1
+@file(genus.tcl) 454: if {[catch {
+    write_parasitics > $MAPPED_SPEF
+} parasitic_error]} {
+    set SPEF_GENERATED 0
+    puts "WARNING: write_parasitics failed: $parasitic_error"
+}
+Starting spef generation ..
+printing HEADER ..
+printing NAME_MAP section ..
+printing NAME_MAP all ports section ..
+printing NAME_MAP top level nets ..
+printing NAME_MAP all other level nets ..
+printing NAME_MAP instances ..
+printing PORTS section ..
+Total number of net segments is 34531 ..
+Total number of physical nets is 30504 ..
+printing D_NET section ..
+ ... 3050 nets processed
+ ... 6100 nets processed
+ ... 9150 nets processed
+ ... 12200 nets processed
+ ... 15250 nets processed
+ ... 18300 nets processed
+ ... 21350 nets processed
+ ... 24400 nets processed
+ ... 27450 nets processed
+ ... 30500 nets processed
+Completed spef generation ..
+@file(genus.tcl) 461: write_do_lec \
+    -revised_design $MAPPED_NETLIST \
+    -logfile ./logs/lec_genus.log \
+    > ./outputs/genus_mapping_hints.do
+Info    : Wrote formal verification information. [CFM-5]
+        : Wrote 'fv/riscv_pipeline/riscv_pipeline_synv.fv.json' for netlist './outputs/riscv_pipeline_syn.v'.
+Info    : Wrote composite dofile. [CFM-2]
+        : The composite dofile './outputs/genus_mapping_hints.do' includes two compare operations: rtl-to-fv_map and fv_map-to-revised. The 'fv_map' netlist was automatically written in the verification directory during the syn_map command.
+@file(genus.tcl) 466: report_messages -all > reports/messages_all.rpt
+@file(genus.tcl) 468: puts "===================================================="
+====================================================
+@file(genus.tcl) 469: puts "GENUS RV32IM HIERARCHY SYNTHESIS COMPLETED"
+GENUS RV32IM HIERARCHY SYNTHESIS COMPLETED
+@file(genus.tcl) 470: puts " - Std cells: RVT + LVT"
+ - Std cells: RVT + LVT
+@file(genus.tcl) 471: puts " - PVT      : TT, 0.7 V, 25 C"
+ - PVT      : TT, 0.7 V, 25 C
+@file(genus.tcl) 472: puts " - Netlist  : $MAPPED_NETLIST"
+ - Netlist  : ./outputs/riscv_pipeline_syn.v
+@file(genus.tcl) 473: puts " - SDC      : $MAPPED_SDC"
+ - SDC      : ./outputs/riscv_pipeline_syn.sdc
+@file(genus.tcl) 475: if {$SPEF_GENERATED} {
+    puts " - SPEF     : $MAPPED_SPEF (estimated)"
+} else {
+    puts " - SPEF     : not generated"
+}
+ - SPEF     : ./outputs/riscv_pipeline_syn.spef (estimated)
+@file(genus.tcl) 481: puts " - Hierarchy: $PRESERVED_HIER_MODULES"
+ - Hierarchy: module:riscv_pipeline/execute module:riscv_pipeline/register_file module:riscv_pipeline/csr_register_file module:riscv_pipeline/branch_prediction_unit
+@file(genus.tcl) 482: puts "===================================================="
+====================================================
+#@ End verbose source ./tcl/genus.tcl
+
+Lic Summary:
+[23:40:58.274904] Cdslmd servers: vm-fsemi-edu02-h4l0gt0b
+[23:40:58.799203] Feature usage summary:
+[23:40:58.799203] Genus_Synthesis
+
+Normal exit.
