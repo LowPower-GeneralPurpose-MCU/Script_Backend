@@ -63,6 +63,7 @@ set_db / .init_hdl_search_path {./rtl}
 # max_cpus_per_server setting could launch a super-thread helper that then
 # stalled at syn_generic on this host.
 set_db / .auto_super_thread false
+set_db / .super_thread_servers {}
 
 if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
     set CORES [env_or_default GENUS_CPUS 4]
@@ -84,7 +85,8 @@ if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
         error "Super-thread server test failed before synthesis: $st_error"
     }
 } else {
-    puts "Genus CPU configuration: super-thread disabled. Set GENUS_ENABLE_SUPER_THREAD=1 only after test_super_thread_servers passes."
+    set_db / .max_cpus_per_server 1
+    puts "Genus CPU configuration: super-thread disabled, local single-process run. Set GENUS_ENABLE_SUPER_THREAD=1 only after test_super_thread_servers passes."
 }
 
 set_db / .hdl_unconnected_value 0
