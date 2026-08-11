@@ -3,19 +3,19 @@ Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
 Cadence and the Cadence logo are registered trademarks and Genus is a trademark
 of Cadence Design Systems, Inc. in the United States and other countries.
 
-[23:17:21.206210] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+[23:26:27.206258] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 Version: 23.14-s090_1, built Wed Feb 26 17:49:50 PST 2025
-Options: 
-Date:    Tue Aug 11 23:17:21 2026
+Options: -disable_user_startup -batch -files tcl/genus.tcl -log genus -overwrite 
+Date:    Tue Aug 11 23:26:27 2026
 Host:    user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*1physical cpu*AMD Ryzen 5 7545U 1024KB) (13556668KB)
-PID:     1538451
+PID:     1583877
 OS:      Ubuntu 26.04 LTS
 
 Checking out license: Genus_Synthesis
-[23:17:22.222722] Periodic Lic check successful
-[23:17:22.222723] Feature usage summary:
-[23:17:22.222723] Genus_Synthesis
+[23:26:28.121890] Periodic Lic check successful
+[23:26:28.121896] Feature usage summary:
+[23:26:28.121897] Genus_Synthesis
 
 
 
@@ -24,49 +24,26 @@ Checking out license: Genus_Synthesis
 
 
 
-Finished executable startup (1 second elapsed).
+Finished executable startup (2 seconds elapsed).
 
 Loading tool scripts...
-Finished loading tool scripts (11 seconds elapsed).
+Finished loading tool scripts (10 seconds elapsed).
 
-WARNING: This version of the tool is 530 days old.
-@genus:root: 1> # ------------------------------------------------------------------------
-@genus:root: 2> # 1. GLOBAL VARIABLES
-@genus:root: 3> # ------------------------------------------------------------------------
-@genus:root: 4> 
-@genus:root: 4> if {[info exists ::env(ASAP7_HOME)]} {
+#@ Processing -files option
+@genus:root: 1> source tcl/genus.tcl
+#@ Begin verbose source ./tcl/genus.tcl
+@file(genus.tcl) 12: if {[info exists ::env(ASAP7_HOME)]} {
     set ASAP7 [file normalize $::env(ASAP7_HOME)]
 } else {
     set ASAP7 "/home/user1/Desktop/asap7"
 }
-/home/user1/Desktop/asap7
-@genus:root: 5> 
-@genus:root: 5> set LIB      "${ASAP7}/asap7sc7p5t_28/LIB/CCS"
-/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS
-@genus:root: 6> set TOP      "riscv_pipeline"
-riscv_pipeline
-@genus:root: 7> set SDC_FILE "./tcl/constraint.sdc"
-./tcl/constraint.sdc
-@genus:root: 8> 
-@genus:root: 8> proc env_or_default {name default_value} {
-    if {[info exists ::env($name)] && $::env($name) ne ""} {
-        return $::env($name)
-    }
-
-    return $default_value
-}
-@genus:root: 9> 
-@genus:root: 9> proc env_flag_is_true {name} {
-    if {![info exists ::env($name)]} {
-        return 0
-    }
-
-    set value [string tolower $::env($name)]
-    return [expr {$value eq "1" || $value eq "true" || $value eq "yes" || $value eq "on"}]
-}
-@genus:root: 10> 
-@genus:root: 10> source ./tcl/rtl_filelist.tcl
-Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 23:17:46 JST 2026)...
+@file(genus.tcl) 18: set LIB      "${ASAP7}/asap7sc7p5t_28/LIB/CCS"
+@file(genus.tcl) 19: set TOP      "riscv_pipeline"
+@file(genus.tcl) 20: set SDC_FILE "./tcl/constraint.sdc"
+@file(genus.tcl) 22: proc env_or_default ...
+@file(genus.tcl) 30: proc env_flag_is_true ...
+@file(genus.tcl) 39: source ./tcl/rtl_filelist.tcl
+Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 23:26:38 JST 2026)...
 #@ Begin verbose source ./tcl/rtl_filelist.tcl
 @file(rtl_filelist.tcl) 2: set RTL_FILES [list \
     ./rtl/control_unit.v \
@@ -84,46 +61,30 @@ Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 23:17:46 JST 2026)...
     }
 }
 #@ End verbose source ./tcl/rtl_filelist.tcl
-@genus:root: 11> 
-@genus:root: 11> foreach dir {outputs reports logs} {
+@file(genus.tcl) 41: foreach dir {outputs reports logs} {
     if {![file exists $dir]} {
         file mkdir $dir
     }
 }
-@genus:root: 12> 
-@genus:root: 12> # Never mix a failed run with reports/netlists from an older successful run.
-@genus:root: 13> foreach pattern {./outputs/* ./reports/* ./logs/*} {
+@file(genus.tcl) 48: foreach pattern {./outputs/* ./reports/* ./logs/*} {
     foreach stale_file [glob -nocomplain $pattern] {
         file delete -force $stale_file
     }
 }
-@genus:root: 14> 
-@genus:root: 14> # ------------------------------------------------------------------------
-@genus:root: 15> # 2. DATABASE SETTINGS
-@genus:root: 16> # ------------------------------------------------------------------------
-@genus:root: 17> 
-@genus:root: 17> set_db / .init_lib_search_path [list $LIB]
+@file(genus.tcl) 58: set_db / .init_lib_search_path [list $LIB]
   Setting attribute of root '/': 'init_lib_search_path' = /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS
-1 /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS
-@genus:root: 18> set_db / .script_search_path   {./tcl}
+@file(genus.tcl) 59: set_db / .script_search_path   {./tcl}
   Setting attribute of root '/': 'script_search_path' = ./tcl
-1 ./tcl
-@genus:root: 19> set_db / .init_hdl_search_path {./rtl}
+@file(genus.tcl) 60: set_db / .init_hdl_search_path {./rtl}
   Setting attribute of root '/': 'init_hdl_search_path' = ./rtl
-1 ./rtl
-@genus:root: 20> 
-@genus:root: 20> # Keep the default run local. The -cpu command-line option, super_thread_servers,
-@genus:root: 21> # and max_cpus_per_server all enter Genus super-threading mode on this host.
-@genus:root: 22> set_db / .auto_super_thread false
+@file(genus.tcl) 64: set_db / .auto_super_thread false
   Setting attribute of root '/': 'auto_super_thread' = false
-1 false
-@genus:root: 23> foreach st_attr {super_thread_servers max_cpus_per_server} {
+@file(genus.tcl) 65: foreach st_attr {super_thread_servers max_cpus_per_server} {
     if {[catch {reset_db $st_attr} reset_error]} {
         puts "WARNING: Unable to reset $st_attr: $reset_error"
     }
 }
-@genus:root: 24> 
-@genus:root: 24> if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
+@file(genus.tcl) 71: if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
     set CORES [env_or_default GENUS_CPUS 4]
     if {![string is integer -strict $CORES] || $CORES < 1} {
         error "GENUS_CPUS must be a positive integer, got '$CORES'"
@@ -146,27 +107,17 @@ Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 23:17:46 JST 2026)...
     puts "Genus CPU configuration: super-thread disabled. Do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set."
 }
 Genus CPU configuration: super-thread disabled. Do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set.
-@genus:root: 25> 
-@genus:root: 25> set_db / .hdl_unconnected_value 0
+@file(genus.tcl) 94: set_db / .hdl_unconnected_value 0
   Setting attribute of root '/': 'hdl_unconnected_value' = 0
-1 0
-@genus:root: 26> set_db / .hdl_track_filename_row_col true
+@file(genus.tcl) 95: set_db / .hdl_track_filename_row_col true
 Info   : Enabled hdl_track_filename_row_col attribute.
        : Setting this attribute to 'true' can have an impact on the run time. Use this attribute only when filename, line number, and column information are needed in reports.
   Setting attribute of root '/': 'hdl_track_filename_row_col' = true
-1 true
-@genus:root: 27> set_db / .auto_ungroup both
+@file(genus.tcl) 96: set_db / .auto_ungroup both
   Setting attribute of root '/': 'auto_ungroup' = both
-1 both
-@genus:root: 28> set_db / .lp_insert_clock_gating false
+@file(genus.tcl) 97: set_db / .lp_insert_clock_gating false
   Setting attribute of root '/': 'lp_insert_clock_gating' = false
-1 false
-@genus:root: 29> 
-@genus:root: 29> # ------------------------------------------------------------------------
-@genus:root: 30> # 3. LIBRARIES
-@genus:root: 31> # ------------------------------------------------------------------------
-@genus:root: 32> 
-@genus:root: 32> set STD_LIBS [list \
+@file(genus.tcl) 103: set STD_LIBS [list \
     "${LIB}/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib" \
     "${LIB}/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib" \
     "${LIB}/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib" \
@@ -177,19 +128,15 @@ Info   : Enabled hdl_track_filename_row_col attribute.
     "${LIB}/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib" \
     "${LIB}/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib" \
     "${LIB}/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib"]
-/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib
-@genus:root: 33> 
-@genus:root: 33> foreach lib $STD_LIBS {
+@file(genus.tcl) 115: foreach lib $STD_LIBS {
     if {![file exists $lib]} {
         error "Missing Liberty file: [file normalize $lib]"
     }
 }
-@genus:root: 34> 
-@genus:root: 34> if {![file exists $SDC_FILE]} {
+@file(genus.tcl) 121: if {![file exists $SDC_FILE]} {
     error "Missing SDC file: [file normalize $SDC_FILE]"
 }
-@genus:root: 35> 
-@genus:root: 35> set_db / .library $STD_LIBS
+@file(genus.tcl) 125: set_db / .library $STD_LIBS
 
   Message Summary for Library all 10 libraries:
   *********************************************
@@ -218,18 +165,10 @@ Info    : Created nominal operating condition. [LBR-412]
 Info    : Created nominal operating condition. [LBR-412]
         : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib'.
   Setting attribute of root '/': 'library' = /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib
-1 {/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib}
-@genus:root: 36> 
-@genus:root: 36> # ------------------------------------------------------------------------
-@genus:root: 37> # 4. MMMC CORNER: TT, 0.7 V, 25 C
-@genus:root: 38> # ------------------------------------------------------------------------
-@genus:root: 39> 
-@genus:root: 39> create_library_set \
+@file(genus.tcl) 131: create_library_set \
     -name libset \
     -timing $STD_LIBS
-library_set:libset
-@genus:root: 40> 
-@genus:root: 40> create_rc_corner \
+@file(genus.tcl) 135: create_rc_corner \
     -name rccorner \
     -pre_route_res 1.0 \
     -post_route_res 1.0 \
@@ -239,46 +178,30 @@ library_set:libset
     -pre_route_clock_res 0.0 \
     -pre_route_clock_cap 0.0 \
     -temperature 25
-rc_corner:rccorner
-@genus:root: 41> 
-@genus:root: 41> create_opcond \
+@file(genus.tcl) 146: create_opcond \
     -name opcond \
     -process 1 \
     -voltage 0.7 \
     -temperature 25
-opcond:opcond
-@genus:root: 42> 
-@genus:root: 42> create_timing_condition \
+@file(genus.tcl) 152: create_timing_condition \
     -name timecond \
     -library_sets libset \
     -opcond opcond
-timing_condition:timecond
-@genus:root: 43> 
-@genus:root: 43> create_delay_corner \
+@file(genus.tcl) 157: create_delay_corner \
     -name corner \
     -timing_condition timecond \
     -rc_corner rccorner
-@genus:root: 44> 
-@genus:root: 44> create_constraint_mode \
+@file(genus.tcl) 162: create_constraint_mode \
     -name mode_normal \
     -sdc_files $SDC_FILE
-constraint_mode:__default_mmmc_spec/mode_normal
-@genus:root: 45> 
-@genus:root: 45> create_analysis_view \
+@file(genus.tcl) 166: create_analysis_view \
     -name tt \
     -constraint_mode mode_normal \
     -delay_corner corner
-analysis_view:__default_mmmc_spec/tt
-@genus:root: 46> 
-@genus:root: 46> set_analysis_view \
+@file(genus.tcl) 171: set_analysis_view \
     -setup {tt} \
     -hold  {tt}
-@genus:root: 47> 
-@genus:root: 47> # ------------------------------------------------------------------------
-@genus:root: 48> # 5. READ AND ELABORATE RTL
-@genus:root: 49> # ------------------------------------------------------------------------
-@genus:root: 50> 
-@genus:root: 50> foreach rtl $RTL_FILES {
+@file(genus.tcl) 179: foreach rtl $RTL_FILES {
     if {![file exists $rtl]} {
         error "Missing RTL file: [file normalize $rtl]"
     }
@@ -323,8 +246,7 @@ Warning : Unused attribute. [VLOGPT-506]
        |
 Warning : Unused attribute. [VLOGPT-506]
         : Attribute 'async_reg' in file '././rtl/riscv_pipeline.v' on line 64, column 8.
-@genus:root: 51> 
-@genus:root: 51> elaborate $TOP
+@file(genus.tcl) 188: elaborate $TOP
   Libraries have 334 usable logic and 46 usable sequential lib-cells.
 Info    : Elaborating Design. [ELAB-1]
         : Elaborating top-level block 'riscv_pipeline' from file '././rtl/riscv_pipeline.v'.
@@ -343,21 +265,21 @@ Stage: post_elab
 | ume_merge         |       0 |       0 |        0.00 | 
 | ume_ssm           |       0 |       0 |        0.01 | 
 | ume_cse           |       1 |       0 |        0.09 | 
-| ume_shrink        |       2 |       0 |        0.01 | 
-| ume_sweep         |       0 |       0 |        0.01 | 
+| ume_shrink        |       2 |       0 |        0.00 | 
+| ume_sweep         |       0 |       0 |        0.00 | 
 | ume_constant_bmux |       0 |       0 |        0.00 | 
 | ume_merge         |       0 |       0 |        0.00 | 
 | ume_ssm           |       0 |       0 |        0.01 | 
-| ume_cse           |       0 |       0 |        0.03 | 
+| ume_cse           |       0 |       0 |        0.04 | 
 | ume_shrink        |       0 |       0 |        0.00 | 
 | ume_sweep         |       0 |       0 |        0.00 | 
 -------------------------------------------------------
 Starting optimize datapath shifters [v1.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
-Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.000s)
+Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting clip mux common data inputs [v1.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
-Completed clip mux common data inputs (accepts: 1, rejects: 0, runtime: 0.002s)
+Completed clip mux common data inputs (accepts: 1, rejects: 0, runtime: 0.004s)
 Starting clip the non-user hierarchies [v2.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
-Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.000s)
+Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting basic netlist cleanup [v1.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
 Completed basic netlist cleanup (accepts: 0, rejects: 0, runtime: 0.001s)
 
@@ -372,12 +294,10 @@ Stage: post_elab
 --------------------------------------------------------------------
 UM:   flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
 UM:*                                                                   elaborate
-design:riscv_pipeline
-@genus:root: 52> uniquify $TOP
-@genus:root: 53> check_design -unresolved > reports/check_design_unresolved.rpt
+@file(genus.tcl) 189: uniquify $TOP
+@file(genus.tcl) 190: check_design -unresolved > reports/check_design_unresolved.rpt
 
-@genus:root: 54> 
-@genus:root: 54> init_design
+@file(genus.tcl) 192: init_design
 Started checking and loading power intent for design riscv_pipeline...
 ======================================================================
 No power intent for design 'riscv_pipeline'.
@@ -408,23 +328,14 @@ Statistics for commands executed by read_sdc:
  "sizeof_collection"        - successful      3 , failed      0 (runtime  0.00)
 read_sdc completed in 00:00:00 (hh:mm:ss)
   Setting attribute of root '/': 'read_qrc_tech_file_rc_corner' = true
-@genus:root: 55> set_interactive_constraint_modes mode_normal
-@genus:root: 56> 
-@genus:root: 56> # ------------------------------------------------------------------------
-@genus:root: 57> # 6. SELECT PHYSICAL HIERARCHY
-@genus:root: 58> # ------------------------------------------------------------------------
-@genus:root: 59> # Keep only meaningful RISC-V blocks for the hierarchy-floorplan flow.
-@genus:root: 60> 
-@genus:root: 60> set HIER_MODULE_PATTERNS [list \
+@file(genus.tcl) 193: set_interactive_constraint_modes mode_normal
+@file(genus.tcl) 200: set HIER_MODULE_PATTERNS [list \
     "*execute*" \
     "register_file" \
     "csr_register_file" \
     "branch_prediction_unit"]
-*execute* register_file csr_register_file branch_prediction_unit
-@genus:root: 61> 
-@genus:root: 61> set PRESERVED_HIER_MODULES {}
-@genus:root: 62> 
-@genus:root: 62> foreach module_pattern $HIER_MODULE_PATTERNS {
+@file(genus.tcl) 206: set PRESERVED_HIER_MODULES {}
+@file(genus.tcl) 208: foreach module_pattern $HIER_MODULE_PATTERNS {
     set matched_modules [get_db modules $module_pattern]
 
     if {[llength $matched_modules] == 0} {
@@ -446,42 +357,29 @@ Preserve physical hierarchy: register_file
 Preserve physical hierarchy: csr_register_file
   Setting attribute of module 'branch_prediction_unit': 'ungroup_ok' = false
 Preserve physical hierarchy: branch_prediction_unit
-@genus:root: 63> 
-@genus:root: 63> if {[llength $PRESERVED_HIER_MODULES] == 0} {
+@file(genus.tcl) 223: if {[llength $PRESERVED_HIER_MODULES] == 0} {
     puts "WARNING: no RISC-V hierarchy module was protected."
     puts "         Inspect reports/area_hierarchy_elaborated.rpt."
 }
-@genus:root: 64> 
-@genus:root: 64> set CLK_PORT_OBJ [get_ports clk]
-0x16
-@genus:root: 65> 
-@genus:root: 65> if {[sizeof_collection $CLK_PORT_OBJ] == 0} {
+@file(genus.tcl) 228: set CLK_PORT_OBJ [get_ports clk]
+@file(genus.tcl) 230: if {[sizeof_collection $CLK_PORT_OBJ] == 0} {
     error "Top design '$TOP' does not contain port 'clk'."
 }
-@genus:root: 66> 
-@genus:root: 66> report_hierarchy      > reports/hierarchy_elaborated.rpt
-@genus:root: 67> report_area -depth 3  > reports/area_hierarchy_elaborated.rpt
+@file(genus.tcl) 234: report_hierarchy      > reports/hierarchy_elaborated.rpt
+@file(genus.tcl) 235: report_area -depth 3  > reports/area_hierarchy_elaborated.rpt
 Warning : The details given in report might be incorrect or incomplete. [RPT-80]
         : The design design:riscv_pipeline should be mapped to get accurate area details.
         : Map the design using syn_map before using the '-detail' option of the 'report_area' command.
-@genus:root: 68> report_metric -format html -file reports/elaborated_metric.html
-@genus:root: 69> 
-@genus:root: 69> # ------------------------------------------------------------------------
-@genus:root: 70> # 7. VERIFY THE SDC ATTACHED TO THE CONSTRAINT MODE
-@genus:root: 71> # ------------------------------------------------------------------------
-@genus:root: 72> 
-@genus:root: 72> puts "===================================================="
+@file(genus.tcl) 236: report_metric -format html -file reports/elaborated_metric.html
+@file(genus.tcl) 242: puts "===================================================="
 ====================================================
-@genus:root: 73> puts "VERIFYING MMMC SDC"
+@file(genus.tcl) 243: puts "VERIFYING MMMC SDC"
 VERIFYING MMMC SDC
-@genus:root: 74> puts " - File: [file normalize $SDC_FILE]"
+@file(genus.tcl) 244: puts " - File: [file normalize $SDC_FILE]"
  - File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/tcl/constraint.sdc
-@genus:root: 75> puts "===================================================="
+@file(genus.tcl) 245: puts "===================================================="
 ====================================================
-@genus:root: 76> 
-@genus:root: 76> # The SDC is already attached by create_constraint_mode.  Do not read it a
-@genus:root: 77> # second time because that would duplicate clocks and timing constraints.
-@genus:root: 78> if {[info exists ::dc::sdc_failed_commands]} {
+@file(genus.tcl) 249: if {[info exists ::dc::sdc_failed_commands]} {
     set FAILED_SDC $::dc::sdc_failed_commands
 
     if {[llength $FAILED_SDC] > 0} {
@@ -495,53 +393,37 @@ VERIFYING MMMC SDC
         error "SDC contains failed commands. See reports/failed_sdc_commands.rpt"
     }
 }
-@genus:root: 79> 
-@genus:root: 79> set DEFINED_CLOCKS [get_clocks CLK]
-0x17
-@genus:root: 80> 
-@genus:root: 80> if {[sizeof_collection $DEFINED_CLOCKS] == 0} {
+@file(genus.tcl) 264: set DEFINED_CLOCKS [get_clocks CLK]
+@file(genus.tcl) 266: if {[sizeof_collection $DEFINED_CLOCKS] == 0} {
     error "Clock 'CLK' was not created by $SDC_FILE"
 }
-@genus:root: 81> 
-@genus:root: 81> puts "===================================================="
+@file(genus.tcl) 270: puts "===================================================="
 ====================================================
-@genus:root: 82> puts "SDC CHECK PASSED"
+@file(genus.tcl) 271: puts "SDC CHECK PASSED"
 SDC CHECK PASSED
-@genus:root: 83> puts " - Clock port   : $CLK_PORT_OBJ"
+@file(genus.tcl) 272: puts " - Clock port   : $CLK_PORT_OBJ"
  - Clock port   : 0x16
-@genus:root: 84> puts " - Clock object : $DEFINED_CLOCKS"
+@file(genus.tcl) 273: puts " - Clock object : $DEFINED_CLOCKS"
  - Clock object : 0x17
-@genus:root: 85> puts "===================================================="
+@file(genus.tcl) 274: puts "===================================================="
 ====================================================
-@genus:root: 86> 
-@genus:root: 86> check_timing_intent -verbose \
+@file(genus.tcl) 276: check_timing_intent -verbose \
     > reports/timing_intent_pre_syn.rpt
 Info    : Timing analysis will be done for this view. [TUI-744]
         : View is 'analysis_view:riscv_pipeline/tt'.
         : Worst paths will be shown in this view.
-@genus:root: 87> 
-@genus:root: 87> if {[catch {
+@file(genus.tcl) 279: if {[catch {
     report_timing -lint > reports/timing_lint_pre_syn.rpt
 } timing_lint_error]} {
     puts "WARNING: report_timing -lint failed: $timing_lint_error"
 }
 Info    : Timing analysis will be done for this view. [TUI-744]
         : View is 'analysis_view:riscv_pipeline/tt'.
-@genus:root: 88> 
-@genus:root: 88> # ------------------------------------------------------------------------
-@genus:root: 89> # 8. COST GROUPS
-@genus:root: 90> # ------------------------------------------------------------------------
-@genus:root: 91> 
-@genus:root: 91> set ALL_SEQS [all::all_seqs]
-{inst:riscv_pipeline/IF_ID/if_id_instr_reg[0]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[1]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[2]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[3]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[4]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[5]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[6]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[7]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[8]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[9]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[10]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[11]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[12]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[13]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[14]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[15]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[16]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[17]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[18]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[19]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[20]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[21]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[22]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[23]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[24]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[25]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[26]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[27]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[28]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[29]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[30]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[31]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[0]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[1]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[2]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[3]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[4]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[5]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[6]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[7]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[8]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[9]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[10]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[11]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[12]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[13]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[14]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[15]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[16]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[17]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[18]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[19]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[20]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[21]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[22]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[23]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[24]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[25]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[26]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[27]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[28]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[29]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[30]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[31]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[0]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[1]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[2]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[3]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[4]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[5]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[6]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[7]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[8]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[9]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[10]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[11]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[12]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[13]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[14]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[15]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[16]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[17]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[18]} {inst:riscv_pi... <result is 303211 characters long and printing is truncated to 4096 characters, use 'puts [command]' to view the entire result>
-@genus:root: 92> set ASYNC_INPUT_NAMES [list meip_i msip_i mtip_i dbg_halt_req dbg_resume_req]
-meip_i msip_i mtip_i dbg_halt_req dbg_resume_req
-@genus:root: 93> set NON_DATA_INPUTS [get_ports [concat [list clk reset_n] $ASYNC_INPUT_NAMES]]
-0x18
-@genus:root: 94> set DATA_INPUTS [remove_from_collection [all_inputs] $NON_DATA_INPUTS]
-0x20
-@genus:root: 95> 
-@genus:root: 95> if {[sizeof_collection $ALL_SEQS] > 0} {
+@file(genus.tcl) 289: set ALL_SEQS [all::all_seqs]
+@file(genus.tcl) 290: set ASYNC_INPUT_NAMES [list meip_i msip_i mtip_i dbg_halt_req dbg_resume_req]
+@file(genus.tcl) 291: set NON_DATA_INPUTS [get_ports [concat [list clk reset_n] $ASYNC_INPUT_NAMES]]
+@file(genus.tcl) 292: set DATA_INPUTS [remove_from_collection [all_inputs] $NON_DATA_INPUTS]
+@file(genus.tcl) 294: if {[sizeof_collection $ALL_SEQS] > 0} {
     define_cost_group -name I2C -design $TOP
     define_cost_group -name C2O -design $TOP
     define_cost_group -name C2C -design $TOP
@@ -599,13 +481,7 @@ COST GROUPS CREATED
  - I2O : input    -> output
  - View: tt
 ====================================================
-@genus:root: 96> # ------------------------------------------------------------------------
-@genus:root: 97> # 9. SYNTHESIS
-@genus:root: 98> # ------------------------------------------------------------------------
-@genus:root: 99> 
-@genus:root: 99> # Conservative default for debugging convergence. Re-enable datapath transforms
-@genus:root: 100> # only after the script completes cleanly in the local run mode.
-@genus:root: 101> if {[env_flag_is_true GENUS_ENABLE_DATAPATH_OPT]} {
+@file(genus.tcl) 351: if {[env_flag_is_true GENUS_ENABLE_DATAPATH_OPT]} {
     puts "Genus datapath mode: optimized"
 } else {
     puts "Genus datapath mode: debug-safe; datapath sharing/speculation disabled"
@@ -617,22 +493,17 @@ Genus datapath mode: debug-safe; datapath sharing/speculation disabled
   Setting attribute of root '/': 'dp_analytical_opt' = off
   Setting attribute of root '/': 'dp_sharing' = none
   Setting attribute of root '/': 'dp_speculation' = none
-1 none
-@genus:root: 102> 
-@genus:root: 102> set SYN_EFFORT [env_or_default GENUS_SYN_EFFORT medium]
-medium
-@genus:root: 103> puts "Genus synthesis effort: $SYN_EFFORT"
+@file(genus.tcl) 360: set SYN_EFFORT [env_or_default GENUS_SYN_EFFORT medium]
+@file(genus.tcl) 361: puts "Genus synthesis effort: $SYN_EFFORT"
 Genus synthesis effort: medium
-@genus:root: 104> 
-@genus:root: 104> set_db / .syn_generic_effort $SYN_EFFORT
+@file(genus.tcl) 363: set_db / .syn_generic_effort $SYN_EFFORT
   Setting attribute of root '/': 'syn_generic_effort' = medium
-1 medium
-@genus:root: 105> syn_generic
+@file(genus.tcl) 364: syn_generic
 stamp 'PBS_Generic-Start' being created for table 'pbs_debug'
 
   Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
 --------------------+---------------------+--------------+--------------------+-----------+----------------------
- 00:00:44(00:01:11) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:18:34 (Aug11) |  863.2 MB | PBS_Generic-Start
+ 00:00:41(00:00:19) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:26:47 (Aug11) |  723.4 MB | PBS_Generic-Start
 --------------------+---------------------+--------------+--------------------+-----------+----------------------
 Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
 Info: (*N*) indicates data that was populated from previously saved time_info database
@@ -980,7 +851,7 @@ Stage: pre_to_gen_setup
 | hlo_mux_reorder |       0 |       0 |        0.02 | 
 -----------------------------------------------------
 Starting mux data reorder optimization [v1.0] (stage: post_to_gen_setup, startdef: riscv_pipeline, recur: true)
-Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.002s)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.001s)
 
 Stage: post_to_gen_setup
 -----------------------------------------------------
@@ -1001,7 +872,7 @@ Stage: pre_hlo_rtlopt
 | ume_sweep |       1 |       0 |        0.01 | 
 | ume_share |       0 |       0 |        0.01 | 
 | ume_ssm   |       0 |       0 |        0.00 | 
-| ume_sweep |       0 |       0 |        0.01 | 
+| ume_sweep |       0 |       0 |        0.00 | 
 | ume_share |       0 |       0 |        0.00 | 
 -----------------------------------------------
 Begin SDR optimization CTX_region 
@@ -1259,43 +1130,43 @@ End SDR optimization UME_region
 Starting timing based select reordering [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.214s)
 Starting recase case-box optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed recase case-box optimization (accepts: 0, rejects: 0, runtime: 0.140s)
+Completed recase case-box optimization (accepts: 0, rejects: 0, runtime: 0.132s)
 Starting infer macro optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed infer macro optimization (accepts: 0, rejects: 63, runtime: 0.069s)
+Completed infer macro optimization (accepts: 0, rejects: 63, runtime: 0.062s)
 Starting decode mux sandwich optimization [v2.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed decode mux sandwich optimization (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting decode mux optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed decode mux optimization (accepts: 0, rejects: 0, runtime: 0.000s)
+Completed decode mux optimization (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting chop wide muxes [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed chop wide muxes (accepts: 0, rejects: 0, runtime: 0.160s)
+Completed chop wide muxes (accepts: 0, rejects: 0, runtime: 0.171s)
 Starting common data mux cascade opt [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed common data mux cascade opt (accepts: 0, rejects: 0, runtime: 0.003s)
 Starting mux input consolidation [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.010s)
+Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.007s)
 Starting constant-data mux optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed constant-data mux optimization (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting chain-to-tree inequality transform [v2.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed chain-to-tree inequality transform (accepts: 0, rejects: 0, runtime: 0.095s)
+Completed chain-to-tree inequality transform (accepts: 0, rejects: 0, runtime: 0.092s)
 Starting reconvergence optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed reconvergence optimization (accepts: 0, rejects: 0, runtime: 0.002s)
+Completed reconvergence optimization (accepts: 0, rejects: 0, runtime: 0.006s)
 Starting logic restructure optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed logic restructure optimization (accepts: 0, rejects: 0, runtime: 0.016s)
+Completed logic restructure optimization (accepts: 0, rejects: 0, runtime: 0.017s)
 Starting identity transform [v3.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed identity transform (accepts: 0, rejects: 6, runtime: 0.014s)
+Completed identity transform (accepts: 0, rejects: 6, runtime: 0.011s)
 Starting reduce operator chain [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed reduce operator chain (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed reduce operator chain (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting common data mux cascade opt [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed common data mux cascade opt (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting mux input consolidation [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.005s)
+Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.007s)
 Starting optimize datapath elements [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed optimize datapath elements (accepts: 7, rejects: 0, runtime: 0.005s)
 Starting datapath recasting [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed datapath recasting (accepts: 0, rejects: 0, runtime: 0.003s)
+Completed datapath recasting (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting word-level redundancy removal [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Info    : Setting up the version of high level Redundancy Removal Optimizations. [HLO_RR-1]
         : hlo_rr=1: Enables RRv1, on by default.
-Completed word-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.238s)
+Completed word-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.133s)
 Starting clip mux common data inputs [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed clip mux common data inputs (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting clip the non-user hierarchies [v2.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
@@ -1308,24 +1179,24 @@ Stage: pre_rtlopt
 | Transform                   | Accepts | Rejects | Runtime (s) | 
 -----------------------------------------------------------------
 | hlo_timing_reorder          |       0 |       0 |        1.21 | 
-| hlo_recase_casebox          |       0 |       0 |        0.14 | 
-| hlo_infer_macro             |       0 |      63 |        0.07 | 
+| hlo_recase_casebox          |       0 |       0 |        0.13 | 
+| hlo_infer_macro             |       0 |      63 |        0.06 | 
 | hlo_decode_mux_sandwich     |       0 |       0 |        0.00 | 
 | hlo_mux_decode              |       0 |       0 |        0.00 | 
-| hlo_chop_mux                |       0 |       0 |        0.16 | 
+| hlo_chop_mux                |       0 |       0 |        0.17 | 
 | hlo_mux_cascade_opt         |       0 |       0 |        0.00 | 
 | hlo_mux_consolidation       |       0 |       0 |        0.01 | 
 | hlo_constant_mux_opt        |       0 |       0 |        0.00 | 
 | hlo_inequality_transform    |       0 |       0 |        0.09 | 
-| hlo_reconv_opt              |       0 |       0 |        0.00 | 
+| hlo_reconv_opt              |       0 |       0 |        0.01 | 
 | hlo_restructure             |       0 |       0 |        0.02 | 
 | hlo_identity_transform      |       0 |       6 |        0.01 | 
 | hlo_reduce_operator_chain   |       0 |       0 |        0.00 | 
 | hlo_mux_cascade_opt         |       0 |       0 |        0.00 | 
-| hlo_mux_consolidation       |       0 |       0 |        0.00 | 
+| hlo_mux_consolidation       |       0 |       0 |        0.01 | 
 | hlo_optimize_datapath       |       7 |       0 |        0.00 | 
 | hlo_datapath_recast         |       0 |       0 |        0.00 | 
-| hlo_redundancy_removal_word |       0 |       4 |        2.24 | 
+| hlo_redundancy_removal_word |       0 |       4 |        2.13 | 
 | hlo_clip_mux_input          |       0 |       0 |        0.00 | 
 | hlo_clip                    |       0 |       0 |        0.00 | 
 | hlo_cleanup                 |       0 |       0 |        0.00 | 
@@ -1446,22 +1317,22 @@ Info    : Done optimizing RTL. [RTLOPT-2]
         : Done optimizing RTL in 'riscv_pipeline'.
 Number of big hc bmuxes after = 0
 Starting bit-level redundancy removal [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed bit-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.319s)
+Completed bit-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.422s)
 Starting logic reduction [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed logic reduction (accepts: 0, rejects: 0, runtime: 0.002s)
+Completed logic reduction (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting mux data reorder optimization [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.000s)
 Starting timing based select reordering [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.311s)
+Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.286s)
 
 Stage: post_rtlopt
 ----------------------------------------------------------------
 | Transform                  | Accepts | Rejects | Runtime (s) | 
 ----------------------------------------------------------------
-| hlo_redundancy_removal_bit |       0 |       4 |        2.32 | 
+| hlo_redundancy_removal_bit |       0 |       4 |        2.42 | 
 | hlo_logic_reduction        |       0 |       0 |        0.00 | 
 | hlo_mux_reorder            |       0 |       0 |        0.00 | 
-| hlo_timing_reorder         |       0 |       0 |        1.31 | 
+| hlo_timing_reorder         |       0 |       0 |        1.29 | 
 ----------------------------------------------------------------
 Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
 Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
@@ -1481,7 +1352,7 @@ Running post blast mux optimization. Please follow up with Cadence support if ru
 Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
 Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
 Starting timing based select reordering [v1.0] (stage: post_muxopt, startdef: riscv_pipeline, recur: true)
-Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.222s)
+Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.216s)
 
 Stage: post_muxopt
 --------------------------------------------------------
@@ -1495,79 +1366,65 @@ Stage : to_generic
   =================
    Message Summary
   =================
-------------------------------------------------------------------------------------------------------------------------------------------------------
-|    Id    |  Sev  |Count|                                                       Message Text                                                        |
-------------------------------------------------------------------------------------------------------------------------------------------------------
-|CDFG-250  |Info   |    5|Processing multi-dimensional arrays.                                                                                       |
-|CDFG-372  |Info   |    5|Bitwidth mismatch in assignment.                                                                                           |
-|          |       |     |Review and make sure the mismatch is intentional. Genus can possibly issue bitwidth mismatch warning for explicit          |
-|          |       |     | assignments present in RTL as-well-as for implicit assignments inferred by the tool. For example, in case of enum         |
-|          |       |     | declaration without value, the tool will implicitly assign value to the enum variables. It also issues the warning for any|
-|          |       |     | bitwidth mismatch that appears in this implicit assignment.                                                               |
-|CDFG-373  |Info   |    1|Sign mismatch in assignment.                                                                                               |
-|CDFG-500  |Info   |    1|Unused module input port.                                                                                                  |
-|          |       |     |(In port definition within the module, the input port is not used in any assignment statements or conditional expressions f|
-|          |       |     | or decision statements.                                                                                                   |
-|CDFG-567  |Info   |   20|Instantiating Subdesign.                                                                                                   |
-|CDFG-738  |Info   |   42|Common subexpression eliminated.                                                                                           |
-|CDFG-739  |Info   |   42|Common subexpression kept.                                                                                                 |
-|CDFG-769  |Info   |    9|Identified sum-of-products logic to be optimized during syn_generic.                                                       |
-|CWD-19    |Info   |  178|An implementation was inferred.                                                                                            |
-|DPOPT-1   |Info   |    2|Optimizing datapath logic.                                                                                                 |
-|DPOPT-3   |Info   |    4|Implementing datapath configurations.                                                                                      |
-|DPOPT-4   |Info   |    4|Done implementing datapath configurations.                                                                                 |
-|ELAB-1    |Info   |    1|Elaborating Design.                                                                                                        |
-|ELAB-2    |Info   |   20|Elaborating Subdesign.                                                                                                     |
-|ELAB-3    |Info   |    1|Done Elaborating Design.                                                                                                   |
-|GLO-12    |Info   |  140|Replacing a flip-flop with a logic constant 0.                                                                             |
-|          |       |     |To prevent this optimization, set the 'optimize_constant_0_flops' root attribute to 'false' or 'optimize_constant_0_seq'   |
-|          |       |     | instance attribute to 'false'. You can also see the complete list of deleted sequential with command 'report sequential   |
-|          |       |     | -deleted' (on Reason 'constant0').                                                                                        |
-|GLO-13    |Info   |    1|Replacing a flip-flop with a logic constant 1.                                                                             |
-|          |       |     |To prevent this optimization, set the 'optimize_constant_1_flops' root attribute to 'false' or 'optimize_constant_1_seq'   |
-|          |       |     | instance attribute to 'false'.                                                                                            |
-|GLO-34    |Info   |   54|Deleting instances not driving any primary outputs.                                                                        |
-|          |       |     |Optimizations such as constant propagation or redundancy removal could change the connections so a hierarchical instance   |
-|          |       |     | does not drive any primary outputs anymore. To see the list of deleted hierarchical instances, set the 'information_level'|
-|          |       |     | attribute to 2 or above. If the message is truncated set the message attribute 'truncate' to false to see the complete    |
-|          |       |     | list. To prevent this optimization, set the 'delete_unloaded_insts' root/subdesign attribute to 'false' or 'preserve'     |
-|          |       |     | instance attribute to 'true'.                                                                                             |
-|GLO-40    |Info   |  163|Combinational hierarchical blocks with identical inputs have been merged.                                                  |
-|          |       |     |This optimization usually reduces design area. To prevent merging of combinational hierarchical blocks, set the            |
-|          |       |     | 'merge_combinational_hier_instances' root attribute to 'false' or the 'merge_combinational_hier_instance' instance        |
-|          |       |     | attribute to 'false'.                                                                                                     |
-|GLO-42    |Info   |    9|Equivalent sequential instances have been merged.                                                                          |
-|          |       |     |To prevent merging of sequential instances, set the 'optimize_merge_flops' and 'optimize_merge_latches' root attributes to |
-|          |       |     | 'false' or the 'optimize_merge_seq' instance attribute to 'false'.                                                        |
-|GLO-45    |Info   |  205|Replacing the synchronous part of an always feeding back flip-flop with a logic constant.                                  |
-|          |       |     |To prevent this optimization, set 'optimize_constant_feedback_seqs' root attribute to 'false'. The instance attribute      |
-|          |       |     | 'optimize_constant_feedback_seq' controls this optimization.                                                              |
-|GLO-46    |Info   |    1|Combinational hierarchical instances are merged.                                                                           |
-|HLO_RR-1  |Info   |    1|Setting up the version of high level Redundancy Removal Optimizations.                                                     |
-|LBR-40    |Info   |   20|An unsupported construct was detected in this library.                                                                     |
-|          |       |     |Check to see if this construct is really needed for synthesis. Many liberty constructs are not actually required.          |
-|LBR-155   |Info   |    4|Mismatch in unateness between 'timing_sense' attribute and the function.                                                   |
-|          |       |     |The 'timing_sense' attribute will be respected.                                                                            |
-|LBR-162   |Info   |   34|Both 'pos_unate' and 'neg_unate' timing_sense arcs have been processed.                                                    |
-|          |       |     |Setting the 'timing_sense' to non_unate.                                                                                   |
-|LBR-412   |Info   |   10|Created nominal operating condition.                                                                                       |
-|          |       |     |The nominal operating condition is represented, either by the nominal PVT values specified in the library source           |
-|          |       |     | (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).               |
-|PHYS-752  |Info   |    1|Partition Based Synthesis execution skipped.                                                                               |
-|RPT-80    |Warning|    1|The details given in report might be incorrect or incomplete.                                                              |
-|          |       |     |Map the design using syn_map before using the '-detail' option of the 'report_area' command.                               |
-|RTLOPT-1  |Info   |    1|Optimizing RTL.                                                                                                            |
-|RTLOPT-2  |Info   |    1|Done optimizing RTL.                                                                                                       |
-|RTLOPT-19 |Info   |    5|Grouping carry-save logic.                                                                                                 |
-|RTLOPT-20 |Info   |    5|Accepted carry-save configuration.                                                                                         |
-|RTLOPT-23 |Info   |    5|Done grouping carry-save logic.                                                                                            |
-|RTLOPT-40 |Info   |    1|Transformed datapath macro.                                                                                                |
-|SYNTH-1   |Info   |    1|Synthesizing.                                                                                                              |
-|TIM-1000  |Info   |    1|Multimode clock gating check is disabled.                                                                                  |
-|TUI-744   |Info   |    2|Timing analysis will be done for this view.                                                                                |
-|          |       |     |Worst paths will be shown in this view.                                                                                    |
-|VLOGPT-506|Warning|    7|Unused attribute.                                                                                                          |
-------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|    Id    |  Sev  |Count|                                                                                                                                     Message Text                                                                                                                                     |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|CDFG-250  |Info   |    5|Processing multi-dimensional arrays.                                                                                                                                                                                                                                                  |
+|CDFG-372  |Info   |    5|Bitwidth mismatch in assignment.                                                                                                                                                                                                                                                      |
+|          |       |     |Review and make sure the mismatch is intentional. Genus can possibly issue bitwidth mismatch warning for explicit assignments present in RTL as-well-as for implicit assignments inferred by the tool. For example, in case of enum declaration without value, the tool will          |
+|          |       |     | implicitly assign value to the enum variables. It also issues the warning for any bitwidth mismatch that appears in this implicit assignment.                                                                                                                                        |
+|CDFG-373  |Info   |    1|Sign mismatch in assignment.                                                                                                                                                                                                                                                          |
+|CDFG-500  |Info   |    1|Unused module input port.                                                                                                                                                                                                                                                             |
+|          |       |     |(In port definition within the module, the input port is not used in any assignment statements or conditional expressions for decision statements.                                                                                                                                    |
+|CDFG-567  |Info   |   20|Instantiating Subdesign.                                                                                                                                                                                                                                                              |
+|CDFG-738  |Info   |   42|Common subexpression eliminated.                                                                                                                                                                                                                                                      |
+|CDFG-739  |Info   |   42|Common subexpression kept.                                                                                                                                                                                                                                                            |
+|CDFG-769  |Info   |    9|Identified sum-of-products logic to be optimized during syn_generic.                                                                                                                                                                                                                  |
+|CWD-19    |Info   |  178|An implementation was inferred.                                                                                                                                                                                                                                                       |
+|DPOPT-1   |Info   |    2|Optimizing datapath logic.                                                                                                                                                                                                                                                            |
+|DPOPT-3   |Info   |    4|Implementing datapath configurations.                                                                                                                                                                                                                                                 |
+|DPOPT-4   |Info   |    4|Done implementing datapath configurations.                                                                                                                                                                                                                                            |
+|ELAB-1    |Info   |    1|Elaborating Design.                                                                                                                                                                                                                                                                   |
+|ELAB-2    |Info   |   20|Elaborating Subdesign.                                                                                                                                                                                                                                                                |
+|ELAB-3    |Info   |    1|Done Elaborating Design.                                                                                                                                                                                                                                                              |
+|GLO-12    |Info   |  140|Replacing a flip-flop with a logic constant 0.                                                                                                                                                                                                                                        |
+|          |       |     |To prevent this optimization, set the 'optimize_constant_0_flops' root attribute to 'false' or 'optimize_constant_0_seq' instance attribute to 'false'. You can also see the complete list of deleted sequential with command 'report sequential -deleted' (on Reason 'constant0').   |
+|GLO-13    |Info   |    1|Replacing a flip-flop with a logic constant 1.                                                                                                                                                                                                                                        |
+|          |       |     |To prevent this optimization, set the 'optimize_constant_1_flops' root attribute to 'false' or 'optimize_constant_1_seq' instance attribute to 'false'.                                                                                                                               |
+|GLO-34    |Info   |   54|Deleting instances not driving any primary outputs.                                                                                                                                                                                                                                   |
+|          |       |     |Optimizations such as constant propagation or redundancy removal could change the connections so a hierarchical instance does not drive any primary outputs anymore. To see the list of deleted hierarchical instances, set the 'information_level' attribute to 2 or above. If the   |
+|          |       |     | message is truncated set the message attribute 'truncate' to false to see the complete list. To prevent this optimization, set the 'delete_unloaded_insts' root/subdesign attribute to 'false' or 'preserve' instance attribute to 'true'.                                           |
+|GLO-40    |Info   |  163|Combinational hierarchical blocks with identical inputs have been merged.                                                                                                                                                                                                             |
+|          |       |     |This optimization usually reduces design area. To prevent merging of combinational hierarchical blocks, set the 'merge_combinational_hier_instances' root attribute to 'false' or the 'merge_combinational_hier_instance' instance attribute to 'false'.                              |
+|GLO-42    |Info   |    9|Equivalent sequential instances have been merged.                                                                                                                                                                                                                                     |
+|          |       |     |To prevent merging of sequential instances, set the 'optimize_merge_flops' and 'optimize_merge_latches' root attributes to 'false' or the 'optimize_merge_seq' instance attribute to 'false'.                                                                                         |
+|GLO-45    |Info   |  205|Replacing the synchronous part of an always feeding back flip-flop with a logic constant.                                                                                                                                                                                             |
+|          |       |     |To prevent this optimization, set 'optimize_constant_feedback_seqs' root attribute to 'false'. The instance attribute 'optimize_constant_feedback_seq' controls this optimization.                                                                                                    |
+|GLO-46    |Info   |    1|Combinational hierarchical instances are merged.                                                                                                                                                                                                                                      |
+|HLO_RR-1  |Info   |    1|Setting up the version of high level Redundancy Removal Optimizations.                                                                                                                                                                                                                |
+|LBR-40    |Info   |   20|An unsupported construct was detected in this library.                                                                                                                                                                                                                                |
+|          |       |     |Check to see if this construct is really needed for synthesis. Many liberty constructs are not actually required.                                                                                                                                                                     |
+|LBR-155   |Info   |    4|Mismatch in unateness between 'timing_sense' attribute and the function.                                                                                                                                                                                                              |
+|          |       |     |The 'timing_sense' attribute will be respected.                                                                                                                                                                                                                                       |
+|LBR-162   |Info   |   34|Both 'pos_unate' and 'neg_unate' timing_sense arcs have been processed.                                                                                                                                                                                                               |
+|          |       |     |Setting the 'timing_sense' to non_unate.                                                                                                                                                                                                                                              |
+|LBR-412   |Info   |   10|Created nominal operating condition.                                                                                                                                                                                                                                                  |
+|          |       |     |The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).                                                          |
+|PHYS-752  |Info   |    1|Partition Based Synthesis execution skipped.                                                                                                                                                                                                                                          |
+|RPT-80    |Warning|    1|The details given in report might be incorrect or incomplete.                                                                                                                                                                                                                         |
+|          |       |     |Map the design using syn_map before using the '-detail' option of the 'report_area' command.                                                                                                                                                                                          |
+|RTLOPT-1  |Info   |    1|Optimizing RTL.                                                                                                                                                                                                                                                                       |
+|RTLOPT-2  |Info   |    1|Done optimizing RTL.                                                                                                                                                                                                                                                                  |
+|RTLOPT-19 |Info   |    5|Grouping carry-save logic.                                                                                                                                                                                                                                                            |
+|RTLOPT-20 |Info   |    5|Accepted carry-save configuration.                                                                                                                                                                                                                                                    |
+|RTLOPT-23 |Info   |    5|Done grouping carry-save logic.                                                                                                                                                                                                                                                       |
+|RTLOPT-40 |Info   |    1|Transformed datapath macro.                                                                                                                                                                                                                                                           |
+|SYNTH-1   |Info   |    1|Synthesizing.                                                                                                                                                                                                                                                                         |
+|TIM-1000  |Info   |    1|Multimode clock gating check is disabled.                                                                                                                                                                                                                                             |
+|TUI-744   |Info   |    2|Timing analysis will be done for this view.                                                                                                                                                                                                                                           |
+|          |       |     |Worst paths will be shown in this view.                                                                                                                                                                                                                                               |
+|VLOGPT-506|Warning|    7|Unused attribute.                                                                                                                                                                                                                                                                     |
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Mapper: Libraries have:
 	domain _default_: 334 combo usable cells and 46 sequential usable cells
 Info    : Attempting to launch a super-threading server. [ST-120]
@@ -1575,12 +1432,15 @@ Info    : Attempting to launch a super-threading server. [ST-120]
         : The tool is entering super-threading mode and is launching a CPU server process.  This is enabled by the root attribute 'super_thread_servers' or 'auto_super_thread'.
 
 Another Ctrl-C within 1 second will terminate the tool.
-CURRENT RESOURCES: RT {elapsed: 247s, ST: 98s, FG: 98s, CPU: 0.6%}, MEM {curr: 2.3G, peak: 3.9G, phys curr: 1.5G, phys peak: 1.6G}, SYS {load: 0.6, cpu: 12, total: 12.9G, free: 4.6G}
+CURRENT RESOURCES: RT {elapsed: 158s, ST: 95s, FG: 95s, CPU: 0.4%}, MEM {curr: 2.0G, peak: 3.7G, phys curr: 1.4G, phys peak: 1.5G}, SYS {load: 0.7, cpu: 12, total: 12.9G, free: 4.6G}
 
 Another Ctrl-C within 1 second will terminate the tool.
-CURRENT RESOURCES: RT {elapsed: 250s, ST: 98s, FG: 98s, CPU: 0.6%}, MEM {curr: 2.3G, peak: 3.9G, phys curr: 1.5G, phys peak: 1.6G}, SYS {load: 0.6, cpu: 12, total: 12.9G, free: 4.6G}
+CURRENT RESOURCES: RT {elapsed: 185s, ST: 95s, FG: 95s, CPU: 0.5%}, MEM {curr: 2.0G, peak: 3.7G, phys curr: 1.4G, phys peak: 1.5G}, SYS {load: 0.7, cpu: 12, total: 12.9G, free: 4.6G}
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 186s, ST: 95s, FG: 95s, CPU: 0.5%}, MEM {curr: 2.0G, peak: 3.7G, phys curr: 1.4G, phys peak: 1.5G}, SYS {load: 0.7, cpu: 12, total: 12.9G, free: 4.6G}
 Abnormal exit.
 Warning : Failed to establish connection with super-threading server. [ST-111]
-        : The server was process '1548852' on this host.
+        : The server was process '1589406' on this host.
         : The tool is exiting super-threading mode and failed to establish a connection with a CPU server process.  This could be due to a high cpu load on that host or a networking issue.  If a job queueing mechanism (such as LSF) is being used, perhaps the job was held up in the queue.
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/.st_launch_user1-EliteMini_1538451
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/.st_launch_user1-EliteMini_1583877
