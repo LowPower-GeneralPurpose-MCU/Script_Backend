@@ -37,6 +37,9 @@ if {$CORES > 8} {
 }
 
 setDesignMode -process 7
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
 setMultiCpuUsage -acquireLicense $CORES
 setMultiCpuUsage -localCpu $CORES
 setDistributeHost -local

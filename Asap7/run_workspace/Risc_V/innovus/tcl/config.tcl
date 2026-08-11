@@ -79,11 +79,13 @@ set RING_SPACING 0.320
 set RING_OFFSET  0.320
 set CORE_MARGIN  3.840
 
-# Legal values from ASAP7 4x LEF WIDTHTABLE and routing pitches.
-set M45_WIDTH       0.480
+# M4/M5 low-level PG uses the SRAM reference's one-track legal width.  Wider
+# full-chip M4 straps caused VDD/VSS shorts when core-pin special routing was
+# added before placement.
+set M45_WIDTH       0.096
 set M45_SPACING     0.288
-set M45_SET_PITCH  12.288
-set M45_OFFSET      6.144
+set M45_SET_PITCH  25.920
+set M45_OFFSET     12.960
 
 set M67_WIDTH       0.640
 set M67_SPACING     0.288

@@ -40,7 +40,7 @@ if {[sizeof_collection [all_clocks]] == 0} {
 }
 
 # Keep clock ideal through placement/pre-CTS.  It is changed to propagated only
-# after ccopt_design.
+# after clock_opt_design.
 
 # ----------------------------------------------------------------------------
 # Floorplan information
@@ -71,6 +71,8 @@ close $size_report
 #   M4 horizontal, M5 vertical, M6 horizontal, M7 vertical,
 #   M8 horizontal ring sides, M9 vertical ring sides.
 # ----------------------------------------------------------------------------
+setAddStripeMode -reset
+setAddStripeMode -allow_jog none
 setAddStripeMode -trim_antenna_back_to_shape core_ring
 setAddStripeMode -split_vias true
 setAddStripeMode -via_using_exact_crossover_size false
@@ -127,41 +129,23 @@ addStripe -nets {VDD VSS} \
     -start_from bottom -start_offset $M67_OFFSET \
     -snap_wire_center_to_grid grid
 
-# Mid-level mesh: legal WIDTHTABLE width 0.480 um on M4/M5.
-setAddStripeMode -stacked_via_bottom_layer M5 -stacked_via_top_layer M6
-addStripe -nets {VDD VSS} \
-    -layer M5 -direction vertical \
-    -width $M45_WIDTH -spacing $M45_SPACING \
-    -set_to_set_distance $M45_SET_PITCH \
-    -start_from left -start_offset $M45_OFFSET \
-    -snap_wire_center_to_grid grid
-
-setAddStripeMode -stacked_via_bottom_layer M1 -stacked_via_top_layer M5
-addStripe -nets {VDD VSS} \
-    -layer M4 -direction horizontal \
-    -width $M45_WIDTH -spacing $M45_SPACING \
-    -set_to_set_distance $M45_SET_PITCH \
-    -start_from bottom -start_offset $M45_OFFSET \
-    -snap_wire_center_to_grid grid
-
-# Project requirement: do not permit special-route jogging or layer changes.
-setSrouteMode -viaConnectToShape {ring stripe}
-sroute -nets {VDD VSS} \
-    -connect {corePin} \
-    -corePinTarget {stripe} \
-    -allowJogging 0 \
-    -allowLayerChange 0
+# Low-level M1/M5 core-pin PG is built after standard-cell placement.  Creating
+# full-chip M4 straps and core-pin sroute here produced VDD/VSS M4 shorts in
+# the latest run.
 
 editTrim -nets {VDD VSS}
 clearDrc
 
-verifyConnectivity -type all -error 1000 -warning 100 \
+# Assign every top port after PG shapes exist, allowing editPin to avoid overlap.
+setPinConstraint -cell $TOP -corner_to_pin_distance 8
+source ./tcl/pins.tcl
+
+# Before standard-cell placement, only special-route PG connectivity is useful.
+# A full connectivity check here reports every unplaced cell pin as noise.
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet \
+    -error 1000 -warning 100 \
     -report ./verify_rpt/connectivity_after_pg.rpt
 verify_drc -report ./verify_rpt/drc_after_pg.rpt
-
-# Assign every top port after PG shapes exist, allowing editPin to avoid overlap.
-setPinConstraint -corner_to_pin_distance 8
-source ./tcl/pins.tcl
 
 saveDesign ./saved/${TOP}_powerplan.enc
 
@@ -182,6 +166,43 @@ setPlaceMode \
 
 place_design
 refinePlace
+
+# Post-placement lower PG: create M1 follow-pin rails first, then stitch them
+# up to the M5/M6 mesh.  This mirrors the clean SRAM lower-PG topology but
+# keeps the RISC-V flow macro-free.
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe}
+sroute -nets {VDD VSS} \
+    -connect {corePin} \
+    -corePinCheckStdcellGeoms \
+    -allowJogging 0 \
+    -allowLayerChange 0
+
+setAddStripeMode -reset
+setAddStripeMode \
+    -allow_jog none \
+    -allow_nonpreferred_dir none \
+    -break_at none \
+    -extend_to_closest_target area_boundary \
+    -stacked_via_bottom_layer M1 \
+    -stacked_via_top_layer M6
+
+addStripe -nets {VDD VSS} \
+    -layer M5 -direction vertical \
+    -width $M45_WIDTH -spacing $M45_SPACING \
+    -set_to_set_distance $M45_SET_PITCH \
+    -start_from left -start_offset $M45_OFFSET \
+    -create_pins 0 \
+    -snap_wire_center_to_grid Grid \
+    -allow_snapping_override_custom_spacing 1
+
+editTrim -nets {VDD VSS}
+clearDrc
+
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet \
+    -error 1000 -warning 100 \
+    -report ./verify_rpt/connectivity_after_postplace_pg.rpt
+verify_drc -report ./verify_rpt/drc_after_postplace_pg.rpt
 
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_postPlace.rpt
 report_timing > ./reports/timing_postPlace.rpt
@@ -214,11 +235,35 @@ setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 \
 optDesign -prefix preCTS -preCTS
 report_timing > ./reports/timing_preCTS.rpt
 
-create_ccopt_clock_tree_spec -filename ./outputs/ccopt.spec
-source ./outputs/ccopt.spec
-ccopt_design -prefix postCTS
+refinePlace
+checkPlace ./verify_rpt/checkPlace_before_cts.rpt
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
 
-set_propagated_clock [all_clocks]
+# PODv2 place-opt databases must use clock_opt_design.  ccopt_design exits with
+# IMPCCOPT-2440 in this Innovus version.
+clock_opt_design -prefix postCTS
+
+proc apply_post_cts_propagated_clocks {} {
+    set active_constraint_modes [all_constraint_modes -active]
+
+    if {[catch {
+        set_interactive_constraint_modes $active_constraint_modes
+        set_propagated_clock [all_clocks]
+    } propagated_clock_setup_error]} {
+        catch {set_interactive_constraint_modes {}}
+        return -code error $propagated_clock_setup_error
+    }
+
+    set_interactive_constraint_modes {}
+}
+
+if {[catch {apply_post_cts_propagated_clocks} propagated_clock_error]} {
+    puts stderr "Post-CTS propagated-clock setup failed: $propagated_clock_error"
+    error $propagated_clock_error
+}
+
 setHierMode -optStage postCTS
 optDesign -prefix postCTS -postCTS -setup -hold
 
@@ -237,10 +282,13 @@ addFiller
 # Signal routing and post-route closure
 # ----------------------------------------------------------------------------
 setNanoRouteMode -reset
+setDesignMode \
+    -bottomRoutingLayer 2 \
+    -topRoutingLayer 7
 setNanoRouteMode -quiet \
     -route_strict_honor_route_rule true \
     -route_strictly_honor_1d_routing true \
-    -route_detail_no_taper_in_layers "1:9" \
+    -route_detail_no_taper_in_layers "2:7" \
     -route_detail_no_taper_on_output_pin true \
     -route_use_auto_via false \
     -route_with_via_only_for_stdcell_pin true \
