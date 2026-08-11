@@ -1,4 +1,6 @@
+catch { setDesignMode -bottomRoutingLayer {} }
 catch { setDesignMode -process 7 }
+catch { setDesignMode -topRoutingLayer {} }
 catch { setAnalysisMode -analysisType single }
 catch { setExtractRCMode  -engine preRoute -total_c_th 5 -relative_c_th 0.03 -coupling_c_th 3 }
 catch { setPlaceMode -macroPlaceMode 0 }

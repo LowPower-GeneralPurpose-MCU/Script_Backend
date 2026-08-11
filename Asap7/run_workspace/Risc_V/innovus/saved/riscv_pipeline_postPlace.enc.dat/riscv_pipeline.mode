@@ -1,4 +1,6 @@
+catch { setDesignMode -bottomRoutingLayer {} }
 catch { setDesignMode -process 7 }
+catch { setDesignMode -topRoutingLayer {} }
 catch { setAnalysisMode -analysisType single }
 catch { setAnalysisMode -clkSrcPath true }
 catch { setAnalysisMode -clockPropagation sdcControl }
@@ -29,11 +31,12 @@ catch { setHierMode -optStage preCTS }
 catch { setImportMode -discardFloatingVNets false }
 catch { setImportMode -keepEmptyModule true }
 catch { setGenerateViaMode -auto false }
-catch { setAddStripeMode -split_vias true }
+catch { setAddStripeMode -allow_jog none }
+catch { setAddStripeMode -allow_nonpreferred_dir none }
+catch { setAddStripeMode -break_at none }
+catch { setAddStripeMode -extend_to_closest_target area_boundary }
 catch { setAddStripeMode -stacked_via_bottom_layer M1 }
-catch { setAddStripeMode -stacked_via_top_layer M5 }
-catch { setAddStripeMode -trim_antenna_back_to_shape core_ring }
-catch { setAddStripeMode -via_using_exact_crossover_size false }
+catch { setAddStripeMode -stacked_via_top_layer M6 }
 catch { setFPlanMode -cellsForExtraSites {} }
 catch { setFPlanMode -defaultRowPatternSite {} }
 catch { setFPlanMode -defaultTechSite asap7sc7p5t }

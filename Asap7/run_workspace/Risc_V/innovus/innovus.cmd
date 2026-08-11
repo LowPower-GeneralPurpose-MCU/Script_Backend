@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Wed Aug 12 00:08:17 2026                
+#  Created on Wed Aug 12 00:27:29 2026                
 #                                                     
 #######################################################
 
@@ -19,8 +19,9 @@ getVersion
 getVersion
 getVersion
 set enc_source_continue_on_error false
-set auto_file_dir /tmp/user1/innovus_riscv_1789970
+set auto_file_dir /tmp/user1/innovus_riscv_1887995
 setDesignMode -process 7
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
 setMultiCpuUsage -acquireLicense 8
 setMultiCpuUsage -localCpu 8
 setDistributeHost -local
@@ -60,6 +61,8 @@ report_timing > ./reports/timing_hierFP.rpt
 setMultiColorsHier
 all_constraint_modes
 set_interactive_constraint_modes [all_constraint_modes]
+setAddStripeMode -reset
+setAddStripeMode -allow_jog none
 setAddStripeMode -trim_antenna_back_to_shape core_ring
 setAddStripeMode -split_vias true
 setAddStripeMode -via_using_exact_crossover_size false
@@ -77,23 +80,17 @@ setAddStripeMode -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.288 -set_to_set_distance 25.600 -start_from left -start_offset 12.800 -snap_wire_center_to_grid grid
 setAddStripeMode -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.288 -set_to_set_distance 25.600 -start_from bottom -start_offset 12.800 -snap_wire_center_to_grid grid
-setAddStripeMode -stacked_via_bottom_layer M5 -stacked_via_top_layer M6
-addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.480 -spacing 0.288 -set_to_set_distance 12.288 -start_from left -start_offset 6.144 -snap_wire_center_to_grid grid
-setAddStripeMode -stacked_via_bottom_layer M1 -stacked_via_top_layer M5
-addStripe -nets {VDD VSS} -layer M4 -direction horizontal -width 0.480 -spacing 0.288 -set_to_set_distance 12.288 -start_from bottom -start_offset 6.144 -snap_wire_center_to_grid grid
-setSrouteMode -viaConnectToShape {ring stripe}
-sroute -nets {VDD VSS} -connect corePin -corePinTarget stripe -allowJogging 0 -allowLayerChange 0
 editTrim -nets {VDD VSS}
 clearDrc
-verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_pg.rpt
-verify_drc -report ./verify_rpt/drc_after_pg.rpt
-setPinConstraint -corner_to_pin_distance 8
+setPinConstraint -cell riscv_pipeline -corner_to_pin_distance 8
 setPinAssignMode -pinEditInBatch true
 editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side BOTTOM -layer M7 -honorConstraint 1 -pin {clk reset_n riscv_start {reset_vector_in[31]} {reset_vector_in[30]} {reset_vector_in[29]} {reset_vector_in[28]} {reset_vector_in[27]} {reset_vector_in[26]} {reset_vector_in[25]} {reset_vector_in[24]} {reset_vector_in[23]} {reset_vector_in[22]} {reset_vector_in[21]} {reset_vector_in[20]} {reset_vector_in[19]} {reset_vector_in[18]} {reset_vector_in[17]} {reset_vector_in[16]} {reset_vector_in[15]} {reset_vector_in[14]} {reset_vector_in[13]} {reset_vector_in[12]} {reset_vector_in[11]} {reset_vector_in[10]} {reset_vector_in[9]} {reset_vector_in[8]} {reset_vector_in[7]} {reset_vector_in[6]} {reset_vector_in[5]} {reset_vector_in[4]} {reset_vector_in[3]} {reset_vector_in[2]} {reset_vector_in[1]} {reset_vector_in[0]}}
 editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side LEFT -layer M6 -honorConstraint 1 -pin {icache_read_req {icache_addr[31]} {icache_addr[30]} {icache_addr[29]} {icache_addr[28]} {icache_addr[27]} {icache_addr[26]} {icache_addr[25]} {icache_addr[24]} {icache_addr[23]} {icache_addr[22]} {icache_addr[21]} {icache_addr[20]} {icache_addr[19]} {icache_addr[18]} {icache_addr[17]} {icache_addr[16]} {icache_addr[15]} {icache_addr[14]} {icache_addr[13]} {icache_addr[12]} {icache_addr[11]} {icache_addr[10]} {icache_addr[9]} {icache_addr[8]} {icache_addr[7]} {icache_addr[6]} {icache_addr[5]} {icache_addr[4]} {icache_addr[3]} {icache_addr[2]} {icache_addr[1]} {icache_addr[0]} {icache_read_data[31]} {icache_read_data[30]} {icache_read_data[29]} {icache_read_data[28]} {icache_read_data[27]} {icache_read_data[26]} {icache_read_data[25]} {icache_read_data[24]} {icache_read_data[23]} {icache_read_data[22]} {icache_read_data[21]} {icache_read_data[20]} {icache_read_data[19]} {icache_read_data[18]} {icache_read_data[17]} {icache_read_data[16]} {icache_read_data[15]} {icache_read_data[14]} {icache_read_data[13]} {icache_read_data[12]} {icache_read_data[11]} {icache_read_data[10]} {icache_read_data[9]} {icache_read_data[8]} {icache_read_data[7]} {icache_read_data[6]} {icache_read_data[5]} {icache_read_data[4]} {icache_read_data[3]} {icache_read_data[2]} {icache_read_data[1]} {icache_read_data[0]} icache_hit icache_stall}
 editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side RIGHT -layer M6 -honorConstraint 1 -pin {dcache_read_req dcache_write_req {dcache_addr[31]} {dcache_addr[30]} {dcache_addr[29]} {dcache_addr[28]} {dcache_addr[27]} {dcache_addr[26]} {dcache_addr[25]} {dcache_addr[24]} {dcache_addr[23]} {dcache_addr[22]} {dcache_addr[21]} {dcache_addr[20]} {dcache_addr[19]} {dcache_addr[18]} {dcache_addr[17]} {dcache_addr[16]} {dcache_addr[15]} {dcache_addr[14]} {dcache_addr[13]} {dcache_addr[12]} {dcache_addr[11]} {dcache_addr[10]} {dcache_addr[9]} {dcache_addr[8]} {dcache_addr[7]} {dcache_addr[6]} {dcache_addr[5]} {dcache_addr[4]} {dcache_addr[3]} {dcache_addr[2]} {dcache_addr[1]} {dcache_addr[0]} {dcache_write_data[31]} {dcache_write_data[30]} {dcache_write_data[29]} {dcache_write_data[28]} {dcache_write_data[27]} {dcache_write_data[26]} {dcache_write_data[25]} {dcache_write_data[24]} {dcache_write_data[23]} {dcache_write_data[22]} {dcache_write_data[21]} {dcache_write_data[20]} {dcache_write_data[19]} {dcache_write_data[18]} {dcache_write_data[17]} {dcache_write_data[16]} {dcache_write_data[15]} {dcache_write_data[14]} {dcache_write_data[13]} {dcache_write_data[12]} {dcache_write_data[11]} {dcache_write_data[10]} {dcache_write_data[9]} {dcache_write_data[8]} {dcache_write_data[7]} {dcache_write_data[6]} {dcache_write_data[5]} {dcache_write_data[4]} {dcache_write_data[3]} {dcache_write_data[2]} {dcache_write_data[1]} {dcache_write_data[0]} {dcache_read_data[31]} {dcache_read_data[30]} {dcache_read_data[29]} {dcache_read_data[28]} {dcache_read_data[27]} {dcache_read_data[26]} {dcache_read_data[25]} {dcache_read_data[24]} {dcache_read_data[23]} {dcache_read_data[22]} {dcache_read_data[21]} {dcache_read_data[20]} {dcache_read_data[19]} {dcache_read_data[18]} {dcache_read_data[17]} {dcache_read_data[16]} {dcache_read_data[15]} {dcache_read_data[14]} {dcache_read_data[13]} {dcache_read_data[12]} {dcache_read_data[11]} {dcache_read_data[10]} {dcache_read_data[9]} {dcache_read_data[8]} {dcache_read_data[7]} {dcache_read_data[6]} {dcache_read_data[5]} {dcache_read_data[4]} {dcache_read_data[3]} {dcache_read_data[2]} {dcache_read_data[1]} {dcache_read_data[0]} dcache_hit dcache_stall {mem_size_top[1]} {mem_size_top[0]} mem_unsigned_top}
 editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDirection counterclockwise -side TOP -layer M7 -honorConstraint 1 -pin {meip_i msip_i mtip_i riscv_done wfi_sleep_out dbg_halt_req dbg_resume_req dbg_halted {dbg_reg_read_addr[15]} {dbg_reg_read_addr[14]} {dbg_reg_read_addr[13]} {dbg_reg_read_addr[12]} {dbg_reg_read_addr[11]} {dbg_reg_read_addr[10]} {dbg_reg_read_addr[9]} {dbg_reg_read_addr[8]} {dbg_reg_read_addr[7]} {dbg_reg_read_addr[6]} {dbg_reg_read_addr[5]} {dbg_reg_read_addr[4]} {dbg_reg_read_addr[3]} {dbg_reg_read_addr[2]} {dbg_reg_read_addr[1]} {dbg_reg_read_addr[0]} {dbg_reg_read_data[31]} {dbg_reg_read_data[30]} {dbg_reg_read_data[29]} {dbg_reg_read_data[28]} {dbg_reg_read_data[27]} {dbg_reg_read_data[26]} {dbg_reg_read_data[25]} {dbg_reg_read_data[24]} {dbg_reg_read_data[23]} {dbg_reg_read_data[22]} {dbg_reg_read_data[21]} {dbg_reg_read_data[20]} {dbg_reg_read_data[19]} {dbg_reg_read_data[18]} {dbg_reg_read_data[17]} {dbg_reg_read_data[16]} {dbg_reg_read_data[15]} {dbg_reg_read_data[14]} {dbg_reg_read_data[13]} {dbg_reg_read_data[12]} {dbg_reg_read_data[11]} {dbg_reg_read_data[10]} {dbg_reg_read_data[9]} {dbg_reg_read_data[8]} {dbg_reg_read_data[7]} {dbg_reg_read_data[6]} {dbg_reg_read_data[5]} {dbg_reg_read_data[4]} {dbg_reg_read_data[3]} {dbg_reg_read_data[2]} {dbg_reg_read_data[1]} {dbg_reg_read_data[0]} dbg_reg_write_en {dbg_reg_write_addr[15]} {dbg_reg_write_addr[14]} {dbg_reg_write_addr[13]} {dbg_reg_write_addr[12]} {dbg_reg_write_addr[11]} {dbg_reg_write_addr[10]} {dbg_reg_write_addr[9]} {dbg_reg_write_addr[8]} {dbg_reg_write_addr[7]} {dbg_reg_write_addr[6]} {dbg_reg_write_addr[5]} {dbg_reg_write_addr[4]} {dbg_reg_write_addr[3]} {dbg_reg_write_addr[2]} {dbg_reg_write_addr[1]} {dbg_reg_write_addr[0]} {dbg_reg_write_data[31]} {dbg_reg_write_data[30]} {dbg_reg_write_data[29]} {dbg_reg_write_data[28]} {dbg_reg_write_data[27]} {dbg_reg_write_data[26]} {dbg_reg_write_data[25]} {dbg_reg_write_data[24]} {dbg_reg_write_data[23]} {dbg_reg_write_data[22]} {dbg_reg_write_data[21]} {dbg_reg_write_data[20]} {dbg_reg_write_data[19]} {dbg_reg_write_data[18]} {dbg_reg_write_data[17]} {dbg_reg_write_data[16]} {dbg_reg_write_data[15]} {dbg_reg_write_data[14]} {dbg_reg_write_data[13]} {dbg_reg_write_data[12]} {dbg_reg_write_data[11]} {dbg_reg_write_data[10]} {dbg_reg_write_data[9]} {dbg_reg_write_data[8]} {dbg_reg_write_data[7]} {dbg_reg_write_data[6]} {dbg_reg_write_data[5]} {dbg_reg_write_data[4]} {dbg_reg_write_data[3]} {dbg_reg_write_data[2]} {dbg_reg_write_data[1]} {dbg_reg_write_data[0]}}
 setPinAssignMode -pinEditInBatch false
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_pg.rpt
+verify_drc -report ./verify_rpt/drc_after_pg.rpt
 saveDesign ./saved/riscv_pipeline_powerplan.enc
 setDelayCalMode -SIAware false -equivalent_waveform_model none
 setHierMode -optStage preCTS
@@ -101,6 +98,16 @@ setPlaceMode -reset
 setPlaceMode -place_global_uniform_density true -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_design_refine_macro false
 place_design
 refinePlace
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe}
+sroute -nets {VDD VSS} -connect corePin -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
+setAddStripeMode -reset
+setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M1 -stacked_via_top_layer M6
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 12.960 -create_pins 0 -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+editTrim -nets {VDD VSS}
+clearDrc
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_postplace_pg.rpt
+verify_drc -report ./verify_rpt/drc_after_postplace_pg.rpt
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_postPlace.rpt
 report_timing > ./reports/timing_postPlace.rpt
 report_area > ./reports/area_postPlace.rpt
@@ -119,37 +126,54 @@ set_ccopt_property use_inverters auto
 setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 -powerEffort high -fixFanoutLoad true
 optDesign -prefix preCTS -preCTS
 report_timing > ./reports/timing_preCTS.rpt
-create_ccopt_clock_tree_spec -filename ./outputs/ccopt.spec
-get_ccopt_clock_trees
-ccopt_check_and_flatten_ilms_no_restore
-set_ccopt_property cts_is_sdc_clock_root -pin clk true
-create_ccopt_clock_tree -name CLK -source clk -no_skew_group
-set_ccopt_property target_max_trans_sdc -delay_corner dc_tt -early -clock_tree CLK 10.0
-set_ccopt_property target_max_trans_sdc -delay_corner dc_tt -late -clock_tree CLK 40.0
-set_ccopt_property source_latency -delay_corner dc_tt -early -rise -clock_tree CLK 100.0
-set_ccopt_property source_latency -delay_corner dc_tt -early -fall -clock_tree CLK 100.0
-set_ccopt_property source_latency -delay_corner dc_tt -late -rise -clock_tree CLK 150.0
-set_ccopt_property source_latency -delay_corner dc_tt -late -fall -clock_tree CLK 150.0
-set_ccopt_property clock_period -pin clk 10000
-set_ccopt_property timing_connectivity_info {}
-create_ccopt_skew_group -name CLK/mode_func -sources clk -auto_sinks
-set_ccopt_property include_source_latency -skew_group CLK/mode_func true
-set_ccopt_property extracted_from_clock_name -skew_group CLK/mode_func CLK
-set_ccopt_property extracted_from_constraint_mode_names -skew_group CLK/mode_func {mode_func  }
-set_ccopt_property extracted_from_delay_corners -skew_group CLK/mode_func dc_tt
-check_ccopt_clock_tree_convergence
-get_ccopt_property auto_design_state_for_ilms
-ccopt_design -prefix postCTS
-win
-zoomBox -2.14400 13.91050 325.11350 306.87575
-zoomBox 74.80025 78.76600 275.77750 258.68350
-zoomBox 100.55725 116.35550 245.76350 246.34600
-zoomBox 122.59275 153.61275 211.76775 233.44350
-zoomBox 135.99175 176.09275 190.75650 225.11900
-zoomBox 142.53825 185.62800 182.10600 221.04950
-zoomBox 135.49975 176.23025 190.26500 225.25675
-zoomBox 125.60725 163.03250 201.40700 230.88950
-zoomBox 103.05650 132.96475 226.48375 243.45850
-zoomBox 48.95875 61.32175 285.40650 272.99300
-zoomBox -22.92325 -30.74050 362.09275 313.93100
-zoomBox -140.59650 -178.14525 486.33825 383.09525
+refinePlace
+checkPlace ./verify_rpt/checkPlace_before_cts.rpt
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+clock_opt_design -prefix postCTS
+all_constraint_modes -active
+set_interactive_constraint_modes $active_constraint_modes
+set_propagated_clock [all_clocks]
+set_interactive_constraint_modes {}
+setHierMode -optStage postCTS
+optDesign -prefix postCTS -postCTS -setup -hold
+report_timing > ./reports/timing_postCTS.rpt
+report_area > ./reports/area_postCTS.rpt
+saveDesign ./saved/riscv_pipeline_postCTS.enc
+setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
+addFiller
+setNanoRouteMode -reset
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+setNanoRouteMode -quiet -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 2:7 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven true -route_detail_fix_antenna true -route_detail_merge_abutting_cut true -route_detail_end_iteration 5
+routeDesign -globalDetail
+routeDesign -viaOpt -wireOpt -trackOpt
+ecoRoute -fix_drc
+verify_drc -report ./verify_rpt/drc_after_route.rpt
+verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_route.rpt
+setAnalysisMode -analysisType onChipVariation -cppr both
+setDelayCalMode -SIAware true -equivalent_waveform_model propagation
+setExtractRCMode -engine postRoute -effortLevel medium
+optDesign -prefix postRoute -postRoute -setup -hold
+optDesign -prefix postRouteDRV -postRoute -drv
+ecoRoute -fix_drc
+report_timing > ./reports/timing_postRoute.rpt
+report_area > ./reports/area_postRoute.rpt
+report_power > ./reports/power_postRoute.rpt
+saveDesign ./saved/riscv_pipeline_postRoute.enc
+verify_drc -report ./verify_rpt/drc_postRoute_final.rpt
+verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_postRoute_final.rpt
+verify_drc -report ./verify_rpt/drc_after_metal_fill.rpt
+verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_metal_fill.rpt
+extractRC
+rcOut -spef ./outputs/riscv_pipeline_pnr.spef -rc_corner rc_typ
+writeTimingCon ./outputs/riscv_pipeline_pnr.sdc
+saveNetlist ./outputs/riscv_pipeline_pnr_lec.v -excludeLeafCell -removePowerGround
+saveNetlist ./outputs/riscv_pipeline_pnr_sta.v -excludeLeafCell
+saveNetlist ./outputs/riscv_pipeline_pnr_pg.v -excludeLeafCell -includePowerGround -includePhysicalInst
+setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic -virtualConnection false -textSize 1
+streamOut ./outputs/riscv_pipeline.gds -mapFile ./tcl/streamOut.map -merge {/home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds} -units 4000 -dieAreaAsBoundary -outputMacros
+write_lef_abstract -noCutObs ./outputs/riscv_pipeline.lef
+defOut -floorplan -netlist -routing ./outputs/riscv_pipeline_pnr.def
+report_area > ./reports/area_pnr.rpt
+report_power > ./reports/power_pnr.rpt
+report_timing > ./reports/timing_pnr.rpt
+saveDesign ./saved/riscv_pipeline_final.enc
