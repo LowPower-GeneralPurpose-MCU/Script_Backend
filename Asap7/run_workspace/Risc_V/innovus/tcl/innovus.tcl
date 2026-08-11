@@ -13,8 +13,23 @@
 # that paths used by the two stage scripts remain deterministic.
 # =============================================================================
 
-set driver_file [file normalize [info script]]
-set run_dir [file dirname [file dirname $driver_file]]
+set driver_script [info script]
+if {$driver_script ne ""} {
+    set driver_file [file normalize $driver_script]
+    set run_dir [file dirname [file dirname $driver_file]]
+} else {
+    # Interactive paste mode: [info script] is empty.  In this mode, start
+    # Innovus from the run directory, or from the tcl subdirectory.
+    set paste_cwd [file normalize [pwd]]
+    if {[file exists [file join $paste_cwd tcl innovus.tcl]]} {
+        set run_dir $paste_cwd
+    } elseif {[file tail $paste_cwd] eq "tcl" &&
+              [file exists [file join [file dirname $paste_cwd] tcl innovus.tcl]]} {
+        set run_dir [file dirname $paste_cwd]
+    } else {
+        error "Interactive paste mode cannot find the Innovus run directory. cd to Asap7/run_workspace/Risc_V/innovus first, then paste again."
+    }
+}
 cd $run_dir
 
 set enc_source_continue_on_error false
