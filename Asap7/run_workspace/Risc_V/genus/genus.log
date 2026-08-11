@@ -3,19 +3,19 @@ Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
 Cadence and the Cadence logo are registered trademarks and Genus is a trademark
 of Cadence Design Systems, Inc. in the United States and other countries.
 
-[22:48:39.206306] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+[23:17:21.206210] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 Version: 23.14-s090_1, built Wed Feb 26 17:49:50 PST 2025
 Options: 
-Date:    Tue Aug 11 22:48:39 2026
+Date:    Tue Aug 11 23:17:21 2026
 Host:    user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*1physical cpu*AMD Ryzen 5 7545U 1024KB) (13556668KB)
-PID:     1396232
+PID:     1538451
 OS:      Ubuntu 26.04 LTS
 
 Checking out license: Genus_Synthesis
-[22:48:40.188177] Periodic Lic check successful
-[22:48:40.188184] Feature usage summary:
-[22:48:40.188185] Genus_Synthesis
+[23:17:22.222722] Periodic Lic check successful
+[23:17:22.222723] Feature usage summary:
+[23:17:22.222723] Genus_Synthesis
 
 
 
@@ -24,10 +24,10 @@ Checking out license: Genus_Synthesis
 
 
 
-Finished executable startup (3 seconds elapsed).
+Finished executable startup (1 second elapsed).
 
 Loading tool scripts...
-Finished loading tool scripts (15 seconds elapsed).
+Finished loading tool scripts (11 seconds elapsed).
 
 WARNING: This version of the tool is 530 days old.
 @genus:root: 1> # ------------------------------------------------------------------------
@@ -50,16 +50,7 @@ riscv_pipeline
 @genus:root: 8> 
 @genus:root: 8> proc env_or_default {name default_value} {
     if {[info exists ::env($name)] && $::env($name) ne ""} {
-        ret ------------------------------------------------------------------------
-# 1. GLOBAL VARIABLES
-# ------------------------------------------------------------------------
-
-if {[info exists ::env(ASAP7_HOME)]} {
-    set ASAP7 [file normalize $::env(ASAP7_HOME)]
-} else {
-    set ASAP7 "/home/user1/Desktop/asap7"
-}
-urn $::env($name)
+        return $::env($name)
     }
 
     return $default_value
@@ -75,7 +66,7 @@ urn $::env($name)
 }
 @genus:root: 10> 
 @genus:root: 10> source ./tcl/rtl_filelist.tcl
-Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 22:49:03 JST 2026)...
+Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 23:17:46 JST 2026)...
 #@ Begin verbose source ./tcl/rtl_filelist.tcl
 @file(rtl_filelist.tcl) 2: set RTL_FILES [list \
     ./rtl/control_unit.v \
@@ -121,12 +112,16 @@ Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 22:49:03 JST 2026)...
   Setting attribute of root '/': 'init_hdl_search_path' = ./rtl
 1 ./rtl
 @genus:root: 20> 
-@genus:root: 20> # Keep the default run local and single-process. The previous unconditional
-@genus:root: 21> # max_cpus_per_server setting could launch a super-thread helper that then
-@genus:root: 22> # stalled at syn_generic on this host.
-@genus:root: 23> set_db / .auto_super_thread false
+@genus:root: 20> # Keep the default run local. The -cpu command-line option, super_thread_servers,
+@genus:root: 21> # and max_cpus_per_server all enter Genus super-threading mode on this host.
+@genus:root: 22> set_db / .auto_super_thread false
   Setting attribute of root '/': 'auto_super_thread' = false
 1 false
+@genus:root: 23> foreach st_attr {super_thread_servers max_cpus_per_server} {
+    if {[catch {reset_db $st_attr} reset_error]} {
+        puts "WARNING: Unable to reset $st_attr: $reset_error"
+    }
+}
 @genus:root: 24> 
 @genus:root: 24> if {[env_flag_is_true GENUS_ENABLE_SUPER_THREAD]} {
     set CORES [env_or_default GENUS_CPUS 4]
@@ -148,9 +143,9 @@ Sourcing './tcl/rtl_filelist.tcl' (Tue Aug 11 22:49:03 JST 2026)...
         error "Super-thread server test failed before synthesis: $st_error"
     }
 } else {
-    puts "Genus CPU configuration: super-thread disabled. Set GENUS_ENABLE_SUPER_THREAD=1 only after test_super_thread_servers passes."
+    puts "Genus CPU configuration: super-thread disabled. Do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set."
 }
-Genus CPU configuration: super-thread disabled. Set GENUS_ENABLE_SUPER_THREAD=1 only after test_super_thread_servers passes.
+Genus CPU configuration: super-thread disabled. Do not start Genus with -cpu unless GENUS_ENABLE_SUPER_THREAD=1 is also set.
 @genus:root: 25> 
 @genus:root: 25> set_db / .hdl_unconnected_value 0
   Setting attribute of root '/': 'hdl_unconnected_value' = 0
@@ -347,18 +342,18 @@ Stage: post_elab
 | ume_constant_bmux |       0 |       0 |        0.00 | 
 | ume_merge         |       0 |       0 |        0.00 | 
 | ume_ssm           |       0 |       0 |        0.01 | 
-| ume_cse           |       1 |       0 |        0.10 | 
-| ume_shrink        |       2 |       0 |        0.00 | 
+| ume_cse           |       1 |       0 |        0.09 | 
+| ume_shrink        |       2 |       0 |        0.01 | 
 | ume_sweep         |       0 |       0 |        0.01 | 
 | ume_constant_bmux |       0 |       0 |        0.00 | 
 | ume_merge         |       0 |       0 |        0.00 | 
 | ume_ssm           |       0 |       0 |        0.01 | 
 | ume_cse           |       0 |       0 |        0.03 | 
 | ume_shrink        |       0 |       0 |        0.00 | 
-| ume_sweep         |       0 |       0 |        0.01 | 
+| ume_sweep         |       0 |       0 |        0.00 | 
 -------------------------------------------------------
 Starting optimize datapath shifters [v1.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
-Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.000s)
 Starting clip mux common data inputs [v1.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
 Completed clip mux common data inputs (accepts: 1, rejects: 0, runtime: 0.002s)
 Starting clip the non-user hierarchies [v2.0] (stage: post_elab, startdef: riscv_pipeline, recur: true)
@@ -414,16 +409,22 @@ Statistics for commands executed by read_sdc:
 read_sdc completed in 00:00:00 (hh:mm:ss)
   Setting attribute of root '/': 'read_qrc_tech_file_rc_corner' = true
 @genus:root: 55> set_interactive_constraint_modes mode_normal
-@genus:root: 56> set HIER_MODULE_PATTERNS [list \
+@genus:root: 56> 
+@genus:root: 56> # ------------------------------------------------------------------------
+@genus:root: 57> # 6. SELECT PHYSICAL HIERARCHY
+@genus:root: 58> # ------------------------------------------------------------------------
+@genus:root: 59> # Keep only meaningful RISC-V blocks for the hierarchy-floorplan flow.
+@genus:root: 60> 
+@genus:root: 60> set HIER_MODULE_PATTERNS [list \
     "*execute*" \
     "register_file" \
     "csr_register_file" \
     "branch_prediction_unit"]
 *execute* register_file csr_register_file branch_prediction_unit
-@genus:root: 57> 
-@genus:root: 57> set PRESERVED_HIER_MODULES {}
-@genus:root: 58> 
-@genus:root: 58> foreach module_pattern $HIER_MODULE_PATTERNS {
+@genus:root: 61> 
+@genus:root: 61> set PRESERVED_HIER_MODULES {}
+@genus:root: 62> 
+@genus:root: 62> foreach module_pattern $HIER_MODULE_PATTERNS {
     set matched_modules [get_db modules $module_pattern]
 
     if {[llength $matched_modules] == 0} {
@@ -445,42 +446,42 @@ Preserve physical hierarchy: register_file
 Preserve physical hierarchy: csr_register_file
   Setting attribute of module 'branch_prediction_unit': 'ungroup_ok' = false
 Preserve physical hierarchy: branch_prediction_unit
-@genus:root: 59> 
-@genus:root: 59> if {[llength $PRESERVED_HIER_MODULES] == 0} {
+@genus:root: 63> 
+@genus:root: 63> if {[llength $PRESERVED_HIER_MODULES] == 0} {
     puts "WARNING: no RISC-V hierarchy module was protected."
     puts "         Inspect reports/area_hierarchy_elaborated.rpt."
 }
-@genus:root: 60> 
-@genus:root: 60> set CLK_PORT_OBJ [get_ports clk]
+@genus:root: 64> 
+@genus:root: 64> set CLK_PORT_OBJ [get_ports clk]
 0x16
-@genus:root: 61> 
-@genus:root: 61> if {[sizeof_collection $CLK_PORT_OBJ] == 0} {
+@genus:root: 65> 
+@genus:root: 65> if {[sizeof_collection $CLK_PORT_OBJ] == 0} {
     error "Top design '$TOP' does not contain port 'clk'."
 }
-@genus:root: 62> 
-@genus:root: 62> report_hierarchy      > reports/hierarchy_elaborated.rpt
-@genus:root: 63> report_area -depth 3  > reports/area_hierarchy_elaborated.rpt
+@genus:root: 66> 
+@genus:root: 66> report_hierarchy      > reports/hierarchy_elaborated.rpt
+@genus:root: 67> report_area -depth 3  > reports/area_hierarchy_elaborated.rpt
 Warning : The details given in report might be incorrect or incomplete. [RPT-80]
         : The design design:riscv_pipeline should be mapped to get accurate area details.
         : Map the design using syn_map before using the '-detail' option of the 'report_area' command.
-@genus:root: 64> report_metric -format html -file reports/elaborated_metric.html
-@genus:root: 65> 
-@genus:root: 65> # ------------------------------------------------------------------------
-@genus:root: 66> # 7. VERIFY THE SDC ATTACHED TO THE CONSTRAINT MODE
-@genus:root: 67> # ------------------------------------------------------------------------
-@genus:root: 68> 
-@genus:root: 68> puts "===================================================="
-====================================================
-@genus:root: 69> puts "VERIFYING MMMC SDC"
-VERIFYING MMMC SDC
-@genus:root: 70> puts " - File: [file normalize $SDC_FILE]"
- - File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/tcl/constraint.sdc
-@genus:root: 71> puts "===================================================="
-====================================================
+@genus:root: 68> report_metric -format html -file reports/elaborated_metric.html
+@genus:root: 69> 
+@genus:root: 69> # ------------------------------------------------------------------------
+@genus:root: 70> # 7. VERIFY THE SDC ATTACHED TO THE CONSTRAINT MODE
+@genus:root: 71> # ------------------------------------------------------------------------
 @genus:root: 72> 
-@genus:root: 72> # The SDC is already attached by create_constraint_mode.  Do not read it a
-@genus:root: 73> # second time because that would duplicate clocks and timing constraints.
-@genus:root: 74> if {[info exists ::dc::sdc_failed_commands]} {
+@genus:root: 72> puts "===================================================="
+====================================================
+@genus:root: 73> puts "VERIFYING MMMC SDC"
+VERIFYING MMMC SDC
+@genus:root: 74> puts " - File: [file normalize $SDC_FILE]"
+ - File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/tcl/constraint.sdc
+@genus:root: 75> puts "===================================================="
+====================================================
+@genus:root: 76> 
+@genus:root: 76> # The SDC is already attached by create_constraint_mode.  Do not read it a
+@genus:root: 77> # second time because that would duplicate clocks and timing constraints.
+@genus:root: 78> if {[info exists ::dc::sdc_failed_commands]} {
     set FAILED_SDC $::dc::sdc_failed_commands
 
     if {[llength $FAILED_SDC] > 0} {
@@ -494,53 +495,53 @@ VERIFYING MMMC SDC
         error "SDC contains failed commands. See reports/failed_sdc_commands.rpt"
     }
 }
-@genus:root: 75> 
-@genus:root: 75> set DEFINED_CLOCKS [get_clocks CLK]
+@genus:root: 79> 
+@genus:root: 79> set DEFINED_CLOCKS [get_clocks CLK]
 0x17
-@genus:root: 76> 
-@genus:root: 76> if {[sizeof_collection $DEFINED_CLOCKS] == 0} {
+@genus:root: 80> 
+@genus:root: 80> if {[sizeof_collection $DEFINED_CLOCKS] == 0} {
     error "Clock 'CLK' was not created by $SDC_FILE"
 }
-@genus:root: 77> 
-@genus:root: 77> puts "===================================================="
-====================================================
-@genus:root: 78> puts "SDC CHECK PASSED"
-SDC CHECK PASSED
-@genus:root: 79> puts " - Clock port   : $CLK_PORT_OBJ"
- - Clock port   : 0x16
-@genus:root: 80> puts " - Clock object : $DEFINED_CLOCKS"
- - Clock object : 0x17
+@genus:root: 81> 
 @genus:root: 81> puts "===================================================="
 ====================================================
-@genus:root: 82> 
-@genus:root: 82> check_timing_intent -verbose \
+@genus:root: 82> puts "SDC CHECK PASSED"
+SDC CHECK PASSED
+@genus:root: 83> puts " - Clock port   : $CLK_PORT_OBJ"
+ - Clock port   : 0x16
+@genus:root: 84> puts " - Clock object : $DEFINED_CLOCKS"
+ - Clock object : 0x17
+@genus:root: 85> puts "===================================================="
+====================================================
+@genus:root: 86> 
+@genus:root: 86> check_timing_intent -verbose \
     > reports/timing_intent_pre_syn.rpt
 Info    : Timing analysis will be done for this view. [TUI-744]
         : View is 'analysis_view:riscv_pipeline/tt'.
         : Worst paths will be shown in this view.
-@genus:root: 83> 
-@genus:root: 83> if {[catch {
+@genus:root: 87> 
+@genus:root: 87> if {[catch {
     report_timing -lint > reports/timing_lint_pre_syn.rpt
 } timing_lint_error]} {
     puts "WARNING: report_timing -lint failed: $timing_lint_error"
 }
 Info    : Timing analysis will be done for this view. [TUI-744]
         : View is 'analysis_view:riscv_pipeline/tt'.
-@genus:root: 84> 
-@genus:root: 84> # ------------------------------------------------------------------------
-@genus:root: 85> # 8. COST GROUPS
-@genus:root: 86> # ------------------------------------------------------------------------
-@genus:root: 87> 
-@genus:root: 87> set ALL_SEQS [all::all_seqs]
-{inst:riscv_pipeline/IF_ID/if_id_instr_reg[0]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[1]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[2]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[3]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[4]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[5]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[6]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[7]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[8]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[9]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[10]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[11]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[12]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[13]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[14]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[15]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[16]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[17]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[18]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[19]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[20]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[21]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[22]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[23]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[24]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[25]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[26]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[27]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[28]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[29]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[30]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[31]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[0]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[1]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[2]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[3]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[4]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[5]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[6]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[7]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[8]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[9]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[10]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[11]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[12]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[13]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[14]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[15]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[16]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[17]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[18]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[19]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[20]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[21]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[22]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[23]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[24]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[25]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[26]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[27]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[28]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[29]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[30]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[31]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[0]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[1]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[2]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[3]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[4]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[5]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[6]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[7]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[8]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[9]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[10]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[11]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[12]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[13]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[14]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[15]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[16]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[17]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[18]} {inst:riscv_pi... <result is 303211 characters long and printing is truncated to 4096 characters, use 'puts [command]' to view the entire result>
-@genus:root: 88> set ASYNC_INPUT_NAMES [list meip_i msip_i mtip_i dbg_halt_req dbg_resume_req]
-meip_i msip_i mtip_i dbg_halt_req dbg_resume_req
-@genus:root: 89> set NON_DATA_INPUTS [get_ports [concat [list clk reset_n] $ASYNC_INPUT_NAMES]]
-0x18
-@genus:root: 90> set DATA_INPUTS [remove_from_collection [all_inputs] $NON_DATA_INPUTS]
-0x20
+@genus:root: 88> 
+@genus:root: 88> # ------------------------------------------------------------------------
+@genus:root: 89> # 8. COST GROUPS
+@genus:root: 90> # ------------------------------------------------------------------------
 @genus:root: 91> 
-@genus:root: 91> if {[sizeof_collection $ALL_SEQS] > 0} {
+@genus:root: 91> set ALL_SEQS [all::all_seqs]
+{inst:riscv_pipeline/IF_ID/if_id_instr_reg[0]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[1]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[2]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[3]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[4]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[5]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[6]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[7]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[8]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[9]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[10]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[11]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[12]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[13]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[14]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[15]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[16]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[17]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[18]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[19]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[20]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[21]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[22]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[23]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[24]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[25]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[26]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[27]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[28]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[29]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[30]} {inst:riscv_pipeline/IF_ID/if_id_instr_reg[31]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[0]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[1]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[2]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[3]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[4]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[5]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[6]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[7]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[8]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[9]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[10]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[11]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[12]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[13]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[14]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[15]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[16]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[17]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[18]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[19]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[20]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[21]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[22]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[23]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[24]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[25]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[26]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[27]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[28]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[29]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[30]} {inst:riscv_pipeline/IF_ID/if_id_pc_plus_4_reg[31]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[0]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[1]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[2]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[3]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[4]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[5]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[6]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[7]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[8]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[9]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[10]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[11]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[12]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[13]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[14]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[15]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[16]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[17]} {inst:riscv_pipeline/IF_ID/if_id_pc_in_reg[18]} {inst:riscv_pi... <result is 303211 characters long and printing is truncated to 4096 characters, use 'puts [command]' to view the entire result>
+@genus:root: 92> set ASYNC_INPUT_NAMES [list meip_i msip_i mtip_i dbg_halt_req dbg_resume_req]
+meip_i msip_i mtip_i dbg_halt_req dbg_resume_req
+@genus:root: 93> set NON_DATA_INPUTS [get_ports [concat [list clk reset_n] $ASYNC_INPUT_NAMES]]
+0x18
+@genus:root: 94> set DATA_INPUTS [remove_from_collection [all_inputs] $NON_DATA_INPUTS]
+0x20
+@genus:root: 95> 
+@genus:root: 95> if {[sizeof_collection $ALL_SEQS] > 0} {
     define_cost_group -name I2C -design $TOP
     define_cost_group -name C2O -design $TOP
     define_cost_group -name C2C -design $TOP
@@ -598,9 +599,13 @@ COST GROUPS CREATED
  - I2O : input    -> output
  - View: tt
 ====================================================
-@genus:root: 92> # Conservative default for debugging convergence. Re-enable datapath transforms
-@genus:root: 93> # only after the script completes cleanly in the local run mode.
-@genus:root: 94> if {[env_flag_is_true GENUS_ENABLE_DATAPATH_OPT]} {
+@genus:root: 96> # ------------------------------------------------------------------------
+@genus:root: 97> # 9. SYNTHESIS
+@genus:root: 98> # ------------------------------------------------------------------------
+@genus:root: 99> 
+@genus:root: 99> # Conservative default for debugging convergence. Re-enable datapath transforms
+@genus:root: 100> # only after the script completes cleanly in the local run mode.
+@genus:root: 101> if {[env_flag_is_true GENUS_ENABLE_DATAPATH_OPT]} {
     puts "Genus datapath mode: optimized"
 } else {
     puts "Genus datapath mode: debug-safe; datapath sharing/speculation disabled"
@@ -613,21 +618,21 @@ Genus datapath mode: debug-safe; datapath sharing/speculation disabled
   Setting attribute of root '/': 'dp_sharing' = none
   Setting attribute of root '/': 'dp_speculation' = none
 1 none
-@genus:root: 95> 
-@genus:root: 95> set SYN_EFFORT [env_or_default GENUS_SYN_EFFORT medium]
+@genus:root: 102> 
+@genus:root: 102> set SYN_EFFORT [env_or_default GENUS_SYN_EFFORT medium]
 medium
-@genus:root: 96> puts "Genus synthesis effort: $SYN_EFFORT"
+@genus:root: 103> puts "Genus synthesis effort: $SYN_EFFORT"
 Genus synthesis effort: medium
-@genus:root: 97> 
-@genus:root: 97> set_db / .syn_generic_effort $SYN_EFFORT
+@genus:root: 104> 
+@genus:root: 104> set_db / .syn_generic_effort $SYN_EFFORT
   Setting attribute of root '/': 'syn_generic_effort' = medium
 1 medium
-@genus:root: 98> syn_generic
+@genus:root: 105> syn_generic
 stamp 'PBS_Generic-Start' being created for table 'pbs_debug'
 
   Total Time (Wall) |  Stage Time (Wall)  |   % (Wall)   |    Date - Time     |  Memory   | Stage
 --------------------+---------------------+--------------+--------------------+-----------+----------------------
- 00:00:45(00:01:17) |  00:00:00(00:00:00) |   0.0(  0.0) |   22:49:58 (Aug11) |  854.3 MB | PBS_Generic-Start
+ 00:00:44(00:01:11) |  00:00:00(00:00:00) |   0.0(  0.0) |   23:18:34 (Aug11) |  863.2 MB | PBS_Generic-Start
 --------------------+---------------------+--------------+--------------------+-----------+----------------------
 Number of threads: 8 * 1   (id: pbs_debug, time_info v1.57)
 Info: (*N*) indicates data that was populated from previously saved time_info database
@@ -648,7 +653,7 @@ Found 0 unmapped ChipWare ICG instances
 Mapped 0 of 0 ChipWare ICG instances
 ##Generic Timing Info: typical gate delay   18.0 ps   std_slew:    3.9 ps   std_load:  0.8 fF  for library domain _default_
 Starting mux data reorder optimization [v1.0] (stage: pre_to_gen_setup, startdef: riscv_pipeline, recur: true)
-Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.003s)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.002s)
 
 Stage: pre_to_gen_setup
 -----------------------------------------------------
@@ -966,7 +971,7 @@ Running Synthesis Turbo Flow Version 3.
 Info    : Partition Based Synthesis execution skipped. [PHYS-752]
         : Design size is less than the partition size '100000' for distributed generic optimization to kick in.
 Starting mux data reorder optimization [v1.0] (stage: pre_to_gen_setup, startdef: riscv_pipeline, recur: true)
-Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.020s)
+Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.021s)
 
 Stage: pre_to_gen_setup
 -----------------------------------------------------
@@ -994,7 +999,7 @@ Stage: pre_hlo_rtlopt
 -----------------------------------------------
 | ume_ssm   |       0 |       0 |        0.00 | 
 | ume_sweep |       1 |       0 |        0.01 | 
-| ume_share |       0 |       0 |        0.00 | 
+| ume_share |       0 |       0 |        0.01 | 
 | ume_ssm   |       0 |       0 |        0.00 | 
 | ume_sweep |       0 |       0 |        0.01 | 
 | ume_share |       0 |       0 |        0.00 | 
@@ -1252,75 +1257,75 @@ Resetting costing type to std
   Setting attribute of root '/': 'hier_sandbox_support_folded' = 0
 End SDR optimization UME_region 
 Starting timing based select reordering [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.184s)
+Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.214s)
 Starting recase case-box optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed recase case-box optimization (accepts: 0, rejects: 0, runtime: 0.130s)
+Completed recase case-box optimization (accepts: 0, rejects: 0, runtime: 0.140s)
 Starting infer macro optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed infer macro optimization (accepts: 0, rejects: 63, runtime: 0.073s)
+Completed infer macro optimization (accepts: 0, rejects: 63, runtime: 0.069s)
 Starting decode mux sandwich optimization [v2.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed decode mux sandwich optimization (accepts: 0, rejects: 0, runtime: 0.000s)
+Completed decode mux sandwich optimization (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting decode mux optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed decode mux optimization (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed decode mux optimization (accepts: 0, rejects: 0, runtime: 0.000s)
 Starting chop wide muxes [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed chop wide muxes (accepts: 0, rejects: 0, runtime: 0.177s)
+Completed chop wide muxes (accepts: 0, rejects: 0, runtime: 0.160s)
 Starting common data mux cascade opt [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed common data mux cascade opt (accepts: 0, rejects: 0, runtime: 0.003s)
 Starting mux input consolidation [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.008s)
+Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.010s)
 Starting constant-data mux optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed constant-data mux optimization (accepts: 0, rejects: 0, runtime: 0.003s)
+Completed constant-data mux optimization (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting chain-to-tree inequality transform [v2.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed chain-to-tree inequality transform (accepts: 0, rejects: 0, runtime: 0.136s)
+Completed chain-to-tree inequality transform (accepts: 0, rejects: 0, runtime: 0.095s)
 Starting reconvergence optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed reconvergence optimization (accepts: 0, rejects: 0, runtime: 0.004s)
+Completed reconvergence optimization (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting logic restructure optimization [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed logic restructure optimization (accepts: 0, rejects: 0, runtime: 0.019s)
+Completed logic restructure optimization (accepts: 0, rejects: 0, runtime: 0.016s)
 Starting identity transform [v3.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed identity transform (accepts: 0, rejects: 6, runtime: 0.013s)
+Completed identity transform (accepts: 0, rejects: 6, runtime: 0.014s)
 Starting reduce operator chain [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed reduce operator chain (accepts: 0, rejects: 0, runtime: 0.003s)
+Completed reduce operator chain (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting common data mux cascade opt [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed common data mux cascade opt (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting mux input consolidation [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.007s)
+Completed mux input consolidation (accepts: 0, rejects: 0, runtime: 0.005s)
 Starting optimize datapath elements [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed optimize datapath elements (accepts: 7, rejects: 0, runtime: 0.005s)
 Starting datapath recasting [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed datapath recasting (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed datapath recasting (accepts: 0, rejects: 0, runtime: 0.003s)
 Starting word-level redundancy removal [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Info    : Setting up the version of high level Redundancy Removal Optimizations. [HLO_RR-1]
         : hlo_rr=1: Enables RRv1, on by default.
-Completed word-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.234s)
+Completed word-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.238s)
 Starting clip mux common data inputs [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed clip mux common data inputs (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting clip the non-user hierarchies [v2.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.000s)
+Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting basic netlist cleanup [v1.0] (stage: pre_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed basic netlist cleanup (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed basic netlist cleanup (accepts: 0, rejects: 0, runtime: 0.000s)
 
 Stage: pre_rtlopt
 -----------------------------------------------------------------
 | Transform                   | Accepts | Rejects | Runtime (s) | 
 -----------------------------------------------------------------
-| hlo_timing_reorder          |       0 |       0 |        1.18 | 
-| hlo_recase_casebox          |       0 |       0 |        0.13 | 
+| hlo_timing_reorder          |       0 |       0 |        1.21 | 
+| hlo_recase_casebox          |       0 |       0 |        0.14 | 
 | hlo_infer_macro             |       0 |      63 |        0.07 | 
 | hlo_decode_mux_sandwich     |       0 |       0 |        0.00 | 
 | hlo_mux_decode              |       0 |       0 |        0.00 | 
-| hlo_chop_mux                |       0 |       0 |        0.18 | 
+| hlo_chop_mux                |       0 |       0 |        0.16 | 
 | hlo_mux_cascade_opt         |       0 |       0 |        0.00 | 
 | hlo_mux_consolidation       |       0 |       0 |        0.01 | 
 | hlo_constant_mux_opt        |       0 |       0 |        0.00 | 
-| hlo_inequality_transform    |       0 |       0 |        0.14 | 
+| hlo_inequality_transform    |       0 |       0 |        0.09 | 
 | hlo_reconv_opt              |       0 |       0 |        0.00 | 
 | hlo_restructure             |       0 |       0 |        0.02 | 
 | hlo_identity_transform      |       0 |       6 |        0.01 | 
 | hlo_reduce_operator_chain   |       0 |       0 |        0.00 | 
 | hlo_mux_cascade_opt         |       0 |       0 |        0.00 | 
-| hlo_mux_consolidation       |       0 |       0 |        0.01 | 
+| hlo_mux_consolidation       |       0 |       0 |        0.00 | 
 | hlo_optimize_datapath       |       7 |       0 |        0.00 | 
 | hlo_datapath_recast         |       0 |       0 |        0.00 | 
-| hlo_redundancy_removal_word |       0 |       4 |        2.23 | 
+| hlo_redundancy_removal_word |       0 |       4 |        2.24 | 
 | hlo_clip_mux_input          |       0 |       0 |        0.00 | 
 | hlo_clip                    |       0 |       0 |        0.00 | 
 | hlo_cleanup                 |       0 |       0 |        0.00 | 
@@ -1441,22 +1446,22 @@ Info    : Done optimizing RTL. [RTLOPT-2]
         : Done optimizing RTL in 'riscv_pipeline'.
 Number of big hc bmuxes after = 0
 Starting bit-level redundancy removal [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed bit-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.415s)
+Completed bit-level redundancy removal (accepts: 0, rejects: 4, runtime: 2.319s)
 Starting logic reduction [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed logic reduction (accepts: 0, rejects: 0, runtime: 0.001s)
+Completed logic reduction (accepts: 0, rejects: 0, runtime: 0.002s)
 Starting mux data reorder optimization [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
 Completed mux data reorder optimization (accepts: 0, rejects: 0, runtime: 0.001s)
 Starting timing based select reordering [v1.0] (stage: post_rtlopt, startdef: riscv_pipeline, recur: true)
-Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.288s)
+Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.311s)
 
 Stage: post_rtlopt
 ----------------------------------------------------------------
 | Transform                  | Accepts | Rejects | Runtime (s) | 
 ----------------------------------------------------------------
-| hlo_redundancy_removal_bit |       0 |       4 |        2.41 | 
+| hlo_redundancy_removal_bit |       0 |       4 |        2.32 | 
 | hlo_logic_reduction        |       0 |       0 |        0.00 | 
 | hlo_mux_reorder            |       0 |       0 |        0.00 | 
-| hlo_timing_reorder         |       0 |       0 |        1.29 | 
+| hlo_timing_reorder         |       0 |       0 |        1.31 | 
 ----------------------------------------------------------------
 Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
 Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
@@ -1476,13 +1481,13 @@ Running post blast mux optimization. Please follow up with Cadence support if ru
 Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
 Running post blast mux optimization. Please follow up with Cadence support if runtime issues are seen with this optimization.
 Starting timing based select reordering [v1.0] (stage: post_muxopt, startdef: riscv_pipeline, recur: true)
-Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.290s)
+Completed timing based select reordering (accepts: 0, rejects: 0, runtime: 1.222s)
 
 Stage: post_muxopt
 --------------------------------------------------------
 | Transform          | Accepts | Rejects | Runtime (s) | 
 --------------------------------------------------------
-| hlo_timing_reorder |       0 |       0 |        1.29 | 
+| hlo_timing_reorder |       0 |       0 |        1.22 | 
 --------------------------------------------------------
 ==================================
 Stage : to_generic 
@@ -1570,12 +1575,12 @@ Info    : Attempting to launch a super-threading server. [ST-120]
         : The tool is entering super-threading mode and is launching a CPU server process.  This is enabled by the root attribute 'super_thread_servers' or 'auto_super_thread'.
 
 Another Ctrl-C within 1 second will terminate the tool.
-CURRENT RESOURCES: RT {elapsed: 620s, ST: 99s, FG: 99s, CPU: 0.4%}, MEM {curr: 2.3G, peak: 3.7G, phys curr: 1.5G, phys peak: 1.6G}, SYS {load: 0.5, cpu: 12, total: 12.9G, free: 4.6G}
+CURRENT RESOURCES: RT {elapsed: 247s, ST: 98s, FG: 98s, CPU: 0.6%}, MEM {curr: 2.3G, peak: 3.9G, phys curr: 1.5G, phys peak: 1.6G}, SYS {load: 0.6, cpu: 12, total: 12.9G, free: 4.6G}
 
 Another Ctrl-C within 1 second will terminate the tool.
-CURRENT RESOURCES: RT {elapsed: 622s, ST: 99s, FG: 99s, CPU: 0.4%}, MEM {curr: 2.3G, peak: 3.7G, phys curr: 1.5G, phys peak: 1.6G}, SYS {load: 0.5, cpu: 12, total: 12.9G, free: 4.6G}
+CURRENT RESOURCES: RT {elapsed: 250s, ST: 98s, FG: 98s, CPU: 0.6%}, MEM {curr: 2.3G, peak: 3.9G, phys curr: 1.5G, phys peak: 1.6G}, SYS {load: 0.6, cpu: 12, total: 12.9G, free: 4.6G}
 Abnormal exit.
 Warning : Failed to establish connection with super-threading server. [ST-111]
-        : The server was process '1407435' on this host.
+        : The server was process '1548852' on this host.
         : The tool is exiting super-threading mode and failed to establish a connection with a CPU server process.  This could be due to a high cpu load on that host or a networking issue.  If a job queueing mechanism (such as LSF) is being used, perhaps the job was held up in the queue.
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/.st_launch_user1-EliteMini_1396232
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/.st_launch_user1-EliteMini_1538451
