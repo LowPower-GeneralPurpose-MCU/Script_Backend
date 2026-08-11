@@ -1,155 +1,61 @@
-# ASAP7 AXI SRAM macro integration — teacher-style Innovus Tcl
+# ASAP7 RISC-V Innovus Flow
 
-This package follows the file separation used in:
+This directory contains the Innovus backend flow for the Genus-mapped
+`riscv_pipeline` design.
 
-- `innovus.globals`
-- `viewDefinition.tcl`
-- `pins.tcl`
-- `innovus.tcl`
+## Required Genus Outputs
 
-## Files
+Run Genus first from `../genus`. Innovus reads these files directly:
 
-### `tcl/innovus.globals`
+- `../genus/outputs/riscv_pipeline_syn.v`
+- `../genus/outputs/riscv_pipeline_syn.sdc`
+- `../genus/outputs/riscv_pipeline_syn.spef` is kept as a reference only
 
-Contains only Innovus initialization inputs:
+## Main Scripts
 
-- ASAP7 tech LEF
-- standard-cell LEFs
-- generated SRAM 4x LEF
-- mapped Verilog netlist
-- MMMC file
-- VDD/VSS names
-- top-cell name
-
-The generated hard SRAM LEF is separate from
-`asap7sc7p5t_28_SRAM_4x_220121a.lef`.
-
-### `tcl/viewDefinition.tcl`
-
-Contains only MMMC objects:
-
-- RVT TT standard-cell Liberty files
-- SRAM Liberty
-- QRC corner
-- operating condition
-- delay corner
-- constraint mode
-- analysis view
-
-### `tcl/pins.tcl`
-
-Uses the teacher's `setPinAssignMode` + `editPin` style.
-
-Because the SRAM macros occupy the TOP and BOTTOM core boundaries:
-
-- AXI write interface is placed on LEFT/M6
-- AXI read interface is placed on RIGHT/M6
-- TOP/BOTTOM are kept mostly free for SRAM signal escape and PG routing
-
-### `tcl/sram_macro_floorplan.tcl`
-
-Creates an explicit macro-aware floorplan:
-
-- 8 SRAMs at the bottom boundary
-- 8 SRAMs at the top boundary
-- bottom row orientation `R180`
-- top row orientation `R0`
-- halo around every macro
-- macro status `fixed`
-- straight rows, so no notches
-
-The selected macro's data pins are close to its local bottom edge.
-Therefore:
-
-- bottom row uses `R180` so data pins face upward/inward
-- top row uses `R0` so data pins face downward/inward
-
-### `tcl/sram_gap_stripes.tcl`
-
-Creates one M7 VDD/VSS pair in every macro gap.
-
-This script replaces the original ordinary M7 stripe command.
-M6 horizontal and M5 vertical grids remain in the teacher's flow.
-
-### `tcl/sram_macro_power.tcl`
-
-Adds `sroute -connect {blockPin}`.
-
-The teacher's original:
-
-```tcl
-sroute -connect {corePin}
-```
-
-only handles standard-cell rails. SRAM VDD/VSS are hard-macro block pins.
-
-### `innovus.tcl`
-
-A full patched version of the teacher's Innovus script.
-
-Main changes:
-
-1. explicit macro-aware floorplan
-2. macro placement before power planning
-3. dedicated M7 VDD/VSS pairs in macro gaps
-4. SRAM block-pin power connection
-5. `place_design_refine_macro false`
-6. output names changed from `Mul32` to `axi_ram`
-7. SRAM GDS merged during stream-out
-
-## Required collateral
-
-Expected directory structure:
-
-```text
-../tkvm/asap7/
-├── asap7sc7p5t_28/
-└── asap7_sram_0p0/
-    ├── generated/LIB/srambank_256x4x32_6t122.lib
-    ├── generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef
-    └── gds/srambank_32b.gds
-```
-
-## Required synthesis result
-
-`outputs/axi_ram_syn.v` must still contain 16 instances of:
-
-```text
-srambank_256x4x32_6t122
-```
-
-The hard macro must not be replaced by flip-flops.
+- `innovus.tcl`: top-level wrapper for convenient launch from this directory
+- `tcl/innovus.tcl`: stage driver
+- `tcl/config.tcl`: top name, ASAP7 paths, LEF/Lib/GDS lists, floorplan constants
+- `tcl/innovus.globals`: `init_design` inputs
+- `tcl/viewDefinition.tcl`: TT 0.7 V 25 C MMMC view
+- `tcl/innovus_hierFP.tcl`: hierarchy-aware floorplan stage
+- `tcl/innovus_PnR.tcl`: power plan, placement, CTS, route, extraction, export
+- `tcl/pins.tcl`: top-level RISC-V pin assignment
+- `tcl/streamOut.map`: ASAP7 GDS layer map
 
 ## Running
 
-From the design run directory:
+From `Asap7/run_workspace/Risc_V/innovus`:
 
-```tcl
+```bash
 innovus -stylus -files innovus.tcl
 ```
 
-or use the command appropriate for the installed Innovus release.
+For manual hierarchy-floorplan review:
 
-## First checks after `init_design`
-
-In the Innovus console:
-
-```tcl
-dbGet [dbGet -p2 top.insts.cell.name srambank_256x4x32_6t122].name
+```bash
+INNOVUS_STAGE=hierfp innovus -stylus -files innovus.tcl
+INNOVUS_STAGE=pnr    innovus -stylus -files innovus.tcl
 ```
 
-Expected: 16 instances.
+`INNOVUS_STAGE=all` is the default and runs both stages in one session.
 
-After floorplan:
+## Expected Outputs
 
-```tcl
-dbGet [dbGet -p2 top.insts.cell.name srambank_256x4x32_6t122].pStatus
-```
+- `saved/riscv_pipeline_hierFP.enc`
+- `saved/riscv_pipeline_final.enc`
+- `outputs/riscv_pipeline.gds`
+- `outputs/riscv_pipeline.lef`
+- `outputs/riscv_pipeline_pnr.def`
+- `outputs/riscv_pipeline_pnr.sdc`
+- `outputs/riscv_pipeline_pnr.spef`
+- `outputs/riscv_pipeline_pnr_sta.v`
+- `outputs/riscv_pipeline_pnr_pg.v`
 
-Expected: every instance is `fixed`.
+## Notes
 
-After power planning:
-
-```tcl
-verifyConnectivity -type special -noUnroutedNet
-```
+The current Genus result maps BPU, BTB/BHT, and the register file into
+standard cells. This Innovus flow therefore does not load SRAM macro LEF/Lib/GDS
+collateral. If those blocks are later changed to hard SRAM macros, add their
+LEF/Lib/GDS files in `tcl/config.tcl` and add macro floorplanning before power
+planning.

@@ -24,6 +24,13 @@ if {![catch {open "/proc/cpuinfo" r} cpu_file]} {
     }
 }
 
+if {[info exists ::env(INNOVUS_CPUS)] && $::env(INNOVUS_CPUS) ne ""} {
+    set CORES $::env(INNOVUS_CPUS)
+    if {![string is integer -strict $CORES] || $CORES < 1} {
+        error "INNOVUS_CPUS must be a positive integer, got '$CORES'"
+    }
+}
+
 # The available Innovus license in the reference log permits eight CPU jobs.
 if {$CORES > 8} {
     set CORES 8

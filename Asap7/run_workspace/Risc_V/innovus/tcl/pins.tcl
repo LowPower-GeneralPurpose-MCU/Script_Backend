@@ -16,14 +16,7 @@ for {set i 31} {$i >= 0} {incr i -1} {
 for {set i 31} {$i >= 0} {incr i -1} {
     lappend left_pins [format {icache_read_data[%d]} $i]
 }
-lappend left_pins icache_hit icache_stall icache_read_req_lane1
-for {set i 31} {$i >= 0} {incr i -1} {
-    lappend left_pins [format {icache_addr_lane1[%d]} $i]
-}
-for {set i 31} {$i >= 0} {incr i -1} {
-    lappend left_pins [format {icache_read_data_lane1[%d]} $i]
-}
-lappend left_pins icache_hit_lane1 icache_stall_lane1
+lappend left_pins icache_hit icache_stall
 
 set right_pins {dcache_read_req dcache_write_req}
 for {set i 31} {$i >= 0} {incr i -1} {

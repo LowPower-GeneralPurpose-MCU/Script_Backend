@@ -15,7 +15,7 @@ setGenerateViaMode -auto false
 init_design
 
 if {[sizeof_collection [all_clocks]] == 0} {
-    error "No clock was created. Check clk in ../genus/tcl/constraint.sdc."
+    error "No clock was created. Check clk in $FUNC_SDC."
 }
 
 set design_name [dbGet top.name]

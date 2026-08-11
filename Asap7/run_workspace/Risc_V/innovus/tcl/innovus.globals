@@ -1,4 +1,4 @@
-# Innovus init_design inputs for riscv_pipeline.
+# Innovus init_design inputs for the Genus-mapped riscv_pipeline netlist.
 source ./tcl/config.tcl
 
 set init_lef_file [concat [list $TECH_LEF] $CELL_LEFS]

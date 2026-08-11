@@ -5,9 +5,9 @@
 #   hierarchy floorplan -> power plan -> placement -> CTS -> route -> export
 #
 # Optional stage selection from the shell:
-#   INNOVUS_STAGE=hierfp innovus -files tcl/innovus.tcl
-#   INNOVUS_STAGE=pnr    innovus -files tcl/innovus.tcl
-#   INNOVUS_STAGE=all    innovus -files tcl/innovus.tcl
+#   INNOVUS_STAGE=hierfp innovus -stylus -files innovus.tcl
+#   INNOVUS_STAGE=pnr    innovus -stylus -files innovus.tcl
+#   INNOVUS_STAGE=all    innovus -stylus -files innovus.tcl
 #
 # Run from any directory; the driver changes to the innovus run directory so
 # that paths used by the two stage scripts remain deterministic.

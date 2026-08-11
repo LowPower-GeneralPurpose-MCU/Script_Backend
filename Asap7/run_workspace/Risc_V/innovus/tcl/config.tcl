@@ -43,8 +43,11 @@ set GDS_MERGE [list \
     [file join $GDS_DIR asap7sc7p5t_28_R_220121a.gds] \
     [file join $GDS_DIR asap7sc7p5t_28_L_220121a.gds]]
 
-set SYN_NETLIST ../genus/outputs/${TOP}_syn.v
-set FUNC_SDC    ../genus/tcl/constraint.sdc
+set GENUS_OUTPUT_DIR ../genus/outputs
+set SYN_NETLIST [file join $GENUS_OUTPUT_DIR ${TOP}_syn.v]
+set SYN_SDC     [file join $GENUS_OUTPUT_DIR ${TOP}_syn.sdc]
+set SYN_SPEF    [file join $GENUS_OUTPUT_DIR ${TOP}_syn.spef]
+set FUNC_SDC    $SYN_SDC
 set STREAM_MAP  ./tcl/streamOut.map
 
 # Slide recommendation: module density below 80%, approximately 75% preferred.
