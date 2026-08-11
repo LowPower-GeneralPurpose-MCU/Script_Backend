@@ -1568,3 +1568,14 @@ Mapper: Libraries have:
 Info    : Attempting to launch a super-threading server. [ST-120]
         : Attempting to Launch server 1 of 8.
         : The tool is entering super-threading mode and is launching a CPU server process.  This is enabled by the root attribute 'super_thread_servers' or 'auto_super_thread'.
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 620s, ST: 99s, FG: 99s, CPU: 0.4%}, MEM {curr: 2.3G, peak: 3.7G, phys curr: 1.5G, phys peak: 1.6G}, SYS {load: 0.5, cpu: 12, total: 12.9G, free: 4.6G}
+
+Another Ctrl-C within 1 second will terminate the tool.
+CURRENT RESOURCES: RT {elapsed: 622s, ST: 99s, FG: 99s, CPU: 0.4%}, MEM {curr: 2.3G, peak: 3.7G, phys curr: 1.5G, phys peak: 1.6G}, SYS {load: 0.5, cpu: 12, total: 12.9G, free: 4.6G}
+Abnormal exit.
+Warning : Failed to establish connection with super-threading server. [ST-111]
+        : The server was process '1407435' on this host.
+        : The tool is exiting super-threading mode and failed to establish a connection with a CPU server process.  This could be due to a high cpu load on that host or a networking issue.  If a job queueing mechanism (such as LSF) is being used, perhaps the job was held up in the queue.
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/genus/.st_launch_user1-EliteMini_1396232
