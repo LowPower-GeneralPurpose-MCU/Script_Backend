@@ -421,9 +421,9 @@ if {[env_flag INNOVUS_STOP_AFTER_PLACE 0]} {
 create_route_type -name leaf_rule \
     -bottom_preferred_layer M2 -top_preferred_layer M3
 create_route_type -name trunk_rule \
-    -shield_net VSS -bottom_preferred_layer M4 -top_preferred_layer M5
+    -bottom_preferred_layer M4 -top_preferred_layer M5
 create_route_type -name top_rule \
-    -shield_net VSS -bottom_preferred_layer M6 -top_preferred_layer M7
+    -bottom_preferred_layer M6 -top_preferred_layer M7
 
 set_ccopt_property -net_type leaf  route_type leaf_rule
 set_ccopt_property -net_type trunk route_type trunk_rule
@@ -493,11 +493,26 @@ setFillerMode -core $FILLER_CELLS \
     -preserveUserOrder true \
     -honorPrerouteAsObs true \
     -diffCellViol true
-addFiller
+addFiller \
+    -cell $FILLER_CELLS \
+    -prefix FILLER \
+    -honorPrerouteAsObs true \
+    -diffCellViol true
 
 # ----------------------------------------------------------------------------
 # Signal routing and post-route closure
 # ----------------------------------------------------------------------------
+foreach route_report {
+    ./verify_rpt/drc_after_initial_route.rpt
+    ./verify_rpt/connectivity_after_initial_route.rpt
+    ./verify_rpt/drc_after_route.rpt
+    ./verify_rpt/connectivity_after_route.rpt
+    ./verify_rpt/drc_postRoute_final.rpt
+    ./verify_rpt/connectivity_postRoute_final.rpt
+} {
+    file delete -force $route_report
+}
+
 setNanoRouteMode -reset
 setDesignMode \
     -bottomRoutingLayer 2 \
@@ -511,21 +526,26 @@ setNanoRouteMode -quiet \
     -route_with_via_only_for_stdcell_pin true \
     -route_detail_use_multi_cut_via_effort low \
     -route_with_timing_driven true \
-    -route_with_si_driven true \
+    -route_with_si_driven false \
     -route_detail_fix_antenna true \
     -route_detail_merge_abutting_cut true \
-    -route_detail_end_iteration 5
+    -route_detail_end_iteration 20
 
 routeDesign -globalDetail
 routeDesign -viaOpt -wireOpt -trackOpt
+setNanoRouteMode -quiet \
+    -route_with_timing_driven false \
+    -route_with_si_driven false
 ecoRoute -fix_drc
 
-verify_drc -report ./verify_rpt/drc_after_route.rpt
+verify_drc -report ./verify_rpt/drc_after_initial_route.rpt
 verifyConnectivity -type all -error 1000 -warning 100 \
-    -report ./verify_rpt/connectivity_after_route.rpt
-verify_antenna_if_enabled ./verify_rpt/antenna_after_route.rpt
-assert_clean_drc_report ./verify_rpt/drc_after_route.rpt
-assert_clean_connectivity_report ./verify_rpt/connectivity_after_route.rpt
+    -report ./verify_rpt/connectivity_after_initial_route.rpt
+if {[catch {assert_clean_drc_report ./verify_rpt/drc_after_initial_route.rpt} initial_route_drc]} {
+    puts "INFO: Initial route DRC still needs post-route cleanup: $initial_route_drc"
+}
+assert_clean_connectivity_report ./verify_rpt/connectivity_after_initial_route.rpt
+saveDesign ./saved/${TOP}_routed_initial.enc
 
 setAnalysisMode -analysisType onChipVariation -cppr both
 setDelayCalMode -SIAware true -equivalent_waveform_model propagation
@@ -533,6 +553,9 @@ setExtractRCMode -engine postRoute -effortLevel medium
 
 optDesign -prefix postRoute -postRoute -setup -hold
 optDesign -prefix postRouteDRV -postRoute -drv
+setNanoRouteMode -quiet \
+    -route_with_timing_driven false \
+    -route_with_si_driven false
 ecoRoute -fix_drc
 
 report_timing > ./reports/timing_postRoute.rpt
@@ -540,20 +563,22 @@ report_area   > ./reports/area_postRoute.rpt
 report_power  > ./reports/power_postRoute.rpt
 saveDesign ./saved/${TOP}_postRoute.enc
 
-verify_drc -report ./verify_rpt/drc_postRoute_final.rpt
+verify_drc -report ./verify_rpt/drc_after_route.rpt
 verifyConnectivity -type all -error 1000 -warning 100 \
-    -report ./verify_rpt/connectivity_postRoute_final.rpt
+    -report ./verify_rpt/connectivity_after_route.rpt
 verify_antenna_if_enabled ./verify_rpt/antenna_postRoute_final.rpt
-assert_clean_drc_report ./verify_rpt/drc_postRoute_final.rpt
-assert_clean_connectivity_report ./verify_rpt/connectivity_postRoute_final.rpt
+file copy -force ./verify_rpt/drc_after_route.rpt ./verify_rpt/drc_postRoute_final.rpt
+file copy -force ./verify_rpt/connectivity_after_route.rpt ./verify_rpt/connectivity_postRoute_final.rpt
+assert_clean_drc_report ./verify_rpt/drc_after_route.rpt
+assert_clean_connectivity_report ./verify_rpt/connectivity_after_route.rpt
 
 if {[env_flag INNOVUS_STOP_AFTER_ROUTE 0]} {
     puts "============================================================"
     puts "FLOW STOPPED AFTER ROUTE AND FINAL ROUTE CHECKS"
     puts "Inspect:"
     puts " - saved/${TOP}_postRoute.enc"
-    puts " - verify_rpt/drc_postRoute_final.rpt"
-    puts " - verify_rpt/connectivity_postRoute_final.rpt"
+    puts " - verify_rpt/drc_after_route.rpt"
+    puts " - verify_rpt/connectivity_after_route.rpt"
     puts "Continue in the same Innovus session by pasting the export section."
     puts "============================================================"
     return
