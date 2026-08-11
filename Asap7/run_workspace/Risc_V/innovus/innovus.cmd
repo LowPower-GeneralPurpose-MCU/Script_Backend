@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Wed Aug 12 01:29:43 2026                
+#  Created on Wed Aug 12 01:44:57 2026                
 #                                                     
 #######################################################
 
@@ -20,11 +20,12 @@ getVersion
 getVersion
 win
 set enc_source_continue_on_error false
-set auto_file_dir /tmp/user1/innovus_riscv_2208394
+set auto_file_dir /tmp/user1/innovus_riscv_2285341
 setDesignMode -process 7
 setMultiCpuUsage -acquireLicense 8
 setMultiCpuUsage -localCpu 8
 setDistributeHost -local
+suppressMessage IMPPP-133
 set init_design_uniquify 1
 set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef}
 set ::TimeLib::tsgMarkCellLatchConstructFlag 1
@@ -78,11 +79,12 @@ addRing -nets VDD -type core_rings -follow core -layer {top M8 bottom M8 left M9
 addRing -nets VSS -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 1.152 -snap_wire_center_to_grid Grid
 deletePGPin -net VDD
 deletePGPin -net VSS
-createPGPin VDD -geom M9 3.216 157.08 3.696 159.0 -net VDD
-createPGPin VSS -geom M9 2.256 157.08 2.736 159.0 -net VSS
+createPGPin VDD -geom M9 3.144 157.080 3.624 159.000 -net VDD
+createPGPin VSS -geom M9 2.064 157.080 2.544 159.000 -net VSS
 setAddStripeMode -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.288 -set_to_set_distance 25.600 -start_from left -start_offset 12.800 -snap_wire_center_to_grid grid
-setAddStripeMode -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
+setAddStripeMode -reset
+setAddStripeMode -allow_jog none -split_vias true -via_using_exact_crossover_size false -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.288 -set_to_set_distance 25.600 -start_from bottom -start_offset 12.800 -snap_wire_center_to_grid grid
 editTrim -nets {VDD VSS}
 clearDrc
@@ -95,17 +97,82 @@ editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -spreadType side -spreadDi
 setPinAssignMode -pinEditInBatch false
 verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_pg.rpt
 verify_drc -report ./verify_rpt/drc_after_pg.rpt
-zoomBox -10.08825 25.54925 315.90350 317.38150
-zoomBox -0.49225 96.35100 235.03700 307.20000
-pan -55.45450 118.17175
-zoomBox -40.22025 151.75425 129.94975 304.09275
-zoomBox -33.74800 164.63250 110.89650 294.12025
-zoomBox -16.21775 199.51500 59.28800 267.10875
-zoomBox -8.83025 214.21450 37.54000 255.72575
-zoomBox -4.29350 223.24200 24.18375 248.73525
-zoomBox -7.06675 217.72350 32.34825 253.00825
-zoomBox -13.34650 205.22800 50.83475 262.68400
-zoomBox -23.57175 184.88175 80.93675 278.43925
-zoomBox -19.86050 193.37900 68.97175 272.90275
-zoomBox -11.74550 211.95900 42.80875 260.79675
-zoomBox -6.76225 223.36950 26.74125 253.36225
+saveDesign ./saved/riscv_pipeline_powerplan.enc
+setDelayCalMode -SIAware false -equivalent_waveform_model none
+setHierMode -optStage preCTS
+setPlaceMode -reset
+setPlaceMode -place_global_uniform_density true -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_design_refine_macro false
+place_design
+refinePlace
+setAddStripeMode -reset
+setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M1 -stacked_via_top_layer M6
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 12.960 -create_pins 0 -area {3.888 0.0 313.056 316.08} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape stripe
+sroute -nets {VDD VSS} -connect corePin -corePinTarget stripe -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
+editTrim -nets {VDD VSS}
+clearDrc
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_postplace_pg.rpt
+verify_drc -report ./verify_rpt/drc_after_postplace_pg.rpt
+checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_postPlace.rpt
+report_timing > ./reports/timing_postPlace.rpt
+report_area > ./reports/area_postPlace.rpt
+saveDesign ./saved/riscv_pipeline_postPlace.enc
+create_route_type -name leaf_rule -bottom_preferred_layer M2 -top_preferred_layer M3
+create_route_type -name trunk_rule -shield_net VSS -bottom_preferred_layer M4 -top_preferred_layer M5
+create_route_type -name top_rule -shield_net VSS -bottom_preferred_layer M6 -top_preferred_layer M7
+set_ccopt_property -net_type leaf route_type leaf_rule
+set_ccopt_property -net_type trunk route_type trunk_rule
+set_ccopt_property -net_type top route_type top_rule
+set_ccopt_property routing_top_min_fanout 100
+set_ccopt_property target_max_trans 0.300ns
+set_ccopt_property buffer_cells {BUFx4_ASAP7_75t_R BUFx8_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx4_ASAP7_75t_L BUFx8_ASAP7_75t_L BUFx12_ASAP7_75t_L}
+set_ccopt_property inverter_cells {CKINVDCx8_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx8_ASAP7_75t_L CKINVDCx12_ASAP7_75t_L CKINVDCx16_ASAP7_75t_L}
+set_ccopt_property use_inverters auto
+setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 -powerEffort high -fixFanoutLoad true
+optDesign -prefix preCTS -preCTS
+report_timing > ./reports/timing_preCTS.rpt
+refinePlace
+checkPlace ./verify_rpt/checkPlace_before_cts.rpt
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+clock_opt_design -prefix postCTS
+all_constraint_modes -active
+set_interactive_constraint_modes $active_constraint_modes
+set_propagated_clock [all_clocks]
+set_interactive_constraint_modes {}
+setHierMode -optStage postCTS
+optDesign -prefix postCTS -postCTS -setup -hold
+report_timing > ./reports/timing_postCTS.rpt
+report_area > ./reports/area_postCTS.rpt
+saveDesign ./saved/riscv_pipeline_postCTS.enc
+setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
+addFiller
+setNanoRouteMode -reset
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+setNanoRouteMode -quiet -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 2:7 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven true -route_detail_fix_antenna true -route_detail_merge_abutting_cut true -route_detail_end_iteration 5
+routeDesign -globalDetail
+routeDesign -viaOpt -wireOpt -trackOpt
+ecoRoute -fix_drc
+verify_drc -report ./verify_rpt/drc_after_route.rpt
+verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_route.rpt
+fit
+zoomBox -119.28675 69.40400 349.57275 320.60875
+zoomBox -85.24675 130.85050 253.50425 312.34600
+zoomBox -60.10675 175.16150 184.64125 306.29225
+zoomBox -41.79125 207.08525 135.03950 301.82725
+zoomBox -23.35950 238.91350 85.23675 297.09700
+zoomBox -15.17875 252.95700 63.28200 294.99450
+zoomBox -9.21950 263.10325 47.46850 293.47550
+zoomBox -4.91400 270.43400 36.04325 292.37800
+zoomBox -9.21975 263.10325 47.46850 293.47550
+zoomBox -15.57850 253.25850 62.88300 295.29650
+zoomBox -19.70275 247.05375 72.60500 296.51025
+zoomBox -77.97375 159.38525 209.96975 313.65900
+zoomBox -132.18700 78.14700 336.68150 329.35650
+zoomBox -300.44275 -185.80425 756.26875 380.35875
+zoomBox -228.56175 -121.22475 669.64300 360.01375
+zoomBox -171.62050 -65.91050 591.85350 343.14225
+zoomBox -82.08050 21.07125 469.52950 316.61175
+zoomBox -47.11150 55.04100 421.75700 306.25050
+zoomBox -17.38775 83.91550 381.15050 297.44350
+zoomBox -123.22100 -18.89400 525.73325 328.80150
