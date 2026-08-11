@@ -119,6 +119,8 @@ sroute \
     -connect {blockPin} \
     -nets {VDD VSS} \
     -blockPin useLef \
+    -blockPinLayerRange {M3 M3} \
+    -blockPinWidthRange {0.0 0.150} \
     -blockPinTarget nearestTarget
 
 puts "Local SRAM M4/M5 PG created; blockPin used nearest shared-cluster blockring target."

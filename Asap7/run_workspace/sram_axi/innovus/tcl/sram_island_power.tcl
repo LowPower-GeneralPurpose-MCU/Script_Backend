@@ -359,8 +359,10 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
 
 # Route macro M3 PG pins only after the stripe targets exist.  Restricting the
 # target to stripe prevents a long direct block-pin route to the distant ring.
-# Do not force the access wire to inherit the SRAM LEF pin width: the generated
-# ASAP7 SRAM abstract has narrow M3 PG pins that trigger WIDTHTABLE warnings.
+# Do not let sroute pick the long M4 rails inside the SRAM abstract: those rails
+# are hard-macro shapes and the latest PG DRC showed WIDTHTABLE/spacing markers
+# when sroute promoted them to top-level special routes.  Use only the narrow M3
+# access pins and let ViaGen climb to the local M4/M5 collectors.
 setSrouteMode -reset
 setSrouteMode \
     -extendNearestTarget true \
@@ -371,6 +373,8 @@ sroute \
     -connect {blockPin} \
     -nets {VSS VDD} \
     -blockPin useLef \
+    -blockPinLayerRange {M3 M3} \
+    -blockPinWidthRange {0.0 0.150} \
     -blockPinTarget {stripe}
 
 editTrim -nets {VSS VDD}
