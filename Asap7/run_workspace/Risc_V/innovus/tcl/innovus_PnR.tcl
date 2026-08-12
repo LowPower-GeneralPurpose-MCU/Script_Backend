@@ -584,24 +584,102 @@ if {[env_flag INNOVUS_STOP_AFTER_ROUTE 0]} {
     return
 }
 
-set RUN_LEGACY_METAL_FILL [env_flag INNOVUS_RUN_LEGACY_METAL_FILL 0]
+set RUN_LEGACY_METAL_FILL [env_flag INNOVUS_RUN_LEGACY_METAL_FILL 1]
+set RUN_PAD_METAL_FILL    [env_flag INNOVUS_RUN_PAD_FILL 0]
+
+file delete -force \
+    ./verify_rpt/drc_after_metal_fill.rpt \
+    ./verify_rpt/connectivity_after_metal_fill.rpt
 
 if {$RUN_LEGACY_METAL_FILL} {
-    # The legacy in-design fill command produces WIDTH table violations with
-    # this ASAP7 educational LEF.  Keep it opt-in for experiments only.
+    puts "INFO: Configuring ASAP7 legacy metal-fill rules."
+
+    if {[llength [info commands deleteMetalFill]]} {
+        catch {deleteMetalFill -all}
+    }
+
+    setMetalFill -layer { M1 M2 M3 } \
+        -maxWidth 0.936 \
+        -minWidth 0.072 \
+        -maxLength 5.0 \
+        -minLength 0.148 \
+        -decrement 0.288 \
+        -activeSpacing 0.144 \
+        -gapSpacing 0.144 \
+        -maxDensity 60 \
+        -minDensity 25 \
+        -preferredDensity 40
+
+    setMetalFill -layer { M4 M5 } \
+        -maxWidth 1.248 \
+        -minWidth 0.096 \
+        -maxLength 5.0 \
+        -minLength 0.384 \
+        -decrement 0.384 \
+        -activeSpacing 0.192 \
+        -gapSpacing 0.192 \
+        -maxDensity 35 \
+        -minDensity 10 \
+        -preferredDensity 25
+
+    setMetalFill -layer { M6 M7 } \
+        -maxWidth 1.664 \
+        -minWidth 0.128 \
+        -maxLength 5.0 \
+        -minLength 0.512 \
+        -decrement 0.512 \
+        -activeSpacing 0.300 \
+        -gapSpacing 0.300 \
+        -maxDensity 55 \
+        -minDensity 25 \
+        -preferredDensity 40
+
+    setMetalFill -layer { M8 M9 } \
+        -maxWidth 0.160 \
+        -minWidth 0.160 \
+        -maxLength 5.0 \
+        -minLength 0.960 \
+        -activeSpacing 0.320 \
+        -gapSpacing 0.320 \
+        -maxDensity 55 \
+        -minDensity 25 \
+        -preferredDensity 40
+
+    if {$RUN_PAD_METAL_FILL} {
+        puts "INFO: Pad metal fill enabled by INNOVUS_RUN_PAD_FILL=1."
+
+        setMetalFill -layer { Pad } \
+            -maxWidth 8.0 \
+            -minWidth 0.8 \
+            -maxLength 8.96 \
+            -minLength 8.96 \
+            -decrement 0.160 \
+            -activeSpacing 8.16 \
+            -gapSpacing 8.16 \
+            -maxDensity 30 \
+            -minDensity 10 \
+            -preferredDensity 25
+    } else {
+        puts "INFO: Pad metal fill disabled. Set INNOVUS_RUN_PAD_FILL=1 only if Pad density is required."
+    }
+
     addMetalFill -snap -squareShape
 
     verify_drc -report ./verify_rpt/drc_after_metal_fill.rpt
-    verifyConnectivity -type all -error 1000 -warning 100 \
+    verifyConnectivity -type all -error 1000 -warning 50 \
         -report ./verify_rpt/connectivity_after_metal_fill.rpt
     assert_clean_drc_report ./verify_rpt/drc_after_metal_fill.rpt
     assert_clean_connectivity_report ./verify_rpt/connectivity_after_metal_fill.rpt
+
+    report_area  > ./reports/area_metal_fill.rpt
+    report_power > ./reports/power_metal_fill.rpt
+    saveDesign ./saved/${TOP}_metalFill.enc
 } else {
     write_skipped_report ./verify_rpt/drc_after_metal_fill.rpt \
-        "Legacy addMetalFill skipped. Set INNOVUS_RUN_LEGACY_METAL_FILL=1 only for fill experiments, or use Pegasus/signoff fill."
+        "Legacy addMetalFill skipped by INNOVUS_RUN_LEGACY_METAL_FILL=0. Use Pegasus/signoff fill for production signoff."
     write_skipped_report ./verify_rpt/connectivity_after_metal_fill.rpt \
         "Skipped because legacy metal fill was not run."
-    puts "INFO: Legacy addMetalFill skipped; routed DRC/connectivity remain the signoff gate for this run."
+    puts "INFO: Legacy addMetalFill skipped by INNOVUS_RUN_LEGACY_METAL_FILL=0."
 }
 
 # ----------------------------------------------------------------------------
