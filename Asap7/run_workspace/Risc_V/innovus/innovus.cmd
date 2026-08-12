@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Wed Aug 12 13:00:00 2026                
+#  Created on Wed Aug 12 15:16:20 2026                
 #                                                     
 #######################################################
 
@@ -19,7 +19,7 @@ getVersion
 getVersion
 getVersion
 set enc_source_continue_on_error false
-set auto_file_dir /tmp/user1/innovus_riscv_1441532
+set auto_file_dir /tmp/user1/innovus_riscv_2149295
 setDesignMode -process 7
 setMultiCpuUsage -acquireLicense 8
 setMultiCpuUsage -localCpu 8
@@ -169,17 +169,7 @@ report_power > ./reports/power_postRoute.rpt
 saveDesign ./saved/riscv_pipeline_postRoute.enc
 verify_drc -report ./verify_rpt/drc_after_route.rpt
 verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_route.rpt
-extractRC
-rcOut -spef ./outputs/riscv_pipeline_pnr.spef -rc_corner rc_typ
-writeTimingCon ./outputs/riscv_pipeline_pnr.sdc
-saveNetlist ./outputs/riscv_pipeline_pnr_lec.v -excludeLeafCell -removePowerGround
-saveNetlist ./outputs/riscv_pipeline_pnr_sta.v -excludeLeafCell
-saveNetlist ./outputs/riscv_pipeline_pnr_pg.v -excludeLeafCell -includePowerGround -includePhysicalInst
-setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic -virtualConnection false -textSize 1
-streamOut ./outputs/riscv_pipeline.gds -mapFile ./tcl/streamOut.map -merge {/home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds} -units 4000 -dieAreaAsBoundary -outputMacros
-write_lef_abstract -noCutObs ./outputs/riscv_pipeline.lef
-defOut -floorplan -netlist -routing ./outputs/riscv_pipeline_pnr.def
-report_area > ./reports/area_pnr.rpt
-report_power > ./reports/power_pnr.rpt
-report_timing > ./reports/timing_pnr.rpt
-saveDesign ./saved/riscv_pipeline_final.enc
+verify_drc -report ./verify_rpt/drc_after_metal_fill.rpt
+verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_metal_fill.rpt
+win
+fit
