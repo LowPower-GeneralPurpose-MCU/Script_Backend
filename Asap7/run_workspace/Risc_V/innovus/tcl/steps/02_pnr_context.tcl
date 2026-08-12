@@ -12,14 +12,12 @@ if {![info exists TOP]} {
 }
 
 set reuse_active_design 0
-if {[info exists ::INNOVUS_COMBINED_FLOW] && $::INNOVUS_COMBINED_FLOW} {
-    if {![catch {dbGet top.name} active_top] && $active_top eq $TOP} {
-        set reuse_active_design 1
-    }
+if {![catch {dbGet top.name} active_top] && $active_top eq $TOP} {
+    set reuse_active_design 1
 }
 
 if {$reuse_active_design} {
-    puts "INFO: Continuing from active hierarchy floorplan for $TOP."
+    puts "INFO: Continuing from active design for $TOP."
 } else {
     source ./tcl/tool_setup.tcl
 
@@ -208,4 +206,3 @@ lassign $power_die_box \
     power_die_llx power_die_lly power_die_urx power_die_ury
 
 riscv_step_banner "STEP 02 DONE: PnR context ready"
-

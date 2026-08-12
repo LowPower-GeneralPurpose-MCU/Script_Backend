@@ -12,7 +12,8 @@
 ##   source ./tcl/steps/04_place.tcl
 ##   source ./tcl/steps/05_cts.tcl
 ##   source ./tcl/steps/06_route.tcl
-##   source ./tcl/steps/07_export.tcl
+##   source ./tcl/steps/07_metal_fill.tcl
+##   source ./tcl/steps/08_export.tcl
 ##
 ## Useful controls:
 ##   INNOVUS_STAGE=all|hierfp|pnr
@@ -21,6 +22,7 @@
 ##   INNOVUS_STOP_AFTER_PLACE=1
 ##   INNOVUS_STOP_AFTER_CTS=1
 ##   INNOVUS_STOP_AFTER_ROUTE=1
+##   INNOVUS_STOP_AFTER_METAL_FILL=1
 ############################################################
 
 set innovus_driver_script [info script]
@@ -60,7 +62,8 @@ if {$run_hierfp && ($FLOW_STAGE eq "hierfp" ||
     puts "  source ./tcl/steps/04_place.tcl"
     puts "  source ./tcl/steps/05_cts.tcl"
     puts "  source ./tcl/steps/06_route.tcl"
-    puts "  source ./tcl/steps/07_export.tcl"
+    puts "  source ./tcl/steps/07_metal_fill.tcl"
+    puts "  source ./tcl/steps/08_export.tcl"
     return
 }
 
@@ -78,7 +81,10 @@ if {$run_pnr} {
     source ./tcl/steps/06_route.tcl
     if {[riscv_env_flag INNOVUS_STOP_AFTER_ROUTE 0]} { return }
 
-    source ./tcl/steps/07_export.tcl
+    source ./tcl/steps/07_metal_fill.tcl
+    if {[riscv_env_flag INNOVUS_STOP_AFTER_METAL_FILL 0]} { return }
+
+    source ./tcl/steps/08_export.tcl
 }
 
 unset -nocomplain ::INNOVUS_COMBINED_FLOW
