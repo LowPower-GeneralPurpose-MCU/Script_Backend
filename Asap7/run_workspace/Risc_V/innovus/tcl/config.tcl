@@ -50,13 +50,15 @@ set SYN_SPEF    [file join $GENUS_OUTPUT_DIR ${TOP}_syn.spef]
 set FUNC_SDC    $SYN_SDC
 set STREAM_MAP  ./tcl/streamOut.map
 
-# Slide recommendation: module density below 80%, approximately 75% preferred.
-# 72% is selected to leave routing headroom for this control-heavy CPU.
-set CORE_UTIL   0.72
+# Keep the final post-CTS/post-route density near 60%.  The flop-based BPU/BTB
+# and RF grow noticeably during CTS/optimization; the previous 309 x 308 um
+# core ended at ~82% density and left persistent M2/M4/M6 detailed-route DRCs
+# around the RF/debug cluster.
+set CORE_UTIL   0.60
 set CORE_ASPECT 1.00
 set FLOORPLAN_GRID 0.384
-set CORE_WIDTH  309.120
-set CORE_HEIGHT 308.352
+set CORE_WIDTH  360.192
+set CORE_HEIGHT 360.192
 
 # proto_design requires the optional invs_ehfs license. The available license
 # reports IMPLIC-90/IMPFM-801, so keep it disabled unless explicitly requested.
@@ -89,8 +91,8 @@ set M45_OFFSET     12.960
 
 set M67_WIDTH       0.640
 set M67_SPACING     0.288
-set M67_SET_PITCH  25.600
-set M67_OFFSET     12.800
+set M67_SET_PITCH  34.560
+set M67_OFFSET     17.280
 
 set CTS_BUF_CELLS [list \
     BUFx4_ASAP7_75t_R BUFx8_ASAP7_75t_R BUFx12_ASAP7_75t_R \
