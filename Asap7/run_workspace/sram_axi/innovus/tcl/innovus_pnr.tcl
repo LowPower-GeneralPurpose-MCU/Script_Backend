@@ -205,28 +205,21 @@ timeDesign \
 
 # Standard-cell M1 rails exist after placement.  Build the PG stack upward in
 # legal ASAP7 grid steps: M1->M5 taps, M5/M6/M7 core mesh, then M7/M8/M9 upper mesh.
+foreach stale_post_place_pg_report {
+    ./verify_rpt/pg_connectivity_before_trim.rpt
+    ./verify_rpt/pg_connectivity_after_trim.rpt
+} {
+    file delete -force $stale_post_place_pg_report
+}
 source ./tcl/core_lower_pg_nojog.tcl
 source ./tcl/core_pg_outside_island.tcl
 source ./tcl/global_upper_pg_to_ring.tcl
 
-verifyConnectivity \
-    -type special \
-    -net {VDD VSS} \
-    -noUnroutedNet \
-    -report ./verify_rpt/pg_connectivity_before_trim.rpt
-
-editTrim -nets {VDD VSS}
-clearDrc
-
-verifyConnectivity \
-    -type special \
-    -net {VDD VSS} \
-    -noUnroutedNet \
-    -report ./verify_rpt/pg_connectivity_after_trim.rpt
-
-if {[catch {pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt} post_place_pg_error]} {
-    puts stderr $post_place_pg_error
-    error $post_place_pg_error
+if {[catch {
+    connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt
+} post_place_pg_error]} {
+    puts stderr "Post-placement PG reconnect/verify failed: $post_place_pg_error"
+    return -code error $post_place_pg_error
 }
 
 saveDesign ./saved/axi_ram_placed.enc

@@ -49,6 +49,25 @@ if {[llength $lower_pg_die_box] != 4} {
 lassign $lower_pg_die_box \
     lower_pg_die_llx lower_pg_die_lly lower_pg_die_urx lower_pg_die_ury
 
+if {![info exists PG_BOUNDARY_EPS]} {
+    set PG_BOUNDARY_EPS 0.192
+}
+if {![info exists STDCELL_PG_AREA_OVERHANG]} {
+    set STDCELL_PG_AREA_OVERHANG [pg_layer_pitch M5]
+}
+
+# ASAP7 std-cell M1 PG pins can protrude a fraction of a track outside the
+# legal placement row bbox.  Keep ViaGen area boxes wide enough to see the
+# complete M1 pin/rail overlap while staying inside the die margin.
+set stdcell_pg_area_lly [expr {
+    max($lower_pg_die_lly + $PG_BOUNDARY_EPS,
+        $core_lly - $STDCELL_PG_AREA_OVERHANG)
+}]
+set stdcell_pg_area_ury [expr {
+    min($lower_pg_die_ury - $PG_BOUNDARY_EPS,
+        $core_ury + $STDCELL_PG_AREA_OVERHANG)
+}]
+
 if {![info exists LOGIC_RIGHT_EDGE_TAP_BOX] ||
     ![info exists LOGIC_RIGHT_FULL_BOX] ||
     ![info exists LOGIC_TOP_LEFT_BOX]} {
@@ -84,14 +103,14 @@ if {![info exists LOGIC_RIGHT_EDGE_TAP_BOX] ||
     }
 
     set LOGIC_RIGHT_EDGE_TAP_BOX [list \
-        $SRAM_ISLAND_CUT_URX $core_lly \
-        $logic_edge_tap_urx  $core_ury]
+        $SRAM_ISLAND_CUT_URX $stdcell_pg_area_lly \
+        $logic_edge_tap_urx  $stdcell_pg_area_ury]
     set LOGIC_RIGHT_FULL_BOX [list \
-        $logic_edge_tap_urx $core_lly \
-        $core_urx           $core_ury]
+        $logic_edge_tap_urx $stdcell_pg_area_lly \
+        $core_urx           $stdcell_pg_area_ury]
     set LOGIC_TOP_LEFT_BOX [list \
         $core_llx              $SRAM_ISLAND_CUT_URY \
-        $SRAM_ISLAND_CUT_URX   $core_ury]
+        $SRAM_ISLAND_CUT_URX   $stdcell_pg_area_ury]
 }
 
 set global_m5_first_x [expr {$core_llx + $stripe_m5_offset}]
@@ -106,11 +125,16 @@ setAddStripeMode \
 foreach area [list $LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LEFT_BOX] {
     set area_llx [lindex $area 0]
     set area_urx [lindex $area 2]
+    set area_nets {VDD VSS}
 
     if {$area eq $LOGIC_RIGHT_EDGE_TAP_BOX} {
         set area_offset [pg_track_aligned_pair_offset \
             $area_llx $area_urx M5 $stripe_m5_w $stripe_m5_s]
         set area_sets 1
+        # The narrow SRAM-edge tap is centered in a 4-row channel.  Put VDD on
+        # the second snapped lane so it overlaps the bottom-row VDD pin shapes
+        # reported around x=505.008..508.032 in the latest Innovus log.
+        set area_nets {VSS VDD}
     } else {
         set area_offset [pg_track_aligned_global_offset \
             $area_llx $area_urx $global_m5_first_x \
@@ -120,7 +144,7 @@ foreach area [list $LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LE
 
     if {$area_sets ne ""} {
         addStripe \
-            -nets {VDD VSS} \
+            -nets $area_nets \
             -layer M5 \
             -direction vertical \
             -width $stripe_m5_w \
@@ -135,7 +159,7 @@ foreach area [list $LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LE
             -allow_snapping_override_custom_spacing 1
     } else {
         addStripe \
-            -nets {VDD VSS} \
+            -nets $area_nets \
             -layer M5 \
             -direction vertical \
             -width $stripe_m5_w \

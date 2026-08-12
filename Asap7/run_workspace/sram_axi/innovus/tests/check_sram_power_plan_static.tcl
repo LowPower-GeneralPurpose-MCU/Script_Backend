@@ -261,6 +261,7 @@ foreach child $power_children {
 
 set pnr_text [read_complete_file [file join $tcl_dir innovus_pnr.tcl]]
 set innovus_text [read_complete_file [file join $tcl_dir innovus.tcl]]
+set flow_checks_text [read_complete_file [file join $tcl_dir flow_checks.tcl]]
 set route_guard_path [file join $tcl_dir sram_route_guard.tcl]
 if {![file exists $route_guard_path]} {
     fail "Missing sram_route_guard.tcl; SRAM macro bodies must be reserved before placement/CTS"
@@ -513,8 +514,16 @@ assert_contains \
     "core_lower_pg_nojog.tcl must create an explicit first M5 tap beside the SRAM island right edge"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
-    {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$SRAM_ISLAND_CUT_URX[[:space:]]+\$core_lly} \
-    "core_lower_pg_nojog.tcl must rebuild lower PG boxes from core rows, not die boundary"
+    {set[[:space:]]+stdcell_pg_area_lly[[:space:]]+\[expr} \
+    "core_lower_pg_nojog.tcl must explicitly expand lower PG boxes for ASAP7 M1 pin overhang"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {core_lly[[:space:]]+-[[:space:]]+\$STDCELL_PG_AREA_OVERHANG} \
+    "core_lower_pg_nojog.tcl must cover bottom-row VDD/VSS pins that protrude below the placement row bbox"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$SRAM_ISLAND_CUT_URX[[:space:]]+\$stdcell_pg_area_lly} \
+    "core_lower_pg_nojog.tcl must rebuild lower PG boxes from std-cell PG rail coverage, not die boundary"
 if {[regexp {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$SRAM_ISLAND_CUT_URX[[:space:]]+\$lower_pg_die_lly} \
         $child_text(core_lower_pg_nojog.tcl)]} {
     fail "core_lower_pg_nojog.tcl must not use die-bottom/die-top for standard-cell corePin areas"
@@ -527,6 +536,10 @@ assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {if[[:space:]]+\{\$area[[:space:]]+eq[[:space:]]+\$LOGIC_RIGHT_EDGE_TAP_BOX\}} \
     "the SRAM-adjacent M5 tap must use one fixed pair instead of the global repeated phase"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {set[[:space:]]+area_nets[[:space:]]+\{VSS[[:space:]]+VDD\}} \
+    "the SRAM-adjacent M5 tap must put VDD on the second lane to overlap the bottom-row VDD pins reported near x=505..508"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {-number_of_sets[[:space:]]+\$area_sets} \
@@ -856,19 +869,15 @@ foreach flow_pair [list \
         "$flow_name must build the post-placement M8/M9 upper PG mesh before lower M1/M5 taps"
     assert_contains \
         $flow_text \
-        {-net[[:space:]]+\{VDD[[:space:]]+VSS\}} \
-        "$flow_name post-placement PG verifyConnectivity must be restricted to VDD/VSS"
+        {connect_core_pg_pins_nojog[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
+        "$flow_name must reconnect/verify VDD/VSS PG after post-placement mesh construction"
     assert_contains \
         $flow_text \
-        {pg_assert_clean_connectivity_report[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
-        "$flow_name must stop after placement if VDD/VSS PG connectivity is still dirty"
+        {catch[[:space:]]+\{[[:space:]]+connect_core_pg_pins_nojog[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
+        "$flow_name must catch the post-placement PG reconnect guard"
     assert_contains \
         $flow_text \
-        {catch[[:space:]]+\{pg_assert_clean_connectivity_report[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt\}} \
-        "$flow_name must catch the post-placement PG guard and rethrow it before saveDesign"
-    assert_contains \
-        $flow_text \
-        {error[[:space:]]+\$post_place_pg_error} \
+        {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$post_place_pg_error} \
         "$flow_name must hard-stop on dirty post-placement PG instead of saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
@@ -906,8 +915,12 @@ foreach flow_pair [list \
     set upper_pg_index [string first {source ./tcl/global_upper_pg_to_ring.tcl} $flow_text]
     set lower_pg_index [string first {source ./tcl/core_lower_pg_nojog.tcl} $flow_text]
     set middle_pg_index [string first {source ./tcl/core_pg_outside_island.tcl} $flow_text]
-    set post_place_guard_index [string first {catch {pg_assert_clean_connectivity_report ./verify_rpt/pg_connectivity_after_trim.rpt}} $flow_text]
+    set stale_post_place_delete_index [string first {file delete -force $stale_post_place_pg_report} $flow_text]
+    set post_place_guard_index [string first {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} $flow_text]
     set placed_save_index [string first {saveDesign ./saved/axi_ram_placed.enc} $flow_text]
+    set before_trim_verify_seen [regexp {
+        verifyConnectivity[[:space:]\n\\]+.*pg_connectivity_before_trim\.rpt
+    } $flow_text]
     set power_error_return_index [string first {error $power_plan_error} $flow_text $power_catch_index]
     set route_guard_source_index [string first {source ./tcl/sram_route_guard.tcl} $flow_text]
     set place_opt_index [string first {place_opt_design} $flow_text]
@@ -941,10 +954,17 @@ foreach flow_pair [list \
         $middle_pg_index > $upper_pg_index} {
         fail "$flow_name must build post-placement PG upward: M1/M5 taps, then M6/M7 mesh, then M8/M9 upper mesh"
     }
+    if {$stale_post_place_delete_index < 0 ||
+        $stale_post_place_delete_index > $lower_pg_index} {
+        fail "$flow_name must delete stale post-placement PG reports before rebuilding the mesh"
+    }
     if {$post_place_guard_index < 0 ||
         $placed_save_index < 0 ||
         $post_place_guard_index > $placed_save_index} {
-        fail "$flow_name must guard PG connectivity before saving axi_ram_placed.enc"
+        fail "$flow_name must trim/reconnect and guard PG connectivity before saving axi_ram_placed.enc"
+    }
+    if {$before_trim_verify_seen} {
+        fail "$flow_name must not verify a pre-trim PG state that is expected to contain dangling M1 rail endpoints"
     }
     if {$route_guard_source_index < 0 ||
         $place_opt_index < 0 ||
@@ -969,6 +989,23 @@ foreach flow_pair [list \
         fail "$flow_name must check STOP_AFTER_POWER_PINS after saving the power/pins checkpoint and before place_opt_design"
     }
 }
+
+assert_contains \
+    $flow_checks_text \
+    {-connect[[:space:]]+\{floatingStripe\}} \
+    "flow_checks.tcl must connect area-constrained floating PG stripes before corePin reconnect"
+assert_contains \
+    $flow_checks_text \
+    {-floatingStripeTarget[[:space:]]+\{ring[[:space:]]+stripe[[:space:]]+blockring\}} \
+    "flow_checks.tcl must target existing rings/stripes/blockrings for floating PG stripe stitching"
+assert_contains \
+    $flow_checks_text \
+    {-net[[:space:]]+\{VDD[[:space:]]+VSS\}} \
+    "post-placement PG verifyConnectivity must be restricted to VDD/VSS"
+assert_contains \
+    $flow_checks_text \
+    {assert_clean_connectivity_report[[:space:]]+\$report_file} \
+    "flow_checks.tcl must hard-stop on dirty post-placement PG before saveDesign"
 
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_drc_before_stdcell_place.rpt]
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_connectivity_before_stdcell_place.rpt]

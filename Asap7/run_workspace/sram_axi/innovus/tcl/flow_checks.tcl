@@ -92,8 +92,25 @@ proc verify_antenna_if_enabled {report_file} {
     return 1
 }
 
+proc connect_floating_pg_stripes_nojog {} {
+    applyGlobalNets
+
+    setSrouteMode -reset
+    setSrouteMode \
+        -viaConnectToShape {ring stripe blockring}
+
+    sroute \
+        -connect {floatingStripe} \
+        -nets {VDD VSS} \
+        -floatingStripeTarget {ring stripe blockring} \
+        -allowJogging 0 \
+        -allowLayerChange 0
+}
+
 proc connect_core_pg_pins_nojog {{report_file ""}} {
     applyGlobalNets
+
+    connect_floating_pg_stripes_nojog
 
     setSrouteMode -reset
     setSrouteMode \
