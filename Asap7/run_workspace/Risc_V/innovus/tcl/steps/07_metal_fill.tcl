@@ -26,8 +26,11 @@ file delete -force \
 if {$RUN_LEGACY_METAL_FILL} {
     puts "INFO: Configuring ASAP7 legacy metal-fill rules."
 
-    if {[llength [info commands deleteMetalFill]]} {
-        catch {deleteMetalFill -all}
+    foreach fill_shape {fillwire fillwireopc} {
+        set fill_objs [dbGet top.nets.sWires.shape $fill_shape -p]
+        if {$fill_objs ne "" && $fill_objs ne "0x0"} {
+            dbDeleteObj $fill_objs
+        }
     }
 
     # M1-M3: width table starts at 0.072um.

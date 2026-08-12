@@ -31,6 +31,28 @@ M8    SPNET    80    0
 M9    SPNET    90    0
 
 # ----------------------------
+# Metal fill shapes
+# ----------------------------
+M1    FILL     19    0
+M1    FILLOPC  19    0
+M2    FILL     20    0
+M2    FILLOPC  20    0
+M3    FILL     30    0
+M3    FILLOPC  30    0
+M4    FILL     40    0
+M4    FILLOPC  40    0
+M5    FILL     50    0
+M5    FILLOPC  50    0
+M6    FILL     60    0
+M6    FILLOPC  60    0
+M7    FILL     70    0
+M7    FILLOPC  70    0
+M8    FILL     80    0
+M8    FILLOPC  80    0
+M9    FILL     90    0
+M9    FILLOPC  90    0
+
+# ----------------------------
 # Pins / terminals
 # ----------------------------
 M1    PIN      19    251
