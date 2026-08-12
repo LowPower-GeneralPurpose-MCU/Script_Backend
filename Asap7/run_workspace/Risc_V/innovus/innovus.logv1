@@ -1,0 +1,1110 @@
+[08/12 16:17:30      0s] 
+[08/12 16:17:30      0s] Cadence Innovus(TM) Implementation System.
+[08/12 16:17:30      0s] Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+[08/12 16:17:30      0s] 
+[08/12 16:17:30      0s] Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
+[08/12 16:17:30      0s] Options:	
+[08/12 16:17:30      0s] Date:		Wed Aug 12 16:17:30 2026
+[08/12 16:17:30      0s] Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
+[08/12 16:17:30      0s] OS:		Ubuntu 26.04 LTS
+[08/12 16:17:30      0s] 
+[08/12 16:17:30      0s] License:
+[08/12 16:17:34      0s] 		[16:17:34.206258] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+[08/12 16:17:35      0s] 		invs	Innovus Implementation System	23.1	checkout succeeded
+[08/12 16:17:35      0s] 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
+[08/12 16:17:45      9s] Memory management switch to non-aggressive memory release mode.
+[08/12 16:17:45      9s] 
+[08/12 16:17:45      9s] OS Mmap count monitoring thread starts. Limit of OS Mmap count is 1048576
+[08/12 16:17:45      9s] 
+[08/12 16:17:47     10s] Reset Parastics called with the command setExtractRCMode -reset@(#)CDS: Innovus v23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+[08/12 16:17:49     12s] @(#)CDS: NanoRoute 23.14-s088_1 NR250219-0822/23_14-UB (database version 18.20.661) {superthreading v2.20}
+[08/12 16:17:49     12s] @(#)CDS: AAE 23.14-s018 (64bit) 02/28/2025 (Linux 3.10.0-693.el7.x86_64)
+[08/12 16:17:49     12s] @(#)CDS: CTE 23.14-s036_1 () Feb 22 2025 01:17:26 ( )
+[08/12 16:17:49     12s] @(#)CDS: SYNTECH 23.14-s010_1 () Feb 19 2025 23:56:49 ( )
+[08/12 16:17:49     12s] @(#)CDS: CPE v23.14-s082
+[08/12 16:17:49     12s] @(#)CDS: IQuantus/TQuantus 23.1.1-s336 (64bit) Mon Jan 20 22:11:00 PST 2025 (Linux 3.10.0-693.el7.x86_64)
+[08/12 16:17:49     12s] @(#)CDS: OA 22.61-p020 Fri Nov  1 12:14:48 2024
+[08/12 16:17:49     12s] @(#)CDS: SGN 23.10-d005 (03-Oct-2023) (64 bit executable, TkQt5.15.9)
+[08/12 16:17:49     12s] @(#)CDS: RCDB 11.15.0
+[08/12 16:17:49     12s] @(#)CDS: STYLUS 23.16-e002_1 (01/09/2025 16:47 PST)
+[08/12 16:17:49     12s] @(#)CDS: IntegrityPlanner-23.14-17034 (23.14) (2025-02-20 15:50:05+0800)
+[08/12 16:17:49     12s] @(#)CDS: SYNTHESIS_ENGINE 23.14-s090
+[08/12 16:17:49     12s] Create and set the environment variable TMPDIR to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti.
+
+[08/12 16:17:49     12s] Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
+[08/12 16:17:50     13s] Info: Process UID = 2476860 / 5f6217ab-570f-4226-8d33-c816aae08860 / ho6DYsOgkO
+[08/12 16:17:50     13s] 
+[08/12 16:17:50     13s] **INFO:  MMMC transition support version v31-84 
+[08/12 16:17:50     13s] 
+[08/12 16:17:50     13s] <CMD> set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+[08/12 16:17:50     13s] <CMD> suppressMessage ENCEXT-2799
+[08/12 16:17:50     13s] <CMD> getVersion
+[08/12 16:17:50     13s] <CMD> getVersion
+[08/12 16:17:50     13s] <CMD> getVersion
+[08/12 16:17:51     13s] [INFO] Loading PVS 21.12 fill procedures
+[08/12 16:17:51     13s] <CMD> win
+[08/12 16:18:14     14s] <CMD> set enc_source_continue_on_error false
+[08/12 16:18:27     15s] <CMD> set auto_file_dir /tmp/user1/innovus_riscv_2476860
+[08/12 16:18:27     15s] <CMD> setDesignMode -process 7
+[08/12 16:18:27     15s] ##  Process: 7             (User Set)               
+[08/12 16:18:27     15s] ##     Node: (not set)                           
+[08/12 16:18:27     15s] 
+##  Check design process and node:  
+##  Design tech node is not set.
+
+[08/12 16:18:27     15s] Applying the recommended capacitance filtering threshold values for 7nm process node: total_c_th=0, relative_c_th=1 and coupling_c_th=0.1.
+[08/12 16:18:27     15s] 	These values will be used by all post-route extraction engines, including TQuantus, IQuantus and Quantus QRC extraction.
+[08/12 16:18:27     15s] 	Capacitance filtering mode(-capFilterMode option of the setExtractRCMode) is 'relAndCoup' for all engines.
+[08/12 16:18:27     15s] 	The accuracy mode for postRoute effortLevel low extraction will be set to 'high'.
+[08/12 16:18:27     15s] 	Default value for EffortLevel(-effortLevel option of the setExtractRCMode) in postRoute extraction mode will be 'medium' if Quantus QRC technology file is specified else 'low'.
+[08/12 16:18:27     15s] <CMD> setMultiCpuUsage -acquireLicense 8
+[08/12 16:18:27     15s] <CMD> setMultiCpuUsage -localCpu 8
+[08/12 16:18:27     15s] <CMD> setDistributeHost -local
+[08/12 16:18:27     15s] The timeout for a remote job to respond is 3600 seconds.
+[08/12 16:18:27     15s] Submit command for task runs will be: local
+[08/12 16:18:27     15s] <CMD> suppressMessage IMPPP-133
+[08/12 16:18:55     15s] <CMD> restoreDesign ./saved/riscv_pipeline_metalFill.enc riscv_pipeline
+[08/12 16:18:56     16s] #% Begin load design ... (date=08/12 16:18:55, mem=1824.0M)
+[08/12 16:18:56     16s] **ERROR: (IMPSYT-7338):	The specified design session directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc' could not be located as specified. Check your file system, correct the location, and try restoring the design again.
+[08/12 16:18:56     16s] 
+[08/12 16:18:56     16s] 
+[08/12 16:18:56     16s] ERROR: 
+[08/12 16:18:56     16s] 
+[08/12 16:18:56     16s] 
+[08/12 16:18:56     16s]     while executing
+[08/12 16:18:56     16s] "error $catchMsg"
+[08/12 16:18:56     16s]     (procedure "restoreDesign" line 36)
+[08/12 16:18:56     16s] 
+[08/12 16:18:56     16s] 
+[08/12 16:22:15     22s] <CMD> is_common_ui_mode
+[08/12 16:22:15     22s] <CMD> restoreDesign /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat riscv_pipeline
+[08/12 16:22:15     22s] report_message: '-start_cmd/-end_cmd' can not be nested. Interior calls do nothing. Ignore.
+[08/12 16:22:15     22s] % Begin load design ... (date=08/12 16:22:15, mem=1823.5M)
+[08/12 16:22:15     22s] Set Default Input Pin Transition as 0.1 ps.
+[08/12 16:22:15     23s] #USet: HiLayer Color Conflict For Pin-Track Alignment = 1.
+[08/12 16:22:16     23s] Loading design 'riscv_pipeline' saved by 'Innovus' '23.14-s088_1' on 'Wed Aug 12 16:03:44 2026'.
+[08/12 16:22:16     23s] % Begin Load MMMC data ... (date=08/12 16:22:16, mem=1826.1M)
+[08/12 16:22:16     23s] % End Load MMMC data ... (date=08/12 16:22:16, total cpu=0:00:00.1, real=0:00:00.0, peak res=1826.1M, current mem=1826.0M)
+[08/12 16:22:16     23s] 
+[08/12 16:22:16     23s] Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/libs/lef/asap7_tech_4x_201209.lef ...
+[08/12 16:22:16     23s] 
+[08/12 16:22:16     23s] Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/libs/lef/asap7sc7p5t_28_R_4x_220121a.lef ...
+[08/12 16:22:16     23s] Set DBUPerIGU to M1 pitch 576.
+[08/12 16:22:16     23s] 
+[08/12 16:22:16     23s] Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/libs/lef/asap7sc7p5t_28_L_4x_220121a.lef ...
+[08/12 16:22:16     23s] 
+##  Check design process and node:  
+##  Design tech node is not set.
+
+[08/12 16:22:16     23s] Loading view definition file from /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/viewDefinition.tcl
+[08/12 16:22:16     23s] Starting library reading in 'Multi-threaded flow' (with '8' threads)
+[08/12 16:22:18     39s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib.
+[08/12 16:22:18     39s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 46726)
+[08/12 16:22:18     39s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 75682)
+[08/12 16:22:18     39s] Read 56 cells in library asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.
+[08/12 16:22:18     39s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib.
+[08/12 16:22:18     39s] Read 37 cells in library asap7sc7p5t_INVBUF_RVT_TT_ccs_211120.
+[08/12 16:22:19     48s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib.
+[08/12 16:22:19     48s] Read 42 cells in library asap7sc7p5t_AO_RVT_TT_ccs_211120.
+[08/12 16:22:19     48s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib.
+[08/12 16:22:19     48s] Read 34 cells in library asap7sc7p5t_OA_RVT_TT_ccs_211120.
+[08/12 16:22:19     48s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib.
+[08/12 16:22:19     48s] Read 33 cells in library asap7sc7p5t_SEQ_RVT_TT_ccs_220123.
+[08/12 16:22:19     48s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib.
+[08/12 16:22:19     48s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 46726)
+[08/12 16:22:19     48s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 75682)
+[08/12 16:22:19     48s] Read 56 cells in library asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.
+[08/12 16:22:19     48s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib.
+[08/12 16:22:19     48s] Read 37 cells in library asap7sc7p5t_INVBUF_LVT_TT_ccs_211120.
+[08/12 16:22:19     48s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib.
+[08/12 16:22:19     48s] Read 42 cells in library asap7sc7p5t_AO_LVT_TT_ccs_211120.
+[08/12 16:22:19     48s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib.
+[08/12 16:22:19     48s] Read 34 cells in library asap7sc7p5t_OA_LVT_TT_ccs_211120.
+[08/12 16:22:19     48s] Reading libset_tt timing library /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib.
+[08/12 16:22:19     48s] Read 33 cells in library asap7sc7p5t_SEQ_LVT_TT_ccs_220123.
+[08/12 16:22:20     50s] Library reading multithread flow ended.
+[08/12 16:22:20     51s] Ending "PreSetAnalysisView" (total cpu=0:00:28.2, real=0:00:04.0, peak res=4198.3M, current mem=1894.5M)
+[08/12 16:22:20     51s] *** End library_loading (cpu=0.47min, real=0.07min, mem=2576.1M, fe_cpu=0.86min, fe_real=4.83min, fe_mem=4401.6M) ***
+[08/12 16:22:20     51s] % Begin Load netlist data ... (date=08/12 16:22:20, mem=1894.5M)
+[08/12 16:22:20     51s] *** Begin netlist parsing (mem=4401.6M) ***
+[08/12 16:22:20     51s] Created 404 new cells from 10 timing libraries.
+[08/12 16:22:20     51s] Reading netlist ...
+[08/12 16:22:20     51s] Backslashed names will retain backslash and a trailing blank character.
+[08/12 16:22:20     51s] Reading verilogBinary netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/vbin/riscv_pipeline.v.bin'
+[08/12 16:22:20     51s] Reading binary database version 2 in multi-threaded mode
+[08/12 16:22:20     52s] 
+[08/12 16:22:20     52s] *** Memory Usage v#2 (Current mem = 4401.605M, initial mem = 847.699M) ***
+[08/12 16:22:20     52s] *** End netlist parsing (cpu=0:00:00.1, real=0:00:00.0, mem=4401.6M) ***
+[08/12 16:22:20     52s] % End Load netlist data ... (date=08/12 16:22:20, total cpu=0:00:00.2, real=0:00:00.0, peak res=1959.0M, current mem=1959.0M)
+[08/12 16:22:20     52s] Set top cell to riscv_pipeline.
+[08/12 16:22:20     52s] Hooked 404 DB cells to tlib cells.
+[08/12 16:22:20     52s] Ending "BindLib:" (total cpu=0:00:00.1, real=0:00:00.0, peak res=1991.2M, current mem=1991.2M)
+[08/12 16:22:20     52s] Starting recursive module instantiation check.
+[08/12 16:22:20     52s] No recursion found.
+[08/12 16:22:20     52s] Building hierarchical netlist for Cell riscv_pipeline ...
+[08/12 16:22:20     52s] ***** UseNewTieNetMode *****.
+[08/12 16:22:21     52s] *** Netlist is unique.
+[08/12 16:22:21     52s] Set DBUPerIGU to techSite asap7sc7p5t width 864.
+[08/12 16:22:21     52s] Setting Std. cell height to 4320 DBU (smallest netlist inst).
+[08/12 16:22:21     52s] ** info: there are 444 modules.
+[08/12 16:22:21     52s] ** info: there are 36384 stdCell insts.
+[08/12 16:22:21     52s] ** info: there are 36384 stdCell insts with at least one signal pin.
+[08/12 16:22:21     52s] 
+[08/12 16:22:21     52s] *** Memory Usage v#2 (Current mem = 4401.605M, initial mem = 847.699M) ***
+[08/12 16:22:21     52s] *info: set bottom ioPad orient R0
+[08/12 16:22:21     52s] Start create_tracks
+[08/12 16:22:21     52s] Loading preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/gui.pref.tcl ...
+[08/12 16:22:21     52s] ##  Process: 7             (User Set)               
+[08/12 16:22:21     52s] ##     Node: (not set)                           
+[08/12 16:22:21     52s] 
+##  Check design process and node:  
+##  Design tech node is not set.
+
+[08/12 16:22:21     52s] Applying the recommended capacitance filtering threshold values for 7nm process node: total_c_th=0, relative_c_th=1 and coupling_c_th=0.1.
+[08/12 16:22:21     52s] 	These values will be used by all post-route extraction engines, including TQuantus, IQuantus and Quantus QRC extraction.
+[08/12 16:22:21     52s] 	Capacitance filtering mode(-capFilterMode option of the setExtractRCMode) is 'relAndCoup' for all engines.
+[08/12 16:22:21     52s] 	The accuracy mode for postRoute effortLevel low extraction will be set to 'high'.
+[08/12 16:22:21     52s] 	Default value for EffortLevel(-effortLevel option of the setExtractRCMode) in postRoute extraction mode will be 'medium' if Quantus QRC technology file is specified else 'low'.
+[08/12 16:22:21     52s] **WARN: (IMPOPT-3602):	The specified path group name tdgp_reg2reg_default is not defined.
+[08/12 16:22:21     52s] Type 'man IMPOPT-3602' for more detail.
+[08/12 16:22:21     52s] Effort level <high> specified for tdgp_reg2reg_default path_group
+[08/12 16:22:21     52s] Slack adjustment of -0 applied on tdgp_reg2reg_default path_group
+[08/12 16:22:21     52s] **WARN: (IMPTCM-77):	Option "-drouteStartIteration" for command setNanoRouteMode is obsolete and will be removed in a future release. The obsolete option still works in this release but to avoid this warning and to ensure compatibility with future releases, remove the obsolete option from your script.
+[08/12 16:22:21     52s] AAE_INFO: switching setDelayCal -siAware from false to true ...
+[08/12 16:22:21     52s] AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
+[08/12 16:22:21     52s] addStripe will not allow jog to connect padcore ring and block ring.
+[08/12 16:22:21     52s] 
+[08/12 16:22:21     52s] Stripes will use preferred direction when jogging to make connections.
+[08/12 16:22:21     52s] Change floorplan default-technical-site to 'asap7sc7p5t'.
+[08/12 16:22:21     52s] Extraction setup Delayed 
+[08/12 16:22:21     52s] *Info: initialize multi-corner CTS.
+[08/12 16:22:21     53s] Ending "SetAnalysisView" (total cpu=0:00:00.2, real=0:00:00.0, peak res=1991.2M, current mem=1982.2M)
+[08/12 16:22:21     53s] Tech dependent Parameter, Build TLibAnalyzer for: cellAreaConsiderPadding
+[08/12 16:22:21     53s] 
+[08/12 16:22:21     53s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) in restoreDesign Begin ...
+[08/12 16:22:21     53s] Summary for sequential cells identification: 
+[08/12 16:22:21     53s]   Identified SBFF number: 34
+[08/12 16:22:21     53s]   Identified MBFF number: 0
+[08/12 16:22:21     53s]   Identified SB Latch number: 12
+[08/12 16:22:21     53s]   Identified MB Latch number: 0
+[08/12 16:22:21     53s]   Not identified SBFF number: 0
+[08/12 16:22:21     53s]   Not identified MBFF number: 0
+[08/12 16:22:21     53s]   Not identified SB Latch number: 0
+[08/12 16:22:21     53s]   Not identified MB Latch number: 0
+[08/12 16:22:21     53s]   Number of sequential cells which are not FFs: 20
+[08/12 16:22:21     53s] Total number of combinational cells: 338
+[08/12 16:22:21     53s] Total number of sequential cells: 66
+[08/12 16:22:21     53s] Total number of tristate cells: 0
+[08/12 16:22:21     53s] Total number of level shifter cells: 0
+[08/12 16:22:21     53s] Total number of power gating cells: 0
+[08/12 16:22:21     53s] Total number of isolation cells: 0
+[08/12 16:22:21     53s] Total number of power switch cells: 0
+[08/12 16:22:21     53s] Total number of pulse generator cells: 0
+[08/12 16:22:21     53s] Total number of always on buffers: 0
+[08/12 16:22:21     53s] Total number of retention cells: 0
+[08/12 16:22:21     53s] Total number of physical cells: 0
+[08/12 16:22:21     53s] List of usable buffers: BUFx10_ASAP7_75t_L BUFx12_ASAP7_75t_L BUFx12f_ASAP7_75t_L BUFx16f_ASAP7_75t_L BUFx24_ASAP7_75t_L BUFx2_ASAP7_75t_L BUFx3_ASAP7_75t_L BUFx4_ASAP7_75t_L BUFx5_ASAP7_75t_L BUFx4f_ASAP7_75t_L BUFx6f_ASAP7_75t_L BUFx8_ASAP7_75t_L HB1xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx24_ASAP7_75t_R BUFx2_ASAP7_75t_R BUFx3_ASAP7_75t_R BUFx4_ASAP7_75t_R BUFx5_ASAP7_75t_R BUFx4f_ASAP7_75t_R BUFx6f_ASAP7_75t_R BUFx8_ASAP7_75t_R HB1xp67_ASAP7_75t_R
+[08/12 16:22:21     53s] Total number of usable buffers: 27
+[08/12 16:22:21     53s] List of unusable buffers:
+[08/12 16:22:21     53s] Total number of unusable buffers: 0
+[08/12 16:22:21     53s] List of usable inverters: CKINVDCx10_ASAP7_75t_L CKINVDCx12_ASAP7_75t_L CKINVDCx11_ASAP7_75t_L CKINVDCx14_ASAP7_75t_L CKINVDCx16_ASAP7_75t_L CKINVDCx20_ASAP7_75t_L CKINVDCx8_ASAP7_75t_L CKINVDCx5p33_ASAP7_75t_L CKINVDCx6p67_ASAP7_75t_L CKINVDCx9p33_ASAP7_75t_L INVx11_ASAP7_75t_L INVx13_ASAP7_75t_L INVx1_ASAP7_75t_L INVx2_ASAP7_75t_L INVx3_ASAP7_75t_L INVx4_ASAP7_75t_L INVx5_ASAP7_75t_L INVx6_ASAP7_75t_L INVx8_ASAP7_75t_L INVxp67_ASAP7_75t_L INVxp33_ASAP7_75t_L CKINVDCx10_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx11_ASAP7_75t_R CKINVDCx14_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx20_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R CKINVDCx5p33_ASAP7_75t_R CKINVDCx6p67_ASAP7_75t_R CKINVDCx9p33_ASAP7_75t_R INVx11_ASAP7_75t_R INVx13_ASAP7_75t_R INVx1_ASAP7_75t_R INVx2_ASAP7_75t_R INVx3_ASAP7_75t_R INVx4_ASAP7_75t_R INVx5_ASAP7_75t_R INVx6_ASAP7_75t_R INVx8_ASAP7_75t_R INVxp67_ASAP7_75t_R INVxp33_ASAP7_75t_R
+[08/12 16:22:21     53s] Total number of usable inverters: 42
+[08/12 16:22:21     53s] List of unusable inverters:
+[08/12 16:22:21     53s] Total number of unusable inverters: 0
+[08/12 16:22:21     53s] List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_R
+[08/12 16:22:21     53s] Total number of identified usable delay cells: 5
+[08/12 16:22:21     53s] List of identified unusable delay cells:
+[08/12 16:22:21     53s] Total number of identified unusable delay cells: 0
+[08/12 16:22:21     53s] 
+[08/12 16:22:21     53s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) in restoreDesign End ...
+[08/12 16:22:21     53s] 
+[08/12 16:22:21     53s] TimeStamp Deleting Cell Server Begin ...
+[08/12 16:22:21     53s] 
+[08/12 16:22:21     53s] TimeStamp Deleting Cell Server End ...
+[08/12 16:22:21     53s] Ending "Cell type marking" (total cpu=0:00:00.0, real=0:00:00.0, peak res=2301.0M, current mem=2301.0M)
+[08/12 16:22:21     53s] 
+[08/12 16:22:21     53s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) in restoreDesign Begin ...
+[08/12 16:22:21     53s] Summary for sequential cells identification: 
+[08/12 16:22:21     53s]   Identified SBFF number: 34
+[08/12 16:22:21     53s]   Identified MBFF number: 0
+[08/12 16:22:21     53s]   Identified SB Latch number: 12
+[08/12 16:22:21     53s]   Identified MB Latch number: 0
+[08/12 16:22:21     53s]   Not identified SBFF number: 0
+[08/12 16:22:21     53s]   Not identified MBFF number: 0
+[08/12 16:22:21     53s]   Not identified SB Latch number: 0
+[08/12 16:22:21     53s]   Not identified MB Latch number: 0
+[08/12 16:22:21     53s]   Number of sequential cells which are not FFs: 20
+[08/12 16:22:21     53s]  Visiting view : view_tt
+[08/12 16:22:21     53s]    : PowerDomain = none : Weighted F : unweighted  = 6.70 (1.000) with rcCorner = 0
+[08/12 16:22:21     53s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[08/12 16:22:21     53s]  Visiting view : view_tt
+[08/12 16:22:21     53s]    : PowerDomain = none : Weighted F : unweighted  = 6.70 (1.000) with rcCorner = 0
+[08/12 16:22:21     53s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[08/12 16:22:21     53s] 
+[08/12 16:22:21     53s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) in restoreDesign End ...
+[08/12 16:22:21     53s] 
+[08/12 16:22:21     53s] TimeStamp Deleting Cell Server Begin ...
+[08/12 16:22:21     53s] 
+[08/12 16:22:21     53s] TimeStamp Deleting Cell Server End ...
+[08/12 16:22:21     53s] Reading floorplan file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/riscv_pipeline.fp.gz (mem = 4468.6M).
+[08/12 16:22:21     53s] % Begin Load floorplan data ... (date=08/12 16:22:21, mem=2304.9M)
+[08/12 16:22:21     53s] *info: reset 37303 existing net BottomPreferredLayer and AvoidDetour
+[08/12 16:22:21     53s] Deleting old partition specification.
+[08/12 16:22:21     53s] Set FPlanBox to (0 0 1471680 1471680)
+[08/12 16:22:22     53s]  ... processed partition successfully.
+[08/12 16:22:22     53s] Reading binary special route file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/riscv_pipeline.fp.spr.gz (Created by Innovus v23.14-s088_1 on Wed Aug 12 16:03:43 2026, version: 1)
+[08/12 16:22:22     53s] Convert 0 swires and 0 svias from compressed groups
+[08/12 16:22:22     53s] 410 swires and 496 svias were compressed
+[08/12 16:22:22     53s] 410 swires and 496 svias were decompressed from small or sparse groups
+[08/12 16:22:22     53s] Ending "Read special route file" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2322.3M, current mem=2322.3M)
+[08/12 16:22:22     53s] There are 69 nets with weight being set
+[08/12 16:22:22     53s] There are 70 nets with bottomPreferredRoutingLayer being set
+[08/12 16:22:22     53s] There are 69 nets with avoidDetour being set
+[08/12 16:22:22     53s] Extracting standard cell pins and blockage ...... 
+[08/12 16:22:22     53s] Pin and blockage extraction finished
+[08/12 16:22:22     53s] % End Load floorplan data ... (date=08/12 16:22:22, total cpu=0:00:00.2, real=0:00:01.0, peak res=2322.3M, current mem=2321.7M)
+[08/12 16:22:22     53s] Reading congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/riscv_pipeline.route.congmap.gz ...
+[08/12 16:22:22     53s] Suppress "**WARN ..." messages.
+[08/12 16:22:22     53s] Changing maximum routing layer from 10 to 7.
+[08/12 16:22:22     53s] routingBox: (0 0) (1471680 1471680)
+[08/12 16:22:22     53s] coreBox:    (15552 15552) (1456128 1456128)
+[08/12 16:22:22     53s] Un-suppress "**WARN ..." messages.
+[08/12 16:22:22     53s] % Begin Load SymbolTable ... (date=08/12 16:22:22, mem=2323.5M)
+[08/12 16:22:22     53s] % End Load SymbolTable ... (date=08/12 16:22:22, total cpu=0:00:00.2, real=0:00:00.0, peak res=2335.0M, current mem=2335.0M)
+[08/12 16:22:22     53s] Loading place ...
+[08/12 16:22:22     53s] % Begin Load placement data ... (date=08/12 16:22:22, mem=2335.0M)
+[08/12 16:22:22     53s] Reading placement file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/riscv_pipeline.place.gz.
+[08/12 16:22:22     53s] ** Reading stdCellPlacement_binary (Created by Innovus v23.14-s088_1 on Wed Aug 12 16:03:42 2026, version# 2) ...
+[08/12 16:22:22     54s] Read Views for adaptive view pruning ...
+[08/12 16:22:22     54s] Read 0 views from Binary DB for adaptive view pruning
+[08/12 16:22:22     54s] *** applyConnectGlobalNets disabled.
+[08/12 16:22:22     54s] *** Completed restorePlace (cpu=0:00:00.2 real=0:00:00.0 mem=4476.6M) ***
+[08/12 16:22:22     54s] Total net length = 6.116e+05 (2.854e+05 3.262e+05) (ext = 5.388e+04)
+[08/12 16:22:22     54s] % End Load placement data ... (date=08/12 16:22:22, total cpu=0:00:00.2, real=0:00:00.0, peak res=2364.1M, current mem=2364.1M)
+[08/12 16:22:22     54s] Reading PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/riscv_pipeline.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on       Wed Aug 12 16:03:42 2026)
+[08/12 16:22:22     54s] *** Completed restorePGFile (cpu=0:00:00.0 real=0:00:00.0 mem=4476.6M) ***
+[08/12 16:22:22     54s] % Begin Load routing data ... (date=08/12 16:22:22, mem=2367.4M)
+[08/12 16:22:22     54s] Reading routing file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/riscv_pipeline.route.gz.
+[08/12 16:22:22     54s] Reading Innovus routing data (Created by Innovus v23.14-s088_1 on Wed Aug 12 16:03:42 2026 Format: 23.1) ...
+[08/12 16:22:22     54s] *** Total 36561 nets are successfully restored.
+[08/12 16:22:22     54s] *** Completed restoreRoute (cpu=0:00:00.4 real=0:00:00.0 mem=4476.6M) ***
+[08/12 16:22:22     54s] % End Load routing data ... (date=08/12 16:22:22, total cpu=0:00:00.4, real=0:00:00.0, peak res=2418.3M, current mem=2418.3M)
+[08/12 16:22:22     54s] TAT_INFO: ::restoreCongMap REAL = 0 : CPU = 0 : MEM = 0.
+[08/12 16:22:22     54s] Reading property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/riscv_pipeline.prop
+[08/12 16:22:22     54s] *** Completed restoreProperty (cpu=0:00:00.0 real=0:00:00.0 mem=4468.6M) ***
+[08/12 16:22:22     54s] Reading dirtyarea snapshot file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/riscv_pipeline.db.da.gz (Create by Innovus v23.14-s088_1 on Wed Aug 12 16:03:43 2026, version: 7).
+[08/12 16:22:23     55s] Set Default Input Pin Transition as 0.1 ps.
+[08/12 16:22:23     55s] #USet: HiLayer Color Conflict For Pin-Track Alignment = 1.
+[08/12 16:22:24     55s] Loading preRoute extraction data from directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/extraction/' ...
+[08/12 16:22:24     55s] eee: Design meta data check started
+[08/12 16:22:24     55s] eee: Design meta data check completed
+[08/12 16:22:24     55s] Extraction setup Started for TopCell riscv_pipeline 
+[08/12 16:22:24     55s] Initializing multi-corner RC extraction with 1 active RC Corners ...
+[08/12 16:22:24     55s] eee: __QRC_SADV_USE_LE__ is set 0
+[08/12 16:22:24     56s] Generating auto layer map file.
+[08/12 16:22:24     56s] eee:  LayerId	    Name	QrcTechId	QrcTechName	Type
+[08/12 16:22:24     56s] eee:        1	      M1	        2	       lisd	Metal          
+[08/12 16:22:24     56s] eee:       34	      V1	        3	         v0	Via            
+[08/12 16:22:24     56s] eee:        2	      M2	        4	         m1	Metal          
+[08/12 16:22:24     56s] eee:       35	      V2	        5	         v1	Via            
+[08/12 16:22:24     56s] eee:        3	      M3	        6	         m2	Metal          
+[08/12 16:22:24     56s] eee:       36	      V3	        7	         v2	Via            
+[08/12 16:22:24     56s] eee:        4	      M4	        8	         m3	Metal          
+[08/12 16:22:24     56s] eee:       37	      V4	        9	         v3	Via            
+[08/12 16:22:24     56s] eee:        5	      M5	       10	         m4	Metal          
+[08/12 16:22:24     56s] eee:       38	      V5	       11	         v4	Via            
+[08/12 16:22:24     56s] eee:        6	      M6	       12	         m5	Metal          
+[08/12 16:22:24     56s] eee:       39	      V6	       13	         v5	Via            
+[08/12 16:22:24     56s] eee:        7	      M7	       14	         m6	Metal          
+[08/12 16:22:24     56s] eee:       40	      V7	       15	         v6	Via            
+[08/12 16:22:24     56s] eee:        8	      M8	       16	         m7	Metal          
+[08/12 16:22:24     56s] eee:       41	      V8	       17	         v7	Via            
+[08/12 16:22:24     56s] eee:        9	      M9	       18	         m8	Metal          
+[08/12 16:22:24     56s] eee:       42	      V9	       19	         v8	Via            
+[08/12 16:22:24     56s] eee:       10	     Pad	       20	         m9	Metal          
+[08/12 16:22:24     56s] eee: TechFile: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_scaled4xV06
+[08/12 16:22:24     56s] eee: HoWee  : 0 0 0 0 0 0 0 0 0 0 
+[08/12 16:22:24     56s] eee: Erosn  : 0 0 0 0 0 0 0 0 0 0 
+[08/12 16:22:24     56s] eee: nrColor: 0 0 0 0 0 0 0 0 0 0 
+[08/12 16:22:24     56s] eee: Save / Restore of RC patterns enabled 
+[08/12 16:22:24     56s] eee: Pattern meta data check started
+[08/12 16:22:24     56s] eee: Pattern meta data check completed
+[08/12 16:22:24     56s] eee: Pattern data restore started
+[08/12 16:22:24     56s] Loading preRoute extracted patterns from file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/riscv_pipeline.techData.gz' ...
+[08/12 16:22:24     56s] eee: Pattern data restore completed
+[08/12 16:22:24     56s] Completed (cpu: 0:00:00.3 real: 0:00:00.0)
+[08/12 16:22:24     56s] Set Shrink Factor to 1.00000
+[08/12 16:22:24     56s] Summary of Active RC-Corners : 
+[08/12 16:22:24     56s]  
+[08/12 16:22:24     56s]  Analysis View: view_tt
+[08/12 16:22:24     56s]     RC-Corner Name        : rc_typ
+[08/12 16:22:24     56s]     RC-Corner Index       : 0
+[08/12 16:22:24     56s]     RC-Corner Temperature : 25 Celsius
+[08/12 16:22:24     56s]     RC-Corner Cap Table   : ''
+[08/12 16:22:24     56s]     RC-Corner PreRoute Res Factor         : 1
+[08/12 16:22:24     56s]     RC-Corner PreRoute Cap Factor         : 1
+[08/12 16:22:24     56s]     RC-Corner PostRoute Res Factor        : 1 {1 1 1}
+[08/12 16:22:24     56s]     RC-Corner PostRoute Cap Factor        : 1 {1 1 1}
+[08/12 16:22:24     56s]     RC-Corner PostRoute XCap Factor       : 1 {1 1 1}
+[08/12 16:22:24     56s]     RC-Corner PreRoute Clock Res Factor   : 1	[Derived from postRoute_res (effortLevel low)]
+[08/12 16:22:24     56s]     RC-Corner PreRoute Clock Cap Factor   : 1	[Derived from postRoute_cap (effortLevel low)]
+[08/12 16:22:24     56s]     RC-Corner PostRoute Clock Cap Factor  : 1 {1 1 1} 	[Derived from postRoute_cap (effortLevel medium)]
+[08/12 16:22:24     56s]     RC-Corner PostRoute Clock Res Factor  : 1 {1 1 1} 	[Derived from postRoute_res (effortLevel medium)]
+[08/12 16:22:24     56s]     RC-Corner PostRoute Clock coupling capacitance Factor : 1 {1 1 1} 	[Derived from postRoute_xcap (effortLevel medium)]
+[08/12 16:22:24     56s]     RC-Corner Technology file: '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_scaled4xV06'
+[08/12 16:22:24     56s] eee: RC Grid memory allocated = 155520 (36 X 36 X 10 X 12b)
+[08/12 16:22:24     56s] eee: Grid density data restore started
+[08/12 16:22:24     56s] eee: Grid density data restore completed
+[08/12 16:22:24     56s] eee: pegSigSF=1.070000
+[08/12 16:22:24     56s] Initializing multi-corner resistance tables ...
+[08/12 16:22:24     56s] eee: Blockage data restore started... completed.
+[08/12 16:22:24     56s] eee: Grid unit RC data restore started
+[08/12 16:22:24     56s] eee:     Restore started for corner rc_typ
+[08/12 16:22:24     56s] eee:         Current session: rc_typ Tech: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_scaled4xV06 25.000000 1.000000 1.000000 
+[08/12 16:22:24     56s] eee:         Saved   session: rc_typ Tech: /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 25.000000 1.000000 1.000000 
+[08/12 16:22:24     56s] eee:     Restore completed for corner rc_typ
+[08/12 16:22:24     56s] eee: Grid unit RC data restore completed
+[08/12 16:22:24     56s] eee: l=1 avDens=0.000872 usedTrk=75.413337 availTrk=86475.000000 sigTrk=75.413337
+[08/12 16:22:24     56s] eee: l=2 avDens=0.199259 usedTrk=16722.826294 availTrk=83925.000000 sigTrk=16722.826294
+[08/12 16:22:24     56s] eee: l=3 avDens=0.280997 usedTrk=23645.915543 availTrk=84150.000000 sigTrk=23645.915543
+[08/12 16:22:24     56s] eee: l=4 avDens=0.101394 usedTrk=6176.806668 availTrk=60918.750000 sigTrk=6176.806668
+[08/12 16:22:24     56s] eee: l=5 avDens=0.193082 usedTrk=10889.824443 availTrk=56400.000000 sigTrk=10889.824443
+[08/12 16:22:24     56s] eee: l=6 avDens=0.202477 usedTrk=8883.658521 availTrk=43875.000000 sigTrk=8883.658521
+[08/12 16:22:24     56s] eee: l=7 avDens=0.052699 usedTrk=1592.820743 availTrk=30225.000000 sigTrk=1592.820743
+[08/12 16:22:24     56s] eee: l=8 avDens=0.070166 usedTrk=134.192592 availTrk=1912.500000 sigTrk=134.192592
+[08/12 16:22:24     56s] eee: l=9 avDens=0.065731 usedTrk=134.091852 availTrk=2040.000000 sigTrk=134.091852
+[08/12 16:22:24     56s] eee: l=10 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[08/12 16:22:24     56s] eee: LAM-FP: thresh=1 ; dimX=2555.000000 ; dimY=2555.000000 ; multX=1.000000 ; multY=1.000000 ; minP=576 ; fpMult=1.000000 ;
+[08/12 16:22:24     56s] eee: LAM: n=40 LLS=2-3 HLS=3-5 rDens=0.313233 uaWl=0.999655 uaWlH=0.379100 aWlH=0.000300 lMod=0 pMax=0.871500 pMod=80 pModAss=50 wcR=0.547200 crit=0.000548 siPrev=0 newSi=0.001600 wHLS=1.368800 viaL=0.000000 shortMod=0.002741 fModUnas=0.000137 fModAs=0.000137 pDens=0.500000 
+[08/12 16:22:24     56s] eee: uR 0.002835 of RC Grid (1 0 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003175 of RC Grid (1 29 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003267 of RC Grid (1 30 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003363 of RC Grid (1 31 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003364 of RC Grid (1 32 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003364 of RC Grid (1 33 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003360 of RC Grid (4 33 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002892 of RC Grid (6 15 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002841 of RC Grid (6 33 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002339 of RC Grid (4 0 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002129 of RC Grid (4 1 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002204 of RC Grid (4 2 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003364 of RC Grid (8 0 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003364 of RC Grid (8 33 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002878 of RC Grid (11 11 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002866 of RC Grid (13 32 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003153 of RC Grid (13 33 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003364 of RC Grid (15 0 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002891 of RC Grid (15 24 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003364 of RC Grid (15 32 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002134 of RC Grid (12 3 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002074 of RC Grid (12 7 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002139 of RC Grid (12 8 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002066 of RC Grid (12 9 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002045 of RC Grid (12 11 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002132 of RC Grid (12 15 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002044 of RC Grid (12 19 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002073 of RC Grid (12 22 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.001998 of RC Grid (12 29 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002169 of RC Grid (12 31 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002228 of RC Grid (12 32 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002354 of RC Grid (12 33 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002059 of RC Grid (13 0 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002184 of RC Grid (13 1 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002158 of RC Grid (13 2 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002206 of RC Grid (13 3 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002170 of RC Grid (13 4 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002088 of RC Grid (13 5 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002126 of RC Grid (13 6 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002257 of RC Grid (13 7 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002285 of RC Grid (13 8 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002261 of RC Grid (13 9 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002178 of RC Grid (13 10 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002229 of RC Grid (13 11 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002227 of RC Grid (13 12 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002104 of RC Grid (13 13 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002168 of RC Grid (13 14 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002213 of RC Grid (13 15 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002194 of RC Grid (13 16 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002188 of RC Grid (13 17 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002145 of RC Grid (13 18 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002229 of RC Grid (13 19 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002288 of RC Grid (13 20 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002182 of RC Grid (13 21 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002205 of RC Grid (13 22 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002089 of RC Grid (13 23 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002111 of RC Grid (13 25 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002159 of RC Grid (13 27 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002015 of RC Grid (13 28 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002141 of RC Grid (13 29 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002240 of RC Grid (13 30 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002271 of RC Grid (13 31 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002340 of RC Grid (13 32 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002354 of RC Grid (13 33 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002328 of RC Grid (14 0 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002212 of RC Grid (14 1 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002049 of RC Grid (14 3 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002096 of RC Grid (14 7 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003263 of RC Grid (20 0 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002827 of RC Grid (20 8 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002871 of RC Grid (20 9 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002107 of RC Grid (4 3 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002190 of RC Grid (4 4 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002139 of RC Grid (4 5 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002131 of RC Grid (4 6 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002100 of RC Grid (4 7 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002161 of RC Grid (14 8 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002059 of RC Grid (14 12 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002073 of RC Grid (14 16 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002020 of RC Grid (14 18 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002169 of RC Grid (14 31 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002354 of RC Grid (14 32 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002250 of RC Grid (14 33 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002354 of RC Grid (15 0 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002218 of RC Grid (15 1 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002138 of RC Grid (15 2 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002084 of RC Grid (15 3 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002071 of RC Grid (15 5 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002096 of RC Grid (15 6 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002061 of RC Grid (15 7 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002241 of RC Grid (15 8 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002194 of RC Grid (15 9 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002139 of RC Grid (15 12 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002086 of RC Grid (15 13 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002110 of RC Grid (15 14 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002215 of RC Grid (15 15 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002175 of RC Grid (15 16 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002172 of RC Grid (15 17 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002181 of RC Grid (15 18 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002139 of RC Grid (15 19 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003157 of RC Grid (23 0 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002241 of RC Grid (4 8 6) is > max uR 0.001996 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003364 of RC Grid (16 0 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.002865 of RC Grid (11 14 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003364 of RC Grid (25 0 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: uR 0.003364 of RC Grid (3 33 5) is > max uR 0.002825 of layer.
+[08/12 16:22:24     56s] eee: dbu = 4000, Design = [ll(0.000000, 0.000000) ur(367.920000, 367.920000)], Layers = [f(10) b(0)], Grid size = 10.800000 um, Grid Dim = (35 X 35)
+[08/12 16:22:24     56s] eee: Metal Layers Info:
+[08/12 16:22:24     56s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[08/12 16:22:24     56s] eee: |   Layer  |  Id |    W    |    S    |    P    |   uC   |   uR   | D | T | wS |
+[08/12 16:22:24     56s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[08/12 16:22:24     56s] eee: |       M1 |   1 |   0.072 |   0.072 |   0.144 |  0.039 |  13.89 | V | 0 |  1 |
+[08/12 16:22:24     56s] eee: |       M2 |   2 |   0.072 |   0.072 |   0.144 |  0.049 |  16.96 | H | 0 |  1 |
+[08/12 16:22:24     56s] eee: |       M3 |   3 |   0.072 |   0.072 |   0.144 |  0.047 |  16.96 | V | 0 |  1 |
+[08/12 16:22:24     56s] eee: |       M4 |   4 |   0.096 |   0.096 |   0.192 |  0.042 |  11.74 | H | 0 |  1 |
+[08/12 16:22:24     56s] eee: |       M5 |   5 |   0.096 |   0.096 |   0.216 |  0.043 |  10.27 | V | 0 |  1 |
+[08/12 16:22:24     56s] eee: |       M6 |   6 |   0.128 |   0.128 |   0.288 |  0.038 |   7.26 | H | 0 |  1 |
+[08/12 16:22:24     56s] eee: |       M7 |   7 |   0.128 |   0.128 |   0.288 |  0.045 |   6.77 | V | 0 |  1 |
+[08/12 16:22:24     56s] eee: |       M8 |   8 |   0.160 |   0.160 |   0.384 |  0.038 |   5.20 | H | 0 |  1 |
+[08/12 16:22:24     56s] eee: |       M9 |   9 |   0.160 |   0.160 |   0.360 |  0.044 |   4.83 | V | 0 |  1 |
+[08/12 16:22:24     56s] eee: |      Pad |  10 |   0.160 |   8.000 |   8.280 |  0.021 |   4.83 | H | 0 |  1 |
+[08/12 16:22:24     56s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[08/12 16:22:24     56s] eee: uC/uR for corner rc_typ, min-width/min-spacing, 30 perc over/under densities.
+[08/12 16:22:24     56s] eee: +-----------------------NDR Info-----------------------+
+[08/12 16:22:24     56s] eee: NDR Count = 0, Fake NDR = 0
+[08/12 16:22:24     56s] Default value for postRoute extraction mode's effortLevel (-effortLevel option of setExtractRCMode) changed to 'medium'.
+[08/12 16:22:24     56s] Restore PreRoute all RC Grid data successful.Start generating vias ..
+[08/12 16:22:24     56s] #Skip building auto via since it is turned off.
+[08/12 16:22:24     56s] Via generation completed.
+[08/12 16:22:24     56s] % Begin Load power constraints ... (date=08/12 16:22:24, mem=2472.6M)
+[08/12 16:22:24     56s] % End Load power constraints ... (date=08/12 16:22:24, total cpu=0:00:00.1, real=0:00:00.0, peak res=2478.7M, current mem=2478.7M)
+[08/12 16:22:24     56s] % Begin load AAE data ... (date=08/12 16:22:24, mem=2522.4M)
+[08/12 16:22:25     56s] **WARN: (IMPESI-3505):	setDelayCalMode -eng_enablePrePlacedFlow false (default=false) will be obsoleted along with its sgs2set equivalent.  This parameter will continue to be supported in the current release, but will be removed in the next major release of the software.
+[08/12 16:22:25     56s] AAE DB initialization (MEM=2532.058594 CPU=0:00:00.0 REAL=0:00:00.0) 
+[08/12 16:22:25     56s] % End load AAE data ... (date=08/12 16:22:25, total cpu=0:00:00.3, real=0:00:01.0, peak res=2532.1M, current mem=2532.1M)
+[08/12 16:22:25     56s] Restoring CCOpt config...
+[08/12 16:22:25     56s] 
+[08/12 16:22:25     56s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) in restoreDesign Begin ...
+[08/12 16:22:25     56s] Summary for sequential cells identification: 
+[08/12 16:22:25     56s]   Identified SBFF number: 34
+[08/12 16:22:25     56s]   Identified MBFF number: 0
+[08/12 16:22:25     56s]   Identified SB Latch number: 12
+[08/12 16:22:25     56s]   Identified MB Latch number: 0
+[08/12 16:22:25     56s]   Not identified SBFF number: 0
+[08/12 16:22:25     56s]   Not identified MBFF number: 0
+[08/12 16:22:25     56s]   Not identified SB Latch number: 0
+[08/12 16:22:25     56s]   Not identified MB Latch number: 0
+[08/12 16:22:25     56s]   Number of sequential cells which are not FFs: 20
+[08/12 16:22:25     56s]  Visiting view : view_tt
+[08/12 16:22:25     56s]    : PowerDomain = none : Weighted F : unweighted  = 5.00 (1.000) with rcCorner = 0
+[08/12 16:22:25     56s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[08/12 16:22:25     56s]  Visiting view : view_tt
+[08/12 16:22:25     56s]    : PowerDomain = none : Weighted F : unweighted  = 5.00 (1.000) with rcCorner = 0
+[08/12 16:22:25     56s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[08/12 16:22:25     56s] 
+[08/12 16:22:25     56s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) in restoreDesign End ...
+[08/12 16:22:25     56s]   Extracting original clock gating for CLK...
+[08/12 16:22:25     56s]     clock_tree CLK contains 6114 sinks and 0 clock gates.
+[08/12 16:22:25     56s]   Extracting original clock gating for CLK done.
+[08/12 16:22:25     56s]   The skew group CLK/mode_func was created. It contains 6114 sinks and 1 sources.
+[08/12 16:22:25     56s]   The skew group CLK/mode_func was created. It contains 6114 sinks and 1 sources.
+[08/12 16:22:25     56s] Restoring CCOpt config done.
+[08/12 16:22:25     56s] 
+[08/12 16:22:25     56s] TimeStamp Deleting Cell Server Begin ...
+[08/12 16:22:25     56s] 
+[08/12 16:22:25     56s] TimeStamp Deleting Cell Server End ...
+[08/12 16:22:25     56s] 
+[08/12 16:22:25     56s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) in restoreDesign Begin ...
+[08/12 16:22:25     56s] Summary for sequential cells identification: 
+[08/12 16:22:25     56s]   Identified SBFF number: 34
+[08/12 16:22:25     56s]   Identified MBFF number: 0
+[08/12 16:22:25     56s]   Identified SB Latch number: 12
+[08/12 16:22:25     56s]   Identified MB Latch number: 0
+[08/12 16:22:25     56s]   Not identified SBFF number: 0
+[08/12 16:22:25     56s]   Not identified MBFF number: 0
+[08/12 16:22:25     56s]   Not identified SB Latch number: 0
+[08/12 16:22:25     56s]   Not identified MB Latch number: 0
+[08/12 16:22:25     56s]   Number of sequential cells which are not FFs: 20
+[08/12 16:22:25     56s] Total number of combinational cells: 338
+[08/12 16:22:25     56s] Total number of sequential cells: 66
+[08/12 16:22:25     56s] Total number of tristate cells: 0
+[08/12 16:22:25     56s] Total number of level shifter cells: 0
+[08/12 16:22:25     56s] Total number of power gating cells: 0
+[08/12 16:22:25     56s] Total number of isolation cells: 0
+[08/12 16:22:25     56s] Total number of power switch cells: 0
+[08/12 16:22:25     56s] Total number of pulse generator cells: 0
+[08/12 16:22:25     56s] Total number of always on buffers: 0
+[08/12 16:22:25     56s] Total number of retention cells: 0
+[08/12 16:22:25     56s] Total number of physical cells: 0
+[08/12 16:22:25     56s] List of usable buffers: BUFx10_ASAP7_75t_L BUFx12_ASAP7_75t_L BUFx12f_ASAP7_75t_L BUFx16f_ASAP7_75t_L BUFx24_ASAP7_75t_L BUFx2_ASAP7_75t_L BUFx3_ASAP7_75t_L BUFx4_ASAP7_75t_L BUFx5_ASAP7_75t_L BUFx4f_ASAP7_75t_L BUFx6f_ASAP7_75t_L BUFx8_ASAP7_75t_L HB1xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx24_ASAP7_75t_R BUFx2_ASAP7_75t_R BUFx3_ASAP7_75t_R BUFx4_ASAP7_75t_R BUFx5_ASAP7_75t_R BUFx4f_ASAP7_75t_R BUFx6f_ASAP7_75t_R BUFx8_ASAP7_75t_R HB1xp67_ASAP7_75t_R
+[08/12 16:22:25     56s] Total number of usable buffers: 27
+[08/12 16:22:25     56s] List of unusable buffers:
+[08/12 16:22:25     56s] Total number of unusable buffers: 0
+[08/12 16:22:25     56s] List of usable inverters: CKINVDCx10_ASAP7_75t_L CKINVDCx12_ASAP7_75t_L CKINVDCx11_ASAP7_75t_L CKINVDCx14_ASAP7_75t_L CKINVDCx16_ASAP7_75t_L CKINVDCx20_ASAP7_75t_L CKINVDCx8_ASAP7_75t_L CKINVDCx5p33_ASAP7_75t_L CKINVDCx6p67_ASAP7_75t_L CKINVDCx9p33_ASAP7_75t_L INVx11_ASAP7_75t_L INVx13_ASAP7_75t_L INVx1_ASAP7_75t_L INVx2_ASAP7_75t_L INVx3_ASAP7_75t_L INVx4_ASAP7_75t_L INVx5_ASAP7_75t_L INVx6_ASAP7_75t_L INVx8_ASAP7_75t_L INVxp67_ASAP7_75t_L INVxp33_ASAP7_75t_L CKINVDCx10_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx11_ASAP7_75t_R CKINVDCx14_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx20_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R CKINVDCx5p33_ASAP7_75t_R CKINVDCx6p67_ASAP7_75t_R CKINVDCx9p33_ASAP7_75t_R INVx11_ASAP7_75t_R INVx13_ASAP7_75t_R INVx1_ASAP7_75t_R INVx2_ASAP7_75t_R INVx3_ASAP7_75t_R INVx4_ASAP7_75t_R INVx5_ASAP7_75t_R INVx6_ASAP7_75t_R INVx8_ASAP7_75t_R INVxp67_ASAP7_75t_R INVxp33_ASAP7_75t_R
+[08/12 16:22:25     56s] Total number of usable inverters: 42
+[08/12 16:22:25     56s] List of unusable inverters:
+[08/12 16:22:25     56s] Total number of unusable inverters: 0
+[08/12 16:22:25     56s] List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_R
+[08/12 16:22:25     56s] Total number of identified usable delay cells: 5
+[08/12 16:22:25     56s] List of identified unusable delay cells:
+[08/12 16:22:25     56s] Total number of identified unusable delay cells: 0
+[08/12 16:22:25     56s] 
+[08/12 16:22:25     56s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) in restoreDesign End ...
+[08/12 16:22:25     56s] 
+[08/12 16:22:25     56s] TimeStamp Deleting Cell Server Begin ...
+[08/12 16:22:25     56s] 
+[08/12 16:22:25     56s] TimeStamp Deleting Cell Server End ...
+[08/12 16:22:25     56s] **WARN: (IMPCTE-107):	The following globals have been obsoleted since version (null). They will be removed in the next release. 
+[08/12 16:22:25     56s] timing_aocv_enable_gba_combine_launch_capture
+[08/12 16:22:25     56s] timing_enable_backward_compatible_latch_thru_mt_mode
+[08/12 16:22:25     56s] timing_enable_separate_device_slew_effect_sensitivities
+[08/12 16:22:25     56s] % End load design ... (date=08/12 16:22:25, total cpu=0:00:34.5, real=0:00:10.0, peak res=4198.3M, current mem=2531.9M)
+[08/12 16:22:25     56s] report_message: '-start_cmd/-end_cmd' can not be nested. Interior calls do nothing. Ignore.
+[08/12 16:22:45     58s] <CMD> extractRC
+[08/12 16:22:45     58s] tQuantus: Need to rerun tQuantus because the top cell's isRCExtracted() is false.
+[08/12 16:22:45     58s] ### Net info: total nets: 37304
+[08/12 16:22:45     58s] ### Net info: dirty nets: 0
+[08/12 16:22:45     58s] ### Net info: marked as disconnected nets: 0
+[08/12 16:22:45     59s] ### Net info: fully routed nets: 36559
+[08/12 16:22:45     59s] ### Net info: trivial (< 2 pins) nets: 745
+[08/12 16:22:45     59s] ### Net info: unrouted nets: 0
+[08/12 16:22:45     59s] ### Net info: re-extraction nets: 0
+[08/12 16:22:45     59s] ### Net info: ignored nets: 0
+[08/12 16:22:45     59s] ### Net info: skip routing nets: 0
+[08/12 16:22:45     59s] #WARNING (NRIG-100) Ignoring auto generated timing constraints when routeWithTimingDriven set to false.
+[08/12 16:22:45     59s] ### import design signature (1): route=829216678 fixed_route=829216678 flt_obj=0 vio=1905142130 swire=1905142130 shield_wire=1 net_attr=1938852142 dirty_area=0 del_dirty_area=0 cell=287444601 placement=789603408 pin_access=1 inst_pattern=1 inst_orient=1 via=2127493176 routing_via=1 timing=1867278960 sns=1867278960 ppa_info=1246445805
+[08/12 16:22:45     59s] #Extract in post route mode
+[08/12 16:22:45     59s] #Finish check_net_pin_list step Enter extract_rc_in_nr_cmd
+[08/12 16:22:45     59s] ### init rcell_view design signature (2): route=829216678 flt_obj=0 net_attr=1938852142 dirty_area=0 del_dirty_area=0
+[08/12 16:22:45     59s] #Fast data preparation for tQuantus.
+[08/12 16:22:46     59s] Multithreaded Timing Analysis is initialized with 8 threads
+[08/12 16:22:46     59s] 
+[08/12 16:22:46     59s] #Start routing data preparation on Wed Aug 12 16:22:46 2026
+[08/12 16:22:46     59s] #
+[08/12 16:22:46     60s] #WARNING (NRDB-2040) Rule LEF_DEFAULT doesn't specify any vias that satisfy all of the area rules for layer M2 M3 M4 M5 M6 M7 M8 
+[08/12 16:22:46     60s] #WARNING (NRDB-778) No multicut vias which meet all area rules for LAYER M8 are defined in RULE LEF_DEFAULT. When a LEF MINIMUMCUT rule is defined for a layer, you must define multicut vias for the layer in the LEF file. Edit your LEF file and read it in again.
+[08/12 16:22:46     60s] #WARNING (NRDB-778) No multicut vias which meet all area rules for LAYER M9 are defined in RULE LEF_DEFAULT. When a LEF MINIMUMCUT rule is defined for a layer, you must define multicut vias for the layer in the LEF file. Edit your LEF file and read it in again.
+[08/12 16:22:46     60s] #WARNING (NRDB-778) No multicut vias which meet all area rules for LAYER Pad are defined in RULE LEF_DEFAULT. When a LEF MINIMUMCUT rule is defined for a layer, you must define multicut vias for the layer in the LEF file. Edit your LEF file and read it in again.
+[08/12 16:22:46     60s] # M1           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+[08/12 16:22:46     60s] # M2           H   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+[08/12 16:22:46     60s] # M3           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+[08/12 16:22:46     60s] # M4           H   Track-Pitch = 0.19200    Line-2-Via Pitch = 0.19200
+[08/12 16:22:46     60s] # M5           V   Track-Pitch = 0.21600    Line-2-Via Pitch = 0.19200
+[08/12 16:22:46     60s] # M6           H   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+[08/12 16:22:46     60s] # M7           V   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+[08/12 16:22:46     60s] # M8           H   Track-Pitch = 0.38400    Line-2-Via Pitch = 0.32000
+[08/12 16:22:46     60s] # M9           V   Track-Pitch = 0.36000    Line-2-Via Pitch = 0.32000
+[08/12 16:22:46     60s] # Pad          H   Track-Pitch = 8.28000    Line-2-Via Pitch = 8.28000
+[08/12 16:22:46     60s] #Regenerating Ggrids automatically.
+[08/12 16:22:46     60s] #Auto generating G-grids with size=15 tracks, using layer M3's pitch = 0.14400.
+[08/12 16:22:46     60s] #Using automatically generated G-grids.
+[08/12 16:22:46     60s] #Done routing data preparation.
+[08/12 16:22:46     60s] #cpu time = 00:00:00, elapsed time = 00:00:00, memory = 2873.04 (MB), peak = 4198.27 (MB)
+[08/12 16:22:46     60s] #Start routing data preparation on Wed Aug 12 16:22:46 2026
+[08/12 16:22:46     60s] #
+[08/12 16:22:46     60s] #Bottom routing layer index=2(M2), bottom routing layer for shielding=2(M2), bottom shield layer=2(M2)
+[08/12 16:22:46     60s] #shield_bottom_stripe_layer=1(M1), shield_top_stripe_layer=7(M7)
+[08/12 16:22:46     60s] #pin_access_rlayer=2(M2)
+[08/12 16:22:46     60s] #shield_top_dpt_rlayer=-1 top_rlayer=7 top_trim_metal_rlayer=-1 rlayer_lowest=1 bottom_rlayer=2
+[08/12 16:22:46     60s] #enable_trim_layer_shield=F enable_dpt_layer_shield=F has_line_end_grid=F
+[08/12 16:22:46     60s] #enable_dpt_layer_shield=F
+[08/12 16:22:46     60s] #has_line_end_grid=F
+[08/12 16:22:46     60s] #Regenerating Ggrids automatically.
+[08/12 16:22:46     60s] #Auto generating G-grids with size=15 tracks, using layer M3's pitch = 0.14400.
+[08/12 16:22:46     60s] #Using automatically generated G-grids.
+[08/12 16:22:46     60s] #Done routing data preparation.
+[08/12 16:22:46     60s] #cpu time = 00:00:01, elapsed time = 00:00:00, memory = 2890.45 (MB), peak = 4198.27 (MB)
+[08/12 16:22:46     60s] #
+[08/12 16:22:46     60s] #Start tQuantus RC extraction...
+[08/12 16:22:46     60s] #Start building rc corner(s)...
+[08/12 16:22:46     60s] #Number of RC Corner = 1
+[08/12 16:22:46     60s] #Corner rc_typ /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 25.000000 (real) 
+[08/12 16:22:46     60s] #(i=10, n=10 4000)
+[08/12 16:22:46     60s] #LISD -> M1 (1)
+[08/12 16:22:46     60s] #M1 -> M2 (2)
+[08/12 16:22:46     60s] #M2 -> M3 (3)
+[08/12 16:22:46     60s] #M3 -> M4 (4)
+[08/12 16:22:46     60s] #M4 -> M5 (5)
+[08/12 16:22:46     60s] #M5 -> M6 (6)
+[08/12 16:22:46     60s] #M6 -> M7 (7)
+[08/12 16:22:46     60s] #M7 -> M8 (8)
+[08/12 16:22:46     60s] #M8 -> M9 (9)
+[08/12 16:22:46     60s] #M9 -> Pad (10)
+[08/12 16:22:46     60s] #SADV-On
+[08/12 16:22:46     60s] # Corner(s) : 
+[08/12 16:22:46     60s] #rc_typ [25.00]
+[08/12 16:22:47     61s] # Corner id: 0
+[08/12 16:22:47     61s] # Layout Scale: 1.000000
+[08/12 16:22:47     61s] # Has Metal Fill model: yes
+[08/12 16:22:47     61s] # Temperature was set
+[08/12 16:22:47     61s] # Temperature : 25.000000
+[08/12 16:22:47     61s] # Ref. Temp   : 25.000000
+[08/12 16:22:47     61s] #SADV-Off
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #layer[1] tech width 288 != ict width 400.0
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #layer[1] tech spc 288 != ict spc 464.0
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #layer[4] tech width 384 != ict width 288.0
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #layer[4] tech spc 384 != ict spc 288.0
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #layer[6] tech width 512 != ict width 384.0
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #layer[6] tech spc 512 != ict spc 384.0
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #layer[8] tech width 640 != ict width 512.0
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #layer[8] tech spc 640 != ict spc 512.0
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #layer[10] tech spc 32000 != ict spc 640.0
+[08/12 16:22:47     61s] #total pattern=220 [10, 605]
+[08/12 16:22:47     61s] #Reading previously stored rc_model file ( /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat/libs/misc/rc_model.bin ) ...
+[08/12 16:22:47     61s] #found CAPMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
+[08/12 16:22:47     61s] #found RESMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 25.000000 
+[08/12 16:22:47     61s] #CCE Version read = IQuantus/TQuantus 23.1.1-s336
+[08/12 16:22:47     61s] #number model r/c [1,1] [10,605] read
+[08/12 16:22:47     61s] #0 rcmodel(s) requires rebuild
+[08/12 16:22:47     61s] #Build RC corners: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 2910.09 (MB), peak = 4198.27 (MB)
+[08/12 16:22:47     61s] #Finish check_net_pin_list step Enter extract
+[08/12 16:22:47     61s] #Start init net ripin tree building
+[08/12 16:22:47     61s] #Finish init net ripin tree building
+[08/12 16:22:47     61s] #Cpu time = 00:00:00
+[08/12 16:22:47     61s] #Elapsed time = 00:00:00
+[08/12 16:22:47     61s] #Increased memory = 1.47 (MB)
+[08/12 16:22:47     61s] #Total memory = 2911.56 (MB)
+[08/12 16:22:47     61s] #Peak memory = 4198.27 (MB)
+[08/12 16:22:47     61s] #Using multithreading with 8 threads.
+[08/12 16:22:47     61s] #begin processing metal fill model file
+[08/12 16:22:47     61s] #end processing metal fill model file
+[08/12 16:22:47     61s] #Length limit = 200 pitches
+[08/12 16:22:47     61s] #opt mode = 2
+[08/12 16:22:47     61s] #Finish check_net_pin_list step Fix net pin list
+[08/12 16:22:47     61s] #Start generate extraction boxes.
+[08/12 16:22:47     61s] #
+[08/12 16:22:47     61s] #Extract using 30 x 30 Hboxes
+[08/12 16:22:47     61s] #7x7 initial hboxes
+[08/12 16:22:47     61s] #Use area based hbox pruning.
+[08/12 16:22:47     61s] #0/0 hboxes pruned.
+[08/12 16:22:47     61s] #Complete generating extraction boxes.
+[08/12 16:22:47     61s] #Start step Extraction
+[08/12 16:22:47     61s] #Extract 36 hboxes with 8 threads on machine with  2.81GHz 1024KB Cache 12CPU...
+[08/12 16:22:47     61s] #Process 0 special clock nets for rc extraction
+[08/12 16:22:47     62s] #Total 36557 nets were built. 3001 nodes added to break long wires. 0 net(s) have incomplete routes.
+[08/12 16:22:48     72s] #Run Statistics for Extraction:
+[08/12 16:22:48     72s] #   Cpu time = 00:00:11, elapsed time = 00:00:02 .
+[08/12 16:22:48     72s] #   Increased memory =   357.30 (MB), total memory =  3272.70 (MB), peak memory =  4198.27 (MB)
+[08/12 16:22:48     72s] #Register nets and terms for rcdb /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d
+[08/12 16:22:49     74s] #Finish registering nets and terms for rcdb.
+[08/12 16:22:49     74s] #Simplify RC tree: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 3173.61 (MB), peak = 4198.27 (MB)
+[08/12 16:22:49     74s] #RC Statistics: 234611 Res, 132233 Ground Cap, 3399 XCap (Edge to Edge)
+[08/12 16:22:49     74s] #RC V/H edge ratio: 0.51, Avg V/H Edge Length: 7200.70 (123053), Avg L-Edge Length: 13214.63 (63335)
+[08/12 16:22:49     74s] #Nets and terms are pre-registered for rcdb /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d.
+[08/12 16:22:49     74s] #Start writing RC data.
+[08/12 16:22:49     74s] #Finish writing RC data
+[08/12 16:22:49     74s] #Finish writing rcdb with 271168 nodes, 234611 edges, and 8020 xcaps
+[08/12 16:22:49     74s] #cpu time = 00:00:01, elapsed time = 00:00:00, memory = 3165.01 (MB), peak = 4198.27 (MB)
+[08/12 16:22:49     74s] Restoring parasitic data from file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d' ...
+[08/12 16:22:49     74s] Opening parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d' for reading (mem: 5160.547M)
+[08/12 16:22:49     74s] Reading RCDB with compressed RC data.
+[08/12 16:22:49     74s] Opening parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d' for content verification (mem: 5160.547M)
+[08/12 16:22:49     74s] Reading RCDB with compressed RC data.
+[08/12 16:22:49     74s] Closing parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d': 0 access done (mem: 5160.547M)
+[08/12 16:22:49     74s] Closing parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d': 0 access done (mem: 5160.547M)
+[08/12 16:22:49     74s] Begin read_parasitics... (cpu: 0:00:00.0 real: 0:00:00.0 mem: 5160.547M)
+[08/12 16:22:49     74s] Following multi-corner parasitics specified:
+[08/12 16:22:49     74s] 	/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d (rcdb)
+[08/12 16:22:49     74s] Opening parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d' for reading (mem: 5160.547M)
+[08/12 16:22:49     74s] Reading RCDB with compressed RC data.
+[08/12 16:22:49     74s] 		Cell riscv_pipeline has rcdb /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d specified
+[08/12 16:22:49     74s] Cell riscv_pipeline, hinst 
+[08/12 16:22:49     74s] processing rcdb (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d) for hinst (top) of cell (riscv_pipeline);
+[08/12 16:22:49     75s] Closing parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d': 0 access done (mem: 5160.547M)
+[08/12 16:22:49     75s] Lumped Parasitic Loading Started (total cpu=0:00:00.0, real=0:00:00.0, current mem=5160.547M)
+[08/12 16:22:49     75s] Opening parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/riscv_pipeline_2476860_5f6217ab-570f-4226-8d33-c816aae08860_ECVU2y.rcdb.d/riscv_pipeline.rcdb.d' for reading (mem: 5160.547M)
+[08/12 16:22:49     75s] Reading RCDB with compressed RC data.
+[08/12 16:22:49     75s] Lumped Parasitic Loading Completed (total cpu=0:00:00.1, real=0:00:00.0, current mem=5160.547M)
+[08/12 16:22:49     75s] Closing parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/riscv_pipeline_2476860_5f6217ab-570f-4226-8d33-c816aae08860_ECVU2y.rcdb.d/riscv_pipeline.rcdb.d': 0 access done (mem: 5160.547M)
+[08/12 16:22:49     75s] Done read_parasitics... (cpu: 0:00:00.4 real: 0:00:00.0 mem: 5160.547M)
+[08/12 16:22:49     75s] #
+[08/12 16:22:49     75s] #Restore RCDB.
+[08/12 16:22:49     75s] #
+[08/12 16:22:49     75s] #Complete tQuantus RC extraction.
+[08/12 16:22:49     75s] #Cpu time = 00:00:14
+[08/12 16:22:49     75s] #Elapsed time = 00:00:03
+[08/12 16:22:49     75s] #Increased memory = 276.65 (MB)
+[08/12 16:22:49     75s] #Total memory = 3167.17 (MB)
+[08/12 16:22:49     75s] #Peak memory = 4198.27 (MB)
+[08/12 16:22:49     75s] #
+[08/12 16:22:49     75s] #3001 inserted nodes are removed
+[08/12 16:22:49     75s] #Restored 0 tie nets, 0 tie snets, 0 partial nets
+[08/12 16:22:49     75s] ### export design design signature (3): route=1952942095 fixed_route=1952942095 flt_obj=0 vio=1905142130 swire=1905142130 shield_wire=1 net_attr=586891213 dirty_area=0 del_dirty_area=0 cell=287444601 placement=789603408 pin_access=1 inst_pattern=1 inst_orient=1 via=2127493176 routing_via=1588071918 timing=1867278960 sns=1867278960 ppa_info=1246445805
+[08/12 16:22:49     76s] #Start Design Signature (0)
+[08/12 16:22:50     76s] #Finish Inst Signature in MT(43773242)
+[08/12 16:22:50     76s] #Finish Net Signature in MT(84090239)
+[08/12 16:22:50     76s] #Finish SNet Signature in MT (85064496)
+[08/12 16:22:50     76s] #Run time and memory report for RC extraction:
+[08/12 16:22:50     76s] #RC extraction running on  2.82GHz 1024KB Cache 12CPU.
+[08/12 16:22:50     76s] #Run Statistics for snet signature:
+[08/12 16:22:50     76s] #   Cpu time = 00:00:00, elapsed time = 00:00:00 , scale factor =  1.01/8, scale score = 0.13.
+[08/12 16:22:50     76s] #    Increased memory =    -5.00 (MB), total memory =  2861.75 (MB), peak memory =  4198.27 (MB)
+[08/12 16:22:50     76s] #Run Statistics for Net Final Signature:
+[08/12 16:22:50     76s] #   Cpu time = 00:00:00, elapsed time = 00:00:00 .
+[08/12 16:22:50     76s] #   Increased memory =     0.00 (MB), total memory =  2867.02 (MB), peak memory =  4198.27 (MB)
+[08/12 16:22:50     76s] #Run Statistics for Net launch:
+[08/12 16:22:50     76s] #   Cpu time = 00:00:00, elapsed time = 00:00:00 , scale factor =  7.41/8, scale score = 0.93.
+[08/12 16:22:50     76s] #    Increased memory =     0.06 (MB), total memory =  2867.02 (MB), peak memory =  4198.27 (MB)
+[08/12 16:22:50     76s] #Run Statistics for Net init_dbsNet_slist:
+[08/12 16:22:50     76s] #   Cpu time = 00:00:00, elapsed time = 00:00:00 .
+[08/12 16:22:50     76s] #   Increased memory =     0.28 (MB), total memory =  2866.96 (MB), peak memory =  4198.27 (MB)
+[08/12 16:22:50     76s] #Run Statistics for net signature:
+[08/12 16:22:50     76s] #   Cpu time = 00:00:00, elapsed time = 00:00:00 , scale factor =  6.36/8, scale score = 0.80.
+[08/12 16:22:50     76s] #    Increased memory =     0.06 (MB), total memory =  2866.74 (MB), peak memory =  4198.27 (MB)
+[08/12 16:22:50     76s] #Run Statistics for inst signature:
+[08/12 16:22:50     76s] #   Cpu time = 00:00:00, elapsed time = 00:00:00 , scale factor =  4.32/8, scale score = 0.54.
+[08/12 16:22:50     76s] #    Increased memory =    -6.27 (MB), total memory =  2866.68 (MB), peak memory =  4198.27 (MB)
+[08/12 16:22:50     76s] <CMD> rcOut -spef ./outputs/riscv_pipeline_pnr.spef -rc_corner rc_typ
+[08/12 16:22:50     76s] Opening parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/riscv_pipeline_2476860_5f6217ab-570f-4226-8d33-c816aae08860_ECVU2y.rcdb.d/riscv_pipeline.rcdb.d' for reading (mem: 5160.609M)
+[08/12 16:22:50     76s] Reading RCDB with compressed RC data.
+[08/12 16:22:50     76s] RC Out has the following PVT Info:
+[08/12 16:22:50     76s]    RC:rc_typ
+[08/12 16:22:50     76s] Dumping Spef file.....
+[08/12 16:22:50     76s] Printing D_NET...
+[08/12 16:22:50     77s] RC Out from RCDB Completed (CPU Time= 0:00:00.9  MEM= 5160.6M)
+[08/12 16:22:50     77s] Closing parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/riscv_pipeline_2476860_5f6217ab-570f-4226-8d33-c816aae08860_ECVU2y.rcdb.d/riscv_pipeline.rcdb.d': 36557 access done (mem: 5160.609M)
+[08/12 16:22:50     77s] <CMD> writeTimingCon ./outputs/riscv_pipeline_pnr.sdc
+[08/12 16:22:50     77s] <CMD> saveNetlist ./outputs/riscv_pipeline_pnr_lec.v -excludeLeafCell -removePowerGround
+[08/12 16:22:50     77s] Writing Netlist "./outputs/riscv_pipeline_pnr_lec.v" ...
+[08/12 16:22:50     77s] <CMD> saveNetlist ./outputs/riscv_pipeline_pnr_sta.v -excludeLeafCell
+[08/12 16:22:50     77s] Writing Netlist "./outputs/riscv_pipeline_pnr_sta.v" ...
+[08/12 16:22:50     77s] <CMD> saveNetlist ./outputs/riscv_pipeline_pnr_pg.v -excludeLeafCell -includePowerGround -includePhysicalInst
+[08/12 16:22:50     77s] Writing Netlist "./outputs/riscv_pipeline_pnr_pg.v" ...
+[08/12 16:22:50     78s] Pwr name (VDD).
+[08/12 16:22:50     78s] Gnd name (VSS).
+[08/12 16:22:50     78s] 1 Pwr names and 1 Gnd names.
+[08/12 16:22:50     78s] <CMD> setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic -virtualConnection false -textSize 1
+[08/12 16:22:50     78s] <CMD> streamOut ./outputs/riscv_pipeline.gds -mapFile ./tcl/streamOut.map -merge {/home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds} -units 4000 -dieAreaAsBoundary -outputMacros
+[08/12 16:22:50     78s] Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds has version number: 5
+[08/12 16:22:50     78s] Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds has version number: 5
+[08/12 16:22:50     78s] Parse flat map file './tcl/streamOut.map'
+[08/12 16:22:50     78s] Writing GDSII file ...
+[08/12 16:22:50     78s] 	****** db unit per micron = 4000 ******
+[08/12 16:22:50     78s] 	****** output gds2 file unit per micron = 4000 ******
+[08/12 16:22:50     78s] 	****** unit scaling factor = 1 ******
+[08/12 16:22:50     78s] Output for instance
+[08/12 16:22:51     78s] Output for bump
+[08/12 16:22:51     78s] Output for physical terminals
+[08/12 16:22:51     78s] Output for logical terminals
+[08/12 16:22:51     78s] Output for regular nets
+[08/12 16:22:51     78s] Output for special nets and metal fills
+[08/12 16:22:51     79s] Convert 0 swires and 0 svias from compressed groups
+[08/12 16:22:51     79s] Output for via structure generation total number 14
+[08/12 16:22:51     79s] Statistics for GDS generated (version 5)
+[08/12 16:22:51     79s] ----------------------------------------
+[08/12 16:22:51     79s] Stream Out Layer Mapping Information:
+[08/12 16:22:51     79s] GDS Layer Number          GDS Layer Name
+[08/12 16:22:51     79s] ----------------------------------------
+[08/12 16:22:51     79s]     90                                M9
+[08/12 16:22:51     79s]     80                                M8
+[08/12 16:22:51     79s]     70                                M7
+[08/12 16:22:51     79s]     60                                M6
+[08/12 16:22:51     79s]     50                                M5
+[08/12 16:22:51     79s]     40                                M4
+[08/12 16:22:51     79s]     30                                M3
+[08/12 16:22:51     79s]     20                                M2
+[08/12 16:22:51     79s]     19                                M1
+[08/12 16:22:51     79s]     65                                V6
+[08/12 16:22:51     79s]     55                                V5
+[08/12 16:22:51     79s]     45                                V4
+[08/12 16:22:51     79s]     35                                V3
+[08/12 16:22:51     79s]     25                                V2
+[08/12 16:22:51     79s]     21                                V1
+[08/12 16:22:51     79s]     18                                V0
+[08/12 16:22:51     79s]     75                                V7
+[08/12 16:22:51     79s]     85                                V8
+[08/12 16:22:51     79s]     95                                V9
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Stream Out Information Processed for GDS version 5:
+[08/12 16:22:51     79s] Units: 4000 DBU
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Object                             Count
+[08/12 16:22:51     79s] ----------------------------------------
+[08/12 16:22:51     79s] Instances                         153102
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Ports/Pins                           312
+[08/12 16:22:51     79s]     metal layer M6                   170
+[08/12 16:22:51     79s]     metal layer M7                   140
+[08/12 16:22:51     79s]     metal layer M9                     2
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Nets                              338388
+[08/12 16:22:51     79s]     metal layer M2                177723
+[08/12 16:22:51     79s]     metal layer M3                126735
+[08/12 16:22:51     79s]     metal layer M4                 20015
+[08/12 16:22:51     79s]     metal layer M5                  9105
+[08/12 16:22:51     79s]     metal layer M6                  3969
+[08/12 16:22:51     79s]     metal layer M7                   841
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s]     Via Instances                 368721
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Special Nets                         410
+[08/12 16:22:51     79s]     metal layer M1                   334
+[08/12 16:22:51     79s]     metal layer M5                    28
+[08/12 16:22:51     79s]     metal layer M6                    20
+[08/12 16:22:51     79s]     metal layer M7                    20
+[08/12 16:22:51     79s]     metal layer M8                     4
+[08/12 16:22:51     79s]     metal layer M9                     4
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s]     Via Instances                  19192
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Metal Fills                       325535
+[08/12 16:22:51     79s]     metal layer M1                 53336
+[08/12 16:22:51     79s]     metal layer M2                 59877
+[08/12 16:22:51     79s]     metal layer M3                 87476
+[08/12 16:22:51     79s]     metal layer M4                 40884
+[08/12 16:22:51     79s]     metal layer M5                 30192
+[08/12 16:22:51     79s]     metal layer M6                 28242
+[08/12 16:22:51     79s]     metal layer M7                 25528
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s]     Via Instances                      0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Metal FillOPCs                         0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s]     Via Instances                      0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Metal FillDRCs                         0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s]     Via Instances                      0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Text                                   0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Blockages                              0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Custom Text                            0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Custom Box                             0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Trim Metal                             0
+[08/12 16:22:51     79s] 
+[08/12 16:22:51     79s] Scanning GDS file /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds to register cell name ......
+[08/12 16:22:51     79s] Scanning GDS file /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds to register cell name ......
+[08/12 16:22:51     79s] Merging GDS file /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds ......
+[08/12 16:22:51     79s] 	****** Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds has version number: 5.
+[08/12 16:22:51     79s] 	****** Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds has units: 4000 per micron.
+[08/12 16:22:51     79s] 	****** unit scaling factor = 1 ******
+[08/12 16:22:51     79s] Merging GDS file /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds ......
+[08/12 16:22:51     79s] 	****** Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds has version number: 5.
+[08/12 16:22:51     79s] 	****** Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds has units: 4000 per micron.
+[08/12 16:22:51     79s] 	****** unit scaling factor = 1 ******
+[08/12 16:22:51     79s] Output for cells
+[08/12 16:22:51     79s] ######Streamout is finished!
+[08/12 16:22:51     79s] <CMD> write_lef_abstract -noCutObs ./outputs/riscv_pipeline.lef
+[08/12 16:22:51     79s] <CMD> defOut -floorplan -netlist -routing ./outputs/riscv_pipeline_pnr.def
+[08/12 16:22:51     79s] Writing DEF file './outputs/riscv_pipeline_pnr.def', current time is Wed Aug 12 16:22:51 2026 ...
+[08/12 16:22:51     79s] unitPerMicron=4000, dbgMicronPerDBU=0.000250, unitPerDBU=1.000000
+[08/12 16:22:52     79s] DEF file './outputs/riscv_pipeline_pnr.def' is written, current time is Wed Aug 12 16:22:52 2026 ...
+[08/12 16:22:52     79s] <CMD> report_area > ./reports/area_pnr.rpt
+[08/12 16:22:52     79s] <CMD> report_power > ./reports/power_pnr.rpt
+[08/12 16:22:52     79s] env CDS_WORKAREA is set to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus
+[08/12 16:22:52     79s] 
+[08/12 16:22:52     79s] Power Net Detected:
+[08/12 16:22:52     79s]         Voltage	    Name
+[08/12 16:22:52     79s]              0V	    VSS
+[08/12 16:22:52     79s]            0.7V	    VDD
+[08/12 16:22:52     80s] AAE_INFO: opIsDesignInPostRouteState() is 1
+[08/12 16:22:52     80s] AAE_INFO: resetNetProps viewIdx 0 
+[08/12 16:22:52     80s] Starting SI iteration 1 using Infinite Timing Windows
+[08/12 16:22:52     80s] #################################################################################
+[08/12 16:22:52     80s] # Design Stage: PostRoute
+[08/12 16:22:52     80s] # Design Name: riscv_pipeline
+[08/12 16:22:52     80s] # Design Mode: 7nm
+[08/12 16:22:52     80s] # Analysis Mode: MMMC OCV 
+[08/12 16:22:52     80s] # Parasitics Mode: SPEF/RCDB 
+[08/12 16:22:52     80s] # Signoff Settings: SI On (EWM-WFP)
+[08/12 16:22:52     80s] #################################################################################
+[08/12 16:22:52     81s] Setting infinite Tws ...
+[08/12 16:22:52     81s] First Iteration Infinite Tw... 
+[08/12 16:22:52     81s] Calculate early delays in OCV mode...
+[08/12 16:22:52     81s] Calculate late delays in OCV mode...
+[08/12 16:22:53     81s] Topological Sorting (REAL = 0:00:01.0, MEM = 5134.0M, InitMEM = 5131.9M)
+[08/12 16:22:53     81s] Start delay calculation (fullDC) (8 T). (MEM=3034.91)
+[08/12 16:22:53     81s] Start AAE Lib Loading. (MEM=3035.066406)
+[08/12 16:22:53     81s] End AAE Lib Loading. (MEM=3054.546875 CPU=0:00:00.0 Real=0:00:00.0)
+[08/12 16:22:53     82s] End AAE Lib Interpolated Model. (MEM=3054.546875 CPU Time=0:00:00.0, Real Time=0:00:00.0)
+[08/12 16:22:53     82s] Opening parasitic data file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/riscv_pipeline_2476860_5f6217ab-570f-4226-8d33-c816aae08860_ECVU2y.rcdb.d/riscv_pipeline.rcdb.d' for reading (mem: 5334.953M)
+[08/12 16:22:53     82s] Reading RCDB with compressed RC data.
+[08/12 16:22:53     82s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 5335.0M)
+[08/12 16:22:53     82s] AAE_INFO: 8 threads acquired from CTE.
+[08/12 16:22:56    106s] Total number of fetched objects 36557
+[08/12 16:22:56    106s] AAE_INFO-618: Total number of nets in the design is 37304,  98.5 percent of the nets selected for SI analysis
+[08/12 16:22:56    106s] End Timing Check Calculation. (CPU Time=0:00:00.5, Real Time=0:00:00.0)
+[08/12 16:22:56    106s] End delay calculation. (MEM=3157.11 CPU=0:00:24.0 REAL=0:00:03.0)
+[08/12 16:22:57    107s] End delay calculation (fullDC). (MEM=3044.12 CPU=0:00:25.5 REAL=0:00:04.0)
+[08/12 16:22:57    107s] Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/.AAE_HHP8Pu/.AAE_2476860_5f6217ab-570f-4226-8d33-c816aae08860/waveform.data...
+[08/12 16:22:57    107s] *** CDM Built up (cpu=0:00:27.2  real=0:00:05.0  mem= 6183.6M) ***
+[08/12 16:22:57    109s] Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 3125.8M)
+[08/12 16:22:57    109s] Add other clocks and setupCteToAAEClockMapping during iter 1
+[08/12 16:22:57    109s] Loading CTE timing window is completed (CPU = 0:00:00.2, REAL = 0:00:00.0, MEM = 3152.0M)
+[08/12 16:22:57    109s] Starting SI iteration 2
+[08/12 16:22:58    110s] Calculate early delays in OCV mode...
+[08/12 16:22:58    110s] Calculate late delays in OCV mode...
+[08/12 16:22:58    110s] Start delay calculation (fullDC) (8 T). (MEM=3141.73)
+[08/12 16:22:58    110s] Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/.AAE_HHP8Pu/.AAE_2476860_5f6217ab-570f-4226-8d33-c816aae08860/waveform.data...
+[08/12 16:22:58    110s] End AAE Lib Interpolated Model. (MEM=3146.812500 CPU Time=0:00:00.0, Real Time=0:00:00.0)
+[08/12 16:22:58    110s] Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 72. 
+[08/12 16:22:58    110s] Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 36557. 
+[08/12 16:22:58    110s] Total number of fetched objects 36557
+[08/12 16:22:58    110s] AAE_INFO-618: Total number of nets in the design is 37304,  0.2 percent of the nets selected for SI analysis
+[08/12 16:22:58    111s] End Timing Check Calculation. (CPU Time=0:00:00.4, Real Time=0:00:00.0)
+[08/12 16:22:58    111s] End delay calculation. (MEM=3202.33 CPU=0:00:01.0 REAL=0:00:00.0)
+[08/12 16:22:58    111s] End delay calculation (fullDC). (MEM=3202.33 CPU=0:00:01.1 REAL=0:00:00.0)
+[08/12 16:22:58    111s] *** CDM Built up (cpu=0:00:01.1  real=0:00:00.0  mem= 5653.7M) ***
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] Begin Power Analysis
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s]              0V	    VSS
+[08/12 16:22:58    112s]            0.7V	    VDD
+[08/12 16:22:58    112s] Begin Processing Timing Library for Power Calculation
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3193.35MB/unknown/unknown)
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] Begin Processing Power Net/Grid for Power Calculation
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3193.35MB/unknown/unknown)
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] Begin Processing Timing Window Data for Power Calculation
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] CLK(100MHz) Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3200.72MB/unknown/unknown)
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] Begin Processing User Attributes
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3200.72MB/unknown/unknown)
+[08/12 16:22:58    112s] 
+[08/12 16:22:58    112s] Begin Processing Signal Activity
+[08/12 16:22:58    112s] 
+[08/12 16:23:00    113s] Ended Processing Signal Activity: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=3201.60MB/unknown/unknown)
+[08/12 16:23:00    113s] 
+[08/12 16:23:00    113s] Begin Power Computation
+[08/12 16:23:00    113s] 
+[08/12 16:23:00    113s]       ----------------------------------------------------------
+[08/12 16:23:00    113s]       # of cell(s) missing both power/leakage table: 0
+[08/12 16:23:00    113s]       # of cell(s) missing power table: 0
+[08/12 16:23:00    113s]       # of cell(s) missing leakage table: 0
+[08/12 16:23:00    113s]       ----------------------------------------------------------
+[08/12 16:23:00    113s] 
+[08/12 16:23:00    113s] 
+[08/12 16:23:01    119s]       # of MSMV cell(s) missing power_level: 0
+[08/12 16:23:01    119s] Ended Power Computation: (cpu=0:00:05, real=0:00:01, mem(process/total/peak)=3218.25MB/unknown/unknown)
+[08/12 16:23:01    119s] 
+[08/12 16:23:01    119s] Begin Processing User Attributes
+[08/12 16:23:01    119s] 
+[08/12 16:23:01    119s] Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3218.38MB/unknown/unknown)
+[08/12 16:23:01    119s] 
+[08/12 16:23:01    119s] Ended Power Analysis: (cpu=0:00:07, real=0:00:02, mem(process/total/peak)=3218.38MB/unknown/unknown)
+[08/12 16:23:01    119s] 
+[08/12 16:23:01    119s] *
+
+
+
+[08/12 16:23:01    119s] Total Power
+[08/12 16:23:01    119s] -----------------------------------------------------------------------------------------
+[08/12 16:23:01    119s] Total Internal Power:        0.89295436 	   66.7229%
+[08/12 16:23:01    119s] Total Switching Power:       0.44134356 	   32.9778%
+[08/12 16:23:01    119s] Total Leakage Power:         0.00400534 	    0.2993%
+[08/12 16:23:01    119s] Total Power:                 1.33830327
+[08/12 16:23:01    119s] -----------------------------------------------------------------------------------------
+[08/12 16:23:01    119s] <CMD> report_timing > ./reports/timing_pnr.rpt
+[08/12 16:23:01    119s] <CMD> saveDesign ./saved/riscv_pipeline_final.enc
+[08/12 16:23:01    119s] report_message: '-start_cmd/-end_cmd' can not be nested. Interior calls do nothing. Ignore.
+[08/12 16:23:01    119s] The in-memory database contained RC information but was not saved. To save 
+[08/12 16:23:01    119s] the RC information, use saveDesign's -rc option. Note: Saving RC information can be quite large, 
+[08/12 16:23:01    119s] so it should only be saved when it is really desired.
+[08/12 16:23:01    119s] % Begin save design ... (date=08/12 16:23:01, mem=3215.8M)
+[08/12 16:23:01    119s] INFO: Current data have to be saved into a temporary db: 'riscv_pipeline_final.enc.dat.tmp' first. It will be renamed to the correct name 'riscv_pipeline_final.enc.dat' after the old db was deleted.
+[08/12 16:23:02    119s] % Begin Save ccopt configuration ... (date=08/12 16:23:01, mem=3215.8M)
+[08/12 16:23:02    119s] % End Save ccopt configuration ... (date=08/12 16:23:02, total cpu=0:00:00.2, real=0:00:00.0, peak res=3217.2M, current mem=3217.2M)
+[08/12 16:23:02    119s] % Begin Save netlist data ... (date=08/12 16:23:02, mem=3217.2M)
+[08/12 16:23:02    119s] Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_final.enc.dat.tmp/vbin/riscv_pipeline.v.bin in multi-threaded mode...
+[08/12 16:23:02    120s] % End Save netlist data ... (date=08/12 16:23:02, total cpu=0:00:00.2, real=0:00:00.0, peak res=3217.2M, current mem=3214.4M)
+[08/12 16:23:02    120s] Saving symbol-table file in separate thread ...
+[08/12 16:23:02    120s] Saving congestion map file in separate thread ...
+[08/12 16:23:02    120s] Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_final.enc.dat.tmp/riscv_pipeline.route.congmap.gz ...
+[08/12 16:23:02    120s] % Begin Save AAE data ... (date=08/12 16:23:02, mem=3215.5M)
+[08/12 16:23:02    120s] Saving AAE Data ...
+[08/12 16:23:02    120s] % End Save AAE data ... (date=08/12 16:23:02, total cpu=0:00:00.1, real=0:00:00.0, peak res=3215.5M, current mem=3215.5M)
+[08/12 16:23:02    120s] Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_final.enc.dat.tmp/gui.pref.tcl ...
+[08/12 16:23:02    120s] Saving mode setting ...
+[08/12 16:23:02    120s] **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+[08/12 16:23:02    120s] Saving global file ...
+[08/12 16:23:03    120s] *info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_final.enc.dat.tmp/riscv_pipeline.bbox.lef
+[08/12 16:23:03    120s] Saving Drc markers ...
+[08/12 16:23:03    120s] ... No Drc file written since there is no markers found.
+[08/12 16:23:03    120s] Convert 0 swires and 0 svias from compressed groups
+[08/12 16:23:03    120s] 410 swires and 496 svias were compressed
+[08/12 16:23:03    120s] 410 swires and 496 svias were decompressed from small or sparse groups
+[08/12 16:23:03    120s] Saving special route data file in separate thread ...
+[08/12 16:23:03    120s] Saving PG file in separate thread ...
+[08/12 16:23:03    120s] Saving placement file in separate thread ...
+[08/12 16:23:03    120s] Saving route file in separate thread ...
+[08/12 16:23:03    120s] Saving property file in separate thread ...
+[08/12 16:23:03    120s] Convert 0 swires and 0 svias from compressed groups
+[08/12 16:23:03    120s] Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_final.enc.dat.tmp/riscv_pipeline.prop
+[08/12 16:23:03    120s] Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_final.enc.dat.tmp/riscv_pipeline.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Wed Aug 12 16:23:03 2026)
+[08/12 16:23:03    120s] ** Saving stdCellPlacement_binary (version# 2) ...
+[08/12 16:23:03    121s] Save Adaptive View Pruning View Names to Binary file
+[08/12 16:23:03    121s] *** Completed savePlace (cpu=0:00:00.3 real=0:00:00.0 mem=6331.8M) ***
+[08/12 16:23:03    121s] TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
+[08/12 16:23:03    121s] *** Completed savePGFile (cpu=0:00:00.4 real=0:00:00.0 mem=6323.8M) ***
+[08/12 16:23:03    121s] *** Completed saveProperty (cpu=0:00:00.4 real=0:00:00.0 mem=6323.8M) ***
+[08/12 16:23:03    121s] TAT_INFO: ::savePGFile REAL = 0 : CPU = 0 : MEM = 0.
+[08/12 16:23:03    121s] TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
+[08/12 16:23:03    121s] *** Completed saveRoute (cpu=0:00:00.5 real=0:00:00.0 mem=6307.8M) ***
+[08/12 16:23:03    121s] TAT_INFO: ::saveRoute REAL = 0 : CPU = 0 : MEM = 0.
+[08/12 16:23:03    121s] TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
+[08/12 16:23:03    121s] #Saving pin access data to file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_final.enc.dat.tmp/riscv_pipeline.apa ...
+[08/12 16:23:03    121s] Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_final.enc.dat.tmp/riscv_pipeline.techData.gz' ...
+[08/12 16:23:03    121s] Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_final.enc.dat.tmp/extraction/' ...
+[08/12 16:23:03    121s] eee: Checksum of RC Grid density data=120
+[08/12 16:23:03    121s] TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
+[08/12 16:23:03    121s] TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
+[08/12 16:23:03    121s] % Begin Save power constraints data ... (date=08/12 16:23:03, mem=3242.9M)
+[08/12 16:23:03    121s] % End Save power constraints data ... (date=08/12 16:23:03, total cpu=0:00:00.1, real=0:00:00.0, peak res=3242.9M, current mem=3242.9M)
+[08/12 16:23:04    121s] Generated self-contained design riscv_pipeline_final.enc.dat.tmp
+[08/12 16:23:04    122s] % End save design ... (date=08/12 16:23:04, total cpu=0:00:02.4, real=0:00:03.0, peak res=3242.9M, current mem=3242.9M)
+[08/12 16:23:04    122s] report_message: '-start_cmd/-end_cmd' can not be nested. Interior calls do nothing. Ignore.
+[08/12 16:23:11    123s] <CMD> fit

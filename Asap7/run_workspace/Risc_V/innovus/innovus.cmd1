@@ -1,0 +1,46 @@
+#######################################################
+#                                                     
+#  Innovus Command Logging File                     
+#  Created on Wed Aug 12 16:17:49 2026                
+#                                                     
+#######################################################
+
+#@(#)CDS: Innovus v23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: NanoRoute 23.14-s088_1 NR250219-0822/23_14-UB (database version 18.20.661) {superthreading v2.20}
+#@(#)CDS: AAE 23.14-s018 (64bit) 02/28/2025 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: CTE 23.14-s036_1 () Feb 22 2025 01:17:26 ( )
+#@(#)CDS: SYNTECH 23.14-s010_1 () Feb 19 2025 23:56:49 ( )
+#@(#)CDS: CPE v23.14-s082
+#@(#)CDS: IQuantus/TQuantus 23.1.1-s336 (64bit) Mon Jan 20 22:11:00 PST 2025 (Linux 3.10.0-693.el7.x86_64)
+
+set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+suppressMessage ENCEXT-2799
+getVersion
+getVersion
+getVersion
+win
+set enc_source_continue_on_error false
+set auto_file_dir /tmp/user1/innovus_riscv_2476860
+setDesignMode -process 7
+setMultiCpuUsage -acquireLicense 8
+setMultiCpuUsage -localCpu 8
+setDistributeHost -local
+suppressMessage IMPPP-133
+restoreDesign ./saved/riscv_pipeline_metalFill.enc riscv_pipeline
+is_common_ui_mode
+restoreDesign /home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/saved/riscv_pipeline_metalFill.enc.dat riscv_pipeline
+extractRC
+rcOut -spef ./outputs/riscv_pipeline_pnr.spef -rc_corner rc_typ
+writeTimingCon ./outputs/riscv_pipeline_pnr.sdc
+saveNetlist ./outputs/riscv_pipeline_pnr_lec.v -excludeLeafCell -removePowerGround
+saveNetlist ./outputs/riscv_pipeline_pnr_sta.v -excludeLeafCell
+saveNetlist ./outputs/riscv_pipeline_pnr_pg.v -excludeLeafCell -includePowerGround -includePhysicalInst
+setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic -virtualConnection false -textSize 1
+streamOut ./outputs/riscv_pipeline.gds -mapFile ./tcl/streamOut.map -merge {/home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds} -units 4000 -dieAreaAsBoundary -outputMacros
+write_lef_abstract -noCutObs ./outputs/riscv_pipeline.lef
+defOut -floorplan -netlist -routing ./outputs/riscv_pipeline_pnr.def
+report_area > ./reports/area_pnr.rpt
+report_power > ./reports/power_pnr.rpt
+report_timing > ./reports/timing_pnr.rpt
+saveDesign ./saved/riscv_pipeline_final.enc
+fit

@@ -69,6 +69,7 @@ catch { setPlaceMode -place_global_cong_effort high }
 catch { setPlaceMode -place_global_module_aware_spare true }
 catch { setPlaceMode -place_global_uniform_density true }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
+catch { setActiveLogicViewMode -keepHighFanoutCriticalInsts false }
 catch { setUsefulSkewMode -opt_skew_eco_route false }
 catch { setSrouteMode -viaConnectToShape stripe }
 catch { setDelayCalMode -enable_hier_save_restore_flow false }
@@ -85,6 +86,7 @@ catch { setHierMode -disableArt false }
 catch { setHierMode -optStage postCTS }
 catch { setHierMode -reportPostRouteArtTiming false }
 catch { setHierMode -trialRouteHonorReadOnly false }
+catch { setImportMode -config true }
 catch { setImportMode -discardFloatingVNets false }
 catch { setImportMode -keepEmptyModule true }
 catch { setGenerateViaMode -auto false }
