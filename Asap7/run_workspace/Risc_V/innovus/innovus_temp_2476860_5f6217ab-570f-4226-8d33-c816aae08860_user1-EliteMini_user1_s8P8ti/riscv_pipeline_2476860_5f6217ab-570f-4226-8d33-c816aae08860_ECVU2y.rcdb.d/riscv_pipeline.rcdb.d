@@ -1,1 +1,0 @@
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/Risc_V/innovus/innovus_temp_2476860_5f6217ab-570f-4226-8d33-c816aae08860_user1-EliteMini_user1_s8P8ti/nr2476860_eCe7cJ.rcdb.d

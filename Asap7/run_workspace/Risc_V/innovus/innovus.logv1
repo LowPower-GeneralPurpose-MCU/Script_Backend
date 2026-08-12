@@ -1108,3 +1108,46 @@
 [08/12 16:23:04    122s] % End save design ... (date=08/12 16:23:04, total cpu=0:00:02.4, real=0:00:03.0, peak res=3242.9M, current mem=3242.9M)
 [08/12 16:23:04    122s] report_message: '-start_cmd/-end_cmd' can not be nested. Interior calls do nothing. Ignore.
 [08/12 16:23:11    123s] <CMD> fit
+[08/12 17:35:33    266s] <CMD> zoomBox -151.56600 17.48075 490.50050 361.48600
+[08/12 17:35:35    266s] <CMD> zoomBox -81.84300 69.51425 382.05050 318.05825
+[08/12 17:35:35    266s] <CMD> zoomBox -31.46775 107.10875 303.69525 286.68175
+[08/12 17:35:36    267s] <CMD> zoomBox 4.92850 134.27075 247.08375 264.01225
+[08/12 17:35:36    267s] <CMD> zoomBox 19.14250 144.87850 224.97450 255.15875
+[08/12 17:35:37    267s] <CMD> zoomBox 41.49425 161.55925 190.20800 241.23675
+[08/12 17:35:37    267s] <CMD> zoomBox 57.64325 173.61100 165.08925 231.17825
+[08/12 17:35:38    268s] <CMD> zoomBox 63.95000 178.31775 155.27925 227.25000
+[08/12 17:35:38    268s] <CMD> zoomBox 69.31075 182.31850 146.94075 223.91100
+[08/12 17:35:39    268s] <CMD> zoomBox 73.86750 185.71925 139.85300 221.07275
+[08/12 17:35:39    268s] <CMD> zoomBox 77.74075 188.60975 133.82850 218.66025
+[08/12 17:35:40    268s] <CMD> zoomBox 81.03300 191.06675 128.70750 216.60975
+[08/12 17:35:40    268s] <CMD> zoomBox 83.83150 193.15525 124.35475 214.86675
+[08/12 17:35:41    268s] <CMD> zoomBox 89.95025 197.72175 114.83700 211.05550
+[08/12 17:35:42    268s] <CMD> zoomBox 92.65275 199.73850 110.63350 209.37225
+[08/12 17:35:42    268s] <CMD> zoomBox 93.70825 200.52625 108.99175 208.71475
+[08/12 17:35:43    269s] <CMD> zoomBox 94.60525 201.19575 107.59625 208.15600
+[08/12 17:35:44    269s] <CMD> zoomBox 95.36775 201.76475 106.41025 207.68100
+[08/12 17:35:45    269s] <CMD> zoomBox 97.03525 203.00900 103.81650 206.64225
+[08/12 17:35:45    269s] <CMD> zoomBox 97.77150 203.55825 102.67125 206.18350
+[08/12 17:35:46    269s] <CMD> zoomBox 98.30300 203.95525 101.84375 205.85225
+[08/12 17:35:47    269s] <CMD> zoomBox 98.68725 204.24200 101.24575 205.61275
+[08/12 17:35:47    269s] <CMD> zoomBox 98.83750 204.35400 101.01225 205.51925
+[08/12 17:35:49    269s] <CMD> zoomBox 98.68725 204.24200 101.24575 205.61275
+[08/12 17:35:53    269s] <CMD> fit
+[08/12 17:41:27    280s] 
+[08/12 17:41:27    280s] *** Memory Usage v#2 (Current mem = 6275.789M, initial mem = 847.699M) ***
+[08/12 17:41:27    280s] 
+[08/12 17:41:27    280s] *** Summary of all messages that are not suppressed in this session:
+[08/12 17:41:27    280s] Severity  ID               Count  Summary                                  
+[08/12 17:41:27    280s] ERROR     IMPSYT-7338          1  The specified design session directory '...
+[08/12 17:41:27    280s] WARNING   IMPESI-3505          1  setDelayCalMode -eng_%s (default=%s) wil...
+[08/12 17:41:27    280s] WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
+[08/12 17:41:27    281s] WARNING   IMPOPT-3602          1  The specified path group name %s is not ...
+[08/12 17:41:27    281s] WARNING   NRDB-778             3  No multicut vias which meet all area rul...
+[08/12 17:41:27    281s] WARNING   NRDB-2040            1  Rule %s doesn't specify any vias that sa...
+[08/12 17:41:27    281s] WARNING   NRIG-100             1  Ignoring auto generated timing constrain...
+[08/12 17:41:27    281s] WARNING   IMPCTE-107           1  The following globals have been obsolete...
+[08/12 17:41:27    281s] WARNING   IMPTCM-77            1  Option "%s" for command %s is obsolete a...
+[08/12 17:41:27    281s] WARNING   TECHLIB-1277         4  The %s '%s' has been defined for %s %s '...
+[08/12 17:41:27    281s] *** Message Summary: 14 warning(s), 1 error(s)
+[08/12 17:41:27    281s] 
+[08/12 17:41:27    281s] --- Ending "Innovus" (totcpu=0:04:41, real=1:23:57, mem=6275.8M) ---
