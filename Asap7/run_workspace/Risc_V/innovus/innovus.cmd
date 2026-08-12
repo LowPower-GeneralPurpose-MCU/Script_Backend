@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Wed Aug 12 02:09:56 2026                
+#  Created on Wed Aug 12 13:00:00 2026                
 #                                                     
 #######################################################
 
@@ -18,9 +18,8 @@ suppressMessage ENCEXT-2799
 getVersion
 getVersion
 getVersion
-win
 set enc_source_continue_on_error false
-set auto_file_dir /tmp/user1/innovus_riscv_2416784
+set auto_file_dir /tmp/user1/innovus_riscv_1441532
 setDesignMode -process 7
 setMultiCpuUsage -acquireLicense 8
 setMultiCpuUsage -localCpu 8
@@ -54,7 +53,7 @@ set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
 setGenerateViaMode -auto false
 init_design
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
-floorPlan -s 309.120 308.352 3.840 3.840 3.840 3.840
+floorPlan -s 360.192 360.192 3.840 3.840 3.840 3.840
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP.rpt
 saveFPlan ./outputs/riscv_pipeline_hierFP.fp
 saveDesign ./saved/riscv_pipeline_hierFP.enc
@@ -79,13 +78,13 @@ addRing -nets VDD -type core_rings -follow core -layer {top M8 bottom M8 left M9
 addRing -nets VSS -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 1.152 -snap_wire_center_to_grid Grid
 deletePGPin -net VDD
 deletePGPin -net VSS
-createPGPin VDD -geom M9 3.144 157.080 3.624 159.000 -net VDD
-createPGPin VSS -geom M9 2.064 157.080 2.544 159.000 -net VSS
+createPGPin VDD -geom M9 3.144 183.000 3.624 184.920 -net VDD
+createPGPin VSS -geom M9 2.064 183.000 2.544 184.920 -net VSS
 setAddStripeMode -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
-addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.288 -set_to_set_distance 25.600 -start_from left -start_offset 12.800 -snap_wire_center_to_grid grid
+addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.288 -set_to_set_distance 34.560 -start_from left -start_offset 17.280 -snap_wire_center_to_grid grid
 setAddStripeMode -reset
 setAddStripeMode -allow_jog none -split_vias true -via_using_exact_crossover_size false -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
-addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.288 -set_to_set_distance 25.600 -start_from bottom -start_offset 12.800 -snap_wire_center_to_grid grid
+addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.288 -set_to_set_distance 34.560 -start_from bottom -start_offset 17.280 -snap_wire_center_to_grid grid
 editTrim -nets {VDD VSS}
 clearDrc
 setPinConstraint -cell riscv_pipeline -corner_to_pin_distance 8
@@ -106,7 +105,7 @@ place_design
 refinePlace
 setAddStripeMode -reset
 setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M1 -stacked_via_top_layer M6
-addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 12.960 -create_pins 0 -area {3.888 0.0 313.056 316.08} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 12.960 -create_pins 0 -area {3.888 0.0 364.032 367.92} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setSrouteMode -reset
 setSrouteMode -viaConnectToShape stripe
 sroute -nets {VDD VSS} -connect corePin -corePinTarget stripe -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
@@ -170,3 +169,17 @@ report_power > ./reports/power_postRoute.rpt
 saveDesign ./saved/riscv_pipeline_postRoute.enc
 verify_drc -report ./verify_rpt/drc_after_route.rpt
 verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_route.rpt
+extractRC
+rcOut -spef ./outputs/riscv_pipeline_pnr.spef -rc_corner rc_typ
+writeTimingCon ./outputs/riscv_pipeline_pnr.sdc
+saveNetlist ./outputs/riscv_pipeline_pnr_lec.v -excludeLeafCell -removePowerGround
+saveNetlist ./outputs/riscv_pipeline_pnr_sta.v -excludeLeafCell
+saveNetlist ./outputs/riscv_pipeline_pnr_pg.v -excludeLeafCell -includePowerGround -includePhysicalInst
+setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic -virtualConnection false -textSize 1
+streamOut ./outputs/riscv_pipeline.gds -mapFile ./tcl/streamOut.map -merge {/home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds} -units 4000 -dieAreaAsBoundary -outputMacros
+write_lef_abstract -noCutObs ./outputs/riscv_pipeline.lef
+defOut -floorplan -netlist -routing ./outputs/riscv_pipeline_pnr.def
+report_area > ./reports/area_pnr.rpt
+report_power > ./reports/power_pnr.rpt
+report_timing > ./reports/timing_pnr.rpt
+saveDesign ./saved/riscv_pipeline_final.enc

@@ -1,5 +1,5 @@
 Top: riscv_pipeline
-Area: 100179.65952
-CoreBox: 3.888 3.888 313.056 312.192
-CoreSize_XY: {309.168 308.304}
-DieSize_XY: {316.944 316.08}
+Area: 135365.1264
+CoreBox: 3.888 3.888 364.032 364.032
+CoreSize_XY: {360.144 360.144}
+DieSize_XY: {367.92 367.92}

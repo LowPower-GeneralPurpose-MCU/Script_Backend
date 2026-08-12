@@ -28,6 +28,16 @@ define_attribute do_not_show_joules_log_on_error -data_type bool -obj_type root 
 define_attribute joules_batch_eval_command -data_type string -obj_type root -category joules -help_string {The unix command to submit jobs to a server farm using eval of this command, when batch mode is chosen. It overrides joules_batch_script.} -hidden -quiet
 define_attribute joules_batch_script -data_type string -obj_type root -category joules -help_string {The unix command to submit jobs to a server farm.  Recommended settings are 'bsub -q <queuename> -o /dev/null -J <job_name>'.} -default_value {bsub} -hidden -quiet
 proc jls::ckattr_jls_exe {obj args} {
+
+  # assure that specified executable is ok
+  if {$args eq "default_search_order"} {
+    # default value - return ok
+    return 1
+  } elseif {[auto_execok $args] eq ""} {
+    jls::puts_send "Can not find specified executable: $args"
+    return 0
+  }
+  return 1
 }
 define_attribute joules_executable -data_type string -obj_type root -category joules -help_string {Joules executable to be used for encapsulated runs.} -check_function {jls::ckattr_jls_exe} -default_value {/Cadence/DDI/bin/joules} -hidden -quiet
 define_attribute joules_extra_pin_mapping_rule -data_type string -obj_type root -category joules -help_string {Modify name while reading stimulus in replay.} -hidden -quiet
@@ -39,14 +49,38 @@ define_attribute joules_launch_parallel_jobs -data_type bool -obj_type root -cat
 define_attribute joules_launch_with_batch_command -data_type bool -obj_type root -category joules -help_string {Launch Joules with batch command.} -default_value {false} -hidden -quiet
 define_attribute joules_num_launch_attempts -data_type int -obj_type root -category joules -help_string {Number of launch attempts.} -default_value {5} -hidden -quiet
 proc jls::ckattr_jls_exe {obj args} {
+
+  # assure that specified executable is ok
+  if {$args eq "default_search_order"} {
+    # default value - return ok
+    return 1
+  } elseif {[auto_execok $args] eq ""} {
+    jls::puts_send "Can not find specified executable: $args"
+    return 0
+  }
+  return 1
 }
 define_attribute jstudio_executable -data_type string -obj_type root -category joules -help_string {Joules Studio executable to be used for encapsulated runs.} -check_function {jls::ckattr_jls_exe} -default_value {/Cadence/DDI/bin/joules_studio} -hidden -quiet
 define_attribute jstudio_launch_args -data_type string -obj_type root -category joules -help_string {The command line arguments that need to be passed to Joules Studio while launching it.} -hidden -quiet
 define_attribute jstudio_launch_license -data_type string -obj_type root -category joules -help_string {The first license to be used to start Joules Studio.} -hidden -quiet
 proc jls::ckattr_lec_exe {obj args} {
+
+  # assure that specified executable is ok
+  if {[auto_execok $args] eq ""} {
+    jls::puts_send "Can not find specified executable: $args"
+    return 0
+  }
+  return 1
 }
 define_attribute lec_executable -data_type string -obj_type root -category joules -help_string {LEC executable to be used for xreplay runs.} -check_function {jls::ckattr_lec_exe} -default_value {/Cadence/CONFRML/bin/lec} -hidden -quiet
 proc jls::ckattr_liberate_exe {obj args} {
+
+  # assure that specified executable is ok
+  if {[auto_execok $args] eq ""} {
+    jls::puts_send "Can not find specified executable: $args"
+    return 0
+  }
+  return 1
 }
 define_attribute liberate_executable -data_type string -obj_type root -category joules -help_string {Liberate executable to be used for xreplay runs.} -check_function {jls::ckattr_liberate_exe} -default_value {/Cadence/LIBERATE/bin/liberate} -hidden -quiet
 define_attribute merge_activity_merge_stimulus_extra_options -data_type string -obj_type root -category joules -help_string {Attribute will pass arguments to merge_stimulus within merge_activity command.} -hidden -quiet
@@ -63,10 +97,42 @@ define_attribute use_parallel_read_stimulus_in_xreplay_merge_stim -data_type boo
 define_attribute write_joules_standalone_flow_script -data_type bool -obj_type root -category joules -help_string {Attribute will dump xreplay_standalone_xreplay_stim.tcl for each stimulus.} -default_value {false} -hidden -quiet
 define_attribute xreplay_compare_sim_extra_options -data_type string -obj_type root -category joules -help_string {Attribute will pass arguments to compare_sim command.} -hidden -quiet
 proc jls::sanity_check_for_xreplay_dump_annotation_info {obj args} {
+
+  # assure that specified value is ok
+  set args_str  {*}$args
+  set vals [split $args_str " "]
+  set pin_type {in out clock enable all}
+  set annotation_type {asserted unasserted unconnected non_toggle all}
+  set obj_type {port port_dft seq comb reg reg_dft mem mem_dft icgc latch bbox pad pm mux drivers rtl_drivers all}
+  #format for show_details option for report_sdb_annotation: <obj_type>[:<annotation_type>[:<pin_prop_type>]]
+  foreach val $vals {
+      set show_details_value [split $val ":"]
+      set length [llength $show_details_value]
+      if { $length > 0 && ( [llength [lsearch -all $obj_type [lindex $show_details_value 0] ] ] == 0) } {
+          puts "Error   : Invalid $val is given for attribute xreplay_dump_annotation_info." 
+          return 0
+      }
+      if { $length > 1 && ( [llength [lsearch -all $annotation_type [lindex $show_details_value 1] ] ] == 0) } {
+          puts "Error   : Invalid $val is given for attribute xreplay_dump_annotation_info." 
+          return 0
+      }
+      if { $length > 2 && ( [llength [lsearch -all $pin_type [lindex $show_details_value 2] ] ] == 0) } {
+          puts "Error   : Invalid $val is given for attribute xreplay_dump_annotation_info." 
+          return 0
+      }
+  }
+  return 1
 }
 define_attribute xreplay_dump_annotation_info -data_type string -obj_type root -category joules -help_string {Attribute will pass arguments to xreplay_stimulus command.} -check_function {jls::sanity_check_for_xreplay_dump_annotation_info} -hidden -quiet
 define_attribute xreplay_extra_options -data_type string -obj_type root -category joules -help_string {Attribute will pass arguments to xreplay command.} -hidden -quiet
 proc jls::ckattr_xrun_exe {obj args} {
+
+  # assure that specified executable is ok
+  if {[auto_execok $args] eq ""} {
+    jls::puts_send "Can not find specified executable: $args"
+    return 0
+  }
+  return 1
 }
 define_attribute xrun_executable -data_type string -obj_type root -category joules -help_string {Xrun executable to be used for xreplay runs.} -check_function {jls::ckattr_xrun_exe} -default_value {/Cadence/XCELIUM/tools/bin/xrun} -hidden -quiet
 define_attribute commented -data_type bool -obj_type formal_verification_constraint -category dft -help_string {Commented.} -default_value {false} -hidden -quiet

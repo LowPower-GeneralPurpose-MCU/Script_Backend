@@ -1,0 +1,108 @@
+Using Power View: view_tt.
+Reading RCDB with compressed RC data.
+Load RC corner of view view_tt
+Begin Boundary Leakage Calculation
+Ended Boundary Leakage Calculation: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=7056.75MB/unknown/unknown)
+Begin Static Power Report Generation
+*----------------------------------------------------------------------------------------
+*	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+*	
+*
+* 	Date & Time:	2026-Aug-12 13:16:32 (2026-Aug-12 04:16:32 GMT)
+*
+*----------------------------------------------------------------------------------------
+*
+*	Design: riscv_pipeline
+*
+*	Parasitic Files used:
+*
+*       Power View : view_tt
+*
+*       User-Defined Activity : N.A.
+*
+*       Activity File: N.A.
+*
+*       Hierarchical Global Activity: N.A.
+*
+*       Global Activity: N.A.
+*
+*       Sequential Element Activity: 0.200000
+*
+*       Primary Input Activity: 0.200000
+*
+*       Default icg ratio: N.A.
+*
+*       Global Comb ClockGate Ratio: N.A.
+*
+*	Power Units = 1mW
+*
+*	Time Units = 1e-12 secs
+*
+*       report_power
+*
+-----------------------------------------------------------------------------------------
+*
+
+
+
+Total Power
+-----------------------------------------------------------------------------------------
+Total Internal Power:        0.89295436 	   66.7229%
+Total Switching Power:       0.44134356 	   32.9778%
+Total Leakage Power:         0.00400534 	    0.2993%
+Total Power:                 1.33830327
+-----------------------------------------------------------------------------------------
+
+
+Group                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+Sequential                        0.7524     0.07052    0.001728      0.8247       61.62
+Macro                                  0           0           0           0           0
+IO                                     0           0           0           0           0
+Combinational                     0.1158      0.1942    0.001975      0.3119       23.31
+Clock (Combinational)            0.02477      0.1766   0.0003029      0.2017       15.07
+Clock (Sequential)                     0           0           0           0           0
+-----------------------------------------------------------------------------------------
+Total                              0.893      0.4413    0.004005       1.338         100
+-----------------------------------------------------------------------------------------
+
+
+Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+VDD                       0.7      0.893      0.4413    0.004005       1.338         100
+
+
+Clock                           Internal   Switching     Leakage       Total  Percentage 
+                                Power      Power         Power         Power  (%)        
+-----------------------------------------------------------------------------------------
+CLK                              0.02477      0.1766   0.0003029      0.2017       15.07
+-----------------------------------------------------------------------------------------
+Total                            0.02477      0.1766   0.0003029      0.2017       15.07
+-----------------------------------------------------------------------------------------
+Clock: CLK
+Clock Period: 0.010000 usec 
+Clock Toggle Rate:   200.0000 Mhz 
+Clock Static Probability:  0.5000
+  
+ 
+ 
+-----------------------------------------------------------------------------------------
+*	Power Distribution Summary: 
+*              Highest Average Power:       CTS_ccl_a_buf_00010 (BUFx12_ASAP7_75t_L):         0.003409
+*              Highest Leakage Power:       CTS_ccl_a_buf_00010 (BUFx12_ASAP7_75t_L):        7.044e-06
+*                Total Cap:      7.27963e-11 F
+*                Total instances in design: 36384
+*                Total instances in design with no power:     0
+*                Total instances in design with no activty:     0
+
+*                Total Fillers and Decap:     0
+-----------------------------------------------------------------------------------------
+ 
+** INFO:  (VOLTUS_POWR-3465): There are 0 decaps and 0 fillers in the design
+
+Ended Static Power Report Generation: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=7069.38MB/unknown/unknown)
+

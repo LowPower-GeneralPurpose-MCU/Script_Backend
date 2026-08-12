@@ -1,0 +1,2 @@
+SKIPPED
+Legacy addMetalFill skipped. Set INNOVUS_RUN_LEGACY_METAL_FILL=1 only for fill experiments, or use Pegasus/signoff fill.
