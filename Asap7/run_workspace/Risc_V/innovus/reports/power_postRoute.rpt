@@ -7,49 +7,49 @@ Begin Power Analysis
            0.7V	    VDD
 Begin Processing Timing Library for Power Calculation
 
-Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6466.66MB/unknown/unknown)
+Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6429.08MB/unknown/unknown)
 
 
 
 Begin Processing Power Net/Grid for Power Calculation
 
-Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6466.66MB/unknown/unknown)
+Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6429.08MB/unknown/unknown)
 
 Begin Processing Timing Window Data for Power Calculation
 
 CK: assigning clock CLK to net clk
-Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6466.66MB/unknown/unknown)
+Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6429.08MB/unknown/unknown)
 
 Begin Processing User Attributes
 
-Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6466.66MB/unknown/unknown)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6429.08MB/unknown/unknown)
 
 Begin Processing Signal Activity
 
 
 Starting Levelizing
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT)
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 10%
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 20%
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 30%
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 40%
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 50%
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 60%
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 70%
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 80%
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 90%
+2026-Aug-12 16:03:09 (2026-Aug-12 07:03:09 GMT)
+2026-Aug-12 16:03:09 (2026-Aug-12 07:03:09 GMT): 10%
+2026-Aug-12 16:03:09 (2026-Aug-12 07:03:09 GMT): 20%
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT): 30%
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT): 40%
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT): 50%
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT): 60%
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT): 70%
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT): 80%
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT): 90%
 
 Finished Levelizing
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT)
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT)
 
 Starting Activity Propagation
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT)
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 10%
-2026-Aug-12 15:32:47 (2026-Aug-12 06:32:47 GMT): 20%
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT)
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT): 10%
+2026-Aug-12 16:03:10 (2026-Aug-12 07:03:10 GMT): 20%
 
 Finished Activity Propagation
-2026-Aug-12 15:32:48 (2026-Aug-12 06:32:48 GMT)
-Ended Processing Signal Activity: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=6468.29MB/unknown/unknown)
+2026-Aug-12 16:03:11 (2026-Aug-12 07:03:11 GMT)
+Ended Processing Signal Activity: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=6431.21MB/unknown/unknown)
 
 Begin Power Computation
 
@@ -62,40 +62,40 @@ Begin Power Computation
 
 
 Starting Calculating power
-2026-Aug-12 15:32:48 (2026-Aug-12 06:32:48 GMT)
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT): 10%
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT): 20%
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT): 30%
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT): 40%
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT): 50%
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT): 60%
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT): 70%
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT): 80%
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT): 90%
+2026-Aug-12 16:03:11 (2026-Aug-12 07:03:11 GMT)
+2026-Aug-12 16:03:11 (2026-Aug-12 07:03:11 GMT): 10%
+2026-Aug-12 16:03:11 (2026-Aug-12 07:03:11 GMT): 20%
+2026-Aug-12 16:03:12 (2026-Aug-12 07:03:12 GMT): 30%
+2026-Aug-12 16:03:12 (2026-Aug-12 07:03:12 GMT): 40%
+2026-Aug-12 16:03:12 (2026-Aug-12 07:03:12 GMT): 50%
+2026-Aug-12 16:03:12 (2026-Aug-12 07:03:12 GMT): 60%
+2026-Aug-12 16:03:12 (2026-Aug-12 07:03:12 GMT): 70%
+2026-Aug-12 16:03:12 (2026-Aug-12 07:03:12 GMT): 80%
+2026-Aug-12 16:03:12 (2026-Aug-12 07:03:12 GMT): 90%
 
 Finished Calculating power
-2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT)
+2026-Aug-12 16:03:12 (2026-Aug-12 07:03:12 GMT)
       # of MSMV cell(s) missing power_level: 0
-Ended Power Computation: (cpu=0:00:06, real=0:00:01, mem(process/total/peak)=6477.85MB/unknown/unknown)
+Ended Power Computation: (cpu=0:00:05, real=0:00:01, mem(process/total/peak)=6441.14MB/unknown/unknown)
 
 Begin Processing User Attributes
 
 Begin Processing set_power
 Ended Processing set_power: (cpu=0:00:00, real=0:00:00,
-mem(process/total/peak)=6477.85MB/unknown/unknown)
-Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6477.85MB/unknown/unknown)
+mem(process/total/peak)=6441.14MB/unknown/unknown)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6441.14MB/unknown/unknown)
 
-Ended Power Analysis: (cpu=0:00:07, real=0:00:02, mem(process/total/peak)=6477.85MB/unknown/unknown)
+Ended Power Analysis: (cpu=0:00:07, real=0:00:02, mem(process/total/peak)=6441.14MB/unknown/unknown)
 
 Begin Boundary Leakage Calculation
 Ended Boundary Leakage Calculation: (cpu=0:00:00, real=0:00:00,
-mem(process/total/peak)=6477.85MB/unknown/unknown)
+mem(process/total/peak)=6441.14MB/unknown/unknown)
 Begin Static Power Report Generation
 *----------------------------------------------------------------------------------------
 *	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
 *	
 *
-* 	Date & Time:	2026-Aug-12 15:32:49 (2026-Aug-12 06:32:49 GMT)
+* 	Date & Time:	2026-Aug-12 16:03:12 (2026-Aug-12 07:03:12 GMT)
 *
 *----------------------------------------------------------------------------------------
 *
@@ -190,5 +190,5 @@ Clock Static Probability:  0.5000
 ** INFO:  (VOLTUS_POWR-3465): There are 0 decaps and 0 fillers in the design
 
 Ended Static Power Report Generation: (cpu=0:00:00, real=0:00:00,
-mem(process/total/peak)=6492.10MB/unknown/unknown)
+mem(process/total/peak)=6455.02MB/unknown/unknown)
 

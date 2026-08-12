@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Wed Aug 12 15:16:20 2026                
+#  Created on Wed Aug 12 15:46:24 2026                
 #                                                     
 #######################################################
 
@@ -18,8 +18,9 @@ suppressMessage ENCEXT-2799
 getVersion
 getVersion
 getVersion
+win
 set enc_source_continue_on_error false
-set auto_file_dir /tmp/user1/innovus_riscv_2149295
+set auto_file_dir /tmp/user1/innovus_riscv_2309608
 setDesignMode -process 7
 setMultiCpuUsage -acquireLicense 8
 setMultiCpuUsage -localCpu 8
@@ -170,6 +171,31 @@ saveDesign ./saved/riscv_pipeline_postRoute.enc
 verify_drc -report ./verify_rpt/drc_after_route.rpt
 verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_route.rpt
 verify_drc -report ./verify_rpt/drc_after_metal_fill.rpt
-verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_metal_fill.rpt
-win
+verifyConnectivity -type all -error 1000 -warning 50 -report ./verify_rpt/connectivity_after_metal_fill.rpt
+report_area > ./reports/area_metal_fill.rpt
+report_power > ./reports/power_metal_fill.rpt
+saveDesign ./saved/riscv_pipeline_metalFill.enc
+extractRC
+rcOut -spef ./outputs/riscv_pipeline_pnr.spef -rc_corner rc_typ
+writeTimingCon ./outputs/riscv_pipeline_pnr.sdc
+saveNetlist ./outputs/riscv_pipeline_pnr_lec.v -excludeLeafCell -removePowerGround
+saveNetlist ./outputs/riscv_pipeline_pnr_sta.v -excludeLeafCell
+saveNetlist ./outputs/riscv_pipeline_pnr_pg.v -excludeLeafCell -includePowerGround -includePhysicalInst
+setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic -virtualConnection false -textSize 1
+streamOut ./outputs/riscv_pipeline.gds -mapFile ./tcl/streamOut.map -merge {/home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds} -units 4000 -dieAreaAsBoundary -outputMacros
+write_lef_abstract -noCutObs ./outputs/riscv_pipeline.lef
+defOut -floorplan -netlist -routing ./outputs/riscv_pipeline_pnr.def
+report_area > ./reports/area_pnr.rpt
+report_power > ./reports/power_pnr.rpt
+report_timing > ./reports/timing_pnr.rpt
+saveDesign ./saved/riscv_pipeline_final.enc
+zoomBox -82.89900 -73.65500 1222.25275 625.61675
+zoomBox -6.77025 16.56575 936.20200 521.78975
+zoomBox 22.96125 51.80050 824.48775 481.24100
+zoomBox 103.49225 147.23900 521.89450 371.40975
+zoomBox 137.42850 187.45700 394.38000 325.12600
+zoomBox 145.53000 197.05800 363.93875 314.07675
+zoomBox 152.41600 205.21900 338.06375 304.68500
+zoomBox 163.24475 218.05225 297.37525 289.91650
+zoomBox 167.47375 223.06425 281.48475 284.14875
 fit

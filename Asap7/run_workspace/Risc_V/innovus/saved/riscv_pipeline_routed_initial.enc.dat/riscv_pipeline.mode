@@ -53,7 +53,7 @@ catch {setNanoRouteMode -quiet -route_use_auto_via "false"}
 catch {setNanoRouteMode -quiet -route_with_si_driven false}
 catch {setNanoRouteMode -quiet -route_with_timing_driven false}
 catch {setNanoRouteMode -quiet -route_with_via_only_for_stdcell_pin "true"}
-catch {setNanoRouteMode -quiet -timingEngine ".timing_file_2149295.tif.gz"}
+catch {setNanoRouteMode -quiet -timingEngine ".timing_file_2309608.tif.gz"}
 
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setPlaceMode -place_design_refine_macro false }
