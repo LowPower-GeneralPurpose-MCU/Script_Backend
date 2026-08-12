@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Wed Aug 12 01:44:57 2026                
+#  Created on Wed Aug 12 02:09:56 2026                
 #                                                     
 #######################################################
 
@@ -20,7 +20,7 @@ getVersion
 getVersion
 win
 set enc_source_continue_on_error false
-set auto_file_dir /tmp/user1/innovus_riscv_2285341
+set auto_file_dir /tmp/user1/innovus_riscv_2416784
 setDesignMode -process 7
 setMultiCpuUsage -acquireLicense 8
 setMultiCpuUsage -localCpu 8
@@ -119,8 +119,8 @@ report_timing > ./reports/timing_postPlace.rpt
 report_area > ./reports/area_postPlace.rpt
 saveDesign ./saved/riscv_pipeline_postPlace.enc
 create_route_type -name leaf_rule -bottom_preferred_layer M2 -top_preferred_layer M3
-create_route_type -name trunk_rule -shield_net VSS -bottom_preferred_layer M4 -top_preferred_layer M5
-create_route_type -name top_rule -shield_net VSS -bottom_preferred_layer M6 -top_preferred_layer M7
+create_route_type -name trunk_rule -bottom_preferred_layer M4 -top_preferred_layer M5
+create_route_type -name top_rule -bottom_preferred_layer M6 -top_preferred_layer M7
 set_ccopt_property -net_type leaf route_type leaf_rule
 set_ccopt_property -net_type trunk route_type trunk_rule
 set_ccopt_property -net_type top route_type top_rule
@@ -146,33 +146,27 @@ report_timing > ./reports/timing_postCTS.rpt
 report_area > ./reports/area_postCTS.rpt
 saveDesign ./saved/riscv_pipeline_postCTS.enc
 setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
-addFiller
+addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
 setNanoRouteMode -reset
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
-setNanoRouteMode -quiet -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 2:7 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven true -route_detail_fix_antenna true -route_detail_merge_abutting_cut true -route_detail_end_iteration 5
+setNanoRouteMode -quiet -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 2:7 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven false -route_detail_fix_antenna true -route_detail_merge_abutting_cut true -route_detail_end_iteration 20
 routeDesign -globalDetail
 routeDesign -viaOpt -wireOpt -trackOpt
+setNanoRouteMode -quiet -route_with_timing_driven false -route_with_si_driven false
 ecoRoute -fix_drc
+verify_drc -report ./verify_rpt/drc_after_initial_route.rpt
+verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_initial_route.rpt
+saveDesign ./saved/riscv_pipeline_routed_initial.enc
+setAnalysisMode -analysisType onChipVariation -cppr both
+setDelayCalMode -SIAware true -equivalent_waveform_model propagation
+setExtractRCMode -engine postRoute -effortLevel medium
+optDesign -prefix postRoute -postRoute -setup -hold
+optDesign -prefix postRouteDRV -postRoute -drv
+setNanoRouteMode -quiet -route_with_timing_driven false -route_with_si_driven false
+ecoRoute -fix_drc
+report_timing > ./reports/timing_postRoute.rpt
+report_area > ./reports/area_postRoute.rpt
+report_power > ./reports/power_postRoute.rpt
+saveDesign ./saved/riscv_pipeline_postRoute.enc
 verify_drc -report ./verify_rpt/drc_after_route.rpt
 verifyConnectivity -type all -error 1000 -warning 100 -report ./verify_rpt/connectivity_after_route.rpt
-fit
-zoomBox -119.28675 69.40400 349.57275 320.60875
-zoomBox -85.24675 130.85050 253.50425 312.34600
-zoomBox -60.10675 175.16150 184.64125 306.29225
-zoomBox -41.79125 207.08525 135.03950 301.82725
-zoomBox -23.35950 238.91350 85.23675 297.09700
-zoomBox -15.17875 252.95700 63.28200 294.99450
-zoomBox -9.21950 263.10325 47.46850 293.47550
-zoomBox -4.91400 270.43400 36.04325 292.37800
-zoomBox -9.21975 263.10325 47.46850 293.47550
-zoomBox -15.57850 253.25850 62.88300 295.29650
-zoomBox -19.70275 247.05375 72.60500 296.51025
-zoomBox -77.97375 159.38525 209.96975 313.65900
-zoomBox -132.18700 78.14700 336.68150 329.35650
-zoomBox -300.44275 -185.80425 756.26875 380.35875
-zoomBox -228.56175 -121.22475 669.64300 360.01375
-zoomBox -171.62050 -65.91050 591.85350 343.14225
-zoomBox -82.08050 21.07125 469.52950 316.61175
-zoomBox -47.11150 55.04100 421.75700 306.25050
-zoomBox -17.38775 83.91550 381.15050 297.44350
-zoomBox -123.22100 -18.89400 525.73325 328.80150
