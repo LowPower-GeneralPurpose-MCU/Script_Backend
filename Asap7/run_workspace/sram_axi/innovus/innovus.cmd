@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Mon Aug 10 11:51:04 2026                
+#  Created on Wed Aug 12 17:49:41 2026                
 #                                                     
 #######################################################
 
@@ -1093,7 +1093,7 @@ addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {374.976 0.192 379.296 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setSrouteMode -reset
 setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth false -viaConnectToShape stripe
-sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinTarget stripe
+sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinLayerRange {M3 M3} -blockPinWidthRange {0.0 0.150} -blockPinTarget stripe
 editTrim -nets {VSS VDD}
 clearDrc
 deselectAll
@@ -1112,31 +1112,36 @@ editPin -pin {{s_axi_arid[4]} {s_axi_arid[3]} {s_axi_arid[2]} {s_axi_arid[1]} {s
 editPin -pin {{s_axi_rid[4]} {s_axi_rid[3]} {s_axi_rid[2]} {s_axi_rid[1]} {s_axi_rid[0]} {s_axi_rdata[31]} {s_axi_rdata[30]} {s_axi_rdata[29]} {s_axi_rdata[28]} {s_axi_rdata[27]} {s_axi_rdata[26]} {s_axi_rdata[25]} {s_axi_rdata[24]} {s_axi_rdata[23]} {s_axi_rdata[22]} {s_axi_rdata[21]} {s_axi_rdata[20]} {s_axi_rdata[19]} {s_axi_rdata[18]} {s_axi_rdata[17]} {s_axi_rdata[16]} {s_axi_rdata[15]} {s_axi_rdata[14]} {s_axi_rdata[13]} {s_axi_rdata[12]} {s_axi_rdata[11]} {s_axi_rdata[10]} {s_axi_rdata[9]} {s_axi_rdata[8]} {s_axi_rdata[7]} {s_axi_rdata[6]} {s_axi_rdata[5]} {s_axi_rdata[4]} {s_axi_rdata[3]} {s_axi_rdata[2]} {s_axi_rdata[1]} {s_axi_rdata[0]} {s_axi_rresp[1]} {s_axi_rresp[0]} s_axi_rlast s_axi_rvalid s_axi_rready} -side BOTTOM -layer M7 -spreadType range -start {615.088 2.16} -end {10.16 2.16} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
 setPinAssignMode -pinEditInBatch false
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
-zoomBox -209.36950 -235.68925 971.66625 821.58975
-zoomBox -139.01175 -127.05850 864.86875 771.62875
-zoomBox -79.20750 -34.72225 774.09100 729.16200
-zoomBox 51.56175 167.18250 575.59375 636.30300
-zoomBox 131.87050 291.17700 453.69200 579.27600
-zoomBox 50.15925 227.05525 495.58700 625.80825
-zoomBox 134.90875 274.22700 456.73025 562.32600
-zoomBox 170.94200 294.58550 444.49025 539.46950
-zoomBox 201.57025 311.89000 434.08625 520.04150
-zoomBox 249.73275 339.10150 417.72575 489.49100
-zoomBox 283.14300 355.74625 404.51825 464.40300
-zoomBox 308.76375 360.84425 396.45725 439.34875
-pan -1.58825 15.77800
-selectInst {u_mem/G_SRAM_BANK[8].u_sram}
-deselectAll
-selectMarker 253.9440 358.2760 376.9680 358.4680 4 1 111
-setLayerPreference violation -isVisible 1
-violationBrowser -all -no_display_false -displayByLayer
-deselectAll
-selectMarker 253.9440 358.2760 376.9680 358.4680 4 1 111
-deselectAll
-selectMarker 253.9440 358.2760 376.9680 358.4680 4 1 111
-deselectAll
-selectMarker 253.9440 358.2760 376.9680 358.4680 4 1 111
-deselectAll
-selectMarker 253.9440 358.2760 376.9680 358.4680 4 1 111
-deselectAll
-selectMarker 379.6560 357.8920 502.0320 358.0840 4 1 111
+setDelayCalMode -SIAware false -equivalent_waveform_model none -ewm_type moments
+setPlaceMode -reset
+setPlaceMode -place_global_uniform_density false -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_global_reorder_scan false -place_design_refine_macro false
+place_opt_design
+refinePlace
+checkPlace ./verify_rpt/checkPlace_after_place.rpt
+checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_place.rpt
+timeDesign -preCTS -outDir ./reports/timing_preCTS
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe blockring}
+sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
+setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M1 -stacked_via_top_layer M5
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {502.848 2.16 507.168 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 11.760000 -create_pins 0 -area {507.168 2.16 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 24.288000 -create_pins 0 -area {2.16 708.48 502.848 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
+addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from left -start_offset 0.384000 -area {502.848 2.16 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from left -start_offset 17.232000 -area {2.16 708.48 502.848 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M5 -stacked_via_top_layer M7
+addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from bottom -start_offset 2.112000 -area {2.16 708.48 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from bottom -start_offset 17.232000 -area {502.848 2.16 623.088 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
+addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 2.080000 -create_pins 0 -area {0.192 708.48 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 19.168000 -create_pins 0 -area {502.848 0.192 625.056 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M8 -stacked_via_top_layer M9
+addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 0.352000 -create_pins 0 -area {502.848 0.192 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.168000 -create_pins 0 -area {0.192 708.48 502.848 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_before_trim.rpt
+editTrim -nets {VDD VSS}
+clearDrc
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
+saveDesign ./saved/axi_ram_placed.enc
+fit
