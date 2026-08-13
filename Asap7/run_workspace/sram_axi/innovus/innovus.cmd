@@ -1153,3 +1153,15 @@ zoomBox 572.79475 344.84925 644.96025 383.51400
 zoomBox 596.47450 353.41100 634.14575 373.59450
 zoomBox 610.86050 358.61225 627.57600 367.56800
 zoomBox 616.34525 360.59550 625.07100 365.27050
+applyGlobalNets
+applyGlobalNets
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe blockring}
+sroute -connect floatingStripe -nets {VDD VSS} -floatingStripeTarget {ring stripe blockring} -allowJogging 0 -allowLayerChange 0
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe blockring}
+sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
+editTrim -nets {VDD VSS}
+clearDrc
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
+verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_after_trim.rpt
