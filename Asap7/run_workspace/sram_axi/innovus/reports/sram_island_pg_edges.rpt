@@ -5,3 +5,6 @@ halo local_right M5 vertical {500.688 0.192 502.848 708.48}
 gap row_0 M4 horizontal {0.192 174.96 502.848 179.28}
 gap row_1 M4 horizontal {0.192 352.08 502.848 356.4}
 gap row_2 M4 horizontal {0.192 529.2 502.848 533.52}
+gap col_0 M5 vertical {123.552 0.192 127.872 708.48}
+gap col_1 M5 vertical {249.264 0.192 253.584 708.48}
+gap col_2 M5 vertical {374.976 0.192 379.296 708.48}
