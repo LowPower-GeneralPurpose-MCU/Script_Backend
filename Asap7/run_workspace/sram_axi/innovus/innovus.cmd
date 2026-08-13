@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Thu Aug 13 14:48:38 2026                
+#  Created on Thu Aug 13 15:09:29 2026                
 #                                                     
 #######################################################
 
@@ -1003,19 +1003,6 @@ placeInstance {u_mem/G_SRAM_BANK[12].u_sram} 379.296000 533.520000 R180
 placeInstance {u_mem/G_SRAM_BANK[13].u_sram} 253.584000 533.520000 R180
 placeInstance {u_mem/G_SRAM_BANK[14].u_sram} 127.872000 533.520000 R180
 placeInstance {u_mem/G_SRAM_BANK[15].u_sram} 2.160000 533.520000 R180
-globalNetConnect VDD -type pgpin -pin VDD -inst * -module {} -override
-globalNetConnect VSS -type pgpin -pin VSS -inst * -module {} -override
-applyGlobalNets
-addRing -nets {VSS VDD} -type block_rings -around each_block -layer {top M4 bottom M4 left M5 right M5} -width {top 0.096 bottom 0.096 left 0.096 right 0.096} -spacing {top 0.288 bottom 0.288 left 0.288 right 0.288} -offset {top 1.080 bottom 1.080 left 1.080 right 1.080}
-setAddStripeMode -allow_jog none -break_at block_ring
-addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -extend_to design_boundary -start_from bottom -start_offset 24.3
-addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -extend_to design_boundary -start_from left -start_offset 24.3
-editTrim -nets {VSS VDD}
-create_pg_model_for_macro_place -file ./outputs/golden_mimic_sram_power_mesh.tcl
-set_macro_place_constraint -pg_resource_model {M4 0.03432 M5 0.042475 }
-set_macro_place_constraint -cells srambank_256x4x32_6t122 -track_adjustment {{M4 1.0343} {M5 1.0425} }
-editDelete -shape {STRIPE BLOCKRING}
-clearDrc
 createInstGroup SRAM_ISLAND_GROUP -fence 2.16 2.16 505.008 710.64
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[0].u_sram}
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[1].u_sram}
@@ -1034,27 +1021,22 @@ addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[13].u_sram}
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[14].u_sram}
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[15].u_sram}
 addHaloToBlock -allBlock 2.16 2.16 2.16 2.16
-unplaceAllBlocks
-setHierMode -optStage preCTS
-place_design -concurrent_macros
-place_design -concurrent_macros -incremental
-unplaceAllInsts
-placeInstance {u_mem/G_SRAM_BANK[4].u_sram} 2.160000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[5].u_sram} 127.872000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[11].u_sram} 253.584000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[10].u_sram} 379.296000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[2].u_sram} 2.160000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[3].u_sram} 127.872000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[13].u_sram} 253.584000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[12].u_sram} 379.296000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[7].u_sram} 2.160000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[6].u_sram} 127.872000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[8].u_sram} 253.584000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[9].u_sram} 379.296000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[0].u_sram} 2.160000 533.520000 R180
-placeInstance {u_mem/G_SRAM_BANK[1].u_sram} 127.872000 533.520000 R180
-placeInstance {u_mem/G_SRAM_BANK[14].u_sram} 253.584000 533.520000 R180
-placeInstance {u_mem/G_SRAM_BANK[15].u_sram} 379.296000 533.520000 R180
+placeInstance {u_mem/G_SRAM_BANK[0].u_sram} 2.160000 2.160000 R180
+placeInstance {u_mem/G_SRAM_BANK[1].u_sram} 127.872000 2.160000 R180
+placeInstance {u_mem/G_SRAM_BANK[2].u_sram} 253.584000 2.160000 R180
+placeInstance {u_mem/G_SRAM_BANK[3].u_sram} 379.296000 2.160000 R180
+placeInstance {u_mem/G_SRAM_BANK[7].u_sram} 2.160000 179.280000 R180
+placeInstance {u_mem/G_SRAM_BANK[6].u_sram} 127.872000 179.280000 R180
+placeInstance {u_mem/G_SRAM_BANK[5].u_sram} 253.584000 179.280000 R180
+placeInstance {u_mem/G_SRAM_BANK[4].u_sram} 379.296000 179.280000 R180
+placeInstance {u_mem/G_SRAM_BANK[8].u_sram} 2.160000 356.400000 R180
+placeInstance {u_mem/G_SRAM_BANK[9].u_sram} 127.872000 356.400000 R180
+placeInstance {u_mem/G_SRAM_BANK[10].u_sram} 253.584000 356.400000 R180
+placeInstance {u_mem/G_SRAM_BANK[11].u_sram} 379.296000 356.400000 R180
+placeInstance {u_mem/G_SRAM_BANK[15].u_sram} 2.160000 533.520000 R180
+placeInstance {u_mem/G_SRAM_BANK[14].u_sram} 127.872000 533.520000 R180
+placeInstance {u_mem/G_SRAM_BANK[13].u_sram} 253.584000 533.520000 R180
+placeInstance {u_mem/G_SRAM_BANK[12].u_sram} 379.296000 533.520000 R180
 addHaloToBlock -allBlock 2.16 2.16 2.16 2.16
 addHaloToBlock -allBlock 2.16 2.16 2.16 2.16
 snapFPlan -block
@@ -1063,7 +1045,7 @@ createPlaceBlockage -name SRAM_ISLAND_GROUP_BLOCKAGE -type hard -noCutByCore -bo
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_macroFP.rpt
 saveFPlan ./outputs/FloorPlan_withMacro.fp
 saveDesign ./saved/axi_ram_macroFP.enc
-setRouteMode -earlyGlobalReverseDirection {(2.160000 533.520000 123.552000 706.320000) M5:M5 (127.872000 533.520000 249.264000 706.320000) M5:M5 (2.160000 179.280000 123.552000 352.080000) M5:M5 (127.872000 179.280000 249.264000 352.080000) M5:M5 (2.160000 2.160000 123.552000 174.960000) M5:M5 (127.872000 2.160000 249.264000 174.960000) M5:M5 (127.872000 356.400000 249.264000 529.200000) M5:M5 (2.160000 356.400000 123.552000 529.200000) M5:M5 (253.584000 356.400000 374.976000 529.200000) M5:M5 (379.296000 356.400000 500.688000 529.200000) M5:M5 (379.296000 2.160000 500.688000 174.960000) M5:M5 (253.584000 2.160000 374.976000 174.960000) M5:M5 (379.296000 179.280000 500.688000 352.080000) M5:M5 (253.584000 179.280000 374.976000 352.080000) M5:M5 (253.584000 533.520000 374.976000 706.320000) M5:M5 (379.296000 533.520000 500.688000 706.320000) M5:M5}
+setRouteMode -earlyGlobalReverseDirection {(2.160000 2.160000 123.552000 174.960000) M5:M5 (127.872000 2.160000 249.264000 174.960000) M5:M5 (253.584000 2.160000 374.976000 174.960000) M5:M5 (379.296000 2.160000 500.688000 174.960000) M5:M5 (379.296000 179.280000 500.688000 352.080000) M5:M5 (253.584000 179.280000 374.976000 352.080000) M5:M5 (127.872000 179.280000 249.264000 352.080000) M5:M5 (2.160000 179.280000 123.552000 352.080000) M5:M5 (2.160000 356.400000 123.552000 529.200000) M5:M5 (127.872000 356.400000 249.264000 529.200000) M5:M5 (253.584000 356.400000 374.976000 529.200000) M5:M5 (379.296000 356.400000 500.688000 529.200000) M5:M5 (379.296000 533.520000 500.688000 706.320000) M5:M5 (253.584000 533.520000 374.976000 706.320000) M5:M5 (127.872000 533.520000 249.264000 706.320000) M5:M5 (2.160000 533.520000 123.552000 706.320000) M5:M5}
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_before_pnr.rpt
 setAddStripeMode -reset
 setAddStripeMode -allow_jog none
@@ -1152,5 +1134,3 @@ clearDrc
 verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
 verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_after_trim.rpt
 saveDesign ./saved/axi_ram_placed.enc
-selectWire 402.5440 0.4480 404.1440 709.4400 9 VSS
-fit

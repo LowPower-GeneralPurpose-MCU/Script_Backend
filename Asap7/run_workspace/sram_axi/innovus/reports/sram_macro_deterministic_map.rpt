@@ -1,0 +1,17 @@
+bank instance x y orient status
+0 u_mem/G_SRAM_BANK[0].u_sram 2.16 2.16 R180 placed
+1 u_mem/G_SRAM_BANK[1].u_sram 127.872 2.16 R180 placed
+2 u_mem/G_SRAM_BANK[2].u_sram 253.584 2.16 R180 placed
+3 u_mem/G_SRAM_BANK[3].u_sram 379.296 2.16 R180 placed
+4 u_mem/G_SRAM_BANK[4].u_sram 379.296 179.28 R180 placed
+5 u_mem/G_SRAM_BANK[5].u_sram 253.584 179.28 R180 placed
+6 u_mem/G_SRAM_BANK[6].u_sram 127.872 179.28 R180 placed
+7 u_mem/G_SRAM_BANK[7].u_sram 2.16 179.28 R180 placed
+8 u_mem/G_SRAM_BANK[8].u_sram 2.16 356.4 R180 placed
+9 u_mem/G_SRAM_BANK[9].u_sram 127.872 356.4 R180 placed
+10 u_mem/G_SRAM_BANK[10].u_sram 253.584 356.4 R180 placed
+11 u_mem/G_SRAM_BANK[11].u_sram 379.296 356.4 R180 placed
+12 u_mem/G_SRAM_BANK[12].u_sram 379.296 533.52 R180 placed
+13 u_mem/G_SRAM_BANK[13].u_sram 253.584 533.52 R180 placed
+14 u_mem/G_SRAM_BANK[14].u_sram 127.872 533.52 R180 placed
+15 u_mem/G_SRAM_BANK[15].u_sram 2.16 533.52 R180 placed
