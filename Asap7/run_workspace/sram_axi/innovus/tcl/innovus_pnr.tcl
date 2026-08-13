@@ -222,7 +222,12 @@ if {[catch {
     puts stderr "Post-placement PG reconnect/verify failed: $post_place_pg_error"
     return -code error $post_place_pg_error
 }
-verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}
+if {[catch {
+    verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}
+} post_place_pg_drc_error]} {
+    puts stderr "Post-placement PG DRC failed: $post_place_pg_drc_error"
+    return -code error $post_place_pg_drc_error
+}
 
 saveDesign ./saved/axi_ram_placed.enc
 

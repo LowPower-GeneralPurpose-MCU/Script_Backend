@@ -41,6 +41,22 @@ if {[regexp {set[[:space:]]+LOGIC_REGION_WIDTH[[:space:]]+600\.000} $setup_text]
     fail "sram_macro_setup.tcl must not keep the old oversized logic reserve that produced sub-1% std-cell density"
 }
 
+if {[string first {source ./tcl/sram_pg_model_for_macro_place.tcl} $macro_text] >= 0 ||
+    [string first {place_design -concurrent_macros} $macro_text] >= 0 ||
+    [regexp {SRAM_PG_MODEL} $setup_text]} {
+    fail "SRAM macro floorplan must not use the old temporary PG model or concurrent macro placement path"
+}
+
+if {[string first {./outputs/golden_mimic_sram_power_mesh.tcl} $macro_text] >= 0 ||
+    [string first {./reports/sram_macro_concurrent_map.rpt} $macro_text] >= 0} {
+    fail "SRAM macro floorplan must not reference obsolete temporary-PG/concurrent reports"
+}
+
+if {[string first {./reports/sram_macro_deterministic_map.rpt} $macro_text] < 0 ||
+    [string first {set SRAM_PACK_RECORDS} $macro_text] < 0} {
+    fail "SRAM macro floorplan must write a deterministic SRAM placement map"
+}
+
 if {![regexp {proc[[:space:]]+sram_snap_to_grid[[:space:]]+\{} $macro_text]} {
     fail "sram_macro_floorplan.tcl must define sram_snap_to_grid before placing SRAMs"
 }

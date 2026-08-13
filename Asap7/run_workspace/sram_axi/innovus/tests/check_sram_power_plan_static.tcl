@@ -161,9 +161,7 @@ proc simulate_sram_island_power {script_path} {
     global SRAM_ISLAND_LLX SRAM_ISLAND_LLY SRAM_ISLAND_URX SRAM_ISLAND_URY
     global SRAM_ISLAND_CUT_LLX SRAM_ISLAND_CUT_LLY
     global SRAM_ISLAND_CUT_URX SRAM_ISLAND_CUT_URY
-    global SRAM_PG_MODEL_RING_W SRAM_PG_MODEL_RING_S
-    global SRAM_PG_MODEL_STRIPE_W SRAM_PG_MODEL_STRIPE_S
-    global SRAM_PG_MODEL_STRIPE_PITCH ASAP7_ROW_HEIGHT
+    global ASAP7_ROW_HEIGHT
     global core_llx core_lly
     global power_die_llx power_die_lly
     global ring_m89_w ring_m89_s ring_m89_inner_o ring_m89_outer_o ring_m89_span
@@ -191,11 +189,6 @@ proc simulate_sram_island_power {script_path} {
     set SRAM_ISLAND_CUT_LLY 2.16
     set SRAM_ISLAND_CUT_URX 502.848
     set SRAM_ISLAND_CUT_URY 708.48
-    set SRAM_PG_MODEL_RING_W 0.096
-    set SRAM_PG_MODEL_RING_S 0.288
-    set SRAM_PG_MODEL_STRIPE_W 0.096
-    set SRAM_PG_MODEL_STRIPE_S 0.288
-    set SRAM_PG_MODEL_STRIPE_PITCH 25.920
     set ASAP7_ROW_HEIGHT 1.080
     set core_llx 2.16
     set core_lly 2.16
@@ -905,6 +898,14 @@ foreach flow_pair [list \
         $flow_text \
         {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$post_place_pg_error} \
         "$flow_name must hard-stop on dirty post-placement PG instead of saving axi_ram_placed.enc"
+    assert_contains \
+        $flow_text \
+        {catch[[:space:]]+\{[[:space:]]+verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M4[[:space:]]+M9\}} \
+        "$flow_name must catch dirty post-placement PG special-route DRC"
+    assert_contains \
+        $flow_text \
+        {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$post_place_pg_drc_error} \
+        "$flow_name must hard-stop on dirty post-placement PG DRC instead of saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
         {source[[:space:]]+\./tcl/sram_route_guard\.tcl} \

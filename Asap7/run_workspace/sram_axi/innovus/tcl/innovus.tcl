@@ -173,10 +173,8 @@ source ./tcl/finish_hierFP.tcl
 # 2. SRAM MACRO FLOORPLAN
 # ------------------------------------------------------------------------
 
-# Create a reference 4x4 placement, extract/source a temporary M4/M5 PG
-# resource model, run two-pass concurrent macro placement, and quantize the
-# connectivity-aware result into the required lower-left 4x4 island.  The
-# final sequence is snap -> geometry validation -> FIXED.
+# Create a deterministic lower-left 4x4 SRAM island.  The final sequence is
+# snap -> geometry validation -> FIXED.
 source ./tcl/sram_macro_floorplan.tcl
 source ./tcl/finish_macroFP.tcl
 
@@ -329,7 +327,12 @@ if {[catch {
     puts stderr "Post-placement PG reconnect/verify failed: $post_place_pg_error"
     return -code error $post_place_pg_error
 }
-verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}
+if {[catch {
+    verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}
+} post_place_pg_drc_error]} {
+    puts stderr "Post-placement PG DRC failed: $post_place_pg_drc_error"
+    return -code error $post_place_pg_drc_error
+}
 
 saveDesign ./saved/axi_ram_placed.enc
 

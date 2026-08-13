@@ -352,40 +352,32 @@ Vì sao snap theo site width:
 - Standard-cell row/site trong ASAP7 có grid rất chặt.
 - Snap giúp `snapFPlan -block` phía sau không làm thay đổi gap 4 row quá nhiều.
 
-### 5.5. Tạo temporary PG resource model cho macro placement
+### 5.5. Bỏ temporary PG resource model trong macro placement
+
+Flow hiện tại không còn dùng PG-model tạm hay concurrent macro placer.
+
+Lý do bỏ:
+
+- SRAM đã được yêu cầu thành một island 4x4 cố định, nên concurrent macro placement không còn cần thiết.
+- PG model tạm từng tạo M4/M5 ring/stripe với `extend_to design_boundary`; khi debug GUI rất dễ nhìn thành global power đi phủ lên SRAM island.
+- Theo cách đi đơn giản trong slide của thầy, final SRAM PG nên chỉ được tạo một lần ở gap/halo bằng `sram_island_power.tcl`.
+
+### 5.6. Deterministic 4x4 packing
+
+Script hiện tại đi theo sequence:
 
 ```tcl
-source ./tcl/sram_pg_model_for_macro_place.tcl
-```
-
-Logic:
-
-- Trong slide hierarchy layout, trước concurrent macro placement cần tạo PG model.
-- PG model không phải final power.
-- Nó chỉ giúp macro placer thấy rằng M4/M5 sẽ bị power stripes/rings dùng mất tài nguyên.
-
-Vì sao cần PG model:
-
-- Nếu macro placer không biết power sẽ chiếm routing resource, nó có thể đặt macro quá tối ưu theo wirelength nhưng xấu về power/routing.
-- SRAM island cần chừa gap đúng cho power lines, nên power resource model là một phần của floorplan estimation.
-
-### 5.6. Concurrent macro placement và deterministic packing
-
-Script có comment:
-
-```tcl
-# seed placement -> temporary PG model
-# -> concurrent macro placement -> deterministic 4x4 packing
+# deterministic 4x4 seed -> physical group/fence
 # -> snap -> validate -> FIXED -> save
 ```
 
 Logic:
 
-- Dùng seed 4x4 để có vị trí tham chiếu.
-- Dùng PG model để tool hiểu resource.
-- Sau đó ép lại deterministic 4x4 packing để layout cuối ổn định.
+- Dùng seed 4x4 để đặt SRAM vào vị trí mong muốn ngay từ đầu.
+- Tạo physical group/fence để giữ toàn bộ macro trong island lower-left.
+- Ép lại deterministic 4x4 packing để layout cuối ổn định.
 
-Vì sao không tin hoàn toàn macro placement tự động:
+Vì sao không dùng macro placement tự động cho case này:
 
 - Macro placer có thể tạo island không đều, overlap hoặc notch.
 - Với 16 SRAM gần nhau, yêu cầu gap 4 row và power collector giữa SRAM quan trọng hơn kết quả wirelength tự động.
@@ -1209,4 +1201,3 @@ Logic floorplan và power plan hiện tại đi theo hướng physical-design c�
 - Mỗi giai đoạn quan trọng đều có report để chứng minh: final macro map, route guard report, SRAM PG edge report, checkPlace report và PG connectivity report.
 
 Điểm quan trọng nhất để trình bày là: flow này không chỉ “làm cho GUI nhìn giống hình thầy”, mà đang mô hình hóa đúng vai trò vật lý của SRAM trong Innovus: macro cố định, có gap cho VDD/VSS, có PG topology phân cấp, có blockage bảo vệ routing resource, và có verification sau từng bước.
-

@@ -99,31 +99,10 @@ set LOGIC_REGION_HEIGHT [sram_env_double_or_default SRAM_LOGIC_REGION_HEIGHT  60
 # Only R0/R180 are legal; no R90/R270 is used.
 set SRAM_ISLAND_ORIENT "R180"
 
-# Always convert the raw concurrent-macro result into a complete deterministic
-# 4x4 array before finish_macroFP.tcl.  Set this to 0 only for an intentional
-# manual study of the raw GigaPlace result.
+# Always keep SRAM placement as a complete deterministic 4x4 array before
+# finish_macroFP.tcl.  Set this to 0 only for an intentional manual GUI study
+# of the seed placement.
 set SRAM_AUTO_PACK_4X4 1
-
-# ------------------------------------------------------------------
-# Temporary PG resource model used by concurrent macro placement.
-#
-# This follows the hierarchy-layout slide:
-#   temporary M4/M5 rings and stripes
-#   -> create_pg_model_for_macro_place
-#   -> source the generated model
-#   -> delete the temporary PG shapes
-#
-# These values model routing-resource consumption only.  The final PG
-# topology is still created later by power_plan.tcl.
-# ------------------------------------------------------------------
-set SRAM_PG_MODEL_FILE \
-    "./outputs/golden_mimic_sram_power_mesh.tcl"
-
-set SRAM_PG_MODEL_RING_W       0.096
-set SRAM_PG_MODEL_RING_S       0.288
-set SRAM_PG_MODEL_STRIPE_W     0.096
-set SRAM_PG_MODEL_STRIPE_S     0.288
-set SRAM_PG_MODEL_STRIPE_PITCH 25.920
 
 foreach f [list $SRAM_LIB $SRAM_LEF $SRAM_GDS] {
     if {![file exists $f]} {

@@ -396,7 +396,7 @@ saveDesign ./saved/axi_ram_macroFP.enc
 
 puts "===================================================="
 puts "SRAM MACRO FLOORPLAN SAVED"
-puts " - Sequence    : PG model -> concurrent -> 4x4 pack -> snap -> validate -> FIXED"
+puts " - Sequence    : deterministic 4x4 pack -> snap -> validate -> FIXED"
 puts " - Floorplan   : ./outputs/FloorPlan_withMacro.fp"
 puts " - Geometry Tcl: ./outputs/sram_macro_geometry.tcl"
 puts " - Row cut     : $SRAM_ISLAND_CUT_BOX"

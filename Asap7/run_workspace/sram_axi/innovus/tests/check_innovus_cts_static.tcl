@@ -79,6 +79,7 @@ foreach flow [list $innovus_master $innovus_pnr] {
     require_contains $flow {source ./tcl/core_pg_outside_island.tcl} "outside-island M6/M7 PG source"
     require_contains $flow {source ./tcl/global_upper_pg_to_ring.tcl} "upper PG source"
     require_contains $flow {verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}} "post-place PG DRC guard before placed save"
+    require_contains $flow {post_place_pg_drc_error} "post-place PG DRC hard stop"
     require_contains $flow {-cell $DESIGN} "top-cell name on setPinConstraint"
     require_contains $flow {-place_global_uniform_density false} "compact SRAM-wrapper placement mode"
 }

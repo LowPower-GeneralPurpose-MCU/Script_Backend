@@ -28,10 +28,8 @@ if {![file exists $HIER_FP_FILE]} {
 loadFPlan $HIER_FP_FILE
 
 # Put in the SRAMs only after the reviewed hierarchy floorplan is loaded.
-# This stage creates/sources the temporary PG resource model, deletes its
-# physical shapes, runs two-pass concurrent macro placement, and then packs
-# all sixteen macros into the verified 4x4 island.  Do not leave the session
-# at the irregular raw concurrent placement result.
+# This stage creates the physical group/fence and packs all sixteen macros
+# into the verified 4x4 island.
 set SRAM_AUTO_PACK_4X4 1
 source ./tcl/sram_macro_floorplan.tcl
 
@@ -41,8 +39,7 @@ puts "===================================================="
 puts "MACRO FLOORPLAN READY FOR MANUAL REVIEW"
 puts " - Input  : $HIER_FP_FILE"
 puts " - Review DB: ./saved/axi_ram_macroFP_review.enc"
-puts " - PG model: ./outputs/golden_mimic_sram_power_mesh.tcl"
-puts " - Concurrent map: ./reports/sram_macro_concurrent_map.rpt"
+puts " - Deterministic map: ./reports/sram_macro_deterministic_map.rpt"
 puts ""
 puts "After reviewing connectivity, orientation, gaps and notches:"
 puts "  source ./tcl/finish_macroFP.tcl"
