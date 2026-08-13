@@ -50,38 +50,20 @@ Because the SRAM macros occupy the TOP and BOTTOM core boundaries:
 
 Creates an explicit macro-aware floorplan:
 
-- 8 SRAMs at the bottom boundary
-- 8 SRAMs at the top boundary
-- bottom row orientation `R180`
-- top row orientation `R0`
-- halo around every macro
-- macro status `fixed`
-- straight rows, so no notches
+- one lower-left 4x4 SRAM island
+- all SRAM macros in one physical group
+- fixed macro placement
+- row/column gaps reserved for local SRAM power straps
+- hard placement blockage over the complete island
 
-The selected macro's data pins are close to its local bottom edge.
-Therefore:
+### `tcl/sram_island_power.tcl`
 
-- bottom row uses `R180` so data pins face upward/inward
-- top row uses `R0` so data pins face downward/inward
+Creates the SRAM-local power before standard-cell placement:
 
-### `tcl/sram_gap_stripes.tcl`
-
-Creates one M7 VDD/VSS pair in every macro gap.
-
-This script replaces the original ordinary M7 stripe command.
-M6 horizontal and M5 vertical grids remain in the teacher's flow.
-
-### `tcl/sram_macro_power.tcl`
-
-Adds `sroute -connect {blockPin}`.
-
-The teacher's original:
-
-```tcl
-sroute -connect {corePin}
-```
-
-only handles standard-cell rails. SRAM VDD/VSS are hard-macro block pins.
+- M4 horizontal straps in SRAM row gaps and the top island halo
+- M5 vertical straps in SRAM column gaps plus the right/left island edge
+- `sroute -connect {blockPin}` to the nearest local stripe
+- `editTrim` on VDD/VSS
 
 ### `innovus.tcl`
 
@@ -91,8 +73,8 @@ Main changes:
 
 1. explicit macro-aware floorplan
 2. macro placement before power planning
-3. dedicated M7 VDD/VSS pairs in macro gaps
-4. SRAM block-pin power connection
+3. local SRAM M4/M5 PG in island gaps/halo
+4. SRAM block-pin power connection to local stripes
 5. `place_design_refine_macro false`
 6. output names changed from `Mul32` to `axi_ram`
 7. SRAM GDS merged during stream-out

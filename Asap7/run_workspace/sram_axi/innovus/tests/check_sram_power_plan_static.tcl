@@ -285,15 +285,21 @@ assert_not_contains \
     {deleteRouteBlk} \
     "sram_route_guard.tcl must not manage route blockage objects in the clean flow"
 
-foreach old_child {
+foreach obsolete_child {
     sram_gap_stripes.tcl
     sram_macro_power.tcl
     stitch_island_to_core.tcl
-    core_pg_outside_island.tcl
 } {
-    if {[string first "source ./tcl/$old_child" $power_text] >= 0} {
-        fail "power_plan.tcl must not source $old_child; the SRAM island must reuse the M8/M9 core-ring pair"
+    if {[file exists [file join $tcl_dir $obsolete_child]]} {
+        fail "Obsolete SRAM PG helper must be removed: $obsolete_child"
     }
+    if {[string first "source ./tcl/$obsolete_child" $power_text] >= 0} {
+        fail "power_plan.tcl must not source removed helper $obsolete_child"
+    }
+}
+
+if {[string first {source ./tcl/core_pg_outside_island.tcl} $power_text] >= 0} {
+    fail "The power/pins checkpoint must not add the post-placement M6/M7 mesh"
 }
 
 assert_contains \
