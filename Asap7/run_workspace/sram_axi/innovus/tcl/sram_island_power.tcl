@@ -58,6 +58,9 @@ if {![info exists sram_edge_report]} {
 if {![info exists SRAM_ENABLE_COLUMN_GAP_PG]} {
     set SRAM_ENABLE_COLUMN_GAP_PG 1
 }
+if {![info exists SRAM_COLUMN_GAP_PG_SKIP_LIST]} {
+    set SRAM_COLUMN_GAP_PG_SKIP_LIST {1}
+}
 if {![info exists SRAM_CONNECT_BLOCK_PINS]} {
     set SRAM_CONNECT_BLOCK_PINS 1
 }
@@ -78,6 +81,13 @@ if {$SRAM_MACRO_GAP_Y <= $sram_pair_total} {
 }
 if {$SRAM_ENABLE_COLUMN_GAP_PG && $SRAM_MACRO_GAP_X <= $sram_pair_total} {
     error "SRAM_MACRO_GAP_X=$SRAM_MACRO_GAP_X is too small for one M5 VSS/VDD pair"
+}
+foreach skipped_col_gap $SRAM_COLUMN_GAP_PG_SKIP_LIST {
+    if {![string is integer -strict $skipped_col_gap] ||
+        $skipped_col_gap < 0 ||
+        $skipped_col_gap >= [expr {$SRAM_COLS - 1}]} {
+        error "SRAM_COLUMN_GAP_PG_SKIP_LIST has illegal column-gap index $skipped_col_gap"
+    }
 }
 
 set sram_pg_left [expr {$power_die_llx + $PG_BOUNDARY_EPS}]
@@ -206,6 +216,11 @@ sram_add_local_pg_pair \
 
 if {$SRAM_ENABLE_COLUMN_GAP_PG} {
     for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
+        if {[lsearch -exact $SRAM_COLUMN_GAP_PG_SKIP_LIST $c] >= 0} {
+            puts "SRAM column-gap M5 PG skipped at col_$c: pin-access seam is reserved for SRAM macro priority."
+            continue
+        }
+
         set gap_llx [expr {
             $SRAM_X0 + ($c + 1) * $SRAM_W + $c * $SRAM_MACRO_GAP_X
         }]
@@ -259,6 +274,11 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
 }
 if {$SRAM_ENABLE_COLUMN_GAP_PG} {
     for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
+        if {[lsearch -exact $SRAM_COLUMN_GAP_PG_SKIP_LIST $c] >= 0} {
+            puts $edge_fh "skip col_$c M5 vertical {reserved_for_sram_pin_access}"
+            continue
+        }
+
         set gap_llx [expr {
             $SRAM_X0 + ($c + 1) * $SRAM_W + $c * $SRAM_MACRO_GAP_X
         }]
@@ -275,6 +295,7 @@ puts "===================================================="
 puts "SRAM ISLAND PG CREATED"
 puts " - Local PG       : M4 row-gap/top straps plus M5 edge/column-gap spines"
 puts " - Column-gap M5  : $SRAM_ENABLE_COLUMN_GAP_PG"
+puts " - Skipped columns: $SRAM_COLUMN_GAP_PG_SKIP_LIST"
 puts " - BlockPin sroute: $SRAM_CONNECT_BLOCK_PINS"
 puts " - Report  : $sram_edge_report"
 puts "===================================================="

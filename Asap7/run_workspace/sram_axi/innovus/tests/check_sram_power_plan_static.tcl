@@ -794,6 +794,10 @@ assert_contains \
     "SRAM column-gap M5 collectors must default on so middle SRAM-bank VDD/VSS pins can reach local island collectors"
 assert_contains \
     $child_text(sram_island_power.tcl) \
+    {set[[:space:]]+SRAM_COLUMN_GAP_PG_SKIP_LIST[[:space:]]+\{1\}} \
+    "SRAM island power must skip the center column seam by default because opposing SRAM M4 pins leave too little clean M5 pin-access space"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
     {if[[:space:]]+\{\$SRAM_ENABLE_COLUMN_GAP_PG\}} \
     "SRAM column-gap M5 collectors must be explicitly gated"
 assert_contains \
@@ -831,8 +835,8 @@ if {$global_upper_stripes == 0 || $global_upper_no_pin_stripes < $global_upper_s
 
 set simulated_sram_stripes \
     [simulate_sram_island_power [file join $tcl_dir sram_island_power.tcl]]
-if {[llength $simulated_sram_stripes] != 9} {
-    fail "SRAM island power must default to top M4, three M4 row-gap pairs, left/right M5 edge spines, and three M5 column-gap collectors"
+if {[llength $simulated_sram_stripes] != 8} {
+    fail "SRAM island power must default to top M4, three M4 row-gap pairs, left/right M5 edge spines, and two safe M5 column-gap collectors"
 }
 
 set horizontal_pair_count 0
@@ -840,6 +844,9 @@ set vertical_pair_count 0
 set top_local_ring_found 0
 set left_transition_found 0
 set right_local_ring_found 0
+set col0_collector_found 0
+set col1_collector_found 0
+set col2_collector_found 0
 foreach stripe $simulated_sram_stripes {
     lassign $stripe layer direction area create_pins width spacing
     if {$create_pins ne "0"} {
@@ -885,6 +892,18 @@ foreach stripe $simulated_sram_stripes {
                 abs($urx - 502.848) < 0.000001} {
                 set right_local_ring_found 1
             }
+            if {abs($llx - 123.552) < 0.000001 &&
+                abs($urx - 127.872) < 0.000001} {
+                set col0_collector_found 1
+            }
+            if {abs($llx - 249.264) < 0.000001 &&
+                abs($urx - 253.584) < 0.000001} {
+                set col1_collector_found 1
+            }
+            if {abs($llx - 374.976) < 0.000001 &&
+                abs($urx - 379.296) < 0.000001} {
+                set col2_collector_found 1
+            }
         }
         default {
             fail "Unexpected SRAM island stripe direction: $direction"
@@ -892,11 +911,14 @@ foreach stripe $simulated_sram_stripes {
     }
 }
 
-if {$horizontal_pair_count != 4 || $vertical_pair_count != 5} {
-    fail "Open SRAM island topology requires four M4 pairs and five M5 vertical collector pairs by default"
+if {$horizontal_pair_count != 4 || $vertical_pair_count != 4} {
+    fail "Open SRAM island topology requires four M4 pairs and four M5 vertical collector pairs by default"
 }
 if {!$top_local_ring_found || !$right_local_ring_found || !$left_transition_found} {
     fail "SRAM island must have top/right local collectors plus a left transition spine to keep M4 rows electrically tied to the reused global ring"
+}
+if {!$col0_collector_found || !$col2_collector_found || $col1_collector_found} {
+    fail "SRAM island must keep safe col_0/col_2 M5 collectors while skipping the center col_1 pin-access seam"
 }
 
 if {[llength $SRAM_RING_CAPTURE] != 0} {
