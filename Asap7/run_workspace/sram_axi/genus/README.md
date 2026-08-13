@@ -90,5 +90,5 @@ The script checks this automatically and stops if the count is not 16.
 3. The SRAM black-box declaration provides the HDL interface.
 4. SRAM timing, area and capacitance come from the Liberty file.
 5. VDD/VSS are Liberty `pg_pin`s and do not need to appear as normal RTL ports.
-   Innovus connects them later using `globalNetConnect` and `sroute blockPin`.
+   Innovus maps them with `globalNetConnect`; physical block-pin stitching is opt-in when clean SRAM edge PG access exists.
 6. Change `CLK_PERIOD` in `tcl/constraint.sdc` to the real system target.

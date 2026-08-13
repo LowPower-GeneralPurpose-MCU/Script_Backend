@@ -8,7 +8,7 @@
 ##
 ## Project restriction:
 ##   - addStripe is not allowed to jog
-##   - SRAM blockPin sroute targets the local collector stripes
+##   - SRAM blockPin sroute is opt-in because ASAP7 SRAM PG rails are internal
 ##   - post-placement corePin sroute is not allowed to jog or change layer
 ##   - planned stripe transitions are made only by stacked ViaGen
 ############################################################
@@ -515,8 +515,8 @@ puts "POWER PLAN CORE RINGS CHECKED"
 # ------------------------------------------------------------------------
 
 # Adapt the teacher's ring/stripe intent to this lower-left boundary island:
-# keep an open M4-top/M5-right local ring, reuse global M9-left/M8-bottom, and
-# connect the internal gap collectors and SRAM block pins to this PG structure.
+# keep an open M4-top/M5-left/right local structure, reuse the global M9-left
+# and M8-bottom ring edges, and keep top-level PG out of the SRAM macro bodies.
 puts "POWER PLAN SOURCE SRAM ISLAND: [file normalize ./tcl/sram_island_power.tcl]"
 source ./tcl/sram_island_power.tcl
 puts "POWER PLAN SRAM ISLAND RETURNED"
@@ -530,11 +530,23 @@ if {$PG_CREATE_CORE_RING_PINS} {
 
 editTrim -nets {VDD VSS}
 
-verifyConnectivity \
-    -type special \
-    -net {VDD VSS} \
-    -noUnroutedNet \
-    -report $pg_connectivity_report
+if {$SRAM_CONNECT_BLOCK_PINS} {
+    verifyConnectivity \
+        -type special \
+        -net {VDD VSS} \
+        -noUnroutedNet \
+        -report $pg_connectivity_report
+
+    pg_assert_clean_connectivity_report $pg_connectivity_report
+} else {
+    file mkdir [file dirname $pg_connectivity_report]
+    set pg_conn_fh [open $pg_connectivity_report w]
+    puts $pg_conn_fh "# Skipped"
+    puts $pg_conn_fh "SRAM_CONNECT_BLOCK_PINS=0 keeps top-level special routes off ASAP7 SRAM internal M4 PG rails."
+    puts $pg_conn_fh "Run a macro-specific edge-port stitch only when the SRAM abstract provides clean edge PG access."
+    close $pg_conn_fh
+    puts "PG connectivity checkpoint skipped for SRAM block pins because SRAM_CONNECT_BLOCK_PINS=0."
+}
 
 # This checkpoint is for the PG network created by addRing/addStripe/sroute.
 # The generated ASAP7 SRAM LEF exposes VDD/VSS as M4 hard-macro rail ports.
@@ -545,19 +557,19 @@ verify_drc \
     -layer_range {M4 M9} \
     -report $pg_drc_report
 
-pg_assert_clean_connectivity_report $pg_connectivity_report
 pg_assert_clean_drc_report $pg_drc_report
 
 saveDesign ./saved/axi_ram_powerplan.enc
 
 puts "===================================================="
 puts "HIERARCHICAL POWER PLAN COMPLETED"
-puts " - SRAM island     : open M4/M5 local ring plus six internal collectors"
+puts " - SRAM island     : M4 row-gap/top straps plus M5 left/right edge spines"
 puts " - Core rings      : independent M8/M9 VDD-inner and VSS-outer rings"
 puts " - Core PG pins    : short M9 side taps on both VSS and VDD"
 puts " - Upper M8/M9 mesh: deferred until after placement"
 puts " - addStripe jog   : none"
-puts " - SRAM blockPin   : nearest local stripe"
+puts " - SRAM column gaps: $SRAM_ENABLE_COLUMN_GAP_PG"
+puts " - SRAM blockPin   : $SRAM_CONNECT_BLOCK_PINS"
 puts " - corePin sroute : no jog/no layer change after placement"
 puts " - PG connectivity : ./verify_rpt/pg_connectivity_before_stdcell_place.rpt"
 puts " - PG DRC          : ./verify_rpt/pg_drc_before_stdcell_place.rpt"

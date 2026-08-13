@@ -3,7 +3,7 @@
 ##
 ## Same intent as the teaching slide:
 ##   1. Build local PG only around the SRAM group/gaps.
-##   2. Connect SRAM block pins to the nearest local PG target.
+##   2. Keep top-level special PG off SRAM macro bodies by default.
 ##   3. Trim VDD/VSS stubs before the rest of the power grid continues.
 ##
 ## ASAP7 mapping:
@@ -54,6 +54,20 @@ if {![info exists PG_BOUNDARY_EPS]} {
 if {![info exists sram_edge_report]} {
     set sram_edge_report ./reports/sram_island_pg_edges.rpt
 }
+if {![info exists SRAM_ENABLE_COLUMN_GAP_PG]} {
+    set SRAM_ENABLE_COLUMN_GAP_PG 0
+}
+if {![info exists SRAM_CONNECT_BLOCK_PINS]} {
+    set SRAM_CONNECT_BLOCK_PINS 0
+}
+foreach bool_variable {
+    SRAM_ENABLE_COLUMN_GAP_PG
+    SRAM_CONNECT_BLOCK_PINS
+} {
+    if {![string is boolean -strict [set $bool_variable]]} {
+        error "$bool_variable must be boolean, got [set $bool_variable]"
+    }
+}
 
 set sram_stripe_w $stripe_m45_w
 set sram_stripe_s $stripe_m45_s
@@ -61,7 +75,7 @@ set sram_pair_total [expr {2.0 * $sram_stripe_w + $sram_stripe_s}]
 if {$SRAM_MACRO_GAP_Y <= $sram_pair_total} {
     error "SRAM_MACRO_GAP_Y=$SRAM_MACRO_GAP_Y is too small for one M4 VSS/VDD pair"
 }
-if {$SRAM_MACRO_GAP_X <= $sram_pair_total} {
+if {$SRAM_ENABLE_COLUMN_GAP_PG && $SRAM_MACRO_GAP_X <= $sram_pair_total} {
     error "SRAM_MACRO_GAP_X=$SRAM_MACRO_GAP_X is too small for one M5 VSS/VDD pair"
 }
 
@@ -189,34 +203,42 @@ sram_assert_pg_area_clear_of_macro_bodies local_right $local_right_area
 sram_add_local_pg_pair \
     M5 vertical $local_right_area $sram_stripe_w $sram_stripe_s
 
-for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
-    set gap_llx [expr {
-        $SRAM_X0 + ($c + 1) * $SRAM_W + $c * $SRAM_MACRO_GAP_X
-    }]
-    set gap_urx [expr {$gap_llx + $SRAM_MACRO_GAP_X}]
-    set col_gap_area [list $gap_llx $sram_pg_bottom $gap_urx $sram_pg_top]
+if {$SRAM_ENABLE_COLUMN_GAP_PG} {
+    for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
+        set gap_llx [expr {
+            $SRAM_X0 + ($c + 1) * $SRAM_W + $c * $SRAM_MACRO_GAP_X
+        }]
+        set gap_urx [expr {$gap_llx + $SRAM_MACRO_GAP_X}]
+        set col_gap_area [list $gap_llx $sram_pg_bottom $gap_urx $sram_pg_top]
 
-    sram_assert_pg_area_clear_of_macro_bodies col_gap_$c $col_gap_area
-    sram_add_local_pg_pair \
-        M5 vertical $col_gap_area $sram_stripe_w $sram_stripe_s
+        sram_assert_pg_area_clear_of_macro_bodies col_gap_$c $col_gap_area
+        sram_add_local_pg_pair \
+            M5 vertical $col_gap_area $sram_stripe_w $sram_stripe_s
+    }
+} else {
+    puts "SRAM column-gap M5 PG skipped: SRAM macro body/pin priority is kept higher than internal island stitching."
 }
 
-setSrouteMode -reset
-setSrouteMode \
-    -extendNearestTarget true \
-    -blockPinRouteWithPinWidth false \
-    -viaConnectToShape stripe
+if {$SRAM_CONNECT_BLOCK_PINS} {
+    setSrouteMode -reset
+    setSrouteMode \
+        -extendNearestTarget true \
+        -blockPinRouteWithPinWidth false \
+        -viaConnectToShape stripe
 
-# Use the M4 VDD/VSS rail ports exposed by the SRAM abstract.  Do not force
-# sroute down to narrow internal M3 access shapes inside the macro body.
-sroute \
-    -connect {blockPin} \
-    -nets {VSS VDD} \
-    -blockPin useLef \
-    -blockPinLayerRange {M4 M4} \
-    -blockPinWidthRange {0.150 0.250} \
-    -blockPinTarget {stripe} \
-    -allowJogging 0
+    # Use this only when the SRAM abstract exposes clean edge-access PG ports.
+    # The default flow leaves internal hard-macro rails owned by the SRAM.
+    sroute \
+        -connect {blockPin} \
+        -nets {VSS VDD} \
+        -blockPin useLef \
+        -blockPinLayerRange {M4 M4} \
+        -blockPinWidthRange {0.150 0.250} \
+        -blockPinTarget {stripe} \
+        -allowJogging 0
+} else {
+    puts "SRAM blockPin sroute skipped: ASAP7 SRAM VDD/VSS M4 rails are treated as hard-macro-internal shapes."
+}
 
 editTrim -nets {VSS VDD}
 
@@ -233,12 +255,14 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
     set gap_ury [expr {$gap_lly + $SRAM_MACRO_GAP_Y}]
     puts $edge_fh "gap row_$r M4 horizontal {[list $sram_pg_left $gap_lly $sram_pg_right $gap_ury]}"
 }
-for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
-    set gap_llx [expr {
-        $SRAM_X0 + ($c + 1) * $SRAM_W + $c * $SRAM_MACRO_GAP_X
-    }]
-    set gap_urx [expr {$gap_llx + $SRAM_MACRO_GAP_X}]
-    puts $edge_fh "gap col_$c M5 vertical {[list $gap_llx $sram_pg_bottom $gap_urx $sram_pg_top]}"
+if {$SRAM_ENABLE_COLUMN_GAP_PG} {
+    for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
+        set gap_llx [expr {
+            $SRAM_X0 + ($c + 1) * $SRAM_W + $c * $SRAM_MACRO_GAP_X
+        }]
+        set gap_urx [expr {$gap_llx + $SRAM_MACRO_GAP_X}]
+        puts $edge_fh "gap col_$c M5 vertical {[list $gap_llx $sram_pg_bottom $gap_urx $sram_pg_top]}"
+    }
 }
 close $edge_fh
 
@@ -247,7 +271,8 @@ deselectAll
 
 puts "===================================================="
 puts "SRAM ISLAND PG CREATED"
-puts " - Local PG: M4 row-gap/top straps and M5 column-gap/right straps"
-puts " - BlockPin: nearest local stripe"
+puts " - Local PG       : M4 row-gap/top straps and M5 left/right edge spines"
+puts " - Column-gap M5  : $SRAM_ENABLE_COLUMN_GAP_PG"
+puts " - BlockPin sroute: $SRAM_CONNECT_BLOCK_PINS"
 puts " - Report  : $sram_edge_report"
 puts "===================================================="

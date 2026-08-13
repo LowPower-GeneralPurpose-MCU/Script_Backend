@@ -522,6 +522,14 @@ assert_contains \
     {-stacked_via_top_layer[[:space:]]+M7} \
     "outside-island M6 mesh must connect up to the M7 mesh"
 assert_contains \
+    $child_text(core_pg_outside_island.tcl) \
+    {set[[:space:]]+stripe_m6_w[[:space:]]+0\.128} \
+    "outside-island M6 mesh must use an ASAP7 legal width-table value"
+assert_contains \
+    $child_text(core_pg_outside_island.tcl) \
+    {set[[:space:]]+stripe_m7_w[[:space:]]+0\.128} \
+    "outside-island M7 mesh must use an ASAP7 legal width-table value"
+assert_contains \
     $child_text(global_upper_pg_to_ring.tcl) \
     {-stacked_via_bottom_layer[[:space:]]+M7} \
     "upper M8 mesh must connect down to the M7 core mesh"
@@ -630,23 +638,35 @@ assert_contains \
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-viaConnectToShape[[:space:]]+stripe} \
-    "SRAM blockPin sroute must target the internal M4/M5 collectors"
+    "Optional SRAM blockPin sroute must target the local M4/M5 collectors"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-blockPinRouteWithPinWidth[[:space:]]+false} \
-    "SRAM blockPin sroute must use controlled top-level route width instead of blindly inheriting macro pin width"
+    "Optional SRAM blockPin sroute must use controlled top-level route width instead of blindly inheriting macro pin width"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-blockPinLayerRange[[:space:]]+\{M4[[:space:]]+M4\}} \
-    "SRAM blockPin sroute must target the generated SRAM M4 VDD/VSS rail ports, not the narrow internal M3 access shapes"
+    "Optional SRAM blockPin sroute must target only the generated SRAM M4 VDD/VSS rail ports"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-blockPinWidthRange[[:space:]]+\{0\.150[[:space:]]+0\.250\}} \
-    "SRAM blockPin sroute must select the 0.192um M4 rail ports exposed by the ASAP7 SRAM LEF"
+    "Optional SRAM blockPin sroute must select the 0.192um M4 rail ports exposed by the ASAP7 SRAM LEF"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-allowJogging[[:space:]]+0} \
-    "SRAM blockPin sroute must not jog through the hard-macro body"
+    "Optional SRAM blockPin sroute must not jog through the hard-macro body"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+0} \
+    "SRAM blockPin sroute must default off so top-level PG cannot enter ASAP7 hard-macro rail shapes"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {if[[:space:]]+\{\$SRAM_CONNECT_BLOCK_PINS\}} \
+    "SRAM blockPin sroute must be explicitly gated"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {SRAM[[:space:]]+blockPin[[:space:]]+sroute[[:space:]]+skipped} \
+    "The log must say when SRAM blockPin special routing is intentionally deferred"
 assert_not_contains \
     $all_power_text \
     {-blockPinRouteWithPinWidth[[:space:]]+true} \
@@ -727,7 +747,15 @@ assert_contains \
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {for[[:space:]]+\{set[[:space:]]+c[[:space:]]+0\}[[:space:]]+\{\$c[[:space:]]+<[[:space:]]+\[expr[[:space:]]+\{\$SRAM_COLS[[:space:]]+-[[:space:]]+1\}\]\}} \
-    "SRAM island power must place explicit vertical M5 pairs in every SRAM column gap"
+    "SRAM island power may optionally place explicit vertical M5 pairs in SRAM column gaps"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {set[[:space:]]+SRAM_ENABLE_COLUMN_GAP_PG[[:space:]]+0} \
+    "SRAM column-gap M5 collectors must default off to preserve hard-macro priority"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {if[[:space:]]+\{\$SRAM_ENABLE_COLUMN_GAP_PG\}} \
+    "SRAM column-gap M5 collectors must be explicitly gated"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {SRAM_MACRO_GAP_Y} \
@@ -763,8 +791,8 @@ if {$global_upper_stripes == 0 || $global_upper_no_pin_stripes < $global_upper_s
 
 set simulated_sram_stripes \
     [simulate_sram_island_power [file join $tcl_dir sram_island_power.tcl]]
-if {[llength $simulated_sram_stripes] != 9} {
-    fail "SRAM island power must generate top/right local-ring pairs, one left M5 transition spine, plus 3 M4 row-gap and 3 M5 column-gap pairs"
+if {[llength $simulated_sram_stripes] != 6} {
+    fail "SRAM island power must default to top M4, three M4 row-gap pairs, and left/right M5 edge spines only"
 }
 
 set horizontal_pair_count 0
@@ -824,8 +852,8 @@ foreach stripe $simulated_sram_stripes {
     }
 }
 
-if {$horizontal_pair_count != 4 || $vertical_pair_count != 5} {
-    fail "Open SRAM ring topology requires four M4 pairs and five M5 pairs"
+if {$horizontal_pair_count != 4 || $vertical_pair_count != 2} {
+    fail "Open SRAM island topology requires four M4 pairs and two M5 edge pairs by default"
 }
 if {!$top_local_ring_found || !$right_local_ring_found || !$left_transition_found} {
     fail "SRAM island must have top/right local collectors plus a left transition spine to keep M4 rows electrically tied to the reused global ring"
@@ -1067,6 +1095,14 @@ assert_contains \
     $flow_checks_text \
     {proc[[:space:]]+verify_pg_special_drc_or_stop} \
     "flow_checks.tcl must provide a shared PG special-route DRC guard"
+assert_contains \
+    $flow_checks_text \
+    {set[[:space:]]+PG_CONNECT_FLOATING_STRIPES[[:space:]]+0} \
+    "floatingStripe stitching must default off so Innovus cannot auto-stitch through the SRAM island"
+assert_contains \
+    $flow_checks_text \
+    {if[[:space:]]+\{\$PG_CONNECT_FLOATING_STRIPES\}} \
+    "floatingStripe stitching must be explicitly gated"
 assert_contains \
     $flow_checks_text \
     {-check_only[[:space:]]+special} \

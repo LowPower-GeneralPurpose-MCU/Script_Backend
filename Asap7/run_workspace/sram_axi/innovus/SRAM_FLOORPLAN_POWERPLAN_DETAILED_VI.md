@@ -1,5 +1,12 @@
 # Phân tích chi tiết floorplan và power plan cho SRAM island
 
+Update 2026-08-13:
+
+- Default SRAM island PG has been simplified after reading the latest `innovus.cmd`, `innovus.log`, and `pg_drc_*` reports.
+- M5 column-gap collectors are disabled by default (`SRAM_ENABLE_COLUMN_GAP_PG=0`) because the latest DRC showed special M5 wires too close to ASAP7 SRAM M4 PG rail/pin shapes around the inter-bank gaps.
+- SRAM `blockPin` special routing is disabled by default (`SRAM_CONNECT_BLOCK_PINS=0`) because the ASAP7 SRAM VDD/VSS rails are treated as hard-macro-internal shapes unless the abstract provides clean edge PG access.
+- The default island now keeps only M4 top/row-gap straps and M5 left/right edge spines, preserving hard-macro priority and keeping top-level PG off the SRAM body.
+
 Tài liệu này phân tích kỹ logic floorplan và power plan trong flow Innovus hiện tại của design `axi_ram`, tập trung vào giai đoạn trước standard-cell placement và phần power plan cho SRAM island. Nội dung bám theo script Tcl đang chạy, log/report hiện có, slide của thầy và tài liệu Cadence Innovus.
 
 ## 1. Mục tiêu vật lý của flow

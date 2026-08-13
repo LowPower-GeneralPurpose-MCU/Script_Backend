@@ -118,9 +118,22 @@ proc connect_floating_pg_stripes_nojog {} {
 }
 
 proc connect_core_pg_pins_nojog {{report_file ""}} {
+    global PG_CONNECT_FLOATING_STRIPES
+
     applyGlobalNets
 
-    connect_floating_pg_stripes_nojog
+    if {![info exists PG_CONNECT_FLOATING_STRIPES]} {
+        set PG_CONNECT_FLOATING_STRIPES 0
+    }
+    if {![string is boolean -strict $PG_CONNECT_FLOATING_STRIPES]} {
+        error "PG_CONNECT_FLOATING_STRIPES must be boolean, got $PG_CONNECT_FLOATING_STRIPES"
+    }
+
+    if {$PG_CONNECT_FLOATING_STRIPES} {
+        connect_floating_pg_stripes_nojog
+    } else {
+        puts "Floating PG stripe stitching skipped: keep SRAM island collectors from being auto-stitched through hard-macro keepout."
+    }
 
     setSrouteMode -reset
     setSrouteMode \

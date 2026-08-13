@@ -168,15 +168,15 @@ Script `sram_island_power.tcl` dung topology:
    - M5 vertical tren canh right exposed cua island.
 4. Tao M5 transition spine o canh left de noi M4 row collectors len stack M5/M8.
 5. Tao M4 row-gap collector trong moi gap hang SRAM.
-6. Tao M5 column-gap collector trong moi gap cot SRAM.
-7. Dung `sroute -connect blockPin -blockPinLayerRange {M4 M4} -blockPinTarget stripe -allowJogging 0` de noi SRAM M4 VDD/VSS rail ports toi collector stripe gan nhat.
+6. Khong tao M5 column-gap collector theo default; chi bat bang `SRAM_ENABLE_COLUMN_GAP_PG=1` neu SRAM gap va OBS/pin abstract du clearance.
+7. Khong dung `sroute -connect blockPin` theo default; chi bat bang `SRAM_CONNECT_BLOCK_PINS=1` neu SRAM abstract co PG edge access sach.
 8. `editTrim -nets {VSS VDD}` de cat stub/dangling PG shapes.
 
-Tai sao dung M4/M5 giua SRAM:
+Tai sao khong mac dinh di M5/blockPin giua SRAM:
 
-- `10_Macro.pdf` noi gap giua macro can it nhat mot cap VDD/VSS.
-- Slide `x_Hierarchy Layout.pdf` noi power line phai di giua SRAMs.
-- M4/M5 la local metal phu hop cho SRAM collector trong island; M8/M9 danh cho global ring/mesh.
+- Log moi nhat cho thay DRC tai x gan 251um/y gan 105um va 180um: special M5 trong column gap va SRAM M4 pin rail qua sat nhau.
+- ASAP7 SRAM LEF co V3 OBS/pin shape sat/hoi vuot bbox, nen macro body/pin priority phai cao hon top-level PG.
+- M4 row-gap/top va M5 left/right edge van giu du skeleton de nhin island ro, nhung khong ep special wire di qua macro body.
 
 Tai sao khong dung `-allowJogging` va `-allowLayerChange` trong `sroute`:
 

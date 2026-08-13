@@ -20,19 +20,19 @@ if {![info exists stripe_m67_pitch]} {
     set stripe_m67_pitch 34.560
 }
 if {![info exists stripe_m6_w]} {
-    set stripe_m6_w 0.640
+    set stripe_m6_w 0.128
 }
 if {![info exists stripe_m6_s]} {
-    set stripe_m6_s 0.896
+    set stripe_m6_s 0.288
 }
 if {![info exists stripe_m6_offset]} {
     set stripe_m6_offset 17.280
 }
 if {![info exists stripe_m7_w]} {
-    set stripe_m7_w 0.640
+    set stripe_m7_w 0.128
 }
 if {![info exists stripe_m7_s]} {
-    set stripe_m7_s 0.896
+    set stripe_m7_s 0.288
 }
 if {![info exists stripe_m7_offset]} {
     set stripe_m7_offset 17.280

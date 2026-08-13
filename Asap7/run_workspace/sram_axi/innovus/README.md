@@ -61,8 +61,9 @@ Creates an explicit macro-aware floorplan:
 Creates the SRAM-local power before standard-cell placement:
 
 - M4 horizontal straps in SRAM row gaps and the top island halo
-- M5 vertical straps in SRAM column gaps plus the right/left island edge
-- `sroute -connect {blockPin}` from SRAM M4 VDD/VSS rail ports to the local stripe
+- M5 vertical straps only on the right/left island edge by default
+- M5 column-gap straps are opt-in with `SRAM_ENABLE_COLUMN_GAP_PG=1`
+- SRAM `blockPin` special routing is opt-in with `SRAM_CONNECT_BLOCK_PINS=1`
 - `editTrim` on VDD/VSS
 
 ### `innovus.tcl`
@@ -73,8 +74,8 @@ Main changes:
 
 1. explicit macro-aware floorplan
 2. macro placement before power planning
-3. local SRAM M4/M5 PG in island gaps/halo
-4. SRAM block-pin power connection to local stripes
+3. local SRAM M4 row-gap/top PG plus M5 island-edge spines
+4. SRAM hard-macro body kept clear of top-level special PG by default
 5. `place_design_refine_macro false`
 6. output names changed from `Mul32` to `axi_ram`
 7. SRAM GDS merged during stream-out
