@@ -4,45 +4,45 @@ view} dp 3 metric timing.min_pulse_width.clocktree.wns.analysis_view:<view>.cloc
 specific view and clock} dp 0 metric timing.min_pulse_width.endpoints.tns.analysis_view:<view>.clock:<clock> type slack units ns} timing.min_pulse_width.endpoints.tns.clock:<clock> {cmp moreBetter description {Min pulse width total negative slack (endpoints) for a clock} dp 0 metric timing.min_pulse_width.endpoints.tns.clock:<clock> units ns} timing.min_pulse_width.endpoints.wns {cmp moreBetter description {Min pulse width worst negative slack (endpoints)} dp 3 metric timing.min_pulse_width.endpoints.wns type slack units ns} timing.min_pulse_width.endpoints.wns.analysis_view:<view> {cmp moreBetter description {Min pulse width worst negative slack (clocktree) for a specific view} dp 3 metric timing.min_pulse_width.endpoints.wns.analysis_view:<view> type slack units ns} timing.min_pulse_width.endpoints.wns.analysis_view:<view>.clock:<clock> {cmp moreBetter description {Min pulse width worst negative slack (clocktree) for a
 specific view and clock} dp 3 metric timing.min_pulse_width.endpoints.wns.analysis_view:<view>.clock:<clock> type slack units ns} timing.min_pulse_width.endpoints.wns.clock:<clock> {cmp moreBetter description {Min pulse width worst negative slack (endpoints) for a specific clock} dp 3 metric timing.min_pulse_width.endpoints.wns.clock:<clock> units ns} timing.setup.analysis_views {description {All setup analysis views} dp 0 metric timing.setup.analysis_views} timing.setup.analysis_views.active {description {All active views of setup timing} dp 0 metric timing.setup.analysis_views.active} timing.setup.analysis_views.active.number {description {The number of all active views of setup timing} dp 0 metric timing.setup.analysis_views.active.number} timing.setup.analysis_views.enabled {description {All enabled views of setup timing} dp 0 metric timing.setup.analysis_views.enabled} timing.setup.analysis_views.enabled.number {description {The number of all enabled views of setup timing} dp 0 metric timing.setup.analysis_views.enabled.number} timing.setup.analysis_views.number {description {Number of setup analysis views} dp 0 metric timing.setup.analysis_views.number} timing.setup.feps {cmp lessBetter description {Total number of setup failing end points} dp 0 metric timing.setup.feps} timing.setup.feps.analysis_view:<view> {cmp lessBetter description {Total number of setup failing end points for a specific view} dp 0 metric timing.setup.feps.analysis_view:<view>} timing.setup.feps.path_group:<group> {cmp lessBetter description {Total number of setup failing end points for a specific path group} dp 0 metric timing.setup.feps.path_group:<group>} timing.setup.feps.path_group:<group>.analysis_view:<view> {cmp lessBetter description {Total number of setup failing end points for a specific view and path group} dp 0 metric timing.setup.feps.path_group:<group>.analysis_view:<view>} timing.setup.histogram {description {Setup TNS histogram} dp 0 metric timing.setup.histogram type histogram} timing.setup.histogram.views {description {Setup TNS histogram (per view)} dp 0 metric timing.setup.histogram.views type histogram} timing.setup.paths {description {Setup timing path details} dp 0 metric timing.setup.paths type timing_data units ns} timing.setup.paths.path_group:reg2reg {description {Setup timing path reg2reg details} dp 0 metric timing.setup.paths.path_group:reg2reg type timing_data units ns} timing.setup.pba.histogram {description {Setup TNS histogram} dp 0 metric timing.setup.pba.histogram type histogram} timing.setup.pba.histogram.views {description {Setup TNS histogram (per view)} dp 0 metric timing.setup.pba.histogram.views type histogram} timing.setup.place.feps {cmp lessBetter description {Total number of setup failing end points according to timing inside placement engine} dp 0 internal 1 metric timing.setup.place.feps} timing.setup.place.tns {cmp moreBetter description {Total negative setup slack according to timing inside placement engine} dp 0 internal 1 metric timing.setup.place.tns units ns} timing.setup.place.wns {cmp moreBetterIgnorePositive description {Worst negative setup slack according to timing inside placement engine} dp 3 internal 1 metric timing.setup.place.wns units ns} timing.setup.retime {description {PBA retiming option (path_slew_propagation, e.g.)} dp 0 metric timing.setup.retime} timing.setup.retime_mode {description {PBA retiming mode (exhaustive, bounded, etc)} dp 0 metric timing.setup.retime_mode} timing.setup.tns {cmp moreBetter description {Total negative setup slack (all path groups)} dp 0 metric timing.setup.tns type slack units ns} timing.setup.tns.analysis_view:<view> {cmp moreBetter description {Total negative setup slack for a specific view} dp 0 metric timing.setup.tns.analysis_view:<view> type slack units ns} timing.setup.tns.path_group:<group> {cmp moreBetter description {Total negative setup slack for a specific path group} dp 0 metric timing.setup.tns.path_group:<group> type slack units ns} timing.setup.tns.path_group:<group>.analysis_view:<view> {cmp moreBetter description {Total negative setup slack for a specific view and path group} dp 0 metric timing.setup.tns.path_group:<group>.analysis_view:<view> type slack units ns} timing.setup.type {description {Analysis type (GBA or PBA)} dp 0 metric timing.setup.type} timing.setup.wns {cmp moreBetterBelowTarget description {Worst negative setup slack (all path groups)} dp 3 metric timing.setup.wns target 0 type slack units ns} timing.setup.wns.analysis_view:<view> {cmp moreBetterBelowTarget description {Worst negative setup slack for a specific view} dp 3 metric timing.setup.wns.analysis_view:<view> target 0 type slack units ns} timing.setup.wns.path_group:<group> {cmp moreBetterBelowTarget description {Worst negative setup slack for a specific path group} dp 3 metric timing.setup.wns.path_group:<group> target 0 type slack units ns} timing.setup.wns.path_group:<group>.analysis_view:<view> {cmp moreBetterBelowTarget description {Worst negative setup slack for a specific view and path group} dp 3 metric timing.setup.wns.path_group:<group>.analysis_view:<view> target 0 type slack units ns} timing.setup.worst_path.capture_clock {description {Capture clock of the worst setup path} dp 0 metric timing.setup.worst_path.capture_clock} timing.setup.worst_path.depth {cmp moreBetter description {Logic depth of the worst setup path} dp 0 metric timing.setup.worst_path.depth} timing.setup.worst_path.frequency {cmp moreBetter description {Frequency: 1/(capture period-slack) of the worst setup path} dp 2 metric timing.setup.worst_path.frequency units MHz} timing.setup.worst_path.launch_clock {description {Launch clock of the worst setup path} dp 0 metric timing.setup.worst_path.launch_clock} timing.setup.worst_path.period {cmp moreBetter description {Period of the clock of the worst setup path} dp 2 metric timing.setup.worst_path.period units ns} timing.setup.worst_path.view {description {Analysis view of the worst setup path} dp 0 metric timing.setup.worst_path.view} timing.si.double_clocking.analysis_view:<view> {cmp lessBetter description {Double clocking analysis view} dp 0 metric timing.si.double_clocking.analysis_view:<view>} timing.si.double_clocking.frequency_violations.analysis_view:<view> {cmp lessBetter description {Double clocking frequency violations per view} dp 0 metric timing.si.double_clocking.frequency_violations.analysis_view:<view>} timing.si.double_clocking.report_file.analysis_view:<view> {cmp lessBetter description {Double clocking report file per view} dp 0 metric timing.si.double_clocking.report_file.analysis_view:<view>} timing.si.glitches {cmp lessBetter description {Number of SI glitches} dp 0 metric timing.si.glitches} timing.si.noise {cmp lessBetter description {Amount of noise delay remaining} dp 3 metric timing.si.noise units ns} uuid {description {Uuid of the snapshot} dp 0 inherit_no_children 1 metric uuid}}
 ::goMC::um:load_missing_metric_definition
-::goMC::um:set_metric_safe {design.area} {337956.2352}
-::goMC::um:set_metric_safe {design.area.all} {337956.235200}
+::goMC::um:set_metric_safe {design.area} {337950.16992}
+::goMC::um:set_metric_safe {design.area.all} {337950.169920}
 ::goMC::um:set_metric_safe {design.area.always_on} {0 um^2}
 ::goMC::um:set_metric_safe {design.area.area_io} {0.000000 um^2}
 ::goMC::um:set_metric_safe {design.area.blackbox} {0.000000 um^2}
-::goMC::um:set_metric_safe {design.area.buffer} {157.230720 um^2}
-::goMC::um:set_metric_safe {design.area.combinatorial} {1343.926080 um^2}
+::goMC::um:set_metric_safe {design.area.buffer} {143.467200 um^2}
+::goMC::um:set_metric_safe {design.area.combinatorial} {1337.860800 um^2}
 ::goMC::um:set_metric_safe {design.area.icg} {0 um^2}
-::goMC::um:set_metric_safe {design.area.inverter} {88.413120 um^2}
+::goMC::um:set_metric_safe {design.area.inverter} {102.176640 um^2}
 ::goMC::um:set_metric_safe {design.area.io} {0.000000 um^2}
 ::goMC::um:set_metric_safe {design.area.iso_ls} {0}
 ::goMC::um:set_metric_safe {design.area.isolation} {0 um^2}
 ::goMC::um:set_metric_safe {design.area.latch} {0.000000 um^2}
 ::goMC::um:set_metric_safe {design.area.level_shifter} {0 um^2}
-::goMC::um:set_metric_safe {design.area.logical} {337956.235200 um^2}
+::goMC::um:set_metric_safe {design.area.logical} {337950.169920 um^2}
 ::goMC::um:set_metric_safe {design.area.macro} {335624.601600 um^2}
 ::goMC::um:set_metric_safe {design.area.physical} {0.000000 um^2}
 ::goMC::um:set_metric_safe {design.area.power_switch} {0 um^2}
 ::goMC::um:set_metric_safe {design.area.register} {742.06368}
 ::goMC::um:set_metric_safe {design.area.sequential} {336366.665280 um^2}
-::goMC::um:set_metric_safe {design.area.std_cell} {2331.633600 um^2}
-::goMC::um:set_metric_safe {design.instances} {1370}
-::goMC::um:set_metric_safe {design.instances.all} {1370}
+::goMC::um:set_metric_safe {design.area.std_cell} {2325.568320 um^2}
+::goMC::um:set_metric_safe {design.instances} {1372}
+::goMC::um:set_metric_safe {design.instances.all} {1372}
 ::goMC::um:set_metric_safe {design.instances.always_on} {0}
 ::goMC::um:set_metric_safe {design.instances.area_io} {0}
 ::goMC::um:set_metric_safe {design.instances.blackbox} {0}
-::goMC::um:set_metric_safe {design.instances.buffer} {135}
+::goMC::um:set_metric_safe {design.instances.buffer} {123}
 ::goMC::um:set_metric_safe {design.instances.combinatorial} {940}
 ::goMC::um:set_metric_safe {design.instances.icg} {0}
-::goMC::um:set_metric_safe {design.instances.inverter} {120}
+::goMC::um:set_metric_safe {design.instances.inverter} {134}
 ::goMC::um:set_metric_safe {design.instances.io} {0}
 ::goMC::um:set_metric_safe {design.instances.iso_ls} {0}
 ::goMC::um:set_metric_safe {design.instances.isolation} {0}
 ::goMC::um:set_metric_safe {design.instances.latch} {0}
 ::goMC::um:set_metric_safe {design.instances.level_shifter} {0}
-::goMC::um:set_metric_safe {design.instances.logical} {1370}
+::goMC::um:set_metric_safe {design.instances.logical} {1372}
 ::goMC::um:set_metric_safe {design.instances.macro} {16}
 ::goMC::um:set_metric_safe {design.instances.physical} {0}
 ::goMC::um:set_metric_safe {design.instances.power_switch} {0}
 ::goMC::um:set_metric_safe {design.instances.register} {159}
 ::goMC::um:set_metric_safe {design.instances.sequential} {175}
-::goMC::um:set_metric_safe {design.instances.std_cell} {1354}
+::goMC::um:set_metric_safe {design.instances.std_cell} {1356}

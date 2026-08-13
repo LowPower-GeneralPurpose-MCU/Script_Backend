@@ -14,9 +14,6 @@ catch {setNanoRouteMode -quiet -route_strict_honor_route_rule "false"}
 
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
-catch { setSrouteMode -blockPinRouteWithPinWidth false }
-catch { setSrouteMode -extendNearestTarget true }
-catch { setSrouteMode -viaConnectToShape stripe }
 catch { setDelayCalMode -engine aae }
 catch { setPinAssignMode -pinEditInBatch false }
 catch { setImportMode -discardFloatingVNets false }

@@ -1,2 +1,2 @@
       flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
-UM:*                                    0.000000 ns       0.003500 ns  drv_eco_fixing
+UM:*                                    0.000000 ns       0.008200 ns  drv_eco_fixing
