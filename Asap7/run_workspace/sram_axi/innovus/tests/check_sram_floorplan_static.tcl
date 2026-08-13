@@ -74,11 +74,50 @@ if {![regexp {set[[:space:]]+status[[:space:]]+\[lindex[[:space:]]+\[dbGet[[:spa
     fail "finish_macroFP.tcl must normalize dbGet placement status before validating it"
 }
 
-if {![regexp {createPlaceBlockage[[:space:]]+\\[^#]+-box[[:space:]]+\$SRAM_ISLAND_CUT_BOX} $finish_text]} {
-    fail "finish_macroFP.tcl must clamp the hard placement blockage to SRAM_ISLAND_CUT_BOX so it stays inside the core"
+if {![regexp {cutRow[[:space:]]+-area[[:space:]]+\$SRAM_NO_MESH_BOX} $finish_text]} {
+    fail "finish_macroFP.tcl must cut placement rows across the full SRAM no-mesh column"
+}
+if {![regexp {createPlaceBlockage[[:space:]]+\\[^#]+-box[[:space:]]+\$SRAM_NO_MESH_BOX} $finish_text]} {
+    fail "finish_macroFP.tcl must hard-block the full SRAM no-mesh column, including the top reserved region"
+}
+if {![regexp {set[[:space:]]+SRAM_NO_MESH_URY[[:space:]]+\$core_ury} $finish_text]} {
+    fail "finish_macroFP.tcl must extend the no-mesh SRAM reservation to the core top"
+}
+if {![regexp {puts[[:space:]]+\$blockage_report[[:space:]]+"no_mesh_box[[:space:]]+\$SRAM_NO_MESH_BOX"} $finish_text]} {
+    fail "finish_macroFP.tcl must report the no-mesh SRAM reservation for GUI/log correlation"
 }
 if {[regexp {createPlaceBlockage[[:space:]]+\\[^#]+-box[[:space:]]+\$SRAM_ISLAND_BLOCKAGE_BOX} $finish_text]} {
     fail "finish_macroFP.tcl must not create a placement blockage from the unclamped die-edge SRAM_ISLAND_BLOCKAGE_BOX"
+}
+if {[regexp {createPlaceBlockage[[:space:]]+\\[^#]+-box[[:space:]]+\$SRAM_ISLAND_CUT_BOX} $finish_text]} {
+    fail "finish_macroFP.tcl must not leave the top SRAM reserved column available to the placer"
+}
+
+set geometry_output [file join $innovus_dir outputs sram_macro_geometry.tcl]
+if {[file exists $geometry_output]} {
+    set geometry_text [assert_file_complete $geometry_output]
+    if {![regexp {set[[:space:]]+SRAM_NO_MESH_BOX[[:space:]]+\{2\.16[[:space:]]+2\.16[[:space:]]+502\.848[[:space:]]+768\.672\}} $geometry_text]} {
+        fail "outputs/sram_macro_geometry.tcl is stale; rerun finish_macroFP.tcl to export the full SRAM no-mesh column"
+    }
+}
+
+set blockage_report_path \
+    [file join $innovus_dir reports sram_island_blockage_geometry.rpt]
+if {[file exists $blockage_report_path]} {
+    set fh [open $blockage_report_path r]
+    set blockage_report_text [read $fh]
+    close $fh
+
+    foreach expected_line {
+        {row_cut_box 2.16 2.16 502.848 768.672}
+        {local_sram_pg_cut_box 2.16 2.16 502.848 708.48}
+        {no_mesh_box 2.16 2.16 502.848 768.672}
+        {place_blockage_box 2.16 2.16 502.848 768.672}
+    } {
+        if {[string first $expected_line $blockage_report_text] < 0} {
+            fail "reports/sram_island_blockage_geometry.rpt is stale; missing '$expected_line'"
+        }
+    }
 }
 
 if {[file exists $stale_map]} {

@@ -58,7 +58,7 @@ if {![info exists SRAM_ENABLE_COLUMN_GAP_PG]} {
     set SRAM_ENABLE_COLUMN_GAP_PG 0
 }
 if {![info exists SRAM_CONNECT_BLOCK_PINS]} {
-    set SRAM_CONNECT_BLOCK_PINS 0
+    set SRAM_CONNECT_BLOCK_PINS 1
 }
 foreach bool_variable {
     SRAM_ENABLE_COLUMN_GAP_PG
@@ -226,15 +226,16 @@ if {$SRAM_CONNECT_BLOCK_PINS} {
         -blockPinRouteWithPinWidth false \
         -viaConnectToShape stripe
 
-    # Use this only when the SRAM abstract exposes clean edge-access PG ports.
-    # The default flow leaves internal hard-macro rails owned by the SRAM.
+    # Stitch only the ASAP7 SRAM M4 VDD/VSS abstract pins to the local island
+    # collectors.  M5 is allowed only as a short vertical escape from the M4
+    # macro pin to the nearest local M4 row-gap/top collector.
     sroute \
         -connect {blockPin} \
         -nets {VSS VDD} \
         -blockPin useLef \
-        -blockPinLayerRange {M4 M4} \
+        -blockPinLayerRange {M4 M5} \
         -blockPinWidthRange {0.150 0.250} \
-        -blockPinTarget {stripe} \
+        -blockPinTarget nearestTarget \
         -allowJogging 0
 } else {
     puts "SRAM blockPin sroute skipped: ASAP7 SRAM VDD/VSS M4 rails are treated as hard-macro-internal shapes."

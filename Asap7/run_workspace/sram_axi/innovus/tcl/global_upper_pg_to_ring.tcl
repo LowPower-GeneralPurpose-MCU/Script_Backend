@@ -3,23 +3,21 @@
 ##
 ## Purpose:
 ##   - connect the external M6/M7 mesh to the M8/M9 core ring;
-##   - keep all regular M8/M9 stripes off the complete SRAM island;
+##   - keep all regular M8/M9 stripes off the complete SRAM no-mesh column;
 ##   - preserve one common global stripe phase across split boxes;
 ##   - use straight addStripe shapes and let area-boundary targets close them.
 ##
-## Geometry decomposition of the L-shaped non-SRAM region:
+## Geometry decomposition of the non-SRAM region:
 ##
 ##   M8 horizontal:
-##     1) TOP_FULL_BOX
-##     2) RIGHT_LOWER_BOX
+##     1) RIGHT_FULL_BOX
 ##
 ##   M9 vertical:
 ##     1) RIGHT_FULL_BOX
-##     2) TOP_LEFT_BOX
 ##
 ## The boxes extend to the DIE boundary so their stripes can be
 ## trimmed/stitch-connected to the M8/M9 core ring.  They never enter
-## SRAM_ISLAND_CUT_BOX, including its top/right escape channels.
+## SRAM_NO_MESH_BOX, including the column above the SRAM macros.
 ############################################################
 
 puts "===================================================="
@@ -27,11 +25,11 @@ puts "PHASE 4: UPPER M8/M9 PG OUTSIDE SRAM ISLAND"
 puts "===================================================="
 
 foreach required_var {
-    SRAM_ISLAND_CUT_URX SRAM_ISLAND_CUT_URY
+    SRAM_ISLAND_CUT_URX SRAM_NO_MESH_URX
     core_llx core_lly core_urx core_ury
 } {
     if {![info exists $required_var]} {
-        error "Missing variable $required_var before upper PG phase"
+        error "Missing variable $required_var before upper PG phase; rerun finish_macroFP.tcl so outputs/sram_macro_geometry.tcl contains SRAM_NO_MESH_BOX"
     }
 }
 
@@ -71,46 +69,28 @@ set stripe_m9_offset   17.280
 set upper_m8_sram_guard [pg_layer_boundary_guard M8 $stripe_m8_w]
 set upper_m9_sram_guard [pg_layer_boundary_guard M9 $stripe_m9_w]
 
-set upper_m8_right_llx [expr {$SRAM_ISLAND_CUT_URX + $upper_m8_sram_guard}]
-set upper_m8_top_lly [expr {$SRAM_ISLAND_CUT_URY + $upper_m8_sram_guard}]
-set upper_m9_right_llx [expr {$SRAM_ISLAND_CUT_URX + $upper_m9_sram_guard}]
-set upper_m9_top_lly [expr {$SRAM_ISLAND_CUT_URY + $upper_m9_sram_guard}]
+set upper_m8_right_llx [expr {$SRAM_NO_MESH_URX + $upper_m8_sram_guard}]
+set upper_m9_right_llx [expr {$SRAM_NO_MESH_URX + $upper_m9_sram_guard}]
 
-# L-shaped region outside the complete rectangular island cut box.
-# Horizontal-layer decomposition.
-set UPPER_TOP_FULL_BOX [list \
-    $upper_die_llx $upper_m8_top_lly \
-    $upper_die_urx $upper_die_ury]
-
-set UPPER_RIGHT_LOWER_BOX [list \
+# Right-side region outside the complete no-mesh SRAM column.
+set UPPER_RIGHT_M8_BOX [list \
     $upper_m8_right_llx $upper_die_lly \
-    $upper_die_urx      $SRAM_ISLAND_CUT_URY]
+    $upper_die_urx      $upper_die_ury]
 
-# Vertical-layer decomposition.
-set UPPER_RIGHT_FULL_BOX [list \
+set UPPER_RIGHT_M9_BOX [list \
     $upper_m9_right_llx $upper_die_lly \
     $upper_die_urx      $upper_die_ury]
 
-set UPPER_TOP_LEFT_BOX [list \
-    $upper_die_llx      $upper_m9_top_lly \
-    $SRAM_ISLAND_CUT_URX $upper_die_ury]
-
 pg_assert_box_clear_of_sram_cut \
-    UPPER_TOP_FULL_BOX $UPPER_TOP_FULL_BOX top $upper_m8_sram_guard
+    UPPER_RIGHT_M8_BOX $UPPER_RIGHT_M8_BOX right $upper_m8_sram_guard
 pg_assert_box_clear_of_sram_cut \
-    UPPER_RIGHT_LOWER_BOX $UPPER_RIGHT_LOWER_BOX right $upper_m8_sram_guard
-pg_assert_box_clear_of_sram_cut \
-    UPPER_RIGHT_FULL_BOX $UPPER_RIGHT_FULL_BOX right $upper_m9_sram_guard
-pg_assert_box_clear_of_sram_cut \
-    UPPER_TOP_LEFT_BOX $UPPER_TOP_LEFT_BOX top $upper_m9_sram_guard
+    UPPER_RIGHT_M9_BOX $UPPER_RIGHT_M9_BOX right $upper_m9_sram_guard
 
 puts " - Die box          : $DIE_BOX"
-puts " - SRAM cut UR      : $SRAM_ISLAND_CUT_URX $SRAM_ISLAND_CUT_URY"
+puts " - SRAM no-mesh UR  : $SRAM_NO_MESH_URX $core_ury"
 puts " - SRAM guard       : M8=$upper_m8_sram_guard M9=$upper_m9_sram_guard"
-puts " - M8 top box       : $UPPER_TOP_FULL_BOX"
-puts " - M8 right-lower   : $UPPER_RIGHT_LOWER_BOX"
-puts " - M9 right box     : $UPPER_RIGHT_FULL_BOX"
-puts " - M9 top-left      : $UPPER_TOP_LEFT_BOX"
+puts " - M8 right box     : $UPPER_RIGHT_M8_BOX"
+puts " - M9 right box     : $UPPER_RIGHT_M9_BOX"
 
 # Use the same global phase in every split area.  The reference first
 # stripe is measured from the core lower-left, not from each local box.
@@ -129,7 +109,7 @@ setAddStripeMode \
     -stacked_via_bottom_layer M7 \
     -stacked_via_top_layer M8
 
-foreach area [list $UPPER_TOP_FULL_BOX $UPPER_RIGHT_LOWER_BOX] {
+foreach area [list $UPPER_RIGHT_M8_BOX] {
     set area_lly [lindex $area 1]
     set area_ury [lindex $area 3]
     set area_offset [pg_track_aligned_global_offset \
@@ -161,7 +141,7 @@ setAddStripeMode \
     -stacked_via_bottom_layer M8 \
     -stacked_via_top_layer M9
 
-foreach area [list $UPPER_RIGHT_FULL_BOX $UPPER_TOP_LEFT_BOX] {
+foreach area [list $UPPER_RIGHT_M9_BOX] {
     set area_llx [lindex $area 0]
     set area_urx [lindex $area 2]
     set area_offset [pg_track_aligned_global_offset \
@@ -183,6 +163,6 @@ foreach area [list $UPPER_RIGHT_FULL_BOX $UPPER_TOP_LEFT_BOX] {
         -allow_snapping_override_custom_spacing 1
 }
 
-puts "Upper M8/M9 mesh created only outside SRAM_ISLAND_CUT_BOX."
-puts "No M8/M9 regular stripe was generated over SRAM macro bodies."
+puts "Upper M8/M9 mesh created only to the right of SRAM_NO_MESH_BOX."
+puts "No M8/M9 regular stripe was generated above or over the SRAM island."
 puts "===================================================="

@@ -50,6 +50,53 @@ proc assert_clean_connectivity_report {report_file} {
     error "Connectivity is not clean; inspect [file normalize $report_file] before continuing"
 }
 
+proc assert_clean_pg_connectivity_report {report_file} {
+    set report_text [read_report_text $report_file "PG connectivity"]
+
+    if {[string first "Found no problems or warnings" $report_text] >= 0 ||
+        [regexp {Verification Complete[[:space:]]*:[[:space:]]*0[[:space:]]+Viols} $report_text]} {
+        return
+    }
+
+    if {[regexp -nocase {special routes with opens|Special Wires:[[:space:]]+Pieces of the net are not connected together|IMPVFC-200|dangling[[:space:]]+Wire|shorted} $report_text]} {
+        error "PG special routes are open/shorted; inspect [file normalize $report_file] before continuing"
+    }
+
+    if {![pg_sram_block_pins_are_deferred]} {
+        assert_clean_connectivity_report $report_file
+        return
+    }
+
+    set saw_sram_terminal 0
+    set unexpected_unconnected {}
+    foreach line [split $report_text "\n"] {
+        if {![regexp -nocase {unconnected[[:space:]]+terminal|Terminal\(s\)[[:space:]]+are[[:space:]]+not[[:space:]]+connected|IMPVFC-96} $line]} {
+            continue
+        }
+
+        set trimmed_line [string trim $line]
+        if {[regexp {u_mem/G_SRAM_BANK\[[0-9]+\]\.u_sram/(VDD|VSS)} $trimmed_line]} {
+            set saw_sram_terminal 1
+            continue
+        }
+        if {[regexp {^[[:space:]]*[0-9]+[[:space:]]+Problem\(s\)[[:space:]]+\(IMPVFC-96\):} $trimmed_line]} {
+            continue
+        }
+        if {[regexp {^Net[[:space:]]+V(DD|SS):[[:space:]]+has[[:space:]]+an[[:space:]]+unconnected[[:space:]]+terminal} $trimmed_line]} {
+            continue
+        }
+
+        lappend unexpected_unconnected $trimmed_line
+    }
+
+    if {$saw_sram_terminal && [llength $unexpected_unconnected] == 0} {
+        puts "WARN: PG connectivity report contains only deferred ASAP7 SRAM VDD/VSS macro terminals: $report_file"
+        return
+    }
+
+    error "PG connectivity is not clean; inspect [file normalize $report_file] before continuing"
+}
+
 proc pg_sram_block_pins_are_deferred {} {
     global SRAM_CONNECT_BLOCK_PINS
 
@@ -84,7 +131,7 @@ proc run_pg_connectivity_verify {report_file} {
 proc verify_pg_connectivity_or_stop {report_file} {
     run_pg_connectivity_verify $report_file
 
-    assert_clean_connectivity_report $report_file
+    assert_clean_pg_connectivity_report $report_file
 }
 
 proc verify_pg_special_drc_or_stop {report_file {layer_range {M4 M9}}} {
@@ -148,7 +195,7 @@ proc connect_core_pg_pins_nojog {{report_file ""}} {
     applyGlobalNets
 
     if {![info exists PG_CONNECT_FLOATING_STRIPES]} {
-        set PG_CONNECT_FLOATING_STRIPES 1
+        set PG_CONNECT_FLOATING_STRIPES 0
     }
     if {![string is boolean -strict $PG_CONNECT_FLOATING_STRIPES]} {
         error "PG_CONNECT_FLOATING_STRIPES must be boolean, got $PG_CONNECT_FLOATING_STRIPES"
@@ -177,7 +224,7 @@ proc connect_core_pg_pins_nojog {{report_file ""}} {
 
     if {$report_file ne ""} {
         run_pg_connectivity_verify $report_file
-        assert_clean_connectivity_report $report_file
+        assert_clean_pg_connectivity_report $report_file
     }
 }
 

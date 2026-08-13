@@ -71,14 +71,14 @@ set stdcell_pg_area_ury [expr {
 
 foreach required_var {
     SRAM_ISLAND_CUT_URX
-    SRAM_ISLAND_CUT_URY
+    SRAM_NO_MESH_URX
     core_llx
     core_lly
     core_urx
     core_ury
 } {
     if {![info exists $required_var]} {
-        error "Missing $required_var before lower core PG box rebuild"
+        error "Missing $required_var before lower core PG box rebuild; rerun finish_macroFP.tcl so outputs/sram_macro_geometry.tcl contains SRAM_NO_MESH_BOX"
     }
 }
 
@@ -93,16 +93,12 @@ set logic_edge_tap_min_span [expr {
 if {$logic_edge_tap_span < $logic_edge_tap_min_span} {
     set logic_edge_tap_span $logic_edge_tap_min_span
 }
-set logic_right_guard_llx [expr {$SRAM_ISLAND_CUT_URX + $lower_m5_sram_guard}]
-set logic_top_guard_lly [expr {$SRAM_ISLAND_CUT_URY + $lower_m5_sram_guard}]
+set logic_right_guard_llx [expr {$SRAM_NO_MESH_URX + $lower_m5_sram_guard}]
 set logic_edge_tap_urx [expr {
     min($core_urx, $logic_right_guard_llx + $logic_edge_tap_span)
 }]
 if {$logic_edge_tap_urx <= $logic_right_guard_llx + $logic_edge_tap_min_span} {
     error "Not enough logic channel beside SRAM island for first M5 edge tap"
-}
-if {$stdcell_pg_area_ury <= $logic_top_guard_lly} {
-    error "Not enough top logic channel above SRAM island for guarded M5 taps"
 }
 
 set LOGIC_RIGHT_EDGE_TAP_BOX [list \
@@ -111,16 +107,10 @@ set LOGIC_RIGHT_EDGE_TAP_BOX [list \
 set LOGIC_RIGHT_FULL_BOX [list \
     $logic_edge_tap_urx $stdcell_pg_area_lly \
     $core_urx           $stdcell_pg_area_ury]
-set LOGIC_TOP_LEFT_BOX [list \
-    $core_llx              $logic_top_guard_lly \
-    $SRAM_ISLAND_CUT_URX   $stdcell_pg_area_ury]
 
 pg_assert_box_clear_of_sram_cut \
     LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_EDGE_TAP_BOX \
     right $lower_m5_sram_guard
-pg_assert_box_clear_of_sram_cut \
-    LOGIC_TOP_LEFT_BOX $LOGIC_TOP_LEFT_BOX \
-    top $lower_m5_sram_guard
 
 set global_m5_first_x [expr {$core_llx + $stripe_m5_offset}]
 setAddStripeMode \
@@ -131,7 +121,7 @@ setAddStripeMode \
     -stacked_via_bottom_layer M1 \
     -stacked_via_top_layer M5
 
-foreach area [list $LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_FULL_BOX $LOGIC_TOP_LEFT_BOX] {
+foreach area [list $LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_FULL_BOX] {
     set area_llx [lindex $area 0]
     set area_urx [lindex $area 2]
     set area_nets {VDD VSS}

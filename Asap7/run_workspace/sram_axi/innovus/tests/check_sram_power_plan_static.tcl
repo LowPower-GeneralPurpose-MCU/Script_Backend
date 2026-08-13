@@ -553,7 +553,35 @@ foreach script_name {core_pg_outside_island.tcl global_upper_pg_to_ring.tcl} {
         $child_text($script_name) \
         {pg_assert_box_clear_of_sram_cut} \
         "$script_name must assert guarded PG boxes before addStripe"
+    assert_contains \
+        $child_text($script_name) \
+        {SRAM_NO_MESH_URX} \
+        "$script_name must keep regular mesh to the right of the full SRAM no-mesh column"
 }
+assert_contains \
+    $child_text(core_pg_outside_island.tcl) \
+    {LOGIC_RIGHT_M6_BOX} \
+    "core_pg_outside_island.tcl must keep M6 mesh in a right-side logic box"
+assert_contains \
+    $child_text(core_pg_outside_island.tcl) \
+    {LOGIC_RIGHT_M7_BOX} \
+    "core_pg_outside_island.tcl must keep M7 mesh in a right-side logic box"
+assert_not_contains \
+    $child_text(core_pg_outside_island.tcl) \
+    {LOGIC_TOP_LEFT_BOX|LOGIC_TOP_FULL_BOX|LOGIC_RIGHT_LOWER_BOX} \
+    "core_pg_outside_island.tcl must not create top-left/top-full M6/M7 mesh over the SRAM island"
+assert_contains \
+    $child_text(global_upper_pg_to_ring.tcl) \
+    {UPPER_RIGHT_M8_BOX} \
+    "global_upper_pg_to_ring.tcl must keep M8 mesh in a right-side logic box"
+assert_contains \
+    $child_text(global_upper_pg_to_ring.tcl) \
+    {UPPER_RIGHT_M9_BOX} \
+    "global_upper_pg_to_ring.tcl must keep M9 mesh in a right-side logic box"
+assert_not_contains \
+    $child_text(global_upper_pg_to_ring.tcl) \
+    {UPPER_TOP_LEFT_BOX|UPPER_TOP_FULL_BOX|UPPER_RIGHT_LOWER_BOX} \
+    "global_upper_pg_to_ring.tcl must not create upper M8/M9 mesh above the SRAM island"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {LOGIC_RIGHT_EDGE_TAP_BOX} \
@@ -574,14 +602,22 @@ assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$logic_right_guard_llx[[:space:]]+\$stdcell_pg_area_lly} \
     "core_lower_pg_nojog.tcl must rebuild lower PG boxes from guarded std-cell PG rail coverage, not the raw SRAM cut boundary"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {SRAM_NO_MESH_URX} \
+    "core_lower_pg_nojog.tcl must guard from the full SRAM no-mesh column, not only the macro bbox"
 if {[regexp {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$SRAM_ISLAND_CUT_URX[[:space:]]+\$lower_pg_die_lly} \
         $child_text(core_lower_pg_nojog.tcl)]} {
     fail "core_lower_pg_nojog.tcl must not use die-bottom/die-top for standard-cell corePin areas"
 }
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
-    {foreach[[:space:]]+area[[:space:]]+\[list[[:space:]]+\$LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\$LOGIC_RIGHT_FULL_BOX[[:space:]]+\$LOGIC_TOP_LEFT_BOX\]} \
-    "the edge M5 tap must be generated before the repeated right/top M5 tap mesh"
+    {foreach[[:space:]]+area[[:space:]]+\[list[[:space:]]+\$LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\$LOGIC_RIGHT_FULL_BOX\]} \
+    "the edge M5 tap must be generated before the repeated right-side M5 tap mesh"
+assert_not_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {LOGIC_TOP_LEFT_BOX|LOGIC_TOP_FULL_BOX} \
+    "core_lower_pg_nojog.tcl must not create top-left/top-full M5 mesh above the SRAM island"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {if[[:space:]]+\{\$area[[:space:]]+eq[[:space:]]+\$LOGIC_RIGHT_EDGE_TAP_BOX\}} \
@@ -638,27 +674,31 @@ assert_contains \
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-viaConnectToShape[[:space:]]+stripe} \
-    "Optional SRAM blockPin sroute must target the local M4/M5 collectors"
+    "SRAM blockPin sroute must target the local island collectors"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-blockPinRouteWithPinWidth[[:space:]]+false} \
-    "Optional SRAM blockPin sroute must use controlled top-level route width instead of blindly inheriting macro pin width"
+    "SRAM blockPin sroute must use controlled top-level route width instead of blindly inheriting macro pin width"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {-blockPinLayerRange[[:space:]]+\{M4[[:space:]]+M4\}} \
-    "Optional SRAM blockPin sroute must target only the generated SRAM M4 VDD/VSS rail ports"
+    {-blockPinLayerRange[[:space:]]+\{M4[[:space:]]+M5\}} \
+    "SRAM blockPin sroute must connect ASAP7 M4 SRAM pins through only short M5 local escapes"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-blockPinWidthRange[[:space:]]+\{0\.150[[:space:]]+0\.250\}} \
-    "Optional SRAM blockPin sroute must select the 0.192um M4 rail ports exposed by the ASAP7 SRAM LEF"
+    "SRAM blockPin sroute must select the 0.192um M4 rail ports exposed by the ASAP7 SRAM LEF"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-blockPinTarget[[:space:]]+nearestTarget} \
+    "SRAM blockPin sroute must stitch to the nearest local collector instead of broad floating-stripe stitching"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-allowJogging[[:space:]]+0} \
-    "Optional SRAM blockPin sroute must not jog through the hard-macro body"
+    "SRAM blockPin sroute must not jog through the hard-macro body"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+0} \
-    "SRAM blockPin sroute must default off so top-level PG cannot enter ASAP7 hard-macro rail shapes"
+    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+1} \
+    "SRAM blockPin sroute must default on for a final powered SRAM island"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {if[[:space:]]+\{\$SRAM_CONNECT_BLOCK_PINS\}} \
@@ -1101,12 +1141,16 @@ assert_contains \
     "flow_checks.tcl must know when SRAM block-pin stitching is intentionally deferred"
 assert_contains \
     $flow_checks_text \
-    {set[[:space:]]+PG_CONNECT_FLOATING_STRIPES[[:space:]]+1} \
-    "floatingStripe stitching must default on so split outside-island PG stripes do not remain open"
+    {set[[:space:]]+PG_CONNECT_FLOATING_STRIPES[[:space:]]+0} \
+    "floatingStripe stitching must default off so Innovus cannot auto-stitch through the SRAM no-mesh column"
 assert_contains \
     $flow_checks_text \
     {if[[:space:]]+\{\$PG_CONNECT_FLOATING_STRIPES\}} \
     "floatingStripe stitching must be explicitly gated"
+assert_contains \
+    $flow_checks_text \
+    {Floating[[:space:]]+PG[[:space:]]+stripe[[:space:]]+stitching[[:space:]]+skipped} \
+    "flow_checks.tcl must log when floatingStripe stitching is intentionally skipped"
 assert_contains \
     $flow_checks_text \
     {pg_sram_block_pins_are_deferred} \
@@ -1121,8 +1165,12 @@ assert_contains \
     "flow_checks.tcl PG DRC guard must isolate special-route DRC"
 assert_contains \
     $flow_checks_text \
-    {assert_clean_connectivity_report[[:space:]]+\$report_file} \
+    {assert_clean_pg_connectivity_report[[:space:]]+\$report_file} \
     "flow_checks.tcl must hard-stop on dirty post-placement PG before saveDesign"
+assert_contains \
+    $flow_checks_text \
+    {IMPVFC-200|special[[:space:]]+routes[[:space:]]+with[[:space:]]+opens} \
+    "flow_checks.tcl must still fail on disconnected PG special-wire islands"
 assert_contains \
     $flow_checks_text \
     {No[[:space:]]+DRC[[:space:]]+violations[[:space:]]+were[[:space:]]+found} \

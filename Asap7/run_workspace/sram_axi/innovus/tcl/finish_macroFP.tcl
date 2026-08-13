@@ -291,6 +291,20 @@ set SRAM_ISLAND_CUT_BOX [list \
     $SRAM_ISLAND_CUT_URY \
 ]
 
+# Keep the full column above the SRAM island free of standard cells and
+# global PG mesh.  SRAM-local PG still uses SRAM_ISLAND_CUT_BOX; this wider
+# box is only for the no-mesh/no-cell island reservation.
+set SRAM_NO_MESH_LLX $SRAM_ISLAND_CUT_LLX
+set SRAM_NO_MESH_LLY $SRAM_ISLAND_CUT_LLY
+set SRAM_NO_MESH_URX $SRAM_ISLAND_CUT_URX
+set SRAM_NO_MESH_URY $core_ury
+set SRAM_NO_MESH_BOX [list \
+    $SRAM_NO_MESH_LLX \
+    $SRAM_NO_MESH_LLY \
+    $SRAM_NO_MESH_URX \
+    $SRAM_NO_MESH_URY \
+]
+
 set blockage_clearance_left \
     [expr {$SRAM_ISLAND_LLX - $SRAM_ISLAND_BLOCKAGE_LLX}]
 set blockage_clearance_bottom \
@@ -313,13 +327,13 @@ foreach {side clearance} [list \
     }
 }
 
-cutRow -area $SRAM_ISLAND_CUT_BOX
+cutRow -area $SRAM_NO_MESH_BOX
 
 createPlaceBlockage \
     -name SRAM_ISLAND_GROUP_BLOCKAGE \
     -type hard \
     -noCutByCore \
-    -box $SRAM_ISLAND_CUT_BOX
+    -box $SRAM_NO_MESH_BOX
 
 set blockage_report \
     [open ./reports/sram_island_blockage_geometry.rpt w]
@@ -344,9 +358,11 @@ puts $blockage_report \
     "blockage_clearance_right $blockage_clearance_right"
 puts $blockage_report \
     "blockage_clearance_top $blockage_clearance_top"
-puts $blockage_report "row_cut_box $SRAM_ISLAND_CUT_BOX"
+puts $blockage_report "row_cut_box $SRAM_NO_MESH_BOX"
 puts $blockage_report "desired_blockage_box $SRAM_ISLAND_BLOCKAGE_BOX"
-puts $blockage_report "place_blockage_box $SRAM_ISLAND_CUT_BOX"
+puts $blockage_report "local_sram_pg_cut_box $SRAM_ISLAND_CUT_BOX"
+puts $blockage_report "no_mesh_box $SRAM_NO_MESH_BOX"
+puts $blockage_report "place_blockage_box $SRAM_NO_MESH_BOX"
 puts $blockage_report "place_blockage_type hard"
 puts $blockage_report "no_cut_by_core true"
 close $blockage_report
@@ -376,6 +392,11 @@ foreach variable {
     SRAM_ISLAND_CUT_URX
     SRAM_ISLAND_CUT_URY
     SRAM_ISLAND_CUT_BOX
+    SRAM_NO_MESH_LLX
+    SRAM_NO_MESH_LLY
+    SRAM_NO_MESH_URX
+    SRAM_NO_MESH_URY
+    SRAM_NO_MESH_BOX
     SRAM_DIE_BOX
     SRAM_ISLAND_BLOCKAGE_LLX
     SRAM_ISLAND_BLOCKAGE_LLY
@@ -399,7 +420,8 @@ puts "SRAM MACRO FLOORPLAN SAVED"
 puts " - Sequence    : deterministic 4x4 pack -> snap -> validate -> FIXED"
 puts " - Floorplan   : ./outputs/FloorPlan_withMacro.fp"
 puts " - Geometry Tcl: ./outputs/sram_macro_geometry.tcl"
-puts " - Row cut     : $SRAM_ISLAND_CUT_BOX"
+puts " - Local PG cut: $SRAM_ISLAND_CUT_BOX"
+puts " - No-mesh box : $SRAM_NO_MESH_BOX"
 puts " - Hard blockage to die: $SRAM_ISLAND_BLOCKAGE_BOX"
 puts " - Database    : ./saved/axi_ram_macroFP.enc"
 puts "===================================================="
