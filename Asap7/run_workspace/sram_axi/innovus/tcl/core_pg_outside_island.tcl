@@ -16,29 +16,6 @@ proc pg_positive_mod {value period} {
     return $result
 }
 
-# Vertical-layer regions: right side full-height + top-left above island.
-set LOGIC_RIGHT_FULL_BOX [list \
-    $SRAM_ISLAND_CUT_URX $core_lly \
-    $core_urx             $core_ury]
-set LOGIC_TOP_LEFT_BOX [list \
-    $core_llx              $SRAM_ISLAND_CUT_URY \
-    $SRAM_ISLAND_CUT_URX   $core_ury]
-
-# Horizontal-layer regions: top full-width + right-lower beside island.
-set LOGIC_TOP_FULL_BOX [list \
-    $core_llx $SRAM_ISLAND_CUT_URY \
-    $core_urx $core_ury]
-set LOGIC_RIGHT_LOWER_BOX [list \
-    $SRAM_ISLAND_CUT_URX $core_lly \
-    $core_urx             $SRAM_ISLAND_CUT_URY]
-
-puts "External vertical PG boxes:"
-puts " - RIGHT FULL: $LOGIC_RIGHT_FULL_BOX"
-puts " - TOP LEFT  : $LOGIC_TOP_LEFT_BOX"
-puts "External horizontal PG boxes:"
-puts " - TOP FULL  : $LOGIC_TOP_FULL_BOX"
-puts " - RIGHT LOW : $LOGIC_RIGHT_LOWER_BOX"
-
 if {![info exists stripe_m67_pitch]} {
     set stripe_m67_pitch 34.560
 }
@@ -60,6 +37,47 @@ if {![info exists stripe_m7_s]} {
 if {![info exists stripe_m7_offset]} {
     set stripe_m7_offset 17.280
 }
+
+set core_m6_sram_guard [pg_layer_boundary_guard M6 $stripe_m6_w]
+set core_m7_sram_guard [pg_layer_boundary_guard M7 $stripe_m7_w]
+
+set core_m6_right_llx [expr {$SRAM_ISLAND_CUT_URX + $core_m6_sram_guard}]
+set core_m6_top_lly [expr {$SRAM_ISLAND_CUT_URY + $core_m6_sram_guard}]
+set core_m7_right_llx [expr {$SRAM_ISLAND_CUT_URX + $core_m7_sram_guard}]
+set core_m7_top_lly [expr {$SRAM_ISLAND_CUT_URY + $core_m7_sram_guard}]
+
+# Vertical-layer regions: right side full-height + top-left above island.
+set LOGIC_RIGHT_FULL_BOX [list \
+    $core_m7_right_llx $core_lly \
+    $core_urx          $core_ury]
+set LOGIC_TOP_LEFT_BOX [list \
+    $core_llx            $core_m7_top_lly \
+    $SRAM_ISLAND_CUT_URX $core_ury]
+
+# Horizontal-layer regions: top full-width + right-lower beside island.
+set LOGIC_TOP_FULL_BOX [list \
+    $core_llx $core_m6_top_lly \
+    $core_urx $core_ury]
+set LOGIC_RIGHT_LOWER_BOX [list \
+    $core_m6_right_llx $core_lly \
+    $core_urx          $SRAM_ISLAND_CUT_URY]
+
+pg_assert_box_clear_of_sram_cut \
+    LOGIC_RIGHT_FULL_BOX $LOGIC_RIGHT_FULL_BOX right $core_m7_sram_guard
+pg_assert_box_clear_of_sram_cut \
+    LOGIC_TOP_LEFT_BOX $LOGIC_TOP_LEFT_BOX top $core_m7_sram_guard
+pg_assert_box_clear_of_sram_cut \
+    LOGIC_TOP_FULL_BOX $LOGIC_TOP_FULL_BOX top $core_m6_sram_guard
+pg_assert_box_clear_of_sram_cut \
+    LOGIC_RIGHT_LOWER_BOX $LOGIC_RIGHT_LOWER_BOX right $core_m6_sram_guard
+
+puts "External vertical PG boxes:"
+puts " - RIGHT FULL: $LOGIC_RIGHT_FULL_BOX"
+puts " - TOP LEFT  : $LOGIC_TOP_LEFT_BOX"
+puts "External horizontal PG boxes:"
+puts " - TOP FULL  : $LOGIC_TOP_FULL_BOX"
+puts " - RIGHT LOW : $LOGIC_RIGHT_LOWER_BOX"
+puts " - SRAM guard: M6=$core_m6_sram_guard M7=$core_m7_sram_guard"
 
 # M7 vertical mesh outside island, globally phase-aligned.
 set global_m7_first_x [expr {$core_llx + $stripe_m7_offset}]

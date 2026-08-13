@@ -55,6 +55,7 @@ if {![info exists PG_BOUNDARY_EPS]} {
 if {![info exists STDCELL_PG_AREA_OVERHANG]} {
     set STDCELL_PG_AREA_OVERHANG [pg_layer_pitch M5]
 }
+set lower_m5_sram_guard [pg_layer_boundary_guard M5 $stripe_m5_w]
 
 # ASAP7 std-cell M1 PG pins can protrude a fraction of a track outside the
 # legal placement row bbox.  Keep ViaGen area boxes wide enough to see the
@@ -95,22 +96,34 @@ if {![info exists LOGIC_RIGHT_EDGE_TAP_BOX] ||
     if {$logic_edge_tap_span < $logic_edge_tap_min_span} {
         set logic_edge_tap_span $logic_edge_tap_min_span
     }
+    set logic_right_guard_llx [expr {$SRAM_ISLAND_CUT_URX + $lower_m5_sram_guard}]
+    set logic_top_guard_lly [expr {$SRAM_ISLAND_CUT_URY + $lower_m5_sram_guard}]
     set logic_edge_tap_urx [expr {
-        min($core_urx, $SRAM_ISLAND_CUT_URX + $logic_edge_tap_span)
+        min($core_urx, $logic_right_guard_llx + $logic_edge_tap_span)
     }]
-    if {$logic_edge_tap_urx <= $SRAM_ISLAND_CUT_URX + $logic_edge_tap_min_span} {
+    if {$logic_edge_tap_urx <= $logic_right_guard_llx + $logic_edge_tap_min_span} {
         error "Not enough logic channel beside SRAM island for first M5 edge tap"
+    }
+    if {$stdcell_pg_area_ury <= $logic_top_guard_lly} {
+        error "Not enough top logic channel above SRAM island for guarded M5 taps"
     }
 
     set LOGIC_RIGHT_EDGE_TAP_BOX [list \
-        $SRAM_ISLAND_CUT_URX $stdcell_pg_area_lly \
+        $logic_right_guard_llx $stdcell_pg_area_lly \
         $logic_edge_tap_urx  $stdcell_pg_area_ury]
     set LOGIC_RIGHT_FULL_BOX [list \
         $logic_edge_tap_urx $stdcell_pg_area_lly \
         $core_urx           $stdcell_pg_area_ury]
     set LOGIC_TOP_LEFT_BOX [list \
-        $core_llx              $SRAM_ISLAND_CUT_URY \
+        $core_llx              $logic_top_guard_lly \
         $SRAM_ISLAND_CUT_URX   $stdcell_pg_area_ury]
+
+    pg_assert_box_clear_of_sram_cut \
+        LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_EDGE_TAP_BOX \
+        right $lower_m5_sram_guard
+    pg_assert_box_clear_of_sram_cut \
+        LOGIC_TOP_LEFT_BOX $LOGIC_TOP_LEFT_BOX \
+        top $lower_m5_sram_guard
 }
 
 set global_m5_first_x [expr {$core_llx + $stripe_m5_offset}]

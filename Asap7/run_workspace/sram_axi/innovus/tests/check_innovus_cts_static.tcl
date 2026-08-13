@@ -78,6 +78,7 @@ foreach flow [list $innovus_master $innovus_pnr] {
     require_contains $flow {source ./tcl/core_lower_pg_nojog.tcl} "lower PG source"
     require_contains $flow {source ./tcl/core_pg_outside_island.tcl} "outside-island M6/M7 PG source"
     require_contains $flow {source ./tcl/global_upper_pg_to_ring.tcl} "upper PG source"
+    require_contains $flow {verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}} "post-place PG DRC guard before placed save"
     require_contains $flow {-cell $DESIGN} "top-cell name on setPinConstraint"
     require_contains $flow {-place_global_uniform_density false} "compact SRAM-wrapper placement mode"
 }
@@ -96,6 +97,8 @@ require_contains $innovus_master {connect_core_pg_pins_nojog ./verify_rpt/pg_con
 require_contains $innovus_pnr {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} "post-place PG trim/reconnect guard in PnR flow"
 require_contains $flow_checks {proc connect_core_pg_pins_nojog} "shared post-CTS/filler PG reconnect proc"
 require_contains $flow_checks {proc connect_floating_pg_stripes_nojog} "shared floating-stripe PG reconnect proc"
+require_contains $flow_checks {proc verify_pg_special_drc_or_stop} "shared PG special DRC guard proc"
+require_contains $flow_checks {-check_only special} "PG DRC guard must check special-route DRC only"
 require_contains $flow_checks {-connect {floatingStripe}} "floating PG stripes must be connected using documented sroute target"
 require_contains $flow_checks {setSrouteMode -reset} "shared PG reconnect must reset stale sroute mode"
 require_contains $core_pg_outside {-stacked_via_bottom_layer M5} "M6 mesh connects down to M5 taps"

@@ -82,6 +82,50 @@ proc pg_layer_offset {layer} {
     return $PG_TRACK_OFFSET($key)
 }
 
+# Guard an SRAM keepout boundary against addStripe center snapping.  The area
+# bbox may not cross the island, but a snapped stripe edge can still move by a
+# half track; include half the stripe width so the drawn metal edge stays out.
+proc pg_layer_boundary_guard {layer width} {
+    global PG_BOUNDARY_EPS
+
+    set guard [expr {$width / 2.0 + 0.5 * [pg_layer_pitch $layer]}]
+    if {[info exists PG_BOUNDARY_EPS] && $guard < $PG_BOUNDARY_EPS} {
+        set guard $PG_BOUNDARY_EPS
+    }
+    return [pg_format_coord $guard]
+}
+
+proc pg_assert_box_clear_of_sram_cut {name box side guard} {
+    global SRAM_ISLAND_CUT_URX SRAM_ISLAND_CUT_URY
+
+    if {[llength $box] != 4} {
+        error "$name must be a four-coordinate box, got: $box"
+    }
+    lassign $box llx lly urx ury
+    if {$urx <= $llx || $ury <= $lly} {
+        error "$name is empty or inverted after SRAM guard insertion: $box"
+    }
+
+    set eps 0.000001
+    switch -- $side {
+        right {
+            set required_llx [expr {$SRAM_ISLAND_CUT_URX + $guard}]
+            if {$llx < $required_llx - $eps} {
+                error "$name starts at x=$llx but must be >= $required_llx to keep snapped PG metal out of the SRAM cut box"
+            }
+        }
+        top {
+            set required_lly [expr {$SRAM_ISLAND_CUT_URY + $guard}]
+            if {$lly < $required_lly - $eps} {
+                error "$name starts at y=$lly but must be >= $required_lly to keep snapped PG metal out of the SRAM cut box"
+            }
+        }
+        default {
+            error "Unsupported SRAM guard side for $name: $side"
+        }
+    }
+}
+
 proc pg_positive_mod {value period} {
     if {$period <= 0.0} {
         error "Modulo period must be positive: $period"

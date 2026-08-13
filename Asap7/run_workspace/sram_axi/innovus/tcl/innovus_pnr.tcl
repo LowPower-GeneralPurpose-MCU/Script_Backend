@@ -208,6 +208,7 @@ timeDesign \
 foreach stale_post_place_pg_report {
     ./verify_rpt/pg_connectivity_before_trim.rpt
     ./verify_rpt/pg_connectivity_after_trim.rpt
+    ./verify_rpt/pg_drc_after_trim.rpt
 } {
     file delete -force $stale_post_place_pg_report
 }
@@ -221,6 +222,7 @@ if {[catch {
     puts stderr "Post-placement PG reconnect/verify failed: $post_place_pg_error"
     return -code error $post_place_pg_error
 }
+verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}
 
 saveDesign ./saved/axi_ram_placed.enc
 

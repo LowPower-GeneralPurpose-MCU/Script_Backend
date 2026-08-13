@@ -61,6 +61,15 @@ proc verify_pg_connectivity_or_stop {report_file} {
     assert_clean_connectivity_report $report_file
 }
 
+proc verify_pg_special_drc_or_stop {report_file {layer_range {M4 M9}}} {
+    verify_drc \
+        -check_only special \
+        -layer_range $layer_range \
+        -report $report_file
+
+    assert_clean_drc_report $report_file
+}
+
 proc write_skipped_report {report_file reason} {
     file mkdir [file dirname $report_file]
     set fp [open $report_file w]

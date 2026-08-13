@@ -318,6 +318,8 @@ if {[string first {source ./tcl/global_upper_pg_to_ring.tcl} $power_text] >= 0} 
 foreach proc_name {
     pg_layer_pitch
     pg_layer_offset
+    pg_layer_boundary_guard
+    pg_assert_box_clear_of_sram_cut
     pg_snap_value_to_layer_track
     pg_positive_mod
     pg_track_aligned_pair_offset
@@ -508,6 +510,23 @@ assert_contains \
     $child_text(global_upper_pg_to_ring.tcl) \
     {-stacked_via_top_layer[[:space:]]+M8} \
     "M8 stripe pass must stop at M8; M8-to-M9 vias are created by the M9 stripe pass"
+foreach {script_name guard_name} {
+    core_pg_outside_island.tcl core_m6_sram_guard
+    core_pg_outside_island.tcl core_m7_sram_guard
+    global_upper_pg_to_ring.tcl upper_m8_sram_guard
+    global_upper_pg_to_ring.tcl upper_m9_sram_guard
+} {
+    assert_contains \
+        $child_text($script_name) \
+        [format {set[[:space:]]+%s[[:space:]]+\[pg_layer_boundary_guard} $guard_name] \
+        "$script_name must derive $guard_name from stripe width and track pitch"
+}
+foreach script_name {core_pg_outside_island.tcl global_upper_pg_to_ring.tcl} {
+    assert_contains \
+        $child_text($script_name) \
+        {pg_assert_box_clear_of_sram_cut} \
+        "$script_name must assert guarded PG boxes before addStripe"
+}
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {LOGIC_RIGHT_EDGE_TAP_BOX} \
@@ -522,8 +541,12 @@ assert_contains \
     "core_lower_pg_nojog.tcl must cover bottom-row VDD/VSS pins that protrude below the placement row bbox"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
-    {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$SRAM_ISLAND_CUT_URX[[:space:]]+\$stdcell_pg_area_lly} \
-    "core_lower_pg_nojog.tcl must rebuild lower PG boxes from std-cell PG rail coverage, not die boundary"
+    {set[[:space:]]+lower_m5_sram_guard[[:space:]]+\[pg_layer_boundary_guard[[:space:]]+M5[[:space:]]+\$stripe_m5_w\]} \
+    "core_lower_pg_nojog.tcl must compute an M5 SRAM boundary guard from the actual stripe width and routing pitch"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$logic_right_guard_llx[[:space:]]+\$stdcell_pg_area_lly} \
+    "core_lower_pg_nojog.tcl must rebuild lower PG boxes from guarded std-cell PG rail coverage, not the raw SRAM cut boundary"
 if {[regexp {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$SRAM_ISLAND_CUT_URX[[:space:]]+\$lower_pg_die_lly} \
         $child_text(core_lower_pg_nojog.tcl)]} {
     fail "core_lower_pg_nojog.tcl must not use die-bottom/die-top for standard-cell corePin areas"
@@ -873,6 +896,10 @@ foreach flow_pair [list \
         "$flow_name must reconnect/verify VDD/VSS PG after post-placement mesh construction"
     assert_contains \
         $flow_text \
+        {verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M4[[:space:]]+M9\}} \
+        "$flow_name must run a post-placement M4-M9 special-route PG DRC guard before saving axi_ram_placed.enc"
+    assert_contains \
+        $flow_text \
         {catch[[:space:]]+\{[[:space:]]+connect_core_pg_pins_nojog[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
         "$flow_name must catch the post-placement PG reconnect guard"
     assert_contains \
@@ -917,6 +944,7 @@ foreach flow_pair [list \
     set middle_pg_index [string first {source ./tcl/core_pg_outside_island.tcl} $flow_text]
     set stale_post_place_delete_index [string first {file delete -force $stale_post_place_pg_report} $flow_text]
     set post_place_guard_index [string first {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} $flow_text]
+    set post_place_drc_guard_index [string first {verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}} $flow_text]
     set placed_save_index [string first {saveDesign ./saved/axi_ram_placed.enc} $flow_text]
     set before_trim_verify_seen [regexp {
         verifyConnectivity[[:space:]\n\\]+.*pg_connectivity_before_trim\.rpt
@@ -963,6 +991,10 @@ foreach flow_pair [list \
         $post_place_guard_index > $placed_save_index} {
         fail "$flow_name must trim/reconnect and guard PG connectivity before saving axi_ram_placed.enc"
     }
+    if {$post_place_drc_guard_index < 0 ||
+        $post_place_drc_guard_index > $placed_save_index} {
+        fail "$flow_name must guard post-placement PG DRC before saving axi_ram_placed.enc"
+    }
     if {$before_trim_verify_seen} {
         fail "$flow_name must not verify a pre-trim PG state that is expected to contain dangling M1 rail endpoints"
     }
@@ -1002,6 +1034,14 @@ assert_contains \
     $flow_checks_text \
     {-net[[:space:]]+\{VDD[[:space:]]+VSS\}} \
     "post-placement PG verifyConnectivity must be restricted to VDD/VSS"
+assert_contains \
+    $flow_checks_text \
+    {proc[[:space:]]+verify_pg_special_drc_or_stop} \
+    "flow_checks.tcl must provide a shared PG special-route DRC guard"
+assert_contains \
+    $flow_checks_text \
+    {-check_only[[:space:]]+special} \
+    "flow_checks.tcl PG DRC guard must isolate special-route DRC"
 assert_contains \
     $flow_checks_text \
     {assert_clean_connectivity_report[[:space:]]+\$report_file} \

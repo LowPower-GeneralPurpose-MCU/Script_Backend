@@ -59,32 +59,6 @@ set upper_die_lly [expr {$die_lly + $PG_BOUNDARY_EPS}]
 set upper_die_urx [expr {$die_urx - $PG_BOUNDARY_EPS}]
 set upper_die_ury [expr {$die_ury - $PG_BOUNDARY_EPS}]
 
-# L-shaped region outside the complete rectangular island cut box.
-# Horizontal-layer decomposition.
-set UPPER_TOP_FULL_BOX [list \
-    $upper_die_llx $SRAM_ISLAND_CUT_URY \
-    $upper_die_urx $upper_die_ury]
-
-set UPPER_RIGHT_LOWER_BOX [list \
-    $SRAM_ISLAND_CUT_URX $upper_die_lly \
-    $upper_die_urx $SRAM_ISLAND_CUT_URY]
-
-# Vertical-layer decomposition.
-set UPPER_RIGHT_FULL_BOX [list \
-    $SRAM_ISLAND_CUT_URX $upper_die_lly \
-    $upper_die_urx $upper_die_ury]
-
-set UPPER_TOP_LEFT_BOX [list \
-    $upper_die_llx $SRAM_ISLAND_CUT_URY \
-    $SRAM_ISLAND_CUT_URX $upper_die_ury]
-
-puts " - Die box          : $DIE_BOX"
-puts " - SRAM cut UR      : $SRAM_ISLAND_CUT_URX $SRAM_ISLAND_CUT_URY"
-puts " - M8 top box       : $UPPER_TOP_FULL_BOX"
-puts " - M8 right-lower   : $UPPER_RIGHT_LOWER_BOX"
-puts " - M9 right box     : $UPPER_RIGHT_FULL_BOX"
-puts " - M9 top-left      : $UPPER_TOP_LEFT_BOX"
-
 # 4x Innovus database values.
 set stripe_m89_pitch   34.560
 set stripe_m8_w         1.600
@@ -93,6 +67,50 @@ set stripe_m8_offset   17.280
 set stripe_m9_w         1.600
 set stripe_m9_s         1.280
 set stripe_m9_offset   17.280
+
+set upper_m8_sram_guard [pg_layer_boundary_guard M8 $stripe_m8_w]
+set upper_m9_sram_guard [pg_layer_boundary_guard M9 $stripe_m9_w]
+
+set upper_m8_right_llx [expr {$SRAM_ISLAND_CUT_URX + $upper_m8_sram_guard}]
+set upper_m8_top_lly [expr {$SRAM_ISLAND_CUT_URY + $upper_m8_sram_guard}]
+set upper_m9_right_llx [expr {$SRAM_ISLAND_CUT_URX + $upper_m9_sram_guard}]
+set upper_m9_top_lly [expr {$SRAM_ISLAND_CUT_URY + $upper_m9_sram_guard}]
+
+# L-shaped region outside the complete rectangular island cut box.
+# Horizontal-layer decomposition.
+set UPPER_TOP_FULL_BOX [list \
+    $upper_die_llx $upper_m8_top_lly \
+    $upper_die_urx $upper_die_ury]
+
+set UPPER_RIGHT_LOWER_BOX [list \
+    $upper_m8_right_llx $upper_die_lly \
+    $upper_die_urx      $SRAM_ISLAND_CUT_URY]
+
+# Vertical-layer decomposition.
+set UPPER_RIGHT_FULL_BOX [list \
+    $upper_m9_right_llx $upper_die_lly \
+    $upper_die_urx      $upper_die_ury]
+
+set UPPER_TOP_LEFT_BOX [list \
+    $upper_die_llx      $upper_m9_top_lly \
+    $SRAM_ISLAND_CUT_URX $upper_die_ury]
+
+pg_assert_box_clear_of_sram_cut \
+    UPPER_TOP_FULL_BOX $UPPER_TOP_FULL_BOX top $upper_m8_sram_guard
+pg_assert_box_clear_of_sram_cut \
+    UPPER_RIGHT_LOWER_BOX $UPPER_RIGHT_LOWER_BOX right $upper_m8_sram_guard
+pg_assert_box_clear_of_sram_cut \
+    UPPER_RIGHT_FULL_BOX $UPPER_RIGHT_FULL_BOX right $upper_m9_sram_guard
+pg_assert_box_clear_of_sram_cut \
+    UPPER_TOP_LEFT_BOX $UPPER_TOP_LEFT_BOX top $upper_m9_sram_guard
+
+puts " - Die box          : $DIE_BOX"
+puts " - SRAM cut UR      : $SRAM_ISLAND_CUT_URX $SRAM_ISLAND_CUT_URY"
+puts " - SRAM guard       : M8=$upper_m8_sram_guard M9=$upper_m9_sram_guard"
+puts " - M8 top box       : $UPPER_TOP_FULL_BOX"
+puts " - M8 right-lower   : $UPPER_RIGHT_LOWER_BOX"
+puts " - M9 right box     : $UPPER_RIGHT_FULL_BOX"
+puts " - M9 top-left      : $UPPER_TOP_LEFT_BOX"
 
 # Use the same global phase in every split area.  The reference first
 # stripe is measured from the core lower-left, not from each local box.
