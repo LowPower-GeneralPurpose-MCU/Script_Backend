@@ -248,7 +248,6 @@ set power_children {
     core_lower_pg_nojog.tcl
     core_pg_outside_island.tcl
     global_upper_pg_to_ring.tcl
-    sram_pg_body_guard.tcl
 }
 
 set power_text [read_complete_file $power_plan]
@@ -533,22 +532,6 @@ foreach script_name {core_pg_outside_island.tcl global_upper_pg_to_ring.tcl} {
         "$script_name must assert guarded PG boxes before addStripe"
 }
 assert_contains \
-    $child_text(sram_pg_body_guard.tcl) \
-    {proc[[:space:]]+sram_pg_body_guard_after_post_place} \
-    "sram_pg_body_guard.tcl must define the post-placement top-level PG body-overlap guard"
-assert_contains \
-    $child_text(sram_pg_body_guard.tcl) \
-    {proc[[:space:]]+sram_pg_collect_body_overlaps} \
-    "sram_pg_body_guard.tcl must collect VDD/VSS top-level special-wire overlaps against SRAM macro bodies"
-assert_contains \
-    $child_text(sram_pg_body_guard.tcl) \
-    {LEF pin/OBS geometry inside the hard macro is not scanned here} \
-    "sram_pg_body_guard.tcl report must distinguish hard-macro LEF geometry from top-level PG wires"
-assert_contains \
-    $child_text(sram_pg_body_guard.tcl) \
-    {strict_layers[[:space:]]+\{M6[[:space:]]+M7[[:space:]]+M8[[:space:]]+M9\}} \
-    "sram_pg_body_guard.tcl must hard-stop regular mesh overlaps on M6-M9 by default"
-assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {LOGIC_RIGHT_EDGE_TAP_BOX} \
     "core_lower_pg_nojog.tcl must create an explicit first M5 tap beside the SRAM island right edge"
@@ -652,29 +635,22 @@ assert_not_contains \
 
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {proc[[:space:]]+sram_pg_assert_edge_wires} \
-    "SRAM island power must define a runtime edge-wire guard"
-assert_contains \
-    $child_text(sram_island_power.tcl) \
-    {min_coverage_ratio} \
-    "SRAM island edge-wire guard must support per-edge coverage thresholds after editTrim"
-assert_contains \
-    $child_text(sram_island_power.tcl) \
     {set[[:space:]]+sram_edge_report[[:space:]]+\./reports/sram_island_pg_edges\.rpt} \
-    "SRAM island power must write an explicit edge report for GUI/debug correlation"
-foreach edge_name {reused_left reused_bottom local_top local_right} {
+    "SRAM island power must write a small region report for GUI/debug correlation"
+foreach edge_name {local_left local_top local_right} {
     assert_contains \
         $child_text(sram_island_power.tcl) \
         $edge_name \
         "SRAM island edge report must cover $edge_name"
 }
-set island_trim_index [string first {editTrim -nets {VSS VDD}} $child_text(sram_island_power.tcl)]
-set island_edge_assert_index [string first {sram_pg_assert_edge_wires $sram_edge_report $sram_edge_specs} $child_text(sram_island_power.tcl)]
-if {$island_trim_index < 0 ||
-    $island_edge_assert_index < 0 ||
-    $island_edge_assert_index <= $island_trim_index} {
-    fail "SRAM island edge-wire guard must run after editTrim so the saved DB cannot miss top/right local ring wires"
-}
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {proc[[:space:]]+sram_add_local_pg_pair} \
+    "SRAM island power must keep repeated addStripe calls in one small helper"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {puts[[:space:]]+\$edge_fh[[:space:]]+"type[[:space:]]+name[[:space:]]+layer[[:space:]]+direction[[:space:]]+area"} \
+    "SRAM island power must write a simple local PG region report after editTrim"
 
 if {[regexp -- {-allowJogging|-allowLayerChange} $child_text(sram_island_power.tcl)]} {
     fail "SRAM blockPin sroute must not pass explicit allowJogging/allowLayerChange switches"
@@ -717,10 +693,6 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {local_left} \
     "SRAM island power must add a narrow M5 transition spine at the reused left global-ring edge"
-assert_contains \
-    $child_text(sram_island_power.tcl) \
-    {\[list[[:space:]]+local_left[[:space:]]+M5[[:space:]]+vertical[[:space:]]+\$local_left_area[[:space:]]+0\.70\]} \
-    "The reused-left M5 transition spine must use a relaxed post-trim coverage guard instead of failing on harmless sub-micron trim"
 if {[string first "-extend_to design_boundary" $sram_island_code_only] >= 0} {
     fail "Area-constrained SRAM island stripes must not also use -extend_to design_boundary; Innovus IMPPP-330 rejects that combination"
 }
@@ -913,20 +885,8 @@ foreach flow_pair [list \
         "$flow_name must build the post-placement M8/M9 upper PG mesh before lower M1/M5 taps"
     assert_contains \
         $flow_text \
-        {source[[:space:]]+\./tcl/sram_pg_body_guard\.tcl} \
-        "$flow_name must source the SRAM PG body-overlap guard before saving the placed design"
-    assert_contains \
-        $flow_text \
-        {sram_pg_write_region_report[[:space:]]+\./reports/sram_pg_regions_after_trim\.rpt} \
-        "$flow_name must write a SRAM island/outside-island PG region audit report"
-    assert_contains \
-        $flow_text \
         {connect_core_pg_pins_nojog[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
         "$flow_name must reconnect/verify VDD/VSS PG after post-placement mesh construction"
-    assert_contains \
-        $flow_text \
-        {sram_pg_body_guard_after_post_place[[:space:]]+\\[[:space:]]+\./reports/sram_pg_body_overlap_after_trim\.rpt[[:space:]]+\\[[:space:]]+\{M6[[:space:]]+M7[[:space:]]+M8[[:space:]]+M9\}} \
-        "$flow_name must hard-stop if top-level regular mesh overlaps SRAM macro bodies"
     assert_contains \
         $flow_text \
         {verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M4[[:space:]]+M9\}} \

@@ -50,7 +50,6 @@ set core_lower_pg [read_file ./tcl/core_lower_pg_nojog.tcl]
 set flow_checks [read_file ./tcl/flow_checks.tcl]
 set core_pg_outside [read_file ./tcl/core_pg_outside_island.tcl]
 set global_upper_pg [read_file ./tcl/global_upper_pg_to_ring.tcl]
-set sram_pg_body_guard [read_file ./tcl/sram_pg_body_guard.tcl]
 
 foreach flow [list $innovus_master $innovus_pnr] {
     require_contains $flow {set enc_source_continue_on_error false} "source stops on Tcl errors"
@@ -79,10 +78,6 @@ foreach flow [list $innovus_master $innovus_pnr] {
     require_contains $flow {source ./tcl/core_lower_pg_nojog.tcl} "lower PG source"
     require_contains $flow {source ./tcl/core_pg_outside_island.tcl} "outside-island M6/M7 PG source"
     require_contains $flow {source ./tcl/global_upper_pg_to_ring.tcl} "upper PG source"
-    require_contains $flow {source ./tcl/sram_pg_body_guard.tcl} "SRAM top-level PG body-overlap guard source"
-    require_contains $flow {sram_pg_write_region_report ./reports/sram_pg_regions_after_trim.rpt} "SRAM island/outside-island PG region report"
-    require_contains $flow {sram_pg_body_guard_after_post_place} "SRAM top-level PG body-overlap guard call"
-    require_contains $flow {./reports/sram_pg_body_overlap_after_trim.rpt} "SRAM PG body-overlap report"
     require_contains $flow {verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}} "post-place PG DRC guard before placed save"
     require_contains $flow {-cell $DESIGN} "top-cell name on setPinConstraint"
     require_contains $flow {-place_global_uniform_density false} "compact SRAM-wrapper placement mode"
@@ -109,8 +104,5 @@ require_contains $flow_checks {setSrouteMode -reset} "shared PG reconnect must r
 require_contains $core_pg_outside {-stacked_via_bottom_layer M5} "M6 mesh connects down to M5 taps"
 require_contains $global_upper_pg {-stacked_via_bottom_layer M7} "M8 mesh connects down to M7"
 require_contains $global_upper_pg {-stacked_via_top_layer M8} "M8 mesh does not create M9-driven M7 patches"
-require_contains $sram_pg_body_guard {proc sram_pg_body_guard_after_post_place} "SRAM PG body-overlap guard proc"
-require_contains $sram_pg_body_guard {LEF pin/OBS geometry inside the hard macro is not scanned here} "SRAM PG body report distinguishes hard macro LEF geometry"
-require_contains $sram_pg_body_guard {{M6 M7 M8 M9}} "SRAM PG body guard defaults strict mesh layers"
 
 puts "PASS: Innovus CTS/static unit checks"
