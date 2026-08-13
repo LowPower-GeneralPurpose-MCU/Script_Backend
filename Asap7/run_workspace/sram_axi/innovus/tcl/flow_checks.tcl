@@ -50,14 +50,39 @@ proc assert_clean_connectivity_report {report_file} {
     error "Connectivity is not clean; inspect [file normalize $report_file] before continuing"
 }
 
-proc verify_pg_connectivity_or_stop {report_file} {
+proc pg_sram_block_pins_are_deferred {} {
+    global SRAM_CONNECT_BLOCK_PINS
+
+    if {![info exists SRAM_CONNECT_BLOCK_PINS]} {
+        return 0
+    }
+    if {![string is boolean -strict $SRAM_CONNECT_BLOCK_PINS]} {
+        error "SRAM_CONNECT_BLOCK_PINS must be boolean, got $SRAM_CONNECT_BLOCK_PINS"
+    }
+
+    return [expr {!$SRAM_CONNECT_BLOCK_PINS}]
+}
+
+proc run_pg_connectivity_verify {report_file} {
     applyGlobalNets
 
-    verifyConnectivity \
+    set verify_cmd [list \
+        verifyConnectivity \
         -type special \
-        -net {VDD VSS} \
-        -noUnroutedNet \
-        -report $report_file
+        -net {VDD VSS}]
+
+    if {[pg_sram_block_pins_are_deferred]} {
+        puts "PG connectivity verify: SRAM block pins are deferred; checking special-route opens/shorts only."
+    } else {
+        lappend verify_cmd -noUnroutedNet
+    }
+
+    lappend verify_cmd -report $report_file
+    {*}$verify_cmd
+}
+
+proc verify_pg_connectivity_or_stop {report_file} {
+    run_pg_connectivity_verify $report_file
 
     assert_clean_connectivity_report $report_file
 }
@@ -123,13 +148,14 @@ proc connect_core_pg_pins_nojog {{report_file ""}} {
     applyGlobalNets
 
     if {![info exists PG_CONNECT_FLOATING_STRIPES]} {
-        set PG_CONNECT_FLOATING_STRIPES 0
+        set PG_CONNECT_FLOATING_STRIPES 1
     }
     if {![string is boolean -strict $PG_CONNECT_FLOATING_STRIPES]} {
         error "PG_CONNECT_FLOATING_STRIPES must be boolean, got $PG_CONNECT_FLOATING_STRIPES"
     }
 
     if {$PG_CONNECT_FLOATING_STRIPES} {
+        puts "Connecting floating PG stripes to existing VDD/VSS ring/stripe/blockring targets."
         connect_floating_pg_stripes_nojog
     } else {
         puts "Floating PG stripe stitching skipped: keep SRAM island collectors from being auto-stitched through hard-macro keepout."
@@ -150,11 +176,7 @@ proc connect_core_pg_pins_nojog {{report_file ""}} {
     clearDrc
 
     if {$report_file ne ""} {
-        verifyConnectivity \
-            -type special \
-            -net {VDD VSS} \
-            -noUnroutedNet \
-            -report $report_file
+        run_pg_connectivity_verify $report_file
         assert_clean_connectivity_report $report_file
     }
 }

@@ -1097,12 +1097,24 @@ assert_contains \
     "flow_checks.tcl must provide a shared PG special-route DRC guard"
 assert_contains \
     $flow_checks_text \
-    {set[[:space:]]+PG_CONNECT_FLOATING_STRIPES[[:space:]]+0} \
-    "floatingStripe stitching must default off so Innovus cannot auto-stitch through the SRAM island"
+    {proc[[:space:]]+pg_sram_block_pins_are_deferred} \
+    "flow_checks.tcl must know when SRAM block-pin stitching is intentionally deferred"
+assert_contains \
+    $flow_checks_text \
+    {set[[:space:]]+PG_CONNECT_FLOATING_STRIPES[[:space:]]+1} \
+    "floatingStripe stitching must default on so split outside-island PG stripes do not remain open"
 assert_contains \
     $flow_checks_text \
     {if[[:space:]]+\{\$PG_CONNECT_FLOATING_STRIPES\}} \
     "floatingStripe stitching must be explicitly gated"
+assert_contains \
+    $flow_checks_text \
+    {pg_sram_block_pins_are_deferred} \
+    "post-placement PG connectivity must relax unrouted SRAM macro terminals only in deferred block-pin mode"
+assert_contains \
+    $flow_checks_text \
+    {lappend[[:space:]]+verify_cmd[[:space:]]+-noUnroutedNet} \
+    "strict PG connectivity must still use -noUnroutedNet when SRAM block pins are stitched"
 assert_contains \
     $flow_checks_text \
     {-check_only[[:space:]]+special} \
