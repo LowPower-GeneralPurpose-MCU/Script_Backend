@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Wed Aug 12 19:21:27 2026                
+#  Created on Thu Aug 13 14:48:38 2026                
 #                                                     
 #######################################################
 
@@ -1124,21 +1124,21 @@ setSrouteMode -reset
 setSrouteMode -viaConnectToShape {ring stripe blockring}
 sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
 setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M1 -stacked_via_top_layer M5
-addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {502.848 1.968 507.168 768.864} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 11.760000 -create_pins 0 -area {507.168 1.968 623.088 768.864} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 24.288000 -create_pins 0 -area {2.16 708.48 502.848 768.864} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {503.04 1.968 507.36 768.864} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 11.568000 -create_pins 0 -area {507.36 1.968 623.088 768.864} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -set_to_set_distance 25.920 -start_from left -start_offset 24.288000 -create_pins 0 -area {2.16 708.672 502.848 768.864} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M6 -stacked_via_top_layer M7
-addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from left -start_offset 0.384000 -area {502.848 2.16 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from left -start_offset 17.232000 -area {2.16 708.48 502.848 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from left -start_offset 34.496000 -area {503.296 2.16 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from left -start_offset 17.232000 -area {2.16 708.928 502.848 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M5 -stacked_via_top_layer M7
-addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from bottom -start_offset 2.112000 -area {2.16 708.48 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from bottom -start_offset 17.232000 -area {502.848 2.16 623.088 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from bottom -start_offset 1.664000 -area {2.16 708.928 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.640 -spacing 0.896 -set_to_set_distance 34.560 -start_from bottom -start_offset 17.232000 -area {503.296 2.16 623.088 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
-addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 2.080000 -create_pins 0 -area {0.192 708.48 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 19.168000 -create_pins 0 -area {502.848 0.192 625.056 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 1.120000 -create_pins 0 -area {0.192 709.44 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 19.168000 -create_pins 0 -area {503.808 0.192 625.056 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M8 -stacked_via_top_layer M9
-addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 0.352000 -create_pins 0 -area {502.848 0.192 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.168000 -create_pins 0 -area {0.192 708.48 502.848 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 33.952000 -create_pins 0 -area {503.808 0.192 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.168000 -create_pins 0 -area {0.192 709.44 502.848 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 applyGlobalNets
 applyGlobalNets
 setSrouteMode -reset
@@ -1150,56 +1150,7 @@ sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 
 editTrim -nets {VDD VSS}
 clearDrc
 verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
+verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_after_trim.rpt
 saveDesign ./saved/axi_ram_placed.enc
-zoomBox -264.91100 -215.33825 916.12475 841.94075
-create_route_type -name leaf_rule -bottom_preferred_layer M2 -top_preferred_layer M3
-create_route_type -name trunk_rule -bottom_preferred_layer M4 -top_preferred_layer M5
-create_route_type -name top_rule -bottom_preferred_layer M6 -top_preferred_layer M7
-set_ccopt_property -net_type leaf route_type leaf_rule
-set_ccopt_property -net_type trunk route_type trunk_rule
-set_ccopt_property -net_type top route_type top_rule
-set_ccopt_property routing_top_min_fanout 100
-set_ccopt_property target_max_trans 0.3ns
-set_ccopt_property -net_type leaf target_max_trans 120ps
-set_ccopt_property -net_type trunk target_max_trans 160ps
-set_ccopt_property -net_type top target_max_trans 200ps
-set_ccopt_property target_skew 50ps
-set_ccopt_property buffer_cells {
-    BUFx4_ASAP7_75t_R
-    BUFx8_ASAP7_75t_R
-    BUFx10_ASAP7_75t_R
-    BUFx12_ASAP7_75t_R
-    BUFx12f_ASAP7_75t_R
-    BUFx16f_ASAP7_75t_R
-    BUFx24_ASAP7_75t_R
-}
-set_ccopt_property inverter_cells {
-    CKINVDCx8_ASAP7_75t_R
-    CKINVDCx12_ASAP7_75t_R
-    CKINVDCx16_ASAP7_75t_R
-}
-set_ccopt_property use_inverters auto
-setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 -powerEffort high -fixFanoutLoad true
-optDesign -prefix preCTS -preCTS
-refinePlace
-checkPlace ./verify_rpt/checkPlace_before_cts.rpt
-setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
-clock_opt_design
-all_constraint_modes -active
-set_interactive_constraint_modes $active_constraint_modes
-set_propagated_clock [all_clocks]
-set_interactive_constraint_modes {}
-optDesign -prefix postCTS -postCTS -setup -hold
-applyGlobalNets
-applyGlobalNets
-setSrouteMode -reset
-setSrouteMode -viaConnectToShape {ring stripe blockring}
-sroute -connect floatingStripe -nets {VDD VSS} -floatingStripeTarget {ring stripe blockring} -allowJogging 0 -allowLayerChange 0
-setSrouteMode -reset
-setSrouteMode -viaConnectToShape {ring stripe blockring}
-sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
-editTrim -nets {VDD VSS}
-clearDrc
-verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_postcts.rpt
-timeDesign -postCTS -outDir ./reports/timing_postCTS
-saveDesign ./saved/axi_ram_postCTS.enc
+selectWire 402.5440 0.4480 404.1440 709.4400 9 VSS
+fit

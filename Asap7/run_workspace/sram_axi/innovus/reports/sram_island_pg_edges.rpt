@@ -1,11 +1,10 @@
-edge net layer direction wires coverage_um required_um min_ratio area
-reused_left VSS M9 vertical 1 708.112000 531.216000 0.750 {0.192 0.192 2.16 708.48}
-reused_left VDD M9 vertical 1 706.960000 531.216000 0.750 {0.192 0.192 2.16 708.48}
-reused_bottom VSS M8 horizontal 1 502.424000 376.992000 0.750 {0.192 0.192 502.848 2.16}
-reused_bottom VDD M8 horizontal 1 501.344000 376.992000 0.750 {0.192 0.192 502.848 2.16}
-local_top VSS M4 horizontal 1 500.784000 376.992000 0.750 {0.192 706.32 502.848 708.48}
-local_top VDD M4 horizontal 1 500.784000 376.992000 0.750 {0.192 706.32 502.848 708.48}
-local_left VSS M5 vertical 1 706.920000 495.801600 0.700 {0.192 0.192 2.16 708.48}
-local_left VDD M5 vertical 1 530.400000 495.801600 0.700 {0.192 0.192 2.16 708.48}
-local_right VSS M5 vertical 1 706.920000 531.216000 0.750 {500.688 0.192 502.848 708.48}
-local_right VDD M5 vertical 1 706.152000 531.216000 0.750 {500.688 0.192 502.848 708.48}
+type name layer direction area
+halo local_left M5 vertical {0.192 0.192 2.16 708.48}
+halo local_top M4 horizontal {0.192 706.32 502.848 708.48}
+halo local_right M5 vertical {500.688 0.192 502.848 708.48}
+gap row_0 M4 horizontal {0.192 174.96 502.848 179.28}
+gap row_1 M4 horizontal {0.192 352.08 502.848 356.4}
+gap row_2 M4 horizontal {0.192 529.2 502.848 533.52}
+gap col_0 M5 vertical {123.552 0.192 127.872 708.48}
+gap col_1 M5 vertical {249.264 0.192 253.584 708.48}
+gap col_2 M5 vertical {374.976 0.192 379.296 708.48}
