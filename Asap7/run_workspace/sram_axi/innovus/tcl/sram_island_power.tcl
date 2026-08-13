@@ -3,8 +3,9 @@
 ##
 ## Same intent as the teaching slide:
 ##   1. Build local PG only around the SRAM group/gaps.
-##   2. Keep top-level special PG off SRAM macro bodies by default.
+##   2. Stitch SRAM VDD/VSS block pins only to the local island collectors.
 ##   3. Trim VDD/VSS stubs before the rest of the power grid continues.
+##   4. Keep the regular global/floating mesh out of the SRAM island.
 ##
 ## ASAP7 mapping:
 ##   M4 is horizontal, M5 is vertical.

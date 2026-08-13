@@ -8,7 +8,7 @@
 ##
 ## Project restriction:
 ##   - addStripe is not allowed to jog
-##   - SRAM blockPin sroute is opt-in because ASAP7 SRAM PG rails are internal
+##   - SRAM blockPin sroute is a controlled local stitch, not a global mesh
 ##   - post-placement corePin sroute is not allowed to jog or change layer
 ##   - planned stripe transitions are made only by stacked ViaGen
 ############################################################
@@ -516,7 +516,8 @@ puts "POWER PLAN CORE RINGS CHECKED"
 
 # Adapt the teacher's ring/stripe intent to this lower-left boundary island:
 # keep an open M4-top/M5-left/right local structure, reuse the global M9-left
-# and M8-bottom ring edges, and keep top-level PG out of the SRAM macro bodies.
+# and M8-bottom ring edges, and keep the regular global mesh out of the SRAM
+# island while SRAM block pins stitch only to local collectors.
 puts "POWER PLAN SOURCE SRAM ISLAND: [file normalize ./tcl/sram_island_power.tcl]"
 source ./tcl/sram_island_power.tcl
 puts "POWER PLAN SRAM ISLAND RETURNED"
