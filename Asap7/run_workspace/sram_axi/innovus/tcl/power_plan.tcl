@@ -355,7 +355,8 @@ proc pg_assert_clean_drc_report {report_path} {
     set text [read $fh]
     close $fh
 
-    if {[regexp {Verification Complete[[:space:]]*:[[:space:]]*0[[:space:]]+Viols} $text] ||
+    if {[string first "No DRC violations were found" $text] >= 0 ||
+        [regexp {Verification Complete[[:space:]]*:[[:space:]]*0[[:space:]]+Viols} $text] ||
         [regexp {Total Violations[[:space:]]*:[[:space:]]*0([^0-9]|$)} $text]} {
         return
     }
@@ -536,8 +537,9 @@ verifyConnectivity \
     -report $pg_connectivity_report
 
 # This checkpoint is for the PG network created by addRing/addStripe/sroute.
-# The generated ASAP7 SRAM LEF has narrow M3 PG pin shapes that are part of
-# the hard-macro abstract, so check the actionable special-route PG layers here.
+# The generated ASAP7 SRAM LEF exposes VDD/VSS as M4 hard-macro rail ports.
+# Check actionable special-route PG layers while leaving macro abstract
+# geometry ownership with the SRAM.
 verify_drc \
     -check_only special \
     -layer_range {M4 M9} \

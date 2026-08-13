@@ -55,6 +55,22 @@ proc dbGet {args} {
         return [format {u_mem/G_SRAM_BANK[%d].u_sram} $index]
     }
 
+    if {[llength $args] == 1 &&
+        [regexp {^sram_ptr_([0-9]+)\.box$} [lindex $args 0] -> index]} {
+        set row [expr {int($index / 4)}]
+        set pos [expr {$index % 4}]
+        if {[expr {$row % 2}] == 0} {
+            set col $pos
+        } else {
+            set col [expr {3 - $pos}]
+        }
+        set llx [expr {2.16 + $col * (121.392 + 4.32)}]
+        set lly [expr {2.16 + $row * (172.8 + 4.32)}]
+        set urx [expr {$llx + 121.392}]
+        set ury [expr {$lly + 172.8}]
+        return [list $llx $lly $urx $ury]
+    }
+
     if {[llength $args] == 3 &&
         [lindex $args 0] eq "-p" &&
         [lindex $args 1] eq "top.nets.name"} {
@@ -618,15 +634,19 @@ assert_contains \
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-blockPinRouteWithPinWidth[[:space:]]+false} \
-    "SRAM blockPin sroute must not inherit the too-narrow generated ASAP7 SRAM M3 PG pin width"
+    "SRAM blockPin sroute must use controlled top-level route width instead of blindly inheriting macro pin width"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {-blockPinLayerRange[[:space:]]+\{M3[[:space:]]+M3\}} \
-    "SRAM blockPin sroute must avoid generated SRAM M4 rail ports that create top-level PG DRC markers"
+    {-blockPinLayerRange[[:space:]]+\{M4[[:space:]]+M4\}} \
+    "SRAM blockPin sroute must target the generated SRAM M4 VDD/VSS rail ports, not the narrow internal M3 access shapes"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {-blockPinWidthRange[[:space:]]+\{0\.0[[:space:]]+0\.150\}} \
-    "SRAM blockPin sroute must prefer narrow M3 access pins instead of wide internal LEF shapes"
+    {-blockPinWidthRange[[:space:]]+\{0\.150[[:space:]]+0\.250\}} \
+    "SRAM blockPin sroute must select the 0.192um M4 rail ports exposed by the ASAP7 SRAM LEF"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {-allowJogging[[:space:]]+0} \
+    "SRAM blockPin sroute must not jog through the hard-macro body"
 assert_not_contains \
     $all_power_text \
     {-blockPinRouteWithPinWidth[[:space:]]+true} \
@@ -651,9 +671,14 @@ assert_contains \
     {puts[[:space:]]+\$edge_fh[[:space:]]+"type[[:space:]]+name[[:space:]]+layer[[:space:]]+direction[[:space:]]+area"} \
     "SRAM island power must write a simple local PG region report after editTrim"
 
-if {[regexp -- {-allowJogging|-allowLayerChange} $child_text(sram_island_power.tcl)]} {
-    fail "SRAM blockPin sroute must not pass explicit allowJogging/allowLayerChange switches"
+if {[regexp -- {-allowLayerChange} $child_text(sram_island_power.tcl)]} {
+    fail "SRAM blockPin sroute must not pass explicit allowLayerChange switches"
 }
+
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {proc[[:space:]]+sram_assert_pg_area_clear_of_macro_bodies} \
+    "SRAM island power must assert that local PG addStripe areas do not overlap SRAM macro bodies"
 
 set sram_island_code_only ""
 foreach line [split $child_text(sram_island_power.tcl) "\n"] {
@@ -896,15 +921,19 @@ foreach flow_pair [list \
         "$flow_name must catch the post-placement PG reconnect guard"
     assert_contains \
         $flow_text \
-        {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$post_place_pg_error} \
+        {catch[[:space:]]+\{error[[:space:]]+\$post_place_pg_error\}} \
         "$flow_name must hard-stop on dirty post-placement PG instead of saving axi_ram_placed.enc"
+    assert_contains \
+        $flow_text \
+        {exit[[:space:]]+1} \
+        "$flow_name must force batch Innovus to exit if PG guards fail"
     assert_contains \
         $flow_text \
         {catch[[:space:]]+\{[[:space:]]+verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M4[[:space:]]+M9\}} \
         "$flow_name must catch dirty post-placement PG special-route DRC"
     assert_contains \
         $flow_text \
-        {return[[:space:]]+-code[[:space:]]+error[[:space:]]+\$post_place_pg_drc_error} \
+        {catch[[:space:]]+\{error[[:space:]]+\$post_place_pg_drc_error\}} \
         "$flow_name must hard-stop on dirty post-placement PG DRC instead of saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
@@ -1046,6 +1075,14 @@ assert_contains \
     $flow_checks_text \
     {assert_clean_connectivity_report[[:space:]]+\$report_file} \
     "flow_checks.tcl must hard-stop on dirty post-placement PG before saveDesign"
+assert_contains \
+    $flow_checks_text \
+    {No[[:space:]]+DRC[[:space:]]+violations[[:space:]]+were[[:space:]]+found} \
+    "flow_checks.tcl must recognize clean Innovus special DRC reports that omit a Total Violations line"
+assert_contains \
+    $flow_checks_text \
+    {assert_clean_drc_report[[:space:]]+\$report_file} \
+    "flow_checks.tcl must hard-stop on dirty post-placement PG DRC before saveDesign"
 
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_drc_before_stdcell_place.rpt]
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_connectivity_before_stdcell_place.rpt]

@@ -30,7 +30,8 @@ proc read_report_text {report_file report_label} {
 proc assert_clean_drc_report {report_file} {
     set report_text [read_report_text $report_file "DRC"]
 
-    if {[regexp {Verification Complete[[:space:]]*:[[:space:]]*0[[:space:]]+Viols} $report_text] ||
+    if {[string first "No DRC violations were found" $report_text] >= 0 ||
+        [regexp {Verification Complete[[:space:]]*:[[:space:]]*0[[:space:]]+Viols} $report_text] ||
         [regexp {Total Violations[[:space:]]*:[[:space:]]*0([^0-9]|$)} $report_text]} {
         return
     }

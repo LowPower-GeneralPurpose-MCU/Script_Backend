@@ -325,13 +325,15 @@ if {[catch {
     connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt
 } post_place_pg_error]} {
     puts stderr "Post-placement PG reconnect/verify failed: $post_place_pg_error"
-    return -code error $post_place_pg_error
+    catch {error $post_place_pg_error}
+    exit 1
 }
 if {[catch {
     verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}
 } post_place_pg_drc_error]} {
     puts stderr "Post-placement PG DRC failed: $post_place_pg_drc_error"
-    return -code error $post_place_pg_drc_error
+    catch {error $post_place_pg_drc_error}
+    exit 1
 }
 
 saveDesign ./saved/axi_ram_placed.enc

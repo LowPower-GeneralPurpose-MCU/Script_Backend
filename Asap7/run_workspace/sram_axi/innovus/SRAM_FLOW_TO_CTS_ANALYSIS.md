@@ -169,7 +169,7 @@ Script `sram_island_power.tcl` dung topology:
 4. Tao M5 transition spine o canh left de noi M4 row collectors len stack M5/M8.
 5. Tao M4 row-gap collector trong moi gap hang SRAM.
 6. Tao M5 column-gap collector trong moi gap cot SRAM.
-7. Dung `sroute -connect blockPin -blockPinTarget nearestTarget -viaConnectToShape stripe` de noi SRAM PG pins toi collector stripe gan nhat.
+7. Dung `sroute -connect blockPin -blockPinLayerRange {M4 M4} -blockPinTarget stripe -allowJogging 0` de noi SRAM M4 VDD/VSS rail ports toi collector stripe gan nhat.
 8. `editTrim -nets {VSS VDD}` de cat stub/dangling PG shapes.
 
 Tai sao dung M4/M5 giua SRAM:
@@ -683,4 +683,3 @@ Mot SRAM physical-design flow dung khong chi la "dat macro va ve power". Can co 
 4. Timing/CTS correctness: route type, clock cells, propagated clock dung constraint mode, report CTS warnings rieng.
 
 Neu thieu lop 3, Innovus co the route/estimate signal/clock len SRAM body. Neu thieu lop 4, postCTS co the tao ket qua nhin "day cell/day routing" ma khong con y nghia physical.
-

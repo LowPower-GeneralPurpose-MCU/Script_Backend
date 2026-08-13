@@ -930,14 +930,19 @@ Sau khi tạo collectors, script dùng `sroute`:
 setSrouteMode ...
 sroute \
     -connect {blockPin} \
-    -blockPinTarget nearestTarget \
-    -nets {VSS VDD}
+    -nets {VSS VDD} \
+    -blockPinLayerRange {M4 M4} \
+    -blockPinWidthRange {0.150 0.250} \
+    -blockPinTarget {stripe} \
+    -allowJogging 0
 ```
 
 Logic:
 
 - SRAM PG pins được connect tới target power stripe gần nhất.
-- `nearestTarget` giúp pin SRAM không bị kéo xa sang ring khác.
+- The SRAM hard macro exposes its main VDD/VSS rail ports on M4, so the
+  top-level blockPin stitch should target those M4 rail ports rather than
+  narrow internal M3 access shapes.
 - `viaConnectToShape stripe` ưu tiên nối pin tới stripe collector nội bộ.
 
 Vì sao không dùng `allowJogging/allowLayerChange` ở đây:

@@ -62,7 +62,7 @@ Creates the SRAM-local power before standard-cell placement:
 
 - M4 horizontal straps in SRAM row gaps and the top island halo
 - M5 vertical straps in SRAM column gaps plus the right/left island edge
-- `sroute -connect {blockPin}` to the nearest local stripe
+- `sroute -connect {blockPin}` from SRAM M4 VDD/VSS rail ports to the local stripe
 - `editTrim` on VDD/VSS
 
 ### `innovus.tcl`

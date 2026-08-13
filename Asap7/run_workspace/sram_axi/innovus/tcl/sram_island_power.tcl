@@ -80,6 +80,34 @@ set local_right_area [list \
     $SRAM_ISLAND_URX $sram_pg_bottom \
     $sram_pg_right $sram_pg_top]
 
+proc sram_area_overlaps_box {area box} {
+    lassign $area area_llx area_lly area_urx area_ury
+    lassign $box box_llx box_lly box_urx box_ury
+
+    set overlap_x [expr {
+        min($area_urx, $box_urx) - max($area_llx, $box_llx)
+    }]
+    set overlap_y [expr {
+        min($area_ury, $box_ury) - max($area_lly, $box_lly)
+    }]
+    return [expr {$overlap_x > 0.000001 && $overlap_y > 0.000001}]
+}
+
+proc sram_assert_pg_area_clear_of_macro_bodies {name area} {
+    upvar 1 SRAM_PTRS sram_ptrs
+
+    foreach ptr $sram_ptrs {
+        set macro_name [lindex [dbGet $ptr.name] 0]
+        set macro_box [join [dbGet $ptr.box]]
+        if {[llength $macro_box] != 4} {
+            error "Cannot decode SRAM macro box while checking $name: $macro_name"
+        }
+        if {[sram_area_overlaps_box $area $macro_box]} {
+            error "$name PG area $area overlaps SRAM macro body $macro_name $macro_box"
+        }
+    }
+}
+
 proc sram_add_local_pg_pair {layer direction area width spacing} {
     if {$direction eq "horizontal"} {
         set start_from bottom
@@ -121,6 +149,7 @@ setAddStripeMode \
     -stacked_via_bottom_layer M4 \
     -stacked_via_top_layer M8
 
+sram_assert_pg_area_clear_of_macro_bodies local_left $local_left_area
 sram_add_local_pg_pair \
     M5 vertical $local_left_area $sram_stripe_w $sram_stripe_s
 
@@ -132,6 +161,7 @@ setAddStripeMode \
     -stacked_via_bottom_layer M4 \
     -stacked_via_top_layer M5
 
+sram_assert_pg_area_clear_of_macro_bodies local_top $local_top_area
 sram_add_local_pg_pair \
     M4 horizontal $local_top_area $sram_stripe_w $sram_stripe_s
 
@@ -142,6 +172,7 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
     set gap_ury [expr {$gap_lly + $SRAM_MACRO_GAP_Y}]
     set row_gap_area [list $sram_pg_left $gap_lly $sram_pg_right $gap_ury]
 
+    sram_assert_pg_area_clear_of_macro_bodies row_gap_$r $row_gap_area
     sram_add_local_pg_pair \
         M4 horizontal $row_gap_area $sram_stripe_w $sram_stripe_s
 }
@@ -154,6 +185,7 @@ setAddStripeMode \
     -stacked_via_bottom_layer M4 \
     -stacked_via_top_layer M8
 
+sram_assert_pg_area_clear_of_macro_bodies local_right $local_right_area
 sram_add_local_pg_pair \
     M5 vertical $local_right_area $sram_stripe_w $sram_stripe_s
 
@@ -164,6 +196,7 @@ for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
     set gap_urx [expr {$gap_llx + $SRAM_MACRO_GAP_X}]
     set col_gap_area [list $gap_llx $sram_pg_bottom $gap_urx $sram_pg_top]
 
+    sram_assert_pg_area_clear_of_macro_bodies col_gap_$c $col_gap_area
     sram_add_local_pg_pair \
         M5 vertical $col_gap_area $sram_stripe_w $sram_stripe_s
 }
@@ -174,13 +207,16 @@ setSrouteMode \
     -blockPinRouteWithPinWidth false \
     -viaConnectToShape stripe
 
+# Use the M4 VDD/VSS rail ports exposed by the SRAM abstract.  Do not force
+# sroute down to narrow internal M3 access shapes inside the macro body.
 sroute \
     -connect {blockPin} \
     -nets {VSS VDD} \
     -blockPin useLef \
-    -blockPinLayerRange {M3 M3} \
-    -blockPinWidthRange {0.0 0.150} \
-    -blockPinTarget {stripe}
+    -blockPinLayerRange {M4 M4} \
+    -blockPinWidthRange {0.150 0.250} \
+    -blockPinTarget {stripe} \
+    -allowJogging 0
 
 editTrim -nets {VSS VDD}
 
