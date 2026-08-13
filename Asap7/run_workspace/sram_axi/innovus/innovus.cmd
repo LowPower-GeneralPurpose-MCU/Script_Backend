@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Thu Aug 13 15:09:29 2026                
+#  Created on Thu Aug 13 16:06:56 2026                
 #                                                     
 #######################################################
 
@@ -1075,7 +1075,7 @@ addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {374.976 0.192 379.296 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setSrouteMode -reset
 setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth false -viaConnectToShape stripe
-sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinLayerRange {M3 M3} -blockPinWidthRange {0.0 0.150} -blockPinTarget stripe
+sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinLayerRange {M4 M4} -blockPinWidthRange {0.150 0.250} -blockPinTarget stripe -allowJogging 0
 editTrim -nets {VSS VDD}
 clearDrc
 deselectAll
@@ -1121,16 +1121,35 @@ addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M8 -stacked_via_top_layer M9
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 33.952000 -create_pins 0 -area {503.808 0.192 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.168000 -create_pins 0 -area {0.192 709.44 502.848 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-applyGlobalNets
-applyGlobalNets
-setSrouteMode -reset
-setSrouteMode -viaConnectToShape {ring stripe blockring}
-sroute -connect floatingStripe -nets {VDD VSS} -floatingStripeTarget {ring stripe blockring} -allowJogging 0 -allowLayerChange 0
-setSrouteMode -reset
-setSrouteMode -viaConnectToShape {ring stripe blockring}
-sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
-editTrim -nets {VDD VSS}
-clearDrc
-verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
-verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_after_trim.rpt
-saveDesign ./saved/axi_ram_placed.enc
+fit
+fit
+zoomBox -325.86400 80.87425 817.55475 693.49300
+zoomBox -209.92800 168.00375 616.19200 610.62075
+zoomBox -148.61750 226.85375 448.25425 546.64450
+zoomBox -93.51000 287.72925 273.04375 484.12075
+zoomBox -44.72100 341.62525 117.92150 428.76550
+zoomBox -29.08750 358.69025 70.79575 412.20550
+zoomBox -20.21200 366.45025 51.95350 405.11500
+zoomBox -16.74575 369.48075 44.59500 402.34575
+zoomBox -13.79950 372.05675 38.34025 399.99200
+zoomBox -6.84500 378.61050 20.37300 393.19325
+zoomBox -5.61075 379.71525 17.52450 392.11050
+zoomBox -4.56150 380.65425 15.10350 391.19025
+zoomBox -14.38075 371.86625 37.76175 399.80300
+zoomBox -34.14500 354.17775 83.37150 417.14050
+zoomBox -92.81975 301.66600 218.77325 468.61075
+zoomBox -248.39225 162.43325 577.78650 605.08175
+zoomBox -495.60800 84.66400 647.89225 697.32650
+zoomBox -647.22475 29.07125 698.07000 749.85075
+fit
+deleteSelectedFromFPlan
+zoomBox -316.44675 20.16850 1028.75125 740.89625
+zoomBox 46.86125 152.95575 872.98150 595.57300
+zoomBox 269.97800 234.50375 777.31925 506.32600
+zoomBox 323.24200 253.97150 754.48200 485.02050
+zoomBox 490.71875 315.12575 682.06250 417.64350
+zoomBox 527.43100 328.44750 665.67700 402.51675
+zoomBox 572.79475 344.84925 644.96025 383.51400
+zoomBox 596.47450 353.41100 634.14575 373.59450
+zoomBox 610.86050 358.61225 627.57600 367.56800
+zoomBox 616.34525 360.59550 625.07100 365.27050
