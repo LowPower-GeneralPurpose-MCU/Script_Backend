@@ -221,8 +221,15 @@ file delete -force $sram_edge_report
 puts "POWER PLAN ENTRY: [file normalize ./tcl/power_plan.tcl]"
 if {[catch {source ./tcl/power_plan.tcl} power_plan_error]} {
     puts stderr "Power plan failed before pin assignment: $power_plan_error"
-    error $power_plan_error
+    catch {error $power_plan_error}
+    exit 1
 }
+stop_if_dirty_pg_connectivity_report \
+    ./verify_rpt/pg_connectivity_before_stdcell_place.rpt \
+    "Power plan PG connectivity"
+stop_if_dirty_pg_special_drc_report \
+    ./verify_rpt/pg_drc_before_stdcell_place.rpt \
+    "Power plan PG DRC"
 puts "POWER PLAN EXIT: ./tcl/power_plan.tcl returned cleanly"
 
 if {![file exists $sram_edge_report]} {
@@ -335,6 +342,12 @@ if {[catch {
     catch {error $post_place_pg_drc_error}
     exit 1
 }
+stop_if_dirty_pg_connectivity_report \
+    ./verify_rpt/pg_connectivity_after_trim.rpt \
+    "Post-placement PG connectivity"
+stop_if_dirty_pg_special_drc_report \
+    ./verify_rpt/pg_drc_after_trim.rpt \
+    "Post-placement PG DRC"
 
 saveDesign ./saved/axi_ram_placed.enc
 

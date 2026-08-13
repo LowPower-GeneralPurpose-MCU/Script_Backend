@@ -41,6 +41,13 @@ proc pg_upper_positive_mod {value period} {
     return $result
 }
 
+proc pg_upper_snap_up_to_layer_track {value layer} {
+    set pitch [pg_layer_pitch $layer]
+    set offset [pg_layer_offset $layer]
+    set snapped [expr {$offset + ceil(($value - $offset) / $pitch) * $pitch}]
+    return [pg_format_coord $snapped]
+}
+
 # Decode die box.  The core ring lies in the die-to-core margin, so the
 # upper-mesh areas must reach the die region rather than stop at coreBox.
 set DIE_BOX [join [dbGet top.fPlan.box]]
@@ -69,8 +76,10 @@ set stripe_m9_offset   17.280
 set upper_m8_sram_guard [pg_layer_boundary_guard M8 $stripe_m8_w]
 set upper_m9_sram_guard [pg_layer_boundary_guard M9 $stripe_m9_w]
 
-set upper_m8_right_llx [expr {$SRAM_NO_MESH_URX + $upper_m8_sram_guard}]
-set upper_m9_right_llx [expr {$SRAM_NO_MESH_URX + $upper_m9_sram_guard}]
+set upper_m8_right_llx [pg_upper_snap_up_to_layer_track \
+    [expr {$SRAM_NO_MESH_URX + $upper_m8_sram_guard}] M8]
+set upper_m9_right_llx [pg_upper_snap_up_to_layer_track \
+    [expr {$SRAM_NO_MESH_URX + $upper_m9_sram_guard}] M9]
 
 # Right-side region outside the complete no-mesh SRAM column.
 set UPPER_RIGHT_M8_BOX [list \

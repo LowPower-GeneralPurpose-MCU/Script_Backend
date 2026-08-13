@@ -370,7 +370,7 @@ proc pg_assert_clean_drc_report {report_path} {
     set pin_drc_count 0
     set unknown_drc_count 0
     foreach line [split $text "\n"] {
-        if {![regexp {^(SPACING|WIDTH|Geometric|CUTSPACING):} $line]} {
+        if {![regexp {^([A-Za-z][A-Za-z0-9_]*):} $line]} {
             continue
         }
 
@@ -564,7 +564,7 @@ saveDesign ./saved/axi_ram_powerplan.enc
 
 puts "===================================================="
 puts "HIERARCHICAL POWER PLAN COMPLETED"
-puts " - SRAM island     : M4 row-gap/top straps plus M5 left/right edge spines"
+puts " - SRAM island     : M4 row-gap/top straps plus M5 edge/column-gap spines"
 puts " - Core rings      : independent M8/M9 VDD-inner and VSS-outer rings"
 puts " - Core PG pins    : short M9 side taps on both VSS and VDD"
 puts " - Upper M8/M9 mesh: deferred until after placement"

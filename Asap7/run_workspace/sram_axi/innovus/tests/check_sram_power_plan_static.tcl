@@ -790,8 +790,8 @@ assert_contains \
     "SRAM island power may optionally place explicit vertical M5 pairs in SRAM column gaps"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {set[[:space:]]+SRAM_ENABLE_COLUMN_GAP_PG[[:space:]]+0} \
-    "SRAM column-gap M5 collectors must default off to preserve hard-macro priority"
+    {set[[:space:]]+SRAM_ENABLE_COLUMN_GAP_PG[[:space:]]+1} \
+    "SRAM column-gap M5 collectors must default on so middle SRAM-bank VDD/VSS pins can reach local island collectors"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {if[[:space:]]+\{\$SRAM_ENABLE_COLUMN_GAP_PG\}} \
@@ -831,8 +831,8 @@ if {$global_upper_stripes == 0 || $global_upper_no_pin_stripes < $global_upper_s
 
 set simulated_sram_stripes \
     [simulate_sram_island_power [file join $tcl_dir sram_island_power.tcl]]
-if {[llength $simulated_sram_stripes] != 6} {
-    fail "SRAM island power must default to top M4, three M4 row-gap pairs, and left/right M5 edge spines only"
+if {[llength $simulated_sram_stripes] != 9} {
+    fail "SRAM island power must default to top M4, three M4 row-gap pairs, left/right M5 edge spines, and three M5 column-gap collectors"
 }
 
 set horizontal_pair_count 0
@@ -892,8 +892,8 @@ foreach stripe $simulated_sram_stripes {
     }
 }
 
-if {$horizontal_pair_count != 4 || $vertical_pair_count != 2} {
-    fail "Open SRAM island topology requires four M4 pairs and two M5 edge pairs by default"
+if {$horizontal_pair_count != 4 || $vertical_pair_count != 5} {
+    fail "Open SRAM island topology requires four M4 pairs and five M5 vertical collector pairs by default"
 }
 if {!$top_local_ring_found || !$right_local_ring_found || !$left_transition_found} {
     fail "SRAM island must have top/right local collectors plus a left transition spine to keep M4 rows electrically tied to the reused global ring"
@@ -993,6 +993,10 @@ foreach flow_pair [list \
         "$flow_name must hard-stop on dirty post-placement PG instead of saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
+        {stop_if_dirty_pg_connectivity_report[[:space:]]+\\[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
+        "$flow_name must re-read post-placement PG connectivity after Innovus report generation before saving axi_ram_placed.enc"
+    assert_contains \
+        $flow_text \
         {exit[[:space:]]+1} \
         "$flow_name must force batch Innovus to exit if PG guards fail"
     assert_contains \
@@ -1003,6 +1007,10 @@ foreach flow_pair [list \
         $flow_text \
         {catch[[:space:]]+\{error[[:space:]]+\$post_place_pg_drc_error\}} \
         "$flow_name must hard-stop on dirty post-placement PG DRC instead of saving axi_ram_placed.enc"
+    assert_contains \
+        $flow_text \
+        {stop_if_dirty_pg_special_drc_report[[:space:]]+\\[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt} \
+        "$flow_name must re-read post-placement PG DRC after Innovus report generation before saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
         {source[[:space:]]+\./tcl/sram_route_guard\.tcl} \
@@ -1177,8 +1185,8 @@ assert_contains \
     "flow_checks.tcl must recognize clean Innovus special DRC reports that omit a Total Violations line"
 assert_contains \
     $flow_checks_text \
-    {assert_clean_drc_report[[:space:]]+\$report_file} \
-    "flow_checks.tcl must hard-stop on dirty post-placement PG DRC before saveDesign"
+    {assert_clean_pg_special_drc_report[[:space:]]+\$report_file} \
+    "flow_checks.tcl must hard-stop on dirty post-placement special-route PG DRC before saveDesign"
 
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_drc_before_stdcell_place.rpt]
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_connectivity_before_stdcell_place.rpt]

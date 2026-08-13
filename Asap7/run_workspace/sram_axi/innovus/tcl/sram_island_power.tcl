@@ -56,7 +56,7 @@ if {![info exists sram_edge_report]} {
     set sram_edge_report ./reports/sram_island_pg_edges.rpt
 }
 if {![info exists SRAM_ENABLE_COLUMN_GAP_PG]} {
-    set SRAM_ENABLE_COLUMN_GAP_PG 0
+    set SRAM_ENABLE_COLUMN_GAP_PG 1
 }
 if {![info exists SRAM_CONNECT_BLOCK_PINS]} {
     set SRAM_CONNECT_BLOCK_PINS 1
@@ -217,7 +217,7 @@ if {$SRAM_ENABLE_COLUMN_GAP_PG} {
             M5 vertical $col_gap_area $sram_stripe_w $sram_stripe_s
     }
 } else {
-    puts "SRAM column-gap M5 PG skipped: SRAM macro body/pin priority is kept higher than internal island stitching."
+    puts "SRAM column-gap M5 PG skipped: only edge SRAM collectors are enabled for this debug run."
 }
 
 if {$SRAM_CONNECT_BLOCK_PINS} {
@@ -273,7 +273,7 @@ deselectAll
 
 puts "===================================================="
 puts "SRAM ISLAND PG CREATED"
-puts " - Local PG       : M4 row-gap/top straps and M5 left/right edge spines"
+puts " - Local PG       : M4 row-gap/top straps plus M5 edge/column-gap spines"
 puts " - Column-gap M5  : $SRAM_ENABLE_COLUMN_GAP_PG"
 puts " - BlockPin sroute: $SRAM_CONNECT_BLOCK_PINS"
 puts " - Report  : $sram_edge_report"
