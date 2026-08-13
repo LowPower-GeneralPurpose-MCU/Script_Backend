@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Thu Aug 13 16:36:44 2026                
+#  Created on Thu Aug 13 20:23:40 2026                
 #                                                     
 #######################################################
 
@@ -1109,6 +1109,7 @@ addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.128 -spacing 0.
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M5 -stacked_via_top_layer M7
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.128 -spacing 0.288 -set_to_set_distance 34.560 -start_from bottom -start_offset 1.920000 -area {2.16 708.672 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.128 -spacing 0.288 -set_to_set_distance 34.560 -start_from bottom -start_offset 17.232000 -area {503.04 2.16 623.088 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+fit
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
 addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 1.120000 -create_pins 0 -area {0.192 709.44 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 19.168000 -create_pins 0 -area {503.808 0.192 625.056 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
@@ -1116,9 +1117,15 @@ setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacke
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 33.952000 -create_pins 0 -area {503.808 0.192 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.168000 -create_pins 0 -area {0.192 709.44 502.848 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 applyGlobalNets
+applyGlobalNets
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe blockring}
+sroute -connect floatingStripe -nets {VDD VSS} -floatingStripeTarget {ring stripe blockring} -allowJogging 0 -allowLayerChange 0
 setSrouteMode -reset
 setSrouteMode -viaConnectToShape {ring stripe blockring}
 sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
 editTrim -nets {VDD VSS}
 clearDrc
-verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
+applyGlobalNets
+verifyConnectivity -type special -net {VDD VSS} -report ./verify_rpt/pg_connectivity_after_trim.rpt
+verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_after_trim.rpt
