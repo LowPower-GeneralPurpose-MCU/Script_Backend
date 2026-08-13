@@ -248,6 +248,7 @@ set power_children {
     core_lower_pg_nojog.tcl
     core_pg_outside_island.tcl
     global_upper_pg_to_ring.tcl
+    sram_pg_body_guard.tcl
 }
 
 set power_text [read_complete_file $power_plan]
@@ -473,10 +474,14 @@ assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {pg_track_aligned_global_offset} \
     "core_lower_pg_nojog.tcl must derive repeated-mesh offsets from the ASAP7 routing track grid"
-assert_contains \
+assert_not_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {info[[:space:]]+exists[[:space:]]+LOGIC_RIGHT_FULL_BOX} \
-    "core_lower_pg_nojog.tcl must rebuild the logic boxes when floorplan PG no longer sources core_pg_outside_island.tcl"
+    "core_lower_pg_nojog.tcl must always rebuild guarded logic boxes instead of reusing stale session variables"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {foreach[[:space:]]+required_var[[:space:]]+\{} \
+    "core_lower_pg_nojog.tcl must validate geometry variables before rebuilding lower PG boxes"
 foreach lower_pg_var {stripe_m5_offset stripe_m5_w stripe_m5_s stripe_m45_pitch} {
     set lower_pg_pattern [format \
         {if[[:space:]]+\{!\[info[[:space:]]+exists[[:space:]]+%s\]\}} \
@@ -527,6 +532,22 @@ foreach script_name {core_pg_outside_island.tcl global_upper_pg_to_ring.tcl} {
         {pg_assert_box_clear_of_sram_cut} \
         "$script_name must assert guarded PG boxes before addStripe"
 }
+assert_contains \
+    $child_text(sram_pg_body_guard.tcl) \
+    {proc[[:space:]]+sram_pg_body_guard_after_post_place} \
+    "sram_pg_body_guard.tcl must define the post-placement top-level PG body-overlap guard"
+assert_contains \
+    $child_text(sram_pg_body_guard.tcl) \
+    {proc[[:space:]]+sram_pg_collect_body_overlaps} \
+    "sram_pg_body_guard.tcl must collect VDD/VSS top-level special-wire overlaps against SRAM macro bodies"
+assert_contains \
+    $child_text(sram_pg_body_guard.tcl) \
+    {LEF pin/OBS geometry inside the hard macro is not scanned here} \
+    "sram_pg_body_guard.tcl report must distinguish hard-macro LEF geometry from top-level PG wires"
+assert_contains \
+    $child_text(sram_pg_body_guard.tcl) \
+    {strict_layers[[:space:]]+\{M6[[:space:]]+M7[[:space:]]+M8[[:space:]]+M9\}} \
+    "sram_pg_body_guard.tcl must hard-stop regular mesh overlaps on M6-M9 by default"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {LOGIC_RIGHT_EDGE_TAP_BOX} \
@@ -892,8 +913,20 @@ foreach flow_pair [list \
         "$flow_name must build the post-placement M8/M9 upper PG mesh before lower M1/M5 taps"
     assert_contains \
         $flow_text \
+        {source[[:space:]]+\./tcl/sram_pg_body_guard\.tcl} \
+        "$flow_name must source the SRAM PG body-overlap guard before saving the placed design"
+    assert_contains \
+        $flow_text \
+        {sram_pg_write_region_report[[:space:]]+\./reports/sram_pg_regions_after_trim\.rpt} \
+        "$flow_name must write a SRAM island/outside-island PG region audit report"
+    assert_contains \
+        $flow_text \
         {connect_core_pg_pins_nojog[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
         "$flow_name must reconnect/verify VDD/VSS PG after post-placement mesh construction"
+    assert_contains \
+        $flow_text \
+        {sram_pg_body_guard_after_post_place[[:space:]]+\\[[:space:]]+\./reports/sram_pg_body_overlap_after_trim\.rpt[[:space:]]+\\[[:space:]]+\{M6[[:space:]]+M7[[:space:]]+M8[[:space:]]+M9\}} \
+        "$flow_name must hard-stop if top-level regular mesh overlaps SRAM macro bodies"
     assert_contains \
         $flow_text \
         {verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M4[[:space:]]+M9\}} \
