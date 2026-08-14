@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug 14 10:50:18 2026                
+#  Created on Fri Aug 14 11:01:12 2026                
 #                                                     
 #######################################################
 
@@ -1097,3 +1097,5 @@ createPGPin VSS -geom M9 0.264000 384.456000 0.744000 386.376000 -net VSS
 createPGPin VDD -geom M9 1.344000 384.456000 1.824000 386.376000 -net VDD
 editTrim -nets {VDD VSS}
 verifyConnectivity -type special -net {VDD VSS} -report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
+verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_before_stdcell_place.rpt
+saveDesign ./saved/axi_ram_powerplan.enc
