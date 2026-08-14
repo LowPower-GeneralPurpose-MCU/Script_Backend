@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_priority_and_local_pg_v6"
+set FLOW_SOURCE_REVISION "sram_priority_and_local_pg_v7"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -490,9 +490,11 @@ set FILLERCells [list \
     FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R \
     FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L]
 
+setFillerMode -reset
 setFillerMode \
     -core $FILLERCells \
-    -preserveUserOrder true \
+    -add_fillers_with_drc false \
+    -fitGap true \
     -honorPrerouteAsObs true \
     -diffCellViol true
 
@@ -500,9 +502,12 @@ addFiller \
     -cell $FILLERCells \
     -prefix FILLER \
     -honorPrerouteAsObs true \
-    -diffCellViol true
+    -diffCellViol true \
+    -fixDRC
 
 assert_filler_inserted FILLER
+checkPlace ./verify_rpt/checkPlace_after_filler.rpt
+assert_clean_check_place ./verify_rpt/checkPlace_after_filler.rpt
 connect_core_pg_pins_nojog \
     ./verify_rpt/pg_connectivity_after_filler.rpt 1
 

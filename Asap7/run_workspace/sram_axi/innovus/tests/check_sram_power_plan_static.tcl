@@ -1308,10 +1308,10 @@ assert_contains \
     $flow_checks_text \
     {CorePin[[:space:]]+reconnect[[:space:]]+skipped} \
     "final PG verification must preserve existing lower-PG vias instead of generating duplicates"
-assert_contains \
+assert_not_contains \
     $flow_checks_text \
-    {corePinMaxViaScale[[:space:]]+20[[:space:]]+20} \
-    "the emergency corePin fallback must limit via arrays to a single-cut-sized footprint"
+    {-corePinMaxViaScale} \
+    "same-layer M1 corePin refresh must not configure unused via-array scaling"
 assert_contains \
     $flow_checks_text \
     {proc[[:space:]]+pg_top_level_owned_drc_areas} \

@@ -474,8 +474,7 @@ proc connect_core_pg_pins_nojog {{report_file ""} {refresh_stdcell_core_pins 0}}
         }
         setSrouteMode -reset
         setSrouteMode \
-            -viaConnectToShape {ring stripe blockring} \
-            -corePinMaxViaScale 20 20
+            -viaConnectToShape {ring stripe blockring}
 
         sroute \
             -connect {corePin} \
