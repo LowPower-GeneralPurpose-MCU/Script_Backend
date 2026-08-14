@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug 14 11:11:40 2026                
+#  Created on Fri Aug 14 11:27:28 2026                
 #                                                     
 #######################################################
 
@@ -18,6 +18,8 @@ suppressMessage ENCEXT-2799
 getVersion
 getVersion
 getVersion
+win
+zoomBox -0.03200 -0.06100 0.18200 0.13100
 set enc_source_continue_on_error false
 set auto_file_dir /tmp/user1/innovus_master
 set init_design_uniquify 1
@@ -1130,10 +1132,36 @@ addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M8 -stacked_via_top_layer M9
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 33.760000 -create_pins 0 -area {504.000000 0.192 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 applyGlobalNets
+applyGlobalNets
+setSrouteMode -reset
+setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth false -viaConnectToShape stripe
+sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinLayerRange {M4 M4} -blockPinWidthRange {0.150 0.250} -blockPinTarget stripe -allowJogging 0
+editTrim -nets {VDD VSS}
+clearDrc
 setSrouteMode -reset
 setSrouteMode -viaConnectToShape {ring stripe blockring}
 sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
 editTrim -nets {VDD VSS}
 clearDrc
 applyGlobalNets
-verifyConnectivity -type special -net {VDD VSS} -report ./verify_rpt/pg_connectivity_after_trim.rpt
+verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
+verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_after_trim.rpt
+zoomBox -169.40050 -119.26600 834.47975 779.42100
+fit
+selectObstruct 2.16 2.16 502.848 768.96 SRAM_ISLAND_GROUP_BLOCKAGE
+zoomBox -302.49125 172.40025 840.92700 785.01875
+zoomBox -175.20325 324.80550 650.91675 767.42250
+zoomBox -16.79225 514.47500 414.44775 745.52400
+pan -10.80025 597.22600
+zoomBox -60.03750 514.87725 536.83450 834.66825
+zoomBox -133.50150 366.44025 838.40500 887.16650
+zoomBox -96.28600 428.55875 605.91700 804.78375
+zoomBox -69.27050 486.94725 438.07125 758.77000
+zoomBox -42.12900 545.69575 269.44250 712.62900
+zoomBox -25.35325 586.72150 165.99075 689.23950
+zoomBox -21.54100 598.26125 141.10150 685.40150
+zoomBox -39.91400 559.00150 224.92225 700.89500
+zoomBox -83.73050 466.05500 423.61300 737.87850
+zoomBox -173.48600 292.15375 798.42475 812.88225
+fit
+saveDesign ./saved/axi_ram_placed.enc
