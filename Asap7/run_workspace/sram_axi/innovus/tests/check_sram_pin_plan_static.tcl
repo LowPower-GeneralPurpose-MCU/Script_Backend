@@ -41,6 +41,10 @@ assert_contains \
     $pins_text \
     {top_requested_uniform_pitch} \
     "pins.tcl must report the requested uniform TOP-pin pitch and row"
+assert_contains \
+    $pins_text \
+    {sram_axi_four_side_connectivity_v6} \
+    "pins.tcl must use the LEF/DRM-aware four-side AXI pin-plan revision"
 
 foreach field {
     top.fPlan.coreBox_llx
@@ -58,40 +62,50 @@ if {[regexp -- {top\.fPlan\.box} $pins_text]} {
     fail "pins.tcl must not use the die box for core-edge pin placement"
 }
 
-foreach side {TOP RIGHT} {
+foreach side {TOP RIGHT BOTTOM LEFT} {
     if {[string first "-side $side" $pins_text] < 0} {
-        fail "pins.tcl must assign pins on the $side core edge"
-    }
-}
-foreach blocked_side {LEFT BOTTOM} {
-    if {[string first "-side $blocked_side" $pins_text] >= 0} {
-        fail "pins.tcl must not force signal pins onto the $blocked_side edge blocked by the SRAM island"
+        fail "pins.tcl must use the legal $side boundary segment"
     }
 }
 
-assert_contains \
-    $pins_text \
-    {set[[:space:]]+TOP_PINS[[:space:]]+\[concat[[:space:]]+\$TOP_PINS[[:space:]]+\$LEFT_PINS\]} \
-    "pins.tcl must move the AR group from the blocked left edge to the legal top edge"
-assert_contains \
-    $pins_text \
-    {set[[:space:]]+LEFT_PINS[[:space:]]+\{\}} \
-    "pins.tcl must leave the SRAM-obstructed left edge unused"
-assert_contains \
-    $pins_text \
-    {set[[:space:]]+RIGHT_PINS[[:space:]]+\[concat[[:space:]]+\$RIGHT_PINS[[:space:]]+\$BOTTOM_PINS\]} \
-    "pins.tcl must move the read-response group from the compressed bottom segment to the legal right edge"
-assert_contains \
-    $pins_text \
-    {set[[:space:]]+BOTTOM_PINS[[:space:]]+\{\}} \
-    "pins.tcl must leave the SRAM-obstructed bottom edge unused"
-
-foreach {side layer} {TOP M7 RIGHT M6} {
+foreach {side layer} {TOP M7 RIGHT M6 BOTTOM M7 LEFT M6} {
     set side_index [string first "-side $side" $pins_text]
     set layer_index [string first "-layer $layer" $pins_text $side_index]
     if {$side_index < 0 || $layer_index < $side_index} {
         fail "$side pins should use layer $layer"
     }
+}
+
+foreach pitch_name {
+    top_requested_uniform_pitch
+    right_requested_uniform_pitch
+    bottom_requested_uniform_pitch
+    left_requested_uniform_pitch
+} {
+    assert_contains $pins_text $pitch_name \
+        "pins.tcl must report $pitch_name"
+}
+assert_contains \
+    $pins_text \
+    {set[[:space:]]+bottom_end[[:space:]]+\[list[[:space:]\\]+\[expr[[:space:]]+\{\$pin_core_llx[[:space:]]+\+[[:space:]]+\$PIN_EDGE_CLEARANCE\}\]} \
+    "BOTTOM signal pins must use the full bottom core edge, not the SRAM no-mesh box"
+assert_contains \
+    $pins_text \
+    {set[[:space:]]+left_end[[:space:]]+\[list[[:space:]\\]+\$pin_core_llx[[:space:]]+\[expr[[:space:]]+\{\$pin_core_lly[[:space:]]+\+[[:space:]]+\$PIN_EDGE_CLEARANCE\}\]} \
+    "LEFT signal pins must use the full left core edge, not the SRAM no-mesh box"
+if {[regexp -- {SRAM_NO_MESH_UR[XY]} $pins_text]} {
+    fail "pins.tcl must not clip M6/M7 signal pins by the SRAM power no-mesh box"
+}
+foreach channel_marker {
+    {left_group CLK_RST_AW}
+    {bottom_group W}
+    {top_group AR}
+    {right_group B_R}
+} {
+    assert_contains \
+        $pins_text \
+        $channel_marker \
+        "pins.tcl must report AXI channel marker '$channel_marker'"
 }
 
 set right_start_index [string first {set right_start [list} $pins_text]

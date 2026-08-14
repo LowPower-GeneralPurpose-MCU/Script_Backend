@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_pg_single_owner_v3"
+set FLOW_SOURCE_REVISION "sram_pg_local_m4_m5_handoff_v4"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -307,7 +307,6 @@ setPlaceMode \
     -place_design_refine_macro false
 
 place_opt_design
-refinePlace
 
 checkPlace ./verify_rpt/checkPlace_after_place.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_place.rpt
@@ -324,6 +323,7 @@ timeDesign \
 foreach stale_post_place_pg_report {
     ./verify_rpt/pg_connectivity_before_trim.rpt
     ./verify_rpt/pg_connectivity_after_trim.rpt
+    ./verify_rpt/sram_m4_interface_drc.rpt
     ./verify_rpt/pg_drc_after_trim.rpt
 } {
     file delete -force $stale_post_place_pg_report
@@ -339,7 +339,11 @@ if {[catch {
     error $post_place_pg_error
 }
 if {[catch {
-    verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}
+    # M4 contains the generated SRAM hard-macro PG rails.  Check that
+    # interface separately so Pin-of-Cell library markers cannot hide a real
+    # special-wire issue, then leave the final GUI/report on actionable M5-M9.
+    verify_pg_special_drc_or_stop ./verify_rpt/sram_m4_interface_drc.rpt {M4 M4}
+    verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M5 M9}
 } post_place_pg_drc_error]} {
     puts stderr "Post-placement PG DRC failed: $post_place_pg_drc_error"
     error $post_place_pg_drc_error
@@ -347,6 +351,9 @@ if {[catch {
 stop_if_dirty_pg_connectivity_report \
     ./verify_rpt/pg_connectivity_after_trim.rpt \
     "Post-placement PG connectivity"
+stop_if_dirty_pg_special_drc_report \
+    ./verify_rpt/sram_m4_interface_drc.rpt \
+    "Post-placement SRAM M4 interface DRC"
 stop_if_dirty_pg_special_drc_report \
     ./verify_rpt/pg_drc_after_trim.rpt \
     "Post-placement PG DRC"

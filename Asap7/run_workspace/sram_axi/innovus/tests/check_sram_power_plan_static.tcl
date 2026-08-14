@@ -279,16 +279,24 @@ set route_guard_text [read_complete_file $route_guard_path]
 
 assert_contains \
     $route_guard_text \
+    {set[[:space:]]+SRAM_ROUTE_GUARD_ENABLE[[:space:]]+0} \
+    "sram_route_guard.tcl must default to trusting the ASAP7 SRAM LEF OBS instead of blocking M6/M7 signal escape"
+assert_contains \
+    $route_guard_text \
+    {if[[:space:]]+\{\$SRAM_ROUTE_GUARD_ENABLE\}} \
+    "sram_route_guard.tcl must gate optional over-the-macro signal blockages"
+assert_contains \
+    $route_guard_text \
     {createRouteBlk[[:space:]]+\\} \
-    "sram_route_guard.tcl must create explicit signal-only route blockages over SRAM macro bodies"
+    "sram_route_guard.tcl must keep an explicit signal-only route blockage command for deliberate debug/signoff experiments"
 assert_contains \
     $route_guard_text \
     {-exceptpgnet} \
-    "SRAM route blockages must use Cadence -exceptpgnet so PG special routing remains legal"
+    "Optional SRAM route blockages must use Cadence -exceptpgnet so PG special routing remains legal"
 assert_contains \
     $route_guard_text \
     {set[[:space:]]+SRAM_ROUTE_GUARD_LAYERS[[:space:]]+\{M6[[:space:]]+M7\}} \
-    "SRAM route guard must block only over-the-macro signal/clock layers by default, not ASAP7 SRAM M4/M5 pin-access layers"
+    "Optional SRAM route guard must target M6/M7 only when explicitly enabled, not ASAP7 SRAM M4/M5 pin-access layers"
 assert_not_contains \
     $route_guard_text \
     {set[[:space:]]+SRAM_ROUTE_GUARD_LAYERS[[:space:]]+\{M4[[:space:]]+M5\}} \
@@ -296,7 +304,7 @@ assert_not_contains \
 assert_contains \
     $route_guard_text \
     {setRouteMode[[:space:]]+\\[[:space:]]+-earlyGlobalReverseDirection[[:space:]]+\$sram_egr_reverse_regions} \
-    "SRAM route guard must use the documented setRouteMode -earlyGlobalReverseDirection option for early global route/CTS estimation"
+    "Explicit SRAM route guard mode must use the documented setRouteMode -earlyGlobalReverseDirection option for early global route/CTS estimation"
 assert_contains \
     $route_guard_text \
     {set[[:space:]]+SRAM_ROUTE_GUARD_EGR_LAYER[[:space:]]+M5} \
@@ -305,6 +313,10 @@ assert_contains \
     $route_guard_text \
     {deleteRouteBlk[[:space:]]+\\[[:space:]]+-name[[:space:]]+\$\{SRAM_ROUTE_GUARD_PREFIX\}_\*[[:space:]]+\\[[:space:]]+-type[[:space:]]+routes} \
     "sram_route_guard.tcl must delete only its own named route blockages before recreating them"
+assert_contains \
+    $route_guard_text \
+    {dbGet[[:space:]]+-e[[:space:]]+-p[[:space:]]+top\.fPlan\.rBlkgs\.name} \
+    "sram_route_guard.tcl must query existing named blockages before deleting them"
 
 foreach obsolete_child {
     sram_gap_stripes.tcl
@@ -580,6 +592,10 @@ assert_contains \
     "core_pg_outside_island.tcl must keep M6 mesh in a right-side logic box"
 assert_contains \
     $child_text(core_pg_outside_island.tcl) \
+    {set[[:space:]]+core_m6_right_llx[[:space:]]+\$SRAM_ISLAND_URX} \
+    "right-side M6 must begin at the SRAM body edge so it can hand off the local M5 collector without entering a macro"
+assert_contains \
+    $child_text(core_pg_outside_island.tcl) \
     {LOGIC_RIGHT_M7_BOX} \
     "core_pg_outside_island.tcl must keep M7 mesh in a right-side logic box"
 assert_contains \
@@ -797,9 +813,9 @@ assert_contains \
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {-extend_to_closest_target[[:space:]]+area_boundary} \
-    "SRAM collectors must cross the existing M8/M9 ring and extend to the explicit area boundary"
+    "SRAM collectors must span their explicit local-gap area without jogging"
 if {[regexp -- {-extend_to_first_ring|-max_extension_distance} $child_text(sram_island_power.tcl)]} {
-    fail "SRAM collectors must not stop before crossing the reused M8/M9 ring"
+    fail "SRAM collectors must not use implicit ring-search limits inside the SRAM island"
 }
 assert_contains \
     $child_text(sram_island_power.tcl) \
@@ -809,10 +825,10 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {-stacked_via_top_layer[[:space:]]+M5} \
     "Horizontal M4 collectors must be allowed to connect to the M5 island transition spine"
-assert_contains \
+assert_not_contains \
     $child_text(sram_island_power.tcl) \
     {-stacked_via_top_layer[[:space:]]+M8} \
-    "Vertical M5 collectors must be allowed to connect to the M8 bottom ring"
+    "local SRAM collectors must stay on M4/M5; the controlled global handoff is M5-to-M6 at the island edge"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {local_left} \
@@ -832,10 +848,10 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {set[[:space:]]+SRAM_ENABLE_COLUMN_GAP_PG[[:space:]]+1} \
     "SRAM column-gap M5 collectors must default on so middle SRAM-bank VDD/VSS pins can reach local island collectors"
-assert_contains \
+assert_not_contains \
     $child_text(sram_island_power.tcl) \
-    {set[[:space:]]+SRAM_COLUMN_GAP_PG_SKIP_LIST[[:space:]]+\{1\}} \
-    "SRAM island power must skip the center column seam by default because opposing SRAM M4 pins leave too little clean M5 pin-access space"
+    {SRAM_COLUMN_GAP_PG_SKIP_LIST} \
+    "SRAM PG priority requires all three column gaps; no center-column collector may be silently skipped"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {if[[:space:]]+\{\$SRAM_ENABLE_COLUMN_GAP_PG\}} \
@@ -875,8 +891,8 @@ if {$global_upper_stripes == 0 || $global_upper_no_pin_stripes < $global_upper_s
 
 set simulated_sram_stripes \
     [simulate_sram_island_power [file join $tcl_dir sram_island_power.tcl]]
-if {[llength $simulated_sram_stripes] != 8} {
-    fail "SRAM island power must default to top M4, three M4 row-gap pairs, left/right M5 edge spines, and two safe M5 column-gap collectors"
+if {[llength $simulated_sram_stripes] != 9} {
+    fail "SRAM island power must default to top M4, three M4 row-gap pairs, left/right M5 edge spines, and all three M5 column-gap collectors"
 }
 
 set horizontal_pair_count 0
@@ -951,14 +967,14 @@ foreach stripe $simulated_sram_stripes {
     }
 }
 
-if {$horizontal_pair_count != 4 || $vertical_pair_count != 4} {
-    fail "Open SRAM island topology requires four M4 pairs and four M5 vertical collector pairs by default"
+if {$horizontal_pair_count != 4 || $vertical_pair_count != 5} {
+    fail "Open SRAM island topology requires four M4 pairs and five M5 vertical collector pairs by default"
 }
 if {!$top_local_ring_found || !$right_local_ring_found || !$left_transition_found} {
     fail "SRAM island must have top/right local collectors plus a left transition spine to keep M4 rows electrically tied to the reused global ring"
 }
-if {!$col0_collector_found || !$col2_collector_found || $col1_collector_found} {
-    fail "SRAM island must keep safe col_0/col_2 M5 collectors while skipping the center col_1 pin-access seam"
+if {!$col0_collector_found || !$col1_collector_found || !$col2_collector_found} {
+    fail "SRAM island must power col_0, col_1, and col_2; SRAM PG has priority in every inter-macro column gap"
 }
 
 if {[llength $SRAM_RING_CAPTURE] != 0} {
@@ -978,11 +994,7 @@ foreach mode $SRAM_STRIPE_MODE_CAPTURE {
         [lindex $mode [expr {[lsearch -exact $mode -extend_to_closest_target] + 1}]] ne "area_boundary"} {
         fail "Every SRAM stripe mode must extend to its explicit area boundary"
     }
-    if {$mode_index == 1} {
-        set expected_stack {-stacked_via_bottom_layer M4 -stacked_via_top_layer M5}
-    } else {
-        set expected_stack {-stacked_via_bottom_layer M4 -stacked_via_top_layer M8}
-    }
+    set expected_stack {-stacked_via_bottom_layer M4 -stacked_via_top_layer M5}
     foreach {option expected} $expected_stack {
         set option_index [lsearch -exact $mode $option]
         if {$option_index < 0 || [lindex $mode [expr {$option_index + 1}]] ne $expected} {
@@ -1043,8 +1055,12 @@ foreach flow_pair [list \
         "$flow_name must reconnect/verify VDD/VSS PG after post-placement mesh construction"
     assert_contains \
         $flow_text \
-        {verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M4[[:space:]]+M9\}} \
-        "$flow_name must run a post-placement M4-M9 special-route PG DRC guard before saving axi_ram_placed.enc"
+        {verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/sram_m4_interface_drc\.rpt[[:space:]]+\{M4[[:space:]]+M4\}} \
+        "$flow_name must check the SRAM M4 interface separately from the hard-macro abstract"
+    assert_contains \
+        $flow_text \
+        {verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M5[[:space:]]+M9\}} \
+        "$flow_name must run an actionable post-placement M5-M9 PG DRC guard before saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
         {catch[[:space:]]+\{[[:space:]]+connect_core_pg_pins_nojog[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
@@ -1063,8 +1079,8 @@ foreach flow_pair [list \
         "$flow_name must not force Innovus to exit when PG guards fail"
     assert_contains \
         $flow_text \
-        {catch[[:space:]]+\{[[:space:]]+verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M4[[:space:]]+M9\}} \
-        "$flow_name must catch dirty post-placement PG special-route DRC"
+        {if[[:space:]]+\{\[catch[[:space:]]+\{} \
+        "$flow_name must catch post-placement verification failures"
     assert_contains \
         $flow_text \
         {error[[:space:]]+\$post_place_pg_drc_error} \
@@ -1111,7 +1127,7 @@ foreach flow_pair [list \
     set middle_pg_index [string first {source ./tcl/core_pg_outside_island.tcl} $flow_text]
     set stale_post_place_delete_index [string first {file delete -force $stale_post_place_pg_report} $flow_text]
     set post_place_guard_index [string first {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} $flow_text]
-    set post_place_drc_guard_index [string first {verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M4 M9}} $flow_text]
+    set post_place_drc_guard_index [string first {verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M5 M9}} $flow_text]
     set placed_save_index [string first {saveDesign ./saved/axi_ram_placed.enc} $flow_text]
     set before_trim_verify_seen [regexp {
         verifyConnectivity[[:space:]\n\\]+.*pg_connectivity_before_trim\.rpt
@@ -1243,8 +1259,18 @@ assert_contains \
     "post-placement SRAM PG stitch must target the ASAP7 SRAM M4 VDD/VSS rails only"
 assert_contains \
     $flow_checks_text \
-    {-blockPinTarget[[:space:]]+\{stripe\}} \
-    "post-placement SRAM PG stitch must target local SRAM island stripes instead of global mesh"
+    {-blockPinTarget[[:space:]]+nearestTarget} \
+    "post-placement SRAM PG stitch must use the nearest legal local collector"
+foreach {pattern purpose} {
+    {-allowLayerChange[[:space:]]+1} "permit the required M4-to-M5 transition"
+    {-layerChangeRange[[:space:]]+\{M4[[:space:]]+M5\}} "confine block-pin routing to M4/M5"
+    {-targetViaLayerRange[[:space:]]+\{M4[[:space:]]+M5\}} "prevent target vias from climbing into M6-M8"
+    {-connectInsideArea} "keep source and target inside the SRAM island"
+    {-detailed_log} "retain detailed sroute diagnostics"
+} {
+    assert_contains $flow_checks_text $pattern \
+        "post-placement SRAM PG stitch must $purpose"
+}
 assert_contains \
     $flow_checks_text \
     {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+1} \
@@ -1291,8 +1317,8 @@ if {$core_pg_proc_index < 0 ||
 }
 assert_contains \
     $flow_checks_text \
-    {lappend[[:space:]]+verify_cmd[[:space:]]+-noUnroutedNet} \
-    "strict PG connectivity must still use -noUnroutedNet when SRAM block pins are stitched"
+    {lappend[[:space:]]+verify_cmd[[:space:]]+-allPGPinPort[[:space:]]+-noUnroutedNet} \
+    "strict PG connectivity must inspect every SRAM PG port and still use -noUnroutedNet"
 assert_contains \
     $flow_checks_text \
     {lappend[[:space:]]+verify_cmd[[:space:]]+-noUnConnPin} \

@@ -43,6 +43,7 @@ set core_m6_sram_guard [pg_layer_boundary_guard M6 $stripe_m6_w]
 set core_m7_sram_guard [pg_layer_boundary_guard M7 $stripe_m7_w]
 
 foreach required_var {
+    SRAM_ISLAND_URX
     SRAM_ISLAND_CUT_URX
     SRAM_NO_MESH_URX
     SRAM_NO_MESH_URY
@@ -52,7 +53,11 @@ foreach required_var {
     }
 }
 
-set core_m6_right_llx [expr {$SRAM_NO_MESH_URX + $core_m6_sram_guard}]
+# M6 is the controlled hand-off layer from the local SRAM M5 collector to the
+# global logic mesh.  Its wire shapes begin at the macro-body boundary, cross
+# only the right collector halo, and never enter an SRAM body.  M7 remains
+# fully outside SRAM_NO_MESH_BOX because it is not needed for block-pin access.
+set core_m6_right_llx $SRAM_ISLAND_URX
 set core_m7_right_llx [expr {$SRAM_NO_MESH_URX + $core_m7_sram_guard}]
 set core_m6_top_lly [expr {$SRAM_NO_MESH_URY + $core_m6_sram_guard}]
 set core_m7_top_lly [expr {$SRAM_NO_MESH_URY + $core_m7_sram_guard}]
@@ -76,8 +81,9 @@ set LOGIC_TOP_LEFT_M6_BOX [list \
 
 pg_assert_box_clear_of_sram_cut \
     LOGIC_RIGHT_M7_BOX $LOGIC_RIGHT_M7_BOX right $core_m7_sram_guard
-pg_assert_box_clear_of_sram_cut \
-    LOGIC_RIGHT_M6_BOX $LOGIC_RIGHT_M6_BOX right $core_m6_sram_guard
+if {[lindex $LOGIC_RIGHT_M6_BOX 0] < $SRAM_ISLAND_URX} {
+    error "M6 SRAM-to-logic hand-off enters the SRAM macro body: $LOGIC_RIGHT_M6_BOX"
+}
 pg_assert_box_clear_of_sram_cut \
     LOGIC_TOP_LEFT_M7_BOX $LOGIC_TOP_LEFT_M7_BOX top $core_m7_sram_guard
 pg_assert_box_clear_of_sram_cut \
@@ -90,6 +96,7 @@ puts "External horizontal PG boxes:"
 puts " - RIGHT M6 : $LOGIC_RIGHT_M6_BOX"
 puts " - TOP M6   : $LOGIC_TOP_LEFT_M6_BOX"
 puts " - SRAM guard: M6=$core_m6_sram_guard M7=$core_m7_sram_guard"
+puts " - M5/M6 hand-off: right M6 shapes start at SRAM_ISLAND_URX=$SRAM_ISLAND_URX"
 
 # M7 vertical mesh outside island, globally phase-aligned.
 set global_m7_first_x [expr {$core_llx + $stripe_m7_offset}]

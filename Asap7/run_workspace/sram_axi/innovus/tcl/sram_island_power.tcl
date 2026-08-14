@@ -3,9 +3,8 @@
 ##
 ## Same intent as the teaching slide:
 ##   1. Build local PG only around the SRAM group/gaps.
-##   2. Keep generic SRAM block-pin stitching off by default because the
-##      ASAP7 generated SRAM LEF exposes internal M4 PG rails, not clean
-##      top-level edge ports.
+##   2. Use every four-row column/row gap as a local collector.  Power access
+##      has priority over signal escape inside the SRAM island.
 ##   3. Trim VDD/VSS stubs before the rest of the power grid continues.
 ##   4. Keep the regular global/floating mesh out of the SRAM island.
 ##
@@ -60,9 +59,6 @@ if {![info exists sram_edge_report]} {
 if {![info exists SRAM_ENABLE_COLUMN_GAP_PG]} {
     set SRAM_ENABLE_COLUMN_GAP_PG 1
 }
-if {![info exists SRAM_COLUMN_GAP_PG_SKIP_LIST]} {
-    set SRAM_COLUMN_GAP_PG_SKIP_LIST {1}
-}
 if {![info exists SRAM_CONNECT_BLOCK_PINS]} {
     set SRAM_CONNECT_BLOCK_PINS 0
 }
@@ -84,14 +80,6 @@ if {$SRAM_MACRO_GAP_Y <= $sram_pair_total} {
 if {$SRAM_ENABLE_COLUMN_GAP_PG && $SRAM_MACRO_GAP_X <= $sram_pair_total} {
     error "SRAM_MACRO_GAP_X=$SRAM_MACRO_GAP_X is too small for one M5 VSS/VDD pair"
 }
-foreach skipped_col_gap $SRAM_COLUMN_GAP_PG_SKIP_LIST {
-    if {![string is integer -strict $skipped_col_gap] ||
-        $skipped_col_gap < 0 ||
-        $skipped_col_gap >= [expr {$SRAM_COLS - 1}]} {
-        error "SRAM_COLUMN_GAP_PG_SKIP_LIST has illegal column-gap index $skipped_col_gap"
-    }
-}
-
 set sram_pg_left [expr {$power_die_llx + $PG_BOUNDARY_EPS}]
 set sram_pg_bottom [expr {$power_die_lly + $PG_BOUNDARY_EPS}]
 set sram_pg_right [expr {min($SRAM_ISLAND_CUT_URX, $power_die_urx - $PG_BOUNDARY_EPS)}]
@@ -174,7 +162,7 @@ setAddStripeMode \
     -break_at none \
     -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M4 \
-    -stacked_via_top_layer M8
+    -stacked_via_top_layer M5
 
 sram_assert_pg_area_clear_of_macro_bodies local_left $local_left_area
 sram_add_local_pg_pair \
@@ -210,7 +198,7 @@ setAddStripeMode \
     -break_at none \
     -extend_to_closest_target area_boundary \
     -stacked_via_bottom_layer M4 \
-    -stacked_via_top_layer M8
+    -stacked_via_top_layer M5
 
 sram_assert_pg_area_clear_of_macro_bodies local_right $local_right_area
 sram_add_local_pg_pair \
@@ -218,11 +206,6 @@ sram_add_local_pg_pair \
 
 if {$SRAM_ENABLE_COLUMN_GAP_PG} {
     for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
-        if {[lsearch -exact $SRAM_COLUMN_GAP_PG_SKIP_LIST $c] >= 0} {
-            puts "SRAM column-gap M5 PG skipped at col_$c: pin-access seam is reserved for SRAM macro priority."
-            continue
-        }
-
         set gap_llx [expr {
             $SRAM_X0 + ($c + 1) * $SRAM_W + $c * $SRAM_MACRO_GAP_X
         }]
@@ -276,11 +259,6 @@ for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
 }
 if {$SRAM_ENABLE_COLUMN_GAP_PG} {
     for {set c 0} {$c < [expr {$SRAM_COLS - 1}]} {incr c} {
-        if {[lsearch -exact $SRAM_COLUMN_GAP_PG_SKIP_LIST $c] >= 0} {
-            puts $edge_fh "skip col_$c M5 vertical {reserved_for_sram_pin_access}"
-            continue
-        }
-
         set gap_llx [expr {
             $SRAM_X0 + ($c + 1) * $SRAM_W + $c * $SRAM_MACRO_GAP_X
         }]
@@ -297,7 +275,7 @@ puts "===================================================="
 puts "SRAM ISLAND PG CREATED"
 puts " - Local PG       : M4 row-gap/top straps plus M5 edge/column-gap spines"
 puts " - Column-gap M5  : $SRAM_ENABLE_COLUMN_GAP_PG"
-puts " - Skipped columns: $SRAM_COLUMN_GAP_PG_SKIP_LIST"
+puts " - Skipped columns: none; SRAM PG has priority in all three column gaps"
 puts " - BlockPin sroute: $SRAM_CONNECT_BLOCK_PINS"
 puts " - Report  : $sram_edge_report"
 puts "===================================================="

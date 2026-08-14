@@ -684,3 +684,105 @@ Mot SRAM physical-design flow dung khong chi la "dat macro va ve power". Can co 
 4. Timing/CTS correctness: route type, clock cells, propagated clock dung constraint mode, report CTS warnings rieng.
 
 Neu thieu lop 3, Innovus co the route/estimate signal/clock len SRAM body. Neu thieu lop 4, postCTS co the tao ket qua nhin "day cell/day routing" ma khong con y nghia physical.
+
+## 13. Audit run 10:48 va topology sua doi
+
+Muc nay thay the cac ket luan cu ve pin va PG connectivity cua run truoc. Cac
+report `innovus.log`, `innovus.cmd`, `pg_connectivity_after_trim.rpt` va
+`pg_drc_after_trim.rpt` duoc tao ngay 14/08/2026 luc 10:48 tren Windows
+(12:45 trong timestamp ben trong Innovus/Linux).
+
+### 13.1. Root cause da xac nhan
+
+- `top_level_pin_geometry.rpt` cu co 138 pin TOP, 90 pin RIGHT, LEFT/BOTTOM
+  khong dung. Vi vay pin bi don ve hai canh la do script, khong phai do Innovus.
+- `sram_island_pg_edges.rpt` cu co `skip col_1`. Day la ly do cot giua island
+  khong co M5 VDD/VSS collector day du.
+- `sroute` bao `Number of Block ports routed: 32` nhung dong tiep theo la
+  `32 ports open due to poor power planning`. Report sau do van sach vi lenh
+  cu chi dung `-noUnroutedNet`; do la false clean.
+- 39 DRC cu deu o M4: 32 `Pin of Cell` WidthTable tu SRAM LEF va 7 spacing
+  cua `Special Wire VDD & VSS`. Khong co DRC nao tren M5-M9. Vi vay khong ha
+  toan bo global M8/M9 mesh; chi ha va gioi han duong cap local SRAM.
+
+### 13.2. Phan loai toan bo warning trong log
+
+| Ma | So lan | Phan loai | Xu ly |
+|---|---:|---|---|
+| IMPPP-133 | 112 | LEF/abstract ASAP7: OBS V3 SRAM va M1 PG pin std-cell vuot boundary rat nho | Khong sua geometry top-level de che warning; giu hierarchical signoff |
+| IMPPP-570 | 40 | ViaGen cat gon V4 array de tranh cut-spacing khi tao M1-M5 tap | Chap nhan neu final DRC sach; via khong bi xoa |
+| IMPPP-610 | 20 | Block-pin sroute cu tim via M2/M3, M6/M7, M7/M8 khong co matching rule | Gioi han source/target/via trong M4-M5 va trong SRAM island |
+| EMS-27 | 6 | Message display limit cho hai warning lap lai | Meta-warning, khong phai geometry error |
+| IMPMF-5054 | 5 | `saveDesign` noi bo luu obsolete fill setting | Khong do flow goi `fill_setting_save`; khong anh huong PG |
+| TECHLIB-1277 | 4 | Liberty dat `input_signal_level` tren output `CON` | Thuoc library, Innovus ignore attribute nay |
+| IMPOPT-3195 | 2 | Analysis mode thay doi trong optimization | Thong tin benign cua optimizer |
+| IMPSR-4302 | 2 | QRC tech file duoc uu tien hon cap-table trong tech LEF | Dung mot nguon RC, khong phai PG error |
+| IMPFP-325 | 1 | Floorplan bi resize o buoc proto/final floorplan | Co chu dich va duoc audit lai geometry sau resize |
+| IMPVFC-200 | 1 summary, 2 nets | VDD/VSS special-wire island open o checkpoint truoc placement | Deferred truoc place; final phai strict voi `-allPGPinPort` |
+| IMPFP-6001 | 1 | Xoa route blockage khi lan source dau chua co object | Da query `top.fPlan.rBlkgs.name` truoc khi xoa |
+| IMPOPT-7329 | 1 | `place_opt_design` bo qua internal refinePlace theo user configuration | Benign neu `checkPlace_after_place.rpt` sach; bo loi goi refinePlace lap ngay sau place_opt |
+| IMPPSP-1501 | 1 | Net 2-pin `u_mem/n_68` bi xem la degenerate trong early global route | Can theo doi o signal connectivity, khong phai PG root cause |
+
+### 13.3. Topology moi
+
+1. Local SRAM: M4 ngang o top va ba row gaps; M5 doc o left/right va ca ba
+   column gaps. Khong con skip cot giua.
+2. Block-pin stitch: chi M4 -> M5, `nearestTarget`, khong jog, source/target
+   nam trong island. Khong cho auto search len M6-M8.
+3. Global handoff: M5 collector ben phai giao voi M6 tai dung boundary macro.
+   M7/M8/M9 regular mesh van nam ngoai SRAM no-mesh box.
+4. Pin: TOP/M7, RIGHT/M6, BOTTOM/M7, LEFT/M6 dung full core side theo AXI
+   channel. SRAM PG no-mesh khong duoc dung de clip signal pin tren M6/M7.
+5. Verification: final connectivity them `-allPGPinPort`; M4 interface check
+   rieng de phan biet hard-macro pin marker voi special-wire DRC; global PG
+   signoff report con lai check M5-M9.
+
+### 13.4. Tieu chi cho run ke tiep
+
+- Log block-pin khong duoc con dong `ports open due to poor power planning`.
+- `pg_connectivity_after_trim.rpt` phai duoc tao boi command co
+  `-allPGPinPort` va bao zero problem.
+- `sram_island_pg_edges.rpt` phai co `col_0`, `col_1`, `col_2`, khong co
+  dong `skip`.
+- `top_level_pin_geometry.rpt` phai co count/pitch cho ca TOP, RIGHT, BOTTOM,
+  LEFT va `checkPinAssignment` phai zero illegal/unplaced.
+- `sram_m4_interface_drc.rpt` chi duoc con hard-macro `Pin of Cell` marker;
+  khong duoc co `Special Wire`/`Special Via` violation.
+- `pg_drc_after_trim.rpt` M5-M9 phai sach.
+
+## 14. Update 14/08/2026: pin placement theo LEF/DRM
+
+Sau khi doc lai `D:/download/srambank_256x4x32_6t122.lef.4x.lef` va
+`asap7_drm_201207a.pdf`, ket luan ve top-level signal pin da duoc sua:
+
+- SRAM LEF co VDD/VSS rail tren M4; signal pin/geometry chu yeu tren
+  M3/M4/M5/V3/V4.
+- OBS cua macro SRAM nam tren M1/M2/M4/V4/M5; khong co M6/M7 OBS trong LEF
+  nay. Vi vay viec dat top-level signal pin tren M6/M7 o canh gan SRAM khong
+  bi cam boi LEF/DRM.
+- DRM xac nhan M6 la horizontal routing layer va M7 la vertical routing layer.
+  `pins.tcl` giu convention LEFT/RIGHT dung M6, TOP/BOTTOM dung M7 voi
+  `PIN_WIDTH=0.128` va `PIN_DEPTH=0.288`.
+- Loi cu la tron hai concept: power no-mesh cua SRAM island va signal pin
+  legality. Power mesh van phai bi gioi han ngoai island; signal pin khong nen
+  bi don ve TOP/RIGHT chi vi no-mesh PG.
+
+Script hien tai:
+
+- `pins.tcl`: revision `sram_axi_four_side_connectivity_v6`.
+- LEFT/M6: `clk`, `rst_n`, AW channel.
+- BOTTOM/M7: W channel.
+- TOP/M7: AR channel.
+- RIGHT/M6: B va R channel.
+- `sram_route_guard.tcl`: mac dinh `SRAM_ROUTE_GUARD_ENABLE=0`, xoa stale
+  route blockage cu neu co, va chi tao optional M6/M7 route blockage khi user
+  chu dong bat debug/signoff experiment.
+
+Run ke tiep can xem:
+
+- `top_level_pin_geometry.rpt` phai ghi `left_group CLK_RST_AW`,
+  `bottom_group W`, `top_group AR`, `right_group B_R`.
+- `sram_route_guard.rpt` phai co `enabled 0` neu dung default moi.
+- `checkPinAssignment_after_pin.rpt` phai zero illegal/unplaced.
+- PG DRC/connectivity van danh gia rieng theo no-mesh island; khong lay viec
+  signal pin full-side lam ly do cho power mesh di qua SRAM.

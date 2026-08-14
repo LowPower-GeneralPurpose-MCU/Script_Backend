@@ -218,7 +218,10 @@ proc run_pg_connectivity_verify {report_file} {
         lappend verify_cmd -noUnConnPin
         puts "PG connectivity verify: SRAM block pins are deferred; checking special-route opens/shorts without unplaced-terminal noise."
     } else {
-        lappend verify_cmd -noUnroutedNet
+        # Cadence verifyConnectivity documents -allPGPinPort as the mode that
+        # verifies every PG port.  -noUnroutedNet alone allowed sroute's
+        # "32 ports open due to poor power planning" result to look clean.
+        lappend verify_cmd -allPGPinPort -noUnroutedNet
     }
 
     lappend verify_cmd -report $report_file
@@ -417,6 +420,7 @@ proc connect_floating_pg_stripes_nojog {} {
 proc connect_sram_block_pins_to_local_stripes_nojog {} {
     global SRAM_CONNECT_BLOCK_PINS SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE
     global SRAM_BLOCKPIN_STITCH_DONE
+    global SRAM_ISLAND_CUT_URX SRAM_ISLAND_CUT_URY PG_BOUNDARY_EPS
 
     if {![info exists SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE]} {
         set SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE 1
@@ -441,20 +445,51 @@ proc connect_sram_block_pins_to_local_stripes_nojog {} {
     puts "Connecting SRAM VDD/VSS block pins to local SRAM island stripes."
     applyGlobalNets
 
+    foreach required_var {SRAM_ISLAND_CUT_URX SRAM_ISLAND_CUT_URY} {
+        if {![info exists $required_var]} {
+            error "Missing $required_var before SRAM block-pin stitch"
+        }
+    }
+    if {![info exists PG_BOUNDARY_EPS]} {
+        set PG_BOUNDARY_EPS 0.192
+    }
+    set sram_stitch_area [list \
+        $PG_BOUNDARY_EPS $PG_BOUNDARY_EPS \
+        $SRAM_ISLAND_CUT_URX $SRAM_ISLAND_CUT_URY]
+
     setSrouteMode -reset
     setSrouteMode \
         -extendNearestTarget true \
         -blockPinRouteWithPinWidth false \
         -viaConnectToShape stripe
 
+    # Keep the hard-macro connection local and one layer deep.  The previous
+    # unrestricted target-via search tried M2/M3, M6/M7 and M7/M8 and left all
+    # 32 ports open.  Cadence documents layerChangeRange/targetViaLayerRange
+    # for constraining exactly this target-side via stacking.
     sroute \
         -connect {blockPin} \
         -nets {VSS VDD} \
         -blockPin useLef \
         -blockPinLayerRange {M4 M4} \
         -blockPinWidthRange {0.150 0.250} \
-        -blockPinTarget {stripe} \
-        -allowJogging 0
+        -blockPinTarget nearestTarget \
+        -allowJogging 0 \
+        -allowLayerChange 1 \
+        -layerChangeRange {M4 M5} \
+        -targetViaLayerRange {M4 M5} \
+        -area $sram_stitch_area \
+        -connectInsideArea \
+        -detailed_log
+
+    file mkdir ./reports
+    set stitch_fp [open ./reports/sram_blockpin_stitch_intent.rpt w]
+    puts $stitch_fp "area $sram_stitch_area"
+    puts $stitch_fp "source_layer M4"
+    puts $stitch_fp "target_layer M5"
+    puts $stitch_fp "target nearestTarget_inside_sram_island"
+    puts $stitch_fp "expected_ports [expr {2 * [llength [dbGet -p2 top.insts.cell.name $::SRAM_MASTER]]}]"
+    close $stitch_fp
 
     set SRAM_CONNECT_BLOCK_PINS 1
     set SRAM_BLOCKPIN_STITCH_DONE 1

@@ -575,9 +575,9 @@ puts "POWER PLAN CORE RINGS CHECKED"
 # ------------------------------------------------------------------------
 
 # Adapt the teacher's ring/stripe intent to this lower-left boundary island:
-# keep an open M4-top/M5-left/right local structure, reuse the global M9-left
-# and M8-bottom ring edges, and keep the regular global mesh out of the SRAM
-# island while SRAM block pins stitch only to local collectors.
+# keep an open M4/M5 local structure in every row/column gap, keep M8/M9 out
+# of the SRAM body, and hand the local M5 collector to global M6 only at the
+# right island boundary after placement.
 puts "POWER PLAN SOURCE SRAM ISLAND: [file normalize ./tcl/sram_island_power.tcl]"
 source ./tcl/sram_island_power.tcl
 puts "POWER PLAN SRAM ISLAND RETURNED"
@@ -595,6 +595,7 @@ if {$SRAM_CONNECT_BLOCK_PINS} {
     verifyConnectivity \
         -type special \
         -net {VDD VSS} \
+        -allPGPinPort \
         -noUnroutedNet \
         -report $pg_connectivity_report
 
