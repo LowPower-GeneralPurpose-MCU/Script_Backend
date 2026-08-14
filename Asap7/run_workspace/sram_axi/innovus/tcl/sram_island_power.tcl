@@ -23,6 +23,8 @@ foreach required_variable {
     SRAM_H
     SRAM_MACRO_GAP_X
     SRAM_MACRO_GAP_Y
+    ASAP7_ROW_HEIGHT
+    SRAM_BLOCKAGE_BORDER
     SRAM_ISLAND_URX
     SRAM_ISLAND_URY
     SRAM_ISLAND_CUT_URX
@@ -56,11 +58,14 @@ if {![info exists PG_BOUNDARY_EPS]} {
 if {![info exists sram_edge_report]} {
     set sram_edge_report ./reports/sram_island_pg_edges.rpt
 }
+if {![info exists sram_stitch_intent_report]} {
+    set sram_stitch_intent_report ./reports/sram_blockpin_stitch_intent.rpt
+}
 if {![info exists SRAM_ENABLE_COLUMN_GAP_PG]} {
     set SRAM_ENABLE_COLUMN_GAP_PG 1
 }
 if {![info exists SRAM_CONNECT_BLOCK_PINS]} {
-    set SRAM_CONNECT_BLOCK_PINS 0
+    set SRAM_CONNECT_BLOCK_PINS 1
 }
 foreach bool_variable {
     SRAM_ENABLE_COLUMN_GAP_PG
@@ -88,6 +93,9 @@ set sram_pg_top [expr {min($SRAM_ISLAND_CUT_URY, $power_die_ury - $PG_BOUNDARY_E
 set local_left_area [list \
     $sram_pg_left $sram_pg_bottom \
     $SRAM_X0 $sram_pg_top]
+set local_bottom_area [list \
+    $sram_pg_left $sram_pg_bottom \
+    $sram_pg_right $SRAM_Y0]
 set local_top_area [list \
     $sram_pg_left $SRAM_ISLAND_URY \
     $sram_pg_right $sram_pg_top]
@@ -176,6 +184,18 @@ setAddStripeMode \
     -stacked_via_bottom_layer M4 \
     -stacked_via_top_layer M5
 
+sram_assert_pg_area_clear_of_macro_bodies local_bottom $local_bottom_area
+sram_add_local_pg_pair \
+    M4 horizontal $local_bottom_area $sram_stripe_w $sram_stripe_s
+
+setAddStripeMode \
+    -allow_jog none \
+    -allow_nonpreferred_dir none \
+    -break_at none \
+    -extend_to_closest_target area_boundary \
+    -stacked_via_bottom_layer M4 \
+    -stacked_via_top_layer M5
+
 sram_assert_pg_area_clear_of_macro_bodies local_top $local_top_area
 sram_add_local_pg_pair \
     M4 horizontal $local_top_area $sram_stripe_w $sram_stripe_s
@@ -220,27 +240,53 @@ if {$SRAM_ENABLE_COLUMN_GAP_PG} {
     puts "SRAM column-gap M5 PG skipped: only edge SRAM collectors are enabled for this debug run."
 }
 
-if {$SRAM_CONNECT_BLOCK_PINS} {
-    setSrouteMode -reset
-    setSrouteMode \
-        -extendNearestTarget true \
-        -blockPinRouteWithPinWidth false \
-        -viaConnectToShape stripe
-
-    # Debug-only stitch for SRAM abstracts that provide clean edge PG access.
-    # On the generated ASAP7 SRAM LEF this generic sroute can materialize
-    # internal M4 rails as top-level special wires, so the default is off.
-    sroute \
-        -connect {blockPin} \
-        -nets {VSS VDD} \
-        -blockPin useLef \
-        -blockPinLayerRange {M4 M5} \
-        -blockPinWidthRange {0.150 0.250} \
-        -blockPinTarget nearestTarget \
-        -allowJogging 0
-} else {
-    puts "SRAM blockPin sroute skipped: ASAP7 SRAM VDD/VSS M4 rails are treated as hard-macro-internal shapes until clean edge PG access is available."
+# The ASAP7 SRAM LEF exposes many long horizontal VDD/VSS rails on M4 and no
+# M5 PG pin.  nearestTarget sroute selected arbitrary M4 power bars, promoted
+# whole rails to special wires, and still left the bottom row open.  Build a
+# deterministic two-stripe M5 access pair at the lower-right edge of every
+# macro instead.  Each short tap overlaps only the edge portion of the M4 PG
+# pin, reaches the M4 collector immediately below the macro, and does not form
+# a regular mesh over the SRAM body.
+if {![info exists SRAM_PIN_TAP_DEPTH]} {
+    set SRAM_PIN_TAP_DEPTH [expr {8.0 * $ASAP7_ROW_HEIGHT}]
 }
+if {$SRAM_PIN_TAP_DEPTH <= 0.0 || $SRAM_PIN_TAP_DEPTH >= $SRAM_H} {
+    error "SRAM_PIN_TAP_DEPTH=$SRAM_PIN_TAP_DEPTH must be inside the SRAM height $SRAM_H"
+}
+
+set SRAM_PIN_TAP_AREAS {}
+set sram_pin_tap_index 0
+setAddStripeMode \
+    -allow_jog none \
+    -allow_nonpreferred_dir none \
+    -break_at none \
+    -extend_to_closest_target area_boundary \
+    -stacked_via_bottom_layer M4 \
+    -stacked_via_top_layer M5
+
+foreach ptr $SRAM_PTRS {
+    set macro_name [lindex [dbGet $ptr.name] 0]
+    set macro_point [join [dbGet $ptr.pt]]
+    if {[llength $macro_point] != 2} {
+        error "Cannot decode SRAM origin for PG tap: $macro_name"
+    }
+    lassign $macro_point macro_x macro_y
+
+    set tap_llx [expr {$macro_x + $SRAM_W - $SRAM_BLOCKAGE_BORDER}]
+    set tap_urx [expr {$macro_x + $SRAM_W - $PG_BOUNDARY_EPS}]
+    set tap_lly [expr {max($sram_pg_bottom, $macro_y - $SRAM_MACRO_GAP_Y)}]
+    set tap_ury [expr {$macro_y + $SRAM_PIN_TAP_DEPTH}]
+    set tap_area [list $tap_llx $tap_lly $tap_urx $tap_ury]
+
+    sram_add_local_pg_pair \
+        M5 vertical $tap_area $sram_stripe_w $sram_stripe_s
+    lappend SRAM_PIN_TAP_AREAS \
+        [list $sram_pin_tap_index $macro_name $tap_area]
+    incr sram_pin_tap_index
+}
+
+set SRAM_PIN_TAPS_BUILT 1
+set SRAM_BLOCKPIN_STITCH_DONE 1
 
 editTrim -nets {VSS VDD}
 
@@ -248,6 +294,7 @@ file mkdir [file dirname $sram_edge_report]
 set edge_fh [open $sram_edge_report w]
 puts $edge_fh "type name layer direction area"
 puts $edge_fh "halo local_left M5 vertical {$local_left_area}"
+puts $edge_fh "halo local_bottom M4 horizontal {$local_bottom_area}"
 puts $edge_fh "halo local_top M4 horizontal {$local_top_area}"
 puts $edge_fh "halo local_right M5 vertical {$local_right_area}"
 for {set r 0} {$r < [expr {$SRAM_ROWS - 1}]} {incr r} {
@@ -266,16 +313,32 @@ if {$SRAM_ENABLE_COLUMN_GAP_PG} {
         puts $edge_fh "gap col_$c M5 vertical {[list $gap_llx $sram_pg_bottom $gap_urx $sram_pg_top]}"
     }
 }
+foreach tap_record $SRAM_PIN_TAP_AREAS {
+    lassign $tap_record tap_index macro_name tap_area
+    puts $edge_fh "tap macro_$tap_index M5 vertical {$tap_area} instance=$macro_name"
+}
 close $edge_fh
+
+file mkdir [file dirname $sram_stitch_intent_report]
+set stitch_fp [open $sram_stitch_intent_report w]
+puts $stitch_fp "strategy deterministic_m5_edge_taps"
+puts $stitch_fp "source_layer M4"
+puts $stitch_fp "tap_layer M5"
+puts $stitch_fp "tap_depth $SRAM_PIN_TAP_DEPTH"
+puts $stitch_fp "tap_count [llength $SRAM_PIN_TAP_AREAS]"
+puts $stitch_fp "expected_connected_ports [expr {2 * $SRAM_COUNT}]"
+puts $stitch_fp "nearest_target_sroute disabled"
+close $stitch_fp
 
 clearDrc
 deselectAll
 
 puts "===================================================="
 puts "SRAM ISLAND PG CREATED"
-puts " - Local PG       : M4 row-gap/top straps plus M5 edge/column-gap spines"
+puts " - Local PG       : M4 bottom/row-gap/top straps plus M5 edge/column-gap spines"
 puts " - Column-gap M5  : $SRAM_ENABLE_COLUMN_GAP_PG"
 puts " - Skipped columns: none; SRAM PG has priority in all three column gaps"
-puts " - BlockPin sroute: $SRAM_CONNECT_BLOCK_PINS"
+puts " - SRAM pin taps  : [llength $SRAM_PIN_TAP_AREAS] deterministic M5 edge pairs"
+puts " - nearestTarget  : disabled"
 puts " - Report  : $sram_edge_report"
 puts "===================================================="

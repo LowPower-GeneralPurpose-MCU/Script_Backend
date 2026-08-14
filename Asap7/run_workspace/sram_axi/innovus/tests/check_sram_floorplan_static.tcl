@@ -28,6 +28,29 @@ set macro_text [assert_file_complete $macro_floorplan]
 set finish_text [assert_file_complete $finish_macro_fp]
 set setup_text [assert_file_complete $macro_setup]
 
+if {![regexp {set[[:space:]]+SRAM_ROWS[[:space:]]+4} $setup_text] ||
+    ![regexp {set[[:space:]]+SRAM_COLS[[:space:]]+4} $setup_text]} {
+    fail "SRAM hierarchy must remain one complete rectangular 4x4 cluster"
+}
+if {![regexp {set[[:space:]]+SRAM_ISLAND_ORIENT[[:space:]]+"R180"} $setup_text]} {
+    fail "SRAM orientation must be an explicitly reviewed R0/R180 choice"
+}
+if {![regexp {set[[:space:]]+SRAM_MACRO_GAP_ROWS[[:space:]]+4} $setup_text]} {
+    fail "Inter-macro channels must reserve four ASAP7 rows for power and signal escape"
+}
+if {![regexp {createInstGroup[[:space:]]+\$SRAM_GROUP_NAME([[:space:]]|$)} $macro_text]} {
+    fail "All SRAM macros must be recorded in one hierarchy group"
+}
+if {[regexp {createInstGroup[^\r\n]*-fence|createInstGroup[^\r\n]*\\[\r\n]+[[:space:]]*-fence} $macro_text]} {
+    fail "The macro-only SRAM group must not be an exclusive fence for standard cells"
+}
+if {![regexp {addInstToInstGroup[[:space:]]+\\[[:space:]]*\n[[:space:]]*\$SRAM_GROUP_NAME} $macro_text]} {
+    fail "Every SRAM record must be added to the SRAM hierarchy group"
+}
+if {![regexp {dbSet[[:space:]]+\$ptr\.pStatus[[:space:]]+fixed} $finish_text]} {
+    fail "SRAM macros must be FIXED after manual placement and validation"
+}
+
 if {![regexp {set[[:space:]]+LOGIC_REGION_WIDTH[[:space:]]+\[sram_env_double_or_default[[:space:]]+SRAM_LOGIC_REGION_WIDTH[[:space:]]+120\.000[[:space:]]+80\.000\]} $setup_text]} {
     fail "sram_macro_setup.tcl must default to a compact 120um right-side logic channel with env override"
 }

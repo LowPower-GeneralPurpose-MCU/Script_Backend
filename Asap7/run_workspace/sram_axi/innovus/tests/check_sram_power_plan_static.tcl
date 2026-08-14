@@ -71,6 +71,20 @@ proc dbGet {args} {
         return [list $llx $lly $urx $ury]
     }
 
+    if {[llength $args] == 1 &&
+        [regexp {^sram_ptr_([0-9]+)\.pt$} [lindex $args 0] -> index]} {
+        set row [expr {int($index / 4)}]
+        set pos [expr {$index % 4}]
+        if {[expr {$row % 2}] == 0} {
+            set col $pos
+        } else {
+            set col [expr {3 - $pos}]
+        }
+        return [list \
+            [expr {2.16 + $col * (121.392 + 4.32)}] \
+            [expr {2.16 + $row * (172.8 + 4.32)}]]
+    }
+
     if {[llength $args] == 3 &&
         [lindex $args 0] eq "-p" &&
         [lindex $args 1] eq "top.nets.name"} {
@@ -177,7 +191,7 @@ proc simulate_sram_island_power {script_path} {
     global SRAM_ISLAND_LLX SRAM_ISLAND_LLY SRAM_ISLAND_URX SRAM_ISLAND_URY
     global SRAM_ISLAND_CUT_LLX SRAM_ISLAND_CUT_LLY
     global SRAM_ISLAND_CUT_URX SRAM_ISLAND_CUT_URY
-    global ASAP7_ROW_HEIGHT
+    global ASAP7_ROW_HEIGHT SRAM_BLOCKAGE_BORDER
     global core_llx core_lly
     global power_die_llx power_die_lly
     global ring_m89_w ring_m89_s ring_m89_inner_o ring_m89_outer_o ring_m89_span
@@ -206,6 +220,7 @@ proc simulate_sram_island_power {script_path} {
     set SRAM_ISLAND_CUT_URX 502.848
     set SRAM_ISLAND_CUT_URY 708.48
     set ASAP7_ROW_HEIGHT 1.080
+    set SRAM_BLOCKAGE_BORDER 2.160
     set core_llx 2.16
     set core_lly 2.16
     set power_die_llx 0.0
@@ -221,15 +236,20 @@ proc simulate_sram_island_power {script_path} {
     if {[info exists ::env(TEMP)]} {
         set sram_edge_report [file join \
             $::env(TEMP) sram_island_pg_edges_static.rpt]
+        set sram_stitch_intent_report [file join \
+            $::env(TEMP) sram_blockpin_stitch_intent_static.rpt]
     } else {
         set sram_edge_report sram_island_pg_edges_static.rpt
+        set sram_stitch_intent_report sram_blockpin_stitch_intent_static.rpt
     }
     file delete -force $sram_edge_report
+    file delete -force $sram_stitch_intent_report
 
     if {[catch {source $script_path} message]} {
         fail "Simulated SRAM island PG failed: $message"
     }
     file delete -force $sram_edge_report
+    file delete -force $sram_stitch_intent_report
 
     return $SRAM_STRIPE_CAPTURE
 }
@@ -725,40 +745,36 @@ assert_contains \
 
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {-viaConnectToShape[[:space:]]+stripe} \
-    "SRAM blockPin sroute must target the local island collectors"
+    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+1} \
+    "SRAM PG verification must be strict after deterministic macro access is built"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {-blockPinRouteWithPinWidth[[:space:]]+false} \
-    "SRAM blockPin sroute must use controlled top-level route width instead of blindly inheriting macro pin width"
+    {set[[:space:]]+SRAM_PIN_TAP_DEPTH[[:space:]]+\[expr[[:space:]]+\{8\.0[[:space:]]+\*[[:space:]]+\$ASAP7_ROW_HEIGHT\}\]} \
+    "SRAM M5 access taps must have a short row-derived depth"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {-blockPinLayerRange[[:space:]]+\{M4[[:space:]]+M5\}} \
-    "SRAM blockPin sroute must connect ASAP7 M4 SRAM pins through only short M5 local escapes"
+    {foreach[[:space:]]+ptr[[:space:]]+\$SRAM_PTRS} \
+    "SRAM power must build one deterministic access location for every macro"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {-blockPinWidthRange[[:space:]]+\{0\.150[[:space:]]+0\.250\}} \
-    "SRAM blockPin sroute must select the 0.192um M4 rail ports exposed by the ASAP7 SRAM LEF"
+    {M5[[:space:]]+vertical[[:space:]]+\$tap_area} \
+    "Each SRAM must use a short M5 pair to access its M4 VDD/VSS rails"
 assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {set[[:space:]]+SRAM_BLOCKPIN_STITCH_DONE[[:space:]]+1} \
+    "Deterministic SRAM access must own block-pin stitching before placement"
+assert_contains \
+    $child_text(sram_island_power.tcl) \
+    {strategy[[:space:]]+deterministic_m5_edge_taps} \
+    "SRAM power must report the deterministic access strategy"
+assert_not_contains \
+    $child_text(sram_island_power.tcl) \
+    {sroute[[:space:]]+\\} \
+    "Primary SRAM power construction must not use generic blockPin sroute"
+assert_not_contains \
     $child_text(sram_island_power.tcl) \
     {-blockPinTarget[[:space:]]+nearestTarget} \
-    "SRAM blockPin sroute must stitch to the nearest local collector instead of broad floating-stripe stitching"
-assert_contains \
-    $child_text(sram_island_power.tcl) \
-    {-allowJogging[[:space:]]+0} \
-    "SRAM blockPin sroute must not jog through the hard-macro body"
-assert_contains \
-    $child_text(sram_island_power.tcl) \
-    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+0} \
-    "SRAM blockPin sroute must default deferred because the generated ASAP7 SRAM LEF exposes internal M4 PG rails instead of clean edge ports"
-assert_contains \
-    $child_text(sram_island_power.tcl) \
-    {if[[:space:]]+\{\$SRAM_CONNECT_BLOCK_PINS\}} \
-    "SRAM blockPin sroute must be explicitly gated"
-assert_contains \
-    $child_text(sram_island_power.tcl) \
-    {SRAM[[:space:]]+blockPin[[:space:]]+sroute[[:space:]]+skipped} \
-    "The log must say when SRAM blockPin special routing is intentionally deferred"
+    "Primary SRAM power must not search arbitrary nearest PG targets"
 assert_contains \
     $power_text \
     {-noUnConnPin} \
@@ -772,7 +788,7 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {set[[:space:]]+sram_edge_report[[:space:]]+\./reports/sram_island_pg_edges\.rpt} \
     "SRAM island power must write a small region report for GUI/debug correlation"
-foreach edge_name {local_left local_top local_right} {
+foreach edge_name {local_left local_bottom local_top local_right} {
     assert_contains \
         $child_text(sram_island_power.tcl) \
         $edge_name \
@@ -891,18 +907,20 @@ if {$global_upper_stripes == 0 || $global_upper_no_pin_stripes < $global_upper_s
 
 set simulated_sram_stripes \
     [simulate_sram_island_power [file join $tcl_dir sram_island_power.tcl]]
-if {[llength $simulated_sram_stripes] != 9} {
-    fail "SRAM island power must default to top M4, three M4 row-gap pairs, left/right M5 edge spines, and all three M5 column-gap collectors"
+if {[llength $simulated_sram_stripes] != 26} {
+    fail "SRAM island power must create 10 gap/edge pairs plus one short M5 access pair for each of 16 macros"
 }
 
 set horizontal_pair_count 0
 set vertical_pair_count 0
+set bottom_local_ring_found 0
 set top_local_ring_found 0
 set left_transition_found 0
 set right_local_ring_found 0
 set col0_collector_found 0
 set col1_collector_found 0
 set col2_collector_found 0
+set macro_tap_pair_count 0
 foreach stripe $simulated_sram_stripes {
     lassign $stripe layer direction area create_pins width spacing
     if {$create_pins ne "0"} {
@@ -928,6 +946,10 @@ foreach stripe $simulated_sram_stripes {
             }
             assert_close $llx 0.192 "M4 SRAM row-gap stripe must cross the reused left M9 core ring without touching die boundary"
             assert_close $urx 502.848 "M4 SRAM row-gap stripe must stop at the SRAM island cut boundary"
+            if {abs($lly - 0.192) < 0.000001 &&
+                abs($ury - 2.160) < 0.000001} {
+                set bottom_local_ring_found 1
+            }
             if {abs($lly - 706.320) < 0.000001 &&
                 abs($ury - 708.480) < 0.000001} {
                 set top_local_ring_found 1
@@ -937,6 +959,11 @@ foreach stripe $simulated_sram_stripes {
             incr vertical_pair_count
             if {$layer ne "M5"} {
                 fail "Vertical SRAM island stripes must be on M5, got $layer"
+            }
+            if {abs(($urx - $llx) - 1.968) < 0.000001 &&
+                ($ury - $lly) <= 12.961} {
+                incr macro_tap_pair_count
+                continue
             }
             assert_close $lly 0.192 "M5 SRAM column-gap stripe must cross the reused bottom M8 core ring without touching die boundary"
             assert_close $ury 708.48 "M5 SRAM column-gap stripe must stop at the SRAM island cut boundary"
@@ -967,22 +994,26 @@ foreach stripe $simulated_sram_stripes {
     }
 }
 
-if {$horizontal_pair_count != 4 || $vertical_pair_count != 5} {
-    fail "Open SRAM island topology requires four M4 pairs and five M5 vertical collector pairs by default"
+if {$horizontal_pair_count != 5 || $vertical_pair_count != 21} {
+    fail "Open SRAM island topology requires five M4 pairs, five M5 collector pairs, and sixteen M5 macro-access pairs"
 }
-if {!$top_local_ring_found || !$right_local_ring_found || !$left_transition_found} {
-    fail "SRAM island must have top/right local collectors plus a left transition spine to keep M4 rows electrically tied to the reused global ring"
+if {!$bottom_local_ring_found || !$top_local_ring_found ||
+    !$right_local_ring_found || !$left_transition_found} {
+    fail "SRAM island must have bottom/top/right local collectors plus a left transition spine"
 }
 if {!$col0_collector_found || !$col1_collector_found || !$col2_collector_found} {
     fail "SRAM island must power col_0, col_1, and col_2; SRAM PG has priority in every inter-macro column gap"
+}
+if {$macro_tap_pair_count != 16} {
+    fail "Every SRAM macro must have exactly one deterministic short M5 VDD/VSS access pair"
 }
 
 if {[llength $SRAM_RING_CAPTURE] != 0} {
     fail "SRAM island must not create a closed ring that duplicates the reused left/bottom global-ring edges"
 }
 
-if {[llength $SRAM_STRIPE_MODE_CAPTURE] != 3} {
-    fail "SRAM island power must configure left-transition, horizontal, and right/column collector modes"
+if {[llength $SRAM_STRIPE_MODE_CAPTURE] != 5} {
+    fail "SRAM island power must configure edge, gap, and macro-access stripe modes explicitly"
 }
 set mode_index 0
 foreach mode $SRAM_STRIPE_MODE_CAPTURE {
@@ -1035,8 +1066,12 @@ foreach flow_pair [list \
         "$flow_name must track the SRAM island edge report generated by sram_island_power.tcl"
     assert_contains \
         $flow_text \
-        {file[[:space:]]+delete[[:space:]]+-force[[:space:]]+\$sram_edge_report} \
-        "$flow_name must delete the old SRAM island edge report before entering power_plan.tcl"
+        {set[[:space:]]+sram_stitch_intent_report[[:space:]]+\./reports/sram_blockpin_stitch_intent\.rpt} \
+        "$flow_name must track deterministic SRAM tap intent separately"
+    assert_contains \
+        $flow_text \
+        {foreach[[:space:]]+stale_sram_pg_report} \
+        "$flow_name must delete stale SRAM PG evidence before entering power_plan.tcl"
     assert_contains \
         $flow_text \
         {POWER PLAN DIRECT SRAM ISLAND SOURCE:} \
@@ -1055,12 +1090,12 @@ foreach flow_pair [list \
         "$flow_name must reconnect/verify VDD/VSS PG after post-placement mesh construction"
     assert_contains \
         $flow_text \
-        {verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/sram_m4_interface_drc\.rpt[[:space:]]+\{M4[[:space:]]+M4\}} \
-        "$flow_name must check the SRAM M4 interface separately from the hard-macro abstract"
+        {-report[[:space:]]+\./verify_rpt/sram_m4_interface_drc\.rpt} \
+        "$flow_name must generate the separate SRAM M4/M5 interface report"
     assert_contains \
         $flow_text \
-        {verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M5[[:space:]]+M9\}} \
-        "$flow_name must run an actionable post-placement M5-M9 PG DRC guard before saving axi_ram_placed.enc"
+        {-report[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt} \
+        "$flow_name must generate the actionable post-placement M6-M9 PG DRC report"
     assert_contains \
         $flow_text \
         {catch[[:space:]]+\{[[:space:]]+connect_core_pg_pins_nojog[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
@@ -1079,12 +1114,12 @@ foreach flow_pair [list \
         "$flow_name must not force Innovus to exit when PG guards fail"
     assert_contains \
         $flow_text \
-        {if[[:space:]]+\{\[catch[[:space:]]+\{} \
-        "$flow_name must catch post-placement verification failures"
+        {assert_clean_pg_special_drc_report[[:space:]]+\./verify_rpt/sram_m4_interface_drc\.rpt} \
+        "$flow_name must reject a dirty SRAM M4/M5 interface report"
     assert_contains \
         $flow_text \
-        {error[[:space:]]+\$post_place_pg_drc_error} \
-        "$flow_name must raise a Tcl error on dirty post-placement PG DRC instead of saving axi_ram_placed.enc"
+        {assert_clean_pg_special_drc_report[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt} \
+        "$flow_name must reject a dirty M6-M9 PG report before saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
         {stop_if_dirty_pg_special_drc_report[[:space:]]+\\[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt} \
@@ -1120,14 +1155,17 @@ foreach flow_pair [list \
     set power_entry_index [string first {POWER PLAN ENTRY:} $flow_text]
     set power_return_index [string first {POWER PLAN RETURN:} $flow_text $power_catch_index]
     set edge_report_index [string first {set sram_edge_report ./reports/sram_island_pg_edges.rpt} $flow_text]
-    set edge_delete_index [string first {file delete -force $sram_edge_report} $flow_text]
+    set stale_sram_delete_index [string first {foreach stale_sram_pg_report} $flow_text]
     set direct_sram_source_index [string first {source ./tcl/sram_island_power.tcl} $flow_text $power_catch_index]
     set upper_pg_index [string first {source ./tcl/global_upper_pg_to_ring.tcl} $flow_text]
     set lower_pg_index [string first {source ./tcl/core_lower_pg_nojog.tcl} $flow_text]
     set middle_pg_index [string first {source ./tcl/core_pg_outside_island.tcl} $flow_text]
     set stale_post_place_delete_index [string first {file delete -force $stale_post_place_pg_report} $flow_text]
     set post_place_guard_index [string first {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} $flow_text]
-    set post_place_drc_guard_index [string first {verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M5 M9}} $flow_text]
+    set m4_drc_report_index [string first {-report ./verify_rpt/sram_m4_interface_drc.rpt} $flow_text]
+    set m59_drc_report_index [string first {-report ./verify_rpt/pg_drc_after_trim.rpt} $flow_text]
+    set m4_drc_guard_index [string first {assert_clean_pg_special_drc_report ./verify_rpt/sram_m4_interface_drc.rpt} $flow_text]
+    set post_place_drc_guard_index [string first {assert_clean_pg_special_drc_report ./verify_rpt/pg_drc_after_trim.rpt} $flow_text]
     set placed_save_index [string first {saveDesign ./saved/axi_ram_placed.enc} $flow_text]
     set before_trim_verify_seen [regexp {
         verifyConnectivity[[:space:]\n\\]+.*pg_connectivity_before_trim\.rpt
@@ -1150,9 +1188,9 @@ foreach flow_pair [list \
     }
     if {$edge_report_index < 0 ||
         $edge_report_index > $power_catch_index ||
-        $edge_delete_index < $edge_report_index ||
-        $edge_delete_index > $power_catch_index} {
-        fail "$flow_name must delete stale SRAM edge evidence before sourcing power_plan.tcl"
+        $stale_sram_delete_index < $edge_report_index ||
+        $stale_sram_delete_index > $power_catch_index} {
+        fail "$flow_name must delete stale SRAM PG evidence before sourcing power_plan.tcl"
     }
     if {$direct_sram_source_index < $power_return_index ||
         $direct_sram_source_index > $pin_source_index} {
@@ -1174,9 +1212,14 @@ foreach flow_pair [list \
         $post_place_guard_index > $placed_save_index} {
         fail "$flow_name must trim/reconnect and guard PG connectivity before saving axi_ram_placed.enc"
     }
-    if {$post_place_drc_guard_index < 0 ||
+    if {$m4_drc_report_index < 0 ||
+        $m59_drc_report_index < 0 ||
+        $m4_drc_guard_index < 0 ||
+        $post_place_drc_guard_index < 0 ||
+        $m4_drc_report_index > $m4_drc_guard_index ||
+        $m59_drc_report_index > $m4_drc_guard_index ||
         $post_place_drc_guard_index > $placed_save_index} {
-        fail "$flow_name must guard post-placement PG DRC before saving axi_ram_placed.enc"
+        fail "$flow_name must generate both DRC reports before enforcing them and before saving axi_ram_placed.enc"
     }
     if {$before_trim_verify_seen} {
         fail "$flow_name must not verify a pre-trim PG state that is expected to contain dangling M1 rail endpoints"
@@ -1205,14 +1248,14 @@ foreach flow_pair [list \
     }
 }
 
-assert_contains \
+assert_not_contains \
     $flow_checks_text \
     {-connect[[:space:]]+\{floatingStripe\}} \
-    "flow_checks.tcl must connect area-constrained floating PG stripes before corePin reconnect"
-assert_contains \
+    "flow_checks.tcl must never auto-stitch floating stripes across the SRAM island"
+assert_not_contains \
     $flow_checks_text \
-    {-floatingStripeTarget[[:space:]]+\{ring[[:space:]]+stripe[[:space:]]+blockring\}} \
-    "flow_checks.tcl must target existing rings/stripes/blockrings for floating PG stripe stitching"
+    {PG_CONNECT_FLOATING_STRIPES} \
+    "floatingStripe stitching must not remain as an accidentally enabled option"
 assert_contains \
     $flow_checks_text \
     {-net[[:space:]]+\{VDD[[:space:]]+VSS\}} \
@@ -1227,16 +1270,8 @@ assert_contains \
     "flow_checks.tcl must know when SRAM block-pin stitching is intentionally deferred"
 assert_contains \
     $flow_checks_text \
-    {set[[:space:]]+PG_CONNECT_FLOATING_STRIPES[[:space:]]+0} \
-    "floatingStripe stitching must default off so Innovus cannot auto-stitch through the SRAM no-mesh column"
-assert_contains \
-    $flow_checks_text \
-    {if[[:space:]]+\{\$PG_CONNECT_FLOATING_STRIPES\}} \
-    "floatingStripe stitching must be explicitly gated"
-assert_contains \
-    $flow_checks_text \
-    {Floating[[:space:]]+PG[[:space:]]+stripe[[:space:]]+stitching[[:space:]]+skipped} \
-    "flow_checks.tcl must log when floatingStripe stitching is intentionally skipped"
+    {Floating[[:space:]]+PG[[:space:]]+stripe[[:space:]]+stitching[[:space:]]+is[[:space:]]+disabled[[:space:]]+by[[:space:]]+construction} \
+    "flow_checks.tcl must state that floatingStripe stitching is structurally disabled"
 assert_contains \
     $flow_checks_text \
     {allow_preplacement_special_opens} \
@@ -1244,41 +1279,23 @@ assert_contains \
 assert_contains \
     $flow_checks_text \
     {proc[[:space:]]+connect_sram_block_pins_to_local_stripes_nojog} \
-    "flow_checks.tcl must provide a controlled post-placement SRAM blockPin stitch"
-assert_contains \
-    $flow_checks_text \
-    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE[[:space:]]+1} \
-    "post-placement SRAM blockPin stitch must default on"
-assert_contains \
+    "flow_checks.tcl must validate deterministic SRAM access before final connectivity"
+assert_not_contains \
     $flow_checks_text \
     {-connect[[:space:]]+\{blockPin\}} \
-    "post-placement SRAM PG stitch must use documented sroute blockPin connection"
+    "post-placement checks must not draw fallback SRAM blockPin geometry"
 assert_contains \
     $flow_checks_text \
-    {-blockPinLayerRange[[:space:]]+\{M4[[:space:]]+M4\}} \
-    "post-placement SRAM PG stitch must target the ASAP7 SRAM M4 VDD/VSS rails only"
-assert_contains \
-    $flow_checks_text \
-    {-blockPinTarget[[:space:]]+nearestTarget} \
-    "post-placement SRAM PG stitch must use the nearest legal local collector"
-foreach {pattern purpose} {
-    {-allowLayerChange[[:space:]]+1} "permit the required M4-to-M5 transition"
-    {-layerChangeRange[[:space:]]+\{M4[[:space:]]+M5\}} "confine block-pin routing to M4/M5"
-    {-targetViaLayerRange[[:space:]]+\{M4[[:space:]]+M5\}} "prevent target vias from climbing into M6-M8"
-    {-connectInsideArea} "keep source and target inside the SRAM island"
-    {-detailed_log} "retain detailed sroute diagnostics"
-} {
-    assert_contains $flow_checks_text $pattern \
-        "post-placement SRAM PG stitch must $purpose"
-}
+    {Deterministic[[:space:]]+SRAM[[:space:]]+M5[[:space:]]+edge[[:space:]]+taps[[:space:]]+were[[:space:]]+not[[:space:]]+built} \
+    "post-placement PG verification must reject a missing deterministic tap topology"
 assert_contains \
     $flow_checks_text \
     {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+1} \
-    "post-placement SRAM blockPin stitch must make final PG connectivity strict"
+    "post-placement SRAM access validation must make final PG connectivity strict"
 assert_contains \
-    $flow_checks_text \
+    $child_text(sram_island_power.tcl) \
     {set[[:space:]]+SRAM_BLOCKPIN_STITCH_DONE[[:space:]]+1} \
-    "SRAM blockPin stitch must be owned once so later PG checkpoints cannot duplicate its vias"
+    "SRAM local power construction must own macro access once"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {set[[:space:]]+STDCELL_CORE_PG_BUILT[[:space:]]+1} \
@@ -1302,7 +1319,7 @@ assert_contains \
 assert_contains \
     $flow_checks_text \
     {connect_sram_block_pins_to_local_stripes_nojog} \
-    "post-placement PG reconnect must run the controlled SRAM blockPin stitch before final verify"
+    "post-placement PG reconnect must validate deterministic SRAM access before final verify"
 set core_pg_proc_index [string first {proc connect_core_pg_pins_nojog} $flow_checks_text]
 set post_place_sram_stitch_index [string first {connect_sram_block_pins_to_local_stripes_nojog} $flow_checks_text $core_pg_proc_index]
 set post_place_core_pin_index [string first {-connect {corePin}} $flow_checks_text $core_pg_proc_index]
@@ -1313,7 +1330,7 @@ if {$core_pg_proc_index < 0 ||
     $post_place_verify_index < 0 ||
     $post_place_sram_stitch_index >= $post_place_core_pin_index ||
     $post_place_sram_stitch_index >= $post_place_verify_index} {
-    fail "connect_core_pg_pins_nojog must stitch SRAM block pins before corePin reconnect and final PG verify"
+    fail "connect_core_pg_pins_nojog must validate SRAM access before corePin reconnect and final PG verify"
 }
 assert_contains \
     $flow_checks_text \

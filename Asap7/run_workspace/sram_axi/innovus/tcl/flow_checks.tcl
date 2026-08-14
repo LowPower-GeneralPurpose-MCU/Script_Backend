@@ -274,6 +274,7 @@ proc pg_top_level_owned_drc_areas {} {
     global SRAM_DIE_BOX SRAM_ISLAND_LLX SRAM_ISLAND_LLY
     global SRAM_ISLAND_URX SRAM_ISLAND_URY SRAM_MACRO_BOXES
     global SRAM_MACRO_GAP_X SRAM_MACRO_GAP_Y
+    global SRAM_PIN_TAP_AREAS
 
     foreach required_var {
         SRAM_DIE_BOX
@@ -351,6 +352,19 @@ proc pg_top_level_owned_drc_areas {} {
         }
     }
 
+    # Deterministic M5 access pairs are top-level geometry even though each
+    # pair overlaps a short edge corridor of its hard macro.  Include those
+    # corridors so M4/M5 interface and V4 via DRC are not hidden by the normal
+    # exclusion of macro-internal LEF shapes.
+    if {[info exists SRAM_PIN_TAP_AREAS]} {
+        foreach tap_record $SRAM_PIN_TAP_AREAS {
+            if {[llength $tap_record] != 3} {
+                error "Invalid SRAM pin-tap DRC record: $tap_record"
+            }
+            pg_append_unique_drc_box [lindex $tap_record 2] areas
+        }
+    }
+
     return $areas
 }
 
@@ -359,7 +373,7 @@ proc write_pg_drc_scope_report {report_file owned_areas} {
 
     set fp [open $report_file w]
     puts $fp "check_scope top_level_owned_pg"
-    puts $fp "reason SRAM macro-internal pin geometry belongs to hard-IP signoff; top-level verifies all logic regions, island borders, and inter-macro collectors"
+    puts $fp "reason SRAM macro-internal pin geometry belongs to hard-IP signoff; top-level verifies logic regions, island borders, inter-macro collectors, and deterministic M5 tap corridors"
     puts $fp "top_level_area_count [llength $owned_areas]"
     foreach area $owned_areas {
         puts $fp "top_level_area $area"
@@ -402,119 +416,27 @@ proc verify_antenna_if_enabled {report_file} {
     return 1
 }
 
-proc connect_floating_pg_stripes_nojog {} {
-    applyGlobalNets
-
-    setSrouteMode -reset
-    setSrouteMode \
-        -viaConnectToShape {ring stripe blockring}
-
-    sroute \
-        -connect {floatingStripe} \
-        -nets {VDD VSS} \
-        -floatingStripeTarget {ring stripe blockring} \
-        -allowJogging 0 \
-        -allowLayerChange 0
-}
-
 proc connect_sram_block_pins_to_local_stripes_nojog {} {
-    global SRAM_CONNECT_BLOCK_PINS SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE
-    global SRAM_BLOCKPIN_STITCH_DONE
-    global SRAM_ISLAND_CUT_URX SRAM_ISLAND_CUT_URY PG_BOUNDARY_EPS
+    global SRAM_CONNECT_BLOCK_PINS SRAM_BLOCKPIN_STITCH_DONE
 
-    if {![info exists SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE]} {
-        set SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE 1
-    }
-    if {![string is boolean -strict $SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE]} {
-        error "SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE must be boolean, got $SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE"
-    }
-    if {!$SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE} {
-        puts "SRAM blockPin post-place stitch skipped by SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE=0."
-        return
-    }
-    if {[info exists SRAM_BLOCKPIN_STITCH_DONE]} {
-        if {![string is boolean -strict $SRAM_BLOCKPIN_STITCH_DONE]} {
-            error "SRAM_BLOCKPIN_STITCH_DONE must be boolean, got $SRAM_BLOCKPIN_STITCH_DONE"
-        }
-        if {$SRAM_BLOCKPIN_STITCH_DONE} {
-            puts "SRAM blockPin stitch already completed; preserving the existing 32 connections."
-            return
-        }
+    if {![info exists SRAM_BLOCKPIN_STITCH_DONE] ||
+        ![string is boolean -strict $SRAM_BLOCKPIN_STITCH_DONE] ||
+        !$SRAM_BLOCKPIN_STITCH_DONE} {
+        error "Deterministic SRAM M5 edge taps were not built by sram_island_power.tcl"
     }
 
-    puts "Connecting SRAM VDD/VSS block pins to local SRAM island stripes."
-    applyGlobalNets
-
-    foreach required_var {SRAM_ISLAND_CUT_URX SRAM_ISLAND_CUT_URY} {
-        if {![info exists $required_var]} {
-            error "Missing $required_var before SRAM block-pin stitch"
-        }
-    }
-    if {![info exists PG_BOUNDARY_EPS]} {
-        set PG_BOUNDARY_EPS 0.192
-    }
-    set sram_stitch_area [list \
-        $PG_BOUNDARY_EPS $PG_BOUNDARY_EPS \
-        $SRAM_ISLAND_CUT_URX $SRAM_ISLAND_CUT_URY]
-
-    setSrouteMode -reset
-    setSrouteMode \
-        -extendNearestTarget true \
-        -blockPinRouteWithPinWidth false \
-        -viaConnectToShape stripe
-
-    # Keep the hard-macro connection local and one layer deep.  The previous
-    # unrestricted target-via search tried M2/M3, M6/M7 and M7/M8 and left all
-    # 32 ports open.  Cadence documents layerChangeRange/targetViaLayerRange
-    # for constraining exactly this target-side via stacking.
-    sroute \
-        -connect {blockPin} \
-        -nets {VSS VDD} \
-        -blockPin useLef \
-        -blockPinLayerRange {M4 M4} \
-        -blockPinWidthRange {0.150 0.250} \
-        -blockPinTarget nearestTarget \
-        -allowJogging 0 \
-        -allowLayerChange 1 \
-        -layerChangeRange {M4 M5} \
-        -targetViaLayerRange {M4 M5} \
-        -area $sram_stitch_area \
-        -connectInsideArea \
-        -detailed_log
-
-    file mkdir ./reports
-    set stitch_fp [open ./reports/sram_blockpin_stitch_intent.rpt w]
-    puts $stitch_fp "area $sram_stitch_area"
-    puts $stitch_fp "source_layer M4"
-    puts $stitch_fp "target_layer M5"
-    puts $stitch_fp "target nearestTarget_inside_sram_island"
-    puts $stitch_fp "expected_ports [expr {2 * [llength [dbGet -p2 top.insts.cell.name $::SRAM_MASTER]]}]"
-    close $stitch_fp
-
+    # This procedure intentionally draws no geometry.  The local power script
+    # is the single owner of macro access, so post-placement verification can
+    # never invoke a broad blockPin/floatingStripe search as a repair step.
     set SRAM_CONNECT_BLOCK_PINS 1
-    set SRAM_BLOCKPIN_STITCH_DONE 1
-    editTrim -nets {VDD VSS}
-    clearDrc
+    puts "SRAM block-pin access preserved: deterministic M5 edge taps are the only owner."
 }
 
 proc connect_core_pg_pins_nojog {{report_file ""}} {
-    global PG_CONNECT_FLOATING_STRIPES STDCELL_CORE_PG_BUILT
+    global STDCELL_CORE_PG_BUILT
 
     applyGlobalNets
-
-    if {![info exists PG_CONNECT_FLOATING_STRIPES]} {
-        set PG_CONNECT_FLOATING_STRIPES 0
-    }
-    if {![string is boolean -strict $PG_CONNECT_FLOATING_STRIPES]} {
-        error "PG_CONNECT_FLOATING_STRIPES must be boolean, got $PG_CONNECT_FLOATING_STRIPES"
-    }
-
-    if {$PG_CONNECT_FLOATING_STRIPES} {
-        puts "Connecting floating PG stripes to existing VDD/VSS ring/stripe/blockring targets."
-        connect_floating_pg_stripes_nojog
-    } else {
-        puts "Floating PG stripe stitching skipped: keep SRAM island collectors from being auto-stitched through hard-macro keepout."
-    }
+    puts "Floating PG stripe stitching is disabled by construction."
 
     connect_sram_block_pins_to_local_stripes_nojog
 

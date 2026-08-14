@@ -8,7 +8,7 @@
 ##
 ## Project restriction:
 ##   - addStripe is not allowed to jog
-##   - SRAM blockPin sroute is a controlled local stitch, not a global mesh
+##   - SRAM block pins use deterministic short M5 edge taps, not global sroute
 ##   - post-placement corePin sroute is not allowed to jog or change layer
 ##   - planned stripe transitions are made only by stacked ViaGen
 ############################################################
@@ -575,7 +575,8 @@ puts "POWER PLAN CORE RINGS CHECKED"
 # ------------------------------------------------------------------------
 
 # Adapt the teacher's ring/stripe intent to this lower-left boundary island:
-# keep an open M4/M5 local structure in every row/column gap, keep M8/M9 out
+# keep an open M4/M5 local structure at every island edge and row/column gap,
+# keep M8/M9 out
 # of the SRAM body, and hand the local M5 collector to global M6 only at the
 # right island boundary after placement.
 puts "POWER PLAN SOURCE SRAM ISLAND: [file normalize ./tcl/sram_island_power.tcl]"
@@ -626,7 +627,7 @@ saveDesign ./saved/axi_ram_powerplan.enc
 
 puts "===================================================="
 puts "HIERARCHICAL POWER PLAN COMPLETED"
-puts " - SRAM island     : M4 row-gap/top straps plus M5 edge/column-gap spines"
+puts " - SRAM island     : M4 bottom/row-gap/top straps plus M5 edge/column-gap spines"
 puts " - Core rings      : independent M8/M9 VDD-inner and VSS-outer rings"
 puts " - Core PG pins    : short M9 side taps on both VSS and VDD"
 puts " - Upper M8/M9 mesh: deferred until after placement"

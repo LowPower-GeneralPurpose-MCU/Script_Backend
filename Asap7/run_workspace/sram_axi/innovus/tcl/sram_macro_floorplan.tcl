@@ -7,7 +7,7 @@
 ##   - sram_macro_setup.tcl sourced by innovus.globals
 ##
 ## Flow:
-##   deterministic 4x4 seed -> physical group/fence -> snap -> validate
+##   deterministic 4x4 seed -> physical group -> snap -> validate
 ##   -> FIXED -> save
 ############################################################
 
@@ -237,28 +237,22 @@ for {set k 0} {$k < $SRAM_COUNT} {incr k} {
 close $planned_map
 
 # ------------------------------------------------------------------------
-# 4. CREATE THE SRAM PHYSICAL GROUP INSIDE THE LOWER-LEFT ISLAND FENCE
+# 4. CREATE THE SRAM PHYSICAL GROUP
 # ------------------------------------------------------------------------
 
-# An explicit physical group keeps all sixteen SRAMs together in the same
-# lower-left island.  No temporary PG model is created here; the final SRAM PG
-# is built once in sram_island_power.tcl.
+# An explicit physical group records that all sixteen SRAMs belong to one
+# hierarchy cluster.  The macros are placed deterministically and later fixed,
+# so this group must not be a fence.  A fence is exclusive: standard cells not
+# added to the group cannot legally be placed inside it.  The previous macro-
+# only fence therefore rejected connected u_mem standard cells near the SRAM
+# boundary and produced Not-of-Fence/overlap violations after place_opt_design.
+# The hard placement blockage created by finish_macroFP.tcl remains the owner
+# of the SRAM bodies and inter-macro PG channels.
 set SRAM_GROUP_NAME SRAM_ISLAND_GROUP
 set SRAM_MODEL_ROW $ASAP7_ROW_HEIGHT
 set SRAM_MODEL_ROW_X2 [expr {2.0 * $SRAM_MODEL_ROW}]
-set SRAM_FENCE_LLX [max_value $core_llx \
-    [expr {$SRAM_X0 - $SRAM_MODEL_ROW_X2}]]
-set SRAM_FENCE_LLY [max_value $core_lly \
-    [expr {$SRAM_Y0 - $SRAM_MODEL_ROW_X2}]]
-set SRAM_FENCE_URX [min_value $core_urx \
-    [expr {$required_urx + $SRAM_MODEL_ROW_X2}]]
-set SRAM_FENCE_URY [min_value $core_ury \
-    [expr {$required_ury + $SRAM_MODEL_ROW_X2}]]
 
-createInstGroup $SRAM_GROUP_NAME \
-    -fence \
-    $SRAM_FENCE_LLX $SRAM_FENCE_LLY \
-    $SRAM_FENCE_URX $SRAM_FENCE_URY
+createInstGroup $SRAM_GROUP_NAME
 
 foreach record $SRAM_RECORDS {
     addInstToInstGroup \

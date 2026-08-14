@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_pg_local_m4_m5_handoff_v4"
+set FLOW_SOURCE_REVISION "sram_priority_and_local_pg_v5"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -221,7 +221,11 @@ checkFPlan \
 # ------------------------------------------------------------------------
 
 set sram_edge_report ./reports/sram_island_pg_edges.rpt
-file delete -force $sram_edge_report
+set sram_stitch_intent_report ./reports/sram_blockpin_stitch_intent.rpt
+foreach stale_sram_pg_report [list \
+    $sram_edge_report $sram_stitch_intent_report] {
+    file delete -force $stale_sram_pg_report
+}
 
 puts "POWER PLAN ENTRY: [file normalize ./tcl/power_plan.tcl]"
 if {[catch {source ./tcl/power_plan.tcl} power_plan_error]} {
@@ -338,22 +342,28 @@ if {[catch {
     puts stderr "Post-placement PG reconnect/verify failed: $post_place_pg_error"
     error $post_place_pg_error
 }
-if {[catch {
-    # M4 contains the generated SRAM hard-macro PG rails.  Check that
-    # interface separately so Pin-of-Cell library markers cannot hide a real
-    # special-wire issue, then leave the final GUI/report on actionable M5-M9.
-    verify_pg_special_drc_or_stop ./verify_rpt/sram_m4_interface_drc.rpt {M4 M4}
-    verify_pg_special_drc_or_stop ./verify_rpt/pg_drc_after_trim.rpt {M5 M9}
-} post_place_pg_drc_error]} {
-    puts stderr "Post-placement PG DRC failed: $post_place_pg_drc_error"
-    error $post_place_pg_drc_error
-}
+# Generate both reports before enforcing either result.  This preserves a
+# complete diagnostic set when the script is pasted interactively and one
+# layer range is dirty.
+verify_drc \
+    -check_only special \
+    -layer_range {M4 M5} \
+    -area [pg_top_level_owned_drc_areas] \
+    -report ./verify_rpt/sram_m4_interface_drc.rpt
+verify_drc \
+    -check_only special \
+    -layer_range {M6 M9} \
+    -area [pg_top_level_owned_drc_areas] \
+    -report ./verify_rpt/pg_drc_after_trim.rpt
+
+assert_clean_pg_special_drc_report ./verify_rpt/sram_m4_interface_drc.rpt
+assert_clean_pg_special_drc_report ./verify_rpt/pg_drc_after_trim.rpt
 stop_if_dirty_pg_connectivity_report \
     ./verify_rpt/pg_connectivity_after_trim.rpt \
     "Post-placement PG connectivity"
 stop_if_dirty_pg_special_drc_report \
     ./verify_rpt/sram_m4_interface_drc.rpt \
-    "Post-placement SRAM M4 interface DRC"
+    "Post-placement SRAM M4/M5 interface DRC"
 stop_if_dirty_pg_special_drc_report \
     ./verify_rpt/pg_drc_after_trim.rpt \
     "Post-placement PG DRC"
