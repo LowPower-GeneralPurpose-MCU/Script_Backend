@@ -21,7 +21,7 @@ Các nguyên tắc chính:
 - SRAM chỉ dùng orientation R0 hoặc R180, không dùng R90/R270.
 - Sau khi macro placement xong phải set macro `FIXED`.
 - Power global nên dùng metal cao, còn power local giữa SRAM dùng M4/M5 theo hướng routing của ASAP7.
-- Signal/clock routing không nên đi xuyên qua thân SRAM trên M4/M5.
+- Signal/clock routing không nên đi xuyên qua thân SRAM; M6/M7 được guard cho over-the-macro route, còn M4/M5 giữ cho pin access/local SRAM PG.
 
 Các nguyên tắc này khớp với:
 
@@ -517,7 +517,7 @@ source ./tcl/sram_route_guard.tcl
 Trong `sram_route_guard.tcl`:
 
 ```tcl
-set SRAM_ROUTE_GUARD_LAYERS {M4 M5}
+set SRAM_ROUTE_GUARD_LAYERS {M6 M7}
 set SRAM_ROUTE_GUARD_EGR_LAYER M5
 
 createRouteBlk \
@@ -533,7 +533,7 @@ setRouteMode \
 Logic:
 
 - `createRouteBlk` tạo routing blockage trên từng SRAM body.
-- `-layer {M4 M5}` chặn local signal/clock routing trên M4/M5.
+- `-layer {M6 M7}` chặn over-the-macro signal/clock routing; không block M4/M5 vì đây là pin-access/local SRAM PG layer của generated ASAP7 SRAM.
 - `-exceptpgnet` không chặn power/ground special routing.
 - `setRouteMode -earlyGlobalReverseDirection` giúp early global route/CTS estimation biết vùng SRAM trên M5 có resource đặc biệt.
 
@@ -541,7 +541,7 @@ Vì sao không dùng blockage all-layer:
 
 - SRAM có thể cần power special routing/via đi qua một số vùng hợp lệ.
 - Global/top routing trên layer cao không nhất thiết phải block hết.
-- Mục tiêu trước mắt là bảo vệ M4/M5, vì slide Macro nói SRAM có thể block tới M4/M5 và local SRAM PG cũng dùng M4/M5.
+- Mục tiêu trước mắt là bảo vệ SRAM body khỏi over-route M6/M7, trong khi vẫn để M4/M5 cho pin access và local SRAM PG.
 
 Evidence từ log:
 
@@ -552,10 +552,10 @@ Evidence từ log:
 Giải thích số 32:
 
 - 16 SRAM macro.
-- Mỗi macro có blockage trên 2 layer M4 và M5.
+- Mỗi macro có blockage trên 2 layer M6 và M7.
 - 16 x 2 = 32 route blockages.
 
-Report `sram_route_guard.rpt` cũng ghi từng SRAM có `{M4 M5}`, `M5`, `fixed`.
+Report `sram_route_guard.rpt` cũng ghi từng SRAM có `{M6 M7}`, `yes`, `M5`, `fixed`.
 
 ## 9. Power plan tổng quan trong `power_plan.tcl`
 
@@ -1144,7 +1144,7 @@ Không nên sửa bằng cách vẽ tay từng shape, vì sẽ khó lặp lại 
 - 16 SRAM đều `R180 fixed`.
 - Gap ngang/dọc được validate đúng 4 row.
 - Placement blockage bao phủ macro body và gap SRAM.
-- Route blockage M4/M5 trên SRAM body đã được EGR nhận, log báo `#Routing Blockages : 32`.
+- Route blockage M6/M7 trên SRAM body đã được EGR nhận, log báo `#Routing Blockages : 32`; M5 vẫn là eGR resource hint.
 - Global core ring dùng M8/M9.
 - SRAM island reuse M9-left và M8-bottom global ring.
 - Giữa SRAM có M4/M5 VDD/VSS collectors.
@@ -1193,7 +1193,7 @@ Có thể trình bày theo 6 slide kỹ thuật:
    - `sroute` nối SRAM block pins tới nearest stripe.
 
 5. **Route/resource protection**
-   - `createRouteBlk -exceptpgnet` trên M4/M5 SRAM body.
+   - `createRouteBlk -exceptpgnet` trên M6/M7 SRAM body; không block M4/M5 pin-access/local PG.
    - `setRouteMode -earlyGlobalReverseDirection` theo cú pháp Innovus TCR.
    - Log sau sửa báo `#Routing Blockages : 32`.
 

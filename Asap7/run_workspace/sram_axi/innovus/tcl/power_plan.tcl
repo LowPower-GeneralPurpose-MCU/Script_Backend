@@ -540,13 +540,13 @@ if {$SRAM_CONNECT_BLOCK_PINS} {
 
     pg_assert_clean_connectivity_report $pg_connectivity_report
 } else {
-    file mkdir [file dirname $pg_connectivity_report]
-    set pg_conn_fh [open $pg_connectivity_report w]
-    puts $pg_conn_fh "# Skipped"
-    puts $pg_conn_fh "SRAM_CONNECT_BLOCK_PINS=0 keeps top-level special routes off ASAP7 SRAM internal M4 PG rails."
-    puts $pg_conn_fh "Run a macro-specific edge-port stitch only when the SRAM abstract provides clean edge PG access."
-    close $pg_conn_fh
-    puts "PG connectivity checkpoint skipped for SRAM block pins because SRAM_CONNECT_BLOCK_PINS=0."
+    verifyConnectivity \
+        -type special \
+        -net {VDD VSS} \
+        -report $pg_connectivity_report
+
+    pg_assert_clean_connectivity_report $pg_connectivity_report
+    puts "PG connectivity checkpoint ran without -noUnroutedNet because SRAM block pins are intentionally deferred."
 }
 
 # This checkpoint is for the PG network created by addRing/addStripe/sroute.

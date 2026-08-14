@@ -253,7 +253,7 @@ Trong log truoc do, early global route lap lai:
 
 Hau qua:
 
-- Innovus khong biet SRAM body phai bi han che routing tren M4/M5.
+- Innovus khong biet SRAM body phai bi han che over-the-macro routing.
 - Signal/clock co the bi uoc luong/chay len SRAM area.
 - GUI nhin nhu routing/clock net di de len SRAM, khong giong flow thay.
 
@@ -262,7 +262,7 @@ Hau qua:
 Script moi:
 
 ```tcl
-set SRAM_ROUTE_GUARD_LAYERS {M4 M5}
+set SRAM_ROUTE_GUARD_LAYERS {M6 M7}
 set SRAM_ROUTE_GUARD_EGR_LAYER M5
 
 createRouteBlk \
@@ -280,11 +280,12 @@ Tai sao dung `createRouteBlk -exceptpgnet`:
 - Theo Innovus TCR, `-exceptpgnet` block signal routing nhung khong block power/ground special routes.
 - Dieu nay dung voi SRAM: khong muon signal/clock di tren SRAM body, nhung van phai cho VDD/VSS collector/ring duoc ket noi.
 
-Tai sao block M4/M5:
+Tai sao default block M6/M7, khong block M4/M5:
 
-- `10_Macro.pdf` noi mot so SRAM block routing toi M4/M5.
-- SRAM local collectors cua script cung dang dung M4/M5. Neu signal/clock tu do chiem M4/M5 tren SRAM body, routing se nhiu va pin access xau.
-- Khong block M8/M9 de global PG/top routing van co tai nguyen cao hon neu can.
+- Generated ASAP7 SRAM abstract co pin/OBS tren M3/M4/M5/V3/V4. Block thang M4/M5 tren macro body co the lam router mat pin access.
+- SRAM local collectors cua script dang dung M4/M5 o edge/gap, nen route guard khong duoc chan local SRAM PG.
+- M6/M7 la over-the-macro signal/clock resource trong flow nay; block M6/M7 giup CTS/detail route khong xem SRAM body la channel rong.
+- M5 van duoc giu trong `setRouteMode -earlyGlobalReverseDirection` de early global route/CTS estimation co memory-resource hint ma khong tao hard blockage tren pin layer.
 
 Tai sao them `setRouteMode -earlyGlobalReverseDirection`:
 
@@ -306,15 +307,15 @@ innovus.log:11109 [NR-eGR] #Routing Blockages  : 32
 So 32 hop ly vi:
 
 - 16 SRAM macro.
-- Moi macro co blockage tren 2 layer M4/M5.
+- Moi macro co blockage tren 2 layer M6/M7.
 - Tong blockage objects theo layer = 16 x 2 = 32.
 
 `sram_route_guard.rpt` ghi ro tung SRAM:
 
 ```text
-u_mem/G_SRAM_BANK[0].u_sram ... {M4 M5} M5 fixed
+u_mem/G_SRAM_BANK[0].u_sram ... {M6 M7} yes M5 fixed
 ...
-u_mem/G_SRAM_BANK[15].u_sram ... {M4 M5} M5 fixed
+u_mem/G_SRAM_BANK[15].u_sram ... {M6 M7} yes M5 fixed
 ```
 
 Day la bang chung de dua vao slide: route guard da duoc Innovus doc vao EGR/CTS.
@@ -449,7 +450,7 @@ Y nghia:
 - Leaf clock dung M2/M3 gan standard cell pins.
 - Trunk clock dung M4/M5 va shield VSS de giam noise/crosstalk.
 - Top clock dung M6/M7 cho route dai hon.
-- SRAM route guard da chan signal/clock tren SRAM body M4/M5, nen CTS khong nen xem SRAM body la resource rong cho trunk.
+- SRAM route guard da chan over-the-macro signal/clock tren SRAM body M6/M7 va giu M5 eGR hint, nen CTS khong nen xem SRAM body la resource rong.
 
 ### 9.2. Chay preCTS opt va CTS
 
@@ -664,7 +665,7 @@ Nhan xet:
 - Core global ring dung M8/M9, SRAM island reuse M9-left/M8-bottom thay vi ve duplicate ring.
 - VDD/VSS PG connectivity sau trim clean.
 - Top-level pins spread tren 4 canh.
-- Route guard M4/M5 tren SRAM body da duoc Innovus EGR nhan: `#Routing Blockages : 32`.
+- Route guard M6/M7 tren SRAM body da duoc Innovus EGR nhan: `#Routing Blockages : 32`; M5 van duoc dung lam eGR resource hint.
 - `set_propagated_clock` da dung syntax Cadence 23.14 voi interactive constraint mode.
 
 ### 12.2. Nhung diem can tiep tuc sua sau CTS

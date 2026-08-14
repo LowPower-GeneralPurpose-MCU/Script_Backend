@@ -3,7 +3,9 @@
 ##
 ## Same intent as the teaching slide:
 ##   1. Build local PG only around the SRAM group/gaps.
-##   2. Stitch SRAM VDD/VSS block pins only to the local island collectors.
+##   2. Keep generic SRAM block-pin stitching off by default because the
+##      ASAP7 generated SRAM LEF exposes internal M4 PG rails, not clean
+##      top-level edge ports.
 ##   3. Trim VDD/VSS stubs before the rest of the power grid continues.
 ##   4. Keep the regular global/floating mesh out of the SRAM island.
 ##
@@ -62,7 +64,7 @@ if {![info exists SRAM_COLUMN_GAP_PG_SKIP_LIST]} {
     set SRAM_COLUMN_GAP_PG_SKIP_LIST {1}
 }
 if {![info exists SRAM_CONNECT_BLOCK_PINS]} {
-    set SRAM_CONNECT_BLOCK_PINS 1
+    set SRAM_CONNECT_BLOCK_PINS 0
 }
 foreach bool_variable {
     SRAM_ENABLE_COLUMN_GAP_PG
@@ -242,9 +244,9 @@ if {$SRAM_CONNECT_BLOCK_PINS} {
         -blockPinRouteWithPinWidth false \
         -viaConnectToShape stripe
 
-    # Stitch only the ASAP7 SRAM M4 VDD/VSS abstract pins to the local island
-    # collectors.  M5 is allowed only as a short vertical escape from the M4
-    # macro pin to the nearest local M4 row-gap/top collector.
+    # Debug-only stitch for SRAM abstracts that provide clean edge PG access.
+    # On the generated ASAP7 SRAM LEF this generic sroute can materialize
+    # internal M4 rails as top-level special wires, so the default is off.
     sroute \
         -connect {blockPin} \
         -nets {VSS VDD} \
@@ -254,7 +256,7 @@ if {$SRAM_CONNECT_BLOCK_PINS} {
         -blockPinTarget nearestTarget \
         -allowJogging 0
 } else {
-    puts "SRAM blockPin sroute skipped: ASAP7 SRAM VDD/VSS M4 rails are treated as hard-macro-internal shapes."
+    puts "SRAM blockPin sroute skipped: ASAP7 SRAM VDD/VSS M4 rails are treated as hard-macro-internal shapes until clean edge PG access is available."
 }
 
 editTrim -nets {VSS VDD}

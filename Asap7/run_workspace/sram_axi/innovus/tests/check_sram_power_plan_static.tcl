@@ -277,10 +277,22 @@ if {![file exists $route_guard_path]} {
 }
 set route_guard_text [read_complete_file $route_guard_path]
 
-assert_not_contains \
+assert_contains \
     $route_guard_text \
     {createRouteBlk[[:space:]]+\\} \
-    "sram_route_guard.tcl must not create hard routing blockages over ASAP7 SRAM pin-access layers"
+    "sram_route_guard.tcl must create explicit signal-only route blockages over SRAM macro bodies"
+assert_contains \
+    $route_guard_text \
+    {-exceptpgnet} \
+    "SRAM route blockages must use Cadence -exceptpgnet so PG special routing remains legal"
+assert_contains \
+    $route_guard_text \
+    {set[[:space:]]+SRAM_ROUTE_GUARD_LAYERS[[:space:]]+\{M6[[:space:]]+M7\}} \
+    "SRAM route guard must block only over-the-macro signal/clock layers by default, not ASAP7 SRAM M4/M5 pin-access layers"
+assert_not_contains \
+    $route_guard_text \
+    {set[[:space:]]+SRAM_ROUTE_GUARD_LAYERS[[:space:]]+\{M4[[:space:]]+M5\}} \
+    "SRAM route guard must not default to blocking generated ASAP7 SRAM M4/M5 pin-access layers"
 assert_contains \
     $route_guard_text \
     {setRouteMode[[:space:]]+\\[[:space:]]+-earlyGlobalReverseDirection[[:space:]]+\$sram_egr_reverse_regions} \
@@ -289,10 +301,10 @@ assert_contains \
     $route_guard_text \
     {set[[:space:]]+SRAM_ROUTE_GUARD_EGR_LAYER[[:space:]]+M5} \
     "The SRAM early-global reverse-direction reservation must target the teacher-style M5 routing layer"
-assert_not_contains \
+assert_contains \
     $route_guard_text \
-    {deleteRouteBlk} \
-    "sram_route_guard.tcl must not manage route blockage objects in the clean flow"
+    {deleteRouteBlk[[:space:]]+\\[[:space:]]+-name[[:space:]]+\$\{SRAM_ROUTE_GUARD_PREFIX\}_\*[[:space:]]+\\[[:space:]]+-type[[:space:]]+routes} \
+    "sram_route_guard.tcl must delete only its own named route blockages before recreating them"
 
 foreach obsolete_child {
     sram_gap_stripes.tcl
@@ -697,8 +709,8 @@ assert_contains \
     "SRAM blockPin sroute must not jog through the hard-macro body"
 assert_contains \
     $child_text(sram_island_power.tcl) \
-    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+1} \
-    "SRAM blockPin sroute must default on for a final powered SRAM island"
+    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+0} \
+    "SRAM blockPin sroute must default deferred because the generated ASAP7 SRAM LEF exposes internal M4 PG rails instead of clean edge ports"
 assert_contains \
     $child_text(sram_island_power.tcl) \
     {if[[:space:]]+\{\$SRAM_CONNECT_BLOCK_PINS\}} \
@@ -707,6 +719,10 @@ assert_contains \
     $child_text(sram_island_power.tcl) \
     {SRAM[[:space:]]+blockPin[[:space:]]+sroute[[:space:]]+skipped} \
     "The log must say when SRAM blockPin special routing is intentionally deferred"
+assert_contains \
+    $power_text \
+    {PG[[:space:]]+connectivity[[:space:]]+checkpoint[[:space:]]+ran[[:space:]]+without[[:space:]]+-noUnroutedNet} \
+    "power_plan.tcl must still verify VDD/VSS special-route connectivity when SRAM block pins are deferred"
 assert_not_contains \
     $all_power_text \
     {-blockPinRouteWithPinWidth[[:space:]]+true} \
