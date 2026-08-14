@@ -13,18 +13,18 @@ specific view and clock} dp 3 metric timing.min_pulse_width.endpoints.wns.analys
 ::goMC::um:set_metric_safe {timing.hold.analysis_views.number} {1}
 ::goMC::um:set_metric_safe {timing.setup.analysis_views} {tt}
 ::goMC::um:set_metric_safe {timing.setup.analysis_views.number} {1}
-::goMC::um:set_metric_safe {timing.setup.feps} {122}
-::goMC::um:set_metric_safe {timing.setup.feps.analysis_view:tt} {122}
-::goMC::um:set_metric_safe {timing.setup.feps.path_group:reg2reg} {122}
-::goMC::um:set_metric_safe {timing.setup.feps.path_group:reg2reg.analysis_view:tt} {122}
-::goMC::um:set_metric_safe {timing.setup.tns} {-8.297 ns}
-::goMC::um:set_metric_safe {timing.setup.tns.analysis_view:tt} {-8.297 ns}
-::goMC::um:set_metric_safe {timing.setup.tns.path_group:reg2reg} {-8.297 ns}
-::goMC::um:set_metric_safe {timing.setup.tns.path_group:reg2reg.analysis_view:tt} {-8.297 ns}
-::goMC::um:set_metric_safe {timing.setup.wns} {-0.208 ns}
-::goMC::um:set_metric_safe {timing.setup.wns.analysis_view:tt} {-0.208 ns}
-::goMC::um:set_metric_safe {timing.setup.wns.path_group:reg2reg} {-0.208 ns}
-::goMC::um:set_metric_safe {timing.setup.wns.path_group:reg2reg.analysis_view:tt} {-0.208 ns}
+::goMC::um:set_metric_safe {timing.setup.feps} {206}
+::goMC::um:set_metric_safe {timing.setup.feps.analysis_view:tt} {206}
+::goMC::um:set_metric_safe {timing.setup.feps.path_group:reg2reg} {206}
+::goMC::um:set_metric_safe {timing.setup.feps.path_group:reg2reg.analysis_view:tt} {206}
+::goMC::um:set_metric_safe {timing.setup.tns} {-26.162 ns}
+::goMC::um:set_metric_safe {timing.setup.tns.analysis_view:tt} {-26.162 ns}
+::goMC::um:set_metric_safe {timing.setup.tns.path_group:reg2reg} {-26.162 ns}
+::goMC::um:set_metric_safe {timing.setup.tns.path_group:reg2reg.analysis_view:tt} {-26.162 ns}
+::goMC::um:set_metric_safe {timing.setup.wns} {-0.399 ns}
+::goMC::um:set_metric_safe {timing.setup.wns.analysis_view:tt} {-0.399 ns}
+::goMC::um:set_metric_safe {timing.setup.wns.path_group:reg2reg} {-0.399 ns}
+::goMC::um:set_metric_safe {timing.setup.wns.path_group:reg2reg.analysis_view:tt} {-0.399 ns}
 ::goMC::um:set_metric_safe {timing.setup.worst_path.capture_clock} {}
 ::goMC::um:set_metric_safe {timing.setup.worst_path.launch_clock} {CLK}
 ::goMC::um:set_metric_safe {timing.setup.worst_path.view} {tt}

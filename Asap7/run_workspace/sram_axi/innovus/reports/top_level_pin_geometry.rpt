@@ -1,0 +1,11 @@
+revision sram_top_right_uniform_v4
+top_side TOP
+top_layer M7
+top_y 768.672
+top_range 10.16 768.672 615.088 768.672
+top_count 138
+top_requested_uniform_pitch 4.41553284672
+right_range 623.088 760.672 623.088 10.16
+right_count 90
+left_side unused_sram_obstruction
+bottom_side unused_sram_obstruction
