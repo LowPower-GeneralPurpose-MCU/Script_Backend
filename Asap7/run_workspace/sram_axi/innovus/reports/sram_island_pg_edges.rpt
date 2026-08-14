@@ -1,5 +1,6 @@
 type name layer direction area
 halo local_left M5 vertical {0.192 0.192 2.16 708.48}
+halo local_bottom M4 horizontal {0.192 0.192 502.848 2.16}
 halo local_top M4 horizontal {0.192 706.32 502.848 708.48}
 halo local_right M5 vertical {500.688 0.192 502.848 708.48}
 gap row_0 M4 horizontal {0.192 174.96 502.848 179.28}
@@ -8,3 +9,19 @@ gap row_2 M4 horizontal {0.192 529.2 502.848 533.52}
 gap col_0 M5 vertical {123.552 0.192 127.872 708.48}
 gap col_1 M5 vertical {249.264 0.192 253.584 708.48}
 gap col_2 M5 vertical {374.976 0.192 379.296 708.48}
+tap macro_0 M5 vertical {121.392 0.192 123.36 10.8} instance=u_mem/G_SRAM_BANK[0].u_sram
+tap macro_1 M5 vertical {247.104 0.192 249.072 10.8} instance=u_mem/G_SRAM_BANK[1].u_sram
+tap macro_2 M5 vertical {372.816 0.192 374.784 10.8} instance=u_mem/G_SRAM_BANK[2].u_sram
+tap macro_3 M5 vertical {498.528 0.192 500.496 10.8} instance=u_mem/G_SRAM_BANK[3].u_sram
+tap macro_4 M5 vertical {498.528 174.96 500.496 187.92} instance=u_mem/G_SRAM_BANK[4].u_sram
+tap macro_5 M5 vertical {372.816 174.96 374.784 187.92} instance=u_mem/G_SRAM_BANK[5].u_sram
+tap macro_6 M5 vertical {247.104 174.96 249.072 187.92} instance=u_mem/G_SRAM_BANK[6].u_sram
+tap macro_7 M5 vertical {121.392 174.96 123.36 187.92} instance=u_mem/G_SRAM_BANK[7].u_sram
+tap macro_8 M5 vertical {121.392 352.08 123.36 365.04} instance=u_mem/G_SRAM_BANK[8].u_sram
+tap macro_9 M5 vertical {247.104 352.08 249.072 365.04} instance=u_mem/G_SRAM_BANK[9].u_sram
+tap macro_10 M5 vertical {372.816 352.08 374.784 365.04} instance=u_mem/G_SRAM_BANK[10].u_sram
+tap macro_11 M5 vertical {498.528 352.08 500.496 365.04} instance=u_mem/G_SRAM_BANK[11].u_sram
+tap macro_12 M5 vertical {498.528 529.2 500.496 542.16} instance=u_mem/G_SRAM_BANK[12].u_sram
+tap macro_13 M5 vertical {372.816 529.2 374.784 542.16} instance=u_mem/G_SRAM_BANK[13].u_sram
+tap macro_14 M5 vertical {247.104 529.2 249.072 542.16} instance=u_mem/G_SRAM_BANK[14].u_sram
+tap macro_15 M5 vertical {121.392 529.2 123.36 542.16} instance=u_mem/G_SRAM_BANK[15].u_sram
