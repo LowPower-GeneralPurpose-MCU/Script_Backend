@@ -91,7 +91,15 @@ proc assert_clean_connectivity_report {report_file} {
     error "Connectivity is not clean; inspect [file normalize $report_file] before continuing"
 }
 
-proc assert_clean_pg_connectivity_report {report_file} {
+proc pg_is_preplacement_pg_checkpoint {report_file {context ""}} {
+    set normalized_report [file tail $report_file]
+    if {$normalized_report eq "pg_connectivity_before_stdcell_place.rpt"} {
+        return 1
+    }
+    return [expr {[string first "Power plan PG connectivity" $context] >= 0}]
+}
+
+proc assert_clean_pg_connectivity_report {report_file {allow_preplacement_special_opens 0}} {
     set report_text [read_report_text $report_file "PG connectivity"]
 
     if {[string first "Found no problems or warnings" $report_text] >= 0 ||
@@ -99,7 +107,7 @@ proc assert_clean_pg_connectivity_report {report_file} {
         return
     }
 
-    if {[regexp -nocase {special routes with opens|Special Wires:[[:space:]]+Pieces of the net are not connected together|IMPVFC-200|dangling[[:space:]]+Wire|shorted} $report_text]} {
+    if {[regexp -nocase {dangling[[:space:]]+Wire|shorted} $report_text]} {
         error "PG special routes are open/shorted; inspect [file normalize $report_file] before continuing"
     }
 
@@ -109,13 +117,23 @@ proc assert_clean_pg_connectivity_report {report_file} {
     }
 
     set saw_sram_terminal 0
+    set saw_preplacement_special_open 0
     set unexpected_unconnected {}
     foreach line [split $report_text "\n"] {
+        set trimmed_line [string trim $line]
+        if {$trimmed_line eq ""} {
+            continue
+        }
+
+        if {[regexp -nocase {special routes with opens|Special Wires:[[:space:]]+Pieces of the net are not connected together|IMPVFC-200} $trimmed_line]} {
+            set saw_preplacement_special_open 1
+            continue
+        }
+
         if {![regexp -nocase {unconnected[[:space:]]+terminal|Terminal\(s\)[[:space:]]+are[[:space:]]+not[[:space:]]+connected|IMPVFC-96} $line]} {
             continue
         }
 
-        set trimmed_line [string trim $line]
         if {[regexp {u_mem/G_SRAM_BANK\[[0-9]+\]\.u_sram/(VDD|VSS)} $trimmed_line]} {
             set saw_sram_terminal 1
             continue
@@ -130,8 +148,21 @@ proc assert_clean_pg_connectivity_report {report_file} {
         lappend unexpected_unconnected $trimmed_line
     }
 
-    if {$saw_sram_terminal && [llength $unexpected_unconnected] == 0} {
-        puts "WARN: PG connectivity report contains only deferred ASAP7 SRAM VDD/VSS macro terminals: $report_file"
+    if {[llength $unexpected_unconnected] != 0} {
+        error "PG connectivity has unexpected unconnected terminals: [join $unexpected_unconnected { | }]"
+    }
+
+    if {$saw_preplacement_special_open && !$allow_preplacement_special_opens} {
+        error "PG special routes are open/shorted; inspect [file normalize $report_file] before continuing"
+    }
+
+    if {$saw_sram_terminal || $saw_preplacement_special_open} {
+        if {$saw_sram_terminal} {
+            puts "WARN: PG connectivity report contains deferred ASAP7 SRAM VDD/VSS macro terminals: $report_file"
+        }
+        if {$saw_preplacement_special_open} {
+            puts "WARN: PG connectivity report contains pre-placement special-route open markers; strict PG reconnect is checked after placement/post-PG."
+        }
         return
     }
 
@@ -139,7 +170,15 @@ proc assert_clean_pg_connectivity_report {report_file} {
 }
 
 proc stop_if_dirty_pg_connectivity_report {report_file context} {
-    if {[catch {assert_clean_pg_connectivity_report $report_file} report_error]} {
+    set allow_preplacement_special_opens [expr {
+        [pg_sram_block_pins_are_deferred] &&
+        [pg_is_preplacement_pg_checkpoint $report_file $context]
+    }]
+    if {[catch {
+        assert_clean_pg_connectivity_report \
+            $report_file \
+            $allow_preplacement_special_opens
+    } report_error]} {
         puts stderr "$context failed: $report_error"
         exit 1
     }
