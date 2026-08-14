@@ -212,7 +212,11 @@ proc run_pg_connectivity_verify {report_file} {
         -net {VDD VSS}]
 
     if {[pg_sram_block_pins_are_deferred]} {
-        puts "PG connectivity verify: SRAM block pins are deferred; checking special-route opens/shorts only."
+        # Before placement, thousands of standard-cell PG terminals are not at
+        # physical locations yet.  Cadence documents -noUnConnPin for skipping
+        # those terminals while retaining special-wire open/short checks.
+        lappend verify_cmd -noUnConnPin
+        puts "PG connectivity verify: SRAM block pins are deferred; checking special-route opens/shorts without unplaced-terminal noise."
     } else {
         lappend verify_cmd -noUnroutedNet
     }

@@ -124,7 +124,7 @@ stop_if_dirty_pg_connectivity_report \
 stop_if_dirty_pg_special_drc_report \
     ./verify_rpt/pg_drc_before_stdcell_place.rpt \
     "Power plan PG DRC"
-puts "POWER PLAN EXIT: ./tcl/power_plan.tcl returned cleanly"
+puts "POWER PLAN RETURN: ./tcl/power_plan.tcl returned cleanly"
 
 if {![file exists $sram_edge_report]} {
     puts "POWER PLAN DIRECT SRAM ISLAND SOURCE: $sram_edge_report missing after power_plan.tcl"

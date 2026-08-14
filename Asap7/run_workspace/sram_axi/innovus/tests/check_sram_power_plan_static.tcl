@@ -568,7 +568,11 @@ foreach script_name {core_pg_outside_island.tcl global_upper_pg_to_ring.tcl} {
     assert_contains \
         $child_text($script_name) \
         {SRAM_NO_MESH_URX} \
-        "$script_name must keep regular mesh to the right of the full SRAM no-mesh column"
+        "$script_name must keep right-side regular mesh clear of the SRAM keepout"
+    assert_contains \
+        $child_text($script_name) \
+        {SRAM_NO_MESH_URY} \
+        "$script_name must keep above-island regular mesh clear of the SRAM keepout"
 }
 assert_contains \
     $child_text(core_pg_outside_island.tcl) \
@@ -578,10 +582,14 @@ assert_contains \
     $child_text(core_pg_outside_island.tcl) \
     {LOGIC_RIGHT_M7_BOX} \
     "core_pg_outside_island.tcl must keep M7 mesh in a right-side logic box"
-assert_not_contains \
+assert_contains \
     $child_text(core_pg_outside_island.tcl) \
-    {LOGIC_TOP_LEFT_BOX|LOGIC_TOP_FULL_BOX|LOGIC_RIGHT_LOWER_BOX} \
-    "core_pg_outside_island.tcl must not create top-left/top-full M6/M7 mesh over the SRAM island"
+    {LOGIC_TOP_LEFT_M6_BOX} \
+    "core_pg_outside_island.tcl must power the legal M6 logic channel above the SRAM island"
+assert_contains \
+    $child_text(core_pg_outside_island.tcl) \
+    {LOGIC_TOP_LEFT_M7_BOX} \
+    "core_pg_outside_island.tcl must power the legal M7 logic channel above the SRAM island"
 assert_contains \
     $child_text(global_upper_pg_to_ring.tcl) \
     {UPPER_RIGHT_M8_BOX} \
@@ -590,10 +598,14 @@ assert_contains \
     $child_text(global_upper_pg_to_ring.tcl) \
     {UPPER_RIGHT_M9_BOX} \
     "global_upper_pg_to_ring.tcl must keep M9 mesh in a right-side logic box"
-assert_not_contains \
+assert_contains \
     $child_text(global_upper_pg_to_ring.tcl) \
-    {UPPER_TOP_LEFT_BOX|UPPER_TOP_FULL_BOX|UPPER_RIGHT_LOWER_BOX} \
-    "global_upper_pg_to_ring.tcl must not create upper M8/M9 mesh above the SRAM island"
+    {UPPER_TOP_LEFT_M8_BOX} \
+    "global_upper_pg_to_ring.tcl must create M8 mesh above, but not over, the SRAM island"
+assert_contains \
+    $child_text(global_upper_pg_to_ring.tcl) \
+    {UPPER_TOP_LEFT_M9_BOX} \
+    "global_upper_pg_to_ring.tcl must create M9 mesh above, but not over, the SRAM island"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {LOGIC_RIGHT_EDGE_TAP_BOX} \
@@ -617,19 +629,23 @@ assert_contains \
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {SRAM_NO_MESH_URX} \
-    "core_lower_pg_nojog.tcl must guard from the full SRAM no-mesh column, not only the macro bbox"
+    "core_lower_pg_nojog.tcl must guard the right side of the SRAM no-mesh box"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {SRAM_NO_MESH_URY} \
+    "core_lower_pg_nojog.tcl must guard the top side of the SRAM no-mesh box"
 if {[regexp {set[[:space:]]+LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\[list[[:space:]]+\\[[:space:]]+\$SRAM_ISLAND_CUT_URX[[:space:]]+\$lower_pg_die_lly} \
         $child_text(core_lower_pg_nojog.tcl)]} {
     fail "core_lower_pg_nojog.tcl must not use die-bottom/die-top for standard-cell corePin areas"
 }
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
-    {foreach[[:space:]]+area[[:space:]]+\[list[[:space:]]+\$LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]]+\$LOGIC_RIGHT_FULL_BOX\]} \
-    "the edge M5 tap must be generated before the repeated right-side M5 tap mesh"
-assert_not_contains \
+    {LOGIC_TOP_LEFT_M5_BOX} \
+    "core_lower_pg_nojog.tcl must add M1-to-M5 taps for logic above the SRAM island"
+assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
-    {LOGIC_TOP_LEFT_BOX|LOGIC_TOP_FULL_BOX} \
-    "core_lower_pg_nojog.tcl must not create top-left/top-full M5 mesh above the SRAM island"
+    {\$LOGIC_RIGHT_EDGE_TAP_BOX[[:space:]\\]+\$LOGIC_RIGHT_FULL_BOX[[:space:]\\]+\$LOGIC_TOP_LEFT_M5_BOX} \
+    "the M5 tap pass must cover right-side and above-island logic regions"
 assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {if[[:space:]]+\{\$area[[:space:]]+eq[[:space:]]+\$LOGIC_RIGHT_EDGE_TAP_BOX\}} \
@@ -729,8 +745,8 @@ assert_contains \
     "The log must say when SRAM blockPin special routing is intentionally deferred"
 assert_contains \
     $power_text \
-    {PG[[:space:]]+connectivity[[:space:]]+checkpoint[[:space:]]+ran[[:space:]]+without[[:space:]]+-noUnroutedNet} \
-    "power_plan.tcl must still verify VDD/VSS special-route connectivity when SRAM block pins are deferred"
+    {-noUnConnPin} \
+    "pre-placement PG verification must suppress unplaced-terminal noise while keeping special-wire checks"
 assert_not_contains \
     $all_power_text \
     {-blockPinRouteWithPinWidth[[:space:]]+true} \
@@ -999,8 +1015,8 @@ foreach flow_pair [list \
         "$flow_name must print a power-plan entry marker before sourcing power_plan.tcl"
     assert_contains \
         $flow_text \
-        {POWER PLAN EXIT:} \
-        "$flow_name must print a power-plan exit marker after power_plan.tcl returns cleanly"
+        {POWER PLAN RETURN:} \
+        "$flow_name must print a power-plan return marker after power_plan.tcl returns cleanly"
     assert_contains \
         $flow_text \
         {set[[:space:]]+sram_edge_report[[:space:]]+\./reports/sram_island_pg_edges\.rpt} \
@@ -1086,7 +1102,7 @@ foreach flow_pair [list \
     set pin_source_index [string first {source ./tcl/pins.tcl} $flow_text $power_catch_index]
     set failure_return_index [string first "\n    return\n" $flow_text $power_catch_index]
     set power_entry_index [string first {POWER PLAN ENTRY:} $flow_text]
-    set power_exit_index [string first {POWER PLAN EXIT:} $flow_text $power_catch_index]
+    set power_return_index [string first {POWER PLAN RETURN:} $flow_text $power_catch_index]
     set edge_report_index [string first {set sram_edge_report ./reports/sram_island_pg_edges.rpt} $flow_text]
     set edge_delete_index [string first {file delete -force $sram_edge_report} $flow_text]
     set direct_sram_source_index [string first {source ./tcl/sram_island_power.tcl} $flow_text $power_catch_index]
@@ -1112,8 +1128,8 @@ foreach flow_pair [list \
     }
     if {$power_entry_index < 0 ||
         $power_entry_index > $power_catch_index ||
-        $power_exit_index < $power_catch_index ||
-        $power_exit_index > $pin_source_index} {
+        $power_return_index < $power_catch_index ||
+        $power_return_index > $pin_source_index} {
         fail "$flow_name must bracket power_plan.tcl in the log before pin assignment"
     }
     if {$edge_report_index < 0 ||
@@ -1122,7 +1138,7 @@ foreach flow_pair [list \
         $edge_delete_index > $power_catch_index} {
         fail "$flow_name must delete stale SRAM edge evidence before sourcing power_plan.tcl"
     }
-    if {$direct_sram_source_index < $power_exit_index ||
+    if {$direct_sram_source_index < $power_return_index ||
         $direct_sram_source_index > $pin_source_index} {
         fail "$flow_name must run the direct SRAM island fallback after power_plan.tcl and before pins.tcl"
     }
@@ -1253,6 +1269,10 @@ assert_contains \
     $flow_checks_text \
     {lappend[[:space:]]+verify_cmd[[:space:]]+-noUnroutedNet} \
     "strict PG connectivity must still use -noUnroutedNet when SRAM block pins are stitched"
+assert_contains \
+    $flow_checks_text \
+    {lappend[[:space:]]+verify_cmd[[:space:]]+-noUnConnPin} \
+    "deferred pre-placement PG verification must suppress unplaced-terminal warnings"
 assert_contains \
     $flow_checks_text \
     {-check_only[[:space:]]+special} \

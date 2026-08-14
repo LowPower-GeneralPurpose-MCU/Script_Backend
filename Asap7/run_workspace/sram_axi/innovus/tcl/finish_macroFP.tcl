@@ -291,13 +291,16 @@ set SRAM_ISLAND_CUT_BOX [list \
     $SRAM_ISLAND_CUT_URY \
 ]
 
-# Keep the full column above the SRAM island free of standard cells and
-# global PG mesh.  SRAM-local PG still uses SRAM_ISLAND_CUT_BOX; this wider
-# box is only for the no-mesh/no-cell island reservation.
+# The SRAM keepout ends at the validated two-row border around the macro
+# array.  The channel above the array remains normal logic area, matching the
+# macro-placement priority that only the hard-macro body, gaps, and local-PG
+# border are reserved.  Extending this box to core_ury would create an
+# artificial hard-blocked column and would also force left-edge IO pins into
+# the few legal row gaps.
 set SRAM_NO_MESH_LLX $SRAM_ISLAND_CUT_LLX
 set SRAM_NO_MESH_LLY $SRAM_ISLAND_CUT_LLY
 set SRAM_NO_MESH_URX $SRAM_ISLAND_CUT_URX
-set SRAM_NO_MESH_URY $core_ury
+set SRAM_NO_MESH_URY $SRAM_ISLAND_CUT_URY
 set SRAM_NO_MESH_BOX [list \
     $SRAM_NO_MESH_LLX \
     $SRAM_NO_MESH_LLY \
@@ -327,13 +330,13 @@ foreach {side clearance} [list \
     }
 }
 
-cutRow -area $SRAM_NO_MESH_BOX
+cutRow -area $SRAM_ISLAND_CUT_BOX
 
 createPlaceBlockage \
     -name SRAM_ISLAND_GROUP_BLOCKAGE \
     -type hard \
     -noCutByCore \
-    -box $SRAM_NO_MESH_BOX
+    -box $SRAM_ISLAND_CUT_BOX
 
 set blockage_report \
     [open ./reports/sram_island_blockage_geometry.rpt w]
@@ -358,11 +361,11 @@ puts $blockage_report \
     "blockage_clearance_right $blockage_clearance_right"
 puts $blockage_report \
     "blockage_clearance_top $blockage_clearance_top"
-puts $blockage_report "row_cut_box $SRAM_NO_MESH_BOX"
+puts $blockage_report "row_cut_box $SRAM_ISLAND_CUT_BOX"
 puts $blockage_report "desired_blockage_box $SRAM_ISLAND_BLOCKAGE_BOX"
 puts $blockage_report "local_sram_pg_cut_box $SRAM_ISLAND_CUT_BOX"
 puts $blockage_report "no_mesh_box $SRAM_NO_MESH_BOX"
-puts $blockage_report "place_blockage_box $SRAM_NO_MESH_BOX"
+puts $blockage_report "place_blockage_box $SRAM_ISLAND_CUT_BOX"
 puts $blockage_report "place_blockage_type hard"
 puts $blockage_report "no_cut_by_core true"
 close $blockage_report

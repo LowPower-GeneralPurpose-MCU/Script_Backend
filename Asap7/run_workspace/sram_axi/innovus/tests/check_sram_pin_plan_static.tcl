@@ -45,17 +45,25 @@ if {[regexp -- {top\.fPlan\.box} $pins_text]} {
     fail "pins.tcl must not use the die box for core-edge pin placement"
 }
 
-if {[regexp -- {SRAM_ISLAND_CUT|PIN_ISLAND_CLEARANCE|above island|right of island} $pins_text]} {
-    fail "pins.tcl must spread signal pins on the complete four core edges, not only island-avoidance sub-ranges"
-}
-
-foreach side {TOP RIGHT LEFT BOTTOM} {
+foreach side {TOP RIGHT BOTTOM} {
     if {[string first "-side $side" $pins_text] < 0} {
         fail "pins.tcl must assign pins on the $side core edge"
     }
 }
+if {[string first {-side LEFT} $pins_text] >= 0} {
+    fail "pins.tcl must not force signal pins onto the left edge blocked by the SRAM island"
+}
 
-foreach {side layer} {TOP M7 BOTTOM M7 LEFT M6 RIGHT M6} {
+assert_contains \
+    $pins_text \
+    {set[[:space:]]+TOP_PINS[[:space:]]+\[concat[[:space:]]+\$TOP_PINS[[:space:]]+\$LEFT_PINS\]} \
+    "pins.tcl must move the AR group from the blocked left edge to the legal top edge"
+assert_contains \
+    $pins_text \
+    {set[[:space:]]+LEFT_PINS[[:space:]]+\{\}} \
+    "pins.tcl must leave the SRAM-obstructed left edge unused"
+
+foreach {side layer} {TOP M7 BOTTOM M7 RIGHT M6} {
     set side_index [string first "-side $side" $pins_text]
     set layer_index [string first "-layer $layer" $pins_text $side_index]
     if {$side_index < 0 || $layer_index < $side_index} {
@@ -65,7 +73,6 @@ foreach {side layer} {TOP M7 BOTTOM M7 LEFT M6 RIGHT M6} {
 
 set right_start_index [string first {set right_start [list} $pins_text]
 set right_end_index [string first {set right_end [list} $pins_text]
-set left_start_index [string first {set left_start [list} $pins_text]
 set bottom_start_index [string first {set bottom_start [list} $pins_text]
 set bottom_end_index [string first {set bottom_end [list} $pins_text]
 set edit_pin_index [string first {setPinAssignMode -pinEditInBatch true} $pins_text]
@@ -77,7 +84,7 @@ if {$right_start_index < 0 ||
 }
 if {$right_end_index < 0 ||
     [string first {$pin_core_lly + $PIN_EDGE_CLEARANCE} $pins_text $right_end_index] < 0 ||
-    [string first {$pin_core_lly + $PIN_EDGE_CLEARANCE} $pins_text $right_end_index] > $left_start_index} {
+    [string first {$pin_core_lly + $PIN_EDGE_CLEARANCE} $pins_text $right_end_index] > $bottom_start_index} {
     fail "RIGHT pins must end at the bottom of the right edge when using clockwise spreading"
 }
 if {$bottom_start_index < 0 ||
@@ -86,9 +93,9 @@ if {$bottom_start_index < 0 ||
     fail "BOTTOM pins must start from the right of the bottom edge when using clockwise spreading"
 }
 if {$bottom_end_index < 0 ||
-    [string first {$pin_core_llx + $PIN_EDGE_CLEARANCE} $pins_text $bottom_end_index] < 0 ||
-    [string first {$pin_core_llx + $PIN_EDGE_CLEARANCE} $pins_text $bottom_end_index] > $edit_pin_index} {
-    fail "BOTTOM pins must end at the left of the bottom edge when using clockwise spreading"
+    [string first {$SRAM_NO_MESH_URX + $PIN_EDGE_CLEARANCE} $pins_text $bottom_end_index] < 0 ||
+    [string first {$SRAM_NO_MESH_URX + $PIN_EDGE_CLEARANCE} $pins_text $bottom_end_index] > $edit_pin_index} {
+    fail "BOTTOM pins must end in the legal logic segment to the right of the SRAM island"
 }
 
 puts "PASS: SRAM signal pin-plan Tcl static checks"

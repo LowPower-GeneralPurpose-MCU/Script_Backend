@@ -1,7 +1,8 @@
 ############################################################
 ## Phase 2: regular core M6/M7 mesh OUTSIDE the SRAM island
 ##
-## The logic PG region is limited to the right of the SRAM no-mesh column.
+## The logic PG regions are the right side and the channel above the SRAM
+## keepout.  The two boxes are disjoint, so regular PG never crosses a macro.
 ## A common global phase keeps separately generated layers aligned.
 ## M6 is later tied down to M5 taps and up to M7; M8/M9 connection is
 ## handled in global_upper_pg_to_ring.tcl.  Avoid direct M1->M8 stacks,
@@ -44,6 +45,7 @@ set core_m7_sram_guard [pg_layer_boundary_guard M7 $stripe_m7_w]
 foreach required_var {
     SRAM_ISLAND_CUT_URX
     SRAM_NO_MESH_URX
+    SRAM_NO_MESH_URY
 } {
     if {![info exists $required_var]} {
         error "Missing $required_var before outside-island core PG; rerun finish_macroFP.tcl so outputs/sram_macro_geometry.tcl contains SRAM_NO_MESH_BOX"
@@ -52,6 +54,8 @@ foreach required_var {
 
 set core_m6_right_llx [expr {$SRAM_NO_MESH_URX + $core_m6_sram_guard}]
 set core_m7_right_llx [expr {$SRAM_NO_MESH_URX + $core_m7_sram_guard}]
+set core_m6_top_lly [expr {$SRAM_NO_MESH_URY + $core_m6_sram_guard}]
+set core_m7_top_lly [expr {$SRAM_NO_MESH_URY + $core_m7_sram_guard}]
 
 # Keep regular M6/M7 PG only in the right-side logic rectangle.
 set LOGIC_RIGHT_M7_BOX [list \
@@ -62,15 +66,29 @@ set LOGIC_RIGHT_M6_BOX [list \
     $core_m6_right_llx $core_lly \
     $core_urx          $core_ury]
 
+set LOGIC_TOP_LEFT_M7_BOX [list \
+    $core_llx         $core_m7_top_lly \
+    $SRAM_NO_MESH_URX $core_ury]
+
+set LOGIC_TOP_LEFT_M6_BOX [list \
+    $core_llx         $core_m6_top_lly \
+    $SRAM_NO_MESH_URX $core_ury]
+
 pg_assert_box_clear_of_sram_cut \
     LOGIC_RIGHT_M7_BOX $LOGIC_RIGHT_M7_BOX right $core_m7_sram_guard
 pg_assert_box_clear_of_sram_cut \
     LOGIC_RIGHT_M6_BOX $LOGIC_RIGHT_M6_BOX right $core_m6_sram_guard
+pg_assert_box_clear_of_sram_cut \
+    LOGIC_TOP_LEFT_M7_BOX $LOGIC_TOP_LEFT_M7_BOX top $core_m7_sram_guard
+pg_assert_box_clear_of_sram_cut \
+    LOGIC_TOP_LEFT_M6_BOX $LOGIC_TOP_LEFT_M6_BOX top $core_m6_sram_guard
 
 puts "External vertical PG boxes:"
 puts " - RIGHT M7 : $LOGIC_RIGHT_M7_BOX"
+puts " - TOP M7   : $LOGIC_TOP_LEFT_M7_BOX"
 puts "External horizontal PG boxes:"
 puts " - RIGHT M6 : $LOGIC_RIGHT_M6_BOX"
+puts " - TOP M6   : $LOGIC_TOP_LEFT_M6_BOX"
 puts " - SRAM guard: M6=$core_m6_sram_guard M7=$core_m7_sram_guard"
 
 # M7 vertical mesh outside island, globally phase-aligned.
@@ -81,7 +99,7 @@ setAddStripeMode \
     -stacked_via_bottom_layer M6 \
     -stacked_via_top_layer M7
 
-foreach area [list $LOGIC_RIGHT_M7_BOX] {
+foreach area [list $LOGIC_RIGHT_M7_BOX $LOGIC_TOP_LEFT_M7_BOX] {
     set area_llx [lindex $area 0]
     set area_urx [lindex $area 2]
     set area_offset [pg_track_aligned_global_offset \
@@ -110,7 +128,7 @@ setAddStripeMode \
     -stacked_via_bottom_layer M5 \
     -stacked_via_top_layer M7
 
-foreach area [list $LOGIC_RIGHT_M6_BOX] {
+foreach area [list $LOGIC_RIGHT_M6_BOX $LOGIC_TOP_LEFT_M6_BOX] {
     set area_lly [lindex $area 1]
     set area_ury [lindex $area 3]
     set area_offset [pg_track_aligned_global_offset \
@@ -131,4 +149,4 @@ foreach area [list $LOGIC_RIGHT_M6_BOX] {
         -allow_snapping_override_custom_spacing 1
 }
 
-puts "Regular M6/M7 core mesh created only outside the SRAM island."
+puts "Regular M6/M7 core mesh created in right and above-island logic regions."

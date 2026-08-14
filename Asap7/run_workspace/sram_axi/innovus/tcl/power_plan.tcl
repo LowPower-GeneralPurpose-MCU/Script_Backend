@@ -603,10 +603,11 @@ if {$SRAM_CONNECT_BLOCK_PINS} {
     verifyConnectivity \
         -type special \
         -net {VDD VSS} \
+        -noUnConnPin \
         -report $pg_connectivity_report
 
     pg_assert_clean_connectivity_report $pg_connectivity_report
-    puts "PG connectivity checkpoint ran without -noUnroutedNet because SRAM block pins are intentionally deferred."
+    puts "PG connectivity checkpoint skipped unplaced terminals with -noUnConnPin; special-wire opens/shorts remain checked."
 }
 
 # This checkpoint is for the PG network created by addRing/addStripe/sroute.

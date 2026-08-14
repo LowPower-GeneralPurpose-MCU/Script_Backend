@@ -2,7 +2,8 @@
 ## Post-placement lower PG for standard-cell region
 ##
 ## 1. Create straight same-layer M1 follow-pin rails.
-## 2. Add external M5 vertical taps with explicit M1->M5 VIAGEN stacks.
+## 2. Add M5 vertical taps in the right and above-island logic regions with
+##    explicit M1->M5 VIAGEN stacks.
 ## No regular M5 mesh is created inside the SRAM island.
 ############################################################
 
@@ -72,6 +73,7 @@ set stdcell_pg_area_ury [expr {
 foreach required_var {
     SRAM_ISLAND_CUT_URX
     SRAM_NO_MESH_URX
+    SRAM_NO_MESH_URY
     core_llx
     core_lly
     core_urx
@@ -94,6 +96,7 @@ if {$logic_edge_tap_span < $logic_edge_tap_min_span} {
     set logic_edge_tap_span $logic_edge_tap_min_span
 }
 set logic_right_guard_llx [expr {$SRAM_NO_MESH_URX + $lower_m5_sram_guard}]
+set logic_top_guard_lly [expr {$SRAM_NO_MESH_URY + $lower_m5_sram_guard}]
 set logic_edge_tap_urx [expr {
     min($core_urx, $logic_right_guard_llx + $logic_edge_tap_span)
 }]
@@ -107,10 +110,16 @@ set LOGIC_RIGHT_EDGE_TAP_BOX [list \
 set LOGIC_RIGHT_FULL_BOX [list \
     $logic_edge_tap_urx $stdcell_pg_area_lly \
     $core_urx           $stdcell_pg_area_ury]
+set LOGIC_TOP_LEFT_M5_BOX [list \
+    $core_llx              $logic_top_guard_lly \
+    $SRAM_NO_MESH_URX      $stdcell_pg_area_ury]
 
 pg_assert_box_clear_of_sram_cut \
     LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_EDGE_TAP_BOX \
     right $lower_m5_sram_guard
+pg_assert_box_clear_of_sram_cut \
+    LOGIC_TOP_LEFT_M5_BOX $LOGIC_TOP_LEFT_M5_BOX \
+    top $lower_m5_sram_guard
 
 set global_m5_first_x [expr {$core_llx + $stripe_m5_offset}]
 setAddStripeMode \
@@ -121,7 +130,11 @@ setAddStripeMode \
     -stacked_via_bottom_layer M1 \
     -stacked_via_top_layer M5
 
-foreach area [list $LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_FULL_BOX] {
+foreach area [list \
+    $LOGIC_RIGHT_EDGE_TAP_BOX \
+    $LOGIC_RIGHT_FULL_BOX \
+    $LOGIC_TOP_LEFT_M5_BOX \
+] {
     set area_llx [lindex $area 0]
     set area_urx [lindex $area 2]
     set area_nets {VDD VSS}
@@ -173,4 +186,4 @@ foreach area [list $LOGIC_RIGHT_EDGE_TAP_BOX $LOGIC_RIGHT_FULL_BOX] {
     }
 }
 
-puts "Post-placement M1/M5 core PG completed with a first SRAM-edge tap and no jog/no layer change."
+puts "Post-placement M1/M5 core PG completed in right and above-island logic regions with no jog."
