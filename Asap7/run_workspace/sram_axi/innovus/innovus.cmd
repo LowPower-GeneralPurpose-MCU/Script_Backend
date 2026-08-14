@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug 14 10:13:09 2026                
+#  Created on Fri Aug 14 10:50:18 2026                
 #                                                     
 #######################################################
 
@@ -1044,6 +1044,23 @@ createPlaceBlockage -name SRAM_ISLAND_GROUP_BLOCKAGE -type hard -noCutByCore -bo
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_macroFP.rpt
 saveFPlan ./outputs/FloorPlan_withMacro.fp
 saveDesign ./saved/axi_ram_macroFP.enc
+deleteRouteBlk -name SRAM_BODY_SIGNAL_GUARD_* -type routes
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_00 -box {2.16 2.16 123.552 174.96} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_01 -box {127.872 2.16 249.264 174.96} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_02 -box {253.584 2.16 374.976 174.96} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_03 -box {379.296 2.16 500.688 174.96} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_04 -box {379.296 179.28 500.688 352.08} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_05 -box {253.584 179.28 374.976 352.08} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_06 -box {127.872 179.28 249.264 352.08} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_07 -box {2.16 179.28 123.552 352.08} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_08 -box {2.16 356.4 123.552 529.2} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_09 -box {127.872 356.4 249.264 529.2} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_10 -box {253.584 356.4 374.976 529.2} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_11 -box {379.296 356.4 500.688 529.2} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_12 -box {379.296 533.52 500.688 706.32} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_13 -box {253.584 533.52 374.976 706.32} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_14 -box {127.872 533.52 249.264 706.32} -layer {M6 M7} -exceptpgnet
+createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_15 -box {2.16 533.52 123.552 706.32} -layer {M6 M7} -exceptpgnet
 setRouteMode -earlyGlobalReverseDirection {(2.160000 2.160000 123.552000 174.960000) M5:M5 (127.872000 2.160000 249.264000 174.960000) M5:M5 (253.584000 2.160000 374.976000 174.960000) M5:M5 (379.296000 2.160000 500.688000 174.960000) M5:M5 (379.296000 179.280000 500.688000 352.080000) M5:M5 (253.584000 179.280000 374.976000 352.080000) M5:M5 (127.872000 179.280000 249.264000 352.080000) M5:M5 (2.160000 179.280000 123.552000 352.080000) M5:M5 (2.160000 356.400000 123.552000 529.200000) M5:M5 (127.872000 356.400000 249.264000 529.200000) M5:M5 (253.584000 356.400000 374.976000 529.200000) M5:M5 (379.296000 356.400000 500.688000 529.200000) M5:M5 (379.296000 533.520000 500.688000 706.320000) M5:M5 (253.584000 533.520000 374.976000 706.320000) M5:M5 (127.872000 533.520000 249.264000 706.320000) M5:M5 (2.160000 533.520000 123.552000 706.320000) M5:M5}
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_before_pnr.rpt
 setAddStripeMode -reset
@@ -1071,9 +1088,6 @@ setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -ex
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.768000 -number_of_sets 1 -create_pins 0 -area {500.688 0.192 502.848 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.968000 -number_of_sets 1 -create_pins 0 -area {123.552 0.192 127.872 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {374.976 0.192 379.296 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setSrouteMode -reset
-setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth false -viaConnectToShape stripe
-sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinLayerRange {M4 M5} -blockPinWidthRange {0.150 0.250} -blockPinTarget nearestTarget -allowJogging 0
 editTrim -nets {VSS VDD}
 clearDrc
 deselectAll
@@ -1082,5 +1096,4 @@ deletePGPin -net VSS
 createPGPin VSS -geom M9 0.264000 384.456000 0.744000 386.376000 -net VSS
 createPGPin VDD -geom M9 1.344000 384.456000 1.824000 386.376000 -net VDD
 editTrim -nets {VDD VSS}
-verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
-verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_before_stdcell_place.rpt
+verifyConnectivity -type special -net {VDD VSS} -report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
