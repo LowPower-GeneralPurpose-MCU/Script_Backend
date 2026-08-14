@@ -44,7 +44,6 @@ catch { setPlaceMode -place_global_reorder_scan false }
 catch { setPlaceMode -place_global_uniform_density false }
 catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
 catch { setUsefulSkewMode -opt_skew_eco_route false }
-catch { setSrouteMode -viaConnectToShape {ring stripe blockring} }
 catch { setDelayCalMode -enable_hier_save_restore_flow false }
 catch { setDelayCalMode -enable_high_fanout true }
 catch { setDelayCalMode -enable_ideal_seq_async_pins false }

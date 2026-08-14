@@ -1,2 +1,2 @@
       flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
-UM:*                                 -463.154602 ns      -1.220200 ns  force_downsizing_area_power
+UM:*                                 -462.965393 ns      -1.220100 ns  force_downsizing_area_power

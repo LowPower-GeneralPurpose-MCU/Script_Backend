@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug 14 13:48:14 2026                
+#  Created on Fri Aug 14 21:02:00 2026                
 #                                                     
 #######################################################
 
@@ -1003,7 +1003,7 @@ placeInstance {u_mem/G_SRAM_BANK[12].u_sram} 379.296000 533.520000 R180
 placeInstance {u_mem/G_SRAM_BANK[13].u_sram} 253.584000 533.520000 R180
 placeInstance {u_mem/G_SRAM_BANK[14].u_sram} 127.872000 533.520000 R180
 placeInstance {u_mem/G_SRAM_BANK[15].u_sram} 2.160000 533.520000 R180
-createInstGroup SRAM_ISLAND_GROUP -fence 2.16 2.16 505.008 710.64
+createInstGroup SRAM_ISLAND_GROUP
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[0].u_sram}
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[1].u_sram}
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[2].u_sram}
@@ -1063,6 +1063,8 @@ deselectAll
 setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.720000 -number_of_sets 1 -create_pins 0 -area {0.192 0.192 2.16 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
+addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 0.732000 -number_of_sets 1 -create_pins 0 -area {0.192 0.192 502.848 2.16} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
 addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 0.780000 -number_of_sets 1 -create_pins 0 -area {0.192 706.32 502.848 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.836000 -number_of_sets 1 -create_pins 0 -area {0.192 174.96 502.848 179.28} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.932000 -number_of_sets 1 -create_pins 0 -area {0.192 352.08 502.848 356.4} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
@@ -1072,6 +1074,23 @@ addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.968000 -number_of_sets 1 -create_pins 0 -area {123.552 0.192 127.872 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.824000 -number_of_sets 1 -create_pins 0 -area {249.264 0.192 253.584 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {374.976 0.192 379.296 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.672000 -number_of_sets 1 -create_pins 0 -area {121.392 0.192 123.36 10.8} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.720000 -number_of_sets 1 -create_pins 0 -area {247.104 0.192 249.072 10.8} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.768000 -number_of_sets 1 -create_pins 0 -area {372.816 0.192 374.784 10.8} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.816000 -number_of_sets 1 -create_pins 0 -area {498.528 0.192 500.496 10.8} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.816000 -number_of_sets 1 -create_pins 0 -area {498.528 174.96 500.496 187.92} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.768000 -number_of_sets 1 -create_pins 0 -area {372.816 174.96 374.784 187.92} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.720000 -number_of_sets 1 -create_pins 0 -area {247.104 174.96 249.072 187.92} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.672000 -number_of_sets 1 -create_pins 0 -area {121.392 174.96 123.36 187.92} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.672000 -number_of_sets 1 -create_pins 0 -area {121.392 352.08 123.36 365.04} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.720000 -number_of_sets 1 -create_pins 0 -area {247.104 352.08 249.072 365.04} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.768000 -number_of_sets 1 -create_pins 0 -area {372.816 352.08 374.784 365.04} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.816000 -number_of_sets 1 -create_pins 0 -area {498.528 352.08 500.496 365.04} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.816000 -number_of_sets 1 -create_pins 0 -area {498.528 529.2 500.496 542.16} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.768000 -number_of_sets 1 -create_pins 0 -area {372.816 529.2 374.784 542.16} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.720000 -number_of_sets 1 -create_pins 0 -area {247.104 529.2 249.072 542.16} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.672000 -number_of_sets 1 -create_pins 0 -area {121.392 529.2 123.36 542.16} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 editTrim -nets {VSS VDD}
 clearDrc
 deselectAll
@@ -1080,7 +1099,7 @@ deletePGPin -net VSS
 createPGPin VSS -geom M9 0.264000 384.456000 0.744000 386.376000 -net VSS
 createPGPin VDD -geom M9 1.344000 384.456000 1.824000 386.376000 -net VDD
 editTrim -nets {VDD VSS}
-verifyConnectivity -type special -net {VDD VSS} -noUnConnPin -report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
+verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_before_stdcell_place.rpt
 verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_before_stdcell_place.rpt
 saveDesign ./saved/axi_ram_powerplan.enc
 setPinConstraint -cell axi_ram -corner_to_pin_distance 8
@@ -1096,6 +1115,7 @@ setDelayCalMode -SIAware false -equivalent_waveform_model none -ewm_type moments
 setPlaceMode -reset
 setPlaceMode -place_global_uniform_density false -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_global_reorder_scan false -place_design_refine_macro false
 place_opt_design
+refinePlace
 checkPlace ./verify_rpt/checkPlace_after_place.rpt
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_place.rpt
 timeDesign -preCTS -outDir ./reports/timing_preCTS
@@ -1119,35 +1139,68 @@ setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacke
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 33.760000 -create_pins 0 -area {504.000000 0.192 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M9 -direction vertical -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from left -start_offset 19.168000 -create_pins 0 -area {0.192 709.440000 502.848 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 applyGlobalNets
-applyGlobalNets
-setSrouteMode -reset
-setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth false -viaConnectToShape stripe
-sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinLayerRange {M4 M4} -blockPinWidthRange {0.150 0.250} -blockPinTarget nearestTarget -allowJogging 0 -allowLayerChange 1 -layerChangeRange {M4 M5} -targetViaLayerRange {M4 M5} -area {0.192 0.192 502.848 708.48} -connectInsideArea -detailed_log
-editTrim -nets {VDD VSS}
-clearDrc
 editTrim -nets {VDD VSS}
 clearDrc
 applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
-verify_drc -check_only special -layer_range {M4 M4} -area {{500.688 0.0 625.248 770.832} {0.0 706.32 500.688 770.832} {0.0 0.0 2.16 706.32} {2.16 0.0 500.688 2.16} {123.552 2.16 127.872 174.96} {2.16 174.96 123.552 179.28} {249.264 2.16 253.584 174.96} {127.872 174.96 249.264 179.28} {374.976 2.16 379.296 174.96} {253.584 174.96 374.976 179.28} {379.296 174.96 500.688 179.28} {374.976 179.28 379.296 352.08} {379.296 352.08 500.688 356.4} {249.264 179.28 253.584 352.08} {253.584 352.08 374.976 356.4} {123.552 179.28 127.872 352.08} {127.872 352.08 249.264 356.4} {2.16 352.08 123.552 356.4} {123.552 356.4 127.872 529.2} {2.16 529.2 123.552 533.52} {249.264 356.4 253.584 529.2} {127.872 529.2 249.264 533.52} {374.976 356.4 379.296 529.2} {253.584 529.2 374.976 533.52} {379.296 529.2 500.688 533.52} {374.976 533.52 379.296 706.32} {249.264 533.52 253.584 706.32} {123.552 533.52 127.872 706.32}} -report ./verify_rpt/sram_m4_interface_drc.rpt
+verify_drc -check_only special -layer_range {M4 M5} -area {{500.688 0.0 625.248 770.832} {0.0 706.32 500.688 770.832} {0.0 0.0 2.16 706.32} {2.16 0.0 500.688 2.16} {123.552 2.16 127.872 174.96} {2.16 174.96 123.552 179.28} {249.264 2.16 253.584 174.96} {127.872 174.96 249.264 179.28} {374.976 2.16 379.296 174.96} {253.584 174.96 374.976 179.28} {379.296 174.96 500.688 179.28} {374.976 179.28 379.296 352.08} {379.296 352.08 500.688 356.4} {249.264 179.28 253.584 352.08} {253.584 352.08 374.976 356.4} {123.552 179.28 127.872 352.08} {127.872 352.08 249.264 356.4} {2.16 352.08 123.552 356.4} {123.552 356.4 127.872 529.2} {2.16 529.2 123.552 533.52} {249.264 356.4 253.584 529.2} {127.872 529.2 249.264 533.52} {374.976 356.4 379.296 529.2} {253.584 529.2 374.976 533.52} {379.296 529.2 500.688 533.52} {374.976 533.52 379.296 706.32} {249.264 533.52 253.584 706.32} {123.552 533.52 127.872 706.32} {121.392 0.192 123.36 10.8} {247.104 0.192 249.072 10.8} {372.816 0.192 374.784 10.8} {498.528 0.192 500.496 10.8} {498.528 174.96 500.496 187.92} {372.816 174.96 374.784 187.92} {247.104 174.96 249.072 187.92} {121.392 174.96 123.36 187.92} {121.392 352.08 123.36 365.04} {247.104 352.08 249.072 365.04} {372.816 352.08 374.784 365.04} {498.528 352.08 500.496 365.04} {498.528 529.2 500.496 542.16} {372.816 529.2 374.784 542.16} {247.104 529.2 249.072 542.16} {121.392 529.2 123.36 542.16}} -report ./verify_rpt/sram_m4_interface_drc.rpt
+verify_drc -check_only special -layer_range {M6 M9} -area {{500.688 0.0 625.248 770.832} {0.0 706.32 500.688 770.832} {0.0 0.0 2.16 706.32} {2.16 0.0 500.688 2.16} {123.552 2.16 127.872 174.96} {2.16 174.96 123.552 179.28} {249.264 2.16 253.584 174.96} {127.872 174.96 249.264 179.28} {374.976 2.16 379.296 174.96} {253.584 174.96 374.976 179.28} {379.296 174.96 500.688 179.28} {374.976 179.28 379.296 352.08} {379.296 352.08 500.688 356.4} {249.264 179.28 253.584 352.08} {253.584 352.08 374.976 356.4} {123.552 179.28 127.872 352.08} {127.872 352.08 249.264 356.4} {2.16 352.08 123.552 356.4} {123.552 356.4 127.872 529.2} {2.16 529.2 123.552 533.52} {249.264 356.4 253.584 529.2} {127.872 529.2 249.264 533.52} {374.976 356.4 379.296 529.2} {253.584 529.2 374.976 533.52} {379.296 529.2 500.688 533.52} {374.976 533.52 379.296 706.32} {249.264 533.52 253.584 706.32} {123.552 533.52 127.872 706.32} {121.392 0.192 123.36 10.8} {247.104 0.192 249.072 10.8} {372.816 0.192 374.784 10.8} {498.528 0.192 500.496 10.8} {498.528 174.96 500.496 187.92} {372.816 174.96 374.784 187.92} {247.104 174.96 249.072 187.92} {121.392 174.96 123.36 187.92} {121.392 352.08 123.36 365.04} {247.104 352.08 249.072 365.04} {372.816 352.08 374.784 365.04} {498.528 352.08 500.496 365.04} {498.528 529.2 500.496 542.16} {372.816 529.2 374.784 542.16} {247.104 529.2 249.072 542.16} {121.392 529.2 123.36 542.16}} -report ./verify_rpt/pg_drc_after_trim.rpt
 saveDesign ./saved/axi_ram_placed.enc
+create_route_type -name leaf_rule -bottom_preferred_layer M2 -top_preferred_layer M3
+create_route_type -name trunk_rule -bottom_preferred_layer M4 -top_preferred_layer M5
+create_route_type -name top_rule -bottom_preferred_layer M6 -top_preferred_layer M7
+set_ccopt_property -net_type leaf route_type leaf_rule
+set_ccopt_property -net_type trunk route_type trunk_rule
+set_ccopt_property -net_type top route_type top_rule
+set_ccopt_property routing_top_min_fanout 100
+set_ccopt_property target_max_trans 0.3ns
+set_ccopt_property -net_type leaf target_max_trans 120ps
+set_ccopt_property -net_type trunk target_max_trans 160ps
+set_ccopt_property -net_type top target_max_trans 200ps
+set_ccopt_property target_skew 50ps
+set_ccopt_property buffer_cells {
+    BUFx4_ASAP7_75t_R
+    BUFx8_ASAP7_75t_R
+    BUFx10_ASAP7_75t_R
+    BUFx12_ASAP7_75t_R
+    BUFx12f_ASAP7_75t_R
+    BUFx16f_ASAP7_75t_R
+    BUFx24_ASAP7_75t_R
+}
+set_ccopt_property inverter_cells {
+    CKINVDCx8_ASAP7_75t_R
+    CKINVDCx12_ASAP7_75t_R
+    CKINVDCx16_ASAP7_75t_R
+}
+set_ccopt_property use_inverters auto
+setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 -powerEffort high -fixFanoutLoad true
+optDesign -prefix preCTS -preCTS
+refinePlace
+checkPlace ./verify_rpt/checkPlace_before_cts.rpt
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+clock_opt_design
+all_constraint_modes -active
+set_interactive_constraint_modes $active_constraint_modes
+set_propagated_clock [all_clocks]
+set_interactive_constraint_modes {}
+optDesign -prefix postCTS -postCTS -setup -hold
+refinePlace
+checkPlace ./verify_rpt/checkPlace_after_postcts.rpt
+applyGlobalNets
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe blockring} -corePinMaxViaScale 20 20
+timeDesign -postCTS -outDir ./reports/timing_postCTS
+zoomBox -160.63475 -126.86350 843.24575 771.82375
+zoomBox -228.24275 -251.30775 952.79325 805.97150
 fit
-zoomBox -315.84750 117.99525 827.57125 730.61400
-zoomBox -247.65675 180.51000 724.24925 701.23600
-zoomBox -98.54875 317.20625 498.32325 636.99725
-zoomBox -6.97800 401.15475 359.57625 597.54650
-pan -123.93350 413.87025
-zoomBox -111.33800 425.18725 200.23325 592.12025
-zoomBox -58.32075 474.74125 104.32200 561.88175
-zoomBox -41.99150 490.06150 75.51850 553.02075
-zoomBox -21.66925 509.12775 39.67200 541.99300
-zoomBox -11.06100 519.08025 20.95975 536.23625
-zoomBox -18.34050 512.25050 33.80025 540.18650
-pan -0.34975 537.47050
-zoomBox -32.41975 508.91700 52.48375 554.40650
-zoomBox -38.74525 504.21975 61.14125 557.73675
-zoomBox -69.39700 484.79575 93.25225 571.93975
-zoomBox -122.69050 452.84725 142.15750 594.74700
-pan 66.56750 582.64450
-zoomBox -16.91050 480.72700 174.44250 583.24975
-fit
+saveDesign ./saved/axi_ram_postCTS.enc
+setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
+addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
+applyGlobalNets
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe blockring} -corePinMaxViaScale 20 20
+setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
+addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
+applyGlobalNets
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe blockring} -corePinMaxViaScale 20 20
