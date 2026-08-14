@@ -1035,24 +1035,24 @@ foreach flow_pair [list \
         "$flow_name must catch the post-placement PG reconnect guard"
     assert_contains \
         $flow_text \
-        {catch[[:space:]]+\{error[[:space:]]+\$post_place_pg_error\}} \
-        "$flow_name must hard-stop on dirty post-placement PG instead of saving axi_ram_placed.enc"
+        {error[[:space:]]+\$post_place_pg_error} \
+        "$flow_name must raise a Tcl error on dirty post-placement PG instead of saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
         {stop_if_dirty_pg_connectivity_report[[:space:]]+\\[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
         "$flow_name must re-read post-placement PG connectivity after Innovus report generation before saving axi_ram_placed.enc"
-    assert_contains \
+    assert_not_contains \
         $flow_text \
         {exit[[:space:]]+1} \
-        "$flow_name must force batch Innovus to exit if PG guards fail"
+        "$flow_name must not force Innovus to exit when PG guards fail"
     assert_contains \
         $flow_text \
         {catch[[:space:]]+\{[[:space:]]+verify_pg_special_drc_or_stop[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt[[:space:]]+\{M4[[:space:]]+M9\}} \
         "$flow_name must catch dirty post-placement PG special-route DRC"
     assert_contains \
         $flow_text \
-        {catch[[:space:]]+\{error[[:space:]]+\$post_place_pg_drc_error\}} \
-        "$flow_name must hard-stop on dirty post-placement PG DRC instead of saving axi_ram_placed.enc"
+        {error[[:space:]]+\$post_place_pg_drc_error} \
+        "$flow_name must raise a Tcl error on dirty post-placement PG DRC instead of saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
         {stop_if_dirty_pg_special_drc_report[[:space:]]+\\[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt} \
@@ -1207,8 +1207,48 @@ assert_contains \
     "flow_checks.tcl must log when floatingStripe stitching is intentionally skipped"
 assert_contains \
     $flow_checks_text \
-    {pg_sram_block_pins_are_deferred} \
-    "post-placement PG connectivity must relax unrouted SRAM macro terminals only in deferred block-pin mode"
+    {allow_preplacement_special_opens} \
+    "PG connectivity must relax deferred SRAM macro terminals only at the pre-placement PG checkpoint"
+assert_contains \
+    $flow_checks_text \
+    {proc[[:space:]]+connect_sram_block_pins_to_local_stripes_nojog} \
+    "flow_checks.tcl must provide a controlled post-placement SRAM blockPin stitch"
+assert_contains \
+    $flow_checks_text \
+    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE[[:space:]]+1} \
+    "post-placement SRAM blockPin stitch must default on"
+assert_contains \
+    $flow_checks_text \
+    {-connect[[:space:]]+\{blockPin\}} \
+    "post-placement SRAM PG stitch must use documented sroute blockPin connection"
+assert_contains \
+    $flow_checks_text \
+    {-blockPinLayerRange[[:space:]]+\{M4[[:space:]]+M4\}} \
+    "post-placement SRAM PG stitch must target the ASAP7 SRAM M4 VDD/VSS rails only"
+assert_contains \
+    $flow_checks_text \
+    {-blockPinTarget[[:space:]]+\{stripe\}} \
+    "post-placement SRAM PG stitch must target local SRAM island stripes instead of global mesh"
+assert_contains \
+    $flow_checks_text \
+    {set[[:space:]]+SRAM_CONNECT_BLOCK_PINS[[:space:]]+1} \
+    "post-placement SRAM blockPin stitch must make final PG connectivity strict"
+assert_contains \
+    $flow_checks_text \
+    {connect_sram_block_pins_to_local_stripes_nojog} \
+    "post-placement PG reconnect must run the controlled SRAM blockPin stitch before final verify"
+set core_pg_proc_index [string first {proc connect_core_pg_pins_nojog} $flow_checks_text]
+set post_place_sram_stitch_index [string first {connect_sram_block_pins_to_local_stripes_nojog} $flow_checks_text $core_pg_proc_index]
+set post_place_core_pin_index [string first {-connect {corePin}} $flow_checks_text $core_pg_proc_index]
+set post_place_verify_index [string first {run_pg_connectivity_verify $report_file} $flow_checks_text $core_pg_proc_index]
+if {$core_pg_proc_index < 0 ||
+    $post_place_sram_stitch_index < 0 ||
+    $post_place_core_pin_index < 0 ||
+    $post_place_verify_index < 0 ||
+    $post_place_sram_stitch_index >= $post_place_core_pin_index ||
+    $post_place_sram_stitch_index >= $post_place_verify_index} {
+    fail "connect_core_pg_pins_nojog must stitch SRAM block pins before corePin reconnect and final PG verify"
+}
 assert_contains \
     $flow_checks_text \
     {lappend[[:space:]]+verify_cmd[[:space:]]+-noUnroutedNet} \

@@ -111,7 +111,8 @@ proc assert_clean_pg_connectivity_report {report_file {allow_preplacement_specia
         error "PG special routes are open/shorted; inspect [file normalize $report_file] before continuing"
     }
 
-    if {![pg_sram_block_pins_are_deferred]} {
+    if {![pg_sram_block_pins_are_deferred] ||
+        !$allow_preplacement_special_opens} {
         assert_clean_connectivity_report $report_file
         return
     }
@@ -179,15 +180,13 @@ proc stop_if_dirty_pg_connectivity_report {report_file context} {
             $report_file \
             $allow_preplacement_special_opens
     } report_error]} {
-        puts stderr "$context failed: $report_error"
-        exit 1
+        error "$context failed: $report_error"
     }
 }
 
 proc stop_if_dirty_pg_special_drc_report {report_file context} {
     if {[catch {assert_clean_pg_special_drc_report $report_file} report_error]} {
-        puts stderr "$context failed: $report_error"
-        exit 1
+        error "$context failed: $report_error"
     }
 }
 
@@ -283,6 +282,43 @@ proc connect_floating_pg_stripes_nojog {} {
         -allowLayerChange 0
 }
 
+proc connect_sram_block_pins_to_local_stripes_nojog {} {
+    global SRAM_CONNECT_BLOCK_PINS SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE
+
+    if {![info exists SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE]} {
+        set SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE 1
+    }
+    if {![string is boolean -strict $SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE]} {
+        error "SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE must be boolean, got $SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE"
+    }
+    if {!$SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE} {
+        puts "SRAM blockPin post-place stitch skipped by SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE=0."
+        return
+    }
+
+    puts "Connecting SRAM VDD/VSS block pins to local SRAM island stripes."
+    applyGlobalNets
+
+    setSrouteMode -reset
+    setSrouteMode \
+        -extendNearestTarget true \
+        -blockPinRouteWithPinWidth false \
+        -viaConnectToShape stripe
+
+    sroute \
+        -connect {blockPin} \
+        -nets {VSS VDD} \
+        -blockPin useLef \
+        -blockPinLayerRange {M4 M4} \
+        -blockPinWidthRange {0.150 0.250} \
+        -blockPinTarget {stripe} \
+        -allowJogging 0
+
+    set SRAM_CONNECT_BLOCK_PINS 1
+    editTrim -nets {VDD VSS}
+    clearDrc
+}
+
 proc connect_core_pg_pins_nojog {{report_file ""}} {
     global PG_CONNECT_FLOATING_STRIPES
 
@@ -301,6 +337,8 @@ proc connect_core_pg_pins_nojog {{report_file ""}} {
     } else {
         puts "Floating PG stripe stitching skipped: keep SRAM island collectors from being auto-stitched through hard-macro keepout."
     }
+
+    connect_sram_block_pins_to_local_stripes_nojog
 
     setSrouteMode -reset
     setSrouteMode \
