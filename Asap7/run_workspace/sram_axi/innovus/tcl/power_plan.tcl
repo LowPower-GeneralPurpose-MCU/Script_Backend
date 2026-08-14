@@ -402,8 +402,68 @@ proc pg_assert_clean_connectivity_report {report_path} {
     set text [read $fh]
     close $fh
 
-    if {[regexp -nocase {unconnected[[:space:]]+terminal|Terminal\(s\)[[:space:]]+are[[:space:]]+not[[:space:]]+connected|IMPVFC-96|special routes with opens|dangling[[:space:]]+Wire|shorted} $text]} {
+    if {[string first "Found no problems or warnings" $text] >= 0 ||
+        [regexp {Verification Complete[[:space:]]*:[[:space:]]*0[[:space:]]+Viols} $text]} {
+        return
+    }
+
+    if {[regexp -nocase {dangling[[:space:]]+Wire|shorted} $text]} {
+        error "PG connectivity has a hard open/short marker: review $report_path"
+    }
+
+    global SRAM_CONNECT_BLOCK_PINS
+    set sram_block_pins_deferred 0
+    if {[info exists SRAM_CONNECT_BLOCK_PINS]} {
+        if {![string is boolean -strict $SRAM_CONNECT_BLOCK_PINS]} {
+            error "SRAM_CONNECT_BLOCK_PINS must be boolean, got $SRAM_CONNECT_BLOCK_PINS"
+        }
+        set sram_block_pins_deferred [expr {!$SRAM_CONNECT_BLOCK_PINS}]
+    }
+    if {!$sram_block_pins_deferred} {
         error "PG connectivity is not clean: review $report_path"
+    }
+
+    set saw_sram_terminal 0
+    set saw_preplacement_special_open 0
+    set unexpected_unconnected {}
+    foreach line [split $text "\n"] {
+        set trimmed_line [string trim $line]
+        if {$trimmed_line eq ""} {
+            continue
+        }
+
+        if {[regexp -nocase {special routes with opens|Special Wires:[[:space:]]+Pieces of the net are not connected together|IMPVFC-200} $trimmed_line]} {
+            set saw_preplacement_special_open 1
+            continue
+        }
+
+        if {![regexp -nocase {unconnected[[:space:]]+terminal|Terminal\(s\)[[:space:]]+are[[:space:]]+not[[:space:]]+connected|IMPVFC-96} $trimmed_line]} {
+            continue
+        }
+
+        if {[regexp {u_mem/G_SRAM_BANK\[[0-9]+\]\.u_sram/(VDD|VSS)} $trimmed_line]} {
+            set saw_sram_terminal 1
+            continue
+        }
+        if {[regexp {^[0-9]+[[:space:]]+Problem\(s\)[[:space:]]+\(IMPVFC-96\):} $trimmed_line]} {
+            continue
+        }
+        if {[regexp {^Net[[:space:]]+V(DD|SS):[[:space:]]+has[[:space:]]+an[[:space:]]+unconnected[[:space:]]+terminal} $trimmed_line]} {
+            continue
+        }
+
+        lappend unexpected_unconnected $trimmed_line
+    }
+
+    if {[llength $unexpected_unconnected] != 0} {
+        error "PG connectivity has unexpected unconnected terminals: [join $unexpected_unconnected { | }]"
+    }
+
+    if {$saw_sram_terminal} {
+        puts "WARN: $report_path contains deferred ASAP7 SRAM VDD/VSS macro terminals at the pre-placement checkpoint."
+    }
+    if {$saw_preplacement_special_open} {
+        puts "WARN: $report_path contains pre-placement special-route open markers; strict PG reconnect is checked after placement/post-PG."
     }
 }
 

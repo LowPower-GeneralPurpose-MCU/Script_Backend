@@ -646,11 +646,19 @@ assert_contains \
 assert_contains \
     $power_text \
     {pg_assert_clean_connectivity_report[[:space:]]+\$pg_connectivity_report} \
-    "power_plan.tcl must stop before saveDesign when PG connectivity is dirty"
+    "power_plan.tcl must still inspect the pre-placement PG connectivity report"
 assert_contains \
     $power_text \
-    {unconnected[[:space:]]+terminal|Terminal\(s\)[[:space:]]+are[[:space:]]+not[[:space:]]+connected|IMPVFC-96} \
-    "PG connectivity guard must reject unconnected VDD/VSS terminals, not only special-route opens"
+    {deferred[[:space:]]+ASAP7[[:space:]]+SRAM[[:space:]]+VDD/VSS[[:space:]]+macro[[:space:]]+terminals} \
+    "pre-placement PG connectivity guard must document deferred SRAM VDD/VSS macro terminals"
+assert_contains \
+    $power_text \
+    {strict[[:space:]]+PG[[:space:]]+reconnect[[:space:]]+is[[:space:]]+checked[[:space:]]+after[[:space:]]+placement/post-PG} \
+    "pre-placement special-route opens must be deferred only until the post-placement PG reconnect guard"
+assert_contains \
+    $power_text \
+    {unexpected[[:space:]]+unconnected[[:space:]]+terminals} \
+    "pre-placement PG connectivity guard must still reject non-SRAM unconnected terminals"
 assert_contains \
     $power_text \
     {pg_assert_clean_drc_report[[:space:]]+\$pg_drc_report} \
