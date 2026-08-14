@@ -2,10 +2,10 @@
    ____________________________________________________________________
 __/ message from Blocking QThread
 Multi-CPU acceleration using 12 CPU(s).
-*** QThread MetricCollect [begin] (optDesign #1) : mem = 0.5M
+*** QThread MetricCollect [begin] (optDesign #1) : mem = 0.4M
 Multithreaded Timing Analysis is initialized with 12 threads
 
-Ending "set_metric_additional_insts" (total cpu=0:00:00.3, real=0:00:01.0, peak res=6225.5M, current mem=5719.8M)
-Ending "set_metric_inst_count_area" (total cpu=0:00:00.3, real=0:00:00.0, peak res=5814.8M, current mem=5745.8M)
-*** QThread MetricCollect [finish] (optDesign #1) : cpu/real = 0:00:00.8/0:00:00.8 (0.9), mem = 80.5M
+Ending "set_metric_additional_insts" (total cpu=0:00:00.3, real=0:00:00.0, peak res=5805.1M, current mem=5350.6M)
+Ending "set_metric_inst_count_area" (total cpu=0:00:00.3, real=0:00:00.0, peak res=5441.5M, current mem=5372.6M)
+*** QThread MetricCollect [finish] (optDesign #1) : cpu/real = 0:00:00.7/0:00:00.8 (0.9), mem = 80.5M
 _______________________________________________________________________

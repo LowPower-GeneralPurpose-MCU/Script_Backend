@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug 14 21:02:00 2026                
+#  Created on Fri Aug 14 23:44:47 2026                
 #                                                     
 #######################################################
 
@@ -1188,19 +1188,61 @@ refinePlace
 checkPlace ./verify_rpt/checkPlace_after_postcts.rpt
 applyGlobalNets
 setSrouteMode -reset
-setSrouteMode -viaConnectToShape {ring stripe blockring} -corePinMaxViaScale 20 20
+setSrouteMode -viaConnectToShape {ring stripe blockring}
+sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -corePinLayer M1 -allowJogging 0 -allowLayerChange 0
+editTrim -nets {VDD VSS}
+clearDrc
+applyGlobalNets
+verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_postcts.rpt
 timeDesign -postCTS -outDir ./reports/timing_postCTS
-zoomBox -160.63475 -126.86350 843.24575 771.82375
-zoomBox -228.24275 -251.30775 952.79325 805.97150
-fit
 saveDesign ./saved/axi_ram_postCTS.enc
-setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
-addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
+setFillerMode -reset
+setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -add_fillers_with_drc false -fitGap true -honorPrerouteAsObs true -diffCellViol true
+addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true -fixDRC
+checkPlace ./verify_rpt/checkPlace_after_filler.rpt
+zoomBox 13.68425 36.80925 738.98775 686.11075
+zoomBox 170.43150 95.13375 694.46325 564.25400
+zoomBox 231.95275 118.92875 677.37975 517.68100
+zoomBox 398.59075 183.38025 631.10675 391.53175
+zoomBox 468.81300 210.54050 611.60725 338.37175
+zoomBox 511.93850 227.22025 599.63200 305.72475
 applyGlobalNets
 setSrouteMode -reset
-setSrouteMode -viaConnectToShape {ring stripe blockring} -corePinMaxViaScale 20 20
-setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -preserveUserOrder true -honorPrerouteAsObs true -diffCellViol true
-addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
+setSrouteMode -viaConnectToShape {ring stripe blockring}
+sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -corePinLayer M1 -allowJogging 0 -allowLayerChange 0
+editTrim -nets {VDD VSS}
+clearDrc
 applyGlobalNets
-setSrouteMode -reset
-setSrouteMode -viaConnectToShape {ring stripe blockring} -corePinMaxViaScale 20 20
+verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_filler.rpt
+zoomBox 498.21275 207.69950 619.58825 316.35650
+zoomBox 480.72300 182.49050 648.71700 332.88100
+zoomBox 456.51625 147.84975 689.03400 356.00275
+zoomBox 376.63875 33.54275 822.07050 432.29925
+zoomBox 310.68450 -57.42100 927.19900 494.49100
+zoomBox 218.47900 -182.71000 1071.78675 581.18250
+zoomBox 90.85925 -354.42450 1271.90800 702.86625
+zoomBox -35.86300 -839.23225 1887.27775 882.38925
+fit
+zoomBox 25.33050 204.01325 1707.90750 1105.50125
+zoomBox 167.04725 388.53275 1045.36300 859.11525
+zoomBox 69.80250 261.91750 1499.99325 1028.18250
+zoomBox 166.05950 379.89425 1044.37575 850.47700
+zoomBox 239.28500 469.64275 697.77225 715.29025
+zoomBox 279.51350 486.37150 610.77100 663.85200
+zoomBox 293.78000 493.77150 575.34900 644.63000
+zoomBox 305.90650 500.06150 545.24025 628.29125
+zoomBox 338.75300 517.09875 463.68675 584.03550
+zoomBox 355.92525 526.01875 421.14200 560.96050
+zoomBox 364.88925 530.67500 398.93325 548.91500
+zoomBox 359.68525 527.64225 415.12025 557.34300
+zoomBox 342.77575 517.78850 467.71350 584.72750
+zoomBox 304.66625 495.58125 586.24475 646.44475
+zoomBox 218.77700 445.53150 853.38450 785.54025
+zoomBox 117.29025 371.95075 995.64025 842.55150
+zoomBox -15.93375 255.77575 1199.77600 907.12650
+zoomBox 172.46625 419.62950 919.06400 819.64025
+zoomBox 256.04250 496.72000 795.45950 785.72775
+zoomBox 333.30625 582.64125 664.57600 760.12825
+zoomBox 401.71175 658.71150 548.69850 737.46375
+zoomBox 373.40850 637.17475 576.85050 746.17450
+zoomBox 334.23425 607.33100 615.81500 758.19575
