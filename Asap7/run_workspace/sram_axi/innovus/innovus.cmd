@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug 14 12:43:19 2026                
+#  Created on Fri Aug 14 13:48:14 2026                
 #                                                     
 #######################################################
 
@@ -1045,24 +1045,6 @@ createPlaceBlockage -name SRAM_ISLAND_GROUP_BLOCKAGE -type hard -noCutByCore -bo
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_macroFP.rpt
 saveFPlan ./outputs/FloorPlan_withMacro.fp
 saveDesign ./saved/axi_ram_macroFP.enc
-deleteRouteBlk -name SRAM_BODY_SIGNAL_GUARD_* -type routes
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_00 -box {2.16 2.16 123.552 174.96} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_01 -box {127.872 2.16 249.264 174.96} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_02 -box {253.584 2.16 374.976 174.96} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_03 -box {379.296 2.16 500.688 174.96} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_04 -box {379.296 179.28 500.688 352.08} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_05 -box {253.584 179.28 374.976 352.08} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_06 -box {127.872 179.28 249.264 352.08} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_07 -box {2.16 179.28 123.552 352.08} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_08 -box {2.16 356.4 123.552 529.2} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_09 -box {127.872 356.4 249.264 529.2} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_10 -box {253.584 356.4 374.976 529.2} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_11 -box {379.296 356.4 500.688 529.2} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_12 -box {379.296 533.52 500.688 706.32} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_13 -box {253.584 533.52 374.976 706.32} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_14 -box {127.872 533.52 249.264 706.32} -layer {M6 M7} -exceptpgnet
-createRouteBlk -name SRAM_BODY_SIGNAL_GUARD_15 -box {2.16 533.52 123.552 706.32} -layer {M6 M7} -exceptpgnet
-setRouteMode -earlyGlobalReverseDirection {(2.160000 2.160000 123.552000 174.960000) M5:M5 (127.872000 2.160000 249.264000 174.960000) M5:M5 (253.584000 2.160000 374.976000 174.960000) M5:M5 (379.296000 2.160000 500.688000 174.960000) M5:M5 (379.296000 179.280000 500.688000 352.080000) M5:M5 (253.584000 179.280000 374.976000 352.080000) M5:M5 (127.872000 179.280000 249.264000 352.080000) M5:M5 (2.160000 179.280000 123.552000 352.080000) M5:M5 (2.160000 356.400000 123.552000 529.200000) M5:M5 (127.872000 356.400000 249.264000 529.200000) M5:M5 (253.584000 356.400000 374.976000 529.200000) M5:M5 (379.296000 356.400000 500.688000 529.200000) M5:M5 (379.296000 533.520000 500.688000 706.320000) M5:M5 (253.584000 533.520000 374.976000 706.320000) M5:M5 (127.872000 533.520000 249.264000 706.320000) M5:M5 (2.160000 533.520000 123.552000 706.320000) M5:M5}
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_before_pnr.rpt
 setAddStripeMode -reset
 setAddStripeMode -allow_jog none
@@ -1078,16 +1060,17 @@ applyGlobalNets
 addRing -nets VDD -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 0.192 -snap_wire_center_to_grid Grid
 addRing -nets VSS -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.480 -spacing 0.480 -offset 1.152 -snap_wire_center_to_grid Grid
 deselectAll
-setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M8
+setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.720000 -number_of_sets 1 -create_pins 0 -area {0.192 0.192 2.16 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
 addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 0.780000 -number_of_sets 1 -create_pins 0 -area {0.192 706.32 502.848 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.836000 -number_of_sets 1 -create_pins 0 -area {0.192 174.96 502.848 179.28} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.932000 -number_of_sets 1 -create_pins 0 -area {0.192 352.08 502.848 356.4} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M4 -direction horizontal -width 0.096 -spacing 0.288 -start_from bottom -start_offset 1.836000 -number_of_sets 1 -create_pins 0 -area {0.192 529.2 502.848 533.52} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
-setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M8
+setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 0.768000 -number_of_sets 1 -create_pins 0 -area {500.688 0.192 502.848 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.968000 -number_of_sets 1 -create_pins 0 -area {123.552 0.192 127.872 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.824000 -number_of_sets 1 -create_pins 0 -area {249.264 0.192 253.584 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VSS VDD} -layer M5 -direction vertical -width 0.096 -spacing 0.288 -start_from left -start_offset 1.872000 -number_of_sets 1 -create_pins 0 -area {374.976 0.192 379.296 708.48} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 editTrim -nets {VSS VDD}
 clearDrc
@@ -1102,8 +1085,10 @@ verify_drc -check_only special -layer_range {M4 M9} -report ./verify_rpt/pg_drc_
 saveDesign ./saved/axi_ram_powerplan.enc
 setPinConstraint -cell axi_ram -corner_to_pin_distance 8
 setPinAssignMode -pinEditInBatch true
-editPin -pin {clk rst_n {s_axi_awid[4]} {s_axi_awid[3]} {s_axi_awid[2]} {s_axi_awid[1]} {s_axi_awid[0]} {s_axi_awaddr[31]} {s_axi_awaddr[30]} {s_axi_awaddr[29]} {s_axi_awaddr[28]} {s_axi_awaddr[27]} {s_axi_awaddr[26]} {s_axi_awaddr[25]} {s_axi_awaddr[24]} {s_axi_awaddr[23]} {s_axi_awaddr[22]} {s_axi_awaddr[21]} {s_axi_awaddr[20]} {s_axi_awaddr[19]} {s_axi_awaddr[18]} {s_axi_awaddr[17]} {s_axi_awaddr[16]} {s_axi_awaddr[15]} {s_axi_awaddr[14]} {s_axi_awaddr[13]} {s_axi_awaddr[12]} {s_axi_awaddr[11]} {s_axi_awaddr[10]} {s_axi_awaddr[9]} {s_axi_awaddr[8]} {s_axi_awaddr[7]} {s_axi_awaddr[6]} {s_axi_awaddr[5]} {s_axi_awaddr[4]} {s_axi_awaddr[3]} {s_axi_awaddr[2]} {s_axi_awaddr[1]} {s_axi_awaddr[0]} {s_axi_awlen[7]} {s_axi_awlen[6]} {s_axi_awlen[5]} {s_axi_awlen[4]} {s_axi_awlen[3]} {s_axi_awlen[2]} {s_axi_awlen[1]} {s_axi_awlen[0]} {s_axi_awsize[2]} {s_axi_awsize[1]} {s_axi_awsize[0]} {s_axi_awburst[1]} {s_axi_awburst[0]} s_axi_awlock {s_axi_awcache[3]} {s_axi_awcache[2]} {s_axi_awcache[1]} {s_axi_awcache[0]} {s_axi_awprot[2]} {s_axi_awprot[1]} {s_axi_awprot[0]} {s_axi_awqos[3]} {s_axi_awqos[2]} {s_axi_awqos[1]} {s_axi_awqos[0]} {s_axi_awregion[3]} {s_axi_awregion[2]} {s_axi_awregion[1]} {s_axi_awregion[0]} s_axi_awvalid s_axi_awready {s_axi_arid[4]} {s_axi_arid[3]} {s_axi_arid[2]} {s_axi_arid[1]} {s_axi_arid[0]} {s_axi_araddr[31]} {s_axi_araddr[30]} {s_axi_araddr[29]} {s_axi_araddr[28]} {s_axi_araddr[27]} {s_axi_araddr[26]} {s_axi_araddr[25]} {s_axi_araddr[24]} {s_axi_araddr[23]} {s_axi_araddr[22]} {s_axi_araddr[21]} {s_axi_araddr[20]} {s_axi_araddr[19]} {s_axi_araddr[18]} {s_axi_araddr[17]} {s_axi_araddr[16]} {s_axi_araddr[15]} {s_axi_araddr[14]} {s_axi_araddr[13]} {s_axi_araddr[12]} {s_axi_araddr[11]} {s_axi_araddr[10]} {s_axi_araddr[9]} {s_axi_araddr[8]} {s_axi_araddr[7]} {s_axi_araddr[6]} {s_axi_araddr[5]} {s_axi_araddr[4]} {s_axi_araddr[3]} {s_axi_araddr[2]} {s_axi_araddr[1]} {s_axi_araddr[0]} {s_axi_arlen[7]} {s_axi_arlen[6]} {s_axi_arlen[5]} {s_axi_arlen[4]} {s_axi_arlen[3]} {s_axi_arlen[2]} {s_axi_arlen[1]} {s_axi_arlen[0]} {s_axi_arsize[2]} {s_axi_arsize[1]} {s_axi_arsize[0]} {s_axi_arburst[1]} {s_axi_arburst[0]} s_axi_arlock {s_axi_arcache[3]} {s_axi_arcache[2]} {s_axi_arcache[1]} {s_axi_arcache[0]} {s_axi_arprot[2]} {s_axi_arprot[1]} {s_axi_arprot[0]} {s_axi_arqos[3]} {s_axi_arqos[2]} {s_axi_arqos[1]} {s_axi_arqos[0]} {s_axi_arregion[3]} {s_axi_arregion[2]} {s_axi_arregion[1]} {s_axi_arregion[0]} s_axi_arvalid s_axi_arready} -side TOP -layer M7 -spreadType range -start {10.16 768.672} -end {615.088 768.672} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
-editPin -pin {{s_axi_wdata[31]} {s_axi_wdata[30]} {s_axi_wdata[29]} {s_axi_wdata[28]} {s_axi_wdata[27]} {s_axi_wdata[26]} {s_axi_wdata[25]} {s_axi_wdata[24]} {s_axi_wdata[23]} {s_axi_wdata[22]} {s_axi_wdata[21]} {s_axi_wdata[20]} {s_axi_wdata[19]} {s_axi_wdata[18]} {s_axi_wdata[17]} {s_axi_wdata[16]} {s_axi_wdata[15]} {s_axi_wdata[14]} {s_axi_wdata[13]} {s_axi_wdata[12]} {s_axi_wdata[11]} {s_axi_wdata[10]} {s_axi_wdata[9]} {s_axi_wdata[8]} {s_axi_wdata[7]} {s_axi_wdata[6]} {s_axi_wdata[5]} {s_axi_wdata[4]} {s_axi_wdata[3]} {s_axi_wdata[2]} {s_axi_wdata[1]} {s_axi_wdata[0]} {s_axi_wstrb[3]} {s_axi_wstrb[2]} {s_axi_wstrb[1]} {s_axi_wstrb[0]} s_axi_wlast s_axi_wvalid s_axi_wready {s_axi_bid[4]} {s_axi_bid[3]} {s_axi_bid[2]} {s_axi_bid[1]} {s_axi_bid[0]} {s_axi_bresp[1]} {s_axi_bresp[0]} s_axi_bvalid s_axi_bready {s_axi_rid[4]} {s_axi_rid[3]} {s_axi_rid[2]} {s_axi_rid[1]} {s_axi_rid[0]} {s_axi_rdata[31]} {s_axi_rdata[30]} {s_axi_rdata[29]} {s_axi_rdata[28]} {s_axi_rdata[27]} {s_axi_rdata[26]} {s_axi_rdata[25]} {s_axi_rdata[24]} {s_axi_rdata[23]} {s_axi_rdata[22]} {s_axi_rdata[21]} {s_axi_rdata[20]} {s_axi_rdata[19]} {s_axi_rdata[18]} {s_axi_rdata[17]} {s_axi_rdata[16]} {s_axi_rdata[15]} {s_axi_rdata[14]} {s_axi_rdata[13]} {s_axi_rdata[12]} {s_axi_rdata[11]} {s_axi_rdata[10]} {s_axi_rdata[9]} {s_axi_rdata[8]} {s_axi_rdata[7]} {s_axi_rdata[6]} {s_axi_rdata[5]} {s_axi_rdata[4]} {s_axi_rdata[3]} {s_axi_rdata[2]} {s_axi_rdata[1]} {s_axi_rdata[0]} {s_axi_rresp[1]} {s_axi_rresp[0]} s_axi_rlast s_axi_rvalid s_axi_rready} -side RIGHT -layer M6 -spreadType range -start {623.088 760.672} -end {623.088 10.16} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
+editPin -pin {{s_axi_arid[4]} {s_axi_arid[3]} {s_axi_arid[2]} {s_axi_arid[1]} {s_axi_arid[0]} {s_axi_araddr[31]} {s_axi_araddr[30]} {s_axi_araddr[29]} {s_axi_araddr[28]} {s_axi_araddr[27]} {s_axi_araddr[26]} {s_axi_araddr[25]} {s_axi_araddr[24]} {s_axi_araddr[23]} {s_axi_araddr[22]} {s_axi_araddr[21]} {s_axi_araddr[20]} {s_axi_araddr[19]} {s_axi_araddr[18]} {s_axi_araddr[17]} {s_axi_araddr[16]} {s_axi_araddr[15]} {s_axi_araddr[14]} {s_axi_araddr[13]} {s_axi_araddr[12]} {s_axi_araddr[11]} {s_axi_araddr[10]} {s_axi_araddr[9]} {s_axi_araddr[8]} {s_axi_araddr[7]} {s_axi_araddr[6]} {s_axi_araddr[5]} {s_axi_araddr[4]} {s_axi_araddr[3]} {s_axi_araddr[2]} {s_axi_araddr[1]} {s_axi_araddr[0]} {s_axi_arlen[7]} {s_axi_arlen[6]} {s_axi_arlen[5]} {s_axi_arlen[4]} {s_axi_arlen[3]} {s_axi_arlen[2]} {s_axi_arlen[1]} {s_axi_arlen[0]} {s_axi_arsize[2]} {s_axi_arsize[1]} {s_axi_arsize[0]} {s_axi_arburst[1]} {s_axi_arburst[0]} s_axi_arlock {s_axi_arcache[3]} {s_axi_arcache[2]} {s_axi_arcache[1]} {s_axi_arcache[0]} {s_axi_arprot[2]} {s_axi_arprot[1]} {s_axi_arprot[0]} {s_axi_arqos[3]} {s_axi_arqos[2]} {s_axi_arqos[1]} {s_axi_arqos[0]} {s_axi_arregion[3]} {s_axi_arregion[2]} {s_axi_arregion[1]} {s_axi_arregion[0]} s_axi_arvalid s_axi_arready} -side TOP -layer M7 -spreadType range -start {10.16 768.672} -end {615.088 768.672} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
+editPin -pin {{s_axi_bid[4]} {s_axi_bid[3]} {s_axi_bid[2]} {s_axi_bid[1]} {s_axi_bid[0]} {s_axi_bresp[1]} {s_axi_bresp[0]} s_axi_bvalid s_axi_bready {s_axi_rid[4]} {s_axi_rid[3]} {s_axi_rid[2]} {s_axi_rid[1]} {s_axi_rid[0]} {s_axi_rdata[31]} {s_axi_rdata[30]} {s_axi_rdata[29]} {s_axi_rdata[28]} {s_axi_rdata[27]} {s_axi_rdata[26]} {s_axi_rdata[25]} {s_axi_rdata[24]} {s_axi_rdata[23]} {s_axi_rdata[22]} {s_axi_rdata[21]} {s_axi_rdata[20]} {s_axi_rdata[19]} {s_axi_rdata[18]} {s_axi_rdata[17]} {s_axi_rdata[16]} {s_axi_rdata[15]} {s_axi_rdata[14]} {s_axi_rdata[13]} {s_axi_rdata[12]} {s_axi_rdata[11]} {s_axi_rdata[10]} {s_axi_rdata[9]} {s_axi_rdata[8]} {s_axi_rdata[7]} {s_axi_rdata[6]} {s_axi_rdata[5]} {s_axi_rdata[4]} {s_axi_rdata[3]} {s_axi_rdata[2]} {s_axi_rdata[1]} {s_axi_rdata[0]} {s_axi_rresp[1]} {s_axi_rresp[0]} s_axi_rlast s_axi_rvalid s_axi_rready} -side RIGHT -layer M6 -spreadType range -start {623.088 760.672} -end {623.088 10.16} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
+editPin -pin {{s_axi_wdata[31]} {s_axi_wdata[30]} {s_axi_wdata[29]} {s_axi_wdata[28]} {s_axi_wdata[27]} {s_axi_wdata[26]} {s_axi_wdata[25]} {s_axi_wdata[24]} {s_axi_wdata[23]} {s_axi_wdata[22]} {s_axi_wdata[21]} {s_axi_wdata[20]} {s_axi_wdata[19]} {s_axi_wdata[18]} {s_axi_wdata[17]} {s_axi_wdata[16]} {s_axi_wdata[15]} {s_axi_wdata[14]} {s_axi_wdata[13]} {s_axi_wdata[12]} {s_axi_wdata[11]} {s_axi_wdata[10]} {s_axi_wdata[9]} {s_axi_wdata[8]} {s_axi_wdata[7]} {s_axi_wdata[6]} {s_axi_wdata[5]} {s_axi_wdata[4]} {s_axi_wdata[3]} {s_axi_wdata[2]} {s_axi_wdata[1]} {s_axi_wdata[0]} {s_axi_wstrb[3]} {s_axi_wstrb[2]} {s_axi_wstrb[1]} {s_axi_wstrb[0]} s_axi_wlast s_axi_wvalid s_axi_wready} -side BOTTOM -layer M7 -spreadType range -start {615.088 2.16} -end {10.16 2.16} -spreadDirection clockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
+editPin -pin {clk rst_n {s_axi_awid[4]} {s_axi_awid[3]} {s_axi_awid[2]} {s_axi_awid[1]} {s_axi_awid[0]} {s_axi_awaddr[31]} {s_axi_awaddr[30]} {s_axi_awaddr[29]} {s_axi_awaddr[28]} {s_axi_awaddr[27]} {s_axi_awaddr[26]} {s_axi_awaddr[25]} {s_axi_awaddr[24]} {s_axi_awaddr[23]} {s_axi_awaddr[22]} {s_axi_awaddr[21]} {s_axi_awaddr[20]} {s_axi_awaddr[19]} {s_axi_awaddr[18]} {s_axi_awaddr[17]} {s_axi_awaddr[16]} {s_axi_awaddr[15]} {s_axi_awaddr[14]} {s_axi_awaddr[13]} {s_axi_awaddr[12]} {s_axi_awaddr[11]} {s_axi_awaddr[10]} {s_axi_awaddr[9]} {s_axi_awaddr[8]} {s_axi_awaddr[7]} {s_axi_awaddr[6]} {s_axi_awaddr[5]} {s_axi_awaddr[4]} {s_axi_awaddr[3]} {s_axi_awaddr[2]} {s_axi_awaddr[1]} {s_axi_awaddr[0]} {s_axi_awlen[7]} {s_axi_awlen[6]} {s_axi_awlen[5]} {s_axi_awlen[4]} {s_axi_awlen[3]} {s_axi_awlen[2]} {s_axi_awlen[1]} {s_axi_awlen[0]} {s_axi_awsize[2]} {s_axi_awsize[1]} {s_axi_awsize[0]} {s_axi_awburst[1]} {s_axi_awburst[0]} s_axi_awlock {s_axi_awcache[3]} {s_axi_awcache[2]} {s_axi_awcache[1]} {s_axi_awcache[0]} {s_axi_awprot[2]} {s_axi_awprot[1]} {s_axi_awprot[0]} {s_axi_awqos[3]} {s_axi_awqos[2]} {s_axi_awqos[1]} {s_axi_awqos[0]} {s_axi_awregion[3]} {s_axi_awregion[2]} {s_axi_awregion[1]} {s_axi_awregion[0]} s_axi_awvalid s_axi_awready} -side LEFT -layer M6 -spreadType range -start {2.16 760.672} -end {2.16 10.16} -spreadDirection counterclockwise -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 -honorConstraint 1 -fixedPin 1
 setPinAssignMode -pinEditInBatch false
 checkPinAssignment -outFile ./verify_rpt/checkPinAssignment_after_pin.rpt
 saveDesign ./saved/axi_ram_floorplan_power_pins.enc
@@ -1111,7 +1096,6 @@ setDelayCalMode -SIAware false -equivalent_waveform_model none -ewm_type moments
 setPlaceMode -reset
 setPlaceMode -place_global_uniform_density false -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_global_reorder_scan false -place_design_refine_macro false
 place_opt_design
-refinePlace
 checkPlace ./verify_rpt/checkPlace_after_place.rpt
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_place.rpt
 timeDesign -preCTS -outDir ./reports/timing_preCTS
@@ -1126,7 +1110,7 @@ setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacke
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.128 -spacing 0.288 -set_to_set_distance 34.560 -start_from left -start_offset 0.192000 -area {503.04 2.16 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M7 -direction vertical -width 0.128 -spacing 0.288 -set_to_set_distance 34.560 -start_from left -start_offset 17.232000 -area {2.16 708.672 502.848 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M5 -stacked_via_top_layer M7
-addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.128 -spacing 0.288 -set_to_set_distance 34.560 -start_from bottom -start_offset 17.232000 -area {503.04 2.16 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
+addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.128 -spacing 0.288 -set_to_set_distance 34.560 -start_from bottom -start_offset 17.232000 -area {500.688 2.16 623.088 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 addStripe -nets {VDD VSS} -layer M6 -direction horizontal -width 0.128 -spacing 0.288 -set_to_set_distance 34.560 -start_from bottom -start_offset 1.920000 -area {2.16 708.672 502.848 768.672} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
 setAddStripeMode -allow_jog none -extend_to_closest_target area_boundary -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
 addStripe -nets {VDD VSS} -layer M8 -direction horizontal -width 1.600 -spacing 1.280 -set_to_set_distance 34.560 -start_from bottom -start_offset 19.168000 -create_pins 0 -area {504.000000 0.192 625.056 770.64} -snap_wire_center_to_grid Grid -allow_snapping_override_custom_spacing 1
@@ -1138,59 +1122,32 @@ applyGlobalNets
 applyGlobalNets
 setSrouteMode -reset
 setSrouteMode -extendNearestTarget true -blockPinRouteWithPinWidth false -viaConnectToShape stripe
-sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinLayerRange {M4 M4} -blockPinWidthRange {0.150 0.250} -blockPinTarget stripe -allowJogging 0
+sroute -connect blockPin -nets {VSS VDD} -blockPin useLef -blockPinLayerRange {M4 M4} -blockPinWidthRange {0.150 0.250} -blockPinTarget nearestTarget -allowJogging 0 -allowLayerChange 1 -layerChangeRange {M4 M5} -targetViaLayerRange {M4 M5} -area {0.192 0.192 502.848 708.48} -connectInsideArea -detailed_log
 editTrim -nets {VDD VSS}
 clearDrc
 editTrim -nets {VDD VSS}
 clearDrc
 applyGlobalNets
-verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
-verify_drc -check_only special -layer_range {M4 M9} -area {{500.688 0.0 625.248 770.832} {0.0 706.32 500.688 770.832} {0.0 0.0 2.16 706.32} {2.16 0.0 500.688 2.16} {123.552 2.16 127.872 174.96} {2.16 174.96 123.552 179.28} {249.264 2.16 253.584 174.96} {127.872 174.96 249.264 179.28} {374.976 2.16 379.296 174.96} {253.584 174.96 374.976 179.28} {379.296 174.96 500.688 179.28} {374.976 179.28 379.296 352.08} {379.296 352.08 500.688 356.4} {249.264 179.28 253.584 352.08} {253.584 352.08 374.976 356.4} {123.552 179.28 127.872 352.08} {127.872 352.08 249.264 356.4} {2.16 352.08 123.552 356.4} {123.552 356.4 127.872 529.2} {2.16 529.2 123.552 533.52} {249.264 356.4 253.584 529.2} {127.872 529.2 249.264 533.52} {374.976 356.4 379.296 529.2} {253.584 529.2 374.976 533.52} {379.296 529.2 500.688 533.52} {374.976 533.52 379.296 706.32} {249.264 533.52 253.584 706.32} {123.552 533.52 127.872 706.32}} -report ./verify_rpt/pg_drc_after_trim.rpt
+verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_trim.rpt
+verify_drc -check_only special -layer_range {M4 M4} -area {{500.688 0.0 625.248 770.832} {0.0 706.32 500.688 770.832} {0.0 0.0 2.16 706.32} {2.16 0.0 500.688 2.16} {123.552 2.16 127.872 174.96} {2.16 174.96 123.552 179.28} {249.264 2.16 253.584 174.96} {127.872 174.96 249.264 179.28} {374.976 2.16 379.296 174.96} {253.584 174.96 374.976 179.28} {379.296 174.96 500.688 179.28} {374.976 179.28 379.296 352.08} {379.296 352.08 500.688 356.4} {249.264 179.28 253.584 352.08} {253.584 352.08 374.976 356.4} {123.552 179.28 127.872 352.08} {127.872 352.08 249.264 356.4} {2.16 352.08 123.552 356.4} {123.552 356.4 127.872 529.2} {2.16 529.2 123.552 533.52} {249.264 356.4 253.584 529.2} {127.872 529.2 249.264 533.52} {374.976 356.4 379.296 529.2} {253.584 529.2 374.976 533.52} {379.296 529.2 500.688 533.52} {374.976 533.52 379.296 706.32} {249.264 533.52 253.584 706.32} {123.552 533.52 127.872 706.32}} -report ./verify_rpt/sram_m4_interface_drc.rpt
 saveDesign ./saved/axi_ram_placed.enc
-zoomBox 84.98325 99.44875 701.49150 651.35525
-zoomBox 213.34925 197.71525 658.77650 596.46775
-zoomBox 354.98850 301.55425 628.53675 546.43825
-zoomBox 417.64100 347.21775 615.27975 524.14650
-zoomBox 480.58575 393.09425 601.96075 501.75075
-zoomBox 417.64050 347.31600 615.27975 524.24525
-zoomBox 268.27150 238.68375 646.88625 577.62475
-zoomBox 74.69225 96.80725 691.20350 648.71650
-zoomBox -2.50275 -48.08575 850.80025 715.80250
-zoomBox 45.28450 113.04250 661.79600 664.95200
-zoomBox 104.68150 276.46175 483.29675 615.40325
-zoomBox 163.46075 376.25450 395.97800 584.40700
-zoomBox 208.17625 452.17000 329.55175 560.82700
-zoomBox 231.51825 491.79850 294.87675 548.51800
-pan -11.88500 272.65700
-zoomBox 197.95075 486.20050 301.12025 578.55925
-zoomBox 164.57400 450.89500 332.56825 601.28575
-pan -6.73725 307.18450
-zoomBox 98.16225 413.72300 371.71300 658.60925
-zoomBox 71.62100 387.30675 393.44550 675.40825
-pan -102.00150 421.01775
-zoomBox -108.89450 434.11300 336.53725 832.86950
-pan 157.31275 529.17800
-zoomBox 84.02975 450.96825 462.64675 789.91125
-zoomBox 167.34850 500.85075 440.89950 745.73725
-pan -158.53925 330.31725
-zoomBox -28.41075 474.93400 293.41400 763.03575
 fit
-zoomBox -185.53850 71.05375 957.88000 683.67250
-zoomBox 109.06600 181.16050 811.26800 557.38500
-zoomBox 238.56675 234.66900 745.90750 506.49100
-zoomBox 399.73100 301.26025 664.56625 443.15325
-zoomBox 423.66200 314.38950 648.77200 434.99850
-zoomBox 402.41350 304.72475 667.24875 446.61775
-zoomBox 431.04075 324.83975 622.38450 427.35750
-zoomBox 458.28250 345.54350 575.79200 408.50250
-zoomBox 479.00600 361.29375 540.34725 394.15900
-selectWire 503.7920 19.9080 503.9200 745.8840 7 VSS
-zoomBox 465.32925 354.43425 550.23075 399.92250
-zoomBox 403.53750 323.44300 594.88450 425.96250
-zoomBox 333.74400 288.43850 645.32075 455.37450
-zoomBox 220.88475 231.96525 728.23550 503.79275
-deselectAll
-zoomBox 55.07625 139.01000 881.21250 581.63575
-zoomBox -20.75225 96.49900 951.17275 617.23525
-zoomBox -109.96225 46.48625 1033.47900 659.11700
+zoomBox -315.84750 117.99525 827.57125 730.61400
+zoomBox -247.65675 180.51000 724.24925 701.23600
+zoomBox -98.54875 317.20625 498.32325 636.99725
+zoomBox -6.97800 401.15475 359.57625 597.54650
+pan -123.93350 413.87025
+zoomBox -111.33800 425.18725 200.23325 592.12025
+zoomBox -58.32075 474.74125 104.32200 561.88175
+zoomBox -41.99150 490.06150 75.51850 553.02075
+zoomBox -21.66925 509.12775 39.67200 541.99300
+zoomBox -11.06100 519.08025 20.95975 536.23625
+zoomBox -18.34050 512.25050 33.80025 540.18650
+pan -0.34975 537.47050
+zoomBox -32.41975 508.91700 52.48375 554.40650
+zoomBox -38.74525 504.21975 61.14125 557.73675
+zoomBox -69.39700 484.79575 93.25225 571.93975
+zoomBox -122.69050 452.84725 142.15750 594.74700
+pan 66.56750 582.64450
+zoomBox -16.91050 480.72700 174.44250 583.24975
 fit
