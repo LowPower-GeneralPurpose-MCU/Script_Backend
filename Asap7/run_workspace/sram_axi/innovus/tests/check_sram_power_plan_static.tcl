@@ -1251,6 +1251,30 @@ assert_contains \
     "post-placement SRAM blockPin stitch must make final PG connectivity strict"
 assert_contains \
     $flow_checks_text \
+    {set[[:space:]]+SRAM_BLOCKPIN_STITCH_DONE[[:space:]]+1} \
+    "SRAM blockPin stitch must be owned once so later PG checkpoints cannot duplicate its vias"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {set[[:space:]]+STDCELL_CORE_PG_BUILT[[:space:]]+1} \
+    "core_lower_pg_nojog.tcl must mark ownership of M1 followpins and M1-to-M5 via stacks"
+assert_contains \
+    $flow_checks_text \
+    {CorePin[[:space:]]+reconnect[[:space:]]+skipped} \
+    "final PG verification must preserve existing lower-PG vias instead of generating duplicates"
+assert_contains \
+    $flow_checks_text \
+    {corePinMaxViaScale[[:space:]]+20[[:space:]]+20} \
+    "the emergency corePin fallback must limit via arrays to a single-cut-sized footprint"
+assert_contains \
+    $flow_checks_text \
+    {proc[[:space:]]+pg_top_level_owned_drc_areas} \
+    "PG DRC must separate top-level-owned geometry from hard-macro-internal abstract pins"
+assert_contains \
+    $flow_checks_text \
+    {sram_macro_abstract_drc_scope\.rpt} \
+    "hierarchical PG DRC scope must be documented in a report"
+assert_contains \
+    $flow_checks_text \
     {connect_sram_block_pins_to_local_stripes_nojog} \
     "post-placement PG reconnect must run the controlled SRAM blockPin stitch before final verify"
 set core_pg_proc_index [string first {proc connect_core_pg_pins_nojog} $flow_checks_text]

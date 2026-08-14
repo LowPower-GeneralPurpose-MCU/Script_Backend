@@ -83,6 +83,12 @@ if {![regexp {createPlaceBlockage[[:space:]]+\\[^#]+-box[[:space:]]+\$SRAM_ISLAN
 if {![regexp {set[[:space:]]+SRAM_NO_MESH_URY[[:space:]]+\$SRAM_ISLAND_CUT_URY} $finish_text]} {
     fail "finish_macroFP.tcl must end the no-mesh region at the SRAM island border"
 }
+if {![regexp {set[[:space:]]+SRAM_MACRO_BOXES[[:space:]]+\$actual_boxes} $finish_text]} {
+    fail "finish_macroFP.tcl must export nominal hard-macro boxes for hierarchical top-level DRC scoping"
+}
+if {![regexp {SRAM_MACRO_BOXES} [string range $finish_text [string first {foreach variable} $finish_text] end]]} {
+    fail "finish_macroFP.tcl must persist SRAM_MACRO_BOXES in outputs/sram_macro_geometry.tcl"
+}
 if {[regexp {set[[:space:]]+SRAM_NO_MESH_URY[[:space:]]+\$core_ury} $finish_text]} {
     fail "finish_macroFP.tcl must not reserve the legal logic channel above the SRAM island"
 }

@@ -29,6 +29,19 @@ proc assert_contains {text pattern message} {
 set pins_tcl [file join $tcl_dir pins.tcl]
 set pins_text [read_complete_file $pins_tcl]
 
+assert_contains \
+    $pins_text \
+    {PIN[[:space:]]+PLAN[[:space:]]+REVISION:} \
+    "pins.tcl must print a revision marker so innovus.log proves which pin plan ran"
+assert_contains \
+    $pins_text \
+    {checkPinAssignment[[:space:]\\]+-outFile[[:space:]]+\./verify_rpt/checkPinAssignment_after_pin\.rpt} \
+    "pins.tcl must run the Cadence pin-legality checker after batch assignment"
+assert_contains \
+    $pins_text \
+    {top_requested_uniform_pitch} \
+    "pins.tcl must report the requested uniform TOP-pin pitch and row"
+
 foreach field {
     top.fPlan.coreBox_llx
     top.fPlan.coreBox_lly
@@ -45,13 +58,15 @@ if {[regexp -- {top\.fPlan\.box} $pins_text]} {
     fail "pins.tcl must not use the die box for core-edge pin placement"
 }
 
-foreach side {TOP RIGHT BOTTOM} {
+foreach side {TOP RIGHT} {
     if {[string first "-side $side" $pins_text] < 0} {
         fail "pins.tcl must assign pins on the $side core edge"
     }
 }
-if {[string first {-side LEFT} $pins_text] >= 0} {
-    fail "pins.tcl must not force signal pins onto the left edge blocked by the SRAM island"
+foreach blocked_side {LEFT BOTTOM} {
+    if {[string first "-side $blocked_side" $pins_text] >= 0} {
+        fail "pins.tcl must not force signal pins onto the $blocked_side edge blocked by the SRAM island"
+    }
 }
 
 assert_contains \
@@ -62,8 +77,16 @@ assert_contains \
     $pins_text \
     {set[[:space:]]+LEFT_PINS[[:space:]]+\{\}} \
     "pins.tcl must leave the SRAM-obstructed left edge unused"
+assert_contains \
+    $pins_text \
+    {set[[:space:]]+RIGHT_PINS[[:space:]]+\[concat[[:space:]]+\$RIGHT_PINS[[:space:]]+\$BOTTOM_PINS\]} \
+    "pins.tcl must move the read-response group from the compressed bottom segment to the legal right edge"
+assert_contains \
+    $pins_text \
+    {set[[:space:]]+BOTTOM_PINS[[:space:]]+\{\}} \
+    "pins.tcl must leave the SRAM-obstructed bottom edge unused"
 
-foreach {side layer} {TOP M7 BOTTOM M7 RIGHT M6} {
+foreach {side layer} {TOP M7 RIGHT M6} {
     set side_index [string first "-side $side" $pins_text]
     set layer_index [string first "-layer $layer" $pins_text $side_index]
     if {$side_index < 0 || $layer_index < $side_index} {
@@ -73,8 +96,6 @@ foreach {side layer} {TOP M7 BOTTOM M7 RIGHT M6} {
 
 set right_start_index [string first {set right_start [list} $pins_text]
 set right_end_index [string first {set right_end [list} $pins_text]
-set bottom_start_index [string first {set bottom_start [list} $pins_text]
-set bottom_end_index [string first {set bottom_end [list} $pins_text]
 set edit_pin_index [string first {setPinAssignMode -pinEditInBatch true} $pins_text]
 
 if {$right_start_index < 0 ||
@@ -84,18 +105,8 @@ if {$right_start_index < 0 ||
 }
 if {$right_end_index < 0 ||
     [string first {$pin_core_lly + $PIN_EDGE_CLEARANCE} $pins_text $right_end_index] < 0 ||
-    [string first {$pin_core_lly + $PIN_EDGE_CLEARANCE} $pins_text $right_end_index] > $bottom_start_index} {
+    [string first {$pin_core_lly + $PIN_EDGE_CLEARANCE} $pins_text $right_end_index] > $edit_pin_index} {
     fail "RIGHT pins must end at the bottom of the right edge when using clockwise spreading"
-}
-if {$bottom_start_index < 0 ||
-    [string first {$pin_core_urx - $PIN_EDGE_CLEARANCE} $pins_text $bottom_start_index] < 0 ||
-    [string first {$pin_core_urx - $PIN_EDGE_CLEARANCE} $pins_text $bottom_start_index] > $bottom_end_index} {
-    fail "BOTTOM pins must start from the right of the bottom edge when using clockwise spreading"
-}
-if {$bottom_end_index < 0 ||
-    [string first {$SRAM_NO_MESH_URX + $PIN_EDGE_CLEARANCE} $pins_text $bottom_end_index] < 0 ||
-    [string first {$SRAM_NO_MESH_URX + $PIN_EDGE_CLEARANCE} $pins_text $bottom_end_index] > $edit_pin_index} {
-    fail "BOTTOM pins must end in the legal logic segment to the right of the SRAM island"
 }
 
 puts "PASS: SRAM signal pin-plan Tcl static checks"

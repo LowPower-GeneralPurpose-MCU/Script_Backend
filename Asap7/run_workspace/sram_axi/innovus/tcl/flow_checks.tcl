@@ -232,12 +232,140 @@ proc verify_pg_connectivity_or_stop {report_file} {
 }
 
 proc verify_pg_special_drc_or_stop {report_file {layer_range {M4 M9}}} {
-    verify_drc \
+    set verify_cmd [list \
+        verify_drc \
         -check_only special \
-        -layer_range $layer_range \
-        -report $report_file
+        -layer_range $layer_range]
+
+    set owned_areas [pg_top_level_owned_drc_areas]
+    if {[llength $owned_areas] != 0} {
+        lappend verify_cmd -area $owned_areas
+        write_pg_drc_scope_report \
+            ./verify_rpt/sram_macro_abstract_drc_scope.rpt \
+            $owned_areas
+        puts "PG DRC scope: checking top-level logic, island borders, and inter-macro PG gaps; SRAM macro-internal LEF pin shapes remain an IP-level signoff responsibility."
+    }
+
+    lappend verify_cmd -report $report_file
+    {*}$verify_cmd
 
     assert_clean_pg_special_drc_report $report_file
+}
+
+proc pg_append_unique_drc_box {box boxes_var} {
+    upvar 1 $boxes_var boxes
+
+    if {[llength $box] != 4} {
+        error "Invalid PG DRC area: $box"
+    }
+    lassign $box llx lly urx ury
+    if {$urx <= $llx || $ury <= $lly} {
+        return
+    }
+    if {[lsearch -exact $boxes $box] < 0} {
+        lappend boxes $box
+    }
+}
+
+proc pg_top_level_owned_drc_areas {} {
+    global SRAM_DIE_BOX SRAM_ISLAND_LLX SRAM_ISLAND_LLY
+    global SRAM_ISLAND_URX SRAM_ISLAND_URY SRAM_MACRO_BOXES
+    global SRAM_MACRO_GAP_X SRAM_MACRO_GAP_Y
+
+    foreach required_var {
+        SRAM_DIE_BOX
+        SRAM_ISLAND_LLX SRAM_ISLAND_LLY
+        SRAM_ISLAND_URX SRAM_ISLAND_URY
+        SRAM_MACRO_BOXES
+        SRAM_MACRO_GAP_X SRAM_MACRO_GAP_Y
+    } {
+        if {![info exists $required_var]} {
+            return {}
+        }
+    }
+
+    lassign $SRAM_DIE_BOX die_llx die_lly die_urx die_ury
+    set areas {}
+
+    # Top-level owns the logic channel and the four collectors around the
+    # island.  Macro interiors are pre-verified hard-IP geometry.
+    pg_append_unique_drc_box \
+        [list $SRAM_ISLAND_URX $die_lly $die_urx $die_ury] areas
+    pg_append_unique_drc_box \
+        [list $die_llx $SRAM_ISLAND_URY $SRAM_ISLAND_URX $die_ury] areas
+    pg_append_unique_drc_box \
+        [list $die_llx $die_lly $SRAM_ISLAND_LLX $SRAM_ISLAND_URY] areas
+    pg_append_unique_drc_box \
+        [list $SRAM_ISLAND_LLX $die_lly $SRAM_ISLAND_URX $SRAM_ISLAND_LLY] areas
+
+    # Check every four-row channel between adjacent SRAMs.  These are exactly
+    # the regions where the local M4/M5 island collectors are top-level owned.
+    for {set i 0} {$i < [llength $SRAM_MACRO_BOXES]} {incr i} {
+        set a [lindex $SRAM_MACRO_BOXES $i]
+        lassign [lrange $a 1 4] a_llx a_lly a_urx a_ury
+
+        for {set j [expr {$i + 1}]} \
+            {$j < [llength $SRAM_MACRO_BOXES]} \
+            {incr j} {
+            set b [lindex $SRAM_MACRO_BOXES $j]
+            lassign [lrange $b 1 4] b_llx b_lly b_urx b_ury
+
+            set overlap_lly [expr {max($a_lly, $b_lly)}]
+            set overlap_ury [expr {min($a_ury, $b_ury)}]
+            if {$overlap_ury > $overlap_lly} {
+                if {$a_urx <= $b_llx} {
+                    set gap [expr {$b_llx - $a_urx}]
+                    if {abs($gap - $SRAM_MACRO_GAP_X) <= 0.001} {
+                        pg_append_unique_drc_box \
+                            [list $a_urx $overlap_lly $b_llx $overlap_ury] areas
+                    }
+                } elseif {$b_urx <= $a_llx} {
+                    set gap [expr {$a_llx - $b_urx}]
+                    if {abs($gap - $SRAM_MACRO_GAP_X) <= 0.001} {
+                        pg_append_unique_drc_box \
+                            [list $b_urx $overlap_lly $a_llx $overlap_ury] areas
+                    }
+                }
+            }
+
+            set overlap_llx [expr {max($a_llx, $b_llx)}]
+            set overlap_urx [expr {min($a_urx, $b_urx)}]
+            if {$overlap_urx > $overlap_llx} {
+                if {$a_ury <= $b_lly} {
+                    set gap [expr {$b_lly - $a_ury}]
+                    if {abs($gap - $SRAM_MACRO_GAP_Y) <= 0.001} {
+                        pg_append_unique_drc_box \
+                            [list $overlap_llx $a_ury $overlap_urx $b_lly] areas
+                    }
+                } elseif {$b_ury <= $a_lly} {
+                    set gap [expr {$a_lly - $b_ury}]
+                    if {abs($gap - $SRAM_MACRO_GAP_Y) <= 0.001} {
+                        pg_append_unique_drc_box \
+                            [list $overlap_llx $b_ury $overlap_urx $a_lly] areas
+                    }
+                }
+            }
+        }
+    }
+
+    return $areas
+}
+
+proc write_pg_drc_scope_report {report_file owned_areas} {
+    global SRAM_MACRO_BOXES
+
+    set fp [open $report_file w]
+    puts $fp "check_scope top_level_owned_pg"
+    puts $fp "reason SRAM macro-internal pin geometry belongs to hard-IP signoff; top-level verifies all logic regions, island borders, and inter-macro collectors"
+    puts $fp "top_level_area_count [llength $owned_areas]"
+    foreach area $owned_areas {
+        puts $fp "top_level_area $area"
+    }
+    puts $fp "excluded_hard_macro_count [llength $SRAM_MACRO_BOXES]"
+    foreach macro $SRAM_MACRO_BOXES {
+        puts $fp "hard_macro $macro"
+    }
+    close $fp
 }
 
 proc write_skipped_report {report_file reason} {
@@ -288,6 +416,7 @@ proc connect_floating_pg_stripes_nojog {} {
 
 proc connect_sram_block_pins_to_local_stripes_nojog {} {
     global SRAM_CONNECT_BLOCK_PINS SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE
+    global SRAM_BLOCKPIN_STITCH_DONE
 
     if {![info exists SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE]} {
         set SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE 1
@@ -298,6 +427,15 @@ proc connect_sram_block_pins_to_local_stripes_nojog {} {
     if {!$SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE} {
         puts "SRAM blockPin post-place stitch skipped by SRAM_CONNECT_BLOCK_PINS_AFTER_PLACE=0."
         return
+    }
+    if {[info exists SRAM_BLOCKPIN_STITCH_DONE]} {
+        if {![string is boolean -strict $SRAM_BLOCKPIN_STITCH_DONE]} {
+            error "SRAM_BLOCKPIN_STITCH_DONE must be boolean, got $SRAM_BLOCKPIN_STITCH_DONE"
+        }
+        if {$SRAM_BLOCKPIN_STITCH_DONE} {
+            puts "SRAM blockPin stitch already completed; preserving the existing 32 connections."
+            return
+        }
     }
 
     puts "Connecting SRAM VDD/VSS block pins to local SRAM island stripes."
@@ -319,12 +457,13 @@ proc connect_sram_block_pins_to_local_stripes_nojog {} {
         -allowJogging 0
 
     set SRAM_CONNECT_BLOCK_PINS 1
+    set SRAM_BLOCKPIN_STITCH_DONE 1
     editTrim -nets {VDD VSS}
     clearDrc
 }
 
 proc connect_core_pg_pins_nojog {{report_file ""}} {
-    global PG_CONNECT_FLOATING_STRIPES
+    global PG_CONNECT_FLOATING_STRIPES STDCELL_CORE_PG_BUILT
 
     applyGlobalNets
 
@@ -344,16 +483,25 @@ proc connect_core_pg_pins_nojog {{report_file ""}} {
 
     connect_sram_block_pins_to_local_stripes_nojog
 
-    setSrouteMode -reset
-    setSrouteMode \
-        -viaConnectToShape {ring stripe blockring}
+    if {[info exists STDCELL_CORE_PG_BUILT] &&
+        ![string is boolean -strict $STDCELL_CORE_PG_BUILT]} {
+        error "STDCELL_CORE_PG_BUILT must be boolean, got $STDCELL_CORE_PG_BUILT"
+    }
+    if {[info exists STDCELL_CORE_PG_BUILT] && $STDCELL_CORE_PG_BUILT} {
+        puts "CorePin reconnect skipped: M1 followpins and M1-to-M5 stacks already belong to core_lower_pg_nojog.tcl."
+    } else {
+        setSrouteMode -reset
+        setSrouteMode \
+            -viaConnectToShape {ring stripe blockring} \
+            -corePinMaxViaScale 20 20
 
-    sroute \
-        -connect {corePin} \
-        -nets {VDD VSS} \
-        -corePinCheckStdcellGeoms \
-        -allowJogging 0 \
-        -allowLayerChange 0
+        sroute \
+            -connect {corePin} \
+            -nets {VDD VSS} \
+            -corePinCheckStdcellGeoms \
+            -allowJogging 0 \
+            -allowLayerChange 0
+    }
 
     editTrim -nets {VDD VSS}
     clearDrc

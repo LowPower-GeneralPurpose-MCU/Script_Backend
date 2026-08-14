@@ -8,6 +8,11 @@
 ## This script stops before metal fill and GDS export.
 ############################################################
 
+set FLOW_SOURCE_REVISION "sram_pg_single_owner_v3"
+puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
+set STDCELL_CORE_PG_BUILT 0
+set SRAM_BLOCKPIN_STITCH_DONE 0
+
 set USER $::env(USER)
 if {[catch {file delete -force /tmp/$USER/innovus_pnr}]} {}
 set auto_file_dir "/tmp/$USER/innovus_pnr"

@@ -52,6 +52,9 @@ set core_pg_outside [read_file ./tcl/core_pg_outside_island.tcl]
 set global_upper_pg [read_file ./tcl/global_upper_pg_to_ring.tcl]
 
 foreach flow [list $innovus_master $innovus_pnr] {
+    require_contains $flow {FLOW SOURCE REVISION:} "flow source revision marker"
+    require_contains $flow {set STDCELL_CORE_PG_BUILT 0} "lower-PG ownership reset"
+    require_contains $flow {set SRAM_BLOCKPIN_STITCH_DONE 0} "SRAM blockPin ownership reset"
     require_contains $flow {set enc_source_continue_on_error false} "source stops on Tcl errors"
     require_contains $flow {prepare_innovus_sdc $SYN_SDC_FILE $INNOVUS_SDC_FILE $INNOVUS_GROUP_PATH_FILE} "generated Innovus SDC before init_design"
     require_contains $flow {source $INNOVUS_GROUP_PATH_FILE} "global group_path source after init_design"
@@ -96,6 +99,7 @@ require_contains $core_lower_pg {-stacked_via_top_layer M5} "lower PG stops at M
 require_contains $core_lower_pg {STDCELL_PG_AREA_OVERHANG} "lower PG expands area boxes for ASAP7 std-cell M1 pin overhang"
 require_contains $core_lower_pg {set area_nets {VSS VDD}} "SRAM-edge M5 tap uses the VDD lane that overlaps bottom-row VDD pins"
 require_contains $core_lower_pg {setSrouteMode -reset} "lower PG must reset stale blockPin sroute mode"
+require_contains $core_lower_pg {set STDCELL_CORE_PG_BUILT 1} "lower PG single-owner marker"
 require_not_contains $core_lower_pg {-stacked_via_top_layer M8} "unsafe direct M1-to-M8 stack"
 require_contains $innovus_master {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} "post-place PG trim/reconnect guard in master flow"
 require_contains $innovus_pnr {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} "post-place PG trim/reconnect guard in PnR flow"
@@ -108,6 +112,9 @@ require_contains $flow_checks {-check_only special} "PG DRC guard must check spe
 require_contains $flow_checks {No DRC violations were found} "PG DRC guard must accept Innovus clean-report wording"
 require_contains $flow_checks {-connect {floatingStripe}} "floating PG stripes must be connected using documented sroute target"
 require_contains $flow_checks {setSrouteMode -reset} "shared PG reconnect must reset stale sroute mode"
+require_contains $flow_checks {SRAM_BLOCKPIN_STITCH_DONE} "single-owner SRAM blockPin stitch"
+require_contains $flow_checks {pg_top_level_owned_drc_areas} "hierarchical PG DRC scope builder"
+require_contains $flow_checks {CorePin reconnect skipped} "duplicate corePin via prevention"
 require_contains $core_pg_outside {-stacked_via_bottom_layer M5} "M6 mesh connects down to M5 taps"
 require_contains $global_upper_pg {-stacked_via_bottom_layer M7} "M8 mesh connects down to M7"
 require_contains $global_upper_pg {-stacked_via_top_layer M8} "M8 mesh does not create M9-driven M7 patches"

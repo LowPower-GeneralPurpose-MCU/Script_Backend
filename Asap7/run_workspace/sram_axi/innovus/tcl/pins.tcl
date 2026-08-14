@@ -1,11 +1,14 @@
 ############################################################
-## AXI pin planning on the four core edges
+## AXI pin planning on the unobstructed core edges
 ##
 ## Macro-slide rules:
 ##   - favor Macro-to-Port connectivity
 ##   - keep signal escape directed toward the core
 ##   - do not force top-level ports through SRAM macro obstructions
 ############################################################
+
+set PIN_PLAN_REVISION "sram_top_right_uniform_v4"
+puts "PIN PLAN REVISION: $PIN_PLAN_REVISION ([file normalize [info script]])"
 
 proc make_bus_pins {base msb lsb} {
     set result {}
@@ -85,6 +88,13 @@ set BOTTOM_PINS [keep_existing_ports $BOTTOM_PINS]
 set TOP_PINS [concat $TOP_PINS $LEFT_PINS]
 set LEFT_PINS {}
 
+# The legal bottom segment is only about 104 um wide.  Compressing all read
+# response pins there produced a visibly dense row and poor escape into the
+# same right-side logic channel.  Continue the clockwise AXI ordering on the
+# unobstructed RIGHT edge instead.
+set RIGHT_PINS [concat $RIGHT_PINS $BOTTOM_PINS]
+set BOTTOM_PINS {}
+
 # Do not assign one port to more than one edge.
 set assigned_ports {}
 foreach pin [concat $TOP_PINS $RIGHT_PINS $LEFT_PINS $BOTTOM_PINS] {
@@ -103,10 +113,6 @@ set PIN_WIDTH 0.128
 set PIN_DEPTH 0.288
 set PIN_EDGE_CLEARANCE 8.000
 
-if {![info exists SRAM_NO_MESH_URX]} {
-    error "Missing SRAM_NO_MESH_URX before top-level pin assignment"
-}
-
 if {[expr {$pin_core_urx - $pin_core_llx}] <= 2.0 * $PIN_EDGE_CLEARANCE} {
     error "Core width is too small for the requested pin edge clearance"
 }
@@ -123,15 +129,6 @@ set right_start [list \
     $pin_core_urx [expr {$pin_core_ury - $PIN_EDGE_CLEARANCE}]]
 set right_end [list \
     $pin_core_urx [expr {$pin_core_lly + $PIN_EDGE_CLEARANCE}]]
-
-set bottom_start [list \
-    [expr {$pin_core_urx - $PIN_EDGE_CLEARANCE}] $pin_core_lly]
-set bottom_end [list \
-    [expr {$SRAM_NO_MESH_URX + $PIN_EDGE_CLEARANCE}] $pin_core_lly]
-
-if {[lindex $bottom_end 0] >= [lindex $bottom_start 0]} {
-    error "No legal bottom-edge pin range remains to the right of the SRAM island"
-}
 
 setPinAssignMode -pinEditInBatch true
 
@@ -163,26 +160,37 @@ editPin \
     -honorConstraint 1 \
     -fixedPin 1
 
-editPin \
-    -pin $BOTTOM_PINS \
-    -side BOTTOM \
-    -layer M7 \
-    -spreadType range \
-    -start $bottom_start \
-    -end $bottom_end \
-    -spreadDirection clockwise \
-    -pinWidth $PIN_WIDTH \
-    -pinDepth $PIN_DEPTH \
-    -fixOverlap 1 \
-    -honorConstraint 1 \
-    -fixedPin 1
-
 setPinAssignMode -pinEditInBatch false
+
+checkPinAssignment \
+    -outFile ./verify_rpt/checkPinAssignment_after_pin.rpt
+
+set pin_geometry_report [open ./reports/top_level_pin_geometry.rpt w]
+set top_pin_pitch 0.0
+if {[llength $TOP_PINS] > 1} {
+    set top_pin_pitch [expr {
+        ([lindex $top_end 0] - [lindex $top_start 0]) /
+        double([llength $TOP_PINS] - 1)
+    }]
+}
+puts $pin_geometry_report "revision $PIN_PLAN_REVISION"
+puts $pin_geometry_report "top_side TOP"
+puts $pin_geometry_report "top_layer M7"
+puts $pin_geometry_report "top_y [lindex $top_start 1]"
+puts $pin_geometry_report "top_range $top_start $top_end"
+puts $pin_geometry_report "top_count [llength $TOP_PINS]"
+puts $pin_geometry_report "top_requested_uniform_pitch $top_pin_pitch"
+puts $pin_geometry_report "right_range $right_start $right_end"
+puts $pin_geometry_report "right_count [llength $RIGHT_PINS]"
+puts $pin_geometry_report "left_side unused_sram_obstruction"
+puts $pin_geometry_report "bottom_side unused_sram_obstruction"
+close $pin_geometry_report
 
 puts "===================================================="
 puts "SEGMENTED AXI PIN ASSIGNMENT COMPLETED"
 puts " - TOP    / M7 : [llength $TOP_PINS] pins"
-puts " - RIGHT  / M6 : [llength $RIGHT_PINS] pins"
+puts "                   requested pitch $top_pin_pitch um on y=[lindex $top_start 1]"
+puts " - RIGHT  / M6 : [llength $RIGHT_PINS] pins, uniformly spread"
 puts " - LEFT        : unused; SRAM macro/OBS priority"
-puts " - BOTTOM / M7 : [llength $BOTTOM_PINS] pins, right of SRAM island"
+puts " - BOTTOM      : unused; SRAM macro/OBS priority"
 puts "===================================================="

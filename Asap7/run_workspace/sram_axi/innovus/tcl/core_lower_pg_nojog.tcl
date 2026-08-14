@@ -186,4 +186,5 @@ foreach area [list \
     }
 }
 
+set STDCELL_CORE_PG_BUILT 1
 puts "Post-placement M1/M5 core PG completed in right and above-island logic regions with no jog."

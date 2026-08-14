@@ -14,6 +14,11 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
+set FLOW_SOURCE_REVISION "sram_pg_single_owner_v3"
+puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
+set STDCELL_CORE_PG_BUILT 0
+set SRAM_BLOCKPIN_STITCH_DONE 0
+
 set AUTO_RUN_ALL 1
 set MASTER_ONE_SHOT 1
 set enc_source_continue_on_error false

@@ -129,6 +129,7 @@ foreach record $SRAM_RECORDS {
     ]
 }
 close $actual_map
+set SRAM_MACRO_BOXES $actual_boxes
 
 set geometry_tolerance 0.001
 if {$actual_llx < [expr {$core_llx - $geometry_tolerance}] ||
@@ -406,6 +407,7 @@ foreach variable {
     SRAM_ISLAND_BLOCKAGE_URX
     SRAM_ISLAND_BLOCKAGE_URY
     SRAM_ISLAND_BLOCKAGE_BOX
+    SRAM_MACRO_BOXES
 } {
     puts $geometry_file "set $variable [list [set $variable]]"
 }
