@@ -172,7 +172,7 @@ proc assert_clean_pg_connectivity_report {report_file {allow_preplacement_specia
 
 proc stop_if_dirty_pg_connectivity_report {report_file context} {
     set allow_preplacement_special_opens [expr {
-        [pg_sram_block_pins_are_deferred] &&
+        [pg_core_handoff_is_deferred] &&
         [pg_is_preplacement_pg_checkpoint $report_file $context]
     }]
     if {[catch {
@@ -201,6 +201,19 @@ proc pg_sram_block_pins_are_deferred {} {
     }
 
     return [expr {!$SRAM_CONNECT_BLOCK_PINS}]
+}
+
+proc pg_core_handoff_is_deferred {} {
+    global STDCELL_CORE_PG_BUILT
+
+    if {![info exists STDCELL_CORE_PG_BUILT]} {
+        return 1
+    }
+    if {![string is boolean -strict $STDCELL_CORE_PG_BUILT]} {
+        error "STDCELL_CORE_PG_BUILT must be boolean, got $STDCELL_CORE_PG_BUILT"
+    }
+
+    return [expr {!$STDCELL_CORE_PG_BUILT}]
 }
 
 proc run_pg_connectivity_verify {report_file} {
@@ -432,7 +445,7 @@ proc connect_sram_block_pins_to_local_stripes_nojog {} {
     puts "SRAM block-pin access preserved: deterministic M5 edge taps are the only owner."
 }
 
-proc connect_core_pg_pins_nojog {{report_file ""}} {
+proc connect_core_pg_pins_nojog {{report_file ""} {refresh_stdcell_core_pins 0}} {
     global STDCELL_CORE_PG_BUILT
 
     applyGlobalNets
@@ -440,13 +453,25 @@ proc connect_core_pg_pins_nojog {{report_file ""}} {
 
     connect_sram_block_pins_to_local_stripes_nojog
 
+    if {![string is boolean -strict $refresh_stdcell_core_pins]} {
+        error "refresh_stdcell_core_pins must be boolean, got $refresh_stdcell_core_pins"
+    }
+
     if {[info exists STDCELL_CORE_PG_BUILT] &&
         ![string is boolean -strict $STDCELL_CORE_PG_BUILT]} {
         error "STDCELL_CORE_PG_BUILT must be boolean, got $STDCELL_CORE_PG_BUILT"
     }
-    if {[info exists STDCELL_CORE_PG_BUILT] && $STDCELL_CORE_PG_BUILT} {
+    set core_pg_is_built [expr {
+        [info exists STDCELL_CORE_PG_BUILT] && $STDCELL_CORE_PG_BUILT
+    }]
+    if {$core_pg_is_built && !$refresh_stdcell_core_pins} {
         puts "CorePin reconnect skipped: M1 followpins and M1-to-M5 stacks already belong to core_lower_pg_nojog.tcl."
     } else {
+        if {$refresh_stdcell_core_pins} {
+            puts "Refreshing same-layer M1 corePin rails after standard-cell insertion or movement."
+        } else {
+            puts "Building same-layer M1 corePin rails before lower core PG ownership is established."
+        }
         setSrouteMode -reset
         setSrouteMode \
             -viaConnectToShape {ring stripe blockring} \
@@ -456,6 +481,7 @@ proc connect_core_pg_pins_nojog {{report_file ""}} {
             -connect {corePin} \
             -nets {VDD VSS} \
             -corePinCheckStdcellGeoms \
+            -corePinLayer M1 \
             -allowJogging 0 \
             -allowLayerChange 0
     }

@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_priority_and_local_pg_v5"
+set FLOW_SOURCE_REVISION "sram_priority_and_local_pg_v6"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -238,7 +238,7 @@ stop_if_dirty_pg_connectivity_report \
 stop_if_dirty_pg_special_drc_report \
     ./verify_rpt/pg_drc_before_stdcell_place.rpt \
     "Power plan PG DRC"
-puts "POWER PLAN RETURN: ./tcl/power_plan.tcl returned cleanly"
+puts "POWER PLAN RETURN: staged PG completed; final connectivity signoff is post-placement"
 
 if {![file exists $sram_edge_report]} {
     puts "POWER PLAN DIRECT SRAM ISLAND SOURCE: $sram_edge_report missing after power_plan.tcl"
@@ -311,6 +311,7 @@ setPlaceMode \
     -place_design_refine_macro false
 
 place_opt_design
+refinePlace
 
 checkPlace ./verify_rpt/checkPlace_after_place.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_place.rpt
@@ -467,8 +468,13 @@ optDesign \
     -hold
 
 # CTS/postCTS inserts FE_* and CTS_* cells after the first corePin sroute.
-# Reconnect only same-layer core PG pins, then verify before saving/filler.
-connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postcts.rpt
+# Legalize their final positions, then refresh only same-layer M1 corePin rails.
+# This does not invoke blockPin/floatingStripe and cannot enter the SRAM island.
+refinePlace
+checkPlace ./verify_rpt/checkPlace_after_postcts.rpt
+assert_clean_check_place ./verify_rpt/checkPlace_after_postcts.rpt
+connect_core_pg_pins_nojog \
+    ./verify_rpt/pg_connectivity_after_postcts.rpt 1
 
 timeDesign \
     -postCTS \
@@ -497,7 +503,8 @@ addFiller \
     -diffCellViol true
 
 assert_filler_inserted FILLER
-connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_filler.rpt
+connect_core_pg_pins_nojog \
+    ./verify_rpt/pg_connectivity_after_filler.rpt 1
 
 # ------------------------------------------------------------------------
 # 7. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
@@ -543,7 +550,8 @@ optDesign \
     -hold \
     -prefix postRoute
 
-connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
+connect_core_pg_pins_nojog \
+    ./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1
 ecoRoute -fix_drc
 
 timeDesign \

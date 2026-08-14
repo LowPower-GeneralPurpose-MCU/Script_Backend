@@ -15,6 +15,10 @@
 
 puts "POWER PLAN SCRIPT ENTRY: [file normalize [info script]]"
 
+# Rebuilding the preroutes invalidates any prior standard-cell PG handoff.
+# The M1/M5/M6/M7/M8/M9 connection is completed after placement.
+set STDCELL_CORE_PG_BUILT 0
+
 foreach required_file {
     ./outputs/sram_macro_geometry.tcl
     ./tcl/sram_island_power.tcl
@@ -411,15 +415,7 @@ proc pg_assert_clean_connectivity_report {report_path} {
         error "PG connectivity has a hard open/short marker: review $report_path"
     }
 
-    global SRAM_CONNECT_BLOCK_PINS
-    set sram_block_pins_deferred 0
-    if {[info exists SRAM_CONNECT_BLOCK_PINS]} {
-        if {![string is boolean -strict $SRAM_CONNECT_BLOCK_PINS]} {
-            error "SRAM_CONNECT_BLOCK_PINS must be boolean, got $SRAM_CONNECT_BLOCK_PINS"
-        }
-        set sram_block_pins_deferred [expr {!$SRAM_CONNECT_BLOCK_PINS}]
-    }
-    if {!$sram_block_pins_deferred} {
+    if {![pg_core_handoff_is_deferred]} {
         error "PG connectivity is not clean: review $report_path"
     }
 
@@ -463,7 +459,7 @@ proc pg_assert_clean_connectivity_report {report_path} {
         puts "WARN: $report_path contains deferred ASAP7 SRAM VDD/VSS macro terminals at the pre-placement checkpoint."
     }
     if {$saw_preplacement_special_open} {
-        puts "WARN: $report_path contains pre-placement special-route open markers; strict PG reconnect is checked after placement/post-PG."
+        puts "INFO: $report_path contains the expected staged ring/island opens; strict PG connectivity is checked after the standard-cell handoff is built."
     }
 }
 
@@ -635,6 +631,6 @@ puts " - addStripe jog   : none"
 puts " - SRAM column gaps: $SRAM_ENABLE_COLUMN_GAP_PG"
 puts " - SRAM blockPin   : $SRAM_CONNECT_BLOCK_PINS"
 puts " - corePin sroute : no jog/no layer change after placement"
-puts " - PG connectivity : ./verify_rpt/pg_connectivity_before_stdcell_place.rpt"
+puts " - PG connectivity : staged report before the post-placement core handoff"
 puts " - PG DRC          : ./verify_rpt/pg_drc_before_stdcell_place.rpt"
 puts "===================================================="

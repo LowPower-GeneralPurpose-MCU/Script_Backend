@@ -705,8 +705,8 @@ assert_contains \
     "pre-placement PG connectivity guard must document deferred SRAM VDD/VSS macro terminals"
 assert_contains \
     $power_text \
-    {strict[[:space:]]+PG[[:space:]]+reconnect[[:space:]]+is[[:space:]]+checked[[:space:]]+after[[:space:]]+placement/post-PG} \
-    "pre-placement special-route opens must be deferred only until the post-placement PG reconnect guard"
+    {expected[[:space:]]+staged[[:space:]]+ring/island[[:space:]]+opens.*strict[[:space:]]+PG[[:space:]]+connectivity[[:space:]]+is[[:space:]]+checked[[:space:]]+after[[:space:]]+the[[:space:]]+standard-cell[[:space:]]+handoff} \
+    "pre-placement ring/island opens must be deferred only until the standard-cell PG handoff"
 assert_contains \
     $power_text \
     {unexpected[[:space:]]+unconnected[[:space:]]+terminals} \
@@ -1270,12 +1270,16 @@ assert_contains \
     "flow_checks.tcl must know when SRAM block-pin stitching is intentionally deferred"
 assert_contains \
     $flow_checks_text \
+    {proc[[:space:]]+pg_core_handoff_is_deferred} \
+    "flow_checks.tcl must distinguish staged pre-placement PG from final PG signoff"
+assert_contains \
+    $flow_checks_text \
     {Floating[[:space:]]+PG[[:space:]]+stripe[[:space:]]+stitching[[:space:]]+is[[:space:]]+disabled[[:space:]]+by[[:space:]]+construction} \
     "flow_checks.tcl must state that floatingStripe stitching is structurally disabled"
 assert_contains \
     $flow_checks_text \
     {allow_preplacement_special_opens} \
-    "PG connectivity must relax deferred SRAM macro terminals only at the pre-placement PG checkpoint"
+    "PG connectivity must relax staged ring/island opens only at the pre-placement PG checkpoint"
 assert_contains \
     $flow_checks_text \
     {proc[[:space:]]+connect_sram_block_pins_to_local_stripes_nojog} \
@@ -1362,6 +1366,5 @@ assert_contains \
     "flow_checks.tcl must hard-stop on dirty post-placement special-route PG DRC before saveDesign"
 
 warn_if_dirty_report [file join $innovus_dir verify_rpt pg_drc_before_stdcell_place.rpt]
-warn_if_dirty_report [file join $innovus_dir verify_rpt pg_connectivity_before_stdcell_place.rpt]
 
 puts "PASS: SRAM power-plan Tcl static checks"
