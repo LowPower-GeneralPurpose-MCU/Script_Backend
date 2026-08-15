@@ -494,6 +494,34 @@ proc connect_core_pg_pins_nojog {{report_file ""} {refresh_stdcell_core_pins 0}}
     }
 }
 
+proc configure_sram_clock_top_routing {sram_ptrs {clock_pin "clk"} {fanout_count 1000}} {
+    if {[llength $sram_ptrs] == 0} {
+        error "Cannot configure SRAM clock routing without SRAM instances"
+    }
+    if {![string is integer -strict $fanout_count] || $fanout_count < 1} {
+        error "SRAM clock routing fanout count must be a positive integer"
+    }
+
+    set configured_pins 0
+    foreach sram_ptr $sram_ptrs {
+        set sram_name [lindex [dbGet $sram_ptr.name] 0]
+        set clock_pin_name "${sram_name}/${clock_pin}"
+        set clock_pin_collection [get_pins -quiet $clock_pin_name]
+
+        if {[sizeof_collection $clock_pin_collection] != 1} {
+            error "Expected one SRAM clock pin named $clock_pin_name"
+        }
+
+        # Cadence recommends weighting macro clock inputs as many internal
+        # sinks so their branches qualify for the upper-layer top route type.
+        set_ccopt_property -pin $clock_pin_name \
+            routing_top_fanout_count $fanout_count
+        incr configured_pins
+    }
+
+    puts "Configured $configured_pins SRAM clock pins for top-layer CTS routing."
+}
+
 proc assert_filler_inserted {{prefix "FILLER"}} {
     set filler_names [dbGet top.insts.name ${prefix}*]
     if {$filler_names eq "" || $filler_names eq "0x0" ||

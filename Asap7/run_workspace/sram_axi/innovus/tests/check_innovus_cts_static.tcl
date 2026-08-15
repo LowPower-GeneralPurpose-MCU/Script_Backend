@@ -21,6 +21,14 @@ proc require_not_contains {text pattern label} {
     }
 }
 
+proc require_order {text first_pattern second_pattern label} {
+    set first_index [string first $first_pattern $text]
+    set second_index [string first $second_pattern $text]
+    if {$first_index < 0 || $second_index < 0 || $first_index >= $second_index} {
+        error "Invalid order for $label"
+    }
+}
+
 source ./tcl/prepare_innovus_sdc.tcl
 
 set tmp_sdc ./reports/__tmp_innovus_unit_check.sdc
@@ -72,8 +80,10 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {set_ccopt_property -net_type trunk target_max_trans 160ps} "trunk CTS transition target"
     require_contains $flow {set_ccopt_property -net_type top   target_max_trans 200ps} "top CTS transition target"
     require_contains $flow {set_ccopt_property target_skew 50ps} "CTS skew target"
+    require_contains $flow {configure_sram_clock_top_routing $SRAM_PTRS clk 1000} "SRAM macro clocks promoted to top routing"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
+    require_contains $flow {./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1} "pre-postCTS PG obstruction refresh"
     require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1} "postCTS PG refresh guard"
     require_contains $flow {./verify_rpt/pg_connectivity_after_filler.rpt 1} "post-filler PG refresh guard"
     require_contains $flow {./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1} "post-route-opt PG refresh guard"
@@ -82,8 +92,9 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {setFillerMode -reset} "idempotent filler-mode reset"
     require_contains $flow {-add_fillers_with_drc false} "filler insertion cannot force DRC-violating cells"
     require_not_contains $flow {-preserveUserOrder true} "fitGap-incompatible filler order setting"
-    require_contains $flow {-fixDRC} "filler-adjacency DRC repair"
+    require_not_contains $flow {-fixDRC} "repair-only option on initial filler insertion"
     require_contains $flow {assert_filler_inserted FILLER} "filler insertion guard"
+    require_contains $flow {checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt} "post-insertion filler gap report"
     require_contains $flow {assert_clean_check_place ./verify_rpt/checkPlace_after_filler.rpt} "post-filler placement guard"
     require_contains $flow {verify_antenna_if_enabled ./verify_rpt/antenna_postroute.rpt} "modern optional antenna check"
     require_contains $flow {source ./tcl/core_lower_pg_nojog.tcl} "lower PG source"
@@ -98,6 +109,24 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_not_contains $flow {post_place_pg_drc_error} "obsolete combined DRC catch that suppresses the second report"
     require_contains $flow {-cell $DESIGN} "top-cell name on setPinConstraint"
     require_contains $flow {-place_global_uniform_density false} "compact SRAM-wrapper placement mode"
+
+    set postcts_opt {-prefix postCTS}
+    set postcts_check {checkPlace ./verify_rpt/checkPlace_after_postcts.rpt}
+    require_order $flow {clock_opt_design} \
+        {checkPlace ./verify_rpt/checkPlace_after_cts.rpt} \
+        "CTS legalization before the CTS placement check"
+    require_order $flow \
+        {checkPlace ./verify_rpt/checkPlace_after_cts.rpt} \
+        $postcts_opt \
+        "CTS placement/PG preparation before postCTS optimization"
+    require_order $flow $postcts_opt $postcts_check \
+        "postCTS optimization before final placement check"
+
+    set postcts_opt_index [string first $postcts_opt $flow]
+    set postcts_check_index [string first $postcts_check $flow]
+    set postcts_segment [string range $flow $postcts_opt_index $postcts_check_index]
+    require_not_contains $postcts_segment {refinePlace} \
+        "timing-destructive legalization after postCTS optimization"
 }
 
 require_contains $view_definition {-sdc_files $INNOVUS_SDC_FILE} "MMMC uses normalized SDC"
@@ -119,6 +148,8 @@ require_not_contains $core_lower_pg {-stacked_via_top_layer M8} "unsafe direct M
 require_contains $innovus_master {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} "post-place PG trim/reconnect guard in master flow"
 require_contains $innovus_pnr {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} "post-place PG trim/reconnect guard in PnR flow"
 require_contains $flow_checks {proc connect_core_pg_pins_nojog} "shared post-CTS/filler PG reconnect proc"
+require_contains $flow_checks {proc configure_sram_clock_top_routing} "shared SRAM macro-clock routing policy"
+require_contains $flow_checks {routing_top_fanout_count $fanout_count} "Cadence macro-clock top-fanout weighting"
 require_contains $flow_checks {proc verify_pg_special_drc_or_stop} "shared PG special DRC guard proc"
 require_contains $flow_checks {-check_only special} "PG DRC guard must check special-route DRC only"
 require_contains $flow_checks {No DRC violations were found} "PG DRC guard must accept Innovus clean-report wording"

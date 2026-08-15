@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_priority_and_local_pg_v7"
+set FLOW_SOURCE_REVISION "sram_priority_and_local_pg_v8"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -411,10 +411,10 @@ set_ccopt_property -net_type leaf  route_type leaf_rule
 set_ccopt_property -net_type trunk route_type trunk_rule
 set_ccopt_property -net_type top   route_type top_rule
 set_ccopt_property routing_top_min_fanout 100
+configure_sram_clock_top_routing $SRAM_PTRS clk 1000
 set_ccopt_property target_max_trans 0.3ns
-# Keep the SDC source transition at 40 ps, but do not force every hard-macro
-# clock leaf to meet the same number.  The ASAP7 SRAM clk pin is a hard macro
-# sink; the latest CTS log showed 64-109 ps at SRAM leaves with clean timing.
+# Standard-cell leaves use a practical target.  SRAM clock pins retain their
+# tighter Liberty limit and are promoted to M6/M7 top routing above.
 set_ccopt_property -net_type leaf  target_max_trans 120ps
 set_ccopt_property -net_type trunk target_max_trans 160ps
 set_ccopt_property -net_type top   target_max_trans 200ps
@@ -440,6 +440,14 @@ setDesignMode \
 # Do not extract/source ccopt.spec.  clock_opt_design avoids the
 # IMPCCOPT-2048 "clock trees are already defined" failure in this flow.
 clock_opt_design
+
+# Legalize CTS cells before postCTS optimization.  Refreshing their M1 PG
+# access here makes the optimizer see the final PG obstruction environment.
+refinePlace
+checkPlace ./verify_rpt/checkPlace_after_cts.rpt
+assert_clean_check_place ./verify_rpt/checkPlace_after_cts.rpt
+connect_core_pg_pins_nojog \
+    ./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1
 
 # Propagated clocks are valid only after CTS.
 proc apply_post_cts_propagated_clocks {} {
@@ -467,12 +475,12 @@ optDesign \
     -setup \
     -hold
 
-# CTS/postCTS inserts FE_* and CTS_* cells after the first corePin sroute.
-# Legalize their final positions, then refresh only same-layer M1 corePin rails.
-# This does not invoke blockPin/floatingStripe and cannot enter the SRAM island.
-refinePlace
+# postCTS optimization performs detailed placement for its ECO cells.  Check
+# that result directly so a later legalization pass cannot undo timing work.
 checkPlace ./verify_rpt/checkPlace_after_postcts.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_postcts.rpt
+# Refresh only same-layer M1 corePin rails for postCTS ECO cells.  This does
+# not invoke blockPin/floatingStripe and cannot enter the SRAM island.
 connect_core_pg_pins_nojog \
     ./verify_rpt/pg_connectivity_after_postcts.rpt 1
 
@@ -502,10 +510,10 @@ addFiller \
     -cell $FILLERCells \
     -prefix FILLER \
     -honorPrerouteAsObs true \
-    -diffCellViol true \
-    -fixDRC
+    -diffCellViol true
 
 assert_filler_inserted FILLER
+checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt
 checkPlace ./verify_rpt/checkPlace_after_filler.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_filler.rpt
 connect_core_pg_pins_nojog \
