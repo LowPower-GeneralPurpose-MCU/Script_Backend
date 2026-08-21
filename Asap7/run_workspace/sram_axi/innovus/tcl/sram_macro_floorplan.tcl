@@ -227,12 +227,13 @@ for {set k 0} {$k < $SRAM_COUNT} {incr k} {
     }]
     set snap_x [sram_snap_to_grid $x $ASAP7_SITE_WIDTH]
     set snap_y [sram_snap_to_grid $y $ASAP7_SITE_WIDTH]
+    set orient [sram_orientation_for_column $col]
     dbSet $ptr.pStatus unplaced
-    placeInstance $name $snap_x $snap_y $SRAM_ISLAND_ORIENT
+    placeInstance $name $snap_x $snap_y $orient
     dbSet $ptr.pStatus placed
 
     puts $planned_map \
-        "$bank $name $row $col $snap_x $snap_y $SRAM_ISLAND_ORIENT seed"
+        "$bank $name $row $col $snap_x $snap_y $orient seed"
 }
 close $planned_map
 
@@ -345,18 +346,19 @@ if {$SRAM_PACK_4X4} {
             }]
             set snap_x [sram_snap_to_grid $x $ASAP7_SITE_WIDTH]
             set snap_y [sram_snap_to_grid $y $ASAP7_SITE_WIDTH]
+            set orient [sram_orientation_for_column $col]
             
             dbSet $ptr.pStatus unplaced
-            placeInstance $name $snap_x $snap_y $SRAM_ISLAND_ORIENT
+            placeInstance $name $snap_x $snap_y $orient
             dbSet $ptr.pStatus placed
             
             set placed_orient [lindex [dbGet $ptr.orient] 0]
-            if {$placed_orient ne $SRAM_ISLAND_ORIENT} {
-            	close $packed_map
-                error "$name was not placed with orientation $SRAM_ISLAND_ORIENT (actual: $placed_orient)"
+            if {$placed_orient ne $orient} {
+                close $packed_map
+                error "$name was not placed with orientation $orient (actual: $placed_orient)"
             }
             puts $packed_map \
-            	"$bank $name $row $col $snap_x $snap_y $SRAM_ISLAND_ORIENT"
+                "$bank $name $row $col $snap_x $snap_y $orient"
             incr packed_count
         }
     }
@@ -449,7 +451,7 @@ if {$SRAM_PACK_4X4} {
     puts "  1. Follow connectivity fly-lines, not bank number alone."
     puts "  2. Keep all macros in one hierarchy group at the boundary."
     puts "  3. Preserve routing gaps and a rectangular, notch-free island."
-    puts "  4. Use only R0/R180."
+    puts "  4. Use only the R0/MY horizontal mirror-pair pattern."
     puts "  5. Orient signal pins toward the controller/core where possible."
     puts ""
     puts "After manual edits in the GUI, run:"

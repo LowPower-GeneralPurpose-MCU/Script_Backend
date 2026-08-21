@@ -28,7 +28,7 @@ Tai lieu nay tong hop cach script Tcl hien tai chay flow SRAM trong Innovus, gia
   - SRAM co the block routing toi M4/M5.
   - Macro gap can du de co it nhat mot cap VDD/VSS.
   - Macro pins nen quay ve phia core.
-  - Macro chi nen dung R0/R180, sau khi dat xong phai set `FIXED`.
+- Macro dung cap doi xung ngang `R0/MY`, sau khi dat xong phai set `FIXED`.
 - `D:/download/x_Hierarchy Layout.pdf`
   - SRAM cung module nen gom thanh group.
   - SRAM group nen o corner/side.
@@ -125,16 +125,19 @@ set SRAM_ARRAY_W [expr {
 - Dat macro bang `placeInstance`.
 - Cuoi flow, `finish_macroFP.tcl` audit orient/status.
 
-Report `sram_macro_final_map.rpt` cho thay:
+Report baseline `sram_macro_final_map.rpt` hien co cho thay:
 
-- 16 SRAM deu co `orient R180`.
+- 16 SRAM deu co `orient R180`; day la report duoc tao truoc khi doi sang quy tac moi.
 - 16 SRAM deu co `status fixed`.
 - Island nam o lower-left, tu gan `(2.16, 2.16)` toi `(500.688, 706.32)`.
 
-Tai sao dung R180:
+Quy tac orientation moi trong script:
 
-- Slide Macro priority 8 noi chi nen dung R0/R180. Khong dung R90/R270 vi macro co huong poly/PG internal rieng.
-- Trong design nay, SRAM signal pins nam gan local bottom edge; R180 giup huong pin ve core/logic side dung hon.
+- `sram_macro_setup.tcl` dat `SRAM_ISLAND_ORIENT R0` va `SRAM_MIRROR_ORIENT MY`.
+- `sram_macro_floorplan.tcl` dat orientation theo cot: cot 0/2 dung `R0`, cot 1/3 dung `MY`, lap lai cho ca 4 hang.
+- `MY` la mirror theo truc Y, lam hai macro ke nhau doi xung theo phuong X trong khe 4 row.
+- `finish_macroFP.tcl`, `innovus.tcl` va `innovus_pnr.tcl` deu kiem tra lai pattern nay truoc khi tiep tuc PG/CTS.
+- Khong dung R90/R270 vi macro co huong poly/PG internal rieng.
 
 Tai sao set fixed:
 
@@ -660,7 +663,7 @@ Nhan xet:
 
 ### 12.1. Nhung diem da dung
 
-- SRAM da dat thanh island 4x4 lower-left, macro fixed, orient R180.
+- SRAM da dat thanh island 4x4 lower-left, macro fixed; flow moi dung pattern R0/MY xen ke theo cot.
 - Gap SRAM theo 4-row rule, co local M4/M5 PG collectors giua macro.
 - Core global ring dung M8/M9, SRAM island reuse M9-left/M8-bottom thay vi ve duplicate ring.
 - VDD/VSS PG connectivity sau trim clean.
@@ -678,7 +681,7 @@ Nhan xet:
 
 Mot SRAM physical-design flow dung khong chi la "dat macro va ve power". Can co 4 lop bao ve:
 
-1. Macro placement rule: group, boundary/corner, R0/R180, fixed.
+1. Macro placement rule: group, boundary/corner, cap R0/MY doi xung theo cot, fixed.
 2. Power topology: M8/M9 global, M4/M5 local SRAM collectors, VDD/VSS pair trong gap.
 3. Routing resource model: `createRouteBlk -exceptpgnet` va `setRouteMode -earlyGlobalReverseDirection`.
 4. Timing/CTS correctness: route type, clock cells, propagated clock dung constraint mode, report CTS warnings rieng.

@@ -6,7 +6,7 @@
 foreach required_variable {
     SRAM_RECORDS SRAM_COUNT SRAM_MASTER SRAM_W SRAM_H SRAM_X0 SRAM_Y0
     core_llx core_lly core_urx core_ury
-    SRAM_ISLAND_ORIENT FLOORPLAN_GRID
+    SRAM_ISLAND_ORIENT SRAM_MIRROR_ORIENT FLOORPLAN_GRID
     ASAP7_ROW_HEIGHT SRAM_MACRO_GAP_ROWS
     SRAM_BLOCKAGE_BORDER_ROWS SRAM_BLOCKAGE_BORDER
     SRAM_MACRO_GAP_X SRAM_MACRO_GAP_Y
@@ -50,6 +50,22 @@ proc sram_decode_inst_point {ptr name} {
     return $point
 }
 
+proc sram_expected_orientation_for_x {x name} {
+    global SRAM_X0 SRAM_W SRAM_MACRO_GAP_X SRAM_COLS
+
+    set column_pitch [expr {$SRAM_W + $SRAM_MACRO_GAP_X}]
+    set column [expr {int(round(($x - $SRAM_X0) / $column_pitch))}]
+    if {$column < 0 || $column >= $SRAM_COLS} {
+        error "$name origin x=$x maps outside SRAM columns 0..[expr {$SRAM_COLS - 1}]"
+    }
+
+    set expected_x [expr {$SRAM_X0 + $column * $column_pitch}]
+    if {abs($x - $expected_x) > 0.001} {
+        error "$name origin x=$x is not on the expected SRAM column grid"
+    }
+    return [sram_orientation_for_column $column]
+}
+
 if {[llength $SRAM_RECORDS] != $SRAM_COUNT} {
     error "finish_macroFP received [llength $SRAM_RECORDS] SRAM records; expected $SRAM_COUNT"
 }
@@ -59,7 +75,7 @@ if {[llength $finish_sram_ptrs] != $SRAM_COUNT} {
 }
 
 # sram_macro_floorplan.tcl has already reset every macro to a complete,
-# overlap-free 4x4 array with legal R180 orientation.  Do not call
+# overlap-free 4x4 array with the required R0/MY pair orientation.  Do not call
 # refine_macro_place here: the failing log shows that it flipped/moved the
 # already packed macros, failed to resolve the dense fence, and destroyed the
 # required four-row channels.  A snap plus strict geometry validation is the
@@ -86,12 +102,18 @@ foreach record $SRAM_RECORDS {
     set ptr  [lindex $record 2]
 
     set orient [lindex [dbGet $ptr.orient] 0]
-    if {$orient ne "R0" && $orient ne "R180"} {
+    if {$orient ne "R0" && $orient ne "MY"} {
         close $actual_map
-        error "$name has illegal orientation $orient; only R0/R180 are allowed"
+        error "$name has illegal orientation $orient; only R0/MY are allowed"
     }
 
     lassign [sram_decode_inst_point $ptr $name] x y
+
+    set expected_orient [sram_expected_orientation_for_x $x $name]
+    if {$orient ne $expected_orient} {
+        close $actual_map
+        error "$name at x=$x must use orientation $expected_orient for its SRAM column; actual $orient"
+    }
 
     # The generated SRAM LEF contains a V3 obstruction that extends roughly
     # 0.020 um outside the declared macro SIZE.  Innovus therefore expands

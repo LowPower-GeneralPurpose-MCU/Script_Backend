@@ -91,13 +91,27 @@ proc sram_env_double_or_default {env_name default min_value} {
 set LOGIC_REGION_WIDTH  [sram_env_double_or_default SRAM_LOGIC_REGION_WIDTH  120.000 80.000]
 set LOGIC_REGION_HEIGHT [sram_env_double_or_default SRAM_LOGIC_REGION_HEIGHT  60.000 40.000]
 
-# The generated ASAP7 SRAM LEF exposes signal pins on M3/M4/M5/V3/V4 across
-# much of the macro height, with some data/write pins near both local bottom
-# and local top.  R180 keeps the original corner-island convention and moves
-# the low-index bottom pins toward the top side of each macro, but routability
-# must be judged from route DRC after the hard route guard is disabled.
-# Only R0/R180 are legal; no R90/R270 is used.
-set SRAM_ISLAND_ORIENT "R180"
+# Use a horizontal mirror pair in every SRAM row.  R0/MY is the orientation
+# convention requested for this macro island: MY mirrors the macro around the
+# Y axis, so adjacent SRAMs present a symmetric physical interface across the
+# four-row gap while keeping the macro width/height unchanged.
+#
+# The value is a placement pattern, not one orientation for every instance.
+# sram_macro_floorplan.tcl derives the orientation from the column index.
+set SRAM_ISLAND_ORIENT "R0"
+set SRAM_MIRROR_ORIENT "MY"
+
+proc sram_orientation_for_column {column} {
+    global SRAM_ISLAND_ORIENT SRAM_MIRROR_ORIENT
+
+    if {![string is integer -strict $column] || $column < 0} {
+        error "SRAM column must be a non-negative integer, got $column"
+    }
+    if {[expr {$column % 2}] == 0} {
+        return $SRAM_ISLAND_ORIENT
+    }
+    return $SRAM_MIRROR_ORIENT
+}
 
 # Always keep SRAM placement as a complete deterministic 4x4 array before
 # finish_macroFP.tcl.  Set this to 0 only for an intentional manual GUI study

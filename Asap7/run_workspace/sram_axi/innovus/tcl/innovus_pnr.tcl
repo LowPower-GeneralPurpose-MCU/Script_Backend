@@ -97,8 +97,24 @@ foreach ptr $SRAM_PTRS {
     set orientation [lindex [dbGet $ptr.orient] 0]
     set status [lindex [dbGet $ptr.pStatus] 0]
 
-    if {$orientation ne "R0" && $orientation ne "R180"} {
+    if {$orientation ne "R0" && $orientation ne "MY"} {
         error "$macro_name has illegal orientation $orientation"
+    }
+    set macro_point [join [dbGet $ptr.pt]]
+    if {[llength $macro_point] != 2} {
+        error "Cannot decode placement point for $macro_name"
+    }
+    set macro_x [lindex $macro_point 0]
+    set column_pitch [expr {$SRAM_W + $SRAM_MACRO_GAP_X}]
+    set column [expr {int(round(($macro_x - $SRAM_X0) / $column_pitch))}]
+    set expected_x [expr {$SRAM_X0 + $column * $column_pitch}]
+    if {$column < 0 || $column >= $SRAM_COLS ||
+        abs($macro_x - $expected_x) > 0.001} {
+        error "$macro_name is not on the deterministic SRAM column grid"
+    }
+    set expected_orientation [sram_orientation_for_column $column]
+    if {$orientation ne $expected_orientation} {
+        error "$macro_name in SRAM column $column must use $expected_orientation; actual $orientation"
     }
     if {$status ne "fixed"} {
         error "$macro_name must be FIXED before PnR; current status is $status"

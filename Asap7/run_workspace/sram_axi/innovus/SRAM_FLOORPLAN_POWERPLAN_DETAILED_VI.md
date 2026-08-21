@@ -18,7 +18,7 @@ Các nguyên tắc chính:
 - SRAM là hard macro lớn, nên ưu tiên đặt sát biên/corner để không chặn routing của standard cell ở giữa core.
 - SRAM cùng module nên gom thành một island để giảm kết nối dài và giảm congestion.
 - Giữa hai SRAM phải có khoảng hở đủ để đặt ít nhất một cặp VDD/VSS.
-- SRAM chỉ dùng orientation R0 hoặc R180, không dùng R90/R270.
+- SRAM dùng cặp orientation `R0/MY` xen kẽ theo cột; không dùng R90/R270.
 - Sau khi macro placement xong phải set macro `FIXED`.
 - Power global nên dùng metal cao, còn power local giữa SRAM dùng M4/M5 theo hướng routing của ASAP7.
 - Signal/clock routing không nên đi xuyên qua thân SRAM; M6/M7 được guard cho over-the-macro route, còn M4/M5 giữ cho pin access/local SRAM PG.
@@ -165,17 +165,19 @@ Vì sao không để gap quá nhỏ:
 - Nếu gap không đủ, addStripe không thể đặt đủ một cặp VDD/VSS.
 - Nếu standard cell bị đẩy vào khe nhỏ giữa SRAM, routing và CTS rất dễ lỗi.
 
-### 3.4. Logic chọn orientation R180
+### 3.4. Logic chọn cặp orientation R0/MY
 
 ```tcl
-set SRAM_ISLAND_ORIENT "R180"
+set SRAM_ISLAND_ORIENT "R0"
+set SRAM_MIRROR_ORIENT "MY"
 ```
 
 Lý do:
 
-- Slide Macro yêu cầu chỉ dùng R0/R180.
-- Generated SRAM có main signal pins gần local bottom edge.
-- Dùng R180 đưa pin về physical top, tức hướng về vùng core/logic nhiều hơn trong lower-left island.
+- `R0` là orientation chuẩn; `MY` mirror macro theo trục Y, tức đảo trái-phải.
+- Đặt xen kẽ `R0`, `MY`, `R0`, `MY` theo chiều X làm hai SRAM kề nhau đối xứng trong khe giữa chúng.
+- Cặp này giữ nguyên `SRAM_W`, `SRAM_H`, tọa độ origin và khoảng hở 4 row, nên không làm thay đổi kích thước island hay PG area.
+- `sram_macro_floorplan.tcl` tính orientation từ column thay vì dùng một orientation chung cho cả 16 macro.
 - Không dùng R90/R270 để tránh phá hướng internal rails/poly và rule của advanced node.
 
 ## 4. Tính core size và hierarchy floorplan trong `innovus.tcl`
@@ -350,7 +352,7 @@ placeInstance $name $snap_x $snap_y $SRAM_ISLAND_ORIENT
 
 Ý nghĩa lệnh:
 
-- `placeInstance` đặt hard macro tại tọa độ `(x, y)` với orientation R180.
+- `placeInstance` đặt hard macro tại tọa độ `(x, y)` với orientation lấy từ pattern R0/MY của column.
 - `sram_snap_to_grid` ép tọa độ về site/manufacturing grid.
 
 Vì sao snap theo site width:
@@ -480,9 +482,9 @@ Script lặp qua từng cặp SRAM:
 - Bảo đảm gap ngang/dọc vẫn là 4 row.
 - Nếu sai thì dừng trước power plan.
 
-Report hiện tại `sram_macro_final_map.rpt` cho thấy:
+Report baseline hiện tại `sram_macro_final_map.rpt` cho thấy:
 
-- 16 SRAM đều `R180 fixed`.
+- 16 SRAM đều `R180 fixed`; đây là checkpoint trước khi đổi orientation và không đại diện cho run mới.
 - Tọa độ nằm đúng island lower-left.
 - Không có SRAM bị unplaced.
 
@@ -1141,7 +1143,7 @@ Không nên sửa bằng cách vẽ tay từng shape, vì sẽ khó lặp lại 
 
 - SRAM được gom thành island 4x4 ở lower-left.
 - Tọa độ SRAM được snap về grid.
-- 16 SRAM đều `R180 fixed`.
+- Flow mới sẽ xuất 8 macro `R0` và 8 macro `MY`, tất cả `fixed`; cần tạo lại report sau khi chạy lại macro floorplan.
 - Gap ngang/dọc được validate đúng 4 row.
 - Placement blockage bao phủ macro body và gap SRAM.
 - Route blockage M6/M7 trên SRAM body đã được EGR nhận, log báo `#Routing Blockages : 32`; M5 vẫn là eGR resource hint.
@@ -1177,7 +1179,7 @@ Có thể trình bày theo 6 slide kỹ thuật:
 2. **Floorplan strategy**
    - 16 SRAM thành island 4x4 lower-left.
    - Gap 4 row, border 2 row.
-   - R180 để pin hướng vào core.
+   - R0/MY xen kẽ theo cột để hai SRAM kề nhau đối xứng theo phương X.
    - Macro fixed sau placement.
 
 3. **Macro placement implementation**
