@@ -410,11 +410,15 @@ create_route_type \
 set_ccopt_property -net_type leaf  route_type leaf_rule
 set_ccopt_property -net_type trunk route_type trunk_rule
 set_ccopt_property -net_type top   route_type top_rule
-set_ccopt_property routing_top_min_fanout 100
-configure_sram_clock_top_routing $SRAM_PTRS clk 1000
+# The shared clock trunk fans out to 16 SRAM stop pins.  Keep that trunk on
+# the M6/M7 top rule; the former per-pin routing_top_fanout_count command was
+# invalid for macro stop pins and generated IMPCCOPT-4395.
+set_ccopt_property routing_top_min_fanout 16
+configure_sram_clock_top_routing $SRAM_PTRS clk
 set_ccopt_property target_max_trans 0.3ns
-# Standard-cell leaves use a practical target.  SRAM clock pins retain their
-# tighter Liberty limit and are promoted to M6/M7 top routing above.
+# Standard-cell leaves use a practical target.  The SRAM abstract pin limits
+# remain authoritative; the shared macro clock trunk is selected for M6/M7 by
+# the global top-fanout threshold above.
 set_ccopt_property -net_type leaf  target_max_trans 120ps
 set_ccopt_property -net_type trunk target_max_trans 160ps
 set_ccopt_property -net_type top   target_max_trans 200ps
@@ -516,8 +520,8 @@ assert_filler_inserted FILLER
 checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt
 checkPlace ./verify_rpt/checkPlace_after_filler.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_filler.rpt
-connect_core_pg_pins_nojog \
-    ./verify_rpt/pg_connectivity_after_filler.rpt 1
+verify_core_pg_after_filler_nojog \
+    ./verify_rpt/pg_connectivity_after_filler.rpt
 
 # ------------------------------------------------------------------------
 # 7. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION

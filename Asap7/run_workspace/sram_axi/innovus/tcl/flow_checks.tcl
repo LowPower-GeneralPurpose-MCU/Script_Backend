@@ -494,14 +494,30 @@ proc connect_core_pg_pins_nojog {{report_file ""} {refresh_stdcell_core_pins 0}}
     }
 }
 
-proc configure_sram_clock_top_routing {sram_ptrs {clock_pin "clk"} {fanout_count 1000}} {
+proc verify_core_pg_after_filler_nojog {{report_file ""}} {
+    global STDCELL_CORE_PG_BUILT
+
+    if {![info exists STDCELL_CORE_PG_BUILT] || !$STDCELL_CORE_PG_BUILT} {
+        error "Cannot verify post-filler PG before the lower core PG is built"
+    }
+
+    # addFiller must land on the already-owned M1 followpin rails.  Re-running
+    # broad sroute here can split the existing VSS special-wire graph at the
+    # SRAM island boundary, so this checkpoint is deliberately read-only.
+    applyGlobalNets
+    connect_sram_block_pins_to_local_stripes_nojog
+    clearDrc
+
+    if {$report_file ne ""} {
+        run_pg_connectivity_verify $report_file
+        assert_clean_pg_connectivity_report $report_file
+    }
+}
+
+proc configure_sram_clock_top_routing {sram_ptrs {clock_pin "clk"}} {
     if {[llength $sram_ptrs] == 0} {
         error "Cannot configure SRAM clock routing without SRAM instances"
     }
-    if {![string is integer -strict $fanout_count] || $fanout_count < 1} {
-        error "SRAM clock routing fanout count must be a positive integer"
-    }
-
     set configured_pins 0
     foreach sram_ptr $sram_ptrs {
         set sram_name [lindex [dbGet $sram_ptr.name] 0]
@@ -512,14 +528,14 @@ proc configure_sram_clock_top_routing {sram_ptrs {clock_pin "clk"} {fanout_count
             error "Expected one SRAM clock pin named $clock_pin_name"
         }
 
-        # Cadence recommends weighting macro clock inputs as many internal
-        # sinks so their branches qualify for the upper-layer top route type.
-        set_ccopt_property -pin $clock_pin_name \
-            routing_top_fanout_count $fanout_count
         incr configured_pins
     }
 
-    puts "Configured $configured_pins SRAM clock pins for top-layer CTS routing."
+    # SRAM macro clock ports are stop pins in this design, not clock-tree sink
+    # pins.  Applying routing_top_fanout_count to them produces IMPCCOPT-4395
+    # and has no effect.  The global routing_top_min_fanout setting in the
+    # master flow controls the shared macro clock trunk instead.
+    puts "Validated $configured_pins SRAM clock pins; top-layer CTS routing uses the global fanout threshold."
 }
 
 proc assert_filler_inserted {{prefix "FILLER"}} {
