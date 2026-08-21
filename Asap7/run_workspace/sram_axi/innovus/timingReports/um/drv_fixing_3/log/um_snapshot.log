@@ -1,2 +1,2 @@
       flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
-UM:*                                      -0.430 ns         -0.048 ns  drv_fixing_3
+UM:*                                      -0.050 ns         -0.014 ns  drv_fixing_3

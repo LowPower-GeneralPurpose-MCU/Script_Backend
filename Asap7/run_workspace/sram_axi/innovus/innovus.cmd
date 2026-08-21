@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug 21 15:40:22 2026                
+#  Created on Fri Aug 21 17:47:07 2026                
 #                                                     
 #######################################################
 
@@ -987,22 +987,22 @@ checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_proto.rpt
 checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_final.rpt
 saveFPlan ./outputs/FloorPlan.fp
 saveDesign ./saved/axi_ram_hierFP.enc
-placeInstance {u_mem/G_SRAM_BANK[0].u_sram} 2.160000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[1].u_sram} 127.872000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[2].u_sram} 253.584000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[3].u_sram} 379.296000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[4].u_sram} 379.296000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[5].u_sram} 253.584000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[6].u_sram} 127.872000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[7].u_sram} 2.160000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[8].u_sram} 2.160000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[9].u_sram} 127.872000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[10].u_sram} 253.584000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[11].u_sram} 379.296000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[12].u_sram} 379.296000 533.520000 R180
-placeInstance {u_mem/G_SRAM_BANK[13].u_sram} 253.584000 533.520000 R180
-placeInstance {u_mem/G_SRAM_BANK[14].u_sram} 127.872000 533.520000 R180
-placeInstance {u_mem/G_SRAM_BANK[15].u_sram} 2.160000 533.520000 R180
+placeInstance {u_mem/G_SRAM_BANK[0].u_sram} 2.160000 2.160000 R0
+placeInstance {u_mem/G_SRAM_BANK[1].u_sram} 127.872000 2.160000 MY
+placeInstance {u_mem/G_SRAM_BANK[2].u_sram} 253.584000 2.160000 R0
+placeInstance {u_mem/G_SRAM_BANK[3].u_sram} 379.296000 2.160000 MY
+placeInstance {u_mem/G_SRAM_BANK[4].u_sram} 379.296000 179.280000 MY
+placeInstance {u_mem/G_SRAM_BANK[5].u_sram} 253.584000 179.280000 R0
+placeInstance {u_mem/G_SRAM_BANK[6].u_sram} 127.872000 179.280000 MY
+placeInstance {u_mem/G_SRAM_BANK[7].u_sram} 2.160000 179.280000 R0
+placeInstance {u_mem/G_SRAM_BANK[8].u_sram} 2.160000 356.400000 R0
+placeInstance {u_mem/G_SRAM_BANK[9].u_sram} 127.872000 356.400000 MY
+placeInstance {u_mem/G_SRAM_BANK[10].u_sram} 253.584000 356.400000 R0
+placeInstance {u_mem/G_SRAM_BANK[11].u_sram} 379.296000 356.400000 MY
+placeInstance {u_mem/G_SRAM_BANK[12].u_sram} 379.296000 533.520000 MY
+placeInstance {u_mem/G_SRAM_BANK[13].u_sram} 253.584000 533.520000 R0
+placeInstance {u_mem/G_SRAM_BANK[14].u_sram} 127.872000 533.520000 MY
+placeInstance {u_mem/G_SRAM_BANK[15].u_sram} 2.160000 533.520000 R0
 createInstGroup SRAM_ISLAND_GROUP
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[0].u_sram}
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[1].u_sram}
@@ -1021,22 +1021,22 @@ addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[13].u_sram}
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[14].u_sram}
 addInstToInstGroup SRAM_ISLAND_GROUP {u_mem/G_SRAM_BANK[15].u_sram}
 addHaloToBlock -allBlock 2.16 2.16 2.16 2.16
-placeInstance {u_mem/G_SRAM_BANK[0].u_sram} 2.160000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[1].u_sram} 127.872000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[2].u_sram} 253.584000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[3].u_sram} 379.296000 2.160000 R180
-placeInstance {u_mem/G_SRAM_BANK[7].u_sram} 2.160000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[6].u_sram} 127.872000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[5].u_sram} 253.584000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[4].u_sram} 379.296000 179.280000 R180
-placeInstance {u_mem/G_SRAM_BANK[8].u_sram} 2.160000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[9].u_sram} 127.872000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[10].u_sram} 253.584000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[11].u_sram} 379.296000 356.400000 R180
-placeInstance {u_mem/G_SRAM_BANK[15].u_sram} 2.160000 533.520000 R180
-placeInstance {u_mem/G_SRAM_BANK[14].u_sram} 127.872000 533.520000 R180
-placeInstance {u_mem/G_SRAM_BANK[13].u_sram} 253.584000 533.520000 R180
-placeInstance {u_mem/G_SRAM_BANK[12].u_sram} 379.296000 533.520000 R180
+placeInstance {u_mem/G_SRAM_BANK[0].u_sram} 2.160000 2.160000 R0
+placeInstance {u_mem/G_SRAM_BANK[1].u_sram} 127.872000 2.160000 MY
+placeInstance {u_mem/G_SRAM_BANK[2].u_sram} 253.584000 2.160000 R0
+placeInstance {u_mem/G_SRAM_BANK[3].u_sram} 379.296000 2.160000 MY
+placeInstance {u_mem/G_SRAM_BANK[7].u_sram} 2.160000 179.280000 R0
+placeInstance {u_mem/G_SRAM_BANK[6].u_sram} 127.872000 179.280000 MY
+placeInstance {u_mem/G_SRAM_BANK[5].u_sram} 253.584000 179.280000 R0
+placeInstance {u_mem/G_SRAM_BANK[4].u_sram} 379.296000 179.280000 MY
+placeInstance {u_mem/G_SRAM_BANK[8].u_sram} 2.160000 356.400000 R0
+placeInstance {u_mem/G_SRAM_BANK[9].u_sram} 127.872000 356.400000 MY
+placeInstance {u_mem/G_SRAM_BANK[10].u_sram} 253.584000 356.400000 R0
+placeInstance {u_mem/G_SRAM_BANK[11].u_sram} 379.296000 356.400000 MY
+placeInstance {u_mem/G_SRAM_BANK[15].u_sram} 2.160000 533.520000 R0
+placeInstance {u_mem/G_SRAM_BANK[14].u_sram} 127.872000 533.520000 MY
+placeInstance {u_mem/G_SRAM_BANK[13].u_sram} 253.584000 533.520000 R0
+placeInstance {u_mem/G_SRAM_BANK[12].u_sram} 379.296000 533.520000 MY
 addHaloToBlock -allBlock 2.16 2.16 2.16 2.16
 addHaloToBlock -allBlock 2.16 2.16 2.16 2.16
 snapFPlan -block
@@ -1152,23 +1152,7 @@ create_route_type -name top_rule -bottom_preferred_layer M6 -top_preferred_layer
 set_ccopt_property -net_type leaf route_type leaf_rule
 set_ccopt_property -net_type trunk route_type trunk_rule
 set_ccopt_property -net_type top route_type top_rule
-set_ccopt_property routing_top_min_fanout 100
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[0].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[1].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[2].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[3].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[4].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[5].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[6].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[7].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[8].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[9].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[10].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[11].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[12].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[13].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[14].u_sram/clk} routing_top_fanout_count 1000
-set_ccopt_property -pin {u_mem/G_SRAM_BANK[15].u_sram/clk} routing_top_fanout_count 1000
+set_ccopt_property routing_top_min_fanout 16
 set_ccopt_property target_max_trans 0.3ns
 set_ccopt_property -net_type leaf target_max_trans 120ps
 set_ccopt_property -net_type trunk target_max_trans 160ps
@@ -1227,11 +1211,41 @@ addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FIL
 checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt
 checkPlace ./verify_rpt/checkPlace_after_filler.rpt
 applyGlobalNets
-setSrouteMode -reset
-setSrouteMode -viaConnectToShape {ring stripe blockring}
-sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -corePinLayer M1 -allowJogging 0 -allowLayerChange 0
-editTrim -nets {VDD VSS}
 clearDrc
 applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_filler.rpt
 fit
+zoomBox -478.66900 215.83300 1103.91700 1063.74800
+selectMarker 0.2640 0.2880 624.6240 769.5360 -1 3 7
+zoomBox -478.66900 554.99900 1103.91700 1402.91400
+fit
+is_innovus_plus
+deselectAll
+selectMarker 0.2640 0.2880 624.6240 769.5360 -1 3 7
+zoomBox -478.66900 385.41600 1103.91700 1233.33100
+deselectAll
+gui_select -rect {579.45525 519.18550 573.08550 521.30875}
+selectWire 572.4640 1.6000 574.0640 768.6080 9 VDD
+zoomBox -478.66900 894.16500 1103.91700 1742.08000
+zoomBox -478.66900 1148.53950 1103.91700 1996.45450
+zoomBox -478.66900 1233.33100 1103.91700 2081.24600
+fit
+zoomBox -478.66900 470.20750 1103.91700 1318.12250
+fit
+deselectAll
+selectWire 572.3360 19.3320 572.4640 746.5600 7 VDD
+zoomBox -478.66900 300.62450 1103.91700 1148.53950
+zoomBox -478.66900 554.99900 1103.91700 1402.91400
+zoomBox -1148.41575 372.66375 1428.56200 1753.35225
+zoomBox -889.27750 408.44875 1301.15375 1582.03400
+zoomBox -481.78225 464.72075 1100.80425 1312.63600
+zoomBox -71.56675 521.52775 900.33950 1042.25400
+zoomBox 109.60275 547.09875 811.80500 923.32350
+zoomBox 251.50575 616.65675 682.74675 847.70625
+zoomBox 266.52000 633.75375 633.07500 830.14600
+zoomBox 279.28200 648.28650 590.85400 815.22000
+zoomBox 290.12975 660.63925 554.96600 802.53275
+zoomBox 313.85000 687.65025 476.49250 774.79050
+zoomBox 324.32600 699.57925 441.83525 762.53825
+panCenter 351.65350 730.69100
+pan -8.56625 405.94475
