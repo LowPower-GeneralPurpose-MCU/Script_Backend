@@ -54,6 +54,7 @@ set innovus_pnr [read_file ./tcl/innovus_pnr.tcl]
 set view_definition [read_file ./tcl/viewDefinition.tcl]
 set globals [read_file ./tcl/innovus.globals]
 set sram_route_guard [read_file ./tcl/sram_route_guard.tcl]
+set sram_signal_route_constraints [read_file ./tcl/sram_signal_route_constraints.tcl]
 set core_lower_pg [read_file ./tcl/core_lower_pg_nojog.tcl]
 set flow_checks [read_file ./tcl/flow_checks.tcl]
 set core_pg_outside [read_file ./tcl/core_pg_outside_island.tcl]
@@ -85,7 +86,7 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {BUFx24_ASAP7_75t_L} "strong LVT CTS buffer for SRAM clock slew recovery"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {sram_preroute_pg_checkpoint_v9} "flow revision for pre-route PG checkpoint policy"
+    require_contains $flow {sram_v3_pin_escape_v10} "flow revision for SRAM V3 pin-escape policy"
     require_contains $flow {./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1 1} "bounded pre-filler PG diagnostic before postCTS optimization"
     require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1 1} "bounded pre-filler PG diagnostic after postCTS optimization"
     require_contains $flow {verify_core_pg_after_filler_nojog} "post-filler PG verification without broad reconnect"
@@ -147,6 +148,13 @@ refinePlace} "explicit legalization immediately after placement optimization"
         error "Missing detailed-route checkpoint"
     }
     set preroute_segment [string range $flow 0 [expr {$detailed_route_index - 1}]]
+    set sram_route_constraint_index [string first {source ./tcl/sram_signal_route_constraints.tcl} $flow]
+    if {$sram_route_constraint_index < 0 || $sram_route_constraint_index >= $detailed_route_index} {
+        error "SRAM signal routing policy must be applied before NanoRoute"
+    }
+    if {![regexp {timeDesign([[:space:]]|\\)+-postRoute([[:space:]]|\\)+-hold([[:space:]]|\\)+-outDir[[:space:]]+\./reports/timing_postRoute_hold} $flow]} {
+        error "Missing explicit final post-route hold report"
+    }
     require_not_contains $preroute_segment {verify_pg_special_drc_or_stop} \
         "premature PG/signal interaction DRC gate before detailed routing"
 }
@@ -161,6 +169,10 @@ require_contains $sram_route_guard {set SRAM_ROUTE_GUARD_LAYERS {M6 M7}} "option
 require_contains $sram_route_guard {deleteRouteBlk} "SRAM route guard is idempotent when sourced before place and route"
 require_contains $sram_route_guard {dbGet -e -p top.fPlan.rBlkgs.name} "route guard avoids an empty-delete IMPFP-6001 warning"
 require_contains $sram_route_guard {-earlyGlobalReverseDirection $sram_egr_reverse_regions} "optional SRAM M5 early-global route reservation"
+require_contains $sram_signal_route_constraints {-bottom_preferred_routing_layer $SRAM_SIGNAL_ROUTE_BOTTOM_LAYER} "SRAM nets avoid new V3 macro-body pin-access cuts"
+require_contains $sram_signal_route_constraints {-top_preferred_routing_layer $SRAM_SIGNAL_ROUTE_TOP_LAYER} "SRAM preferred routing stays below the signal top layer"
+require_contains $sram_signal_route_constraints {-preferred_routing_layer_effort $SRAM_SIGNAL_ROUTE_EFFORT} "SRAM preferred routing has explicit effort"
+require_contains $sram_signal_route_constraints {(^|/)(VDD|VSS|clk)$} "SRAM route policy excludes PG and clock terms"
 require_contains $core_lower_pg {-stacked_via_top_layer M5} "lower PG stops at M5"
 require_contains $core_lower_pg {STDCELL_PG_AREA_OVERHANG} "lower PG expands area boxes for ASAP7 std-cell M1 pin overhang"
 require_contains $core_lower_pg {set area_nets {VSS VDD}} "SRAM-edge M5 tap uses the VDD lane that overlaps bottom-row VDD pins"

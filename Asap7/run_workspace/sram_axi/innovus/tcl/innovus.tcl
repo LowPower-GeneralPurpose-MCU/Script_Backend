@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_preroute_pg_checkpoint_v9"
+set FLOW_SOURCE_REVISION "sram_v3_pin_escape_v10"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -590,6 +590,7 @@ setDesignMode \
     -bottomRoutingLayer 2 \
     -topRoutingLayer 7
 source ./tcl/sram_route_guard.tcl
+source ./tcl/sram_signal_route_constraints.tcl
 setNanoRouteMode -quiet \
     -route_strict_honor_route_rule true \
     -route_strictly_honor_1d_routing true \
@@ -632,6 +633,11 @@ ecoRoute -fix_drc
 timeDesign \
     -postRoute \
     -outDir ./reports/timing_postRoute
+
+timeDesign \
+    -postRoute \
+    -hold \
+    -outDir ./reports/timing_postRoute_hold
 
 verify_drc \
     -report ./verify_rpt/drc_postroute.rpt
