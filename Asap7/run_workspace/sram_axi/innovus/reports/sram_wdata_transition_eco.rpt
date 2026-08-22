@@ -1,0 +1,11 @@
+enabled 1
+bit 11
+source_banks 8 9 10 11 12 13 14 15
+sink_banks 12 13 14 15
+source_net u_mem/FE_OFN284_n
+sink_terms {u_mem/G_SRAM_BANK[12].u_sram/wd[11]} {u_mem/G_SRAM_BANK[13].u_sram/wd[11]} {u_mem/G_SRAM_BANK[14].u_sram/wd[11]} {u_mem/G_SRAM_BANK[15].u_sram/wd[11]}
+cell BUFx24_ASAP7_75t_L
+location 251.424 709.56
+place_radius 24.0
+status failed
+error 

@@ -1,2 +1,2 @@
       flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
-UM:*                                      -1.664 ns         -0.092 ns  incremental_replacement
+UM:*                                      -0.758 ns         -0.061 ns  incremental_replacement

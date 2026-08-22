@@ -9,10 +9,10 @@ specific view and clock} dp 3 metric timing.min_pulse_width.endpoints.wns.analys
 ::goMC::um:set_metric_safe {design.area.always_on} {0 um^2}
 ::goMC::um:set_metric_safe {design.area.area_io} {0.000000 um^2}
 ::goMC::um:set_metric_safe {design.area.blackbox} {0.000000 um^2}
-::goMC::um:set_metric_safe {design.area.buffer} {210.651840 um^2}
-::goMC::um:set_metric_safe {design.area.combinatorial} {1343.926080 um^2}
+::goMC::um:set_metric_safe {design.area.buffer} {198.754560 um^2}
+::goMC::um:set_metric_safe {design.area.combinatorial} {1346.958720 um^2}
 ::goMC::um:set_metric_safe {design.area.icg} {0 um^2}
-::goMC::um:set_metric_safe {design.area.inverter} {151.398720 um^2}
+::goMC::um:set_metric_safe {design.area.inverter} {160.030080 um^2}
 ::goMC::um:set_metric_safe {design.area.io} {0.000000 um^2}
 ::goMC::um:set_metric_safe {design.area.iso_ls} {0}
 ::goMC::um:set_metric_safe {design.area.isolation} {0 um^2}
@@ -22,27 +22,27 @@ specific view and clock} dp 3 metric timing.min_pulse_width.endpoints.wns.analys
 ::goMC::um:set_metric_safe {design.area.macro} {335624.601600 um^2}
 ::goMC::um:set_metric_safe {design.area.physical} {0.000000 um^2}
 ::goMC::um:set_metric_safe {design.area.power_switch} {0 um^2}
-::goMC::um:set_metric_safe {design.area.register} {741.8304}
-::goMC::um:set_metric_safe {design.area.sequential} {336366.432000 um^2}
+::goMC::um:set_metric_safe {design.area.register} {742.06368}
+::goMC::um:set_metric_safe {design.area.sequential} {336366.665280 um^2}
 ::goMC::um:set_metric_safe {design.area.std_cell} {2447.807040 um^2}
-::goMC::um:set_metric_safe {design.instances} {1517}
-::goMC::um:set_metric_safe {design.instances.all} {1517}
+::goMC::um:set_metric_safe {design.instances} {1512}
+::goMC::um:set_metric_safe {design.instances.all} {1512}
 ::goMC::um:set_metric_safe {design.instances.always_on} {0}
 ::goMC::um:set_metric_safe {design.instances.area_io} {0}
 ::goMC::um:set_metric_safe {design.instances.blackbox} {0}
-::goMC::um:set_metric_safe {design.instances.buffer} {196}
+::goMC::um:set_metric_safe {design.instances.buffer} {185}
 ::goMC::um:set_metric_safe {design.instances.combinatorial} {940}
 ::goMC::um:set_metric_safe {design.instances.icg} {0}
-::goMC::um:set_metric_safe {design.instances.inverter} {206}
+::goMC::um:set_metric_safe {design.instances.inverter} {212}
 ::goMC::um:set_metric_safe {design.instances.io} {0}
 ::goMC::um:set_metric_safe {design.instances.iso_ls} {0}
 ::goMC::um:set_metric_safe {design.instances.isolation} {0}
 ::goMC::um:set_metric_safe {design.instances.latch} {0}
 ::goMC::um:set_metric_safe {design.instances.level_shifter} {0}
-::goMC::um:set_metric_safe {design.instances.logical} {1517}
+::goMC::um:set_metric_safe {design.instances.logical} {1512}
 ::goMC::um:set_metric_safe {design.instances.macro} {16}
 ::goMC::um:set_metric_safe {design.instances.physical} {0}
 ::goMC::um:set_metric_safe {design.instances.power_switch} {0}
 ::goMC::um:set_metric_safe {design.instances.register} {159}
 ::goMC::um:set_metric_safe {design.instances.sequential} {175}
-::goMC::um:set_metric_safe {design.instances.std_cell} {1501}
+::goMC::um:set_metric_safe {design.instances.std_cell} {1496}

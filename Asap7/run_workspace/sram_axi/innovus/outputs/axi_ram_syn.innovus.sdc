@@ -1,9 +1,10 @@
 # Generated from ./outputs/axi_ram_syn.sdc for Innovus.
 # Numeric timing values are in ns; capacitance values are in pF.
+# Project max-transition override: 0.3 ns.
 # Do not edit by hand; rerun prepare_innovus_sdc.tcl.
 # ####################################################################
 
-#  Created by Genus(TM) Synthesis Solution 23.14-s090_1 on Sun Jul 26 02:52:16 JST 2026
+#  Created by Genus(TM) Synthesis Solution 23.14-s090_1 on Sun Aug 23 03:19:54 JST 2026
 
 # ####################################################################
 
@@ -524,7 +525,7 @@ set_output_delay -clock [get_clocks CLK] -add_delay -min 0.15 [get_ports {s_axi_
 set_output_delay -clock [get_clocks CLK] -add_delay -min 0.15 [get_ports s_axi_rlast]
 set_output_delay -clock [get_clocks CLK] -add_delay -min 0.15 [get_ports s_axi_rvalid]
 set_max_fanout 20.000 [current_design]
-set_max_transition 0.5 [current_design]
+set_max_transition 0.3 [current_design]
 set_input_transition -min 0.01 [get_ports rst_n]
 set_input_transition -max 0.04 [get_ports rst_n]
 set_input_transition -min 0.01 [get_ports {s_axi_awid[4]}]
