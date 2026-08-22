@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Sat Aug 22 15:49:26 2026                
+#  Created on Sun Aug 23 02:24:12 2026                
 #                                                     
 #######################################################
 
@@ -977,6 +977,8 @@ group_path -name I2C -from [list \
   [get_cells {wstrb_hold_reg[1]}]  \
   [get_cells {wstrb_hold_reg[2]}]  \
   [get_cells {wstrb_hold_reg[3]}] ]
+current_design
+set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]
 setDesignMode -process 7
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
 setMultiCpuUsage -acquireLicense 12
@@ -1923,6 +1925,7 @@ ecoRoute -fix_drc
 setAnalysisMode -analysisType onChipVariation
 setDelayCalMode -SIAware true -equivalent_waveform_model propagation
 setExtractRCMode -engine postRoute -effortLevel medium
+setOptMode -fixCap true -fixTran true -fixFanoutLoad true -setupTargetSlack 0.020 -holdTargetSlack 0.020 -detailDrvFailureReason true -detailDrvFailureReasonMaxNumNets 100
 optDesign -postRoute -setup -hold -prefix postRoute
 applyGlobalNets
 clearDrc
@@ -1931,15 +1934,29 @@ verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -re
 ecoRoute -fix_drc
 timeDesign -postRoute -outDir ./reports/timing_postRoute
 timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold
+report_noise -bumpy_waveform -threshold 0 > ./reports/bumpy_transition_postRoute.rpt
 verify_drc -report ./verify_rpt/drc_postroute.rpt
 verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
 saveDesign ./saved/axi_ram_routed.enc
-zoomBox -195.37825 -225.08950 985.65750 832.18950
-fit
-ecoRoute -fix_drc
-applyGlobalNets
-verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_verify_route_pg.rpt
-verify_drc -report ./verify_rpt/drc_postroute.rpt
-verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
-timeDesign -postRoute -outDir ./reports/timing_postRoute_recheck
-saveDesign ./saved/axi_ram_routed.enc
+zoomBox -330.98575 -326.03600 1058.46850 917.82225
+zoomBox -149.92100 -116.04050 853.95975 782.64700
+zoomBox 31.98875 94.93450 648.49700 646.84100
+zoomBox 170.37350 255.43025 492.19475 543.52900
+zoomBox 254.44450 352.93400 397.23850 480.76500
+zoomBox 280.31975 382.94325 368.01325 461.44775
+zoomBox 286.49650 390.10725 361.03625 456.83625
+zoomBox 303.22775 409.51225 342.13825 444.34550
+zoomBox 311.96150 419.64175 332.27325 437.82500
+zoomBox 314.60850 422.71125 329.28375 435.84875
+zoomBox 315.64225 423.91000 328.11625 435.07700
+zoomBox 310.27775 417.68875 334.17475 439.08175
+zoomBox 300.00150 405.77075 345.78100 446.75325
+zoomBox 286.49325 390.10400 361.03800 456.83750
+zoomBox 242.60375 339.20225 410.60950 489.60325
+zoomBox 193.03100 281.70850 466.60075 526.61175
+zoomBox 98.74575 194.53900 544.20850 593.32325
+zoomBox -124.99475 -12.31550 728.37225 751.63000
+zoomBox -553.61100 -408.58375 1081.17225 1054.89625
+zoomBox -260.64200 -76.44325 743.31950 822.31650
+zoomBox -37.77100 176.22675 486.30350 645.38525
+zoomBox 78.56925 308.12200 352.13950 553.02575
