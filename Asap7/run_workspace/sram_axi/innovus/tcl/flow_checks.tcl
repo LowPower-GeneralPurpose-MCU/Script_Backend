@@ -501,17 +501,13 @@ proc verify_core_pg_after_filler_nojog {{report_file ""}} {
         error "Cannot verify post-filler PG before the lower core PG is built"
     }
 
-    # addFiller must land on the already-owned M1 followpin rails.  Re-running
-    # broad sroute here can split the existing VSS special-wire graph at the
-    # SRAM island boundary, so this checkpoint is deliberately read-only.
-    applyGlobalNets
-    connect_sram_block_pins_to_local_stripes_nojog
-    clearDrc
-
-    if {$report_file ne ""} {
-        run_pg_connectivity_verify $report_file
-        assert_clean_pg_connectivity_report $report_file
-    }
+    # Filler cells introduce new M1 VDD/VSS pins after the prior PG stitch.
+    # Refresh only M1 core-pin rails and trim redundant PG shapes, using the
+    # same restricted sequence that is clean after post-CTS ECO insertion.
+    # The SRAM M4/M5 deterministic edge taps remain geometry-owned by
+    # sram_island_power.tcl; this procedure never invokes blockPin routing,
+    # floatingStripe routing, jogging, or layer changes.
+    connect_core_pg_pins_nojog $report_file 1
 }
 
 proc configure_sram_clock_top_routing {sram_ptrs {clock_pin "clk"}} {

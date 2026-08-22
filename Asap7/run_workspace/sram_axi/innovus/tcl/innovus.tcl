@@ -432,13 +432,14 @@ set_ccopt_property -net_type top   route_type top_rule
 set_ccopt_property routing_top_min_fanout 16
 configure_sram_clock_top_routing $SRAM_PTRS clk
 set_ccopt_property target_max_trans 0.3ns
-# Standard-cell leaves use a practical target.  The SRAM abstract pin limits
-# remain authoritative; the shared macro clock trunk is selected for M6/M7 by
-# the global top-fanout threshold above.
-set_ccopt_property -net_type leaf  target_max_trans 120ps
-set_ccopt_property -net_type trunk target_max_trans 160ps
-set_ccopt_property -net_type top   target_max_trans 200ps
-set_ccopt_property target_skew 50ps
+# SRAM clock pins have a 46 ps Liberty max-transition limit.  The previous
+# 120/160/200 ps CCOpt targets allowed excessive slew margin to accumulate on
+# long branches before the macro-pin limit was evaluated.  Keep each clock
+# tree class below 46 ps so CTS inserts/sizes buffering before the SRAM pins.
+set_ccopt_property -net_type leaf  target_max_trans 35ps
+set_ccopt_property -net_type trunk target_max_trans 40ps
+set_ccopt_property -net_type top   target_max_trans 40ps
+set_ccopt_property target_skew 40ps
 set_ccopt_property buffer_cells $BUFCells
 set_ccopt_property inverter_cells $INVCells
 set_ccopt_property use_inverters auto
@@ -507,6 +508,10 @@ connect_core_pg_pins_nojog \
 timeDesign \
     -postCTS \
     -outDir ./reports/timing_postCTS
+timeDesign \
+    -postCTS \
+    -hold \
+    -outDir ./reports/timing_postCTS_hold
 
 saveDesign ./saved/axi_ram_postCTS.enc
 
@@ -538,6 +543,9 @@ checkPlace ./verify_rpt/checkPlace_after_filler.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_filler.rpt
 verify_core_pg_after_filler_nojog \
     ./verify_rpt/pg_connectivity_after_filler.rpt
+verify_pg_special_drc_or_stop \
+    ./verify_rpt/pg_drc_after_filler.rpt \
+    {M1 M9}
 
 # ------------------------------------------------------------------------
 # 7. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
