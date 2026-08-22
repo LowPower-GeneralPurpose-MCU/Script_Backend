@@ -8,7 +8,7 @@
 ## This script stops before metal fill and GDS export.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_v3_pin_escape_v10"
+set FLOW_SOURCE_REVISION "sram_postroute_drv_guard_v11"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -44,6 +44,11 @@ if {[file exists $INNOVUS_GROUP_PATH_FILE] && [file size $INNOVUS_GROUP_PATH_FIL
     puts "Reading global path groups: $INNOVUS_GROUP_PATH_FILE"
     source $INNOVUS_GROUP_PATH_FILE
 }
+
+# The generated SDC may come from an older Genus checkpoint with the former
+# 0.500 ns rule.  Re-assert the SRAM-safe limit in the active Innovus mode.
+set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]
+puts "Signal max-transition target: ${SIGNAL_MAX_TRANSITION_NS} ns"
 
 setDesignMode -process 7
 setDesignMode \
@@ -506,6 +511,7 @@ setNanoRouteMode -quiet \
     -route_with_si_driven false
 ecoRoute -fix_drc
 
+set_si_mode -enable_delay_report true
 setAnalysisMode -analysisType onChipVariation
 setDelayCalMode \
     -SIAware true \
@@ -513,6 +519,15 @@ setDelayCalMode \
 setExtractRCMode \
     -engine postRoute \
     -effortLevel medium
+
+setOptMode \
+    -fixCap true \
+    -fixTran true \
+    -fixFanoutLoad true \
+    -setupTargetSlack 0.020 \
+    -holdTargetSlack 0.020 \
+    -detailDrvFailureReason true \
+    -detailDrvFailureReasonMaxNumNets 100
 
 optDesign \
     -postRoute \
@@ -533,6 +548,9 @@ timeDesign \
     -hold \
     -outDir ./reports/timing_postRoute_hold
 
+report_noise -bumpy_waveform -threshold 0 \
+    > ./reports/bumpy_transition_postRoute.rpt
+
 verify_drc \
     -report ./verify_rpt/drc_postroute.rpt
 
@@ -550,6 +568,10 @@ set ROUTE_REPORTS_CLEAN 0
 if {[catch {
     assert_clean_drc_report ./verify_rpt/drc_postroute.rpt
     assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt
+    assert_clean_timing_summary \
+        ./reports/timing_postRoute/axi_ram_postRoute.summary.gz setup 1
+    assert_clean_timing_summary \
+        ./reports/timing_postRoute_hold/axi_ram_postRoute_hold.summary.gz hold
     set ROUTE_REPORTS_CLEAN 1
 } route_report_error]} {
     puts stderr "Post-route reports are not clean: $route_report_error"
@@ -557,10 +579,12 @@ if {[catch {
 
 puts "===================================================="
 puts "ROUTED CHECKPOINT CREATED"
-puts "Review and repair until all three reports are clean:"
+puts "Review and repair until physical checks, timing and real DRVs are clean:"
 puts " - ./verify_rpt/drc_postroute.rpt"
 puts " - ./verify_rpt/antenna_postroute.rpt"
 puts " - ./verify_rpt/connectivity_postroute.rpt"
+puts " - ./reports/timing_postRoute/axi_ram_postRoute.summary.gz"
+puts " - ./reports/timing_postRoute_hold/axi_ram_postRoute_hold.summary.gz"
 puts ""
 puts "After every ECO repair, run:"
 puts "  source ./tcl/verify_route.tcl"

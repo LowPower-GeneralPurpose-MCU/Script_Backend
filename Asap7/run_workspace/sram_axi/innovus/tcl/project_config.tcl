@@ -23,6 +23,10 @@ if {[info exists ::env(ASAP7_GDS_MAP_FILE)] &&
 set STREAMOUT_UNITS 4000
 set POWER_NETS {VDD VSS}
 
+# The SRAM data/control input pins have a 0.320 ns Liberty max-transition
+# limit.  Use a tighter design rule to reserve margin for routed RC and SI.
+set SIGNAL_MAX_TRANSITION_NS 0.300
+
 set SYN_SDC_FILE "./outputs/${DESIGN}_syn.sdc"
 set INNOVUS_SDC_FILE "./outputs/${DESIGN}_syn.innovus.sdc"
 set INNOVUS_GROUP_PATH_FILE "./outputs/${DESIGN}_syn.innovus_groups.tcl"

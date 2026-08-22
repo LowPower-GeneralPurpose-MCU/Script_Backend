@@ -78,7 +78,11 @@ foreach inst_ptr $sram_signal_route_ptrs {
         }
 
         set sram_signal_route_seen($net_name) 1
-        set sram_signal_route_origin($net_name) "$inst_name/$term_name"
+        if {[string first "$inst_name/" $term_name] == 0} {
+            set sram_signal_route_origin($net_name) $term_name
+        } else {
+            set sram_signal_route_origin($net_name) "$inst_name/$term_name"
+        }
         lappend sram_signal_route_nets $net_name
     }
 }

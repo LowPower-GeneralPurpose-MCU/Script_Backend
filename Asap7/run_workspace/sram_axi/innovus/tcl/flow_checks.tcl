@@ -21,10 +21,48 @@ proc read_report_text {report_file report_label} {
         error "Missing $report_label report: [file normalize $report_file]"
     }
 
-    set fp [open $report_file r]
+    set fp [open $report_file rb]
+    fconfigure $fp -translation binary
     set report_text [read $fp]
     close $fp
+
+    if {[string equal -nocase [file extension $report_file] ".gz"]} {
+        if {[catch {set report_text [zlib gunzip $report_text]} gzip_error]} {
+            error "Cannot decompress $report_label report [file normalize $report_file]: $gzip_error"
+        }
+    }
     return $report_text
+}
+
+proc assert_clean_timing_summary {report_file analysis_label {check_drvs 0}} {
+    set report_text [read_report_text $report_file "$analysis_label timing"]
+
+    if {![regexp {\|[[:space:]]*Violating Paths:[[:space:]]*\|[[:space:]]*([0-9]+)} \
+        $report_text -> violating_paths]} {
+        error "Cannot find violating-path count in $analysis_label timing report: [file normalize $report_file]"
+    }
+    if {$violating_paths != 0} {
+        error "$analysis_label timing has $violating_paths violating path(s); inspect [file normalize $report_file]"
+    }
+
+    if {!$check_drvs} {
+        return
+    }
+
+    set real_drv_violations {}
+    foreach drv_type {max_cap max_tran max_fanout max_length} {
+        set drv_pattern [format {\|[[:space:]]*%s[[:space:]]*\|[[:space:]]*([0-9]+)[[:space:]]*\(} $drv_type]
+        if {![regexp $drv_pattern $report_text -> real_net_count]} {
+            error "Cannot find real $drv_type count in timing report: [file normalize $report_file]"
+        }
+        if {$real_net_count != 0} {
+            lappend real_drv_violations "$drv_type=$real_net_count"
+        }
+    }
+
+    if {[llength $real_drv_violations] != 0} {
+        error "$analysis_label timing has real DRV violations ([join $real_drv_violations {, }]); inspect [file normalize $report_file] and the matching .cap/.tran/.fanout report"
+    }
 }
 
 proc assert_clean_drc_report {report_file} {

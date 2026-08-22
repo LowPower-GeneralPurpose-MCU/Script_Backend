@@ -142,7 +142,9 @@ if {[llength $AXI_OUTPUTS] > 0} {
 # ------------------------------------------------------------------------
 
 set_max_fanout 20 [current_design]
-set_max_transition 500 [current_design]
+# The SRAM input pins have a 320 ps Liberty limit.  Keep 20 ps of margin so
+# synthesis and physical optimization do not wait for routed RC to violate it.
+set_max_transition 300 [current_design]
 
 puts "INFO: END constraint.sdc"
 

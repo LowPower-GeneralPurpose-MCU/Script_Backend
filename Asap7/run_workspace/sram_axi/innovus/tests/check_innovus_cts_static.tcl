@@ -37,6 +37,7 @@ prepare_innovus_sdc ./outputs/axi_ram_syn.sdc $tmp_sdc $tmp_groups
 
 set generated_sdc [read_file $tmp_sdc]
 set generated_groups [read_file $tmp_groups]
+set genus_constraints [read_file ../genus/tcl/constraint.sdc]
 
 require_contains $generated_sdc {create_clock -name "CLK" -period 1.0 -waveform {0.0 0.5}} "1ns clock"
 require_contains $generated_sdc {set_clock_transition -max 0.04} "40ps clock transition in ns"
@@ -46,6 +47,7 @@ require_contains $generated_sdc {set_clock_uncertainty -setup 0.05} "50ps setup 
 require_not_contains $generated_sdc {set_units} "unsupported set_units"
 require_not_contains $generated_sdc {group_path} "mode-local group_path"
 require_contains $generated_groups {group_path -name C2C} "global C2C path group"
+require_contains $genus_constraints {set_max_transition 300 [current_design]} "300ps synthesis transition margin"
 
 file delete -force $tmp_sdc $tmp_groups
 
@@ -55,6 +57,7 @@ set view_definition [read_file ./tcl/viewDefinition.tcl]
 set globals [read_file ./tcl/innovus.globals]
 set sram_route_guard [read_file ./tcl/sram_route_guard.tcl]
 set sram_signal_route_constraints [read_file ./tcl/sram_signal_route_constraints.tcl]
+set verify_route [read_file ./tcl/verify_route.tcl]
 set core_lower_pg [read_file ./tcl/core_lower_pg_nojog.tcl]
 set flow_checks [read_file ./tcl/flow_checks.tcl]
 set core_pg_outside [read_file ./tcl/core_pg_outside_island.tcl]
@@ -86,7 +89,14 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {BUFx24_ASAP7_75t_L} "strong LVT CTS buffer for SRAM clock slew recovery"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {sram_v3_pin_escape_v10} "flow revision for SRAM V3 pin-escape policy"
+    require_contains $flow {sram_postroute_drv_guard_v11} "flow revision for SRAM V3 pin escape and routed DRV guard"
+    require_contains $flow {set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]} "Innovus transition override for stale Genus SDCs"
+    require_contains $flow {-detailDrvFailureReason true} "detailed post-route DRV diagnostics"
+    require_contains $flow {-detailDrvFailureReasonMaxNumNets 100} "bounded detailed DRV diagnostics"
+    require_contains $flow {-setupTargetSlack 0.020} "post-route setup safety margin"
+    require_contains $flow {-holdTargetSlack 0.020} "post-route hold safety margin"
+    require_contains $flow {set_si_mode -enable_delay_report true} "bumpy-transition delay diagnostics"
+    require_contains $flow {report_noise -bumpy_waveform -threshold 0} "post-route bumpy-transition report"
     require_contains $flow {./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1 1} "bounded pre-filler PG diagnostic before postCTS optimization"
     require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1 1} "bounded pre-filler PG diagnostic after postCTS optimization"
     require_contains $flow {verify_core_pg_after_filler_nojog} "post-filler PG verification without broad reconnect"
@@ -155,6 +165,7 @@ refinePlace} "explicit legalization immediately after placement optimization"
     if {![regexp {timeDesign([[:space:]]|\\)+-postRoute([[:space:]]|\\)+-hold([[:space:]]|\\)+-outDir[[:space:]]+\./reports/timing_postRoute_hold} $flow]} {
         error "Missing explicit final post-route hold report"
     }
+    require_contains $flow {assert_clean_timing_summary} "post-route setup/hold and real-DRV gate"
     require_not_contains $preroute_segment {verify_pg_special_drc_or_stop} \
         "premature PG/signal interaction DRC gate before detailed routing"
 }
@@ -173,6 +184,9 @@ require_contains $sram_signal_route_constraints {-bottom_preferred_routing_layer
 require_contains $sram_signal_route_constraints {-top_preferred_routing_layer $SRAM_SIGNAL_ROUTE_TOP_LAYER} "SRAM preferred routing stays below the signal top layer"
 require_contains $sram_signal_route_constraints {-preferred_routing_layer_effort $SRAM_SIGNAL_ROUTE_EFFORT} "SRAM preferred routing has explicit effort"
 require_contains $sram_signal_route_constraints {(^|/)(VDD|VSS|clk)$} "SRAM route policy excludes PG and clock terms"
+require_contains $verify_route {timing_postRoute_hold_recheck} "route recheck regenerates hold timing"
+require_contains $verify_route {assert_clean_timing_summary} "route recheck gates timing and real DRVs"
+require_contains $verify_route {set_si_mode -enable_delay_report true} "route recheck enables bumpy-transition diagnostics"
 require_contains $core_lower_pg {-stacked_via_top_layer M5} "lower PG stops at M5"
 require_contains $core_lower_pg {STDCELL_PG_AREA_OVERHANG} "lower PG expands area boxes for ASAP7 std-cell M1 pin overhang"
 require_contains $core_lower_pg {set area_nets {VSS VDD}} "SRAM-edge M5 tap uses the VDD lane that overlaps bottom-row VDD pins"
@@ -229,12 +243,22 @@ proc write_cts_test_report {path text} {
     close $fp
 }
 
+proc write_cts_gzip_test_report {path text} {
+    set fp [open $path wb]
+    fconfigure $fp -translation binary
+    puts -nonewline $fp [zlib gzip $text]
+    close $fp
+}
+
 set expected_gap_report ./reports/__tmp_expected_pg_gap.rpt
 set upper_dangling_report ./reports/__tmp_upper_pg_dangling.rpt
 set short_report ./reports/__tmp_pg_short.rpt
 set excessive_gap_report ./reports/__tmp_excessive_pg_gap.rpt
 set clean_pg_baseline ./reports/__tmp_clean_pg_baseline.rpt
 set deferred_drc_report ./reports/__tmp_deferred_pg_drc.rpt
+set clean_timing_summary ./reports/__tmp_clean_timing.summary.gz
+set drv_timing_summary ./reports/__tmp_drv_timing.summary.gz
+set bad_hold_summary ./reports/__tmp_bad_hold.summary.gz
 
 write_cts_test_report $expected_gap_report {
 Net VDD, Pin Pin: CTS_BUF/VDD;: has an unconnected terminal at (1.0, 1.0) (2.0, 2.0)
@@ -278,12 +302,41 @@ require_contains [read_file $deferred_drc_report] \
     {NOT_RUN_BEFORE_DETAILED_ROUTE} \
     "machine-readable deferred pre-route DRC status"
 
+set clean_timing_text {
+|    Violating Paths:|    0    |    0    |
+|   max_cap      |      0 (0)       |   0.000    |      0 (0)       |
+|   max_tran     |      0 (0)       |   0.000    |      4 (4)       |
+|   max_fanout   |      0 (0)       |     0      |      2 (2)       |
+|   max_length   |      0 (0)       |     0      |      0 (0)       |
+}
+write_cts_gzip_test_report $clean_timing_summary $clean_timing_text
+assert_clean_timing_summary $clean_timing_summary setup 1
+
+set drv_timing_text [string map {
+    {|   max_tran     |      0 (0)}
+    {|   max_tran     |      1 (8)}
+} $clean_timing_text]
+write_cts_gzip_test_report $drv_timing_summary $drv_timing_text
+if {![catch {assert_clean_timing_summary $drv_timing_summary setup 1}]} {
+    error "Timing guard accepted a real max-transition violation"
+}
+
+write_cts_gzip_test_report $bad_hold_summary {
+|    Violating Paths:|    1    |    0    |
+}
+if {![catch {assert_clean_timing_summary $bad_hold_summary hold}]} {
+    error "Timing guard accepted a violating hold path"
+}
+
 file delete -force \
     $expected_gap_report \
     $upper_dangling_report \
     $short_report \
     $excessive_gap_report \
     $clean_pg_baseline \
-    $deferred_drc_report
+    $deferred_drc_report \
+    $clean_timing_summary \
+    $drv_timing_summary \
+    $bad_hold_summary
 
 puts "PASS: Innovus CTS/static unit checks"

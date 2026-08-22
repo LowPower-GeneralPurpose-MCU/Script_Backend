@@ -21,7 +21,7 @@ array set mock_db {
     I1.name u_mem/bank1
     I0.instTerms {T0_WD T0_Q T0_CLK T0_VDD T0_OPEN}
     I1.instTerms {T1_WD T1_ADDR T1_VSS}
-    T0_WD.name {wd[0]}
+    T0_WD.name {u_mem/bank0/wd[0]}
     T0_WD.net.name {u_mem/bank_wdata[0]}
     T0_Q.name {dataout[0]}
     T0_Q.net.name {u_mem/bank_rdata[0][0]}
@@ -114,6 +114,12 @@ foreach expected {
     if {[string first $expected $report_text] < 0} {
         error "Missing route-policy report evidence: $expected"
     }
+}
+if {[string first {u_mem/bank0/wd[0]} $report_text] < 0} {
+    error "Missing full hierarchical SRAM term in route-policy report"
+}
+if {[string first {u_mem/bank0/u_mem/bank0/wd[0]} $report_text] >= 0} {
+    error "Route-policy report duplicated the SRAM instance prefix"
 }
 
 puts "PASS: SRAM signal routing policy is deduplicated, excludes clocks/PG, and prefers M4-M7"
