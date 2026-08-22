@@ -241,6 +241,7 @@ foreach stale_post_place_pg_report {
     ./verify_rpt/pg_connectivity_after_trim.rpt
     ./verify_rpt/sram_m4_interface_drc.rpt
     ./verify_rpt/pg_drc_after_trim.rpt
+    ./verify_rpt/pg_drc_after_trim_full.rpt
 } {
     file delete -force $stale_post_place_pg_report
 }
@@ -266,9 +267,15 @@ verify_drc \
     -layer_range {M6 M9} \
     -area [pg_top_level_owned_drc_areas] \
     -report ./verify_rpt/pg_drc_after_trim.rpt
+verify_drc \
+    -check_only special \
+    -layer_range {M1 M9} \
+    -area [pg_top_level_owned_drc_areas] \
+    -report ./verify_rpt/pg_drc_after_trim_full.rpt
 
 assert_clean_pg_special_drc_report ./verify_rpt/sram_m4_interface_drc.rpt
 assert_clean_pg_special_drc_report ./verify_rpt/pg_drc_after_trim.rpt
+assert_clean_pg_special_drc_report ./verify_rpt/pg_drc_after_trim_full.rpt
 stop_if_dirty_pg_connectivity_report \
     ./verify_rpt/pg_connectivity_after_trim.rpt \
     "Post-placement PG connectivity"
@@ -278,6 +285,9 @@ stop_if_dirty_pg_special_drc_report \
 stop_if_dirty_pg_special_drc_report \
     ./verify_rpt/pg_drc_after_trim.rpt \
     "Post-placement PG DRC"
+stop_if_dirty_pg_special_drc_report \
+    ./verify_rpt/pg_drc_after_trim_full.rpt \
+    "Post-placement full PG DRC"
 
 saveDesign ./saved/axi_ram_placed.enc
 
@@ -285,8 +295,8 @@ saveDesign ./saved/axi_ram_placed.enc
 # 3. CLOCK TREE SYNTHESIS
 # ------------------------------------------------------------------------
 
-# Use RVT clock cells for lower leakage and stable clock behavior.  LVT
-# remains available to timing optimization for non-clock critical paths.
+# Use RVT clock cells by default, and allow strong LVT buffers so CCOpt can
+# recover SRAM clock-pin slew before the 46 ps Liberty limit is violated.
 set BUFCells {
     BUFx4_ASAP7_75t_R
     BUFx8_ASAP7_75t_R
@@ -295,6 +305,12 @@ set BUFCells {
     BUFx12f_ASAP7_75t_R
     BUFx16f_ASAP7_75t_R
     BUFx24_ASAP7_75t_R
+    BUFx8_ASAP7_75t_L
+    BUFx10_ASAP7_75t_L
+    BUFx12_ASAP7_75t_L
+    BUFx12f_ASAP7_75t_L
+    BUFx16f_ASAP7_75t_L
+    BUFx24_ASAP7_75t_L
 }
 set INVCells {
     CKINVDCx8_ASAP7_75t_R

@@ -553,6 +553,14 @@ assert_contains \
     $child_text(core_lower_pg_nojog.tcl) \
     {-stacked_via_top_layer[[:space:]]+M5} \
     "post-placement lower taps must stop at M5 before the M6/M7 core mesh"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {STDCELL_M5_TAP_PAIR_SPACING} \
+    "core_lower_pg_nojog.tcl must allow an explicit std-cell M5 tap spacing override"
+assert_contains \
+    $child_text(core_lower_pg_nojog.tcl) \
+    {set[[:space:]]+stripe_m5_s[[:space:]]+\[expr[[:space:]]+\{2\.0[[:space:]]+\*[[:space:]]+\$ASAP7_ROW_HEIGHT\}\]} \
+    "std-cell M5 tap spacing must default to two ASAP7 rows, not SRAM-local collector spacing"
 if {[regexp -- {-stacked_via_bottom_layer[[:space:]]+M1[[:space:]]+\\[[:space:]]+-stacked_via_top_layer[[:space:]]+M8} \
         $child_text(core_lower_pg_nojog.tcl)]} {
     fail "core_lower_pg_nojog.tcl must not use a direct M1-to-M8 stack because it can generate off-grid M7 intermediate metal"
@@ -1098,6 +1106,10 @@ foreach flow_pair [list \
         "$flow_name must generate the actionable post-placement M6-M9 PG DRC report"
     assert_contains \
         $flow_text \
+        {-report[[:space:]]+\./verify_rpt/pg_drc_after_trim_full\.rpt} \
+        "$flow_name must generate a full M1-M9 post-placement PG DRC report to catch via-stack violations"
+    assert_contains \
+        $flow_text \
         {catch[[:space:]]+\{[[:space:]]+connect_core_pg_pins_nojog[[:space:]]+\./verify_rpt/pg_connectivity_after_trim\.rpt} \
         "$flow_name must catch the post-placement PG reconnect guard"
     assert_contains \
@@ -1122,8 +1134,16 @@ foreach flow_pair [list \
         "$flow_name must reject a dirty M6-M9 PG report before saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
+        {assert_clean_pg_special_drc_report[[:space:]]+\./verify_rpt/pg_drc_after_trim_full\.rpt} \
+        "$flow_name must reject a dirty full M1-M9 PG report before saving axi_ram_placed.enc"
+    assert_contains \
+        $flow_text \
         {stop_if_dirty_pg_special_drc_report[[:space:]]+\\[[:space:]]+\./verify_rpt/pg_drc_after_trim\.rpt} \
         "$flow_name must re-read post-placement PG DRC after Innovus report generation before saving axi_ram_placed.enc"
+    assert_contains \
+        $flow_text \
+        {stop_if_dirty_pg_special_drc_report[[:space:]]+\\[[:space:]]+\./verify_rpt/pg_drc_after_trim_full\.rpt} \
+        "$flow_name must re-read the full M1-M9 PG DRC after Innovus report generation before saving axi_ram_placed.enc"
     assert_contains \
         $flow_text \
         {source[[:space:]]+\./tcl/sram_route_guard\.tcl} \
@@ -1164,8 +1184,10 @@ foreach flow_pair [list \
     set post_place_guard_index [string first {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} $flow_text]
     set m4_drc_report_index [string first {-report ./verify_rpt/sram_m4_interface_drc.rpt} $flow_text]
     set m59_drc_report_index [string first {-report ./verify_rpt/pg_drc_after_trim.rpt} $flow_text]
+    set full_drc_report_index [string first {-report ./verify_rpt/pg_drc_after_trim_full.rpt} $flow_text]
     set m4_drc_guard_index [string first {assert_clean_pg_special_drc_report ./verify_rpt/sram_m4_interface_drc.rpt} $flow_text]
     set post_place_drc_guard_index [string first {assert_clean_pg_special_drc_report ./verify_rpt/pg_drc_after_trim.rpt} $flow_text]
+    set full_drc_guard_index [string first {assert_clean_pg_special_drc_report ./verify_rpt/pg_drc_after_trim_full.rpt} $flow_text]
     set placed_save_index [string first {saveDesign ./saved/axi_ram_placed.enc} $flow_text]
     set before_trim_verify_seen [regexp {
         verifyConnectivity[[:space:]\n\\]+.*pg_connectivity_before_trim\.rpt
@@ -1214,12 +1236,16 @@ foreach flow_pair [list \
     }
     if {$m4_drc_report_index < 0 ||
         $m59_drc_report_index < 0 ||
+        $full_drc_report_index < 0 ||
         $m4_drc_guard_index < 0 ||
         $post_place_drc_guard_index < 0 ||
+        $full_drc_guard_index < 0 ||
         $m4_drc_report_index > $m4_drc_guard_index ||
         $m59_drc_report_index > $m4_drc_guard_index ||
+        $full_drc_report_index > $full_drc_guard_index ||
+        $full_drc_guard_index > $placed_save_index ||
         $post_place_drc_guard_index > $placed_save_index} {
-        fail "$flow_name must generate both DRC reports before enforcing them and before saving axi_ram_placed.enc"
+        fail "$flow_name must generate all post-placement PG DRC reports before enforcing them and before saving axi_ram_placed.enc"
     }
     if {$before_trim_verify_seen} {
         fail "$flow_name must not verify a pre-trim PG state that is expected to contain dangling M1 rail endpoints"

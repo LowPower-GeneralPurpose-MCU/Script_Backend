@@ -32,8 +32,10 @@ if {![regexp {set[[:space:]]+SRAM_ROWS[[:space:]]+4} $setup_text] ||
     ![regexp {set[[:space:]]+SRAM_COLS[[:space:]]+4} $setup_text]} {
     fail "SRAM hierarchy must remain one complete rectangular 4x4 cluster"
 }
-if {![regexp {set[[:space:]]+SRAM_ISLAND_ORIENT[[:space:]]+"R180"} $setup_text]} {
-    fail "SRAM orientation must be an explicitly reviewed R0/R180 choice"
+if {![regexp {set[[:space:]]+SRAM_ISLAND_ORIENT[[:space:]]+"R0"} $setup_text] ||
+    ![regexp {set[[:space:]]+SRAM_MIRROR_ORIENT[[:space:]]+"MY"} $setup_text] ||
+    ![regexp {proc[[:space:]]+sram_orientation_for_column[[:space:]]+\{} $setup_text]} {
+    fail "SRAM orientation must be the explicitly reviewed R0/MY mirror-pair pattern"
 }
 if {![regexp {set[[:space:]]+SRAM_MACRO_GAP_ROWS[[:space:]]+4} $setup_text]} {
     fail "Inter-macro channels must reserve four ASAP7 rows for power and signal escape"

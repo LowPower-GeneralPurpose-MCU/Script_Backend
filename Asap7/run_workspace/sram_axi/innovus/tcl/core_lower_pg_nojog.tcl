@@ -3,7 +3,9 @@
 ##
 ## 1. Create straight same-layer M1 follow-pin rails.
 ## 2. Add M5 vertical taps in the right and above-island logic regions with
-##    explicit M1->M5 VIAGEN stacks.
+##    explicit M1->M5 VIAGEN stacks.  Keep the std-cell VDD/VSS tap spacing
+##    wider than the SRAM-local M4/M5 collector spacing so repeated V4 cuts
+##    from those via stacks do not land too close to one another.
 ## No regular M5 mesh is created inside the SRAM island.
 ############################################################
 
@@ -26,11 +28,22 @@ if {![info exists stripe_m5_w]} {
     }
 }
 if {![info exists stripe_m5_s]} {
-    if {[info exists stripe_m45_s]} {
-        set stripe_m5_s $stripe_m45_s
+    if {[info exists ::env(STDCELL_M5_TAP_PAIR_SPACING)] &&
+        $::env(STDCELL_M5_TAP_PAIR_SPACING) ne ""} {
+        set stripe_m5_s $::env(STDCELL_M5_TAP_PAIR_SPACING)
+    } elseif {[info exists ASAP7_ROW_HEIGHT]} {
+        set stripe_m5_s [expr {2.0 * $ASAP7_ROW_HEIGHT}]
     } else {
-        set stripe_m5_s 0.288
+        set stripe_m5_s 2.160
     }
+}
+if {![string is double -strict $stripe_m5_s] || $stripe_m5_s <= 0.0} {
+    error "stripe_m5_s must be a positive spacing, got $stripe_m5_s"
+}
+if {[info exists stripe_m45_s] &&
+    [string is double -strict $stripe_m45_s] &&
+    $stripe_m5_s < $stripe_m45_s} {
+    set stripe_m5_s $stripe_m45_s
 }
 if {![info exists stripe_m45_pitch]} {
     set stripe_m45_pitch 25.920
