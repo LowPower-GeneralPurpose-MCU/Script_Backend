@@ -91,6 +91,59 @@ proc assert_clean_connectivity_report {report_file} {
     error "Connectivity is not clean; inspect [file normalize $report_file] before continuing"
 }
 
+proc assert_expected_unfilled_pg_connectivity_report {report_file {max_violations 500}} {
+    set report_text [read_report_text $report_file "pre-filler PG connectivity"]
+
+    if {[string first "Found no problems or warnings" $report_text] >= 0 ||
+        [regexp {Verification Complete[[:space:]]*:[[:space:]]*0[[:space:]]+Viols} $report_text]} {
+        return
+    }
+    if {![string is integer -strict $max_violations] || $max_violations <= 0} {
+        error "max_violations must be a positive integer, got $max_violations"
+    }
+    if {![regexp {Verification Complete[[:space:]]*:[[:space:]]*([0-9]+)[[:space:]]+Viols} \
+        $report_text -> violation_count]} {
+        set violation_count 0
+        set saw_problem_summary 0
+        foreach line [split $report_text "\n"] {
+            if {[regexp {^[[:space:]]*([0-9]+)[[:space:]]+Problem\(s\)[[:space:]]+\(IMPVFC-[0-9]+\):} \
+                $line -> problem_count]} {
+                incr violation_count $problem_count
+                set saw_problem_summary 1
+            }
+        }
+        if {!$saw_problem_summary} {
+            error "Cannot find violation count in pre-filler PG report: [file normalize $report_file]"
+        }
+    }
+    if {$violation_count > $max_violations} {
+        error "Pre-filler PG connectivity exceeded the expected gap limit: $violation_count > $max_violations in [file normalize $report_file]"
+    }
+    if {[regexp -nocase {shorted} $report_text]} {
+        error "Pre-filler PG connectivity contains a short: [file normalize $report_file]"
+    }
+
+    set allowed_problem_codes {92 94 96 200}
+    foreach line [split $report_text "\n"] {
+        set trimmed_line [string trim $line]
+        if {[regexp {^Net[[:space:]]+([^,[:space:]:]+)} $trimmed_line -> net_name] &&
+            [lsearch -exact {VDD VSS} $net_name] < 0} {
+            error "Unexpected net $net_name in pre-filler PG report: [file normalize $report_file]"
+        }
+        if {[regexp {^Net[[:space:]]} $trimmed_line] &&
+            [regexp -nocase {dangling[[:space:]]+Wire} $trimmed_line] &&
+            ![regexp -nocase {on[[:space:]]+layer:[[:space:]]+M1([[:space:]]|$)} $trimmed_line]} {
+            error "Pre-filler PG report contains a dangling wire above M1: $trimmed_line"
+        }
+        if {[regexp {Problem\(s\).+\(IMPVFC-([0-9]+)\)} $trimmed_line -> problem_code] &&
+            [lsearch -exact $allowed_problem_codes $problem_code] < 0} {
+            error "Unexpected IMPVFC-$problem_code in pre-filler PG report: [file normalize $report_file]"
+        }
+    }
+
+    puts "INFO: $report_file has $violation_count expected pre-filler M1 rail-gap marker(s); strict PG connectivity is deferred until filler insertion."
+}
+
 proc pg_is_preplacement_pg_checkpoint {report_file {context ""}} {
     set normalized_report [file tail $report_file]
     if {$normalized_report eq "pg_connectivity_before_stdcell_place.rpt"} {
@@ -410,6 +463,26 @@ proc write_skipped_report {report_file reason} {
     close $fp
 }
 
+proc defer_preroute_pg_drc_check {report_file stage \
+    {baseline_report "./verify_rpt/pg_drc_after_trim_full.rpt"}} {
+    # PG geometry is read-only after the clean post-placement baseline.  Before
+    # routeDesign, Innovus verify_drc also reports temporary regular trial-route
+    # interactions with special PG, so those markers are not a PG signoff gate.
+    assert_clean_pg_special_drc_report $baseline_report
+
+    file mkdir [file dirname $report_file]
+    set fp [open $report_file w]
+    puts $fp "# Deferred pre-route PG/signal interaction DRC"
+    puts $fp "# Stage: $stage"
+    puts $fp "# Status: NOT_RUN_BEFORE_DETAILED_ROUTE"
+    puts $fp "# Clean intrinsic PG baseline: [file normalize $baseline_report]"
+    puts $fp "# Reason: verify_drc -check_only special includes regular trial-route versus special-PG interactions before routeDesign can legalize signal routing."
+    puts $fp "# Final gate: drc_postroute.rpt and connectivity_postroute.rpt after routeDesign/ecoRoute."
+    close $fp
+
+    puts "INFO: Deferred $stage PG/signal interaction DRC until after detailed routing; intrinsic PG baseline remains clean."
+}
+
 proc verify_antenna_if_enabled {report_file} {
     if {![info exists ::env(INNOVUS_RUN_ANTENNA_CHECK)] ||
         ![string is true -strict $::env(INNOVUS_RUN_ANTENNA_CHECK)]} {
@@ -449,7 +522,8 @@ proc connect_sram_block_pins_to_local_stripes_nojog {} {
     puts "SRAM block-pin access preserved: deterministic M5 edge taps are the only owner."
 }
 
-proc connect_core_pg_pins_nojog {{report_file ""} {post_insertion_checkpoint 0}} {
+proc connect_core_pg_pins_nojog {{report_file ""} {post_insertion_checkpoint 0} \
+    {allow_unfilled_row_gaps 0}} {
     global STDCELL_CORE_PG_BUILT
 
     applyGlobalNets
@@ -459,6 +533,12 @@ proc connect_core_pg_pins_nojog {{report_file ""} {post_insertion_checkpoint 0}}
 
     if {![string is boolean -strict $post_insertion_checkpoint]} {
         error "post_insertion_checkpoint must be boolean, got $post_insertion_checkpoint"
+    }
+    if {![string is boolean -strict $allow_unfilled_row_gaps]} {
+        error "allow_unfilled_row_gaps must be boolean, got $allow_unfilled_row_gaps"
+    }
+    if {$allow_unfilled_row_gaps && !$post_insertion_checkpoint} {
+        error "allow_unfilled_row_gaps is valid only at a post-insertion checkpoint"
     }
 
     if {[info exists STDCELL_CORE_PG_BUILT] &&
@@ -511,7 +591,11 @@ proc connect_core_pg_pins_nojog {{report_file ""} {post_insertion_checkpoint 0}}
 
     if {$report_file ne ""} {
         run_pg_connectivity_verify $report_file
-        assert_clean_pg_connectivity_report $report_file
+        if {$allow_unfilled_row_gaps} {
+            assert_expected_unfilled_pg_connectivity_report $report_file
+        } else {
+            assert_clean_pg_connectivity_report $report_file
+        }
     }
 }
 

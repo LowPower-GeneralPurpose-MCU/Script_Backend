@@ -85,8 +85,9 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {BUFx24_ASAP7_75t_L} "strong LVT CTS buffer for SRAM clock slew recovery"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1} "read-only PG check before postCTS optimization"
-    require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1} "read-only PG check after postCTS optimization"
+    require_contains $flow {sram_preroute_pg_checkpoint_v9} "flow revision for pre-route PG checkpoint policy"
+    require_contains $flow {./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1 1} "bounded pre-filler PG diagnostic before postCTS optimization"
+    require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1 1} "bounded pre-filler PG diagnostic after postCTS optimization"
     require_contains $flow {verify_core_pg_after_filler_nojog} "post-filler PG verification without broad reconnect"
     require_contains $flow {./verify_rpt/pg_connectivity_after_filler.rpt} "post-filler PG connectivity report"
     require_contains $flow {./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1} "read-only post-route-opt PG guard"
@@ -141,6 +142,13 @@ refinePlace} "explicit legalization immediately after placement optimization"
     set postcts_segment [string range $flow $postcts_opt_index $postcts_check_index]
     require_not_contains $postcts_segment {refinePlace} \
         "timing-destructive legalization after postCTS optimization"
+    set detailed_route_index [string first {routeDesign -globalDetail} $flow]
+    if {$detailed_route_index < 0} {
+        error "Missing detailed-route checkpoint"
+    }
+    set preroute_segment [string range $flow 0 [expr {$detailed_route_index - 1}]]
+    require_not_contains $preroute_segment {verify_pg_special_drc_or_stop} \
+        "premature PG/signal interaction DRC gate before detailed routing"
 }
 
 require_contains $view_definition {-sdc_files $INNOVUS_SDC_FILE} "MMMC uses normalized SDC"
@@ -167,6 +175,9 @@ require_not_contains $flow_checks {routing_top_fanout_count $fanout_count} "inva
 require_contains $flow_checks {global routing_top_min_fanout setting} "shared macro-clock top-routing policy"
 require_contains $flow_checks {proc verify_core_pg_after_filler_nojog} "read-only post-filler PG verification"
 require_contains $flow_checks {proc verify_pg_special_drc_or_stop} "shared PG special DRC guard proc"
+require_contains $flow_checks {proc assert_expected_unfilled_pg_connectivity_report} "bounded pre-filler M1 rail-gap classifier"
+require_contains $flow_checks {proc defer_preroute_pg_drc_check} "pre-route PG/signal interaction deferral"
+require_contains $flow_checks {NOT_RUN_BEFORE_DETAILED_ROUTE} "deferred pre-route DRC report status"
 require_contains $flow_checks {-check_only special} "PG DRC guard must check special-route DRC only"
 require_contains $flow_checks {No DRC violations were found} "PG DRC guard must accept Innovus clean-report wording"
 require_not_contains $flow_checks {-connect {floatingStripe}} "floating PG auto-stitch is forbidden"
@@ -186,12 +197,81 @@ require_contains $flow_checks {pg_top_level_owned_drc_areas} "hierarchical PG DR
 require_contains $flow_checks {global SRAM_PIN_TAP_AREAS} "deterministic M5 tap corridors are included in PG DRC scope"
 require_contains $flow_checks {CorePin reconnect skipped} "duplicate corePin via prevention"
 foreach flow_text [list $innovus_master $innovus_pnr] {
-    require_contains $flow_text {./verify_rpt/pg_drc_after_cts_preopt.rpt} "full PG DRC immediately after CTS"
-    require_contains $flow_text {./verify_rpt/pg_drc_after_postcts.rpt} "full PG DRC after postCTS optimization"
+    require_contains $flow_text {defer_preroute_pg_drc_check} "pre-route PG/signal interaction DRC must be deferred"
+    require_contains $flow_text {./verify_rpt/pg_drc_after_cts_preopt.rpt} "deferred DRC evidence immediately after CTS"
+    require_contains $flow_text {./verify_rpt/pg_drc_after_postcts.rpt} "deferred DRC evidence after postCTS optimization"
+    require_contains $flow_text {./verify_rpt/pg_drc_after_filler.rpt} "deferred DRC evidence after filler insertion"
+    require_contains $flow_text {./verify_rpt/drc_postroute.rpt} "stale post-route DRC cleanup and final signoff report"
+    require_contains $flow_text {./verify_rpt/connectivity_postroute.rpt} "stale post-route connectivity cleanup and final signoff report"
 }
 require_contains $core_pg_outside {-stacked_via_bottom_layer M5} "M6 mesh connects down to M5 taps"
 require_contains $core_pg_outside {set core_m6_right_llx $SRAM_ISLAND_URX} "M6 mesh handoff begins at the SRAM body edge"
 require_contains $global_upper_pg {-stacked_via_bottom_layer M7} "M8 mesh connects down to M7"
 require_contains $global_upper_pg {-stacked_via_top_layer M8} "M8 mesh does not create M9-driven M7 patches"
+
+source ./tcl/flow_checks.tcl
+
+proc write_cts_test_report {path text} {
+    set fp [open $path w]
+    puts -nonewline $fp $text
+    close $fp
+}
+
+set expected_gap_report ./reports/__tmp_expected_pg_gap.rpt
+set upper_dangling_report ./reports/__tmp_upper_pg_dangling.rpt
+set short_report ./reports/__tmp_pg_short.rpt
+set excessive_gap_report ./reports/__tmp_excessive_pg_gap.rpt
+set clean_pg_baseline ./reports/__tmp_clean_pg_baseline.rpt
+set deferred_drc_report ./reports/__tmp_deferred_pg_drc.rpt
+
+write_cts_test_report $expected_gap_report {
+Net VDD, Pin Pin: CTS_BUF/VDD;: has an unconnected terminal at (1.0, 1.0) (2.0, 2.0)
+Net VDD: has special routes with opens at (0.0, 0.0) (2.0, 2.0)
+Net VDD: dangling Wire at (1.0, 1.0) (1.0, 1.0) on layer: M1
+    1 Problem(s) (IMPVFC-96): Terminal(s) are not connected.
+    1 Problem(s) (IMPVFC-200): Special Wires: Pieces of the net are not connected together.
+    1 Problem(s) (IMPVFC-94): The net has dangling wire(s).
+}
+assert_expected_unfilled_pg_connectivity_report $expected_gap_report
+
+write_cts_test_report $upper_dangling_report {
+Net VSS: dangling Wire at (1.0, 1.0) (1.0, 1.0) on layer: M6
+    1 Problem(s) (IMPVFC-94): The net has dangling wire(s).
+}
+if {![catch {assert_expected_unfilled_pg_connectivity_report $upper_dangling_report}]} {
+    error "Pre-filler PG classifier accepted an upper-layer dangling wire"
+}
+
+write_cts_test_report $short_report {
+Net VDD: shorted to Net VSS at (1.0, 1.0)
+    1 Problem(s) (IMPVFC-91): The net is shorted.
+}
+if {![catch {assert_expected_unfilled_pg_connectivity_report $short_report}]} {
+    error "Pre-filler PG classifier accepted a PG short"
+}
+
+write_cts_test_report $excessive_gap_report {
+Net VDD: dangling Wire at (1.0, 1.0) (1.0, 1.0) on layer: M1
+    501 Problem(s) (IMPVFC-94): The net has dangling wire(s).
+}
+if {![catch {assert_expected_unfilled_pg_connectivity_report $excessive_gap_report}]} {
+    error "Pre-filler PG classifier accepted more than 500 gap markers"
+}
+
+write_cts_test_report $clean_pg_baseline {No DRC violations were found
+}
+defer_preroute_pg_drc_check \
+    $deferred_drc_report unit-test $clean_pg_baseline
+require_contains [read_file $deferred_drc_report] \
+    {NOT_RUN_BEFORE_DETAILED_ROUTE} \
+    "machine-readable deferred pre-route DRC status"
+
+file delete -force \
+    $expected_gap_report \
+    $upper_dangling_report \
+    $short_report \
+    $excessive_gap_report \
+    $clean_pg_baseline \
+    $deferred_drc_report
 
 puts "PASS: Innovus CTS/static unit checks"

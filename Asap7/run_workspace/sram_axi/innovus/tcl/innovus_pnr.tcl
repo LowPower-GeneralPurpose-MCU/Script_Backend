@@ -8,7 +8,7 @@
 ## This script stops before metal fill and GDS export.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_priority_and_local_pg_v8"
+set FLOW_SOURCE_REVISION "sram_preroute_pg_checkpoint_v9"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -248,6 +248,10 @@ foreach stale_post_place_pg_report {
     ./verify_rpt/pg_drc_after_postcts.rpt
     ./verify_rpt/pg_connectivity_after_filler.rpt
     ./verify_rpt/pg_drc_after_filler.rpt
+    ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
+    ./verify_rpt/drc_postroute.rpt
+    ./verify_rpt/antenna_postroute.rpt
+    ./verify_rpt/connectivity_postroute.rpt
 } {
     file delete -force $stale_post_place_pg_report
 }
@@ -378,16 +382,17 @@ setDesignMode \
 # IMPCCOPT-2048 "clock trees are already defined" failure in this flow.
 clock_opt_design
 
-# Legalize CTS cells before postCTS optimization.  CTS cells inherit the
-# continuous M1 followpins by overlap; verify PG without re-running sroute.
+# Legalize CTS cells before postCTS optimization.  Report the temporary M1 rail
+# gaps left around inserted cells, but defer strict connectivity until fillers
+# bridge every row gap.  Do not re-run sroute or trim finalized PG geometry.
 refinePlace
 checkPlace ./verify_rpt/checkPlace_after_cts.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_cts.rpt
 connect_core_pg_pins_nojog \
-    ./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1
-verify_pg_special_drc_or_stop \
+    ./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1 1
+defer_preroute_pg_drc_check \
     ./verify_rpt/pg_drc_after_cts_preopt.rpt \
-    {M1 M9}
+    "post-CTS/pre-postCTS"
 
 # Propagated clocks are valid only after CTS.
 proc apply_post_cts_propagated_clocks {} {
@@ -419,13 +424,14 @@ optDesign \
 # that result directly so a later legalization pass cannot undo timing work.
 checkPlace ./verify_rpt/checkPlace_after_postcts.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_postcts.rpt
-# PostCTS ECO cells also inherit existing M1 followpins by overlap.  Keep this
-# checkpoint read-only so ViaGen cannot stitch M1 rails into the upper mesh.
+# PostCTS ECO cells also leave temporary M1 rail gaps until filler insertion.
+# Keep this diagnostic checkpoint read-only and bounded; filler is the strict
+# PG connectivity gate before detailed signal routing.
 connect_core_pg_pins_nojog \
-    ./verify_rpt/pg_connectivity_after_postcts.rpt 1
-verify_pg_special_drc_or_stop \
+    ./verify_rpt/pg_connectivity_after_postcts.rpt 1 1
+defer_preroute_pg_drc_check \
     ./verify_rpt/pg_drc_after_postcts.rpt \
-    {M1 M9}
+    "postCTS/pre-filler"
 
 timeDesign \
     -postCTS \
@@ -465,9 +471,9 @@ checkPlace ./verify_rpt/checkPlace_after_filler.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_filler.rpt
 verify_core_pg_after_filler_nojog \
     ./verify_rpt/pg_connectivity_after_filler.rpt
-verify_pg_special_drc_or_stop \
+defer_preroute_pg_drc_check \
     ./verify_rpt/pg_drc_after_filler.rpt \
-    {M1 M9}
+    "post-filler/pre-route"
 
 # ------------------------------------------------------------------------
 # 5. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
