@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Aug 21 17:47:07 2026                
+#  Created on Sat Aug 22 10:47:27 2026                
 #                                                     
 #######################################################
 
@@ -1154,10 +1154,10 @@ set_ccopt_property -net_type trunk route_type trunk_rule
 set_ccopt_property -net_type top route_type top_rule
 set_ccopt_property routing_top_min_fanout 16
 set_ccopt_property target_max_trans 0.3ns
-set_ccopt_property -net_type leaf target_max_trans 120ps
-set_ccopt_property -net_type trunk target_max_trans 160ps
-set_ccopt_property -net_type top target_max_trans 200ps
-set_ccopt_property target_skew 50ps
+set_ccopt_property -net_type leaf target_max_trans 35ps
+set_ccopt_property -net_type trunk target_max_trans 40ps
+set_ccopt_property -net_type top target_max_trans 40ps
+set_ccopt_property target_skew 40ps
 set_ccopt_property buffer_cells {
     BUFx4_ASAP7_75t_R
     BUFx8_ASAP7_75t_R
@@ -1204,6 +1204,7 @@ clearDrc
 applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_postcts.rpt
 timeDesign -postCTS -outDir ./reports/timing_postCTS
+timeDesign -postCTS -hold -outDir ./reports/timing_postCTS_hold
 saveDesign ./saved/axi_ram_postCTS.enc
 setFillerMode -reset
 setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -add_fillers_with_drc false -fitGap true -honorPrerouteAsObs true -diffCellViol true
@@ -1211,41 +1212,22 @@ addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FIL
 checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt
 checkPlace ./verify_rpt/checkPlace_after_filler.rpt
 applyGlobalNets
+setSrouteMode -reset
+setSrouteMode -viaConnectToShape {ring stripe blockring}
+sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -corePinLayer M1 -allowJogging 0 -allowLayerChange 0
+editTrim -nets {VDD VSS}
 clearDrc
 applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_filler.rpt
+verify_drc -check_only special -layer_range {M1 M9} -area {{500.688 0.0 625.248 770.832} {0.0 706.32 500.688 770.832} {0.0 0.0 2.16 706.32} {2.16 0.0 500.688 2.16} {123.552 2.16 127.872 174.96} {2.16 174.96 123.552 179.28} {249.264 2.16 253.584 174.96} {127.872 174.96 249.264 179.28} {374.976 2.16 379.296 174.96} {253.584 174.96 374.976 179.28} {379.296 174.96 500.688 179.28} {374.976 179.28 379.296 352.08} {379.296 352.08 500.688 356.4} {249.264 179.28 253.584 352.08} {253.584 352.08 374.976 356.4} {123.552 179.28 127.872 352.08} {127.872 352.08 249.264 356.4} {2.16 352.08 123.552 356.4} {123.552 356.4 127.872 529.2} {2.16 529.2 123.552 533.52} {249.264 356.4 253.584 529.2} {127.872 529.2 249.264 533.52} {374.976 356.4 379.296 529.2} {253.584 529.2 374.976 533.52} {379.296 529.2 500.688 533.52} {374.976 533.52 379.296 706.32} {249.264 533.52 253.584 706.32} {123.552 533.52 127.872 706.32} {121.392 0.192 123.36 10.8} {247.104 0.192 249.072 10.8} {372.816 0.192 374.784 10.8} {498.528 0.192 500.496 10.8} {498.528 174.96 500.496 187.92} {372.816 174.96 374.784 187.92} {247.104 174.96 249.072 187.92} {121.392 174.96 123.36 187.92} {121.392 352.08 123.36 365.04} {247.104 352.08 249.072 365.04} {372.816 352.08 374.784 365.04} {498.528 352.08 500.496 365.04} {498.528 529.2 500.496 542.16} {372.816 529.2 374.784 542.16} {247.104 529.2 249.072 542.16} {121.392 529.2 123.36 542.16}} -report ./verify_rpt/pg_drc_after_filler.rpt
 fit
-zoomBox -478.66900 215.83300 1103.91700 1063.74800
-selectMarker 0.2640 0.2880 624.6240 769.5360 -1 3 7
-zoomBox -478.66900 554.99900 1103.91700 1402.91400
-fit
-is_innovus_plus
-deselectAll
-selectMarker 0.2640 0.2880 624.6240 769.5360 -1 3 7
-zoomBox -478.66900 385.41600 1103.91700 1233.33100
-deselectAll
-gui_select -rect {579.45525 519.18550 573.08550 521.30875}
-selectWire 572.4640 1.6000 574.0640 768.6080 9 VDD
-zoomBox -478.66900 894.16500 1103.91700 1742.08000
-zoomBox -478.66900 1148.53950 1103.91700 1996.45450
-zoomBox -478.66900 1233.33100 1103.91700 2081.24600
-fit
-zoomBox -478.66900 470.20750 1103.91700 1318.12250
-fit
-deselectAll
-selectWire 572.3360 19.3320 572.4640 746.5600 7 VDD
-zoomBox -478.66900 300.62450 1103.91700 1148.53950
-zoomBox -478.66900 554.99900 1103.91700 1402.91400
-zoomBox -1148.41575 372.66375 1428.56200 1753.35225
-zoomBox -889.27750 408.44875 1301.15375 1582.03400
-zoomBox -481.78225 464.72075 1100.80425 1312.63600
-zoomBox -71.56675 521.52775 900.33950 1042.25400
-zoomBox 109.60275 547.09875 811.80500 923.32350
-zoomBox 251.50575 616.65675 682.74675 847.70625
-zoomBox 266.52000 633.75375 633.07500 830.14600
-zoomBox 279.28200 648.28650 590.85400 815.22000
-zoomBox 290.12975 660.63925 554.96600 802.53275
-zoomBox 313.85000 687.65025 476.49250 774.79050
-zoomBox 324.32600 699.57925 441.83525 762.53825
-panCenter 351.65350 730.69100
-pan -8.56625 405.94475
+zoomBox -188.57475 23.52325 954.84350 636.14175
+zoomBox -74.89775 47.91550 897.00775 568.64125
+zoomBox 173.67150 101.25200 770.54300 421.04275
+zoomBox -74.22750 47.41200 897.67900 568.13825
+zoomBox -320.97450 -6.17775 1024.22450 714.55050
+zoomBox -178.90300 101.50275 793.00350 622.22900
+pan -27.81825 492.95600
+zoomBox -129.46000 360.86600 696.66075 803.48350
+zoomBox -6.01850 434.47975 590.85400 754.27100
+zoomBox 117.99875 508.43700 484.55350 704.82900
