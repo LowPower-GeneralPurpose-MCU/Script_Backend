@@ -98,6 +98,20 @@ proc innovus_sdc_scale_first_number {cmd scale} {
     return "[string range $cmd 0 [expr {$num_start - 1}]][innovus_sdc_format_number [expr {double($old_value) * $scale}]][string range $cmd [expr {$num_end + 1}] end]"
 }
 
+proc innovus_sdc_replace_first_number {cmd value} {
+    set number [innovus_sdc_number_re]
+    set ws {[ \t\r\n]}
+    set pattern "(^|$ws)($number)"
+
+    if {![regexp -indices -- $pattern $cmd match prefix num_idx]} {
+        error "Cannot find a numeric value in SDC command: [string trim $cmd]"
+    }
+
+    lassign $num_idx num_start num_end
+    set formatted_value [innovus_sdc_format_number $value]
+    return "[string range $cmd 0 [expr {$num_start - 1}]]${formatted_value}[string range $cmd [expr {$num_end + 1}] end]"
+}
+
 proc innovus_sdc_scale_waveform {cmd scale} {
     set pattern {(-waveform[ \t\r\n]+\{)([^\}]*)\}}
     set out ""
@@ -126,7 +140,7 @@ proc innovus_sdc_scale_waveform {cmd scale} {
     return $out
 }
 
-proc innovus_sdc_normalize_command {cmd time_scale cap_scale} {
+proc innovus_sdc_normalize_command {cmd time_scale cap_scale {max_transition_ns ""}} {
     set trimmed [string trim $cmd]
     if {$trimmed eq ""} {
         return $cmd
@@ -167,6 +181,9 @@ proc innovus_sdc_normalize_command {cmd time_scale cap_scale} {
             if {$cmd eq $before} {
                 set cmd [innovus_sdc_scale_first_number $cmd $time_scale]
             }
+            if {$command_name eq "set_max_transition" && $max_transition_ns ne ""} {
+                set cmd [innovus_sdc_replace_first_number $cmd $max_transition_ns]
+            }
         }
         set_load {
             set before $cmd
@@ -187,9 +204,13 @@ proc innovus_sdc_normalize_command {cmd time_scale cap_scale} {
     return $cmd
 }
 
-proc prepare_innovus_sdc {src_sdc out_sdc group_path_file} {
+proc prepare_innovus_sdc {src_sdc out_sdc group_path_file {max_transition_ns ""}} {
     if {![file exists $src_sdc]} {
         error "Missing source SDC: [file normalize $src_sdc]"
+    }
+    if {$max_transition_ns ne "" &&
+        (![string is double -strict $max_transition_ns] || $max_transition_ns <= 0.0)} {
+        error "max_transition_ns must be a positive number, got '$max_transition_ns'"
     }
 
     set input_file [open $src_sdc r]
@@ -218,7 +239,8 @@ proc prepare_innovus_sdc {src_sdc out_sdc group_path_file} {
         } elseif {[regexp {^group_path(?:[ \t\r\n]|$)} $trimmed]} {
             lappend group_commands $command_buffer
         } else {
-            lappend output_commands [innovus_sdc_normalize_command $command_buffer $time_scale $cap_scale]
+            lappend output_commands [innovus_sdc_normalize_command \
+                $command_buffer $time_scale $cap_scale $max_transition_ns]
         }
 
         set command_buffer ""
@@ -232,6 +254,9 @@ proc prepare_innovus_sdc {src_sdc out_sdc group_path_file} {
     set out_file [open $out_sdc w]
     puts $out_file "# Generated from $src_sdc for Innovus."
     puts $out_file "# Numeric timing values are in ns; capacitance values are in pF."
+    if {$max_transition_ns ne ""} {
+        puts $out_file "# Project max-transition override: [innovus_sdc_format_number $max_transition_ns] ns."
+    }
     puts $out_file "# Do not edit by hand; rerun prepare_innovus_sdc.tcl."
     foreach command $output_commands {
         puts -nonewline $out_file $command
@@ -254,5 +279,8 @@ proc prepare_innovus_sdc {src_sdc out_sdc group_path_file} {
     close $group_file
 
     puts "Generated Innovus SDC: $out_sdc (time scale $time_scale ns/source-unit, cap scale $cap_scale pF/source-unit)"
+    if {$max_transition_ns ne ""} {
+        puts "Applied project max-transition override: [innovus_sdc_format_number $max_transition_ns] ns"
+    }
     puts "Generated global path groups: $group_path_file ([llength $group_commands] commands)"
 }

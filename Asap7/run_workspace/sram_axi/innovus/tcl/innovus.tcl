@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_postroute_drv_guard_v11"
+set FLOW_SOURCE_REVISION "sram_wdata_transition_eco_v12"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -58,8 +58,19 @@ if {![file exists ./tcl/innovus.globals]} {
 set init_design_uniquify 1
 source ./tcl/innovus.globals
 source ./tcl/prepare_innovus_sdc.tcl
+source ./tcl/sync_genus_handoff.tcl
 source ./tcl/flow_checks.tcl
-prepare_innovus_sdc $SYN_SDC_FILE $INNOVUS_SDC_FILE $INNOVUS_GROUP_PATH_FILE
+sync_genus_handoff \
+    "../genus/outputs/${DESIGN}_syn.v" \
+    "../genus/outputs/${DESIGN}_syn.sdc" \
+    "./outputs/${DESIGN}_syn.v" \
+    $SYN_SDC_FILE \
+    $SIGNAL_MAX_TRANSITION_NS
+prepare_innovus_sdc \
+    $SYN_SDC_FILE \
+    $INNOVUS_SDC_FILE \
+    $INNOVUS_GROUP_PATH_FILE \
+    $SIGNAL_MAX_TRANSITION_NS
 
 init_design
 
@@ -67,11 +78,6 @@ if {[file exists $INNOVUS_GROUP_PATH_FILE] && [file size $INNOVUS_GROUP_PATH_FIL
     puts "Reading global path groups: $INNOVUS_GROUP_PATH_FILE"
     source $INNOVUS_GROUP_PATH_FILE
 }
-
-# The generated SDC may come from an older Genus checkpoint with the former
-# 0.500 ns rule.  Re-assert the SRAM-safe limit in the active Innovus mode.
-set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]
-puts "Signal max-transition target: ${SIGNAL_MAX_TRANSITION_NS} ns"
 
 setDesignMode -process 7
 setDesignMode \
@@ -544,6 +550,12 @@ defer_preroute_pg_drc_check \
     ./verify_rpt/pg_drc_after_postcts.rpt \
     "postCTS/pre-filler"
 
+# Split the routed-RC-sensitive upper SRAM row while legal placement sites are
+# still available and before fillers occupy the remaining standard-cell rows.
+source ./tcl/sram_wdata_transition_eco.tcl
+checkPlace ./verify_rpt/checkPlace_after_sram_wdata_eco.rpt
+assert_clean_check_place ./verify_rpt/checkPlace_after_sram_wdata_eco.rpt
+
 timeDesign \
     -postCTS \
     -outDir ./reports/timing_postCTS
@@ -617,7 +629,9 @@ setNanoRouteMode -quiet \
     -route_with_si_driven false
 ecoRoute -fix_drc
 
-set_si_mode -enable_delay_report true
+setSIMode \
+    -enable_delay_report true \
+    -enable_glitch_report true
 setAnalysisMode -analysisType onChipVariation
 setDelayCalMode \
     -SIAware true \

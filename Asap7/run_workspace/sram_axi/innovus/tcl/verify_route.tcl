@@ -3,7 +3,9 @@
 ## Intended for the active routed Innovus session.
 ############################################################
 
-set_si_mode -enable_delay_report true
+setSIMode \
+    -enable_delay_report true \
+    -enable_glitch_report true
 
 ecoRoute -fix_drc
 

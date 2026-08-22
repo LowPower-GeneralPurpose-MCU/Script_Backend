@@ -33,7 +33,7 @@ source ./tcl/prepare_innovus_sdc.tcl
 
 set tmp_sdc ./reports/__tmp_innovus_unit_check.sdc
 set tmp_groups ./reports/__tmp_innovus_groups_check.tcl
-prepare_innovus_sdc ./outputs/axi_ram_syn.sdc $tmp_sdc $tmp_groups
+prepare_innovus_sdc ./outputs/axi_ram_syn.sdc $tmp_sdc $tmp_groups 0.300
 
 set generated_sdc [read_file $tmp_sdc]
 set generated_groups [read_file $tmp_groups]
@@ -44,6 +44,8 @@ require_contains $generated_sdc {set_clock_transition -max 0.04} "40ps clock tra
 require_contains $generated_sdc {set_input_delay -clock [get_clocks CLK] -add_delay -max 0.25} "250ps input delay in ns"
 require_contains $generated_sdc {set_load -pin_load 0.01} "10fF load in pF"
 require_contains $generated_sdc {set_clock_uncertainty -setup 0.05} "50ps setup uncertainty in ns"
+require_contains $generated_sdc {set_max_transition 0.3 [current_design]} "project transition override in MMMC SDC"
+require_not_contains $generated_sdc {set_max_transition 0.5 [current_design]} "stale 500ps transition constraint"
 require_not_contains $generated_sdc {set_units} "unsupported set_units"
 require_not_contains $generated_sdc {group_path} "mode-local group_path"
 require_contains $generated_groups {group_path -name C2C} "global C2C path group"
@@ -57,6 +59,8 @@ set view_definition [read_file ./tcl/viewDefinition.tcl]
 set globals [read_file ./tcl/innovus.globals]
 set sram_route_guard [read_file ./tcl/sram_route_guard.tcl]
 set sram_signal_route_constraints [read_file ./tcl/sram_signal_route_constraints.tcl]
+set sram_wdata_transition_eco [read_file ./tcl/sram_wdata_transition_eco.tcl]
+set sync_genus_handoff [read_file ./tcl/sync_genus_handoff.tcl]
 set verify_route [read_file ./tcl/verify_route.tcl]
 set core_lower_pg [read_file ./tcl/core_lower_pg_nojog.tcl]
 set flow_checks [read_file ./tcl/flow_checks.tcl]
@@ -68,7 +72,10 @@ foreach flow [list $innovus_master $innovus_pnr] {
     require_contains $flow {set STDCELL_CORE_PG_BUILT 0} "lower-PG ownership reset"
     require_contains $flow {set SRAM_BLOCKPIN_STITCH_DONE 0} "SRAM blockPin ownership reset"
     require_contains $flow {set enc_source_continue_on_error false} "source stops on Tcl errors"
-    require_contains $flow {prepare_innovus_sdc $SYN_SDC_FILE $INNOVUS_SDC_FILE $INNOVUS_GROUP_PATH_FILE} "generated Innovus SDC before init_design"
+    require_contains $flow {prepare_innovus_sdc} "generated Innovus SDC before init_design"
+    require_contains $flow {source ./tcl/sync_genus_handoff.tcl} "validated Genus-to-Innovus handoff"
+    require_contains $flow {sync_genus_handoff} "automatic Genus netlist and SDC synchronization"
+    require_contains $flow {$SIGNAL_MAX_TRANSITION_NS} "generated Innovus SDC receives the project transition limit"
     require_contains $flow {source $INNOVUS_GROUP_PATH_FILE} "global group_path source after init_design"
     require_contains $flow {-place_global_reorder_scan false} "scan reorder disabled without scan DEF"
     require_contains $flow {place_opt_design
@@ -89,13 +96,15 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {BUFx24_ASAP7_75t_L} "strong LVT CTS buffer for SRAM clock slew recovery"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {sram_postroute_drv_guard_v11} "flow revision for SRAM V3 pin escape and routed DRV guard"
-    require_contains $flow {set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]} "Innovus transition override for stale Genus SDCs"
+    require_contains $flow {sram_wdata_transition_eco_v12} "flow revision for the SRAM routed-transition ECO"
+    require_not_contains $flow {set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]} "invalid post-init MMMC constraint override"
     require_contains $flow {-detailDrvFailureReason true} "detailed post-route DRV diagnostics"
     require_contains $flow {-detailDrvFailureReasonMaxNumNets 100} "bounded detailed DRV diagnostics"
     require_contains $flow {-setupTargetSlack 0.020} "post-route setup safety margin"
     require_contains $flow {-holdTargetSlack 0.020} "post-route hold safety margin"
-    require_contains $flow {set_si_mode -enable_delay_report true} "bumpy-transition delay diagnostics"
+    require_contains $flow {setSIMode} "legacy-UI SI command"
+    require_contains $flow {-enable_delay_report true} "legacy-UI bumpy-transition diagnostics"
+    require_contains $flow {-enable_glitch_report true} "legacy-UI SI glitch diagnostics"
     require_contains $flow {report_noise -bumpy_waveform -threshold 0} "post-route bumpy-transition report"
     require_contains $flow {./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1 1} "bounded pre-filler PG diagnostic before postCTS optimization"
     require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1 1} "bounded pre-filler PG diagnostic after postCTS optimization"
@@ -115,6 +124,8 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {source ./tcl/core_lower_pg_nojog.tcl} "lower PG source"
     require_contains $flow {source ./tcl/core_pg_outside_island.tcl} "outside-island M6/M7 PG source"
     require_contains $flow {source ./tcl/global_upper_pg_to_ring.tcl} "upper PG source"
+    require_contains $flow {source ./tcl/sram_wdata_transition_eco.tcl} "targeted SRAM write-data transition ECO"
+    require_contains $flow {checkPlace ./verify_rpt/checkPlace_after_sram_wdata_eco.rpt} "placement check after targeted SRAM ECO"
     require_contains $flow {-layer_range {M4 M5}} "SRAM M4/M5 pin-tap interface DRC range"
     require_contains $flow {-layer_range {M6 M9}} "global upper-PG DRC range"
     require_contains $flow {-report ./verify_rpt/sram_m4_interface_drc.rpt} "separate SRAM M4/M5 interface DRC report"
@@ -162,6 +173,11 @@ refinePlace} "explicit legalization immediately after placement optimization"
     if {$sram_route_constraint_index < 0 || $sram_route_constraint_index >= $detailed_route_index} {
         error "SRAM signal routing policy must be applied before NanoRoute"
     }
+    set sram_wdata_eco_index [string first {source ./tcl/sram_wdata_transition_eco.tcl} $flow]
+    set filler_index [string first {addFiller} $flow]
+    if {$sram_wdata_eco_index < 0 || $filler_index < 0 || $sram_wdata_eco_index >= $filler_index} {
+        error "SRAM write-data transition ECO must run before filler insertion"
+    }
     if {![regexp {timeDesign([[:space:]]|\\)+-postRoute([[:space:]]|\\)+-hold([[:space:]]|\\)+-outDir[[:space:]]+\./reports/timing_postRoute_hold} $flow]} {
         error "Missing explicit final post-route hold report"
     }
@@ -184,9 +200,22 @@ require_contains $sram_signal_route_constraints {-bottom_preferred_routing_layer
 require_contains $sram_signal_route_constraints {-top_preferred_routing_layer $SRAM_SIGNAL_ROUTE_TOP_LAYER} "SRAM preferred routing stays below the signal top layer"
 require_contains $sram_signal_route_constraints {-preferred_routing_layer_effort $SRAM_SIGNAL_ROUTE_EFFORT} "SRAM preferred routing has explicit effort"
 require_contains $sram_signal_route_constraints {(^|/)(VDD|VSS|clk)$} "SRAM route policy excludes PG and clock terms"
+require_contains $sram_wdata_transition_eco {set SRAM_WDATA_TRANSITION_ECO_SOURCE_BANKS {8 9 10 11 12 13 14 15}} "known violating SRAM branch"
+require_contains $sram_wdata_transition_eco {set SRAM_WDATA_TRANSITION_ECO_SINK_BANKS {12 13 14 15}} "upper SRAM row offload set"
+require_contains $sram_wdata_transition_eco {BUFx24_ASAP7_75t_L} "strong low-Vt SRAM data repeater"
+require_contains $sram_wdata_transition_eco {ecoAddRepeater} "targeted transition repeater insertion"
+require_contains $sram_wdata_transition_eco {$SRAM_ISLAND_BLOCKAGE_URY + $ASAP7_ROW_HEIGHT} "legal top-strip ECO location"
+require_contains $sram_wdata_transition_eco {-loc $sram_wdata_eco_location} "explicit repeater location outside the hard SRAM blockage"
+require_contains $sram_wdata_transition_eco {-radius $SRAM_WDATA_TRANSITION_ECO_PLACE_RADIUS} "bounded repeater legalization radius"
+require_contains $sram_wdata_transition_eco {skipped_already_partitioned} "idempotent ECO skip when optimization already split the branch"
+require_contains $sync_genus_handoff {assert_genus_transition_handoff} "Genus transition-constraint handoff guard"
+require_contains $sync_genus_handoff {Rerun Genus before Innovus} "actionable stale-handoff error"
+require_contains $sync_genus_handoff {copy_file_if_different} "content-aware Genus artifact synchronization"
 require_contains $verify_route {timing_postRoute_hold_recheck} "route recheck regenerates hold timing"
 require_contains $verify_route {assert_clean_timing_summary} "route recheck gates timing and real DRVs"
-require_contains $verify_route {set_si_mode -enable_delay_report true} "route recheck enables bumpy-transition diagnostics"
+require_contains $verify_route {setSIMode} "route recheck uses the legacy-UI SI command"
+require_contains $verify_route {-enable_delay_report true} "route recheck enables bumpy-transition delay diagnostics"
+require_contains $verify_route {-enable_glitch_report true} "route recheck enables SI glitch diagnostics"
 require_contains $core_lower_pg {-stacked_via_top_layer M5} "lower PG stops at M5"
 require_contains $core_lower_pg {STDCELL_PG_AREA_OVERHANG} "lower PG expands area boxes for ASAP7 std-cell M1 pin overhang"
 require_contains $core_lower_pg {set area_nets {VSS VDD}} "SRAM-edge M5 tap uses the VDD lane that overlaps bottom-row VDD pins"

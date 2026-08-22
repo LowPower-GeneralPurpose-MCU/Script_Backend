@@ -78,7 +78,11 @@ if {![file exists $INNOVUS_SDC_FILE]} {
     }
 
     source ./tcl/prepare_innovus_sdc.tcl
-    prepare_innovus_sdc $SYN_SDC_FILE $INNOVUS_SDC_FILE $INNOVUS_GROUP_PATH_FILE
+    prepare_innovus_sdc \
+        $SYN_SDC_FILE \
+        $INNOVUS_SDC_FILE \
+        $INNOVUS_GROUP_PATH_FILE \
+        $SIGNAL_MAX_TRANSITION_NS
 }
 
 create_constraint_mode \
