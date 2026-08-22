@@ -1,0 +1,2 @@
+# Skipped
+Skipped legacy in-design metal fill. Cadence reports setMetalFill/addMetalFill as obsolete in this Innovus version; enable INNOVUS_RUN_LEGACY_METAL_FILL=1 only after post-route DRC/connectivity are clean or switch to the Pegasus signoff fill flow.

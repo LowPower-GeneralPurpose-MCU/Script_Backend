@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Sat Aug 22 14:26:49 2026                
+#  Created on Sat Aug 22 15:49:26 2026                
 #                                                     
 #######################################################
 
@@ -1214,10 +1214,707 @@ applyGlobalNets
 clearDrc
 applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_filler.rpt
-zoomBox -271.27075 -250.10450 909.76500 807.17450
-zoomBox -210.30925 -118.78500 793.57125 779.90225
 setNanoRouteMode -reset
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+setAttribute -net FE_OFN665_n_54 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_addr[11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_wdata[1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_wdata[4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_wdata[11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {mem_wdata[23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[0][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[1][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[2][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[3][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[4][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[5][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[6][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[7][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[8][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[9][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[10][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[11][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[12][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[13][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[14][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][0]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][1]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][2]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][3]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][4]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][5]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][6]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][7]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][8]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][9]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][10]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][11]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][12]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][13]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][14]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][15]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][16]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][17]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][18]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][19]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][20]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][21]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][22]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][23]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][24]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][25]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][26]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][27]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][28]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][29]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][30]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net {u_mem/bank_rdata[15][31]} -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_GLN736_mem_wdata_15 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_GLN739_mem_wdata_31 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_GLN745_mem_wdata_5 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_GLN746_mem_wdata_12 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_GLN747_mem_wdata_6 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_GLN749_mem_wdata_10 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_GLN759_n_416 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN12_mem_wdata_31 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN15_mem_wdata_9 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN16_mem_wdata_8 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN17_mem_wdata_7 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN18_mem_wdata_6 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN19_mem_wdata_5 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN21_mem_wdata_3 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN23_mem_wdata_1 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN53_mem_addr_10 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN57_mem_addr_9 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN59_mem_addr_8 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN63_mem_addr_7 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN72_mem_addr_5 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN84_mem_addr_3 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN86_mem_addr_3 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN113_mem_wdata_29 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN116_mem_wdata_28 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN124_mem_wdata_27 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN126_mem_wdata_27 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN128_mem_wdata_26 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN135_mem_wdata_24 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN136_mem_wdata_24 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN138_mem_wdata_24 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN147_mem_wdata_22 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN148_mem_wdata_22 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN152_mem_wdata_22 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN153_mem_wdata_21 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN155_mem_wdata_21 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN156_mem_wdata_21 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN160_mem_wdata_14 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN161_mem_wdata_13 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN162_mem_wdata_12 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN163_mem_wdata_11 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN164_mem_wdata_10 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN166_mem_wdata_20 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN167_mem_wdata_20 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN168_mem_wdata_20 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN170_mem_wdata_20 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN171_mem_wdata_20 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN173_mem_wdata_19 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN174_mem_wdata_19 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN175_mem_wdata_19 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN178_mem_wdata_18 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN182_mem_wdata_18 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN186_mem_wdata_17 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN188_mem_wdata_17 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN189_mem_wdata_17 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN203_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN217_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN226_mem_addr_8 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN231_mem_addr_3 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN234_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN237_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN240_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN248_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN249_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN258_n_616 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN620_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN623_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN627_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN629_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN635_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN637_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN643_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN645_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN646_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN649_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN652_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN653_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN660_mem_wdata_27 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN664_n_54 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN684_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN685_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN704_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN715_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN730_n_409 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN762_mem_wdata_28 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN779_mem_wdata_8 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN780_mem_wdata_13 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN782_mem_wdata_9 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN791_mem_wdata_3 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN797_mem_wdata_7 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN811_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN812_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN833_mem_addr_11 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN838_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN841_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN843_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN854_mem_wdata_2 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN856_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN879_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN880_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN881_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN887_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN896_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN898_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN899_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN900_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN901_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN919_FE_GLN737 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN921_FE_GLN737 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN929_mem_wdata_14 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN930_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN931_mem_wdata_25 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN932_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN933_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN935_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN939_mem_addr_6 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN940_mem_addr_6 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN947_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN948_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN952_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN953_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN954_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN955_mem_addr_9 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN962_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN963_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN964_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN965_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN966_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN968_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN971_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN974_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN976_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN978_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN989_mem_wdata_0 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN994_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1000_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1001_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1002_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1005_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1006_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1012_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1014_mem_addr_4 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1015_mem_addr_4 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1017_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1018_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1019_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1020_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1021_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1022_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1023_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1024_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1025_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1026_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1027_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1028_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1029_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1030_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_OFN1031_n -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/FE_PHN1694_FE_OFN147_mem_wdata_22 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_407 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_408 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_410 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_411 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_412 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_413 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_414 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_415 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_417 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_418 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_419 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_420 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_421 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
+setAttribute -net u_mem/n_456 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
 setNanoRouteMode -quiet -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 2:7 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven false -route_detail_fix_antenna true -route_detail_merge_abutting_cut true -route_detail_end_iteration 20
 routeDesign -globalDetail
 routeDesign -viaOpt -wireOpt -trackOpt
@@ -1233,51 +1930,16 @@ applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
 ecoRoute -fix_drc
 timeDesign -postRoute -outDir ./reports/timing_postRoute
+timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold
 verify_drc -report ./verify_rpt/drc_postroute.rpt
 verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
 saveDesign ./saved/axi_ram_routed.enc
-zoomBox -75.16525 22.84575 650.13850 672.14750
-zoomBox 93.02225 199.10600 471.63550 538.04575
-zoomBox -83.62950 81.23525 532.87900 633.14200
-zoomBox -657.58975 -301.73850 731.86550 942.12050
-zoomBox -269.86500 2.75375 583.43425 766.63875
-zoomBox -102.03700 237.88350 421.99550 707.00450
-zoomBox -8.72825 340.22225 369.88575 679.16250
-zoomBox 27.71275 380.18950 349.53475 668.28900
-zoomBox 126.41750 488.44650 294.41100 638.83650
-zoomBox -8.72950 340.22050 369.88625 679.16250
-zoomBox -231.18725 96.23450 494.12175 745.54100
-zoomBox -999.77975 -746.73700 923.35500 974.87900
-zoomBox -787.06550 -534.39625 847.59900 928.97750
-zoomBox -321.12400 -70.08650 682.76475 828.60825
+zoomBox -195.37825 -225.08950 985.65750 832.18950
 fit
-zoomBox -304.06275 172.59650 839.35575 785.21525
-zoomBox -110.68550 385.31175 591.51650 761.53625
-zoomBox -17.35100 479.51775 489.99000 751.34000
-zoomBox 53.04250 546.82575 419.59650 743.21750
-zoomBox 140.64725 630.59150 331.99125 733.10950
-zoomBox 177.56400 665.89075 295.07400 728.85000
-zoomBox 200.23575 687.56900 272.40200 726.23400
-zoomBox 205.65800 692.73450 266.99925 725.59975
-panCenter 236.38350 722.00600
-zoomBox 202.31925 700.87275 274.48550 739.53775
-zoomBox 187.53550 681.26250 305.04625 744.22225
-fit
-zoomBox -197.41300 65.16175 946.00525 677.78025
-zoomBox -87.57125 105.66200 884.33425 626.38775
-zoomBox 140.53525 150.94775 737.40700 470.73850
-zoomBox 242.90675 180.50350 674.14675 411.55250
-zoomBox 318.10125 208.54750 629.67225 375.48050
-zoomBox 427.01050 249.16575 565.25675 323.23500
-zoomBox 468.53250 264.65125 540.69800 303.31600
-zoomBox 481.11575 269.34425 533.25550 297.27950
-zoomBox 486.03000 271.17675 530.34900 294.92200
-zoomBox 490.20700 272.73450 527.87825 292.91800
-zoomBox 475.33350 267.18725 536.67525 300.05275
-zoomBox 440.03875 254.02375 557.55050 316.98400
-zoomBox 372.42475 228.80700 597.54100 349.41925
-zoomBox 242.89825 180.49925 674.15100 411.55500
-zoomBox 72.63250 116.99775 774.85625 493.23400
-zoomBox -204.61700 13.59675 938.83775 626.23475
-zoomBox -656.07125 -154.77500 1205.85425 842.80400
-fit
+ecoRoute -fix_drc
+applyGlobalNets
+verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_verify_route_pg.rpt
+verify_drc -report ./verify_rpt/drc_postroute.rpt
+verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
+timeDesign -postRoute -outDir ./reports/timing_postRoute_recheck
+saveDesign ./saved/axi_ram_routed.enc
