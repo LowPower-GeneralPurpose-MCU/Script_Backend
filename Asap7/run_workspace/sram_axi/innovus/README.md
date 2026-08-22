@@ -108,10 +108,22 @@ The hard macro must not be replaced by flip-flops.
 From the design run directory:
 
 ```tcl
-innovus -stylus -files innovus.tcl
+innovus -stylus -files tcl/innovus.tcl
 ```
 
 or use the command appropriate for the installed Innovus release.
+
+The master flow runs in-design metal fill by default after routed DRC,
+connectivity, setup, hold and real DRV checks pass. Set
+`INNOVUS_RUN_LEGACY_METAL_FILL=0` only when a separate Pegasus flow owns metal
+fill and density closure.
+
+To continue from an already open, clean routed session without rerunning PnR:
+
+```tcl
+set ROUTE_VERIFY_CLEAN 1
+source ./tcl/add_fill_and_verify.tcl
+```
 
 ## First checks after `init_design`
 

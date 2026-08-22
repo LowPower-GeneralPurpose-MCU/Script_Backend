@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_wdata_transition_eco_v12"
+set FLOW_SOURCE_REVISION "sram_clean_handoff_fill_v13"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -49,6 +49,19 @@ set auto_file_dir "/tmp/$USER/innovus_master"
 
 foreach dir {outputs reports verify_rpt saved} {
     file mkdir $dir
+}
+
+# Remove stale fill evidence before any stage can stop this run early.
+foreach stale_fill_artifact {
+    ./verify_rpt/drc_after_fill.rpt
+    ./verify_rpt/antenna_after_fill.rpt
+    ./verify_rpt/connectivity_after_fill.rpt
+    ./reports/timing_postFill
+    ./reports/timing_postFill_hold
+    ./saved/axi_ram_filled.enc
+    ./saved/axi_ram_filled.enc.dat
+} {
+    file delete -force $stale_fill_artifact
 }
 
 if {![file exists ./tcl/innovus.globals]} {
@@ -550,12 +563,6 @@ defer_preroute_pg_drc_check \
     ./verify_rpt/pg_drc_after_postcts.rpt \
     "postCTS/pre-filler"
 
-# Split the routed-RC-sensitive upper SRAM row while legal placement sites are
-# still available and before fillers occupy the remaining standard-cell rows.
-source ./tcl/sram_wdata_transition_eco.tcl
-checkPlace ./verify_rpt/checkPlace_after_sram_wdata_eco.rpt
-assert_clean_check_place ./verify_rpt/checkPlace_after_sram_wdata_eco.rpt
-
 timeDesign \
     -postCTS \
     -outDir ./reports/timing_postCTS
@@ -737,9 +744,9 @@ if {$AUTO_RUN_ALL} {
     } else {
         puts "===================================================="
         puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE FINAL EXPORT"
-        puts "Metal fill was skipped or post-fill reports are not clean."
-        puts "Set INNOVUS_RUN_LEGACY_METAL_FILL=1 only after routed reports are clean,"
-        puts "or use the Pegasus signoff fill flow recommended by Cadence."
+        puts "Metal fill was disabled or post-fill DRC/connectivity/timing is not clean."
+        puts "Keep INNOVUS_RUN_LEGACY_METAL_FILL enabled for this flow."
+        puts "Set it to 0 only when a separate Pegasus flow owns metal fill."
         puts "===================================================="
     }
 

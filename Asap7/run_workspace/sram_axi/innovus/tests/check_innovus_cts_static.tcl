@@ -59,9 +59,9 @@ set view_definition [read_file ./tcl/viewDefinition.tcl]
 set globals [read_file ./tcl/innovus.globals]
 set sram_route_guard [read_file ./tcl/sram_route_guard.tcl]
 set sram_signal_route_constraints [read_file ./tcl/sram_signal_route_constraints.tcl]
-set sram_wdata_transition_eco [read_file ./tcl/sram_wdata_transition_eco.tcl]
 set sync_genus_handoff [read_file ./tcl/sync_genus_handoff.tcl]
 set verify_route [read_file ./tcl/verify_route.tcl]
+set add_fill_and_verify [read_file ./tcl/add_fill_and_verify.tcl]
 set core_lower_pg [read_file ./tcl/core_lower_pg_nojog.tcl]
 set flow_checks [read_file ./tcl/flow_checks.tcl]
 set core_pg_outside [read_file ./tcl/core_pg_outside_island.tcl]
@@ -96,7 +96,7 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {BUFx24_ASAP7_75t_L} "strong LVT CTS buffer for SRAM clock slew recovery"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {sram_wdata_transition_eco_v12} "flow revision for the SRAM routed-transition ECO"
+    require_contains $flow {sram_clean_handoff_fill_v13} "flow revision for clean synthesis handoff and default metal fill"
     require_not_contains $flow {set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]} "invalid post-init MMMC constraint override"
     require_contains $flow {-detailDrvFailureReason true} "detailed post-route DRV diagnostics"
     require_contains $flow {-detailDrvFailureReasonMaxNumNets 100} "bounded detailed DRV diagnostics"
@@ -124,8 +124,7 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {source ./tcl/core_lower_pg_nojog.tcl} "lower PG source"
     require_contains $flow {source ./tcl/core_pg_outside_island.tcl} "outside-island M6/M7 PG source"
     require_contains $flow {source ./tcl/global_upper_pg_to_ring.tcl} "upper PG source"
-    require_contains $flow {source ./tcl/sram_wdata_transition_eco.tcl} "targeted SRAM write-data transition ECO"
-    require_contains $flow {checkPlace ./verify_rpt/checkPlace_after_sram_wdata_eco.rpt} "placement check after targeted SRAM ECO"
+    require_not_contains $flow {sram_wdata_transition_eco.tcl} "obsolete unconditional SRAM data ECO"
     require_contains $flow {-layer_range {M4 M5}} "SRAM M4/M5 pin-tap interface DRC range"
     require_contains $flow {-layer_range {M6 M9}} "global upper-PG DRC range"
     require_contains $flow {-report ./verify_rpt/sram_m4_interface_drc.rpt} "separate SRAM M4/M5 interface DRC report"
@@ -173,11 +172,6 @@ refinePlace} "explicit legalization immediately after placement optimization"
     if {$sram_route_constraint_index < 0 || $sram_route_constraint_index >= $detailed_route_index} {
         error "SRAM signal routing policy must be applied before NanoRoute"
     }
-    set sram_wdata_eco_index [string first {source ./tcl/sram_wdata_transition_eco.tcl} $flow]
-    set filler_index [string first {addFiller} $flow]
-    if {$sram_wdata_eco_index < 0 || $filler_index < 0 || $sram_wdata_eco_index >= $filler_index} {
-        error "SRAM write-data transition ECO must run before filler insertion"
-    }
     if {![regexp {timeDesign([[:space:]]|\\)+-postRoute([[:space:]]|\\)+-hold([[:space:]]|\\)+-outDir[[:space:]]+\./reports/timing_postRoute_hold} $flow]} {
         error "Missing explicit final post-route hold report"
     }
@@ -200,14 +194,6 @@ require_contains $sram_signal_route_constraints {-bottom_preferred_routing_layer
 require_contains $sram_signal_route_constraints {-top_preferred_routing_layer $SRAM_SIGNAL_ROUTE_TOP_LAYER} "SRAM preferred routing stays below the signal top layer"
 require_contains $sram_signal_route_constraints {-preferred_routing_layer_effort $SRAM_SIGNAL_ROUTE_EFFORT} "SRAM preferred routing has explicit effort"
 require_contains $sram_signal_route_constraints {(^|/)(VDD|VSS|clk)$} "SRAM route policy excludes PG and clock terms"
-require_contains $sram_wdata_transition_eco {set SRAM_WDATA_TRANSITION_ECO_SOURCE_BANKS {8 9 10 11 12 13 14 15}} "known violating SRAM branch"
-require_contains $sram_wdata_transition_eco {set SRAM_WDATA_TRANSITION_ECO_SINK_BANKS {12 13 14 15}} "upper SRAM row offload set"
-require_contains $sram_wdata_transition_eco {BUFx24_ASAP7_75t_L} "strong low-Vt SRAM data repeater"
-require_contains $sram_wdata_transition_eco {ecoAddRepeater} "targeted transition repeater insertion"
-require_contains $sram_wdata_transition_eco {$SRAM_ISLAND_BLOCKAGE_URY + $ASAP7_ROW_HEIGHT} "legal top-strip ECO location"
-require_contains $sram_wdata_transition_eco {-loc $sram_wdata_eco_location} "explicit repeater location outside the hard SRAM blockage"
-require_contains $sram_wdata_transition_eco {-radius $SRAM_WDATA_TRANSITION_ECO_PLACE_RADIUS} "bounded repeater legalization radius"
-require_contains $sram_wdata_transition_eco {skipped_already_partitioned} "idempotent ECO skip when optimization already split the branch"
 require_contains $sync_genus_handoff {assert_genus_transition_handoff} "Genus transition-constraint handoff guard"
 require_contains $sync_genus_handoff {Rerun Genus before Innovus} "actionable stale-handoff error"
 require_contains $sync_genus_handoff {copy_file_if_different} "content-aware Genus artifact synchronization"
@@ -216,6 +202,12 @@ require_contains $verify_route {assert_clean_timing_summary} "route recheck gate
 require_contains $verify_route {setSIMode} "route recheck uses the legacy-UI SI command"
 require_contains $verify_route {-enable_delay_report true} "route recheck enables bumpy-transition delay diagnostics"
 require_contains $verify_route {-enable_glitch_report true} "route recheck enables SI glitch diagnostics"
+require_contains $add_fill_and_verify {set RUN_LEGACY_METAL_FILL 1} "in-design metal fill is enabled by default"
+require_contains $add_fill_and_verify {assert_clean_drc_report ./verify_rpt/drc_postroute.rpt} "metal fill requires clean routed DRC"
+require_contains $add_fill_and_verify {assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt} "metal fill requires clean routed connectivity"
+require_contains $add_fill_and_verify {./reports/timing_postFill/axi_ram_postRoute.summary.gz setup 1} "post-fill setup and real-DRV gate"
+require_contains $add_fill_and_verify {./reports/timing_postFill_hold/axi_ram_postRoute_hold.summary.gz hold} "post-fill hold gate"
+require_contains $add_fill_and_verify {saveDesign ./saved/axi_ram_filled.enc} "filled checkpoint save"
 require_contains $core_lower_pg {-stacked_via_top_layer M5} "lower PG stops at M5"
 require_contains $core_lower_pg {STDCELL_PG_AREA_OVERHANG} "lower PG expands area boxes for ASAP7 std-cell M1 pin overhang"
 require_contains $core_lower_pg {set area_nets {VSS VDD}} "SRAM-edge M5 tap uses the VDD lane that overlaps bottom-row VDD pins"
@@ -259,6 +251,9 @@ foreach flow_text [list $innovus_master $innovus_pnr] {
     require_contains $flow_text {./verify_rpt/drc_postroute.rpt} "stale post-route DRC cleanup and final signoff report"
     require_contains $flow_text {./verify_rpt/connectivity_postroute.rpt} "stale post-route connectivity cleanup and final signoff report"
 }
+require_contains $innovus_master {./verify_rpt/drc_after_fill.rpt} "stale post-fill DRC cleanup"
+require_contains $innovus_master {./verify_rpt/connectivity_after_fill.rpt} "stale post-fill connectivity cleanup"
+require_contains $innovus_master {./saved/axi_ram_filled.enc.dat} "stale filled checkpoint cleanup"
 require_contains $core_pg_outside {-stacked_via_bottom_layer M5} "M6 mesh connects down to M5 taps"
 require_contains $core_pg_outside {set core_m6_right_llx $SRAM_ISLAND_URX} "M6 mesh handoff begins at the SRAM body edge"
 require_contains $global_upper_pg {-stacked_via_bottom_layer M7} "M8 mesh connects down to M7"

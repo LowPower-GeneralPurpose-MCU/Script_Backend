@@ -11,7 +11,9 @@ set FINAL_REPORTS_CLEAN 0
 assert_clean_drc_report ./verify_rpt/drc_postroute.rpt
 assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt
 
-set RUN_LEGACY_METAL_FILL 0
+# This project requires in-design fill after the strict routed-design gate.
+# Set the environment override to 0 only when Pegasus owns the fill step.
+set RUN_LEGACY_METAL_FILL 1
 if {[info exists ::env(INNOVUS_RUN_LEGACY_METAL_FILL)]} {
     switch -nocase -- $::env(INNOVUS_RUN_LEGACY_METAL_FILL) {
         1 - true - yes - on  { set RUN_LEGACY_METAL_FILL 1 }
@@ -24,12 +26,12 @@ if {[info exists ::env(INNOVUS_RUN_LEGACY_METAL_FILL)]} {
 
 if {!$RUN_LEGACY_METAL_FILL} {
     write_skipped_report ./verify_rpt/drc_after_fill.rpt \
-        "Skipped legacy in-design metal fill. Cadence reports setMetalFill/addMetalFill as obsolete in this Innovus version; enable INNOVUS_RUN_LEGACY_METAL_FILL=1 only after post-route DRC/connectivity are clean or switch to the Pegasus signoff fill flow."
+        "Skipped because INNOVUS_RUN_LEGACY_METAL_FILL=0. Use this override only when a separate Pegasus flow owns metal fill and density closure."
     write_skipped_report ./verify_rpt/antenna_after_fill.rpt \
         "Skipped because metal fill was not run."
     write_skipped_report ./verify_rpt/connectivity_after_fill.rpt \
         "Skipped because metal fill was not run."
-    puts "Legacy metal fill skipped. Set INNOVUS_RUN_LEGACY_METAL_FILL=1 only when the routed design is clean and you intentionally accept the legacy fill warnings."
+    puts "Metal fill skipped because INNOVUS_RUN_LEGACY_METAL_FILL=0; a separate Pegasus fill flow must complete density closure."
 } else {
 
 # M1-M3
@@ -117,13 +119,27 @@ verifyConnectivity \
 
 assert_clean_drc_report ./verify_rpt/drc_after_fill.rpt
 assert_clean_connectivity_report ./verify_rpt/connectivity_after_fill.rpt
+
+timeDesign \
+    -postRoute \
+    -outDir ./reports/timing_postFill
+
+timeDesign \
+    -postRoute \
+    -hold \
+    -outDir ./reports/timing_postFill_hold
+
+assert_clean_timing_summary \
+    ./reports/timing_postFill/axi_ram_postRoute.summary.gz setup 1
+assert_clean_timing_summary \
+    ./reports/timing_postFill_hold/axi_ram_postRoute_hold.summary.gz hold
 set FINAL_REPORTS_CLEAN 1
 
 saveDesign ./saved/axi_ram_filled.enc
 
 puts "===================================================="
 puts "METAL FILL ADDED"
-puts "Review the new DRC, antenna and connectivity reports."
+puts "Review the new DRC, antenna, connectivity and post-fill timing reports."
 puts "Also run Calibre density/DRC signoff before export approval."
 puts ""
 puts "When clean:"
