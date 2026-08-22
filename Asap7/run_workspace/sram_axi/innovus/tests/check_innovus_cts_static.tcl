@@ -85,11 +85,11 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {BUFx24_ASAP7_75t_L} "strong LVT CTS buffer for SRAM clock slew recovery"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1} "pre-postCTS PG obstruction refresh"
-    require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1} "postCTS PG refresh guard"
+    require_contains $flow {./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1} "read-only PG check before postCTS optimization"
+    require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1} "read-only PG check after postCTS optimization"
     require_contains $flow {verify_core_pg_after_filler_nojog} "post-filler PG verification without broad reconnect"
     require_contains $flow {./verify_rpt/pg_connectivity_after_filler.rpt} "post-filler PG connectivity report"
-    require_contains $flow {./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1} "post-route-opt PG refresh guard"
+    require_contains $flow {./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1} "read-only post-route-opt PG guard"
     require_contains $flow {addFiller} "explicit filler insertion"
     require_contains $flow {-cell $FILLERCells} "explicit filler cell list"
     require_contains $flow {setFillerMode -reset} "idempotent filler-mode reset"
@@ -127,8 +127,17 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_order $flow $postcts_opt $postcts_check \
         "postCTS optimization before final placement check"
 
+    set after_cts_check_index [string first {checkPlace ./verify_rpt/checkPlace_after_cts.rpt} $flow]
     set postcts_opt_index [string first $postcts_opt $flow]
     set postcts_check_index [string first $postcts_check $flow]
+    set preopt_pg_drc_index [string first {./verify_rpt/pg_drc_after_cts_preopt.rpt} $flow $after_cts_check_index]
+    set postcts_pg_drc_index [string first {./verify_rpt/pg_drc_after_postcts.rpt} $flow $postcts_check_index]
+    if {$preopt_pg_drc_index < 0 || $preopt_pg_drc_index >= $postcts_opt_index} {
+        error "Invalid order for full PG DRC before postCTS optimization"
+    }
+    if {$postcts_pg_drc_index < 0 || $postcts_pg_drc_index <= $postcts_check_index} {
+        error "Invalid order for full PG DRC after postCTS placement"
+    }
     set postcts_segment [string range $flow $postcts_opt_index $postcts_check_index]
     require_not_contains $postcts_segment {refinePlace} \
         "timing-destructive legalization after postCTS optimization"
@@ -152,11 +161,11 @@ require_contains $core_lower_pg {set STDCELL_CORE_PG_BUILT 1} "lower PG single-o
 require_not_contains $core_lower_pg {-stacked_via_top_layer M8} "unsafe direct M1-to-M8 stack"
 require_contains $innovus_master {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} "post-place PG trim/reconnect guard in master flow"
 require_contains $innovus_pnr {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} "post-place PG trim/reconnect guard in PnR flow"
-require_contains $flow_checks {proc connect_core_pg_pins_nojog} "shared post-CTS/filler PG reconnect proc"
+require_contains $flow_checks {proc connect_core_pg_pins_nojog} "shared post-CTS/filler PG verification proc"
 require_contains $flow_checks {proc configure_sram_clock_top_routing} "shared SRAM macro-clock routing policy"
-    require_not_contains $flow_checks {routing_top_fanout_count $fanout_count} "invalid macro stop-pin top-fanout weighting"
-    require_contains $flow_checks {global routing_top_min_fanout setting} "shared macro-clock top-routing policy"
-    require_contains $flow_checks {proc verify_core_pg_after_filler_nojog} "read-only post-filler PG verification"
+require_not_contains $flow_checks {routing_top_fanout_count $fanout_count} "invalid macro stop-pin top-fanout weighting"
+require_contains $flow_checks {global routing_top_min_fanout setting} "shared macro-clock top-routing policy"
+require_contains $flow_checks {proc verify_core_pg_after_filler_nojog} "read-only post-filler PG verification"
 require_contains $flow_checks {proc verify_pg_special_drc_or_stop} "shared PG special DRC guard proc"
 require_contains $flow_checks {-check_only special} "PG DRC guard must check special-route DRC only"
 require_contains $flow_checks {No DRC violations were found} "PG DRC guard must accept Innovus clean-report wording"
@@ -165,7 +174,10 @@ require_not_contains $flow_checks {-connect {blockPin}} "fallback SRAM blockPin 
 require_contains $flow_checks {setSrouteMode -reset} "shared PG reconnect must reset stale sroute mode"
 require_contains $flow_checks {-corePinLayer M1} "PG refresh is restricted to standard-cell M1 core pins"
 require_not_contains $flow_checks {-corePinMaxViaScale} "same-layer M1 refresh must not configure an unused via scale"
-require_contains $flow_checks {refresh_stdcell_core_pins} "post-insertion corePin refresh control"
+require_contains $flow_checks {post_insertion_checkpoint} "read-only post-insertion PG checkpoint control"
+require_contains $flow_checks {if {$core_pg_is_built}} "post-build PG verification must bypass corePin sroute"
+require_contains $flow_checks {inserted cells inherit the existing continuous M1 followpins by overlap} "CTS/filler PG verification stays read-only"
+require_contains $flow_checks {Post-insertion PG checkpoint is read-only: editTrim skipped.} "post-insertion PG verification must not trim existing geometry"
 require_contains $flow_checks {pg_core_handoff_is_deferred} "stage-aware pre-placement PG connectivity policy"
 require_contains $flow_checks {SRAM_BLOCKPIN_STITCH_DONE} "single-owner SRAM blockPin stitch"
 require_contains $flow_checks {-allPGPinPort -noUnroutedNet} "strict final verification checks every SRAM PG port"
@@ -173,6 +185,10 @@ require_contains $flow_checks {Deterministic SRAM M5 edge taps were not built} "
 require_contains $flow_checks {pg_top_level_owned_drc_areas} "hierarchical PG DRC scope builder"
 require_contains $flow_checks {global SRAM_PIN_TAP_AREAS} "deterministic M5 tap corridors are included in PG DRC scope"
 require_contains $flow_checks {CorePin reconnect skipped} "duplicate corePin via prevention"
+foreach flow_text [list $innovus_master $innovus_pnr] {
+    require_contains $flow_text {./verify_rpt/pg_drc_after_cts_preopt.rpt} "full PG DRC immediately after CTS"
+    require_contains $flow_text {./verify_rpt/pg_drc_after_postcts.rpt} "full PG DRC after postCTS optimization"
+}
 require_contains $core_pg_outside {-stacked_via_bottom_layer M5} "M6 mesh connects down to M5 taps"
 require_contains $core_pg_outside {set core_m6_right_llx $SRAM_ISLAND_URX} "M6 mesh handoff begins at the SRAM body edge"
 require_contains $global_upper_pg {-stacked_via_bottom_layer M7} "M8 mesh connects down to M7"

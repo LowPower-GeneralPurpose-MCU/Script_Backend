@@ -1308,6 +1308,10 @@ assert_contains \
     "PG connectivity must relax staged ring/island opens only at the pre-placement PG checkpoint"
 assert_contains \
     $flow_checks_text \
+    {if[[:space:]]+\{!\$allow_preplacement_special_opens\}} \
+    "pre-placement PG opens must remain stage-aware even after deterministic SRAM taps are complete"
+assert_contains \
+    $flow_checks_text \
     {proc[[:space:]]+connect_sram_block_pins_to_local_stripes_nojog} \
     "flow_checks.tcl must validate deterministic SRAM access before final connectivity"
 assert_not_contains \
@@ -1350,6 +1354,18 @@ assert_contains \
     $flow_checks_text \
     {connect_sram_block_pins_to_local_stripes_nojog} \
     "post-placement PG reconnect must validate deterministic SRAM access before final verify"
+assert_contains \
+    $flow_checks_text \
+    {if[[:space:]]+\{\$core_pg_is_built\}} \
+    "CTS, ECO, and filler checkpoints must not re-run corePin sroute after the PG mesh is built"
+assert_contains \
+    $flow_checks_text \
+    {inserted[[:space:]]+cells[[:space:]]+inherit[[:space:]]+the[[:space:]]+existing[[:space:]]+continuous[[:space:]]+M1[[:space:]]+followpins[[:space:]]+by[[:space:]]+overlap} \
+    "post-build PG checks must be read-only to avoid upper-mesh via insertion"
+assert_contains \
+    $flow_checks_text \
+    {if[[:space:]]+\{\$trim_pg_geometry\}} \
+    "post-insertion PG checks must skip editTrim after the mesh is finalized"
 set core_pg_proc_index [string first {proc connect_core_pg_pins_nojog} $flow_checks_text]
 set post_place_sram_stitch_index [string first {connect_sram_block_pins_to_local_stripes_nojog} $flow_checks_text $core_pg_proc_index]
 set post_place_core_pin_index [string first {-connect {corePin}} $flow_checks_text $core_pg_proc_index]

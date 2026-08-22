@@ -242,6 +242,12 @@ foreach stale_post_place_pg_report {
     ./verify_rpt/sram_m4_interface_drc.rpt
     ./verify_rpt/pg_drc_after_trim.rpt
     ./verify_rpt/pg_drc_after_trim_full.rpt
+    ./verify_rpt/pg_connectivity_after_cts_preopt.rpt
+    ./verify_rpt/pg_drc_after_cts_preopt.rpt
+    ./verify_rpt/pg_connectivity_after_postcts.rpt
+    ./verify_rpt/pg_drc_after_postcts.rpt
+    ./verify_rpt/pg_connectivity_after_filler.rpt
+    ./verify_rpt/pg_drc_after_filler.rpt
 } {
     file delete -force $stale_post_place_pg_report
 }
@@ -372,13 +378,16 @@ setDesignMode \
 # IMPCCOPT-2048 "clock trees are already defined" failure in this flow.
 clock_opt_design
 
-# Legalize CTS cells before postCTS optimization.  Refreshing their M1 PG
-# access here makes the optimizer see the final PG obstruction environment.
+# Legalize CTS cells before postCTS optimization.  CTS cells inherit the
+# continuous M1 followpins by overlap; verify PG without re-running sroute.
 refinePlace
 checkPlace ./verify_rpt/checkPlace_after_cts.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_cts.rpt
 connect_core_pg_pins_nojog \
     ./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1
+verify_pg_special_drc_or_stop \
+    ./verify_rpt/pg_drc_after_cts_preopt.rpt \
+    {M1 M9}
 
 # Propagated clocks are valid only after CTS.
 proc apply_post_cts_propagated_clocks {} {
@@ -410,10 +419,13 @@ optDesign \
 # that result directly so a later legalization pass cannot undo timing work.
 checkPlace ./verify_rpt/checkPlace_after_postcts.rpt
 assert_clean_check_place ./verify_rpt/checkPlace_after_postcts.rpt
-# Refresh only same-layer M1 corePin rails for postCTS ECO cells.  This does
-# not invoke blockPin/floatingStripe and cannot enter the SRAM island.
+# PostCTS ECO cells also inherit existing M1 followpins by overlap.  Keep this
+# checkpoint read-only so ViaGen cannot stitch M1 rails into the upper mesh.
 connect_core_pg_pins_nojog \
     ./verify_rpt/pg_connectivity_after_postcts.rpt 1
+verify_pg_special_drc_or_stop \
+    ./verify_rpt/pg_drc_after_postcts.rpt \
+    {M1 M9}
 
 timeDesign \
     -postCTS \

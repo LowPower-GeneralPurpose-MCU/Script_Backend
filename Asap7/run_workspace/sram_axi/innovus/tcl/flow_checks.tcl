@@ -111,8 +111,12 @@ proc assert_clean_pg_connectivity_report {report_file {allow_preplacement_specia
         error "PG special routes are open/shorted; inspect [file normalize $report_file] before continuing"
     }
 
-    if {![pg_sram_block_pins_are_deferred] ||
-        !$allow_preplacement_special_opens} {
+    # The deterministic SRAM taps may already be complete while the standard-
+    # cell M1/M5 and upper M6-M9 handoff is still intentionally deferred until
+    # after placement.  At that one checkpoint, classify IMPVFC-200 open pieces
+    # below instead of treating the completed SRAM stitch as proof that the
+    # whole PG network must already be final.
+    if {!$allow_preplacement_special_opens} {
         assert_clean_connectivity_report $report_file
         return
     }
@@ -445,7 +449,7 @@ proc connect_sram_block_pins_to_local_stripes_nojog {} {
     puts "SRAM block-pin access preserved: deterministic M5 edge taps are the only owner."
 }
 
-proc connect_core_pg_pins_nojog {{report_file ""} {refresh_stdcell_core_pins 0}} {
+proc connect_core_pg_pins_nojog {{report_file ""} {post_insertion_checkpoint 0}} {
     global STDCELL_CORE_PG_BUILT
 
     applyGlobalNets
@@ -453,8 +457,8 @@ proc connect_core_pg_pins_nojog {{report_file ""} {refresh_stdcell_core_pins 0}}
 
     connect_sram_block_pins_to_local_stripes_nojog
 
-    if {![string is boolean -strict $refresh_stdcell_core_pins]} {
-        error "refresh_stdcell_core_pins must be boolean, got $refresh_stdcell_core_pins"
+    if {![string is boolean -strict $post_insertion_checkpoint]} {
+        error "post_insertion_checkpoint must be boolean, got $post_insertion_checkpoint"
     }
 
     if {[info exists STDCELL_CORE_PG_BUILT] &&
@@ -464,14 +468,27 @@ proc connect_core_pg_pins_nojog {{report_file ""} {refresh_stdcell_core_pins 0}}
     set core_pg_is_built [expr {
         [info exists STDCELL_CORE_PG_BUILT] && $STDCELL_CORE_PG_BUILT
     }]
-    if {$core_pg_is_built && !$refresh_stdcell_core_pins} {
-        puts "CorePin reconnect skipped: M1 followpins and M1-to-M5 stacks already belong to core_lower_pg_nojog.tcl."
-    } else {
-        if {$refresh_stdcell_core_pins} {
-            puts "Refreshing same-layer M1 corePin rails after standard-cell insertion or movement."
+    if {$post_insertion_checkpoint && !$core_pg_is_built} {
+        error "Cannot run a post-insertion PG checkpoint before the lower core PG is built"
+    }
+    set trim_pg_geometry [expr {
+        !$core_pg_is_built || !$post_insertion_checkpoint
+    }]
+    if {$core_pg_is_built} {
+        # Standard-cell, CTS, ECO, and filler PG pins connect by overlap to the
+        # continuous M1 followpins already owned by core_lower_pg_nojog.tcl.
+        # Re-running corePin sroute after the M1-to-M9 mesh exists lets ViaGen
+        # stitch followpins to unrelated upper stripes.  In the failing run it
+        # created 54 V1-V5 stacks plus 757 V6 cuts, leaving M4 off-grid patches
+        # and dangling M6 shapes.  A post-build refresh must therefore remain
+        # read-only even when new physical-only cells were inserted.
+        if {$post_insertion_checkpoint} {
+            puts "CorePin sroute refresh skipped: inserted cells inherit the existing continuous M1 followpins by overlap."
         } else {
-            puts "Building same-layer M1 corePin rails before lower core PG ownership is established."
+            puts "CorePin reconnect skipped: M1 followpins and M1-to-M5 stacks already belong to core_lower_pg_nojog.tcl."
         }
+    } else {
+        puts "Building same-layer M1 corePin rails before lower core PG ownership is established."
         setSrouteMode -reset
         setSrouteMode \
             -viaConnectToShape {ring stripe blockring}
@@ -485,7 +502,11 @@ proc connect_core_pg_pins_nojog {{report_file ""} {refresh_stdcell_core_pins 0}}
             -allowLayerChange 0
     }
 
-    editTrim -nets {VDD VSS}
+    if {$trim_pg_geometry} {
+        editTrim -nets {VDD VSS}
+    } else {
+        puts "Post-insertion PG checkpoint is read-only: editTrim skipped."
+    }
     clearDrc
 
     if {$report_file ne ""} {
@@ -501,12 +522,10 @@ proc verify_core_pg_after_filler_nojog {{report_file ""}} {
         error "Cannot verify post-filler PG before the lower core PG is built"
     }
 
-    # Filler cells introduce new M1 VDD/VSS pins after the prior PG stitch.
-    # Refresh only M1 core-pin rails and trim redundant PG shapes, using the
-    # same restricted sequence that is clean after post-CTS ECO insertion.
-    # The SRAM M4/M5 deterministic edge taps remain geometry-owned by
-    # sram_island_power.tcl; this procedure never invokes blockPin routing,
-    # floatingStripe routing, jogging, or layer changes.
+    # Filler cells inherit the continuous M1 followpins by overlap.  Reapply
+    # global-net rules and verify without creating or trimming special-route
+    # geometry.  The SRAM M4/M5 deterministic edge taps remain geometry-owned
+    # by sram_island_power.tcl.
     connect_core_pg_pins_nojog $report_file 1
 }
 
