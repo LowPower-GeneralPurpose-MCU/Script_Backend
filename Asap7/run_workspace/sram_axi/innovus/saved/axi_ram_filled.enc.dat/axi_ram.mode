@@ -1,0 +1,123 @@
+if {![namespace exists ::IMEX]} { namespace eval ::IMEX {} }
+set ::IMEX::dataVar [file dirname [file normalize [info script]]]
+set ::IMEX::libVar ${::IMEX::dataVar}/libs
+
+catch { setDesignMode -bottomRoutingLayer 2 }
+catch { setDesignMode -process 7 }
+catch { setDesignMode -topRoutingLayer 7 }
+catch { setAnalysisMode -analysisType onChipVariation }
+catch { setAnalysisMode -checkType setup }
+catch { setAnalysisMode -clkSrcPath true }
+catch { setAnalysisMode -clockPropagation sdcControl }
+catch { setAnalysisMode -skew true }
+catch { setAnalysisMode -usefulSkew true }
+catch { setOptMode -opt_view_pruning_hold_views_active_list { tt } }
+catch { setOptMode -opt_view_pruning_setup_views_active_list { tt } }
+catch { setOptMode -opt_view_pruning_hold_views_persistent_list { tt} }
+catch { setOptMode -opt_view_pruning_setup_views_persistent_list { tt} }
+catch { setOptMode -opt_view_pruning_tdgr_setup_views_persistent_list { tt} }
+catch { setOptMode -opt_view_pruning_hold_target_slack_auto_flow 200 }
+catch { setOptMode -opt_delete_insts true }
+catch { setOptMode -opt_detail_drv_failure_reason true }
+catch { setOptMode -opt_detail_drv_failure_reason_max_num_nets 100 }
+catch { setOptMode -opt_drv_margin 0 }
+catch { setOptMode -opt_drv_fix_max_cap true }
+catch { setOptMode -opt_drv true }
+catch { setOptMode -opt_fix_fanout_load true }
+catch { setOptMode -opt_drv_fix_max_tran true }
+catch { setOptMode -opt_hold_target_slack 0.02 }
+catch { setOptMode -opt_leakage_to_dynamic_ratio 0.5 }
+catch { setOptMode -opt_resize_flip_flops true }
+catch { setOptMode -opt_power_effort high }
+catch { setOptMode -opt_preserve_all_sequential false }
+catch { setOptMode -opt_area_recovery true }
+catch { setOptMode -opt_setup_target_slack 0.02 }
+catch { setPathGroupOptions reg2reg -effortLevel high -weight 2 }
+catch { setPathGroupOptions reg2reg -late -slackAdjustment -0 }
+catch { setPathGroupOptions I2C -late -slackAdjustment -0 }
+catch { setPathGroupOptions C2O -late -slackAdjustment -0 }
+catch { setExtractRCMode  -effortLevel medium -engine postRoute -total_c_th 0 -relative_c_th 1 -coupling_c_th 0.1 }
+catch {setNanoRouteMode -quiet -route_detail_antenna_factor 1.000000}
+catch {setNanoRouteMode -quiet -route_detail_end_iteration "20"}
+catch {setNanoRouteMode -quiet -route_detail_fix_antenna true}
+catch {setNanoRouteMode -quiet -route_detail_merge_abutting_cut true}
+catch {setNanoRouteMode -quiet -route_detail_no_taper_in_layers "2:7"}
+catch {setNanoRouteMode -quiet -route_detail_no_taper_on_output_pin true}
+catch {setNanoRouteMode -quiet -route_detail_post_route_spread_wire "auto"}
+catch {setNanoRouteMode -quiet -drouteStartIteration 0}
+catch {setNanoRouteMode -quiet -route_detail_use_lef_pin_taper_rule true}
+catch {setNanoRouteMode -quiet -route_detail_use_min_spacing_for_blockage auto}
+catch {setNanoRouteMode -quiet -route_detail_use_multi_cut_via_effort "low"}
+catch {setNanoRouteMode -quiet -extract_design_signature 128150343}
+catch {setNanoRouteMode -quiet -extract_rc_model_file "${::IMEX::libVar}/misc/rc_model.bin"}
+catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
+catch {setNanoRouteMode -quiet -route_global_exp_timing_driven_use_tif_timing_engine_for_import_design true}
+catch {setNanoRouteMode -quiet -route_exp_design_mode_bottom_routing_layer 2}
+catch {setNanoRouteMode -quiet -route_exp_design_mode_top_routing_layer 7}
+catch {setNanoRouteMode -quiet -route_re_insert_filler_cell_list "FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L"}
+catch {setNanoRouteMode -quiet -route_re_insert_filler_cell_list_from_file false}
+catch {setNanoRouteMode -quiet -routeStrictlyHonor1dRouting "true"}
+catch {setNanoRouteMode -quiet -route_strict_honor_route_rule "true"}
+catch {setNanoRouteMode -quiet -route_use_auto_via "false"}
+catch {setNanoRouteMode -quiet -route_with_si_driven false}
+catch {setNanoRouteMode -quiet -route_with_si_post_route_fix false}
+catch {setNanoRouteMode -quiet -route_with_timing_driven false}
+catch {setNanoRouteMode -quiet -route_with_via_only_for_stdcell_pin "true"}
+catch {setNanoRouteMode -quiet -timingEngine ".timing_file_3039393.tif.gz"}
+
+catch { setPlaceMode -macroPlaceMode 0 }
+catch { setPlaceMode -place_design_refine_macro false }
+catch { setPlaceMode -place_detail_preroute_as_obs {2 3} }
+catch { setPlaceMode -place_global_auto_blockage_in_channel soft }
+catch { setPlaceMode -place_global_cong_effort high }
+catch { setPlaceMode -place_global_module_aware_spare true }
+catch { setPlaceMode -place_global_reorder_scan false }
+catch { setPlaceMode -place_global_uniform_density false }
+catch { setIlmMode -keepHighFanoutPorts true -keepLoopBack false -keepInstInSdc false -keepFlatten true }
+catch { setUsefulSkewMode -opt_skew_eco_route false }
+catch { setSrouteMode -viaConnectToShape {ring stripe blockring} }
+catch { setDelayCalMode -enable_hier_save_restore_flow false }
+catch { setDelayCalMode -enable_high_fanout true }
+catch { setDelayCalMode -enable_ideal_seq_async_pins false }
+catch { setDelayCalMode -eng_enablePrePlacedFlow false }
+catch { setDelayCalMode -engine aae }
+catch { setDelayCalMode -equivalent_waveform_model propagation }
+catch { setDelayCalMode -ewm_type moments }
+catch { setDelayCalMode -ignoreNetLoad false }
+catch { setDelayCalMode -SIAware true }
+catch { setDelayCalMode -socv_accuracy_mode low }
+catch { setPinAssignMode -pinEditInBatch false }
+catch { setHierMode -disableArt false }
+catch { setHierMode -reportPostRouteArtTiming false }
+catch { setHierMode -trialRouteHonorReadOnly false }
+catch { setImportMode -discardFloatingVNets false }
+catch { setImportMode -keepEmptyModule true }
+catch { setSIMode -enable_delay_report true }
+catch { setSIMode -enable_glitch_report true }
+catch { setSIMode -separate_delta_delay_on_data true }
+catch { setAddStripeMode -allow_jog none }
+catch { setAddStripeMode -allow_nonpreferred_dir none }
+catch { setAddStripeMode -break_at none }
+catch { setAddStripeMode -extend_to_closest_target area_boundary }
+catch { setAddStripeMode -stacked_via_bottom_layer M8 }
+catch { setAddStripeMode -stacked_via_top_layer M9 }
+catch { setRouteMode -earlyGlobalRouteSecondPG false }
+catch { setFillerMode -add_fillers_with_drc false }
+catch { setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} }
+catch { setFillerMode -diffCellViol true }
+catch { setFillerMode -fitGap true }
+catch { setFillerMode -honorPrerouteAsObs true }
+catch { setFPlanMode -cellsForExtraSites {} }
+catch { setFPlanMode -defaultRowPatternSite {} }
+catch { setFPlanMode -defaultTechSite asap7sc7p5t }
+catch { setFPlanMode -disableEolBlockageOnEdges {} }
+catch { setFPlanMode -exp_dcls_region_options {} }
+catch { setFPlanMode -extraRowPattern {} }
+catch { setFPlanMode -extraSites {} }
+catch { setFPlanMode -firstRowSiteIndex 0 }
+catch { setFPlanMode -ignore_check_power_domain_overlap {} }
+catch { setFPlanMode -lastRowSiteIndex -1 }
+catch { setFPlanMode -maxIoHeight false }
+catch { setFPlanMode -place_check_ignore_fixed_cell_list {} }
+catch { setFPlanMode -powerRailLayer {} }
+catch { setFPlanMode -skipViolations {} }

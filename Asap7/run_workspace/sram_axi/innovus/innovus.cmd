@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Sun Aug 23 03:21:37 2026                
+#  Created on Sun Aug 23 04:05:05 2026                
 #                                                     
 #######################################################
 
@@ -1202,8 +1202,6 @@ applyGlobalNets
 clearDrc
 applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_postcts.rpt
-ecoAddRepeater -term {{u_mem/G_SRAM_BANK[12].u_sram/wd[11]} {u_mem/G_SRAM_BANK[13].u_sram/wd[11]} {u_mem/G_SRAM_BANK[14].u_sram/wd[11]} {u_mem/G_SRAM_BANK[15].u_sram/wd[11]}} -loc {251.424 709.56} -radius 24.0 -cell BUFx24_ASAP7_75t_L
-checkPlace ./verify_rpt/checkPlace_after_sram_wdata_eco.rpt
 timeDesign -postCTS -outDir ./reports/timing_postCTS
 timeDesign -postCTS -hold -outDir ./reports/timing_postCTS_hold
 saveDesign ./saved/axi_ram_postCTS.enc
@@ -1948,4 +1946,18 @@ timeDesign -postRoute -outDir ./reports/timing_postRoute_recheck
 timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold_recheck
 report_noise -bumpy_waveform -threshold 0 > ./reports/bumpy_transition_postRoute_recheck.rpt
 saveDesign ./saved/axi_ram_routed.enc
-zoomBox -426.70250 -305.92100 962.75125 937.93675
+verify_drc -report ./verify_rpt/drc_after_fill.rpt
+verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_after_fill.rpt
+timeDesign -postRoute -outDir ./reports/timing_postFill
+timeDesign -postRoute -hold -outDir ./reports/timing_postFill_hold
+saveDesign ./saved/axi_ram_filled.enc
+fit
+zoomBox -383.54400 20.16850 961.65400 740.89625
+zoomBox -174.14875 154.34875 651.97125 596.96575
+zoomBox -81.67050 213.60875 515.20150 533.39975
+zoomBox 11.23950 273.14525 377.79350 469.53700
+zoomBox -124.16200 186.38075 578.04175 562.60625
+zoomBox -302.14900 72.32700 841.27300 684.94750
+zoomBox -724.51400 -198.32375 1465.92350 975.26475
+zoomBox -880.27400 -299.80125 1696.71125 1080.89125
+fit

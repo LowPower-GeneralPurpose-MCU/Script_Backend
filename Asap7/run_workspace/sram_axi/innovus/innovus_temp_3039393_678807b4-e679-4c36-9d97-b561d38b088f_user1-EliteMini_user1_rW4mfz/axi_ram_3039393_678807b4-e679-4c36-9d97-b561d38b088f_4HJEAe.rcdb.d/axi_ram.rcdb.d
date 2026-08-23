@@ -1,0 +1,1 @@
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/innovus_temp_3039393_678807b4-e679-4c36-9d97-b561d38b088f_user1-EliteMini_user1_rW4mfz/nr3039393_tAJgxs.rcdb.d
