@@ -34,6 +34,96 @@ proc read_report_text {report_file report_label} {
     return $report_text
 }
 
+proc si_glitch_violation_count {report_file} {
+    set report_text [read_report_text $report_file "SI glitch"]
+    if {![regexp -nocase \
+        {Total number of glitch violations:[[:space:]]*([0-9]+)} \
+        $report_text -> violation_count]} {
+        error "Cannot find SI glitch count in [file normalize $report_file]"
+    }
+    return $violation_count
+}
+
+proc publish_si_glitch_report {source_report output_report} {
+    set report_text [read_report_text $source_report "SI glitch"]
+    set violation_count [si_glitch_violation_count $source_report]
+
+    file mkdir [file dirname $output_report]
+    set fp [open $output_report w]
+    puts -nonewline $fp $report_text
+    close $fp
+
+    puts "SI glitch report: $violation_count violation(s) -> [file normalize $output_report]"
+    return $violation_count
+}
+
+proc assert_clean_si_glitch_report {report_file} {
+    set violation_count [si_glitch_violation_count $report_file]
+    if {$violation_count != 0} {
+        error "SI analysis has $violation_count glitch violation(s); inspect [file normalize $report_file]"
+    }
+}
+
+proc publish_metal_fill_density_status {report_file status_file} {
+    set report_text [read_report_text $report_file "metal-fill density"]
+    set in_after_fill_section 0
+    set layer_rows {}
+    set total_under 0
+    set total_over 0
+
+    foreach line [split $report_text "\n"] {
+        if {[string first "After filling" $line] >= 0} {
+            set in_after_fill_section 1
+            continue
+        }
+        if {!$in_after_fill_section} {
+            continue
+        }
+
+        if {[regexp {^Layer ([^ ]+) - Number of windows under minimum density \(([^)]+)\): ([0-9]+) out of total ([0-9]+)} \
+            $line -> layer threshold under_count window_count]} {
+            dict set layer_rows $layer under $under_count
+            dict set layer_rows $layer total $window_count
+            dict set layer_rows $layer minimum $threshold
+            incr total_under $under_count
+        } elseif {[regexp {^Layer ([^ ]+) - Number of windows over maximum density[[:space:]]+\(([^)]+)\): ([0-9]+) out of total ([0-9]+)} \
+            $line -> layer threshold over_count window_count]} {
+            dict set layer_rows $layer over $over_count
+            dict set layer_rows $layer maximum $threshold
+            incr total_over $over_count
+        }
+    }
+
+    if {[dict size $layer_rows] == 0} {
+        error "Cannot parse after-fill density rows in [file normalize $report_file]"
+    }
+
+    file mkdir [file dirname $status_file]
+    set fp [open $status_file w]
+    puts $fp "# Innovus abstract-view metal density status"
+    puts $fp "# Status: PENDING_MERGED_GDS_SIGNOFF"
+    puts $fp "# Source: [file normalize $report_file]"
+    puts $fp "# The SRAM LEF OBS blocks fill but does not provide the SRAM GDS internal metal."
+    puts $fp "# Run density signoff on the top-level GDS merged with all SRAM and standard-cell GDS views."
+    puts $fp "# Total under-minimum windows in abstract view: $total_under"
+    puts $fp "# Total over-maximum windows in abstract view: $total_over"
+    foreach layer [lsort -dictionary [dict keys $layer_rows]] {
+        set row [dict get $layer_rows $layer]
+        puts $fp [format \
+            "%-4s under=%-5s total=%-5s min=%-5s over=%-5s max=%s" \
+            $layer \
+            [dict get $row under] \
+            [dict get $row total] \
+            [dict get $row minimum] \
+            [dict get $row over] \
+            [dict get $row maximum]]
+    }
+    close $fp
+
+    puts "Metal density status: under=$total_under over=$total_over -> [file normalize $status_file]"
+    return [dict create under $total_under over $total_over]
+}
+
 proc assert_clean_timing_summary {report_file analysis_label {check_drvs 0}} {
     set report_text [read_report_text $report_file "$analysis_label timing"]
 
@@ -522,8 +612,11 @@ proc defer_preroute_pg_drc_check {report_file stage \
 }
 
 proc verify_antenna_if_enabled {report_file} {
+    global ANTENNA_CHECK_STATUS
+
     if {![info exists ::env(INNOVUS_RUN_ANTENNA_CHECK)] ||
         ![string is true -strict $::env(INNOVUS_RUN_ANTENNA_CHECK)]} {
+        set ANTENNA_CHECK_STATUS "SKIPPED_NO_RULES"
         write_skipped_report $report_file \
             "INNOVUS_RUN_ANTENNA_CHECK is not enabled. ASAP7 educational LEFs used by this flow do not provide process antenna keywords, and Innovus TCR says verify_antenna requires those rules."
         puts "Antenna check skipped: set INNOVUS_RUN_ANTENNA_CHECK=1 only when antenna rules are loaded."
@@ -533,6 +626,7 @@ proc verify_antenna_if_enabled {report_file} {
     if {[catch {verify_antenna -report $report_file} antenna_error]} {
         if {[string first "no process antenna information" $antenna_error] >= 0 ||
             [string first "IMPVPA-22" $antenna_error] >= 0} {
+            set ANTENNA_CHECK_STATUS "SKIPPED_NO_RULES"
             write_skipped_report $report_file \
                 "Skipped because Innovus reported no process antenna information for this design."
             puts "Antenna check skipped: no process antenna information is loaded."
@@ -541,6 +635,7 @@ proc verify_antenna_if_enabled {report_file} {
         return -code error $antenna_error
     }
 
+    set ANTENNA_CHECK_STATUS "CHECKED_REVIEW_REPORT"
     return 1
 }
 

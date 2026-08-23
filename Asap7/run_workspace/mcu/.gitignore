@@ -1,0 +1,19 @@
+# Cadence-generated synthesis artifacts
+genus/outputs/
+genus/reports/
+genus/logs/
+genus/*.log
+genus/*.cmd
+genus/*.history
+
+# Cadence-generated physical-design artifacts
+innovus/outputs/
+innovus/reports/
+innovus/verify_rpt/
+innovus/saved/
+innovus/logs/
+innovus/*.log
+innovus/*.cmd
+innovus/*.history
+innovus/INNOVUS/
+

@@ -1,0 +1,20 @@
+source ./tcl/project_config.tcl
+
+setLibraryUnit -time 1ns -cap 1pf
+
+set init_lef_file [concat [list $TECH_LEF] $CELL_LEFS [list $SRAM_LEF]]
+set init_verilog $SYN_NETLIST
+set init_top_cell $TOP
+set init_mmmc_file ./tcl/viewDefinition.tcl
+set init_pwr_net {VDD}
+set init_gnd_net {VSS}
+set init_design_settop 1
+set init_abstract_view {abstract}
+set init_layout_view {layout}
+
+set ::TimeLib::tsgMarkCellLatchConstructFlag 1
+set conf_qxconf_file {NULL}
+set conf_qxlib_file {NULL}
+set defHierChar {/}
+set latch_time_borrow_mode max_borrow
+

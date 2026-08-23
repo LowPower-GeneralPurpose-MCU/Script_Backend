@@ -1,0 +1,17 @@
+# Innovus abstract-view metal density status
+# Status: PENDING_MERGED_GDS_SIGNOFF
+# Source: D:/GITHUB_PROJECT/MCU_LowPower_GeneralPurpose/Script_Backend/Asap7/run_workspace/sram_axi/innovus/axi_ram.metalfill.rpt
+# The SRAM LEF OBS blocks fill but does not provide the SRAM GDS internal metal.
+# Run density signoff on the top-level GDS merged with all SRAM and standard-cell GDS views.
+# Total under-minimum windows in abstract view: 183
+# Total over-maximum windows in abstract view: 0
+M1   under=0     total=180   min=25%   over=0     max=60%
+M2   under=0     total=180   min=25%   over=0     max=60%
+M3   under=0     total=180   min=25%   over=0     max=60%
+M4   under=3     total=180   min=10%   over=0     max=35%
+M5   under=180   total=285   min=10%   over=0     max=35%
+M6   under=0     total=180   min=25%   over=0     max=55%
+M7   under=0     total=180   min=25%   over=0     max=55%
+M8   under=0     total=180   min=25%   over=0     max=55%
+M9   under=0     total=180   min=25%   over=0     max=55%
+M10  under=0     total=9     min=10%   over=0     max=30%

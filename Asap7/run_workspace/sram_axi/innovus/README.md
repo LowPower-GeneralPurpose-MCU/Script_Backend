@@ -114,15 +114,33 @@ innovus -stylus -files tcl/innovus.tcl
 or use the command appropriate for the installed Innovus release.
 
 The master flow runs in-design metal fill by default after routed DRC,
-connectivity, setup, hold and real DRV checks pass. Set
+connectivity, setup, hold, real DRV and SI-glitch checks pass. Set
 `INNOVUS_RUN_LEGACY_METAL_FILL=0` only when a separate Pegasus flow owns metal
 fill and density closure.
+
+The tracked 4x tech LEF keeps geometric values scaled but restores the original
+dimensionless density percentages: M5 is 15/90 and Pad is 20/80.  Innovus also
+writes a plain-text SI report and `verify_rpt/metal_density_abstract_after_fill.rpt`.
+That density report is diagnostic only because the SRAM LEF contains OBS but
+not the internal SRAM GDS metal.
+
+When all in-design gates pass, the flow exports `outputs/axi_ram_pnr.gds` as a
+signoff candidate.  Stream-out merges the LVT, RVT and SRAM GDS libraries and
+writes `verify_rpt/signoff_handoff.rpt`.  The candidate still requires
+Calibre/Pegasus density, DRC, LVS and antenna checks on the merged GDS.
 
 To continue from an already open, clean routed session without rerunning PnR:
 
 ```tcl
 set ROUTE_VERIFY_CLEAN 1
 source ./tcl/add_fill_and_verify.tcl
+```
+
+To override the project stream-out map or standard-cell GDS list:
+
+```sh
+export ASAP7_GDS_MAP_FILE=/absolute/path/to/streamOut.map
+export ASAP7_STDCELL_GDS_FILES="/path/to/L.gds /path/to/R.gds"
 ```
 
 ## First checks after `init_design`

@@ -10,13 +10,12 @@ source ./tcl/project_config.tcl
 # SDC files.  Pin the Innovus session to ns/pF before MMMC is read.
 setLibraryUnit -time 1ns -cap 1pf
 
-set TECH_LEF "${ASAP7}/asap7sc7p5t_28/techlef_misc"
 set CELL_LEF "${ASAP7}/asap7sc7p5t_28/LEF/scaled"
 
 source ./tcl/sram_macro_setup.tcl
 
 # Tech LEF
-set tech_lef "${TECH_LEF}/asap7_tech_4x_201209.lef"
+set tech_lef $TECH_LEF_FILE
 
 # Standard-cell LEFs for the RVT + LVT mapped netlist.
 # Do not load SLVT because it is not present in the timing library set.

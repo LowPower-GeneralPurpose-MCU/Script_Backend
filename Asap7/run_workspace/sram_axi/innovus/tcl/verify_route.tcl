@@ -7,6 +7,10 @@ setSIMode \
     -enable_delay_report true \
     -enable_glitch_report true
 
+setNanoRouteMode -quiet \
+    -route_with_timing_driven true \
+    -route_with_si_driven true
+
 ecoRoute -fix_drc
 
 verify_pg_connectivity_or_stop ./verify_rpt/pg_connectivity_after_verify_route_pg.rpt
@@ -31,6 +35,12 @@ timeDesign \
     -hold \
     -outDir ./reports/timing_postRoute_hold_recheck
 
+set postroute_recheck_si_report \
+    ./reports/timing_postRoute_recheck/axi_ram_postRoute.SI_Glitches.rpt.gz
+publish_si_glitch_report \
+    $postroute_recheck_si_report \
+    ./reports/si_glitch_postRoute_recheck.rpt
+
 report_noise -bumpy_waveform -threshold 0 \
     > ./reports/bumpy_transition_postRoute_recheck.rpt
 
@@ -42,6 +52,7 @@ if {[catch {
         ./reports/timing_postRoute_recheck/axi_ram_postRoute.summary.gz setup 1
     assert_clean_timing_summary \
         ./reports/timing_postRoute_hold_recheck/axi_ram_postRoute_hold.summary.gz hold
+    assert_clean_si_glitch_report $postroute_recheck_si_report
     set ROUTE_REPORTS_CLEAN 1
 } route_verify_error]} {
     puts stderr "Route recheck is not clean: $route_verify_error"
@@ -51,5 +62,5 @@ if {[catch {
 
 saveDesign ./saved/axi_ram_routed.enc
 
-puts "Inspect DRC, antenna, connectivity, setup, hold and DRV reports."
+puts "Inspect DRC, antenna, connectivity, setup, hold, DRV and SI glitch reports."
 puts "Route recheck is clean enough to enable ROUTE_VERIFY_CLEAN."

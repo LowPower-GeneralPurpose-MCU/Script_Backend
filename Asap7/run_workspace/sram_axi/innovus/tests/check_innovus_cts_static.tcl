@@ -66,6 +66,10 @@ set core_lower_pg [read_file ./tcl/core_lower_pg_nojog.tcl]
 set flow_checks [read_file ./tcl/flow_checks.tcl]
 set core_pg_outside [read_file ./tcl/core_pg_outside_island.tcl]
 set global_upper_pg [read_file ./tcl/global_upper_pg_to_ring.tcl]
+set project_config [read_file ./tcl/project_config.tcl]
+set export_gds [read_file ./tcl/export_gds.tcl]
+set streamout_map [read_file ./tcl/streamOut.map]
+set tech_lef [read_file ../../../asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
 
 foreach flow [list $innovus_master $innovus_pnr] {
     require_contains $flow {FLOW SOURCE REVISION:} "flow source revision marker"
@@ -96,7 +100,7 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {BUFx24_ASAP7_75t_L} "strong LVT CTS buffer for SRAM clock slew recovery"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {sram_clean_handoff_fill_v13} "flow revision for clean synthesis handoff and default metal fill"
+    require_contains $flow {sram_si_density_signoff_v14} "flow revision for SI and density signoff handoff"
     require_not_contains $flow {set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]} "invalid post-init MMMC constraint override"
     require_contains $flow {-detailDrvFailureReason true} "detailed post-route DRV diagnostics"
     require_contains $flow {-detailDrvFailureReasonMaxNumNets 100} "bounded detailed DRV diagnostics"
@@ -105,6 +109,12 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {setSIMode} "legacy-UI SI command"
     require_contains $flow {-enable_delay_report true} "legacy-UI bumpy-transition diagnostics"
     require_contains $flow {-enable_glitch_report true} "legacy-UI SI glitch diagnostics"
+    require_contains $flow {-route_with_si_driven true} "SI-driven signal routing"
+    require_contains $flow {-route_detail_fix_antenna $ROUTE_FIX_ANTENNA} "antenna route repair follows rule availability"
+    require_contains $flow {publish_si_glitch_report} "plain-text SI glitch publication"
+    require_contains $flow {assert_clean_si_glitch_report $postroute_si_report} "zero-glitch route gate"
+    require_order $flow {setSIMode} {routeDesign -globalDetail} \
+        "SI analysis setup before SI-driven routing"
     require_contains $flow {report_noise -bumpy_waveform -threshold 0} "post-route bumpy-transition report"
     require_contains $flow {./verify_rpt/pg_connectivity_after_cts_preopt.rpt 1 1} "bounded pre-filler PG diagnostic before postCTS optimization"
     require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1 1} "bounded pre-filler PG diagnostic after postCTS optimization"
@@ -202,11 +212,22 @@ require_contains $verify_route {assert_clean_timing_summary} "route recheck gate
 require_contains $verify_route {setSIMode} "route recheck uses the legacy-UI SI command"
 require_contains $verify_route {-enable_delay_report true} "route recheck enables bumpy-transition delay diagnostics"
 require_contains $verify_route {-enable_glitch_report true} "route recheck enables SI glitch diagnostics"
+require_contains $verify_route {-route_with_si_driven true} "route recheck preserves SI-driven ECO routing"
+require_contains $verify_route {assert_clean_si_glitch_report $postroute_recheck_si_report} "route recheck gates SI glitches"
 require_contains $add_fill_and_verify {set RUN_LEGACY_METAL_FILL 1} "in-design metal fill is enabled by default"
 require_contains $add_fill_and_verify {assert_clean_drc_report ./verify_rpt/drc_postroute.rpt} "metal fill requires clean routed DRC"
 require_contains $add_fill_and_verify {assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt} "metal fill requires clean routed connectivity"
 require_contains $add_fill_and_verify {./reports/timing_postFill/axi_ram_postRoute.summary.gz setup 1} "post-fill setup and real-DRV gate"
 require_contains $add_fill_and_verify {./reports/timing_postFill_hold/axi_ram_postRoute_hold.summary.gz hold} "post-fill hold gate"
+require_contains $add_fill_and_verify {-layer {M5}} "independent M5 fill setup"
+require_contains $add_fill_and_verify {-minDensity 15} "M5 source-LEF minimum density"
+require_contains $add_fill_and_verify {-maxDensity 90} "M5 source-LEF maximum density"
+require_contains $add_fill_and_verify {-layer {Pad}} "independent Pad fill setup"
+require_contains $add_fill_and_verify {-minDensity 20} "Pad source-LEF minimum density"
+require_contains $add_fill_and_verify {-maxDensity 80} "Pad source-LEF maximum density"
+require_contains $add_fill_and_verify {publish_metal_fill_density_status} "abstract density status publication"
+require_contains $add_fill_and_verify {assert_clean_si_glitch_report $postfill_si_report} "post-fill SI glitch gate"
+require_contains $add_fill_and_verify {set SIGNOFF_CANDIDATE_READY 1} "signoff candidate readiness flag"
 require_contains $add_fill_and_verify {saveDesign ./saved/axi_ram_filled.enc} "filled checkpoint save"
 require_contains $core_lower_pg {-stacked_via_top_layer M5} "lower PG stops at M5"
 require_contains $core_lower_pg {STDCELL_PG_AREA_OVERHANG} "lower PG expands area boxes for ASAP7 std-cell M1 pin overhang"
@@ -258,6 +279,21 @@ require_contains $core_pg_outside {-stacked_via_bottom_layer M5} "M6 mesh connec
 require_contains $core_pg_outside {set core_m6_right_llx $SRAM_ISLAND_URX} "M6 mesh handoff begins at the SRAM body edge"
 require_contains $global_upper_pg {-stacked_via_bottom_layer M7} "M8 mesh connects down to M7"
 require_contains $global_upper_pg {-stacked_via_top_layer M8} "M8 mesh does not create M9-driven M7 patches"
+require_contains $project_config {set TECH_LEF_FILE $project_tech_lef} "project density-corrected tech LEF"
+require_contains $project_config {set STDCELL_GDS_FILES [list} "standard-cell GDS merge list"
+require_contains $project_config {set ROUTE_FIX_ANTENNA false} "antenna repair disabled without process rules"
+require_contains $export_gds {-merge $merge_gds_files} "merged standard-cell and SRAM GDS stream-out"
+require_not_contains $export_gds {-outputMacros} "LEF-abstract macro stream-out"
+require_contains $export_gds {SIGNOFF_CANDIDATE_EXPORTED} "non-signoff-clean export status"
+require_contains $streamout_map {M5   FILL      50  0} "M5 fill GDS mapping"
+require_contains $streamout_map {Pad  FILL      96  0} "Pad fill GDS mapping"
+require_contains $tech_lef {MINIMUMDENSITY 15 ;} "unscaled M5 minimum density percentage"
+require_contains $tech_lef {MAXIMUMDENSITY 90 ;} "unscaled M5 maximum density percentage"
+require_contains $tech_lef {MINIMUMDENSITY 20 ;} "unscaled Pad minimum density percentage"
+require_contains $tech_lef {MAXIMUMDENSITY 80 ;} "unscaled Pad maximum density percentage"
+require_not_contains $tech_lef {MINIMUMDENSITY 60 ;} "4x-scaled M5 density percentage"
+require_not_contains $tech_lef {MAXIMUMDENSITY 360 ;} "invalid M5 density percentage"
+require_not_contains $tech_lef {MAXIMUMDENSITY 320 ;} "invalid Pad density percentage"
 
 source ./tcl/flow_checks.tcl
 
@@ -283,6 +319,11 @@ set deferred_drc_report ./reports/__tmp_deferred_pg_drc.rpt
 set clean_timing_summary ./reports/__tmp_clean_timing.summary.gz
 set drv_timing_summary ./reports/__tmp_drv_timing.summary.gz
 set bad_hold_summary ./reports/__tmp_bad_hold.summary.gz
+set clean_si_report ./reports/__tmp_clean_si.rpt.gz
+set bad_si_report ./reports/__tmp_bad_si.rpt.gz
+set plain_si_report ./reports/__tmp_plain_si.rpt
+set density_report ./reports/__tmp_density.rpt
+set density_status ./reports/__tmp_density_status.rpt
 
 write_cts_test_report $expected_gap_report {
 Net VDD, Pin Pin: CTS_BUF/VDD;: has an unconnected terminal at (1.0, 1.0) (2.0, 2.0)
@@ -352,6 +393,45 @@ if {![catch {assert_clean_timing_summary $bad_hold_summary hold}]} {
     error "Timing guard accepted a violating hold path"
 }
 
+write_cts_gzip_test_report $clean_si_report {
+NetName vlPeak vlView vhPeak vhView
+Total number of glitch violations: 0
+}
+publish_si_glitch_report $clean_si_report $plain_si_report
+assert_clean_si_glitch_report $clean_si_report
+require_contains [read_file $plain_si_report] \
+    {Total number of glitch violations: 0} \
+    "published clean SI report"
+
+write_cts_gzip_test_report $bad_si_report {
+NetName vlPeak vlView vhPeak vhView
+test_net 0.1 tt -0.1 tt
+Total number of glitch violations: 1
+}
+if {![catch {assert_clean_si_glitch_report $bad_si_report}]} {
+    error "SI guard accepted a glitch violation"
+}
+
+write_cts_test_report $density_report {
+***************Before filling***************
+Layer M4 - Number of windows under minimum density (10%): 10 out of total 20.
+Layer M4 - Number of windows over maximum density  (35%): 0 out of total 20.
+***************After filling***************
+Layer M4 - Number of windows under minimum density (10%): 3 out of total 20.
+Layer M4 - Number of windows over maximum density  (35%): 0 out of total 20.
+Layer M5 - Number of windows under minimum density (15%): 8 out of total 25.
+Layer M5 - Number of windows over maximum density  (90%): 0 out of total 25.
+}
+set density_result [publish_metal_fill_density_status \
+    $density_report $density_status]
+if {[dict get $density_result under] != 11 ||
+    [dict get $density_result over] != 0} {
+    error "Density status parser returned the wrong window counts"
+}
+require_contains [read_file $density_status] \
+    {Status: PENDING_MERGED_GDS_SIGNOFF} \
+    "merged-GDS density handoff status"
+
 file delete -force \
     $expected_gap_report \
     $upper_dangling_report \
@@ -361,6 +441,11 @@ file delete -force \
     $deferred_drc_report \
     $clean_timing_summary \
     $drv_timing_summary \
-    $bad_hold_summary
+    $bad_hold_summary \
+    $clean_si_report \
+    $bad_si_report \
+    $plain_si_report \
+    $density_report \
+    $density_status
 
 puts "PASS: Innovus CTS/static unit checks"

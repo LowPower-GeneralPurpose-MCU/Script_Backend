@@ -8,7 +8,7 @@
 ## This script stops before metal fill and GDS export.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_clean_handoff_fill_v13"
+set FLOW_SOURCE_REVISION "sram_si_density_signoff_v14"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -490,6 +490,17 @@ defer_preroute_pg_drc_check \
 # 5. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
 # ------------------------------------------------------------------------
 
+setSIMode \
+    -enable_delay_report true \
+    -enable_glitch_report true
+setAnalysisMode -analysisType onChipVariation
+setDelayCalMode \
+    -SIAware true \
+    -equivalent_waveform_model propagation
+setExtractRCMode \
+    -engine postRoute \
+    -effortLevel medium
+
 setNanoRouteMode -reset
 setDesignMode \
     -bottomRoutingLayer 2 \
@@ -505,28 +516,17 @@ setNanoRouteMode -quiet \
     -route_with_via_only_for_stdcell_pin true \
     -route_detail_use_multi_cut_via_effort low \
     -route_with_timing_driven true \
-    -route_with_si_driven false \
-    -route_detail_fix_antenna true \
+    -route_with_si_driven true \
+    -route_detail_fix_antenna $ROUTE_FIX_ANTENNA \
     -route_detail_merge_abutting_cut true \
     -route_detail_end_iteration 20
 
 routeDesign -globalDetail
 routeDesign -viaOpt -wireOpt -trackOpt
 setNanoRouteMode -quiet \
-    -route_with_timing_driven false \
-    -route_with_si_driven false
+    -route_with_timing_driven true \
+    -route_with_si_driven true
 ecoRoute -fix_drc
-
-setSIMode \
-    -enable_delay_report true \
-    -enable_glitch_report true
-setAnalysisMode -analysisType onChipVariation
-setDelayCalMode \
-    -SIAware true \
-    -equivalent_waveform_model propagation
-setExtractRCMode \
-    -engine postRoute \
-    -effortLevel medium
 
 setOptMode \
     -fixCap true \
@@ -556,6 +556,12 @@ timeDesign \
     -hold \
     -outDir ./reports/timing_postRoute_hold
 
+set postroute_si_report \
+    ./reports/timing_postRoute/axi_ram_postRoute.SI_Glitches.rpt.gz
+publish_si_glitch_report \
+    $postroute_si_report \
+    ./reports/si_glitch_postRoute.rpt
+
 report_noise -bumpy_waveform -threshold 0 \
     > ./reports/bumpy_transition_postRoute.rpt
 
@@ -580,6 +586,7 @@ if {[catch {
         ./reports/timing_postRoute/axi_ram_postRoute.summary.gz setup 1
     assert_clean_timing_summary \
         ./reports/timing_postRoute_hold/axi_ram_postRoute_hold.summary.gz hold
+    assert_clean_si_glitch_report $postroute_si_report
     set ROUTE_REPORTS_CLEAN 1
 } route_report_error]} {
     puts stderr "Post-route reports are not clean: $route_report_error"

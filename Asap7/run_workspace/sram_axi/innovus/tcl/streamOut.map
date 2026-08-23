@@ -1,0 +1,78 @@
+# ASAP7 Innovus stream-out map
+# LayerName  ObjectType  GDSLayer  GDSType
+
+M1   NET       19  0
+M2   NET       20  0
+M3   NET       30  0
+M4   NET       40  0
+M5   NET       50  0
+M6   NET       60  0
+M7   NET       70  0
+M8   NET       80  0
+M9   NET       90  0
+Pad  NET       96  0
+
+M1   SPNET     19  0
+M2   SPNET     20  0
+M3   SPNET     30  0
+M4   SPNET     40  0
+M5   SPNET     50  0
+M6   SPNET     60  0
+M7   SPNET     70  0
+M8   SPNET     80  0
+M9   SPNET     90  0
+Pad  SPNET     96  0
+
+M1   FILL      19  0
+M1   FILLOPC   19  0
+M2   FILL      20  0
+M2   FILLOPC   20  0
+M3   FILL      30  0
+M3   FILLOPC   30  0
+M4   FILL      40  0
+M4   FILLOPC   40  0
+M5   FILL      50  0
+M5   FILLOPC   50  0
+M6   FILL      60  0
+M6   FILLOPC   60  0
+M7   FILL      70  0
+M7   FILLOPC   70  0
+M8   FILL      80  0
+M8   FILLOPC   80  0
+M9   FILL      90  0
+M9   FILLOPC   90  0
+Pad  FILL      96  0
+Pad  FILLOPC   96  0
+
+M1   PIN       19  251
+M2   PIN       20  251
+M3   PIN       30  251
+M4   PIN       40  251
+M5   PIN       50  251
+M6   PIN       60  251
+M7   PIN       70  251
+M8   PIN       80  251
+M9   PIN       90  251
+Pad  PIN       96  251
+
+V0   VIA       18  0
+V1   VIA       21  0
+V2   VIA       25  0
+V3   VIA       35  0
+V4   VIA       45  0
+V5   VIA       55  0
+V6   VIA       65  0
+V7   VIA       75  0
+V8   VIA       85  0
+V9   VIA       95  0
+
+M1   BLOCKAGE  19  4
+M2   BLOCKAGE  20  4
+M3   BLOCKAGE  30  4
+M4   BLOCKAGE  40  4
+M5   BLOCKAGE  50  4
+M6   BLOCKAGE  60  4
+M7   BLOCKAGE  70  4
+M8   BLOCKAGE  80  4
+M9   BLOCKAGE  90  4
+Pad  BLOCKAGE  96  4

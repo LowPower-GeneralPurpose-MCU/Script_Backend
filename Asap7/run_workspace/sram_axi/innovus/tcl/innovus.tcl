@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_clean_handoff_fill_v13"
+set FLOW_SOURCE_REVISION "sram_si_density_signoff_v14"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -56,10 +56,18 @@ foreach stale_fill_artifact {
     ./verify_rpt/drc_after_fill.rpt
     ./verify_rpt/antenna_after_fill.rpt
     ./verify_rpt/connectivity_after_fill.rpt
+    ./verify_rpt/metal_density_abstract_after_fill.rpt
+    ./verify_rpt/signoff_handoff.rpt
+    ./reports/si_glitch_postFill.rpt
     ./reports/timing_postFill
     ./reports/timing_postFill_hold
+    ./outputs/axi_ram_pnr.gds
+    ./outputs/axi_ram_pnr.def
+    ./outputs/axi_ram_pnr.sdc
     ./saved/axi_ram_filled.enc
     ./saved/axi_ram_filled.enc.dat
+    ./saved/axi_ram_signoff_candidate.enc
+    ./saved/axi_ram_signoff_candidate.enc.dat
 } {
     file delete -force $stale_fill_artifact
 }
@@ -117,7 +125,7 @@ if {$AUTO_RUN_ALL} {
     puts "===================================================="
     puts "ONE-SHOT MODE ENABLED"
     puts "Route/fill/export stages now stop unless their reports are clean."
-    puts "Final GDS export also requires ASAP7_GDS_MAP_FILE."
+    puts "Final GDS export uses the project streamOut map unless overridden."
     puts "===================================================="
 }
 
@@ -609,6 +617,17 @@ defer_preroute_pg_drc_check \
 # 7. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
 # ------------------------------------------------------------------------
 
+setSIMode \
+    -enable_delay_report true \
+    -enable_glitch_report true
+setAnalysisMode -analysisType onChipVariation
+setDelayCalMode \
+    -SIAware true \
+    -equivalent_waveform_model propagation
+setExtractRCMode \
+    -engine postRoute \
+    -effortLevel medium
+
 setNanoRouteMode -reset
 setDesignMode \
     -bottomRoutingLayer 2 \
@@ -624,28 +643,17 @@ setNanoRouteMode -quiet \
     -route_with_via_only_for_stdcell_pin true \
     -route_detail_use_multi_cut_via_effort low \
     -route_with_timing_driven true \
-    -route_with_si_driven false \
-    -route_detail_fix_antenna true \
+    -route_with_si_driven true \
+    -route_detail_fix_antenna $ROUTE_FIX_ANTENNA \
     -route_detail_merge_abutting_cut true \
     -route_detail_end_iteration 20
 
 routeDesign -globalDetail
 routeDesign -viaOpt -wireOpt -trackOpt
 setNanoRouteMode -quiet \
-    -route_with_timing_driven false \
-    -route_with_si_driven false
+    -route_with_timing_driven true \
+    -route_with_si_driven true
 ecoRoute -fix_drc
-
-setSIMode \
-    -enable_delay_report true \
-    -enable_glitch_report true
-setAnalysisMode -analysisType onChipVariation
-setDelayCalMode \
-    -SIAware true \
-    -equivalent_waveform_model propagation
-setExtractRCMode \
-    -engine postRoute \
-    -effortLevel medium
 
 setOptMode \
     -fixCap true \
@@ -675,6 +683,12 @@ timeDesign \
     -hold \
     -outDir ./reports/timing_postRoute_hold
 
+set postroute_si_report \
+    ./reports/timing_postRoute/axi_ram_postRoute.SI_Glitches.rpt.gz
+publish_si_glitch_report \
+    $postroute_si_report \
+    ./reports/si_glitch_postRoute.rpt
+
 report_noise -bumpy_waveform -threshold 0 \
     > ./reports/bumpy_transition_postRoute.rpt
 
@@ -697,6 +711,7 @@ if {[catch {
         ./reports/timing_postRoute/axi_ram_postRoute.summary.gz setup 1
     assert_clean_timing_summary \
         ./reports/timing_postRoute_hold/axi_ram_postRoute_hold.summary.gz hold
+    assert_clean_si_glitch_report $postroute_si_report
     set ROUTE_REPORTS_CLEAN 1
 } route_report_error]} {
     puts stderr "Post-route reports are not clean: $route_report_error"
@@ -734,17 +749,12 @@ if {$AUTO_RUN_ALL} {
     set ROUTE_VERIFY_CLEAN 1
     source ./tcl/add_fill_and_verify.tcl
 
-    if {[info exists FINAL_REPORTS_CLEAN] && $FINAL_REPORTS_CLEAN} {
-        if {$GDS_MAP_FILE eq ""} {
-            puts "Skipping final GDS export because ASAP7_GDS_MAP_FILE is not set."
-        } else {
-            set FINAL_VERIFY_CLEAN 1
-            source ./tcl/export_gds.tcl
-        }
+    if {[info exists SIGNOFF_CANDIDATE_READY] && $SIGNOFF_CANDIDATE_READY} {
+        source ./tcl/export_gds.tcl
     } else {
         puts "===================================================="
-        puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE FINAL EXPORT"
-        puts "Metal fill was disabled or post-fill DRC/connectivity/timing is not clean."
+        puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE SIGNOFF-CANDIDATE EXPORT"
+        puts "Metal fill was disabled or post-fill DRC/connectivity/timing/SI is not clean."
         puts "Keep INNOVUS_RUN_LEGACY_METAL_FILL enabled for this flow."
         puts "Set it to 0 only when a separate Pegasus flow owns metal fill."
         puts "===================================================="
@@ -752,17 +762,16 @@ if {$AUTO_RUN_ALL} {
 
     puts "===================================================="
     puts "ONE-COMMAND INNOVUS FLOW REACHED A SAFE CHECKPOINT"
-    puts "Review every report in ./verify_rpt and run Calibre signoff."
+    puts "Review ./verify_rpt/signoff_handoff.rpt and run merged-GDS signoff."
     puts "===================================================="
 } else {
     puts "===================================================="
     puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE METAL FILL"
-    puts "Repair and recheck DRC, antenna, connectivity, timing and real DRVs."
+    puts "Repair and recheck DRC, connectivity, timing, real DRVs and SI glitches."
     puts "When all routed reports are clean, run:"
     puts "  set ROUTE_VERIFY_CLEAN 1"
     puts "  source ./tcl/add_fill_and_verify.tcl"
-    puts "After clean post-fill reports, run:"
-    puts "  set FINAL_VERIFY_CLEAN 1"
+    puts "After clean post-fill reports, export a signoff candidate with:"
     puts "  source ./tcl/export_gds.tcl"
     puts "===================================================="
 }
