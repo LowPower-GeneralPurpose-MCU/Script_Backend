@@ -220,7 +220,10 @@ module dma_channel #(
                     (wr_outs >= cfg_wr_out_max);
 
     always @(posedge clk or negedge rst_n) begin
-        if (!rst_n || (state == ST_IDLE)) begin
+        if (!rst_n) begin
+            rd_outs <= {OUT_W{1'b0}};
+            wr_outs <= {OUT_W{1'b0}};
+        end else if (state == ST_IDLE) begin
             rd_outs <= {OUT_W{1'b0}};
             wr_outs <= {OUT_W{1'b0}};
         end else begin
@@ -423,7 +426,8 @@ module dma_channel #(
 
     reg [SEQ_W-1:0] rd_id_cnt;   // burst sequence counter (SEQ_W bits only)
     always @(posedge clk or negedge rst_n) begin
-        if (!rst_n || state == ST_IDLE) rd_id_cnt <= {SEQ_W{1'b0}};
+        if (!rst_n) rd_id_cnt <= {SEQ_W{1'b0}};
+        else if (state == ST_IDLE) rd_id_cnt <= {SEQ_W{1'b0}};
         else if (rd_cmd_fire) rd_id_cnt <= rd_id_cnt + 1'b1;
     end
 
@@ -444,7 +448,8 @@ module dma_channel #(
     // Chờ FIFO đủ data cho 1 burst trước khi phát AW
    reg [SEQ_W-1:0] wr_id_cnt;
     always @(posedge clk or negedge rst_n) begin
-        if (!rst_n || state == ST_IDLE) wr_id_cnt <= {SEQ_W{1'b0}};
+        if (!rst_n) wr_id_cnt <= {SEQ_W{1'b0}};
+        else if (state == ST_IDLE) wr_id_cnt <= {SEQ_W{1'b0}};
         else if (wr_cmd_fire) wr_id_cnt <= wr_id_cnt + 1'b1;
     end
 
@@ -681,7 +686,7 @@ module dma_engine #(
         else if (apb_wr & is_global & apb_pwdata[0]) soft_rst_r <= 1'b1;
         else soft_rst_r <= 1'b0;   // auto-clear after 1 cycle
     end
-    // Combine với hard rst_n: nếu một trong hai active → reset kênh
+    // Combine với hard rst_n: nếu một trong hai active -> reset kênh
     wire ch_rst_n = rst_n & ~soft_rst_r;
     always @(posedge clk or negedge rst_n) begin
         apb_pready <= !rst_n ? 1'b0 : (apb_psel & apb_penable);
@@ -691,24 +696,28 @@ module dma_engine #(
     // APB write
     integer n;
     always @(posedge clk or negedge rst_n) begin
-        if (!rst_n || soft_rst_r) begin
-            // Hard reset OR soft reset: clear all channel control registers
+        if (!rst_n) begin
+            // Hard reset: clear channel status/control and configuration.
             for (n = 0; n < N_CH; n = n + 1) begin
                 ch_start_r[n] <= 1'b0;
                 ch_int_st[n]  <= 2'b00;
             end
-            // On hard reset only: also clear config registers
-            if (!rst_n) begin
-                for (n = 0; n < N_CH; n = n + 1) begin
-                    ch_src[n]    <= {ADDR_W{1'b0}};
-                    ch_dst[n]    <= {ADDR_W{1'b0}};
-                    ch_len[n]    <= {LEN_FIELD_W{1'b0}};
-                    ch_bmax[n]   <= MAX_BURST[BURST_W-1:0];
-                    ch_si[n]     <= 1'b1;
-                    ch_di[n]     <= 1'b1;
-                    ch_pnum[n]   <= {PERIPH_NUM_W{1'b0}};
-                    ch_int_en[n] <= 1'b1;
-                end
+            for (n = 0; n < N_CH; n = n + 1) begin
+                ch_src[n]    <= {ADDR_W{1'b0}};
+                ch_dst[n]    <= {ADDR_W{1'b0}};
+                ch_len[n]    <= {LEN_FIELD_W{1'b0}};
+                ch_bmax[n]   <= MAX_BURST[BURST_W-1:0];
+                ch_si[n]     <= 1'b1;
+                ch_di[n]     <= 1'b1;
+                ch_pnum[n]   <= {PERIPH_NUM_W{1'b0}};
+                ch_int_en[n] <= 1'b1;
+            end
+        end else if (soft_rst_r) begin
+            // Soft reset is synchronous in this block; Genus rejects using it
+            // in the async reset condition because it is not an edge control.
+            for (n = 0; n < N_CH; n = n + 1) begin
+                ch_start_r[n] <= 1'b0;
+                ch_int_st[n]  <= 2'b00;
             end
         end else begin
             // Clear start pulses mỗi cycle
