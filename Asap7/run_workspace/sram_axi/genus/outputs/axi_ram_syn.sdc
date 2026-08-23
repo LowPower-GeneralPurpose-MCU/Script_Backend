@@ -1,6 +1,6 @@
 # ####################################################################
 
-#  Created by Genus(TM) Synthesis Solution 23.14-s090_1 on Sun Aug 02 16:02:36 JST 2026
+#  Created by Genus(TM) Synthesis Solution 23.14-s090_1 on Sun Aug 23 03:19:54 JST 2026
 
 # ####################################################################
 
@@ -1452,7 +1452,7 @@ set_output_delay -clock [get_clocks CLK] -add_delay -min 150.0 [get_ports {s_axi
 set_output_delay -clock [get_clocks CLK] -add_delay -min 150.0 [get_ports s_axi_rlast]
 set_output_delay -clock [get_clocks CLK] -add_delay -min 150.0 [get_ports s_axi_rvalid]
 set_max_fanout 20.000 [current_design]
-set_max_transition 500.0 [current_design]
+set_max_transition 300.0 [current_design]
 set_input_transition -min 10.0 [get_ports rst_n]
 set_input_transition -max 40.0 [get_ports rst_n]
 set_input_transition -min 10.0 [get_ports {s_axi_awid[4]}]

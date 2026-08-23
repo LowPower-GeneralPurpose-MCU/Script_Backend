@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Sun Aug 23 04:05:05 2026                
+#  Created on Sun Aug 23 14:57:20 2026                
 #                                                     
 #######################################################
 
@@ -23,7 +23,7 @@ set enc_source_continue_on_error false
 set auto_file_dir /tmp/user1/innovus_master
 set init_design_uniquify 1
 setLibraryUnit -time 1ns -cap 1pf
-set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef}
+set init_lef_file {/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef}
 set ::TimeLib::tsgMarkCellLatchConstructFlag 1
 set conf_qxconf_file NULL
 set conf_qxlib_file NULL
@@ -1214,6 +1214,10 @@ applyGlobalNets
 clearDrc
 applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_filler.rpt
+setSIMode -enable_delay_report true -enable_glitch_report true
+setAnalysisMode -analysisType onChipVariation
+setDelayCalMode -SIAware true -equivalent_waveform_model propagation
+setExtractRCMode -engine postRoute -effortLevel medium
 setNanoRouteMode -reset
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
 setAttribute -net FE_OFN796_n_619 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
@@ -1914,15 +1918,11 @@ setAttribute -net u_mem/n_418 -bottom_preferred_routing_layer 4 -top_preferred_r
 setAttribute -net u_mem/n_419 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
 setAttribute -net u_mem/n_420 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
 setAttribute -net u_mem/n_456 -bottom_preferred_routing_layer 4 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setNanoRouteMode -quiet -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 2:7 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven false -route_detail_fix_antenna true -route_detail_merge_abutting_cut true -route_detail_end_iteration 20
+setNanoRouteMode -quiet -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 2:7 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven true -route_detail_fix_antenna false -route_detail_merge_abutting_cut true -route_detail_end_iteration 20
 routeDesign -globalDetail
 routeDesign -viaOpt -wireOpt -trackOpt
-setNanoRouteMode -quiet -route_with_timing_driven false -route_with_si_driven false
+setNanoRouteMode -quiet -route_with_timing_driven true -route_with_si_driven true
 ecoRoute -fix_drc
-setSIMode -enable_delay_report true -enable_glitch_report true
-setAnalysisMode -analysisType onChipVariation
-setDelayCalMode -SIAware true -equivalent_waveform_model propagation
-setExtractRCMode -engine postRoute -effortLevel medium
 setOptMode -fixCap true -fixTran true -fixFanoutLoad true -setupTargetSlack 0.020 -holdTargetSlack 0.020 -detailDrvFailureReason true -detailDrvFailureReasonMaxNumNets 100
 optDesign -postRoute -setup -hold -prefix postRoute
 applyGlobalNets
@@ -1937,6 +1937,7 @@ verify_drc -report ./verify_rpt/drc_postroute.rpt
 verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
 saveDesign ./saved/axi_ram_routed.enc
 setSIMode -enable_delay_report true -enable_glitch_report true
+setNanoRouteMode -quiet -route_with_timing_driven true -route_with_si_driven true
 ecoRoute -fix_drc
 applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_verify_route_pg.rpt
@@ -1945,19 +1946,35 @@ verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/conn
 timeDesign -postRoute -outDir ./reports/timing_postRoute_recheck
 timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold_recheck
 report_noise -bumpy_waveform -threshold 0 > ./reports/bumpy_transition_postRoute_recheck.rpt
-saveDesign ./saved/axi_ram_routed.enc
 verify_drc -report ./verify_rpt/drc_after_fill.rpt
 verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_after_fill.rpt
 timeDesign -postRoute -outDir ./reports/timing_postFill
 timeDesign -postRoute -hold -outDir ./reports/timing_postFill_hold
 saveDesign ./saved/axi_ram_filled.enc
+zoomBox -236.50425 -218.30600 944.53150 838.97300
+zoomBox -146.20775 -113.57125 857.67275 785.11600
+zoomBox -4.21650 51.12400 721.08725 700.42575
 fit
-zoomBox -383.54400 20.16850 961.65400 740.89625
-zoomBox -174.14875 154.34875 651.97125 596.96575
-zoomBox -81.67050 213.60875 515.20150 533.39975
-zoomBox 11.23950 273.14525 377.79350 469.53700
-zoomBox -124.16200 186.38075 578.04175 562.60625
-zoomBox -302.14900 72.32700 841.27300 684.94750
-zoomBox -724.51400 -198.32375 1465.92350 975.26475
-zoomBox -880.27400 -299.80125 1696.71125 1080.89125
-fit
+zoomBox -322.91750 82.24925 820.50075 694.86775
+zoomBox -262.32050 128.57925 709.58500 649.30500
+zoomBox -98.18600 254.06950 409.15550 525.89200
+zoomBox -29.01900 306.95175 282.55275 473.88500
+zoomBox 1.52850 330.30675 226.63925 450.91625
+zoomBox 32.21825 353.77075 170.46475 427.84025
+zoomBox 39.54450 359.37225 157.05450 422.33150
+zoomBox 45.77200 364.13350 145.65575 417.64900
+zoomBox 55.56500 371.62050 127.73100 410.28550
+zoomBox 67.75225 380.93825 105.42375 401.12175
+zoomBox 55.56400 371.61975 127.73200 410.28575
+zoomBox 32.21600 353.76875 170.46750 427.84100
+zoomBox 1.52425 330.30325 226.64425 450.91775
+pan 9.06125 330.79300
+zoomBox 43.66450 344.47025 206.31400 431.61425
+zoomBox 75.15775 356.06250 175.04525 409.58000
+zoomBox 94.49875 363.18150 155.84225 396.04800
+zoomBox 106.37650 367.55350 144.04925 387.73775
+zoomBox 89.06600 361.18175 161.23600 399.84875
+zoomBox 55.90500 348.97525 194.16050 423.04950
+zoomBox -7.62150 325.59150 257.23350 467.49500
+zoomBox -129.31800 280.79550 378.06175 552.63850
+pan 126.39100 425.99750

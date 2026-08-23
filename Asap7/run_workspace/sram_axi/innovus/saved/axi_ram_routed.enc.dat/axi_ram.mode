@@ -39,7 +39,7 @@ catch { setPathGroupOptions C2O -late -slackAdjustment -0 }
 catch { setExtractRCMode  -effortLevel medium -engine postRoute -total_c_th 0 -relative_c_th 1 -coupling_c_th 0.1 }
 catch {setNanoRouteMode -quiet -route_detail_antenna_factor 1.000000}
 catch {setNanoRouteMode -quiet -route_detail_end_iteration "20"}
-catch {setNanoRouteMode -quiet -route_detail_fix_antenna true}
+catch {setNanoRouteMode -quiet -route_detail_fix_antenna false}
 catch {setNanoRouteMode -quiet -route_detail_merge_abutting_cut true}
 catch {setNanoRouteMode -quiet -route_detail_no_taper_in_layers "2:7"}
 catch {setNanoRouteMode -quiet -route_detail_no_taper_on_output_pin true}
@@ -48,7 +48,7 @@ catch {setNanoRouteMode -quiet -drouteStartIteration 0}
 catch {setNanoRouteMode -quiet -route_detail_use_lef_pin_taper_rule true}
 catch {setNanoRouteMode -quiet -route_detail_use_min_spacing_for_blockage auto}
 catch {setNanoRouteMode -quiet -route_detail_use_multi_cut_via_effort "low"}
-catch {setNanoRouteMode -quiet -extract_design_signature 98189982}
+catch {setNanoRouteMode -quiet -extract_design_signature 47655020}
 catch {setNanoRouteMode -quiet -extract_rc_model_file "${::IMEX::libVar}/misc/rc_model.bin"}
 catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
 catch {setNanoRouteMode -quiet -route_global_exp_timing_driven_use_tif_timing_engine_for_import_design true}
@@ -56,14 +56,15 @@ catch {setNanoRouteMode -quiet -route_exp_design_mode_bottom_routing_layer 2}
 catch {setNanoRouteMode -quiet -route_exp_design_mode_top_routing_layer 7}
 catch {setNanoRouteMode -quiet -route_re_insert_filler_cell_list "FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L"}
 catch {setNanoRouteMode -quiet -route_re_insert_filler_cell_list_from_file false}
+catch {setNanoRouteMode -quiet -route_si_effort "high"}
 catch {setNanoRouteMode -quiet -routeStrictlyHonor1dRouting "true"}
 catch {setNanoRouteMode -quiet -route_strict_honor_route_rule "true"}
 catch {setNanoRouteMode -quiet -route_use_auto_via "false"}
-catch {setNanoRouteMode -quiet -route_with_si_driven false}
+catch {setNanoRouteMode -quiet -route_with_si_driven true}
 catch {setNanoRouteMode -quiet -route_with_si_post_route_fix false}
-catch {setNanoRouteMode -quiet -route_with_timing_driven false}
+catch {setNanoRouteMode -quiet -route_with_timing_driven true}
 catch {setNanoRouteMode -quiet -route_with_via_only_for_stdcell_pin "true"}
-catch {setNanoRouteMode -quiet -timingEngine ".timing_file_3039393.tif.gz"}
+catch {setNanoRouteMode -quiet -timingEngine ".timing_file_2073937.tif.gz"}
 
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setPlaceMode -place_design_refine_macro false }
