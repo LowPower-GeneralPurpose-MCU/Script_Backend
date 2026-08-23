@@ -100,10 +100,12 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {BUFx24_ASAP7_75t_L} "strong LVT CTS buffer for SRAM clock slew recovery"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {sram_si_density_signoff_v14} "flow revision for SI and density signoff handoff"
+    require_contains $flow {sram_si_density_signoff_v15} "flow revision for post-hold SI repair and strict fill handoff"
     require_not_contains $flow {set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]} "invalid post-init MMMC constraint override"
     require_contains $flow {-detailDrvFailureReason true} "detailed post-route DRV diagnostics"
     require_contains $flow {-detailDrvFailureReasonMaxNumNets 100} "bounded detailed DRV diagnostics"
+    require_contains $flow {-fixGlitch true} "explicit post-route glitch repair"
+    require_contains $flow {-reclaimArea false} "post-route area reclaim cannot recreate SI glitches"
     require_contains $flow {-setupTargetSlack 0.020} "post-route setup safety margin"
     require_contains $flow {-holdTargetSlack 0.020} "post-route hold safety margin"
     require_contains $flow {setSIMode} "legacy-UI SI command"
@@ -111,7 +113,13 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {-enable_glitch_report true} "legacy-UI SI glitch diagnostics"
     require_contains $flow {-route_with_si_driven true} "SI-driven signal routing"
     require_contains $flow {-route_detail_fix_antenna $ROUTE_FIX_ANTENNA} "antenna route repair follows rule availability"
+    require_contains $flow {ccopt_pro} "post-route SRAM clock DRV recovery"
+    require_contains $flow {-enable_drv_fixing_by_rebuffering true} "clock DRV recovery may insert buffers"
+    require_contains $flow {-enable_routing_eco true} "clock DRV recovery reroutes inserted buffers"
     require_contains $flow {publish_si_glitch_report} "plain-text SI glitch publication"
+    require_contains $flow {repair_si_glitches_after_hold} "post-hold SI recovery pass"
+    require_contains $flow {./reports/timing_postRoute_preSiRepair} "pre-repair SI measurement"
+    require_contains $flow {./verify_rpt/pg_connectivity_after_si_repair.rpt 1} "PG recheck after SI repair"
     require_contains $flow {assert_clean_si_glitch_report $postroute_si_report} "zero-glitch route gate"
     require_order $flow {setSIMode} {routeDesign -globalDetail} \
         "SI analysis setup before SI-driven routing"
@@ -214,9 +222,15 @@ require_contains $verify_route {-enable_delay_report true} "route recheck enable
 require_contains $verify_route {-enable_glitch_report true} "route recheck enables SI glitch diagnostics"
 require_contains $verify_route {-route_with_si_driven true} "route recheck preserves SI-driven ECO routing"
 require_contains $verify_route {assert_clean_si_glitch_report $postroute_recheck_si_report} "route recheck gates SI glitches"
+require_contains $verify_route {if {$ROUTE_REPORTS_CLEAN}} "route recheck publishes an explicit clean state"
 require_contains $add_fill_and_verify {set RUN_LEGACY_METAL_FILL 1} "in-design metal fill is enabled by default"
 require_contains $add_fill_and_verify {assert_clean_drc_report ./verify_rpt/drc_postroute.rpt} "metal fill requires clean routed DRC"
 require_contains $add_fill_and_verify {assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt} "metal fill requires clean routed connectivity"
+require_contains $add_fill_and_verify {set ROUTE_FILL_PREREQS_CLEAN 0} "metal fill starts with a closed prerequisite gate"
+require_contains $add_fill_and_verify {timing_postRoute_recheck/axi_ram_postRoute.summary.gz setup 1} "metal fill rechecks routed setup and real DRVs"
+require_contains $add_fill_and_verify {timing_postRoute_hold_recheck/axi_ram_postRoute_hold.summary.gz hold} "metal fill rechecks routed hold"
+require_contains $add_fill_and_verify {timing_postRoute_recheck/axi_ram_postRoute.SI_Glitches.rpt.gz} "metal fill requires zero routed SI glitches"
+require_contains $add_fill_and_verify {METAL FILL SKIPPED} "blocked fill has an explicit status"
 require_contains $add_fill_and_verify {./reports/timing_postFill/axi_ram_postRoute.summary.gz setup 1} "post-fill setup and real-DRV gate"
 require_contains $add_fill_and_verify {./reports/timing_postFill_hold/axi_ram_postRoute_hold.summary.gz hold} "post-fill hold gate"
 require_contains $add_fill_and_verify {-layer {M5}} "independent M5 fill setup"
@@ -410,6 +424,9 @@ Total number of glitch violations: 1
 }
 if {![catch {assert_clean_si_glitch_report $bad_si_report}]} {
     error "SI guard accepted a glitch violation"
+}
+if {[si_glitch_victim_nets $bad_si_report] ne "test_net"} {
+    error "SI victim parser did not return the reported net"
 }
 
 write_cts_test_report $density_report {

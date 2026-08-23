@@ -118,6 +118,10 @@ connectivity, setup, hold, real DRV and SI-glitch checks pass. Set
 `INNOVUS_RUN_LEGACY_METAL_FILL=0` only when a separate Pegasus flow owns metal
 fill and density closure.
 
+After post-route hold optimization, the flow measures SI glitches once, applies
+extra routing space to any victim nets, and runs a final DRV/glitch-only repair.
+Area reclaim is disabled in this phase so it cannot undo the repaired routing.
+
 The tracked 4x tech LEF keeps geometric values scaled but restores the original
 dimensionless density percentages: M5 is 15/90 and Pad is 20/80.  Innovus also
 writes a plain-text SI report and `verify_rpt/metal_density_abstract_after_fill.rpt`.
@@ -132,9 +136,15 @@ Calibre/Pegasus density, DRC, LVS and antenna checks on the merged GDS.
 To continue from an already open, clean routed session without rerunning PnR:
 
 ```tcl
+source ./tcl/verify_route.tcl
+# Continue only when the recheck reports that ROUTE_VERIFY_CLEAN may be enabled.
 set ROUTE_VERIFY_CLEAN 1
 source ./tcl/add_fill_and_verify.tcl
 ```
+
+`add_fill_and_verify.tcl` independently checks the recheck setup, hold, real
+DRV, DRC, connectivity and SI reports. Setting the flag alone cannot bypass the
+metal-fill gate.
 
 To override the project stream-out map or standard-cell GDS list:
 

@@ -2,16 +2,36 @@
 ## Add metal fill only after routed DRC/antenna/connectivity are clean
 ############################################################
 
-if {![info exists ROUTE_VERIFY_CLEAN] || !$ROUTE_VERIFY_CLEAN} {
-    error "Set ROUTE_VERIFY_CLEAN 1 only after reviewing clean post-route reports"
-}
-
 set IN_DESIGN_REPORTS_CLEAN 0
 set SIGNOFF_CANDIDATE_READY 0
 set DENSITY_SIGNOFF_STATUS "NOT_RUN"
 
-assert_clean_drc_report ./verify_rpt/drc_postroute.rpt
-assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt
+set ROUTE_FILL_PREREQS_CLEAN 0
+if {[catch {
+    if {![info exists ROUTE_VERIFY_CLEAN] || !$ROUTE_VERIFY_CLEAN ||
+        ![info exists ROUTE_REPORTS_CLEAN] || !$ROUTE_REPORTS_CLEAN} {
+        error "Run source ./tcl/verify_route.tcl and obtain a clean route recheck before metal fill"
+    }
+    assert_clean_drc_report ./verify_rpt/drc_postroute.rpt
+    assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt
+    assert_clean_timing_summary \
+        ./reports/timing_postRoute_recheck/axi_ram_postRoute.summary.gz setup 1
+    assert_clean_timing_summary \
+        ./reports/timing_postRoute_hold_recheck/axi_ram_postRoute_hold.summary.gz hold
+    assert_clean_si_glitch_report \
+        ./reports/timing_postRoute_recheck/axi_ram_postRoute.SI_Glitches.rpt.gz
+    set ROUTE_FILL_PREREQS_CLEAN 1
+} route_fill_prereq_error]} {
+    puts stderr "Metal fill blocked: $route_fill_prereq_error"
+}
+
+if {!$ROUTE_FILL_PREREQS_CLEAN} {
+    puts "===================================================="
+    puts "METAL FILL SKIPPED"
+    puts "The routed design is not clean enough for fill."
+    puts "Inspect ./reports/si_glitch_postRoute_recheck.rpt and the timing/physical reports."
+    puts "===================================================="
+} else {
 
 # This project requires in-design fill after the strict routed-design gate.
 # Set the environment override to 0 only when Pegasus owns the fill step.
@@ -184,4 +204,5 @@ puts ""
 puts "To export the signoff candidate:"
 puts "  source ./tcl/export_gds.tcl"
 puts "===================================================="
+}
 }

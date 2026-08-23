@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_si_density_signoff_v14"
+set FLOW_SOURCE_REVISION "sram_si_density_signoff_v15"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -655,10 +655,22 @@ setNanoRouteMode -quiet \
     -route_with_si_driven true
 ecoRoute -fix_drc
 
+# Normal post-route IPO excludes clock nets. Allow CCOpt to rebuffer the four
+# long SRAM branches that can remain above the macro's 46 ps slew limit.
+ccopt_pro \
+    -enable_drv_fixing true \
+    -enable_drv_fixing_by_rebuffering true \
+    -enable_refine_place true \
+    -enable_routing_eco true \
+    -enable_skew_fixing false \
+    -enable_skew_fixing_by_rebuffering false
+
 setOptMode \
     -fixCap true \
     -fixTran true \
     -fixFanoutLoad true \
+    -fixGlitch true \
+    -reclaimArea false \
     -setupTargetSlack 0.020 \
     -holdTargetSlack 0.020 \
     -detailDrvFailureReason true \
@@ -673,6 +685,13 @@ optDesign \
 connect_core_pg_pins_nojog \
     ./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1
 ecoRoute -fix_drc
+
+repair_si_glitches_after_hold \
+    $DESIGN \
+    ./reports/timing_postRoute_preSiRepair \
+    ./reports/si_glitch_preSiRepair.rpt
+connect_core_pg_pins_nojog \
+    ./verify_rpt/pg_connectivity_after_si_repair.rpt 1
 
 timeDesign \
     -postRoute \
@@ -733,45 +752,52 @@ puts "===================================================="
 if {!$ROUTE_REPORTS_CLEAN} {
     puts "===================================================="
     puts "STRICT CHECKPOINT MODE: FLOW STOPPED AFTER ROUTE"
-    puts "Repair DRC, connectivity, setup/hold or real DRVs before metal fill."
+    puts "Repair DRC, connectivity, setup/hold, real DRVs or SI glitches before metal fill."
     puts " - ./verify_rpt/drc_postroute.rpt"
     puts " - ./verify_rpt/connectivity_postroute.rpt"
     puts " - ./reports/timing_postRoute/axi_ram_postRoute.summary.gz"
     puts " - ./reports/timing_postRoute_hold/axi_ram_postRoute_hold.summary.gz"
+    puts " - ./reports/si_glitch_postRoute.rpt"
     puts " - ./saved/axi_ram_routed.enc"
     puts "===================================================="
-    return
-}
+} else {
+    set ROUTE_REPORTS_CLEAN 0
+    source ./tcl/verify_route.tcl
 
-source ./tcl/verify_route.tcl
+    if {!$ROUTE_REPORTS_CLEAN} {
+        puts "===================================================="
+        puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE METAL FILL"
+        puts "The route recheck changed or still reports a violation."
+        puts " - ./reports/si_glitch_postRoute_recheck.rpt"
+        puts " - ./saved/axi_ram_routed.enc"
+        puts "===================================================="
+    } elseif {$AUTO_RUN_ALL} {
+        set ROUTE_VERIFY_CLEAN 1
+        source ./tcl/add_fill_and_verify.tcl
 
-if {$AUTO_RUN_ALL} {
-    set ROUTE_VERIFY_CLEAN 1
-    source ./tcl/add_fill_and_verify.tcl
-
-    if {[info exists SIGNOFF_CANDIDATE_READY] && $SIGNOFF_CANDIDATE_READY} {
-        source ./tcl/export_gds.tcl
+        if {[info exists SIGNOFF_CANDIDATE_READY] && $SIGNOFF_CANDIDATE_READY} {
+            source ./tcl/export_gds.tcl
+            puts "===================================================="
+            puts "ONE-COMMAND INNOVUS FLOW REACHED A SAFE CHECKPOINT"
+            puts "Review ./verify_rpt/signoff_handoff.rpt and run merged-GDS signoff."
+            puts "===================================================="
+        } else {
+            puts "===================================================="
+            puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE SIGNOFF-CANDIDATE EXPORT"
+            puts "Metal fill was disabled or post-fill DRC/connectivity/timing/SI is not clean."
+            puts "Keep INNOVUS_RUN_LEGACY_METAL_FILL enabled for this flow."
+            puts "Set it to 0 only when a separate Pegasus flow owns metal fill."
+            puts "===================================================="
+        }
     } else {
         puts "===================================================="
-        puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE SIGNOFF-CANDIDATE EXPORT"
-        puts "Metal fill was disabled or post-fill DRC/connectivity/timing/SI is not clean."
-        puts "Keep INNOVUS_RUN_LEGACY_METAL_FILL enabled for this flow."
-        puts "Set it to 0 only when a separate Pegasus flow owns metal fill."
+        puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE METAL FILL"
+        puts "Routed reports are clean; automatic continuation is disabled."
+        puts "To continue, run:"
+        puts "  set ROUTE_VERIFY_CLEAN 1"
+        puts "  source ./tcl/add_fill_and_verify.tcl"
+        puts "After clean post-fill reports, export a signoff candidate with:"
+        puts "  source ./tcl/export_gds.tcl"
         puts "===================================================="
     }
-
-    puts "===================================================="
-    puts "ONE-COMMAND INNOVUS FLOW REACHED A SAFE CHECKPOINT"
-    puts "Review ./verify_rpt/signoff_handoff.rpt and run merged-GDS signoff."
-    puts "===================================================="
-} else {
-    puts "===================================================="
-    puts "STRICT CHECKPOINT MODE: FLOW STOPPED BEFORE METAL FILL"
-    puts "Repair and recheck DRC, connectivity, timing, real DRVs and SI glitches."
-    puts "When all routed reports are clean, run:"
-    puts "  set ROUTE_VERIFY_CLEAN 1"
-    puts "  source ./tcl/add_fill_and_verify.tcl"
-    puts "After clean post-fill reports, export a signoff candidate with:"
-    puts "  source ./tcl/export_gds.tcl"
-    puts "===================================================="
 }

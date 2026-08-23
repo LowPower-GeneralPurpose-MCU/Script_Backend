@@ -3,6 +3,8 @@
 ## Intended for the active routed Innovus session.
 ############################################################
 
+set ROUTE_REPORTS_CLEAN 0
+
 setSIMode \
     -enable_delay_report true \
     -enable_glitch_report true
@@ -44,7 +46,6 @@ publish_si_glitch_report \
 report_noise -bumpy_waveform -threshold 0 \
     > ./reports/bumpy_transition_postRoute_recheck.rpt
 
-set ROUTE_REPORTS_CLEAN 0
 if {[catch {
     assert_clean_drc_report ./verify_rpt/drc_postroute.rpt
     assert_clean_connectivity_report ./verify_rpt/connectivity_postroute.rpt
@@ -57,10 +58,13 @@ if {[catch {
 } route_verify_error]} {
     puts stderr "Route recheck is not clean: $route_verify_error"
     puts stderr "Do not add metal fill yet."
-    error $route_verify_error
 }
 
 saveDesign ./saved/axi_ram_routed.enc
 
 puts "Inspect DRC, antenna, connectivity, setup, hold, DRV and SI glitch reports."
-puts "Route recheck is clean enough to enable ROUTE_VERIFY_CLEAN."
+if {$ROUTE_REPORTS_CLEAN} {
+    puts "Route recheck is clean enough to enable ROUTE_VERIFY_CLEAN."
+} else {
+    puts "Route recheck failed; ROUTE_VERIFY_CLEAN must remain disabled."
+}

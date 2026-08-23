@@ -64,6 +64,67 @@ proc assert_clean_si_glitch_report {report_file} {
     }
 }
 
+proc si_glitch_victim_nets {report_file} {
+    set report_text [read_report_text $report_file "SI glitch"]
+    set victim_nets {}
+
+    foreach line [split $report_text "\n"] {
+        set line [string trim $line]
+        if {$line eq "" || [string match "#*" $line] ||
+            [string match -nocase "NetName*" $line] ||
+            [string match -nocase "Total number of glitch violations:*" $line]} {
+            continue
+        }
+
+        set fields [regexp -all -inline {\S+} $line]
+        if {[llength $fields] >= 5} {
+            lappend victim_nets [lindex $fields 0]
+        }
+    }
+
+    return [lsort -unique $victim_nets]
+}
+
+proc repair_si_glitches_after_hold {design report_dir plain_report} {
+    file mkdir $report_dir
+    timeDesign -postRoute -outDir $report_dir
+
+    set si_report "${report_dir}/${design}_postRoute.SI_Glitches.rpt.gz"
+    set violation_count [publish_si_glitch_report $si_report $plain_report]
+    if {$violation_count == 0} {
+        puts "Post-hold SI recovery is not required."
+        return 0
+    }
+
+    set victim_nets [si_glitch_victim_nets $si_report]
+    if {[llength $victim_nets] == 0} {
+        error "SI report contains $violation_count violation(s), but no victim nets could be parsed"
+    }
+
+    # Hold ECO routing can recreate coupling after the normal post-route glitch
+    # phase. Preserve one track of extra spacing on each reported victim, then
+    # run a final DRV-only pass so glitch fixing is the last topology change.
+    foreach victim_net $victim_nets {
+        setAttribute -net $victim_net -preferred_extra_space 1
+    }
+    puts "Applied extra SI spacing to [llength $victim_nets] post-hold victim net(s)."
+
+    setNanoRouteMode -quiet \
+        -route_with_timing_driven true \
+        -route_with_si_driven true \
+        -route_detail_post_route_spread_wire true
+    routeDesign -wireOpt
+    setNanoRouteMode -quiet -route_detail_post_route_spread_wire auto
+
+    setOptMode \
+        -fixGlitch true \
+        -reclaimArea false
+    optDesign -postRoute -drv
+    ecoRoute -fix_drc
+
+    return $violation_count
+}
+
 proc publish_metal_fill_density_status {report_file status_file} {
     set report_text [read_report_text $report_file "metal-fill density"]
     set in_after_fill_section 0
