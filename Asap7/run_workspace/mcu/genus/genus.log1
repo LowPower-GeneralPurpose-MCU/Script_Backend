@@ -1,0 +1,623 @@
+Cadence Genus(TM) Synthesis Solution.
+Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
+Cadence and the Cadence logo are registered trademarks and Genus is a trademark
+of Cadence Design Systems, Inc. in the United States and other countries.
+
+[15:38:58.206322] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+Version: 23.14-s090_1, built Wed Feb 26 17:49:50 PST 2025
+Options: -files tcl/genus.tcl 
+Date:    Sun Aug 23 15:38:58 2026
+Host:    user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*1physical cpu*AMD Ryzen 5 7545U 1024KB) (13556668KB)
+PID:     2302954
+OS:      Ubuntu 26.04 LTS
+
+Checking out license: Genus_Synthesis
+[15:38:59.465042] Periodic Lic check successful
+[15:38:59.465043] Feature usage summary:
+[15:38:59.465048] Genus_Synthesis
+
+
+
+***********************************************************************************************************
+***********************************************************************************************************
+
+
+
+Finished executable startup (1 second elapsed).
+
+Loading tool scripts...
+Finished loading tool scripts (11 seconds elapsed).
+
+#@ Processing -files option
+@genus:root: 1> source tcl/genus.tcl
+#@ Begin verbose source ./tcl/genus.tcl
+@file(genus.tcl) 6: set GENUS_TCL_DIR [file dirname [file normalize [info script]]]
+@file(genus.tcl) 7: set GENUS_DIR [file dirname $GENUS_TCL_DIR]
+@file(genus.tcl) 8: set FLOW_ROOT [file dirname $GENUS_DIR]
+@file(genus.tcl) 9: set RTL_ROOT [file join $GENUS_DIR rtl]
+@file(genus.tcl) 10: set SDC_FILE [file join $GENUS_TCL_DIR constraint.sdc]
+@file(genus.tcl) 11: cd $GENUS_DIR
+@file(genus.tcl) 13: source [file join $RTL_ROOT flow project_config.tcl]
+Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl' (Sun Aug 23 15:39:10 JST 2026)...
+#@ Begin verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl
+@file(project_config.tcl) 5: if {![info exists FLOW_ROOT]} {
+    set FLOW_ROOT [file dirname [file dirname [file normalize [info script]]]]
+}
+@file(project_config.tcl) 9: set TOP "top_soc"
+@file(project_config.tcl) 11: proc mcu_resolve_path ...
+@file(project_config.tcl) 27: proc mcu_genus_collateral_root_is_complete ...
+@file(project_config.tcl) 37: set ASAP7_STDCELL_REVISION "f970bd3c3292b79ae4d022a3ec80533534614066"
+@file(project_config.tcl) 38: set ASAP7_SRAM_REVISION    "522eeccbccefcd66e61893fa1059df24d95e9f86"
+@file(project_config.tcl) 40: set ASAP7_ROOT_SOURCE ""
+@file(project_config.tcl) 41: if {[info exists ::env(ASAP7_ROOT)] && $::env(ASAP7_ROOT) ne ""} {
+    set ASAP7_ROOT [file normalize $::env(ASAP7_ROOT)]
+    set ASAP7_ROOT_SOURCE "environment ASAP7_ROOT"
+} elseif {[info exists ::env(ASAP7_HOME)] && $::env(ASAP7_HOME) ne ""} {
+    set ASAP7_ROOT [file normalize $::env(ASAP7_HOME)]
+    set ASAP7_ROOT_SOURCE "environment ASAP7_HOME"
+} elseif {[info exists ASAP7_ROOT] && $ASAP7_ROOT ne ""} {
+    set ASAP7_ROOT [file normalize $ASAP7_ROOT]
+    set ASAP7_ROOT_SOURCE "Tcl variable ASAP7_ROOT"
+} else {
+    set repository_asap7_root \
+        [file normalize [file join $FLOW_ROOT .. .. asap7]]
+    set root_candidates [list \
+        $repository_asap7_root \
+        /home/user1/Desktop/asap7]
+
+    set ASAP7_ROOT ""
+    foreach candidate $root_candidates {
+        if {[mcu_genus_collateral_root_is_complete $candidate]} {
+            set ASAP7_ROOT [file normalize $candidate]
+            set ASAP7_ROOT_SOURCE "auto-detected complete collateral"
+            break
+        }
+    }
+
+    if {$ASAP7_ROOT eq ""} {
+        foreach candidate $root_candidates {
+            if {[file isdirectory $candidate]} {
+                set ASAP7_ROOT [file normalize $candidate]
+                set ASAP7_ROOT_SOURCE "auto-detected incomplete collateral"
+                break
+            }
+        }
+    }
+
+    if {$ASAP7_ROOT eq ""} {
+        set ASAP7_ROOT [file normalize /home/user1/Desktop/asap7]
+        set ASAP7_ROOT_SOURCE "legacy fallback"
+    }
+}
+@file(project_config.tcl) 82: set STDCELL_ROOT [mcu_resolve_path STDCELL_ROOT \
+    {ASAP7_STDCELL_ROOT} \
+    [file join $ASAP7_ROOT asap7sc7p5t_28]]
+@file(project_config.tcl) 85: set SRAM_ROOT [mcu_resolve_path SRAM_ROOT \
+    {ASAP7_SRAM_ROOT} \
+    [file join $ASAP7_ROOT asap7_sram_0p0]]
+@file(project_config.tcl) 89: set STD_LIB_DIR [mcu_resolve_path STD_LIB_DIR \
+    {ASAP7_STD_LIB_DIR} \
+    [file join $STDCELL_ROOT LIB CCS]]
+@file(project_config.tcl) 92: set STD_LIBS [list \
+    [file join $STD_LIB_DIR asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib] \
+    [file join $STD_LIB_DIR asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib] \
+    [file join $STD_LIB_DIR asap7sc7p5t_AO_RVT_TT_ccs_211120.lib] \
+    [file join $STD_LIB_DIR asap7sc7p5t_OA_RVT_TT_ccs_211120.lib] \
+    [file join $STD_LIB_DIR asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib] \
+    [file join $STD_LIB_DIR asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib] \
+    [file join $STD_LIB_DIR asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib] \
+    [file join $STD_LIB_DIR asap7sc7p5t_AO_LVT_TT_ccs_211120.lib] \
+    [file join $STD_LIB_DIR asap7sc7p5t_OA_LVT_TT_ccs_211120.lib] \
+    [file join $STD_LIB_DIR asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib]]
+@file(project_config.tcl) 104: set TECH_LEF [mcu_resolve_path TECH_LEF \
+    {ASAP7_TECH_LEF_FILE} \
+    [file join $STDCELL_ROOT techlef_misc asap7_tech_4x_201209.lef]]
+@file(project_config.tcl) 107: set RVT_CELL_LEF [mcu_resolve_path RVT_CELL_LEF \
+    {ASAP7_RVT_LEF_FILE} \
+    [file join $STDCELL_ROOT LEF scaled asap7sc7p5t_28_R_4x_220121a.lef]]
+@file(project_config.tcl) 110: set LVT_CELL_LEF [mcu_resolve_path LVT_CELL_LEF \
+    {ASAP7_LVT_LEF_FILE} \
+    [file join $STDCELL_ROOT LEF scaled asap7sc7p5t_28_L_4x_220121a.lef]]
+@file(project_config.tcl) 113: set CELL_LEFS [list \
+    $RVT_CELL_LEF \
+    $LVT_CELL_LEF]
+@file(project_config.tcl) 116: set QRC_FILE [mcu_resolve_path QRC_FILE \
+    {ASAP7_QRC_FILE} \
+    [file join $STDCELL_ROOT qrc qrcTechFile_typ03_scaled4xV06]]
+@file(project_config.tcl) 122: set SRAM_MASTER         "srambank_256x4x32_6t122"
+@file(project_config.tcl) 123: set SRAM_ROWS           4
+@file(project_config.tcl) 124: set SRAM_COLS           8
+@file(project_config.tcl) 125: set SRAM_EXPECTED_COUNT [expr {$SRAM_ROWS * $SRAM_COLS}]
+@file(project_config.tcl) 126: set SRAM_CAPACITY_BYTES [expr {$SRAM_EXPECTED_COUNT * 1024 * 4}]
+@file(project_config.tcl) 128: set SRAM_LIB [mcu_resolve_path SRAM_LIB \
+    {ASAP7_SRAM_LIB_FILE ASAP7_SRAM_LIB} \
+    [file join $SRAM_ROOT generated LIB "$SRAM_MASTER.lib"]]
+@file(project_config.tcl) 131: set SRAM_LEF [mcu_resolve_path SRAM_LEF \
+    {ASAP7_SRAM_LEF_FILE ASAP7_SRAM_LEF} \
+    [file join $SRAM_ROOT generated LEF 4xLEF \
+        "$SRAM_MASTER.lef.4x.lef"]]
+@file(project_config.tcl) 135: set SRAM_GDS [mcu_resolve_path SRAM_GDS \
+    {ASAP7_SRAM_GDS_FILE ASAP7_SRAM_GDS} \
+    [file join $SRAM_ROOT gds srambank_32b.gds]]
+@file(project_config.tcl) 138: set SRAM_SIM_VERILOG [mcu_resolve_path SRAM_SIM_VERILOG \
+    {ASAP7_SRAM_VERILOG_FILE ASAP7_SRAM_VERILOG} \
+    [file join $SRAM_ROOT generated verilog "$SRAM_MASTER.v"]]
+@file(project_config.tcl) 142: set ALL_TIMING_LIBS [concat $STD_LIBS [list $SRAM_LIB]]
+@file(project_config.tcl) 145: set SIGNAL_MAX_TRANSITION_PS 300.0
+@file(project_config.tcl) 146: set SIGNAL_MAX_TRANSITION_NS 0.300
+@file(project_config.tcl) 148: puts "============================================================"
+============================================================
+@file(project_config.tcl) 149: puts "MCU ASAP7 CONFIGURATION"
+MCU ASAP7 CONFIGURATION
+@file(project_config.tcl) 150: puts " - Root source  : $ASAP7_ROOT_SOURCE"
+ - Root source  : auto-detected complete collateral
+@file(project_config.tcl) 151: puts " - ASAP7 root   : $ASAP7_ROOT"
+ - ASAP7 root   : /home/user1/Desktop/asap7
+@file(project_config.tcl) 152: puts " - Stdcell root : $STDCELL_ROOT"
+ - Stdcell root : /home/user1/Desktop/asap7/asap7sc7p5t_28
+@file(project_config.tcl) 153: puts " - SRAM root    : $SRAM_ROOT"
+ - SRAM root    : /home/user1/Desktop/asap7/asap7_sram_0p0
+@file(project_config.tcl) 154: puts " - Top          : $TOP"
+ - Top          : top_soc
+@file(project_config.tcl) 155: puts "============================================================"
+============================================================
+#@ End verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl
+@file(genus.tcl) 14: source [file join $GENUS_TCL_DIR rtl_filelist.tcl]
+Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/rtl_filelist.tcl' (Sun Aug 23 15:39:10 JST 2026)...
+#@ Begin verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/rtl_filelist.tcl
+@file(rtl_filelist.tcl) 5: set RTL_INCLUDE_DIRS [list \
+    $RTL_ROOT \
+    [file join $RTL_ROOT interrupt CLINT] \
+    [file join $RTL_ROOT interrupt dma] \
+    [file join $RTL_ROOT interrupt plic]]
+@file(rtl_filelist.tcl) 11: set RTL_FILES [list \
+    [file join $RTL_ROOT utils bin_gray_convert.v] \
+    [file join $RTL_ROOT utils cdc_bridge.v] \
+    [file join $RTL_ROOT utils clock_gate.v] \
+    [file join $RTL_ROOT utils fifo_async.v] \
+    [file join $RTL_ROOT utils fifo_sync.v] \
+    [file join $RTL_ROOT utils ROB.v] \
+    [file join $RTL_ROOT utils utils_axi_interconnect.v] \
+    [file join $RTL_ROOT utils utils_dma.v] \
+    [file join $RTL_ROOT bus apb_interconnect apb_async_bridge.v] \
+    [file join $RTL_ROOT bus apb_interconnect apb_interconnect.v] \
+    [file join $RTL_ROOT bus axi_interconnect axi_async_bridge.v] \
+    [file join $RTL_ROOT bus axi_interconnect axi_dispatcher_channel.v] \
+    [file join $RTL_ROOT bus axi_interconnect axi_slave_arbitration.v] \
+    [file join $RTL_ROOT bus axi_interconnect axi_interconnect.v] \
+    [file join $RTL_ROOT bus axi_to_apb_bridge.v] \
+    [file join $RTL_ROOT core block_unit branch_prediction_unit.v] \
+    [file join $RTL_ROOT core block_unit control_unit.v] \
+    [file join $RTL_ROOT core block_unit floating_point_unit.v] \
+    [file join $RTL_ROOT core block_unit forwarding_unit.v] \
+    [file join $RTL_ROOT core block_unit multiplier_divider_unit.v] \
+    [file join $RTL_ROOT core block_unit pipeline_control_unit.v] \
+    [file join $RTL_ROOT core pipeline_register pipeline_register.v] \
+    [file join $RTL_ROOT core pipeline_stage pipeline_stage.v] \
+    [file join $RTL_ROOT core register_file register_file.v] \
+    [file join $RTL_ROOT core riscv_pipeline.v] \
+    [file join $RTL_ROOT debug dtm_axi_master.v] \
+    [file join $RTL_ROOT debug rv_debug_module_sba.v] \
+    [file join $RTL_ROOT debug rv_jtag_dtm.v] \
+    [file join $RTL_ROOT interrupt CLINT clint_core.v] \
+    [file join $RTL_ROOT interrupt CLINT clint_reg_bus.v] \
+    [file join $RTL_ROOT interrupt CLINT clint.v] \
+    [file join $RTL_ROOT interrupt dma dma_axi_master.v] \
+    [file join $RTL_ROOT interrupt dma dma_core.v] \
+    [file join $RTL_ROOT interrupt dma dma.v] \
+    [file join $RTL_ROOT interrupt plic plic_core.v] \
+    [file join $RTL_ROOT interrupt plic plic_reg_bus.v] \
+    [file join $RTL_ROOT interrupt plic plic.v] \
+    [file join $RTL_ROOT memory asap7_sram_128k_1rw.v] \
+    [file join $RTL_ROOT memory axi_ram.v] \
+    [file join $RTL_ROOT memory axi_rom.v] \
+    [file join $RTL_ROOT memory axi_sdram_controller.v] \
+    [file join $RTL_ROOT memory axi_spi_flash.v] \
+    [file join $RTL_ROOT memory dcache.v] \
+    [file join $RTL_ROOT memory icache.v] \
+    [file join $RTL_ROOT peripheral apb_cordic.v] \
+    [file join $RTL_ROOT peripheral apb_gpio.v] \
+    [file join $RTL_ROOT peripheral apb_i2c.v] \
+    [file join $RTL_ROOT peripheral apb_pwm.v] \
+    [file join $RTL_ROOT peripheral apb_spi.v] \
+    [file join $RTL_ROOT peripheral apb_syscon.v] \
+    [file join $RTL_ROOT peripheral apb_uart.v] \
+    [file join $RTL_ROOT peripheral apb_watchdog.v] \
+    [file join $RTL_ROOT top_soc.v]]
+@file(rtl_filelist.tcl) 66: foreach rtl_file $RTL_FILES {
+    if {![file isfile $rtl_file]} {
+        error "Missing RTL source: [file normalize $rtl_file]"
+    }
+}
+#@ End verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/rtl_filelist.tcl
+@file(genus.tcl) 16: proc genus_env_value ...
+@file(genus.tcl) 23: proc genus_env_flag ...
+@file(genus.tcl) 32: proc genus_try_set_root_attribute ...
+@file(genus.tcl) 40: proc genus_require_file ...
+@file(genus.tcl) 50: proc genus_read_file ...
+@file(genus.tcl) 57: proc genus_read_prefix ...
+@file(genus.tcl) 64: proc genus_require_liberty ...
+@file(genus.tcl) 81: proc genus_require_text ...
+@file(genus.tcl) 88: proc genus_run_static_checks ...
+@file(genus.tcl) 155: proc check_sram_library_cell ...
+@file(genus.tcl) 169: proc check_sram_mapped_netlist ...
+@file(genus.tcl) 185: genus_run_static_checks
+MCU static checks passed: 53 RTL files, boot image, SRAM wrapper and SDC
+@file(genus.tcl) 186: foreach timing_lib $STD_LIBS {
+    genus_require_liberty $timing_lib
+}
+@file(genus.tcl) 189: genus_require_liberty $SRAM_LIB $SRAM_MASTER
+@file(genus.tcl) 191: foreach dir {outputs reports logs} {
+    file mkdir $dir
+}
+@file(genus.tcl) 194: foreach pattern {./outputs/* ./reports/* ./logs/*} {
+    foreach stale [glob -nocomplain $pattern] {
+        file delete -force $stale
+    }
+}
+@file(genus.tcl) 200: set_db / .init_lib_search_path [list $STD_LIB_DIR [file dirname $SRAM_LIB]]
+  Setting attribute of root '/': 'init_lib_search_path' = /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB
+@file(genus.tcl) 201: set_db / .script_search_path [list $GENUS_TCL_DIR]
+  Setting attribute of root '/': 'script_search_path' = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl
+@file(genus.tcl) 202: set_db / .init_hdl_search_path \
+    [concat [list $RTL_ROOT] $RTL_INCLUDE_DIRS]
+  Setting attribute of root '/': 'init_hdl_search_path' = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/plic
+@file(genus.tcl) 207: genus_try_set_root_attribute auto_super_thread false
+  Setting attribute of root '/': 'auto_super_thread' = false
+@file(genus.tcl) 208: if {[genus_env_flag GENUS_ENABLE_SUPER_THREAD 0]} {
+    set GENUS_CPUS [genus_env_value GENUS_CPUS 4]
+    if {![string is integer -strict $GENUS_CPUS] || $GENUS_CPUS < 1} {
+        error "GENUS_CPUS must be a positive integer"
+    }
+    set GENUS_SERVERS [genus_env_value GENUS_SUPER_THREAD_SERVERS localhost]
+    genus_try_set_root_attribute super_thread_servers $GENUS_SERVERS
+    genus_try_set_root_attribute max_cpus_per_server $GENUS_CPUS
+    if {[catch {test_super_thread_servers} message]} {
+        error "Genus super-thread server check failed: $message"
+    }
+    puts "Genus execution: super-thread, servers=$GENUS_SERVERS, CPUs=$GENUS_CPUS"
+} else {
+    catch {reset_db super_thread_servers}
+    genus_try_set_root_attribute max_cpus_per_server 0
+    puts "Genus execution: single process"
+}
+  Setting attribute of root '/': 'max_cpus_per_server' = 0
+Genus execution: single process
+@file(genus.tcl) 226: set_db / .hdl_unconnected_value 0
+  Setting attribute of root '/': 'hdl_unconnected_value' = 0
+@file(genus.tcl) 227: set_db / .hdl_track_filename_row_col true
+Info   : Enabled hdl_track_filename_row_col attribute.
+       : Setting this attribute to 'true' can have an impact on the run time. Use this attribute only when filename, line number, and column information are needed in reports.
+  Setting attribute of root '/': 'hdl_track_filename_row_col' = true
+@file(genus.tcl) 228: set_db / .auto_ungroup both
+  Setting attribute of root '/': 'auto_ungroup' = both
+@file(genus.tcl) 229: set_db / .lp_insert_clock_gating false
+  Setting attribute of root '/': 'lp_insert_clock_gating' = false
+@file(genus.tcl) 230: set_db / .library $ALL_TIMING_LIBS
+
+  Message Summary for Library all 11 libraries:
+  *********************************************
+  An unsupported construct was detected in this library. [LBR-40]: 20
+  *********************************************
+ 
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_AO_RVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_OA_RVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_AO_LVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'srambank_256x4x32_6t122.lib'.
+Warning : Inconsistency detected among the units specified in the timing libraries being used. [LBR-714]
+        : Libraries with inconsistent time/capacitance units were loaded.
+        : Default system time/capacitance unit will be used.
+  Setting attribute of root '/': 'library' = /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib
+@file(genus.tcl) 232: create_library_set -name libset_tt -timing $ALL_TIMING_LIBS
+@file(genus.tcl) 233: create_rc_corner \
+    -name rc_typ \
+    -pre_route_res 1.0 \
+    -post_route_res 1.0 \
+    -pre_route_cap 1.0 \
+    -post_route_cap 1.0 \
+    -post_route_cross_cap 1.0 \
+    -pre_route_clock_res 0.0 \
+    -pre_route_clock_cap 0.0 \
+    -temperature 25
+@file(genus.tcl) 243: create_opcond \
+    -name opcond_tt_0p7v_25c \
+    -process 1.0 \
+    -voltage 0.7 \
+    -temperature 25
+@file(genus.tcl) 248: create_timing_condition \
+    -name tc_tt \
+    -library_sets libset_tt \
+    -opcond opcond_tt_0p7v_25c
+@file(genus.tcl) 252: create_delay_corner \
+    -name dc_tt \
+    -timing_condition tc_tt \
+    -rc_corner rc_typ
+@file(genus.tcl) 256: create_constraint_mode \
+    -name mode_func \
+    -sdc_files $SDC_FILE
+@file(genus.tcl) 259: create_analysis_view \
+    -name view_tt \
+    -constraint_mode mode_func \
+    -delay_corner dc_tt
+@file(genus.tcl) 263: set_analysis_view -setup {view_tt} -hold {view_tt}
+@file(genus.tcl) 265: foreach rtl $RTL_FILES {
+    puts "Reading RTL: [file normalize $rtl]"
+    read_hdl $rtl
+}
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/bin_gray_convert.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/cdc_bridge.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/clock_gate.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/fifo_async.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/fifo_sync.v
+    function integer clog2;
+                   |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/fifo_sync.v' on line 127, column 20.
+        : Use the 'automatic' keyword for declaring functions and tasks.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v
+    (* ram_style = "block" *)
+       |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ram_style' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v' on line 168, column 8.
+    function [ROB_TAG_W-1:0] rob_tag_inc;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v' on line 202, column 14.
+    function integer rob_mem_idx;
+                   |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v' on line 210, column 20.
+    function [SLV_PTR_W-1:0] slv_ptr_inc;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v' on line 631, column 14.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/utils_axi_interconnect.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/utils_dma.v
+    function integer clog2;
+                   |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/utils_dma.v' on line 153, column 20.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/apb_interconnect/apb_async_bridge.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/apb_interconnect/apb_interconnect.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_async_bridge.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_dispatcher_channel.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_slave_arbitration.v
+    function [WEIGHT_W-1:0] get_weight;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_slave_arbitration.v' on line 22, column 14.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_interconnect.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_to_apb_bridge.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/branch_prediction_unit.v
+    (* ram_style = "distributed" *) reg [TAG-1:0] tags [0:ENTRY-1];
+       |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ram_style' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/branch_prediction_unit.v' on line 61, column 8.
+    (* ram_style = "distributed" *) reg [TARGET_ADDR-1:0] targets [0:ENTRY-1];
+       |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ram_style' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/branch_prediction_unit.v' on line 62, column 8.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/control_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/floating_point_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/forwarding_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/multiplier_divider_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/pipeline_control_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/pipeline_register/pipeline_register.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/pipeline_stage/pipeline_stage.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/register_file/register_file.v
+    (* ram_style = "distributed" *) reg [31:0] rf_main [0:31];
+       |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ram_style' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/register_file/register_file.v' on line 38, column 8.
+    (* ram_style = "distributed" *) reg [31:0] f_regfile [0:31];
+       |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ram_style' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/register_file/register_file.v' on line 134, column 8.
+    function [31:0] csr_read_value;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/register_file/register_file.v' on line 242, column 14.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/riscv_pipeline.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/debug/dtm_axi_master.v
+    function [3:0] get_wstrb;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/debug/dtm_axi_master.v' on line 98, column 14.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/debug/rv_debug_module_sba.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/debug/rv_jtag_dtm.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_core.v
+    (* ASYNC_REG = "TRUE" *) reg sync_ff1_r;
+       |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ASYNC_REG' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_core.v' on line 132, column 8.
+    (* ASYNC_REG = "TRUE" *) reg sync_ff2_r;
+       |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ASYNC_REG' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_core.v' on line 133, column 8.
+    (* ASYNC_REG = "TRUE" *) reg sync_ff3_r;
+       |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ASYNC_REG' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_core.v' on line 134, column 8.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_reg_bus.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_axi_master.v
+    function integer clog2_fn;
+                   |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_axi_master.v' on line 93, column 20.
+    function integer clog2_fn;
+                   |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_axi_master.v' on line 292, column 20.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_core.v
+    function integer clog2_fn;
+                   |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_core.v' on line 125, column 20.
+        if (!rst_n || (state == ST_IDLE)) begin
+                             |
+Warning : Expecting comparison to a signal in the edge event list. [VLOGPT-431]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_core.v' on line 223, column 30.
+        : Check all the edge event specifiers in the event list of an always block by an if-condition, except one. Take as clock, that one unchecked edge event.
+        if (!rst_n || state == ST_IDLE) rd_id_cnt <= {SEQ_W{1'b0}};
+                            |
+Warning : Expecting comparison to a signal in the edge event list. [VLOGPT-431]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_core.v' on line 426, column 29.
+        if (!rst_n || state == ST_IDLE) wr_id_cnt <= {SEQ_W{1'b0}};
+                            |
+Warning : Expecting comparison to a signal in the edge event list. [VLOGPT-431]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_core.v' on line 447, column 29.
+    function integer clog2_fn;
+                   |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_core.v' on line 624, column 20.
+        if (!rst_n || soft_rst_r) begin
+                      |
+Warning : Expecting comparison to a signal in the edge event list. [VLOGPT-431]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_core.v' on line 694, column 23.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/plic/plic_core.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/plic/plic_reg_bus.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/plic/plic.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/asap7_sram_128k_1rw.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_ram.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_rom.v
+    (* rom_style = "block" *) reg [DATA_WIDTH-1:0] rom_memory [0:MEM_DEPTH-1];
+       |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'rom_style' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_rom.v' on line 64, column 8.
+    initial begin
+          |
+Warning : Ignoring unsynthesizable construct. [VLOGPT-37]
+        : Initial in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_rom.v' on line 71, column 11.
+        : For example, the following constructs will be ignored:
+    - initial block
+    - final block
+    - program block
+    - property block
+    - sequence block
+    - covergroup
+    - checker block
+    - gate drive strength
+    - system task enable
+    - reg declaration with initial value
+    - specify block.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_sdram_controller.v
+    function [SDRAM_DATA_WIDTH-1:0] axi_to_phy_word;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_sdram_controller.v' on line 142, column 14.
+    function [PHY_STRB_WIDTH-1:0] axi_to_phy_strb;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_sdram_controller.v' on line 157, column 14.
+    function [DATA_WIDTH-1:0] merge_phy_read;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_sdram_controller.v' on line 172, column 14.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_spi_flash.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/dcache.v
+    function [31:0] read_data_with_size;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/dcache.v' on line 78, column 14.
+    function [31:0] write_data_with_size;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/dcache.v' on line 99, column 14.
+    function [3:0] gen_wstrb;
+             |
+Warning : Usage of non-static tasks or functions might result in simulation-synthesis mismatch. [VLOGPT-692]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/dcache.v' on line 118, column 14.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/icache.v
+            (* ram_style = "distributed" *) reg [TAG_W-1:0] ram [0:(1<<INDEX_W)-1];
+               |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ram_style' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/icache.v' on line 20, column 16.
+            (* ram_style = "distributed" *) reg [BLOCK_W-1:0] ram [0:(1<<INDEX_W)-1];
+               |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'ram_style' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/icache.v' on line 43, column 16.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_cordic.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_gpio.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_i2c.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_pwm.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_spi.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_syscon.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_uart.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_watchdog.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/top_soc.v
+@file(genus.tcl) 270: elaborate $TOP
+  Libraries have 334 usable logic and 46 usable sequential lib-cells.
+Info    : Elaborating Design. [ELAB-1]
+        : Elaborating top-level block 'top_soc' from file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/top_soc.v'.
+Warning : Referenced signals are not added in sensitivity list. This may cause simulation mismatches between the original and the synthesized design. [CDFG-360]
+        : Signal 'reset_vector_in' in module 'riscv_pipeline' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/riscv_pipeline.v' on line 329.
+        : Add missing reference signals in the sensitivity list or use '*' to add all the signals in the sensitivity list. Example : always @(a or b) (OR) always (*))
+Warning : Unreachable statements for case item. [CDFG-472]
+        : Case item 'default' in module 'main_control_unit' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/control_unit.v' on line 64.
+Warning : Unreachable statements for case item. [CDFG-472]
+        : Case item 'default' in module 'alu_control_unit' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/control_unit.v' on line 347.
+Warning : Unreachable statements for case item. [CDFG-472]
+        : Case item 'default' in module 'alu_control_unit' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/control_unit.v' on line 365.
+Warning : Unreachable statements for case item. [CDFG-472]
+        : Case item 'default' in module 'divider' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/multiplier_divider_unit.v' on line 346.
+Warning : Accessed non-constant signal during asynchronous set or reset operation. [CDFG2G-608]
+        : Variable 'reset_vector_in' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/riscv_pipeline.v' on line 330, column 13.
+        : This may cause simulation mismatches between the original and synthesized designs.
+Warning : Unreachable statements for case item. [CDFG-472]
+        : Case item 'default' in module 'rv_jtag_dtm' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/debug/rv_jtag_dtm.v' on line 52.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused flip-flop register 'rob_tag_valid_r' in module 'dsp_Ax_channel_SLV_AMT6_OUTSTANDING_AMT8_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_BURST_W2_TRANS_DATA_LEN_W8_TRANS_DATA_SIZE_W3_SLV_ID_W3_SLV_ID_MSB_IDX31_SLV_ID_LSB_IDX29_SLV_BASE_ADDRx020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxffff0000f8000000fc000000ff000000fffe0000ffff0000' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_dispatcher_channel.v' on line 303.
+        : Genus removes the flip-flop or latch inferred for an unused signal or variable. To preserve the flip-flop or latch, set the hdl_preserve_unused_registers attribute to true or use a pragma in the RTL.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused flip-flop register 'rob_tag_r' in module 'dsp_Ax_channel_SLV_AMT6_OUTSTANDING_AMT8_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_BURST_W2_TRANS_DATA_LEN_W8_TRANS_DATA_SIZE_W3_SLV_ID_W3_SLV_ID_MSB_IDX31_SLV_ID_LSB_IDX29_SLV_BASE_ADDRx020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxffff0000f8000000fc000000ff000000fffe0000ffff0000' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_dispatcher_channel.v' on line 304.
+Info    : Reversed the data and condition priority for priority mux chain (possibly created from loop based RTL), using new loop reversal algorithm. [CDFG-780]
+        : Priority chain of muxes in module 'axi_read_reorder_buffer_SLV_AMT6_DATA_WIDTH32_ID_WIDTH5_LEN_WIDTH8_RESP_WIDTH2_ROB_DEPTH8_MAX_BURST_BEATS64_ROB_TAG_W3_BEAT_CNT_W7_ID_COUNT32_ID_PTR_W3_ID_CNT_W4_ROB_ID_WIDTH8_SLV_PTR_W3' for signal 'grant_idx_c' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v' on line 665.
+Info    : Reversed the data and condition priority for priority mux chain (possibly created from loop based RTL), using new loop reversal algorithm. [CDFG-780]
+        : Priority chain of muxes in module 'axi_read_reorder_buffer_SLV_AMT6_DATA_WIDTH32_ID_WIDTH5_LEN_WIDTH8_RESP_WIDTH2_ROB_DEPTH8_MAX_BURST_BEATS64_ROB_TAG_W3_BEAT_CNT_W7_ID_COUNT32_ID_PTR_W3_ID_CNT_W4_ROB_ID_WIDTH8_SLV_PTR_W3' for signal 'slv_grant_c' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v' on line 665.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused flip-flop register 'aw_buf_len' in module 'clint_axi4_slave_ADDR_W32_ID_W10' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_reg_bus.v' on line 160.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused flip-flop register 'aw_buf_size' in module 'clint_axi4_slave_ADDR_W32_ID_W10' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_reg_bus.v' on line 161.
+Warning : Removing unused register. [CDFG-508]
+        : Removing unused flip-flop register 'wr_len_cnt' in module 'clint_axi4_slave_ADDR_W32_ID_W10' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_reg_bus.v' on line 219.
+Error   : Unsynthesizable Process. [CDFG-364] [elaborate]
+        : in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_core.v' on line 693.
+        : Error during elaboration.
+Info    : Unable to elaborate the design. [ELAB-4]
+        : Module 'top_soc' contains errors and cannot be elaborated.
+UM:   flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   elaborate
+#@ End verbose source ./tcl/genus.tcl
+1
+Encountered problems processing file: tcl/genus.tcl
+WARNING: This version of the tool is 542 days old.
+@genus:root: 2> exit
+
+Lic Summary:
+[15:40:25.354832] Cdslmd servers: vm-fsemi-edu02-h4l0gt0b
+[15:40:25.354835] Feature usage summary:
+[15:40:25.354835] Genus_Synthesis
+
+Normal exit.
