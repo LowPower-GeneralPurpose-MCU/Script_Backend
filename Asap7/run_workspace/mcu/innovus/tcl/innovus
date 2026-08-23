@@ -1,0 +1,7 @@
+############################################################
+## Compatibility wrapper for:
+##   innovus -files tcl/innovus
+############################################################
+
+set INNOVUS_TCL_DIR [file dirname [file normalize [info script]]]
+source [file join $INNOVUS_TCL_DIR innovus.tcl]

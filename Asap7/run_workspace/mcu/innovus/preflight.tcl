@@ -32,6 +32,7 @@ if {[llength $missing] > 0} {
 
 check_mapped_sram_count \
     $SYN_NETLIST $SRAM_MASTER $SRAM_EXPECTED_COUNT
+check_top_io_handoff $SYN_NETLIST $SYN_SDC
 
 set sram_lib_text [read_binary_file $SRAM_LIB "SRAM Liberty"]
 if {![regexp [format {cell[ \t\r\n]*\([ \t\r\n]*%s[ \t\r\n]*\)} \
@@ -43,6 +44,9 @@ set sram_lef_text [read_binary_file $SRAM_LEF "SRAM 4x LEF"]
 if {![regexp [format {MACRO[ \t]+%s} $SRAM_MASTER] $sram_lef_text] ||
     ![regexp {SIZE[ \t]+121\.392[ \t]+BY[ \t]+172\.8} $sram_lef_text]} {
     error "SRAM 4x LEF master or geometry is unexpected"
+}
+if {![regexp {SYMMETRY[ \t]+[^;\n]*Y} $sram_lef_text]} {
+    error "SRAM 4x LEF does not advertise Y symmetry; macro floorplan uses MY orientation"
 }
 if {[file size $SRAM_GDS] == 0} {
     error "SRAM GDS is empty: [file normalize $SRAM_GDS]"
