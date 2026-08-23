@@ -91,11 +91,11 @@ cd Asap7/run_workspace/mcu/genus
 genus -files tcl/genus.tcl
 ```
 
-`genus.tcl` tự đọc config, filelist, SDC và timing Liberty. Mặc định Genus dùng
-một process và effort `high`; chỉ bật super-thread khi license đã sẵn sàng qua
-`GENUS_ENABLE_SUPER_THREAD=1`. Có thể dùng `GENUS_CPUS` và
-`GENUS_SYN_EFFORT=low|medium|high` để điều chỉnh lần chạy đầu. Sau khi chạy,
-cần kiểm tra ít nhất:
+`genus.tcl` tự đọc config, filelist, SDC, timing Liberty và tự chạy các check
+chuẩn bị trước tổng hợp. Mặc định Genus dùng một process và effort `high`; chỉ
+bật super-thread khi license đã sẵn sàng qua `GENUS_ENABLE_SUPER_THREAD=1`.
+Có thể dùng `GENUS_CPUS` và `GENUS_SYN_EFFORT=low|medium|high` để điều chỉnh
+lần chạy đầu. Sau khi chạy, cần kiểm tra ít nhất:
 
 - `reports/check_design_unresolved.rpt`
 - `reports/timing_intent_post_syn.rpt`

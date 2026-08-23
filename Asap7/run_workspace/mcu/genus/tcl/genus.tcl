@@ -47,6 +47,111 @@ proc genus_require_file {label path} {
     error "Missing $label: [file normalize $path]"
 }
 
+proc genus_read_file {path} {
+    set fp [open $path r]
+    set text [read $fp]
+    close $fp
+    return $text
+}
+
+proc genus_read_prefix {path byte_count} {
+    set fp [open $path r]
+    set text [read $fp $byte_count]
+    close $fp
+    return $text
+}
+
+proc genus_require_liberty {path {required_cell ""}} {
+    genus_require_file "timing Liberty" $path
+    if {[file size $path] < 1024} {
+        error "Timing Liberty is too small to be valid: [file normalize $path]"
+    }
+    if {![regexp {library[ \t\r\n]*\(} [genus_read_prefix $path 16384]]} {
+        error "Timing Liberty does not start like a Liberty file: [file normalize $path]"
+    }
+    if {$required_cell ne ""} {
+        set liberty_text [genus_read_file $path]
+        set cell_pattern [format {cell[ \t\r\n]*\([ \t\r\n]*%s[ \t\r\n]*\)} $required_cell]
+        if {![regexp -- $cell_pattern $liberty_text]} {
+            error "SRAM Liberty does not contain cell $required_cell: [file normalize $path]"
+        }
+    }
+}
+
+proc genus_require_text {label path pattern} {
+    set text [genus_read_file $path]
+    if {![regexp -- $pattern $text]} {
+        error "$label check failed in [file normalize $path]"
+    }
+}
+
+proc genus_run_static_checks {} {
+    global RTL_FILES RTL_ROOT SDC_FILE SRAM_MASTER SRAM_EXPECTED_COUNT SRAM_CAPACITY_BYTES
+
+    if {[llength $RTL_FILES] != 53} {
+        error "Expected exactly 53 RTL files, found [llength $RTL_FILES]"
+    }
+
+    set seen [dict create]
+    foreach rtl_file $RTL_FILES {
+        set normalized_rtl [file normalize $rtl_file]
+        if {[dict exists $seen $normalized_rtl]} {
+            error "Duplicate RTL file in filelist: $normalized_rtl"
+        }
+        dict set seen $normalized_rtl 1
+
+        if {[file tail $normalized_rtl] eq "$SRAM_MASTER.v"} {
+            error "Do not synthesize the behavioral SRAM model: $normalized_rtl"
+        }
+    }
+
+    genus_require_file "SDC file" $SDC_FILE
+    if {![info complete [genus_read_file $SDC_FILE]]} {
+        error "SDC Tcl syntax is incomplete: [file normalize $SDC_FILE]"
+    }
+
+    set boot_mem [file join $RTL_ROOT memory boot.mem]
+    genus_require_file "boot ROM image" $boot_mem
+    if {[file size $boot_mem] == 0} {
+        error "Boot ROM image is empty: [file normalize $boot_mem]"
+    }
+
+    set top_file [file join $RTL_ROOT top_soc.v]
+    genus_require_text "Boot ROM INIT_FILE" \
+        $top_file {\.INIT_FILE[ \t\r\n]*\([ \t\r\n]*"rtl/memory/boot\.mem"[ \t\r\n]*\)}
+    genus_require_text "Top-level AXI RAM depth" \
+        $top_file {\.MEM_DEPTH[ \t\r\n]*\([ \t\r\n]*32768[ \t\r\n]*\)}
+
+    set axi_ram_file [file join $RTL_ROOT memory axi_ram.v]
+    genus_require_text "AXI RAM default depth" \
+        $axi_ram_file {parameter[ \t\r\n]+MEM_DEPTH[ \t\r\n]*=[ \t\r\n]*32768}
+    genus_require_text "AXI RAM hard macro wrapper" \
+        $axi_ram_file {asap7_sram_128k_1rw[ \t\r\n]+[A-Za-z_][A-Za-z0-9_$]*[ \t\r\n]*\(}
+
+    set sram_wrapper_file [file join $RTL_ROOT memory asap7_sram_128k_1rw.v]
+    genus_require_text "SRAM bank address decode" \
+        $sram_wrapper_file {addr\[16:12\]}
+    genus_require_text "SRAM row address decode" \
+        $sram_wrapper_file {addr\[11:2\]}
+    genus_require_text "SRAM generated bank count" \
+        $sram_wrapper_file {for[ \t\r\n]*\([ \t\r\n]*i[ \t\r\n]*=[ \t\r\n]*0[ \t\r\n]*;[ \t\r\n]*i[ \t\r\n]*<[ \t\r\n]*32}
+    genus_require_text "SRAM hard macro instance" \
+        $sram_wrapper_file $SRAM_MASTER
+
+    if {$SRAM_EXPECTED_COUNT != 32 || $SRAM_CAPACITY_BYTES != 131072} {
+        error "SRAM config must describe 32 macros and 128 KiB"
+    }
+
+    foreach clint_file [glob -nocomplain [file join $RTL_ROOT interrupt CLINT *.v]] {
+        set clint_text [genus_read_file $clint_file]
+        if {[regexp {`include[ \t]+"[^"]*CLINT[^"]*"} $clint_text]} {
+            error "CLINT include paths must stay lowercase for Linux: [file normalize $clint_file]"
+        }
+    }
+
+    puts "MCU static checks passed: 53 RTL files, boot image, SRAM wrapper and SDC"
+}
+
 proc check_sram_library_cell {master} {
     set matches {}
     foreach cell_obj [get_db lib_cells] {
@@ -77,10 +182,11 @@ proc check_sram_mapped_netlist {netlist master expected} {
     }
 }
 
-foreach timing_lib $ALL_TIMING_LIBS {
-    genus_require_file "timing Liberty" $timing_lib
+genus_run_static_checks
+foreach timing_lib $STD_LIBS {
+    genus_require_liberty $timing_lib
 }
-genus_require_file "SDC file" $SDC_FILE
+genus_require_liberty $SRAM_LIB $SRAM_MASTER
 
 foreach dir {outputs reports logs} {
     file mkdir $dir
