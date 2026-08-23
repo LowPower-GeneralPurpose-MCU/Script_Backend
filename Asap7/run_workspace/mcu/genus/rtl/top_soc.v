@@ -591,7 +591,9 @@ module top_soc (
     axi_rom #(
         .ID_WIDTH(SLV_ID_WIDTH),
         .ADDR_MASK(32'h0000_FFFF),
-        .MEM_DEPTH(16384)
+        .MEM_DEPTH(16384),
+        // genus.tcl always changes directory to mcu/genus before elaborate.
+        .INIT_FILE("rtl/memory/boot.mem")
     ) u_axi_rom (
         .clk(clk_axi), .rst_n(reset_axi_n_sync),
         .s_axi_awid(s0_awid), .s_axi_awaddr(s0_awaddr), .s_axi_awlen(s0_awlen), .s_axi_awsize(s0_awsize), .s_axi_awburst(s0_awburst), .s_axi_awlock(s0_awlock), .s_axi_awcache(s0_awcache), .s_axi_awprot(s0_awprot), .s_axi_awqos(s0_awqos), .s_axi_awregion(s0_awregion), .s_axi_awvalid(s0_awvalid), .s_axi_awready(s0_awready),

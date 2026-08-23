@@ -4,6 +4,18 @@ Thư mục này là workspace đã chuẩn hóa cho `top_soc`. Flow giữ nguyê
 chính 128 KiB của MCU, nhưng thay mảng RTL suy diễn bằng 32 hard macro
 `srambank_256x4x32_6t122` (mỗi macro 1024 x 32 bit, tương đương 4 KiB).
 
+Bố cục chạy hiện tại:
+
+```text
+mcu/
+├── genus/
+│   ├── rtl/                 # 53 RTL file, SRAM wrapper và test
+│   ├── tcl/                 # Genus Tcl, SDC và filelist
+│   ├── outputs/             # Được tạo khi chạy, không commit
+│   └── reports/             # Được tạo khi chạy, không commit
+└── innovus/                 # Nhận handoff từ genus/outputs
+```
+
 ## Baseline collateral
 
 Flow được khóa theo hai revision:
@@ -11,8 +23,9 @@ Flow được khóa theo hai revision:
 - `asap7sc7p5t_28`: `f970bd3c3292b79ae4d022a3ec80533534614066`
 - `asap7_sram_0p0`: `522eeccbccefcd66e61893fa1059df24d95e9f86`
 
-Đặt hai repository cạnh nhau trong một thư mục và trỏ `ASAP7_ROOT` vào thư
-mục cha đó:
+Đặt hai repository cạnh nhau trong một thư mục. Flow lần lượt ưu tiên biến môi
+trường, collateral đầy đủ trong `Asap7/asap7`, rồi mới dùng đường dẫn legacy
+`/home/user1/Desktop/asap7`:
 
 ```text
 $ASAP7_ROOT/
@@ -31,11 +44,15 @@ $ASAP7_ROOT/
 Các Liberty standard-cell trong repository được lưu dưới dạng `.lib.7z`; phải
 giải nén để đường dẫn `LIB/CCS/*.lib` tồn tại trước khi chạy Genus.
 
+Ngoài `ASAP7_ROOT`/`ASAP7_HOME`, flow hỗ trợ các override tách riêng như
+`ASAP7_STDCELL_ROOT`, `ASAP7_SRAM_ROOT`, `ASAP7_STD_LIB_DIR`,
+`ASAP7_SRAM_LIB_FILE` và `ASAP7_TECH_LEF_FILE`.
+
 ## Những gì đã chuẩn hóa
 
-- `memory/axi_ram.v` là AXI4 slave nối tới SRAM 1RW; truy cập được tuần tự hóa
+- `genus/rtl/memory/axi_ram.v` là AXI4 slave nối tới SRAM 1RW; truy cập được tuần tự hóa
   và ghi từng byte dùng read-modify-write vì macro không có byte-write mask.
-- `memory/asap7_sram_128k_1rw.v` ánh xạ `addr[16:12]` thành 32 bank và tạo đúng
+- `genus/rtl/memory/asap7_sram_128k_1rw.v` ánh xạ `addr[16:12]` thành 32 bank và tạo đúng
   32 hard-macro instance. Behavioral Verilog của macro chỉ dành cho mô phỏng,
   không nằm trong filelist tổng hợp.
 - Filelist RTL có thứ tự cố định và include path tương thích filesystem Linux.
@@ -56,8 +73,8 @@ boot ROM hiện tại vẫn đảm nhiệm nội dung khởi động.
 Có thể kiểm tra độc lập AXI-to-SRAM controller bằng model đồng bộ chính thức:
 
 ```bash
-bash tests/run_rtl_lint.sh
-bash tests/run_axi_ram_verilator.sh
+bash genus/rtl/tests/run_rtl_lint.sh
+bash genus/rtl/tests/run_axi_ram_verilator.sh
 ```
 
 Lệnh đầu lint cấu trúc toàn bộ 53 RTL file với top `top_soc`. Lệnh thứ hai bao
@@ -71,12 +88,14 @@ Chạy trong Linux có Cadence license và đã thiết lập `ASAP7_ROOT`:
 
 ```bash
 cd Asap7/run_workspace/mcu/genus
-tclsh preflight.tcl
-genus -f genus.tcl
+genus -files tcl/genus.tcl
 ```
 
-Preflight của Genus chỉ yêu cầu RTL, SDC và timing Liberty. Nếu physical view
-còn thiếu, nó chỉ báo để chuẩn bị Innovus. Sau khi chạy, cần kiểm tra ít nhất:
+`genus.tcl` tự đọc config, filelist, SDC và timing Liberty. Mặc định Genus dùng
+một process và effort `high`; chỉ bật super-thread khi license đã sẵn sàng qua
+`GENUS_ENABLE_SUPER_THREAD=1`. Có thể dùng `GENUS_CPUS` và
+`GENUS_SYN_EFFORT=low|medium|high` để điều chỉnh lần chạy đầu. Sau khi chạy,
+cần kiểm tra ít nhất:
 
 - `reports/check_design_unresolved.rpt`
 - `reports/timing_intent_post_syn.rpt`

@@ -3,11 +3,84 @@
 ## ASAP7 RVT + LVT, TT 0.7 V 25 C, 32 SRAM hard macros
 ############################################################
 
-set GENUS_DIR [file dirname [file normalize [info script]]]
+set GENUS_TCL_DIR [file dirname [file normalize [info script]]]
+set GENUS_DIR [file dirname $GENUS_TCL_DIR]
+set FLOW_ROOT [file dirname $GENUS_DIR]
+set RTL_ROOT [file join $GENUS_DIR rtl]
+set SDC_FILE [file join $GENUS_TCL_DIR constraint.sdc]
 cd $GENUS_DIR
 
-source ./preflight.tcl
-source ./tcl/check_sram_macro.tcl
+source [file join $RTL_ROOT flow project_config.tcl]
+source [file join $GENUS_TCL_DIR rtl_filelist.tcl]
+
+proc genus_env_value {name default_value} {
+    if {[info exists ::env($name)] && $::env($name) ne ""} {
+        return $::env($name)
+    }
+    return $default_value
+}
+
+proc genus_env_flag {name default_value} {
+    set value [string tolower [genus_env_value $name $default_value]]
+    switch -- $value {
+        1 - true - yes - on  { return 1 }
+        0 - false - no - off { return 0 }
+        default { error "$name must be 0/1, false/true, no/yes or off/on" }
+    }
+}
+
+proc genus_try_set_root_attribute {name value} {
+    if {[catch {set_db / .$name $value} message]} {
+        puts "WARNING: cannot set Genus attribute $name=$value: $message"
+        return 0
+    }
+    return 1
+}
+
+proc genus_require_file {label path} {
+    if {[file isfile $path]} {
+        return
+    }
+    if {[file isfile "$path.7z"]} {
+        error "$label is compressed, extract before running Genus: [file normalize $path.7z]"
+    }
+    error "Missing $label: [file normalize $path]"
+}
+
+proc check_sram_library_cell {master} {
+    set matches {}
+    foreach cell_obj [get_db lib_cells] {
+        set cell_name [get_db $cell_obj .name]
+        if {[string match "*$master*" $cell_name]} {
+            lappend matches $cell_obj
+        }
+    }
+    if {[llength $matches] != 1} {
+        error "Expected one loaded library cell for $master, found [llength $matches]"
+    }
+    puts "Loaded SRAM library cell: [get_db [lindex $matches 0] .name]"
+}
+
+proc check_sram_mapped_netlist {netlist master expected} {
+    if {![file isfile $netlist]} {
+        error "Mapped netlist does not exist: $netlist"
+    }
+    set fp [open $netlist r]
+    set text [read $fp]
+    close $fp
+
+    set pattern [format {(^|\n)[ \t]*%s[ \t]+[^;\n]*\(} $master]
+    set count [regexp -all -- $pattern $text]
+    puts "Mapped SRAM instances: $count (expected $expected)"
+    if {$count != $expected} {
+        error "Mapped SRAM count mismatch for $master"
+    }
+}
+
+foreach timing_lib $ALL_TIMING_LIBS {
+    genus_require_file "timing Liberty" $timing_lib
+}
+genus_require_file "SDC file" $SDC_FILE
 
 foreach dir {outputs reports logs} {
     file mkdir $dir
@@ -19,14 +92,30 @@ foreach pattern {./outputs/* ./reports/* ./logs/*} {
 }
 
 set_db / .init_lib_search_path [list $STD_LIB_DIR [file dirname $SRAM_LIB]]
-set_db / .script_search_path [list [file join $GENUS_DIR tcl]]
+set_db / .script_search_path [list $GENUS_TCL_DIR]
 set_db / .init_hdl_search_path \
     [concat [list $RTL_ROOT] $RTL_INCLUDE_DIRS]
 
-# Stable default for workstation and license-limited runs.
-catch {set_db / .auto_super_thread false}
-catch {reset_db super_thread_servers}
-catch {set_db / .max_cpus_per_server 0}
+# Stable default for workstation and license-limited runs.  Enable distributed
+# processing only when the Cadence installation and license are configured.
+genus_try_set_root_attribute auto_super_thread false
+if {[genus_env_flag GENUS_ENABLE_SUPER_THREAD 0]} {
+    set GENUS_CPUS [genus_env_value GENUS_CPUS 4]
+    if {![string is integer -strict $GENUS_CPUS] || $GENUS_CPUS < 1} {
+        error "GENUS_CPUS must be a positive integer"
+    }
+    set GENUS_SERVERS [genus_env_value GENUS_SUPER_THREAD_SERVERS localhost]
+    genus_try_set_root_attribute super_thread_servers $GENUS_SERVERS
+    genus_try_set_root_attribute max_cpus_per_server $GENUS_CPUS
+    if {[catch {test_super_thread_servers} message]} {
+        error "Genus super-thread server check failed: $message"
+    }
+    puts "Genus execution: super-thread, servers=$GENUS_SERVERS, CPUs=$GENUS_CPUS"
+} else {
+    catch {reset_db super_thread_servers}
+    genus_try_set_root_attribute max_cpus_per_server 0
+    puts "Genus execution: single process"
+}
 
 set_db / .hdl_unconnected_value 0
 set_db / .hdl_track_filename_row_col true
@@ -127,11 +216,17 @@ report_area -depth 4 > ./reports/area_hierarchy_elaborated.rpt
 check_timing_intent -verbose > ./reports/timing_intent_pre_syn.rpt
 catch {report_timing -lint > ./reports/timing_lint_pre_syn.rpt}
 
-set_db / .syn_generic_effort high
+set SYN_EFFORT [string tolower [genus_env_value GENUS_SYN_EFFORT high]]
+if {[lsearch -exact {low medium high} $SYN_EFFORT] < 0} {
+    error "GENUS_SYN_EFFORT must be low, medium or high"
+}
+puts "Genus synthesis effort: $SYN_EFFORT"
+
+set_db / .syn_generic_effort $SYN_EFFORT
 syn_generic
-set_db / .syn_map_effort high
+set_db / .syn_map_effort $SYN_EFFORT
 syn_map
-set_db / .syn_opt_effort high
+set_db / .syn_opt_effort $SYN_EFFORT
 syn_opt
 
 report_area > ./reports/area_syn.rpt

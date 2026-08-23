@@ -1,7 +1,7 @@
 set INNOVUS_DIR [file dirname [file dirname [file normalize [info script]]]]
 set FLOW_ROOT [file dirname $INNOVUS_DIR]
 
-source [file join $FLOW_ROOT flow project_config.tcl]
+source [file join $FLOW_ROOT genus rtl flow project_config.tcl]
 
 set SYN_NETLIST [file join $FLOW_ROOT genus outputs [format "%s_syn.v" $TOP]]
 set SYN_SDC     [file join $FLOW_ROOT genus outputs [format "%s_syn.sdc" $TOP]]
