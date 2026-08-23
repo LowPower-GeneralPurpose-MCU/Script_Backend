@@ -1,12 +1,10 @@
 NetName                                 vlPeak      vlView              vhPeak      vhView              
 #
-u_mem/FE_OFN861_n  0.0749  tt -0.0035  tt
-s_axi_awaddr[7]  -0.0497  tt -0.0497  tt
-s_axi_awaddr[6]  -0.0259  tt -0.0406  tt
-s_axi_awsize[2]  -0.0105  tt -0.0105  tt
-s_axi_awsize[1]  -0.0504  tt -0.0504  tt
+s_axi_awaddr[7]  -0.0483  tt -0.0483  tt
+s_axi_awaddr[6]  -0.0245  tt -0.0392  tt
+s_axi_awsize[1]  -0.0476  tt -0.0476  tt
 u_mem/bank_rdata[0][21]  0.0805  tt -0.014  tt
 u_mem/bank_rdata[0][6]  0.0476  tt -0.0371  tt
 u_mem/bank_rdata[6][13]  0.1106  tt -0.0098  tt
 
-Total number of glitch violations: 8
+Total number of glitch violations: 6

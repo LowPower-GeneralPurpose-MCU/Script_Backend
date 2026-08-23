@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Sun Aug 23 14:57:20 2026                
+#  Created on Sun Aug 23 18:36:48 2026                
 #                                                     
 #######################################################
 
@@ -1923,58 +1923,38 @@ routeDesign -globalDetail
 routeDesign -viaOpt -wireOpt -trackOpt
 setNanoRouteMode -quiet -route_with_timing_driven true -route_with_si_driven true
 ecoRoute -fix_drc
-setOptMode -fixCap true -fixTran true -fixFanoutLoad true -setupTargetSlack 0.020 -holdTargetSlack 0.020 -detailDrvFailureReason true -detailDrvFailureReasonMaxNumNets 100
+ccopt_pro -enable_drv_fixing true -enable_drv_fixing_by_rebuffering true -enable_refine_place true -enable_routing_eco true -enable_skew_fixing false -enable_skew_fixing_by_rebuffering false
+setOptMode -fixCap true -fixTran true -fixFanoutLoad true -fixGlitch true -reclaimArea false -setupTargetSlack 0.020 -holdTargetSlack 0.020 -detailDrvFailureReason true -detailDrvFailureReasonMaxNumNets 100
 optDesign -postRoute -setup -hold -prefix postRoute
 applyGlobalNets
 clearDrc
 applyGlobalNets
 verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_postroute_opt.rpt
 ecoRoute -fix_drc
+timeDesign -postRoute -outDir ./reports/timing_postRoute_preSiRepair
+setAttribute -net {s_axi_awaddr[6]} -preferred_extra_space 1
+setAttribute -net {s_axi_awaddr[7]} -preferred_extra_space 1
+setAttribute -net {s_axi_awsize[1]} -preferred_extra_space 1
+setAttribute -net {s_axi_awsize[2]} -preferred_extra_space 1
+setAttribute -net u_mem/FE_OFN861_n -preferred_extra_space 1
+setAttribute -net {u_mem/bank_rdata[0][21]} -preferred_extra_space 1
+setAttribute -net {u_mem/bank_rdata[0][6]} -preferred_extra_space 1
+setAttribute -net {u_mem/bank_rdata[6][13]} -preferred_extra_space 1
+setNanoRouteMode -quiet -route_with_timing_driven true -route_with_si_driven true -route_detail_post_route_spread_wire true
+routeDesign -wireOpt
+setNanoRouteMode -quiet -route_detail_post_route_spread_wire auto
+setOptMode -fixGlitch true -reclaimArea false
+optDesign -postRoute -drv
+ecoRoute -fix_drc
+applyGlobalNets
+clearDrc
+applyGlobalNets
+verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_si_repair.rpt
 timeDesign -postRoute -outDir ./reports/timing_postRoute
 timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold
 report_noise -bumpy_waveform -threshold 0 > ./reports/bumpy_transition_postRoute.rpt
 verify_drc -report ./verify_rpt/drc_postroute.rpt
 verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
 saveDesign ./saved/axi_ram_routed.enc
-setSIMode -enable_delay_report true -enable_glitch_report true
-setNanoRouteMode -quiet -route_with_timing_driven true -route_with_si_driven true
-ecoRoute -fix_drc
-applyGlobalNets
-verifyConnectivity -type special -net {VDD VSS} -allPGPinPort -noUnroutedNet -report ./verify_rpt/pg_connectivity_after_verify_route_pg.rpt
-verify_drc -report ./verify_rpt/drc_postroute.rpt
-verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
-timeDesign -postRoute -outDir ./reports/timing_postRoute_recheck
-timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold_recheck
-report_noise -bumpy_waveform -threshold 0 > ./reports/bumpy_transition_postRoute_recheck.rpt
-verify_drc -report ./verify_rpt/drc_after_fill.rpt
-verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_after_fill.rpt
-timeDesign -postRoute -outDir ./reports/timing_postFill
-timeDesign -postRoute -hold -outDir ./reports/timing_postFill_hold
-saveDesign ./saved/axi_ram_filled.enc
-zoomBox -236.50425 -218.30600 944.53150 838.97300
-zoomBox -146.20775 -113.57125 857.67275 785.11600
-zoomBox -4.21650 51.12400 721.08725 700.42575
-fit
-zoomBox -322.91750 82.24925 820.50075 694.86775
-zoomBox -262.32050 128.57925 709.58500 649.30500
-zoomBox -98.18600 254.06950 409.15550 525.89200
-zoomBox -29.01900 306.95175 282.55275 473.88500
-zoomBox 1.52850 330.30675 226.63925 450.91625
-zoomBox 32.21825 353.77075 170.46475 427.84025
-zoomBox 39.54450 359.37225 157.05450 422.33150
-zoomBox 45.77200 364.13350 145.65575 417.64900
-zoomBox 55.56500 371.62050 127.73100 410.28550
-zoomBox 67.75225 380.93825 105.42375 401.12175
-zoomBox 55.56400 371.61975 127.73200 410.28575
-zoomBox 32.21600 353.76875 170.46750 427.84100
-zoomBox 1.52425 330.30325 226.64425 450.91775
-pan 9.06125 330.79300
-zoomBox 43.66450 344.47025 206.31400 431.61425
-zoomBox 75.15775 356.06250 175.04525 409.58000
-zoomBox 94.49875 363.18150 155.84225 396.04800
-zoomBox 106.37650 367.55350 144.04925 387.73775
-zoomBox 89.06600 361.18175 161.23600 399.84875
-zoomBox 55.90500 348.97525 194.16050 423.04950
-zoomBox -7.62150 325.59150 257.23350 467.49500
-zoomBox -129.31800 280.79550 378.06175 552.63850
-pan 126.39100 425.99750
+zoomBox -299.67725 -243.74475 881.35825 813.53400
+zoomBox -230.69450 -115.86300 773.18575 782.82400

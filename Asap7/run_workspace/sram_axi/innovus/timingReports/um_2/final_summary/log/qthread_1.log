@@ -5,7 +5,7 @@ Multi-CPU acceleration using 12 CPU(s).
 *** QThread MetricCollect [begin] (clock_opt_design #1) : mem = 0.8M
 Multithreaded Timing Analysis is initialized with 12 threads
 
-Ending "set_metric_additional_insts" (total cpu=0:00:00.2, real=0:00:00.0, peak res=4984.3M, current mem=4227.2M)
-Ending "set_metric_inst_count_area" (total cpu=0:00:00.2, real=0:00:00.0, peak res=4321.4M, current mem=4253.0M)
-*** QThread MetricCollect [finish] (clock_opt_design #1) : cpu/real = 0:00:00.5/0:00:00.6 (0.8), mem = 80.9M
+Ending "set_metric_additional_insts" (total cpu=0:00:00.2, real=0:00:00.0, peak res=5144.7M, current mem=4733.1M)
+Ending "set_metric_inst_count_area" (total cpu=0:00:00.2, real=0:00:00.0, peak res=4823.0M, current mem=4754.4M)
+*** QThread MetricCollect [finish] (clock_opt_design #1) : cpu/real = 0:00:00.6/0:00:00.6 (0.9), mem = 80.9M
 _______________________________________________________________________

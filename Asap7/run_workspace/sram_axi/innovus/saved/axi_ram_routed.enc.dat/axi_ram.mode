@@ -24,13 +24,14 @@ catch { setOptMode -opt_drv_margin 0 }
 catch { setOptMode -opt_drv_fix_max_cap true }
 catch { setOptMode -opt_drv true }
 catch { setOptMode -opt_fix_fanout_load true }
+catch { setOptMode -opt_post_route_fix_glitch true }
 catch { setOptMode -opt_drv_fix_max_tran true }
 catch { setOptMode -opt_hold_target_slack 0.02 }
 catch { setOptMode -opt_leakage_to_dynamic_ratio 0.5 }
 catch { setOptMode -opt_resize_flip_flops true }
 catch { setOptMode -opt_power_effort high }
 catch { setOptMode -opt_preserve_all_sequential false }
-catch { setOptMode -opt_area_recovery true }
+catch { setOptMode -opt_area_recovery false }
 catch { setOptMode -opt_setup_target_slack 0.02 }
 catch { setPathGroupOptions reg2reg -effortLevel high -weight 2 }
 catch { setPathGroupOptions reg2reg -late -slackAdjustment -0 }
@@ -48,7 +49,7 @@ catch {setNanoRouteMode -quiet -drouteStartIteration 0}
 catch {setNanoRouteMode -quiet -route_detail_use_lef_pin_taper_rule true}
 catch {setNanoRouteMode -quiet -route_detail_use_min_spacing_for_blockage auto}
 catch {setNanoRouteMode -quiet -route_detail_use_multi_cut_via_effort "low"}
-catch {setNanoRouteMode -quiet -extract_design_signature 47655020}
+catch {setNanoRouteMode -quiet -extract_design_signature 84902693}
 catch {setNanoRouteMode -quiet -extract_rc_model_file "${::IMEX::libVar}/misc/rc_model.bin"}
 catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
 catch {setNanoRouteMode -quiet -route_global_exp_timing_driven_use_tif_timing_engine_for_import_design true}
@@ -64,7 +65,7 @@ catch {setNanoRouteMode -quiet -route_with_si_driven true}
 catch {setNanoRouteMode -quiet -route_with_si_post_route_fix false}
 catch {setNanoRouteMode -quiet -route_with_timing_driven true}
 catch {setNanoRouteMode -quiet -route_with_via_only_for_stdcell_pin "true"}
-catch {setNanoRouteMode -quiet -timingEngine ".timing_file_2073937.tif.gz"}
+catch {setNanoRouteMode -quiet -timingEngine ".timing_file_3155773.tif.gz"}
 
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setPlaceMode -place_design_refine_macro false }
