@@ -126,8 +126,6 @@ module clint_axi4_slave #(
     reg               aw_buf_valid;
     reg  [ID_W-1:0]   aw_buf_id;
     reg  [ADDR_W-1:0] aw_buf_addr;
-    reg  [7:0]        aw_buf_len;
-    reg  [2:0]        aw_buf_size;
     reg  [1:0]        aw_buf_burst;
     reg               aw_buf_err; // lỗi từ kiểm tra AW sớm
 
@@ -147,8 +145,6 @@ module clint_axi4_slave #(
             aw_buf_valid <= 1'b0;
             aw_buf_id    <= {ID_W{1'b0}};
             aw_buf_addr  <= {ADDR_W{1'b0}};
-            aw_buf_len   <= 8'h0;
-            aw_buf_size  <= 3'h2;
             aw_buf_burst <= `AXI_BURST_INCR;
             aw_buf_err   <= 1'b0;
         end else begin
@@ -157,8 +153,6 @@ module clint_axi4_slave #(
                 aw_buf_valid <= 1'b1;
                 aw_buf_id    <= s_axi_awid;
                 aw_buf_addr  <= s_axi_awaddr;
-                aw_buf_len   <= s_axi_awlen;
-                aw_buf_size  <= s_axi_awsize;
                 aw_buf_burst <= s_axi_awburst;
                 aw_buf_err   <= aw_check_err;
             end else if (aw_consume) begin
@@ -171,7 +165,6 @@ module clint_axi4_slave #(
     //  Active transaction registers 
     reg  [ID_W-1:0]   wr_id;
     reg  [ADDR_W-1:0] wr_addr;       // địa chỉ beat hiện tại
-    reg  [7:0]        wr_len_cnt;    // beats còn lại
     reg  [1:0]        wr_burst;
     reg               wr_err;        // lỗi tích lũy trong transaction
 
@@ -185,7 +178,6 @@ module clint_axi4_slave #(
             wr_state    <= WR_IDLE;
             wr_id       <= {ID_W{1'b0}};
             wr_addr     <= {ADDR_W{1'b0}};
-            wr_len_cnt  <= 8'h0;
             wr_burst    <= `AXI_BURST_INCR;
             wr_err      <= 1'b0;
         end else begin
@@ -197,7 +189,6 @@ module clint_axi4_slave #(
                         // Nạp active regs từ buffer
                         wr_id      <= aw_buf_id;
                         wr_addr    <= aw_buf_addr;
-                        wr_len_cnt <= aw_buf_len;
                         wr_burst   <= aw_buf_burst;
                         wr_err     <= aw_buf_err;
                         wr_state   <= WR_BURST;
@@ -216,7 +207,6 @@ module clint_axi4_slave #(
                             // Beat giữa burst: tăng địa chỉ (INCR)
                             if (wr_burst == `AXI_BURST_INCR)
                                 wr_addr <= wr_addr + 32'h4; // 4 bytes/beat
-                            wr_len_cnt <= wr_len_cnt - 8'h1;
                         end
                     end
                 end

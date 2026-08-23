@@ -66,7 +66,6 @@ module rv_jtag_dtm #(
             PIR: next_state = tms ? E2I : PIR;
             E2I: next_state = tms ? UIR : SIR;
             UIR: next_state = tms ? SDS : RTI;
-            default: next_state = TLR;
         endcase
     end
 

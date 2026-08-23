@@ -129,9 +129,18 @@ module clint_timer (
         else         rtc_toggle_r <= ~rtc_toggle_r;
     end
 
-    (* ASYNC_REG = "TRUE" *) reg sync_ff1_r;
-    (* ASYNC_REG = "TRUE" *) reg sync_ff2_r;
-    (* ASYNC_REG = "TRUE" *) reg sync_ff3_r;
+`ifdef FPGA
+    (* ASYNC_REG = "TRUE" *)
+`endif
+    reg sync_ff1_r;
+`ifdef FPGA
+    (* ASYNC_REG = "TRUE" *)
+`endif
+    reg sync_ff2_r;
+`ifdef FPGA
+    (* ASYNC_REG = "TRUE" *)
+`endif
+    reg sync_ff3_r;
 
     always @(posedge clk_i or negedge rst_ni) begin
         if (!rst_ni) begin

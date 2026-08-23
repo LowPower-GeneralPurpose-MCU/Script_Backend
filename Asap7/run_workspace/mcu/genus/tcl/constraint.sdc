@@ -140,15 +140,17 @@ constrain_input_ports  {uart_rx}                         CLK_UART $P_UART
 constrain_output_ports {uart_tx}                         CLK_UART $P_UART
 constrain_input_ports  {spi_miso}                        CLK_SPI  $P_SPI
 constrain_output_ports {spi_sck spi_mosi spi_ss}          CLK_SPI  $P_SPI
-constrain_input_ports  {i2c_scl i2c_sda}                 CLK_I2C  $P_I2C
-constrain_output_ports {i2c_scl i2c_sda}                 CLK_I2C  $P_I2C
+constrain_input_ports  {i2c_scl_i i2c_sda_i}             CLK_I2C  $P_I2C
+constrain_output_ports {i2c_scl_o i2c_scl_oe \
+    i2c_sda_o i2c_sda_oe}                                CLK_I2C  $P_I2C
 constrain_input_ports  {gpio_in*}                        CLK_APB  $P_APB
 constrain_output_ports {gpio_out* gpio_oe* pwm_out}       CLK_APB  $P_APB
-constrain_input_ports  {flash_io* sdram_dq*}              CLK_AXI  $P_AXI
-constrain_output_ports {flash_sck flash_cs_n flash_io*}   CLK_AXI  $P_AXI
+constrain_input_ports  {flash_io_i* sdram_dq_i*}          CLK_AXI  $P_AXI
+constrain_output_ports {flash_sck flash_cs_n flash_io_o* \
+    flash_io_oe*}                                         CLK_AXI  $P_AXI
 constrain_output_ports {sdram_clk sdram_cke sdram_cs_n \
     sdram_ras_n sdram_cas_n sdram_we_n sdram_ba* \
-    sdram_addr* sdram_dq* sdram_dqm*}                     CLK_AXI  $P_AXI
+    sdram_addr* sdram_dq_o* sdram_dq_oe sdram_dqm*}       CLK_AXI  $P_AXI
 
 if {[sizeof_collection [all_outputs]] > 0} {
     set_load 10.0 -pin_load [all_outputs]
@@ -158,4 +160,3 @@ set_max_fanout 20 [current_design]
 set_max_transition 300.0 [current_design]
 
 puts "INFO: MCU SDC loaded with 9 primary and 8 generated clocks"
-

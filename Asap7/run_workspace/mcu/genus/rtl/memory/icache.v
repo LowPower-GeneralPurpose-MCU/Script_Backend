@@ -17,7 +17,10 @@ module generic_tag_ram #(
     genvar i;
     generate
         for (i = 0; i < WAYS; i = i + 1) begin : tag_ways
-            (* ram_style = "distributed" *) reg [TAG_W-1:0] ram [0:(1<<INDEX_W)-1];
+`ifdef FPGA
+            (* ram_style = "distributed" *)
+`endif
+            reg [TAG_W-1:0] ram [0:(1<<INDEX_W)-1];
             assign tag_out[(i+1)*TAG_W-1 : i*TAG_W] = ram[index];
             always @(posedge clk) begin
                 if (write_en[i]) ram[index] <= write_tag;
@@ -40,7 +43,10 @@ module generic_data_ram #(
     genvar i;
     generate
         for (i = 0; i < WAYS; i = i + 1) begin : data_ways
-            (* ram_style = "distributed" *) reg [BLOCK_W-1:0] ram [0:(1<<INDEX_W)-1];
+`ifdef FPGA
+            (* ram_style = "distributed" *)
+`endif
+            reg [BLOCK_W-1:0] ram [0:(1<<INDEX_W)-1];
             assign data_out[(i+1)*BLOCK_W-1 : i*BLOCK_W] = ram[index];
             always @(posedge clk) begin
                 if (write_en[i]) ram[index] <= write_data;

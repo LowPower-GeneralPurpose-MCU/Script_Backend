@@ -124,7 +124,7 @@ module sync_ff #(
     // --------------------------------------------------------
     // Kiểm tra nhất quán PTR_W giữa DEPTH bằng function
     // --------------------------------------------------------
-    function integer clog2;
+    function automatic integer clog2;
         input integer value;
         integer i;
         begin

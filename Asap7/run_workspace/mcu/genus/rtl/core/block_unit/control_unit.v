@@ -70,7 +70,6 @@ module main_control_unit #(
                         3'b101: md_operation = 3'b101;
                         3'b110: md_operation = 3'b110;
                         3'b111: md_operation = 3'b111;
-                        default: md_operation = 3'b000;
                     endcase
                 end
             end
@@ -359,7 +358,6 @@ module alu_control_unit (
                                 alu_ctrl = 4'b1001;
                             end
                         end
-                        default: alu_ctrl = 4'b0010;
                     endcase
                 end else begin
                     case (funct3)
@@ -383,7 +381,6 @@ module alu_control_unit (
                         end
                         3'b110: alu_ctrl = 4'b0001;
                         3'b111: alu_ctrl = 4'b0000;
-                        default: alu_ctrl = 4'b0010;
                     endcase
                 end
             end

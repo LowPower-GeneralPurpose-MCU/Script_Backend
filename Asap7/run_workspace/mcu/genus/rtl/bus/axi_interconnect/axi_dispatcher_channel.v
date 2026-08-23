@@ -150,8 +150,8 @@ module dsp_Ax_channel
     
     // Reg declaration
     reg     [TRANS_DATA_LEN_W-1:0]  transfer_ctn_r;
-    reg                             rob_tag_valid_r;
-    reg     [ROB_TAG_W-1:0]         rob_tag_r;
+    wire                            rob_tag_valid_r;
+    wire    [ROB_TAG_W-1:0]         rob_tag_r;
     
     // Module
     // xADDR order FIFO 
@@ -290,21 +290,30 @@ module dsp_Ax_channel
         end
     end
 
-    always @(posedge ACLK_i) begin
-        if(~ARESETn_i) begin
-            rob_tag_valid_r <= 1'b0;
-            rob_tag_r       <= {ROB_TAG_W{1'b0}};
-        end
-        else begin
-            if (normal_accept && rob_tag_valid_r) begin
-                rob_tag_valid_r <= 1'b0;
+    generate
+        if (USE_REORDER_BUFFER) begin : gen_rob_tag_state
+            reg                     rob_tag_valid_q;
+            reg [ROB_TAG_W-1:0]     rob_tag_q;
+
+            assign rob_tag_valid_r = rob_tag_valid_q;
+            assign rob_tag_r       = rob_tag_q;
+
+            always @(posedge ACLK_i) begin
+                if (~ARESETn_i) begin
+                    rob_tag_valid_q <= 1'b0;
+                    rob_tag_q       <= {ROB_TAG_W{1'b0}};
+                end else if (normal_accept && rob_tag_valid_q) begin
+                    rob_tag_valid_q <= 1'b0;
+                end else if (rob_tag_capture && ~normal_accept) begin
+                    rob_tag_valid_q <= 1'b1;
+                    rob_tag_q       <= rob_alloc_tag_i;
+                end
             end
-            else if (rob_tag_capture && ~normal_accept) begin
-                rob_tag_valid_r <= 1'b1;
-                rob_tag_r       <= rob_alloc_tag_i;
-            end
+        end else begin : gen_no_rob_tag_state
+            assign rob_tag_valid_r = 1'b0;
+            assign rob_tag_r       = {ROB_TAG_W{1'b0}};
         end
-    end
+    endgenerate
     
     // Timeout counter
     generate

@@ -165,7 +165,9 @@ module axi_read_reorder_buffer_core #(
     reg [BEAT_CNT_W*ROB_DEPTH-1:0]      entry_recv_flat_q;
 
     // BRAM beat memory (reset-insensitive process để tool suy ra BRAM)
+`ifdef FPGA
     (* ram_style = "block" *)
+`endif
     reg [DATA_WIDTH+RESP_WIDTH-1:0]      beat_mem_q [0:ROB_DEPTH*MAX_BURST_BEATS-1];
 
     // Per-ID order tracking: linked ROB entries instead of ID_COUNT*ROB_DEPTH queues.
@@ -199,7 +201,7 @@ module axi_read_reorder_buffer_core #(
     // ------------------------------------------------------------------ //
     // Helper functions (giữ nguyên cho các phép tính đơn-entry)
     // ------------------------------------------------------------------ //
-    function [ROB_TAG_W-1:0] rob_tag_inc;
+    function automatic [ROB_TAG_W-1:0] rob_tag_inc;
         input [ROB_TAG_W-1:0] tag;
         begin
             if (tag == ROB_DEPTH - 1) rob_tag_inc = {ROB_TAG_W{1'b0}};
@@ -207,7 +209,7 @@ module axi_read_reorder_buffer_core #(
         end
     endfunction
 
-    function integer rob_mem_idx;
+    function automatic integer rob_mem_idx;
         input [ROB_TAG_W-1:0]  tag;
         input [BEAT_CNT_W-1:0] beat;
         begin rob_mem_idx = (tag * MAX_BURST_BEATS) + beat; end
@@ -628,7 +630,7 @@ module axi_read_reorder_buffer #(
     integer scan_s_int;
     integer rid_base_int;
 
-    function [SLV_PTR_W-1:0] slv_ptr_inc;
+    function automatic [SLV_PTR_W-1:0] slv_ptr_inc;
         input [SLV_PTR_W-1:0] ptr;
         begin
             if (ptr == (SLV_AMT - 1))

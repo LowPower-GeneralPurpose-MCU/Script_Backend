@@ -75,7 +75,7 @@ module data_cache #(
     localparam TAG_W        = C_M_AXI_ADDR_W - INDEX_W - OFFSET_W;
     localparam BURST_LEN    = (BLOCK_W / C_M_AXI_DATA_W) - 1;
 
-    function [31:0] read_data_with_size;
+    function automatic [31:0] read_data_with_size;
         input [31:0] data; input [1:0] size; input [1:0] offset; input unsigned_flag;
         reg [31:0] res;
         begin
@@ -96,7 +96,7 @@ module data_cache #(
         end
     endfunction
 
-    function [31:0] write_data_with_size;
+    function automatic [31:0] write_data_with_size;
         input [31:0] orig_data; input [31:0] w_data; input [1:0] size; input [1:0] offset;
         reg [31:0] res;
         begin
@@ -115,7 +115,7 @@ module data_cache #(
         end
     endfunction
 
-    function [3:0] gen_wstrb;
+    function automatic [3:0] gen_wstrb;
         input [1:0] size; input [1:0] offset;
         reg [3:0] strb;
         begin

@@ -150,7 +150,7 @@ module rr_arbiter #(
     output reg  [N-1:0] grant
 );
     // Tính N_W = clog2(N) để làm pointer
-    function integer clog2;
+    function automatic integer clog2;
         input integer value;
         integer i;
         begin

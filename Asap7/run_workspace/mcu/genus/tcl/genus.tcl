@@ -85,6 +85,61 @@ proc genus_require_text {label path pattern} {
     }
 }
 
+proc genus_generate_boot_rom_include {mem_path include_path depth} {
+    set address 0
+    set word_count 0
+    set entries {}
+    set seen [dict create]
+
+    foreach raw_line [split [genus_read_file $mem_path] "\n"] {
+        set line $raw_line
+        regsub {//.*$} $line "" line
+        regsub {#.*$} $line "" line
+        set line [string trim $line]
+        if {$line eq ""} {
+            continue
+        }
+
+        foreach token [regexp -all -inline {\S+} $line] {
+            if {[regexp {^@([0-9A-Fa-f]+)$} $token -> address_text]} {
+                scan $address_text %x address
+                continue
+            }
+
+            regsub -all {_} $token "" word
+            if {![regexp {^[0-9A-Fa-f]{1,8}$} $word]} {
+                error "Invalid 32-bit boot ROM word '$token' in [file normalize $mem_path]"
+            }
+            if {$address < 0 || $address >= $depth} {
+                error "Boot ROM address $address is outside depth $depth"
+            }
+            if {[dict exists $seen $address]} {
+                error "Duplicate boot ROM address $address in [file normalize $mem_path]"
+            }
+
+            dict set seen $address 1
+            lappend entries [format "                %d: rom_lookup = 32'h%s;" $address $word]
+            incr address
+            incr word_count
+        }
+    }
+
+    if {$word_count == 0} {
+        error "Boot ROM image contains no data words: [file normalize $mem_path]"
+    }
+
+    set temp_path "$include_path.tmp"
+    set fp [open $temp_path w]
+    puts $fp "// Generated from boot.mem by tcl/genus.tcl. Do not edit by hand."
+    foreach entry $entries {
+        puts $fp $entry
+    }
+    close $fp
+    file rename -force $temp_path $include_path
+    puts "Generated synthesizable boot ROM table: $word_count words"
+    return $word_count
+}
+
 proc genus_run_static_checks {} {
     global RTL_FILES RTL_ROOT SDC_FILE SRAM_MASTER SRAM_EXPECTED_COUNT SRAM_CAPACITY_BYTES
 
@@ -115,12 +170,18 @@ proc genus_run_static_checks {} {
     if {[file size $boot_mem] == 0} {
         error "Boot ROM image is empty: [file normalize $boot_mem]"
     }
+    set boot_include [file join $RTL_ROOT memory boot_rom_image.vh]
+    genus_generate_boot_rom_include $boot_mem $boot_include 16384
 
     set top_file [file join $RTL_ROOT top_soc.v]
     genus_require_text "Boot ROM INIT_FILE" \
         $top_file {\.INIT_FILE[ \t\r\n]*\([ \t\r\n]*"rtl/memory/boot\.mem"[ \t\r\n]*\)}
     genus_require_text "Top-level AXI RAM depth" \
         $top_file {\.MEM_DEPTH[ \t\r\n]*\([ \t\r\n]*32768[ \t\r\n]*\)}
+
+    set axi_rom_file [file join $RTL_ROOT memory axi_rom.v]
+    genus_require_text "Synthesizable boot ROM table" \
+        $axi_rom_file {`include[ \t]+"memory/boot_rom_image\.vh"}
 
     set axi_ram_file [file join $RTL_ROOT memory axi_ram.v]
     genus_require_text "AXI RAM default depth" \
@@ -318,7 +379,7 @@ if {![catch {
 }
 
 report_hierarchy > ./reports/hierarchy_elaborated.rpt
-report_area -depth 4 > ./reports/area_hierarchy_elaborated.rpt
+report_area > ./reports/area_elaborated.rpt
 check_timing_intent -verbose > ./reports/timing_intent_pre_syn.rpt
 catch {report_timing -lint > ./reports/timing_lint_pre_syn.rpt}
 

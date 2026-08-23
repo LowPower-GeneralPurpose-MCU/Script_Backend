@@ -328,7 +328,10 @@ module riscv_pipeline #(
 
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
-            pc_reg <= reset_vector_in;
+            // The SYSCTRL reset vector itself resets to 0x0001_0000.  Keep the
+            // asynchronous reset value constant so synthesis and simulation
+            // cannot disagree when reset_vector_in changes near reset release.
+            pc_reg <= 32'h0001_0000;
         end else if (riscv_start && !riscv_done) begin
             if (dbg_halted && !dbg_resume_req) begin
                 pc_reg <= dpc_out;

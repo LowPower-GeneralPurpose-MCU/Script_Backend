@@ -122,7 +122,7 @@ module dma_channel #(
 
    // localparam
    localparam BYTES_PER_BEAT = `AXI_BYTES;     // = 4 cho 32-bit
-    function integer clog2_fn;
+    function automatic integer clog2_fn;
         input integer v;
         integer i;
         begin
@@ -626,7 +626,7 @@ module dma_engine #(
 
     // localparam & function
     // function phải khai báo TRƯỚC localparam dùng nó (Verilog-2001)
-    function integer clog2_fn;
+    function automatic integer clog2_fn;
         input integer v;
         integer i;
         begin
@@ -763,8 +763,8 @@ module dma_engine #(
         end else if (apb_rd) begin
             if (is_ch_reg) begin
                 case (reg_off)
-                    `REG_SRC_ADDR: apb_prdata <= {{(32-ADDR_W){1'b0}}, ch_src[ch_idx]};
-                    `REG_DST_ADDR: apb_prdata <= {{(32-ADDR_W){1'b0}}, ch_dst[ch_idx]};
+                    `REG_SRC_ADDR: apb_prdata <= ch_src[ch_idx];
+                    `REG_DST_ADDR: apb_prdata <= ch_dst[ch_idx];
                     `REG_LEN:      apb_prdata <= {{(32-LEN_FIELD_W){1'b0}}, ch_len[ch_idx]};
                     `REG_CTRL:     apb_prdata <= {
                                     {(32-PERIPH_NUM_W-CTRL_PNUM_LSB){1'b0}},

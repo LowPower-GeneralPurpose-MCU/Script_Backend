@@ -95,7 +95,7 @@ module dtm_axi_master #(
     reg [2:0] state;
 
     // Hàm tạo WSTRB dựa trên kích thước và LSB của địa chỉ
-    function [3:0] get_wstrb;
+    function automatic [3:0] get_wstrb;
         input [1:0] size;
         input [1:0] addr_lsb;
         begin

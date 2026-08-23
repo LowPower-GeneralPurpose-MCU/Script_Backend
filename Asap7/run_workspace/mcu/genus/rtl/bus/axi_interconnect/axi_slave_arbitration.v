@@ -19,7 +19,7 @@ module arbiter_iwrr_1cycle
     localparam IDX_W    = (REQ_W > 1) ? $clog2(REQ_W) : 1;
 
     // Weight lookup
-    function [WEIGHT_W-1:0] get_weight;
+    function automatic [WEIGHT_W-1:0] get_weight;
         input integer idx;
         reg [31:0] weight_32;
         begin
@@ -326,7 +326,7 @@ module sa_Ax_channel
         .clk(ACLK_i),
         .rst_n(ARESETn_i),
         .req_i(arb_req),          
-        .req_weight_i(),
+        .req_weight_i(MST_WEIGHT),
         .num_grant_req_i(1'b1),
         .grant_ready_i(arb_grant_ready),  
         .grant_valid_o(arb_grant_valid)

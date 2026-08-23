@@ -58,8 +58,14 @@ module branch_target_buffer (
     wire [INDEX-1:0] update_index = update_address[INDEX-1:0];
     wire [INDEX-1:0] fetch_index  = fetch_address [INDEX-1:0];
     
-    (* ram_style = "distributed" *) reg [TAG-1:0] tags [0:ENTRY-1];
-    (* ram_style = "distributed" *) reg [TARGET_ADDR-1:0] targets [0:ENTRY-1];
+`ifdef FPGA
+    (* ram_style = "distributed" *)
+`endif
+    reg [TAG-1:0] tags [0:ENTRY-1];
+`ifdef FPGA
+    (* ram_style = "distributed" *)
+`endif
+    reg [TARGET_ADDR-1:0] targets [0:ENTRY-1];
     reg valids [0:ENTRY-1];
 
     assign btb_hit = valids[fetch_index] && (tags[fetch_index] == fetch_tag);

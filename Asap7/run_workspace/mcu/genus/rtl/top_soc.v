@@ -34,12 +34,18 @@ module top_soc (
     input  wire        spi_miso,
     output wire        spi_ss,
 
-    inout  wire        i2c_scl,
-    inout  wire        i2c_sda,
+    input  wire        i2c_scl_i,
+    output wire        i2c_scl_o,
+    output wire        i2c_scl_oe,
+    input  wire        i2c_sda_i,
+    output wire        i2c_sda_o,
+    output wire        i2c_sda_oe,
 
     output wire        flash_sck,
     output wire        flash_cs_n,
-    inout  wire [3:0]  flash_io,
+    input  wire [3:0]  flash_io_i,
+    output wire [3:0]  flash_io_o,
+    output wire [3:0]  flash_io_oe,
 
     output wire        sdram_clk,
     output wire        sdram_cke,
@@ -49,7 +55,9 @@ module top_soc (
     output wire        sdram_we_n,
     output wire [1:0]  sdram_ba,
     output wire [12:0] sdram_addr,
-    inout  wire [15:0] sdram_dq,
+    input  wire [15:0] sdram_dq_i,
+    output wire [15:0] sdram_dq_o,
+    output wire        sdram_dq_oe,
     output wire [1:0]  sdram_dqm
 );
     assign sdram_clk = clk_sdram_ext;
@@ -616,23 +624,6 @@ module top_soc (
         .s_axi_rid(s1_rid), .s_axi_rdata(s1_rdata), .s_axi_rresp(s1_rresp), .s_axi_rlast(s1_rlast), .s_axi_rvalid(s1_rvalid), .s_axi_rready(s1_rready)
     );
 
-    wire flash_io0_o, flash_io0_oe, flash_io0_i;
-    wire flash_io1_o, flash_io1_oe, flash_io1_i;
-    wire flash_io2_o, flash_io2_oe, flash_io2_i;
-    wire flash_io3_o, flash_io3_oe, flash_io3_i;
-
-    // Chiều OUT: Nếu Output Enable (OE) = 1 thì đẩy dữ liệu ra, nếu bằng 0 thì nhả ra (High-Z)
-    assign flash_io[0] = flash_io0_oe ? flash_io0_o : 1'bz;
-    assign flash_io[1] = flash_io1_oe ? flash_io1_o : 1'bz;
-    assign flash_io[2] = flash_io2_oe ? flash_io2_o : 1'bz;
-    assign flash_io[3] = flash_io3_oe ? flash_io3_o : 1'bz;
-
-    // Chiều IN: Luôn luôn đọc dữ liệu từ chân vật lý vào trong ruột chip
-    assign flash_io0_i = flash_io[0];
-    assign flash_io1_i = flash_io[1];
-    assign flash_io2_i = flash_io[2];
-    assign flash_io3_i = flash_io[3];
-
     axi_spi_flash #(
         .ID_WIDTH(SLV_ID_WIDTH)
     ) u_axi_flash (
@@ -641,10 +632,10 @@ module top_soc (
         // Giao diện Quad SPI vật lý
         .spi_clk_o  (flash_sck), 
         .spi_cs_n_o (flash_cs_n), 
-        .spi_io0_o  (flash_io0_o), .spi_io0_i  (flash_io0_i), .spi_io0_oe (flash_io0_oe),
-        .spi_io1_o  (flash_io1_o), .spi_io1_i  (flash_io1_i), .spi_io1_oe (flash_io1_oe),
-        .spi_io2_o  (flash_io2_o), .spi_io2_i  (flash_io2_i), .spi_io2_oe (flash_io2_oe),
-        .spi_io3_o  (flash_io3_o), .spi_io3_i  (flash_io3_i), .spi_io3_oe (flash_io3_oe),
+        .spi_io0_o  (flash_io_o[0]), .spi_io0_i  (flash_io_i[0]), .spi_io0_oe (flash_io_oe[0]),
+        .spi_io1_o  (flash_io_o[1]), .spi_io1_i  (flash_io_i[1]), .spi_io1_oe (flash_io_oe[1]),
+        .spi_io2_o  (flash_io_o[2]), .spi_io2_i  (flash_io_i[2]), .spi_io2_oe (flash_io_oe[2]),
+        .spi_io3_o  (flash_io_o[3]), .spi_io3_i  (flash_io_i[3]), .spi_io3_oe (flash_io_oe[3]),
 
         // Các kênh AXI giữ nguyên
         .s_axi_arid   (s2_arid),    .s_axi_araddr (s2_araddr), 
@@ -660,10 +651,6 @@ module top_soc (
         .s_axi_wdata(s2_wdata), .s_axi_wstrb(s2_wstrb), .s_axi_wlast(s2_wlast), .s_axi_wvalid(s2_wvalid), .s_axi_wready(s2_wready),
         .s_axi_bid(s2_bid), .s_axi_bresp(s2_bresp), .s_axi_bvalid(s2_bvalid), .s_axi_bready(s2_bready)
     );
-
-    wire [15:0] sdram_dq_i, sdram_dq_o; wire sdram_dq_oe;
-    assign sdram_dq   = sdram_dq_oe ? sdram_dq_o : 16'bz;
-    assign sdram_dq_i = sdram_dq;
 
     axi_sdram_controller #(
         .ID_WIDTH(SLV_ID_WIDTH),
@@ -802,7 +789,7 @@ module top_soc (
 
     // S1: GPIO (Dùng nguyên bản gốc)
     apb_gpio u_apb_gpio (
-        .pclk(clk_apb), .presetn(reset_apb_n_sync),
+        .pclk(clk_gpio), .presetn(reset_apb_n_sync),
         .psel(psel_1), .penable(penable_1), .pwrite(pwrite_1), .paddr(paddr_1[11:0]), .pwdata(pwdata_1), .prdata(prdata_1), .pready(pready_1), .pslverr(pslverr_1),
         .gpio_in(gpio_in), .gpio_out(gpio_out), .gpio_dir(gpio_oe), 
         .gpio_irq(gpio_irq_raw)
@@ -810,7 +797,7 @@ module top_soc (
 
     // S2: PWM
     apb_pwm u_apb_pwm (
-        .pclk(clk_apb), .presetn(reset_apb_n_sync),
+        .pclk(clk_pwm), .presetn(reset_apb_n_sync),
         .psel(psel_2), .penable(penable_2), .pwrite(pwrite_2), .paddr(paddr_2[11:0]), .pwdata(pwdata_2), .pstrb(pstrb_2), .prdata(prdata_2), .pready(pready_2), .pslverr(pslverr_2),
         .pwm_out(pwm_out)
     );
@@ -825,14 +812,17 @@ module top_soc (
     );
 
     // S4: I2C
-    wire i2c_scl_o, i2c_scl_oe, i2c_sda_o, i2c_sda_oe;
-    assign i2c_scl = i2c_scl_oe ? i2c_scl_o : 1'bz;
-    assign i2c_sda = i2c_sda_oe ? i2c_sda_o : 1'bz;
+    wire i2c_scl_oen;
+    wire i2c_sda_oen;
+    // apb_i2c exposes active-low OEN signals; convert them to the active-high
+    // output enables expected by the chip I/O wrapper/pad ring.
+    assign i2c_scl_oe = ~i2c_scl_oen;
+    assign i2c_sda_oe = ~i2c_sda_oen;
     apb_i2c u_apb_i2c (
         .pclk(clk_apb), .presetn(reset_apb_n_sync),
         .psel(psel_4), .penable(penable_4), .pwrite(pwrite_4), .paddr(paddr_4[11:0]), .pwdata(pwdata_4), .pstrb(pstrb_4), .prdata(prdata_4), .pready(pready_4), .pslverr(pslverr_4),
         .i2c_clk(clk_i2c_gated), .i2c_rst_n(reset_apb_n_sync), // Clock qua Gating
-        .scl_o(i2c_scl_o), .scl_oen(i2c_scl_oe), .scl_i(i2c_scl), .sda_o(i2c_sda_o), .sda_oen(i2c_sda_oe), .sda_i(i2c_sda),
+        .scl_o(i2c_scl_o), .scl_oen(i2c_scl_oen), .scl_i(i2c_scl_i), .sda_o(i2c_sda_o), .sda_oen(i2c_sda_oen), .sda_i(i2c_sda_i),
         .i2c_irq(i2c_irq_raw), .dma_tx_req(i2c_dma_tx_raw), .dma_rx_req(i2c_dma_rx_raw)
     );
 
@@ -846,7 +836,7 @@ module top_soc (
 
     // S6: CORDIC
     apb_cordic u_apb_cordic (
-        .pclk(clk_apb), .presetn(reset_apb_n_sync),
+        .pclk(clk_cordic), .presetn(reset_apb_n_sync),
         .psel(psel_6), .penable(penable_6), .pwrite(pwrite_6), .paddr(paddr_6[11:0]), .pwdata(pwdata_6), .pstrb(pstrb_6), .prdata(prdata_6), .pready(pready_6), .pslverr(pslverr_6)
     );
 

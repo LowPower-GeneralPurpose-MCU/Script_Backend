@@ -396,9 +396,6 @@ module divider (
                     if (!stall_id_ex) state <= STATE_IDLE;
                 end
 
-                default: begin
-                    state <= STATE_IDLE;
-                end
             endcase
         end
     end

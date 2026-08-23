@@ -59,25 +59,30 @@ module axi_rom #(
 );
 
     // =========================================================
-    // PHẦN BỘ NHỚ (BLOCK ROM) - CHỈ CÓ CỔNG ĐỌC
+    // PHẦN BỘ NHỚ ROM TỔNG HỢP ĐƯỢC - CHỈ CÓ CỔNG ĐỌC
     // =========================================================
-    (* rom_style = "block" *) reg [DATA_WIDTH-1:0] rom_memory [0:MEM_DEPTH-1];
     reg [DATA_WIDTH-1:0] rdata_out;
 
     wire                  bram_re;
     wire [ADDR_WIDTH-1:0] bram_raddr;
 
-    // Khởi tạo bộ nhớ ROM từ file
-    initial begin
-        if (INIT_FILE != "") begin
-            $readmemh(INIT_FILE, rom_memory);
+    // genus.tcl converts INIT_FILE to this case table before read_hdl.  A case
+    // ROM is synthesizable in an ASIC flow, unlike initial/$readmemh, which
+    // Genus ignores and would otherwise leave the entire boot ROM undriven.
+    function automatic [DATA_WIDTH-1:0] rom_lookup;
+        input [ADDR_WIDTH-1:0] address;
+        begin
+            case (address)
+`include "memory/boot_rom_image.vh"
+                default: rom_lookup = {DATA_WIDTH{1'b0}};
+            endcase
         end
-    end
+    endfunction
 
     // Tiến trình Đọc đồng bộ (Không Reset)
     always @(posedge clk) begin
         if (bram_re) begin
-            rdata_out <= rom_memory[bram_raddr];
+            rdata_out <= rom_lookup(bram_raddr);
         end
     end
 

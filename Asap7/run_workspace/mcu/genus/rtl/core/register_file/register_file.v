@@ -35,7 +35,10 @@ module register_file (
     input  wire [31:0] dbg_write_data      // Dữ liệu DM ghi
 );
 
-    (* ram_style = "distributed" *) reg [31:0] rf_main [0:31];
+`ifdef FPGA
+    (* ram_style = "distributed" *)
+`endif
+    reg [31:0] rf_main [0:31];
     reg [31:0] x2_sp;
 
     always @(posedge clk or negedge reset_n) begin
@@ -131,7 +134,10 @@ module f_register_file (
     input  wire [4:0]  dbg_write_addr,     // Địa chỉ FPR cần ghi
     input  wire [31:0] dbg_write_data      // Dữ liệu DM ghi
 );
-    (* ram_style = "distributed" *) reg [31:0] f_regfile [0:31];
+`ifdef FPGA
+    (* ram_style = "distributed" *)
+`endif
+    reg [31:0] f_regfile [0:31];
     
     // Đọc cho Pipeline
     assign read_data1 = f_regfile[read_reg1];
@@ -239,7 +245,7 @@ module csr_register_file (
     assign dpc_out = dpc;
     assign dcsr_out = dcsr;
 
-    function [31:0] csr_read_value;
+    function automatic [31:0] csr_read_value;
         input [11:0] addr;
         begin
             case (addr)

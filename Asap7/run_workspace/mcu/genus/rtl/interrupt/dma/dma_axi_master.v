@@ -90,7 +90,7 @@ module axi4_master_rd #(
 
     // localparam
     // function phải khai báo TRƯỚC localparam dùng nó (Verilog-2001)
-    function integer clog2_fn;
+    function automatic integer clog2_fn;
         input integer v;
         integer i;
         begin
@@ -289,7 +289,7 @@ module axi4_master_wr #(
 );
 
     // localparam
-    function integer clog2_fn;
+    function automatic integer clog2_fn;
         input integer v;
         integer i;
         begin
