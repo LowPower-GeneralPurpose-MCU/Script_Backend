@@ -114,13 +114,27 @@ innovus -stylus -files tcl/innovus.tcl
 or use the command appropriate for the installed Innovus release.
 
 The master flow runs in-design metal fill by default after routed DRC,
-connectivity, setup, hold, real DRV and SI-glitch checks pass. Set
+connectivity, setup, hold and real-DRV checks pass. SI remains a hard gate when
+the loaded standard-cell and SRAM libraries contain complete noise models. Set
+`INNOVUS_REQUIRE_ZERO_SI=1` to force strict zero-glitch gating, or `0` to keep
+SI diagnostic while validating an educational library set. Set
 `INNOVUS_RUN_LEGACY_METAL_FILL=0` only when a separate Pegasus flow owns metal
 fill and density closure.
 
 After post-route hold optimization, the flow measures SI glitches once, applies
-extra routing space to any victim nets, and runs a final DRV/glitch-only repair.
-Area reclaim is disabled in this phase so it cannot undo the repaired routing.
+two-track routing space to victim nets, runs DRV/glitch repair, then applies a
+final three-track routing-only pass to remaining victims. Area reclaim is
+disabled in this phase so it cannot undo the repaired routing.
+
+Physical filler cells are inserted only after setup, hold and SI optimization.
+This keeps placement rows available for ECO buffers; inserting fillers earlier
+would make row density 100 percent and block post-route repairs.
+
+`viewDefinition.tcl` prefers the ASAP7 CCSN libraries when they are installed
+and writes `verify_rpt/si_model_status.rpt`. It falls back to CCS timing models
+when CCSN files are unavailable. Because the generated SRAM Liberty normally
+lacks noise characterization, residual SRAM glitches are reported but are not
+treated as signoff-clean evidence.
 
 The tracked 4x tech LEF keeps geometric values scaled but restores the original
 dimensionless density percentages: M5 is 15/90 and Pad is 20/80.  Innovus also
@@ -145,6 +159,9 @@ source ./tcl/add_fill_and_verify.tcl
 `add_fill_and_verify.tcl` independently checks the recheck setup, hold, real
 DRV, DRC, connectivity and SI reports. Setting the flag alone cannot bypass the
 metal-fill gate.
+
+`innovus_pnr.tcl` intentionally stops at `saved/axi_ram_routed.enc`; use the
+master `innovus.tcl` for the one-command route, fill and export flow.
 
 To override the project stream-out map or standard-cell GDS list:
 

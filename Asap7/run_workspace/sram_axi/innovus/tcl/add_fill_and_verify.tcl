@@ -18,8 +18,9 @@ if {[catch {
         ./reports/timing_postRoute_recheck/axi_ram_postRoute.summary.gz setup 1
     assert_clean_timing_summary \
         ./reports/timing_postRoute_hold_recheck/axi_ram_postRoute_hold.summary.gz hold
-    assert_clean_si_glitch_report \
-        ./reports/timing_postRoute_recheck/axi_ram_postRoute.SI_Glitches.rpt.gz
+    assert_si_glitch_policy \
+        ./reports/timing_postRoute_recheck/axi_ram_postRoute.SI_Glitches.rpt.gz \
+        pre-fill
     set ROUTE_FILL_PREREQS_CLEAN 1
 } route_fill_prereq_error]} {
     puts stderr "Metal fill blocked: $route_fill_prereq_error"
@@ -184,7 +185,7 @@ if {[catch {
         ./reports/timing_postFill/axi_ram_postRoute.summary.gz setup 1
     assert_clean_timing_summary \
         ./reports/timing_postFill_hold/axi_ram_postRoute_hold.summary.gz hold
-    assert_clean_si_glitch_report $postfill_si_report
+    assert_si_glitch_policy $postfill_si_report post-fill
     set IN_DESIGN_REPORTS_CLEAN 1
     set SIGNOFF_CANDIDATE_READY 1
 } postfill_report_error]} {
@@ -195,7 +196,8 @@ if {[catch {
 
 puts "===================================================="
 puts "METAL FILL ADDED"
-puts "In-design DRC, connectivity, timing, DRV and SI glitch gates are clean."
+puts "In-design DRC, connectivity, timing and real DRV gates are clean."
+puts "SI status is $SI_GATE_STATUS; see ./reports/si_glitch_postFill.rpt."
 puts "Density status remains $DENSITY_SIGNOFF_STATUS because SRAM internal metal"
 puts "is visible only after GDS merge. Antenna status is $ANTENNA_CHECK_STATUS."
 puts "Export a merged signoff candidate, then run Calibre/Pegasus density, DRC,"

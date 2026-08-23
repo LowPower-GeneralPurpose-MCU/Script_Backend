@@ -3,7 +3,7 @@
 ############################################################
 
 if {![info exists SIGNOFF_CANDIDATE_READY] || !$SIGNOFF_CANDIDATE_READY} {
-    error "SIGNOFF_CANDIDATE_READY is false; clean post-fill DRC, connectivity, timing, DRV and SI first"
+    error "SIGNOFF_CANDIDATE_READY is false; clean post-fill DRC, connectivity, timing and real DRVs first"
 }
 if {![info exists DENSITY_SIGNOFF_STATUS]} {
     set DENSITY_SIGNOFF_STATUS "PENDING_MERGED_GDS_SIGNOFF"
@@ -43,8 +43,9 @@ verifyConnectivity \
 
 assert_clean_drc_report ./verify_rpt/drc_final.rpt
 assert_clean_connectivity_report ./verify_rpt/connectivity_final.rpt
-assert_clean_si_glitch_report \
-    ./reports/timing_postFill/axi_ram_postRoute.SI_Glitches.rpt.gz
+assert_si_glitch_policy \
+    ./reports/timing_postFill/axi_ram_postRoute.SI_Glitches.rpt.gz \
+    pre-export
 
 saveNetlist \
     ./outputs/axi_ram_pnr_lec.v \
@@ -78,7 +79,8 @@ set fp [open $handoff_file w]
 puts $fp "# ASAP7 AXI SRAM signoff handoff"
 puts $fp "# Status: SIGNOFF_CANDIDATE_EXPORTED"
 puts $fp "# This status does not mean density, antenna, DRC or LVS signoff clean."
-puts $fp "# In-design DRC/connectivity/timing/DRV/SI: CLEAN"
+puts $fp "# In-design DRC/connectivity/timing/real-DRV: CLEAN"
+puts $fp "# SI: $SI_GATE_STATUS"
 puts $fp "# Innovus antenna: $ANTENNA_CHECK_STATUS"
 puts $fp "# Density: $DENSITY_SIGNOFF_STATUS"
 puts $fp "# Top-level GDS: [file normalize ./outputs/axi_ram_pnr.gds]"

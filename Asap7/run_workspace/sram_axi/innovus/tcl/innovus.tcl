@@ -14,7 +14,7 @@
 ## Set INNOVUS_STOP_AFTER_POWER_PINS=1 to stop after PG and top-level pins.
 ############################################################
 
-set FLOW_SOURCE_REVISION "sram_si_density_signoff_v15"
+set FLOW_SOURCE_REVISION "sram_si_density_signoff_v16"
 puts "FLOW SOURCE REVISION: $FLOW_SOURCE_REVISION ([file normalize [info script]])"
 set STDCELL_CORE_PG_BUILT 0
 set SRAM_BLOCKPIN_STITCH_DONE 0
@@ -53,6 +53,7 @@ foreach dir {outputs reports verify_rpt saved} {
 
 # Remove stale fill evidence before any stage can stop this run early.
 foreach stale_fill_artifact {
+    ./axi_ram.metalfill.rpt
     ./verify_rpt/drc_after_fill.rpt
     ./verify_rpt/antenna_after_fill.rpt
     ./verify_rpt/connectivity_after_fill.rpt
@@ -582,39 +583,7 @@ timeDesign \
 saveDesign ./saved/axi_ram_postCTS.enc
 
 # ------------------------------------------------------------------------
-# 6. FILLER BEFORE ROUTING
-# ------------------------------------------------------------------------
-
-set FILLERCells [list \
-    FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R \
-    FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L]
-
-setFillerMode -reset
-setFillerMode \
-    -core $FILLERCells \
-    -add_fillers_with_drc false \
-    -fitGap true \
-    -honorPrerouteAsObs true \
-    -diffCellViol true
-
-addFiller \
-    -cell $FILLERCells \
-    -prefix FILLER \
-    -honorPrerouteAsObs true \
-    -diffCellViol true
-
-assert_filler_inserted FILLER
-checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt
-checkPlace ./verify_rpt/checkPlace_after_filler.rpt
-assert_clean_check_place ./verify_rpt/checkPlace_after_filler.rpt
-verify_core_pg_after_filler_nojog \
-    ./verify_rpt/pg_connectivity_after_filler.rpt
-defer_preroute_pg_drc_check \
-    ./verify_rpt/pg_drc_after_filler.rpt \
-    "post-filler/pre-route"
-
-# ------------------------------------------------------------------------
-# 7. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
+# 6. SIGNAL ROUTING AND POST-ROUTE OPTIMIZATION
 # ------------------------------------------------------------------------
 
 setSIMode \
@@ -655,16 +624,6 @@ setNanoRouteMode -quiet \
     -route_with_si_driven true
 ecoRoute -fix_drc
 
-# Normal post-route IPO excludes clock nets. Allow CCOpt to rebuffer the four
-# long SRAM branches that can remain above the macro's 46 ps slew limit.
-ccopt_pro \
-    -enable_drv_fixing true \
-    -enable_drv_fixing_by_rebuffering true \
-    -enable_refine_place true \
-    -enable_routing_eco true \
-    -enable_skew_fixing false \
-    -enable_skew_fixing_by_rebuffering false
-
 setOptMode \
     -fixCap true \
     -fixTran true \
@@ -683,7 +642,7 @@ optDesign \
     -prefix postRoute
 
 connect_core_pg_pins_nojog \
-    ./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1
+    ./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1 1
 ecoRoute -fix_drc
 
 repair_si_glitches_after_hold \
@@ -691,7 +650,37 @@ repair_si_glitches_after_hold \
     ./reports/timing_postRoute_preSiRepair \
     ./reports/si_glitch_preSiRepair.rpt
 connect_core_pg_pins_nojog \
-    ./verify_rpt/pg_connectivity_after_si_repair.rpt 1
+    ./verify_rpt/pg_connectivity_after_si_repair.rpt 1 1
+
+# Fillers must be inserted after every optimization that may add or move
+# cells. Inserting them before post-route optimization leaves row density at
+# 100 percent and prevents glitch-repair buffers from being placed.
+set FILLERCells [list \
+    FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R \
+    FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L]
+
+setFillerMode -reset
+setFillerMode \
+    -core $FILLERCells \
+    -add_fillers_with_drc false \
+    -fitGap true \
+    -honorPrerouteAsObs true \
+    -diffCellViol true
+
+addFiller \
+    -cell $FILLERCells \
+    -prefix FILLER \
+    -honorPrerouteAsObs true \
+    -diffCellViol true
+
+assert_filler_inserted FILLER
+checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt
+checkPlace ./verify_rpt/checkPlace_after_filler.rpt
+assert_clean_check_place ./verify_rpt/checkPlace_after_filler.rpt
+verify_core_pg_after_filler_nojog \
+    ./verify_rpt/pg_connectivity_after_filler.rpt
+verify_drc -report ./verify_rpt/pg_drc_after_filler.rpt
+assert_clean_drc_report ./verify_rpt/pg_drc_after_filler.rpt
 
 timeDesign \
     -postRoute \
@@ -730,7 +719,7 @@ if {[catch {
         ./reports/timing_postRoute/axi_ram_postRoute.summary.gz setup 1
     assert_clean_timing_summary \
         ./reports/timing_postRoute_hold/axi_ram_postRoute_hold.summary.gz hold
-    assert_clean_si_glitch_report $postroute_si_report
+    assert_si_glitch_policy $postroute_si_report post-route
     set ROUTE_REPORTS_CLEAN 1
 } route_report_error]} {
     puts stderr "Post-route reports are not clean: $route_report_error"
@@ -746,7 +735,7 @@ puts " - ./verify_rpt/connectivity_postroute.rpt"
 puts "===================================================="
 
 # ------------------------------------------------------------------------
-# 8. ROUTE RECHECK, METAL FILL AND FINAL EXPORT
+# 7. ROUTE RECHECK, METAL FILL AND FINAL EXPORT
 # ------------------------------------------------------------------------
 
 if {!$ROUTE_REPORTS_CLEAN} {

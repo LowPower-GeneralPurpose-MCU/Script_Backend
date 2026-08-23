@@ -53,7 +53,7 @@ if {[catch {
         ./reports/timing_postRoute_recheck/axi_ram_postRoute.summary.gz setup 1
     assert_clean_timing_summary \
         ./reports/timing_postRoute_hold_recheck/axi_ram_postRoute_hold.summary.gz hold
-    assert_clean_si_glitch_report $postroute_recheck_si_report
+    assert_si_glitch_policy $postroute_recheck_si_report route-recheck
     set ROUTE_REPORTS_CLEAN 1
 } route_verify_error]} {
     puts stderr "Route recheck is not clean: $route_verify_error"

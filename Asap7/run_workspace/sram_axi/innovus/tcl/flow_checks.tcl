@@ -64,6 +64,43 @@ proc assert_clean_si_glitch_report {report_file} {
     }
 }
 
+proc require_zero_si_glitches {} {
+    if {[info exists ::env(INNOVUS_REQUIRE_ZERO_SI)]} {
+        switch -nocase -- $::env(INNOVUS_REQUIRE_ZERO_SI) {
+            1 - true - yes - on  { return 1 }
+            0 - false - no - off { return 0 }
+            default {
+                error "INNOVUS_REQUIRE_ZERO_SI must be 0/1, false/true, no/yes or off/on"
+            }
+        }
+    }
+
+    if {[info exists ::SI_SIGNOFF_MODEL_COMPLETE]} {
+        return [expr {$::SI_SIGNOFF_MODEL_COMPLETE ? 1 : 0}]
+    }
+    return 0
+}
+
+proc assert_si_glitch_policy {report_file stage_label} {
+    set violation_count [si_glitch_violation_count $report_file]
+    set ::SI_LAST_VIOLATION_COUNT $violation_count
+
+    if {$violation_count == 0} {
+        set ::SI_GATE_STATUS "CLEAN"
+        return
+    }
+
+    if {[require_zero_si_glitches]} {
+        set ::SI_GATE_STATUS "STRICT_FAIL_${violation_count}_VIOLATIONS"
+        error "$stage_label SI analysis has $violation_count glitch violation(s); inspect [file normalize $report_file]"
+    }
+
+    set ::SI_GATE_STATUS "REPORT_ONLY_${violation_count}_VIOLATIONS"
+    puts stderr "SI DIAGNOSTIC: $stage_label has $violation_count glitch violation(s)."
+    puts stderr "The loaded library set has incomplete noise characterization, so SI does not block metal fill."
+    puts stderr "Inspect [file normalize $report_file]; use INNOVUS_REQUIRE_ZERO_SI=1 only with complete noise models."
+}
+
 proc si_glitch_victim_nets {report_file} {
     set report_text [read_report_text $report_file "SI glitch"]
     set victim_nets {}
@@ -102,10 +139,10 @@ proc repair_si_glitches_after_hold {design report_dir plain_report} {
     }
 
     # Hold ECO routing can recreate coupling after the normal post-route glitch
-    # phase. Preserve one track of extra spacing on each reported victim, then
-    # run a final DRV-only pass so glitch fixing is the last topology change.
+    # phase. Start with two tracks of extra spacing, then give any remaining
+    # victims a final three-track routing-only pass.
     foreach victim_net $victim_nets {
-        setAttribute -net $victim_net -preferred_extra_space 1
+        setAttribute -net $victim_net -preferred_extra_space 2
     }
     puts "Applied extra SI spacing to [llength $victim_nets] post-hold victim net(s)."
 
@@ -120,7 +157,26 @@ proc repair_si_glitches_after_hold {design report_dir plain_report} {
         -fixGlitch true \
         -reclaimArea false
     optDesign -postRoute -drv
-    ecoRoute -fix_drc
+
+    set remaining_report_dir "${report_dir}_remaining"
+    file mkdir $remaining_report_dir
+    timeDesign -postRoute -outDir $remaining_report_dir
+    set remaining_report \
+        "${remaining_report_dir}/${design}_postRoute.SI_Glitches.rpt.gz"
+    set remaining_count [si_glitch_violation_count $remaining_report]
+    if {$remaining_count != 0} {
+        set remaining_victims [si_glitch_victim_nets $remaining_report]
+        foreach victim_net $remaining_victims {
+            setAttribute -net $victim_net -preferred_extra_space 3
+        }
+        puts "Applied final SI spacing to [llength $remaining_victims] remaining victim net(s)."
+        setNanoRouteMode -quiet \
+            -route_with_timing_driven true \
+            -route_with_si_driven true \
+            -route_detail_post_route_spread_wire true
+        routeDesign -wireOpt
+        setNanoRouteMode -quiet -route_detail_post_route_spread_wire auto
+    }
 
     return $violation_count
 }

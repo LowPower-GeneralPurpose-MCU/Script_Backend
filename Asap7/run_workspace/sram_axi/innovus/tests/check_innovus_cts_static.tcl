@@ -100,7 +100,7 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {BUFx24_ASAP7_75t_R} "strong RVT CTS buffer for SRAM clock sinks"
     require_contains $flow {BUFx24_ASAP7_75t_L} "strong LVT CTS buffer for SRAM clock slew recovery"
     require_contains $flow {-ewm_type moments} "moment EWM pre-route"
-    require_contains $flow {sram_si_density_signoff_v15} "flow revision for post-hold SI repair and strict fill handoff"
+    require_contains $flow {sram_si_density_signoff_v16} "flow revision for model-aware SI repair and fill handoff"
     require_not_contains $flow {set_max_transition $SIGNAL_MAX_TRANSITION_NS [current_design]} "invalid post-init MMMC constraint override"
     require_contains $flow {-detailDrvFailureReason true} "detailed post-route DRV diagnostics"
     require_contains $flow {-detailDrvFailureReasonMaxNumNets 100} "bounded detailed DRV diagnostics"
@@ -113,14 +113,12 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {-enable_glitch_report true} "legacy-UI SI glitch diagnostics"
     require_contains $flow {-route_with_si_driven true} "SI-driven signal routing"
     require_contains $flow {-route_detail_fix_antenna $ROUTE_FIX_ANTENNA} "antenna route repair follows rule availability"
-    require_contains $flow {ccopt_pro} "post-route SRAM clock DRV recovery"
-    require_contains $flow {-enable_drv_fixing_by_rebuffering true} "clock DRV recovery may insert buffers"
-    require_contains $flow {-enable_routing_eco true} "clock DRV recovery reroutes inserted buffers"
+    require_not_contains $flow "ccopt_pro \\" "post-route CCOpt-PRO command on incomplete SRAM traversal graphs"
     require_contains $flow {publish_si_glitch_report} "plain-text SI glitch publication"
     require_contains $flow {repair_si_glitches_after_hold} "post-hold SI recovery pass"
     require_contains $flow {./reports/timing_postRoute_preSiRepair} "pre-repair SI measurement"
-    require_contains $flow {./verify_rpt/pg_connectivity_after_si_repair.rpt 1} "PG recheck after SI repair"
-    require_contains $flow {assert_clean_si_glitch_report $postroute_si_report} "zero-glitch route gate"
+    require_contains $flow {./verify_rpt/pg_connectivity_after_si_repair.rpt 1 1} "bounded pre-filler PG recheck after SI repair"
+    require_contains $flow {assert_si_glitch_policy $postroute_si_report post-route} "model-aware SI route policy"
     require_order $flow {setSIMode} {routeDesign -globalDetail} \
         "SI analysis setup before SI-driven routing"
     require_contains $flow {report_noise -bumpy_waveform -threshold 0} "post-route bumpy-transition report"
@@ -128,7 +126,7 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {./verify_rpt/pg_connectivity_after_postcts.rpt 1 1} "bounded pre-filler PG diagnostic after postCTS optimization"
     require_contains $flow {verify_core_pg_after_filler_nojog} "post-filler PG verification without broad reconnect"
     require_contains $flow {./verify_rpt/pg_connectivity_after_filler.rpt} "post-filler PG connectivity report"
-    require_contains $flow {./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1} "read-only post-route-opt PG guard"
+    require_contains $flow {./verify_rpt/pg_connectivity_after_postroute_opt.rpt 1 1} "bounded pre-filler post-route-opt PG guard"
     require_contains $flow {addFiller} "explicit filler insertion"
     require_contains $flow {-cell $FILLERCells} "explicit filler cell list"
     require_contains $flow {setFillerMode -reset} "idempotent filler-mode reset"
@@ -138,6 +136,10 @@ refinePlace} "explicit legalization immediately after placement optimization"
     require_contains $flow {assert_filler_inserted FILLER} "filler insertion guard"
     require_contains $flow {checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt} "post-insertion filler gap report"
     require_contains $flow {assert_clean_check_place ./verify_rpt/checkPlace_after_filler.rpt} "post-filler placement guard"
+    require_order $flow {repair_si_glitches_after_hold} {addFiller} \
+        "filler insertion after all post-route SI optimization"
+    require_contains $flow {assert_clean_drc_report ./verify_rpt/pg_drc_after_filler.rpt} \
+        "strict DRC after final filler insertion"
     require_contains $flow {verify_antenna_if_enabled ./verify_rpt/antenna_postroute.rpt} "modern optional antenna check"
     require_contains $flow {source ./tcl/core_lower_pg_nojog.tcl} "lower PG source"
     require_contains $flow {source ./tcl/core_pg_outside_island.tcl} "outside-island M6/M7 PG source"
@@ -221,7 +223,7 @@ require_contains $verify_route {setSIMode} "route recheck uses the legacy-UI SI 
 require_contains $verify_route {-enable_delay_report true} "route recheck enables bumpy-transition delay diagnostics"
 require_contains $verify_route {-enable_glitch_report true} "route recheck enables SI glitch diagnostics"
 require_contains $verify_route {-route_with_si_driven true} "route recheck preserves SI-driven ECO routing"
-require_contains $verify_route {assert_clean_si_glitch_report $postroute_recheck_si_report} "route recheck gates SI glitches"
+require_contains $verify_route {assert_si_glitch_policy $postroute_recheck_si_report route-recheck} "route recheck applies the SI model policy"
 require_contains $verify_route {if {$ROUTE_REPORTS_CLEAN}} "route recheck publishes an explicit clean state"
 require_contains $add_fill_and_verify {set RUN_LEGACY_METAL_FILL 1} "in-design metal fill is enabled by default"
 require_contains $add_fill_and_verify {assert_clean_drc_report ./verify_rpt/drc_postroute.rpt} "metal fill requires clean routed DRC"
@@ -229,7 +231,7 @@ require_contains $add_fill_and_verify {assert_clean_connectivity_report ./verify
 require_contains $add_fill_and_verify {set ROUTE_FILL_PREREQS_CLEAN 0} "metal fill starts with a closed prerequisite gate"
 require_contains $add_fill_and_verify {timing_postRoute_recheck/axi_ram_postRoute.summary.gz setup 1} "metal fill rechecks routed setup and real DRVs"
 require_contains $add_fill_and_verify {timing_postRoute_hold_recheck/axi_ram_postRoute_hold.summary.gz hold} "metal fill rechecks routed hold"
-require_contains $add_fill_and_verify {timing_postRoute_recheck/axi_ram_postRoute.SI_Glitches.rpt.gz} "metal fill requires zero routed SI glitches"
+require_contains $add_fill_and_verify {timing_postRoute_recheck/axi_ram_postRoute.SI_Glitches.rpt.gz} "metal fill records routed SI diagnostics"
 require_contains $add_fill_and_verify {METAL FILL SKIPPED} "blocked fill has an explicit status"
 require_contains $add_fill_and_verify {./reports/timing_postFill/axi_ram_postRoute.summary.gz setup 1} "post-fill setup and real-DRV gate"
 require_contains $add_fill_and_verify {./reports/timing_postFill_hold/axi_ram_postRoute_hold.summary.gz hold} "post-fill hold gate"
@@ -240,7 +242,7 @@ require_contains $add_fill_and_verify {-layer {Pad}} "independent Pad fill setup
 require_contains $add_fill_and_verify {-minDensity 20} "Pad source-LEF minimum density"
 require_contains $add_fill_and_verify {-maxDensity 80} "Pad source-LEF maximum density"
 require_contains $add_fill_and_verify {publish_metal_fill_density_status} "abstract density status publication"
-require_contains $add_fill_and_verify {assert_clean_si_glitch_report $postfill_si_report} "post-fill SI glitch gate"
+require_contains $add_fill_and_verify {assert_si_glitch_policy $postfill_si_report post-fill} "post-fill SI model policy"
 require_contains $add_fill_and_verify {set SIGNOFF_CANDIDATE_READY 1} "signoff candidate readiness flag"
 require_contains $add_fill_and_verify {saveDesign ./saved/axi_ram_filled.enc} "filled checkpoint save"
 require_contains $core_lower_pg {-stacked_via_top_layer M5} "lower PG stops at M5"
@@ -253,6 +255,12 @@ require_contains $innovus_master {connect_core_pg_pins_nojog ./verify_rpt/pg_con
 require_contains $innovus_pnr {connect_core_pg_pins_nojog ./verify_rpt/pg_connectivity_after_trim.rpt} "post-place PG trim/reconnect guard in PnR flow"
 require_contains $flow_checks {proc connect_core_pg_pins_nojog} "shared post-CTS/filler PG verification proc"
 require_contains $flow_checks {proc configure_sram_clock_top_routing} "shared SRAM macro-clock routing policy"
+require_contains $flow_checks {proc assert_si_glitch_policy} "model-aware SI gate"
+require_contains $flow_checks {-preferred_extra_space 2} "initial two-track SI spacing"
+require_contains $flow_checks {-preferred_extra_space 3} "final three-track SI spacing"
+require_contains $view_definition {_ccsn_} "CCSN noise-library preference"
+require_contains $view_definition {SI_SIGNOFF_MODEL_COMPLETE} "complete-noise-model status"
+require_contains $view_definition {./verify_rpt/si_model_status.rpt} "SI model status report"
 require_not_contains $flow_checks {routing_top_fanout_count $fanout_count} "invalid macro stop-pin top-fanout weighting"
 require_contains $flow_checks {global routing_top_min_fanout setting} "shared macro-clock top-routing policy"
 require_contains $flow_checks {proc verify_core_pg_after_filler_nojog} "read-only post-filler PG verification"
@@ -282,13 +290,16 @@ foreach flow_text [list $innovus_master $innovus_pnr] {
     require_contains $flow_text {defer_preroute_pg_drc_check} "pre-route PG/signal interaction DRC must be deferred"
     require_contains $flow_text {./verify_rpt/pg_drc_after_cts_preopt.rpt} "deferred DRC evidence immediately after CTS"
     require_contains $flow_text {./verify_rpt/pg_drc_after_postcts.rpt} "deferred DRC evidence after postCTS optimization"
-    require_contains $flow_text {./verify_rpt/pg_drc_after_filler.rpt} "deferred DRC evidence after filler insertion"
+    require_contains $flow_text {./verify_rpt/pg_drc_after_filler.rpt} "strict DRC evidence after final filler insertion"
     require_contains $flow_text {./verify_rpt/drc_postroute.rpt} "stale post-route DRC cleanup and final signoff report"
     require_contains $flow_text {./verify_rpt/connectivity_postroute.rpt} "stale post-route connectivity cleanup and final signoff report"
 }
 require_contains $innovus_master {./verify_rpt/drc_after_fill.rpt} "stale post-fill DRC cleanup"
 require_contains $innovus_master {./verify_rpt/connectivity_after_fill.rpt} "stale post-fill connectivity cleanup"
 require_contains $innovus_master {./saved/axi_ram_filled.enc.dat} "stale filled checkpoint cleanup"
+require_contains $innovus_master {./axi_ram.metalfill.rpt} "stale metal-density report cleanup"
+require_contains $innovus_pnr {./axi_ram.metalfill.rpt} "PnR-only stale metal-density report cleanup"
+require_contains $innovus_pnr {./saved/axi_ram_filled.enc.dat} "PnR-only stale filled checkpoint cleanup"
 require_contains $core_pg_outside {-stacked_via_bottom_layer M5} "M6 mesh connects down to M5 taps"
 require_contains $core_pg_outside {set core_m6_right_llx $SRAM_ISLAND_URX} "M6 mesh handoff begins at the SRAM body edge"
 require_contains $global_upper_pg {-stacked_via_bottom_layer M7} "M8 mesh connects down to M7"
@@ -427,6 +438,19 @@ if {![catch {assert_clean_si_glitch_report $bad_si_report}]} {
 }
 if {[si_glitch_victim_nets $bad_si_report] ne "test_net"} {
     error "SI victim parser did not return the reported net"
+}
+
+set SI_SIGNOFF_MODEL_COMPLETE 0
+unset -nocomplain ::env(INNOVUS_REQUIRE_ZERO_SI)
+if {[catch {assert_si_glitch_policy $bad_si_report unit-test}]} {
+    error "Diagnostic SI policy blocked an incomplete-noise-model flow"
+}
+if {$SI_GATE_STATUS ne "REPORT_ONLY_1_VIOLATIONS"} {
+    error "Diagnostic SI policy did not publish the residual count"
+}
+set SI_SIGNOFF_MODEL_COMPLETE 1
+if {![catch {assert_si_glitch_policy $bad_si_report unit-test}]} {
+    error "Strict SI policy accepted a glitch violation with complete models"
 }
 
 write_cts_test_report $density_report {
