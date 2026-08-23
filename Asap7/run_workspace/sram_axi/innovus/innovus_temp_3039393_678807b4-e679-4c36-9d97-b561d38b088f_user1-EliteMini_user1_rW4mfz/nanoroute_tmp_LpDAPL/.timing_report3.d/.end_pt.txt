@@ -1,1 +1,0 @@
- u_mem/G_SRAM_BANK[7].u_sram/wd[23] r 
