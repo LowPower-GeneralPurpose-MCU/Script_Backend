@@ -2,23 +2,23 @@
 *	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
 *	
 *
-* 	Date & Time:	2026-Aug-23 18:40:19 (2026-Aug-23 09:40:19 GMT)
+* 	Date & Time:	2026-Aug-23 21:41:24 (2026-Aug-23 12:41:24 GMT)
 *
 *----------------------------------------------------------------------------------------
 *
 *	Design: axi_ram
 *
 *	Liberty Libraries used: 
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib
-*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccsn_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccsn_220122.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccsn_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccsn_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccsn_220123.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccsn_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccsn_220122.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccsn_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccsn_211120.lib
+*	        tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccsn_220123.lib
 *	        tt: /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib
 *
 *	Power Domain used: 
@@ -53,53 +53,52 @@
 
 Total Power 
 -----------------------------------------------------------------------------------------
-Total Internal Power:       65.34256636 	   99.5301%
-Total Switching Power:       0.30827062 	    0.4696%
-Total Leakage Power:         0.00020902 	    0.0003%
-Total Power:                65.65104600 
+Total Internal Power:       65.34224894 	   99.5296%
+Total Switching Power:       0.30865201 	    0.4701%
+Total Leakage Power:         0.00018036 	    0.0003%
+Total Power:                65.65108131 
 -----------------------------------------------------------------------------------------
 
 
 Group                           Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-Sequential                        0.2056     0.04746   3.852e-05      0.2531      0.3855 
-Macro                              65.11      0.1209           0       65.23       99.36 
+Sequential                        0.2055     0.04673   3.647e-05      0.2522      0.3842 
+Macro                              65.11      0.1202           0       65.23       99.36 
 IO                                     0           0           0           0           0 
-Combinational                    0.02648      0.1399   0.0001705      0.1666      0.2537 
+Combinational                    0.02621      0.1417   0.0001439       0.168       0.256 
 Clock (Combinational)                  0           0           0           0           0 
 Clock (Sequential)                     0           0           0           0           0 
 -----------------------------------------------------------------------------------------
-Total                              65.34      0.3083    0.000209       65.65         100 
+Total                              65.34      0.3087   0.0001804       65.65         100 
 -----------------------------------------------------------------------------------------
 
 
 Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-VDD                       0.7      65.34      0.3083    0.000209       65.65         100 
+VDD                       0.7      65.34      0.3087   0.0001804       65.65         100 
 
 
 -----------------------------------------------------------------------------------------
 *	Power Distribution Summary: 
 *                Highest Average Power: u_mem/G_SRAM_BANK[0].u_sram (srambank_256x4x32_6t122):            4.087 
-*                Highest Leakage Power:  FE_OFC1022_s_axi_arready (BUFx12f_ASAP7_75t_L):         8.05e-06 
-*          Total Cap:      1.21277e-11 F
-*          Total instances in design:  1512
+*                Highest Leakage Power: u_mem/FE_OFC619_mem_wdata_25 (BUFx4_ASAP7_75t_L):        2.292e-06 
+*          Total Cap:      1.19956e-11 F
+*          Total instances in design:  1509
 *          Total instances in design with no power:     0
 *          Total instances in design with no activity:     0
 *          Total Fillers and Decap:     0
 -----------------------------------------------------------------------------------------
 
-Total leakage power = 0.000209022 mW
+Total leakage power = 0.000180355 mW
 Cell usage statistics:  
-Library asap7sc7p5t_INVBUF_LVT_TT_ccs_211120 , 49 cells ( 3.240741%) , 5.56435e-05 mW ( 26.620829%  ) 
-Library asap7sc7p5t_AO_LVT_TT_ccs_211120 , 13 cells ( 0.859788%) , 6.79056e-06 mW ( 3.248724%  ) 
-Library asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120 , 21 cells ( 1.388889%) , 1.87577e-05 mW ( 8.974019%  ) 
-Library srambank_256x4x32_6t122 , 16 cells ( 1.058201%) , 0 mW ( 0.000000%  ) 
-Library asap7sc7p5t_OA_RVT_TT_ccs_211120 , 36 cells ( 2.380952%) , 1.83316e-06 mW ( 0.877015%  ) 
-Library asap7sc7p5t_AO_RVT_TT_ccs_211120 , 473 cells ( 31.283070%) , 3.0313e-05 mW ( 14.502280%  ) 
-Library asap7sc7p5t_SEQ_LVT_TT_ccs_220123 , 1 cells ( 0.066138%) , 2.22158e-06 mW ( 1.062844%  ) 
-Library asap7sc7p5t_SEQ_RVT_TT_ccs_220123 , 158 cells ( 10.449736%) , 3.62951e-05 mW ( 17.364233%  ) 
-Library asap7sc7p5t_INVBUF_RVT_TT_ccs_211120 , 348 cells ( 23.015873%) , 2.13125e-05 mW ( 10.196295%  ) 
-Library asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120 , 397 cells ( 26.256615%) , 3.58552e-05 mW ( 17.153761%  ) 
+Library asap7sc7p5t_SEQ_RVT_TT_ccsn_220123 , 159 cells ( 10.536779%) , 3.64736e-05 mW ( 20.223219%  ) 
+Library srambank_256x4x32_6t122 , 16 cells ( 1.060305%) , 0 mW ( 0.000000%  ) 
+Library asap7sc7p5t_SIMPLE_LVT_TT_ccsn_211120 , 22 cells ( 1.457919%) , 7.45132e-06 mW ( 4.131467%  ) 
+Library asap7sc7p5t_INVBUF_LVT_TT_ccsn_211120 , 47 cells ( 3.114645%) , 4.04645e-05 mW ( 22.435987%  ) 
+Library asap7sc7p5t_AO_LVT_TT_ccsn_211120 , 12 cells ( 0.795229%) , 5.49762e-06 mW ( 3.048219%  ) 
+Library asap7sc7p5t_OA_RVT_TT_ccsn_211120 , 36 cells ( 2.385686%) , 1.86613e-06 mW ( 1.034697%  ) 
+Library asap7sc7p5t_AO_RVT_TT_ccsn_211120 , 474 cells ( 31.411531%) , 2.9866e-05 mW ( 16.559538%  ) 
+Library asap7sc7p5t_INVBUF_RVT_TT_ccsn_211120 , 347 cells ( 22.995361%) , 2.17652e-05 mW ( 12.067951%  ) 
+Library asap7sc7p5t_SIMPLE_RVT_TT_ccsn_211120 , 396 cells ( 26.242546%) , 3.69709e-05 mW ( 20.498923%  ) 

@@ -1,0 +1,14 @@
+# ASAP7 AXI SRAM signoff handoff
+# Status: SIGNOFF_CANDIDATE_EXPORTED
+# This status does not mean density, antenna, DRC or LVS signoff clean.
+# In-design DRC/connectivity/timing/real-DRV: CLEAN
+# SI: CLEAN
+# Innovus antenna: SKIPPED_NO_RULES
+# Density: PENDING_MERGED_GDS_SIGNOFF
+# Top-level GDS: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/outputs/axi_ram_pnr.gds
+# Stream-out map: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/tcl/streamOut.map
+# Merged libraries:
+#   /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds
+#   /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds
+#   /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds
+# Required next checks on merged GDS: density, DRC, LVS and antenna.
