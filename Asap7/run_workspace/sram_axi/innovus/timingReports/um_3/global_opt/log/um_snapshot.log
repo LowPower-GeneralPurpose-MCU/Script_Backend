@@ -1,2 +1,2 @@
       flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
-UM:*                                    0.000000 ns       0.001600 ns  global_opt
+UM:*                                    0.000000 ns       0.002400 ns  global_opt

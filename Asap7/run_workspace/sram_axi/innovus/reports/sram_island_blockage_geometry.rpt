@@ -4,6 +4,11 @@ macro_bbox 2.16 2.16 500.688 706.32
 row_height 1.080
 inter_macro_gap_rows 4
 inter_macro_gap_um 4.32
+halo_rows 1
+halo_um 1.08
+free_channel_rows 2
+place_blockage_type soft
+cut_rows_under_macros_only 1
 blockage_border_rows 2
 blockage_border_um 2.16
 blockage_clearance_tolerance 0.001

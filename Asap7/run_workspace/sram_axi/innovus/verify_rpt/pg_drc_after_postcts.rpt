@@ -1,6 +1,0 @@
-# Deferred pre-route PG/signal interaction DRC
-# Stage: postCTS/pre-filler
-# Status: NOT_RUN_BEFORE_DETAILED_ROUTE
-# Clean intrinsic PG baseline: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_drc_after_trim_full.rpt
-# Reason: verify_drc -check_only special includes regular trial-route versus special-PG interactions before routeDesign can legalize signal routing.
-# Final gate: drc_postroute.rpt and connectivity_postroute.rpt after routeDesign/ecoRoute.
