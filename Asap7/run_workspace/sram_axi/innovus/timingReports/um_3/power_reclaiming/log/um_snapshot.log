@@ -1,2 +1,2 @@
       flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
-UM:*                                   -0.386000 ns      -0.023600 ns  power_reclaiming
+UM:*                                   -0.447000 ns      -0.023200 ns  power_reclaiming
