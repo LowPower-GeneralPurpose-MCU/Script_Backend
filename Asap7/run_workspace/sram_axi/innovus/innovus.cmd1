@@ -1,83 +1,54 @@
+#######################################################
+#                                                     
+#  Innovus Command Logging File                     
+#  Created on Thu Aug 27 12:03:18 2026                
+#                                                     
+#######################################################
 
-Cadence Innovus(TM) Implementation System.
-Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+#@(#)CDS: Innovus v23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: NanoRoute 23.14-s088_1 NR250219-0822/23_14-UB (database version 18.20.661) {superthreading v2.20}
+#@(#)CDS: AAE 23.14-s018 (64bit) 02/28/2025 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: CTE 23.14-s036_1 () Feb 22 2025 01:17:26 ( )
+#@(#)CDS: SYNTECH 23.14-s010_1 () Feb 19 2025 23:56:49 ( )
+#@(#)CDS: CPE v23.14-s082
+#@(#)CDS: IQuantus/TQuantus 23.1.1-s336 (64bit) Mon Jan 20 22:11:00 PST 2025 (Linux 3.10.0-693.el7.x86_64)
 
-Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
-Options:	
-Date:		Thu Aug 27 12:00:02 2026
-Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-28-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
-OS:		Ubuntu 26.04 LTS
-
-License:
-		[12:00:06.206154] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
-
-		invs	Innovus Implementation System	23.1	checkout succeeded
-		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
-Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 4101545 / 673b368a-9ee0-4ed7-b007-b1a3f896b7ac / RTs7oAbU6t
-
-**INFO:  MMMC transition support version v31-84 
-
-<CMD> set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
-<CMD> suppressMessage ENCEXT-2799
-<CMD> getVersion
-<CMD> getVersion
-<CMD> getVersion
-[INFO] Loading PVS 21.12 fill procedures
-<CMD> win
-<CMD> set enc_source_continue_on_error false
-<CMD> set auto_file_dir /tmp/user1/innovus_master
-<CMD> set init_design_uniquify 1
-<CMD> setLibraryUnit -time 1ns -cap 1pf
-<CMD> set init_lef_file {/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef}
-<CMD> set ::TimeLib::tsgMarkCellLatchConstructFlag 1
-<CMD> set conf_qxconf_file NULL
-<CMD> set conf_qxlib_file NULL
-<CMD> set defHierChar /
-<CMD> set distributed_client_message_echo 1
-<CMD> set distributed_mmmc_disable_reports_auto_redirection 0
-<CMD> set init_abstract_view abstract
-<CMD> set init_layout_view layout
-<CMD> set init_design_settop 1
-<CMD> set init_top_cell axi_ram
-<CMD> set init_gnd_net VSS
-<CMD> set init_pwr_net VDD
-<CMD> set init_mmmc_file ./tcl/viewDefinition.tcl
-<CMD> set init_verilog ./outputs/axi_ram_syn.v
-<CMD> get_message -id GLOBAL-100 -suppress
-<CMD> get_message -id GLOBAL-100 -suppress
-<CMD> set latch_time_borrow_mode max_borrow
-<CMD> set pegDefaultResScaleFactor 1
-<CMD> set pegDetailResScaleFactor 1
-<CMD> get_message -id GLOBAL-100 -suppress
-<CMD> get_message -id GLOBAL-100 -suppress
-<CMD> set report_inactive_arcs_format {from to when arc_type sense reason}
-<CMD> set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
-GDS ASAP7 SRAM macro (/home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds) does not define structure 'srambank_256x4x32_6t122'. streamOut -merge would drop this master (IMPOGDS-217/218) and export empty macro outlines. Structures found: dummy_topbot_v1, dummy_topbot_v2, dummy_sram_6t122, sram_cell_6t_122, tapcell_sram_6t122, sramcol_x32_sram_6t122, array_x32x4_sram_6t122, INVx1_ASAP7_75t_R_asap7sc7p5t_18_R_old, write_draslatch_02, io_inv_18f, io_nand_3f_6f, io_inv_3f, io_tapcell, srlatch_sram_6t122, sram_prech_ymux_6t112_v2, sram_prech_ymux_6t112_v1, wrasst_prech_ymux_x4_sram_6t122_v2, senseamp_sram_6t122, iocolgrp_sram_6t122_v2, FILLER_BLANK_6t122, ... and 88 more. Rename the structure with: python3 ./scripts/gds_structure_tool.py rename /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds <renamed.gds> --to srambank_256x4x32_6t122 then point ASAP7_SRAM_GDS at the renamed file.
-<CMD> init_design
-#% Begin Load MMMC data ... (date=08/27 12:02:09, mem=1828.0M)
-GDS ASAP7 SRAM macro (/home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds) does not define structure 'srambank_256x4x32_6t122'. streamOut -merge would drop this master (IMPOGDS-217/218) and export empty macro outlines. Structures found: dummy_topbot_v1, dummy_topbot_v2, dummy_sram_6t122, sram_cell_6t_122, tapcell_sram_6t122, sramcol_x32_sram_6t122, array_x32x4_sram_6t122, INVx1_ASAP7_75t_R_asap7sc7p5t_18_R_old, write_draslatch_02, io_inv_18f, io_nand_3f_6f, io_inv_3f, io_tapcell, srlatch_sram_6t122, sram_prech_ymux_6t112_v2, sram_prech_ymux_6t112_v1, wrasst_prech_ymux_x4_sram_6t122_v2, senseamp_sram_6t122, iocolgrp_sram_6t122_v2, FILLER_BLANK_6t122, ... and 88 more. Rename the structure with: python3 ./scripts/gds_structure_tool.py rename /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds <renamed.gds> --to srambank_256x4x32_6t122 then point ASAP7_SRAM_GDS at the renamed file.
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[0].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[1].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[2].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[3].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[4].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[5].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[6].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[7].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[8].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[9].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[10].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[11].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[12].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[13].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[14].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/G_SRAM_BANK[15].u_sram'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/read_bank_q_reg[0]'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/read_bank_q_reg[1]'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/read_bank_q_reg[2]'
-**ERROR: (TCLCMD-917):	Cannot find 'cells' that match 'u_mem/read_bank_q_reg[3]'
-<CMD> group_path -name C2C -from [list \
+set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+suppressMessage ENCEXT-2799
+getVersion
+getVersion
+getVersion
+win
+set enc_source_continue_on_error false
+set auto_file_dir /tmp/user1/innovus_master
+set init_design_uniquify 1
+setLibraryUnit -time 1ns -cap 1pf
+set init_lef_file {/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef}
+set ::TimeLib::tsgMarkCellLatchConstructFlag 1
+set conf_qxconf_file NULL
+set conf_qxlib_file NULL
+set defHierChar /
+set distributed_client_message_echo 1
+set distributed_mmmc_disable_reports_auto_redirection 0
+set init_abstract_view abstract
+set init_layout_view layout
+set init_design_settop 1
+set init_top_cell axi_ram
+set init_gnd_net VSS
+set init_pwr_net VDD
+set init_mmmc_file ./tcl/viewDefinition.tcl
+set init_verilog ./outputs/axi_ram_syn.v
+get_message -id GLOBAL-100 -suppress
+get_message -id GLOBAL-100 -suppress
+set latch_time_borrow_mode max_borrow
+set pegDefaultResScaleFactor 1
+set pegDetailResScaleFactor 1
+get_message -id GLOBAL-100 -suppress
+get_message -id GLOBAL-100 -suppress
+set report_inactive_arcs_format {from to when arc_type sense reason}
+set tso_post_client_restore_command {update_timing ; write_eco_opt_db ;}
+init_design
+group_path -name C2C -from [list \
   [get_cells {u_mem/G_SRAM_BANK[0].u_sram}]  \
   [get_cells {u_mem/G_SRAM_BANK[1].u_sram}]  \
   [get_cells {u_mem/G_SRAM_BANK[2].u_sram}]  \
@@ -428,7 +399,7 @@ GDS ASAP7 SRAM macro (/home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.
   [get_cells {wstrb_hold_reg[1]}]  \
   [get_cells {wstrb_hold_reg[2]}]  \
   [get_cells {wstrb_hold_reg[3]}] ]
-<CMD> group_path -name C2O -from [list \
+group_path -name C2O -from [list \
   [get_cells {u_mem/G_SRAM_BANK[0].u_sram}]  \
   [get_cells {u_mem/G_SRAM_BANK[1].u_sram}]  \
   [get_cells {u_mem/G_SRAM_BANK[2].u_sram}]  \
@@ -656,7 +627,7 @@ GDS ASAP7 SRAM macro (/home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.
   [get_ports {s_axi_rresp[0]}]  \
   [get_ports s_axi_rlast]  \
   [get_ports s_axi_rvalid] ]
-<CMD> group_path -name I2C -from [list \
+group_path -name I2C -from [list \
   [get_ports {s_axi_awid[4]}]  \
   [get_ports {s_axi_awid[3]}]  \
   [get_ports {s_axi_awid[2]}]  \
@@ -1006,363 +977,12 @@ GDS ASAP7 SRAM macro (/home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.
   [get_cells {wstrb_hold_reg[1]}]  \
   [get_cells {wstrb_hold_reg[2]}]  \
   [get_cells {wstrb_hold_reg[3]}] ]
-<CMD> setDesignMode -process 7
-##  Process: 7             (User Set)               
-##     Node: (not set)                           
-
-##  Check design process and node:  
-##  Design tech node is not set.
-
-Applying the recommended capacitance filtering threshold values for 7nm process node: total_c_th=0, relative_c_th=1 and coupling_c_th=0.1.
-	These values will be used by all post-route extraction engines, including TQuantus, IQuantus and Quantus QRC extraction.
-	Capacitance filtering mode(-capFilterMode option of the setExtractRCMode) is 'relAndCoup' for all engines.
-	The accuracy mode for postRoute effortLevel low extraction will be set to 'high'.
-	Default value for EffortLevel(-effortLevel option of the setExtractRCMode) in postRoute extraction mode will be 'medium' if Quantus QRC technology file is specified else 'low'.
-<CMD> setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
-**ERROR: (IMPSYC-6373):	Unable to find layer object in the db.
-**ERROR: (IMPSYC-6373):	Unable to find layer object in the db.
-<CMD> setMultiCpuUsage -acquireLicense 12
-Total CPU(s) requested: 12
-Total CPU(s) enabled with current License(s): 8
-Current free CPU(s): 8
-Additional license(s) checked out: 1 Innovus_CPU_Opt license(s) for 8 CPU(s)
-[12:02:11.113809] Periodic Lic check successful
-[12:02:11.113824] Feature usage summary:
-[12:02:11.113824] Innovus_Impl_System
-[12:02:11.113825] Innovus_CPU_Opt
-
-Total CPU(s) now enabled: 16
-<CMD> setMultiCpuUsage -localCpu 12
-<CMD> setDistributeHost -local
-The timeout for a remote job to respond is 3600 seconds.
-Submit command for task runs will be: local
-No SRAM instances found for master srambank_256x4x32_6t122
-Expected 16 SRAM macros, found 1
-<CMD> floorPlan -s 135.168 75.264 2.16 2.16 2.16 2.16
-**ERROR: Design must be in memory before running "floorPlan"
-Design must be in memory before running "floorPlan"
-<CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_proto.rpt
-**ERROR: Design must be in memory before running "checkFPlan"
-Design must be in memory before running "checkFPlan"
-<CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_final.rpt
-**ERROR: Design must be in memory before running "checkFPlan"
-Design must be in memory before running "checkFPlan"
-No SRAM instances found for master srambank_256x4x32_6t122
-Missing SRAM_RECORDS; run innovus_macroFP.tcl first
-Expected 16 SRAM macros, found 1
-0x0 has illegal orientation 0x0
-No SRAM instances found before SRAM route guard setup
-<CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_before_pnr.rpt
-**ERROR: Design must be in memory before running "checkFPlan"
-Design must be in memory before running "checkFPlan"
-<CMD> setAddStripeMode -reset
-<CMD> setAddStripeMode -allow_jog none
-addStripe will not allow jog to connect padcore ring and block ring.
-
-<CMD> clearGlobalNets
-**ERROR: Design must be in memory before running "clearGlobalNets"
-Design must be in memory before running "clearGlobalNets"
-Power plan PG connectivity failed: Missing PG connectivity report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_connectivity_before_stdcell_place.rpt
-Power plan PG DRC failed: Missing PG special-route DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_drc_before_stdcell_place.rpt
-Cannot decode die box before direct SRAM island PG
-<CMD> setPinConstraint -cell axi_ram -corner_to_pin_distance 8
-**ERROR: Design must be in memory before running "setPinConstraint"
-Design must be in memory before running "setPinConstraint"
-Core width is too small for the requested pin edge clearance
-<CMD> saveDesign ./saved/axi_ram_floorplan_power_pins.enc
-**ERROR: (IMPSYT-7095):	Cannot save design because no design is loaded.
-<CMD> setDelayCalMode -SIAware false -equivalent_waveform_model none -ewm_type moments
-<CMD> setPlaceMode -reset
-<CMD> setPlaceMode -place_global_uniform_density false -place_global_module_aware_spare true -place_global_auto_blockage_in_channel soft -place_detail_preroute_as_obs {2 3} -place_global_cong_effort high -place_global_reorder_scan false -place_design_refine_macro false
-**WARN: (IMPSP-511):	Ignore invalid preroute obs layer 2. Must be a number between 1-8, also accept multiple numbers just like "1 2 3" or {1 2 3}.
-**WARN: (IMPSP-511):	Ignore invalid preroute obs layer 3. Must be a number between 1-8, also accept multiple numbers just like "1 2 3" or {1 2 3}.
-<CMD> place_opt_design
-% Begin place_opt_design (date=08/27 12:02:11, mem=1867.1M)
-**ERROR: (IMPSP-9506):	Design must be in memory before running 'place_opt_design'.
-% End place_opt_design (date=08/27 12:02:11, total cpu=0:00:00.0, real=0:00:00.0, peak res=1867.8M, current mem=1867.8M)
-<CMD> refinePlace
-**ERROR: Design must be in memory before running "refinePlace"
-Design must be in memory before running "refinePlace"
-<CMD> checkPlace ./verify_rpt/checkPlace_after_place.rpt
-**ERROR: Design must be in memory before running "checkPlace"
-Design must be in memory before running "checkPlace"
-Missing checkPlace report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/checkPlace_after_place.rpt
-<CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_after_place.rpt
-**ERROR: Design must be in memory before running "checkFPlan"
-Design must be in memory before running "checkFPlan"
-<CMD> timeDesign -preCTS -outDir ./reports/timing_preCTS
-**ERROR: (IMPOPT-6029):	Timing Library is not loaded yet.
-
-<CMD> setSrouteMode -reset
-<CMD> setSrouteMode -viaConnectToShape {ring stripe blockring}
-**WARN: (IMPPP-2007):	Cannot find layers.
-<CMD> sroute -connect corePin -nets {VDD VSS} -corePinCheckStdcellGeoms -allowJogging 0 -allowLayerChange 0
-% Begin sroute (date=08/27 12:02:11, mem=1868.1M)
-**ERROR: (IMPSR-2503):	Design is not loaded yet.
-% End sroute (date=08/27 12:02:11, total cpu=0:00:00.0, real=0:00:00.0, peak res=1868.1M, current mem=1868.1M)
-Cannot decode die box before lower core PG: 0x0
-LOGIC_RIGHT_M7_BOX is empty or inverted after SRAM guard insertion: 503.04 0x0 0x0 0x0
-Cannot decode die box: 0x0
-<CMD> applyGlobalNets
-**ERROR: Design must be in memory before running "applyGlobalNets"
-Design must be in memory before running "applyGlobalNets"
-<CMD> verify_drc -check_only special -layer_range {M4 M5} -area {{500.688 0.0 625.248 770.832} {0.0 706.32 500.688 770.832} {0.0 0.0 2.16 706.32} {2.16 0.0 500.688 2.16} {123.552 2.16 127.872 174.96} {2.16 174.96 123.552 179.28} {249.264 2.16 253.584 174.96} {127.872 174.96 249.264 179.28} {374.976 2.16 379.296 174.96} {253.584 174.96 374.976 179.28} {379.296 174.96 500.688 179.28} {374.976 179.28 379.296 352.08} {379.296 352.08 500.688 356.4} {249.264 179.28 253.584 352.08} {253.584 352.08 374.976 356.4} {123.552 179.28 127.872 352.08} {127.872 352.08 249.264 356.4} {2.16 352.08 123.552 356.4} {123.552 356.4 127.872 529.2} {2.16 529.2 123.552 533.52} {249.264 356.4 253.584 529.2} {127.872 529.2 249.264 533.52} {374.976 356.4 379.296 529.2} {253.584 529.2 374.976 533.52} {379.296 529.2 500.688 533.52} {374.976 533.52 379.296 706.32} {249.264 533.52 253.584 706.32} {123.552 533.52 127.872 706.32}} -report ./verify_rpt/sram_m4_interface_drc.rpt
-**ERROR: (IMPVFG-1178):	Design must be in memory before running 'verify_drc'.
-**WARN: (IMPVFG-1179):	verify_drc failed.
-<CMD> verify_drc -check_only special -layer_range {M6 M9} -area {{500.688 0.0 625.248 770.832} {0.0 706.32 500.688 770.832} {0.0 0.0 2.16 706.32} {2.16 0.0 500.688 2.16} {123.552 2.16 127.872 174.96} {2.16 174.96 123.552 179.28} {249.264 2.16 253.584 174.96} {127.872 174.96 249.264 179.28} {374.976 2.16 379.296 174.96} {253.584 174.96 374.976 179.28} {379.296 174.96 500.688 179.28} {374.976 179.28 379.296 352.08} {379.296 352.08 500.688 356.4} {249.264 179.28 253.584 352.08} {253.584 352.08 374.976 356.4} {123.552 179.28 127.872 352.08} {127.872 352.08 249.264 356.4} {2.16 352.08 123.552 356.4} {123.552 356.4 127.872 529.2} {2.16 529.2 123.552 533.52} {249.264 356.4 253.584 529.2} {127.872 529.2 249.264 533.52} {374.976 356.4 379.296 529.2} {253.584 529.2 374.976 533.52} {379.296 529.2 500.688 533.52} {374.976 533.52 379.296 706.32} {249.264 533.52 253.584 706.32} {123.552 533.52 127.872 706.32}} -report ./verify_rpt/pg_drc_after_trim.rpt
-**ERROR: (IMPVFG-1178):	Design must be in memory before running 'verify_drc'.
-**WARN: (IMPVFG-1179):	verify_drc failed.
-<CMD> verify_drc -check_only special -layer_range {M1 M9} -area {{500.688 0.0 625.248 770.832} {0.0 706.32 500.688 770.832} {0.0 0.0 2.16 706.32} {2.16 0.0 500.688 2.16} {123.552 2.16 127.872 174.96} {2.16 174.96 123.552 179.28} {249.264 2.16 253.584 174.96} {127.872 174.96 249.264 179.28} {374.976 2.16 379.296 174.96} {253.584 174.96 374.976 179.28} {379.296 174.96 500.688 179.28} {374.976 179.28 379.296 352.08} {379.296 352.08 500.688 356.4} {249.264 179.28 253.584 352.08} {253.584 352.08 374.976 356.4} {123.552 179.28 127.872 352.08} {127.872 352.08 249.264 356.4} {2.16 352.08 123.552 356.4} {123.552 356.4 127.872 529.2} {2.16 529.2 123.552 533.52} {249.264 356.4 253.584 529.2} {127.872 529.2 249.264 533.52} {374.976 356.4 379.296 529.2} {253.584 529.2 374.976 533.52} {379.296 529.2 500.688 533.52} {374.976 533.52 379.296 706.32} {249.264 533.52 253.584 706.32} {123.552 533.52 127.872 706.32}} -report ./verify_rpt/pg_drc_after_trim_full.rpt
-**ERROR: (IMPVFG-1178):	Design must be in memory before running 'verify_drc'.
-**WARN: (IMPVFG-1179):	verify_drc failed.
-Missing PG special-route DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/sram_m4_interface_drc.rpt
-Missing PG special-route DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_drc_after_trim.rpt
-Missing PG special-route DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_drc_after_trim_full.rpt
-Post-placement PG connectivity failed: Missing PG connectivity report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_connectivity_after_trim.rpt
-Post-placement SRAM M4/M5 interface DRC failed: Missing PG special-route DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/sram_m4_interface_drc.rpt
-Post-placement PG DRC failed: Missing PG special-route DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_drc_after_trim.rpt
-Post-placement full PG DRC failed: Missing PG special-route DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_drc_after_trim_full.rpt
-<CMD> saveDesign ./saved/axi_ram_placed.enc
-**ERROR: (IMPSYT-7095):	Cannot save design because no design is loaded.
-<CMD> create_route_type -name leaf_rule -bottom_preferred_layer M2 -top_preferred_layer M3
-**ERROR: (IMPTCM-162):	"M2" does not match any object in design for specified type "layer " object in command "create_route_type".
-
-Usage: create_route_type [-help] [-em_ndr_dist <float>] [-em_ndr_rule <rule_name>] [-min_stack_layer <layer>] -name <string>
-                         [-one_side_spacing_range <bottomLayerNum:topLayerNum] [-prefer_multi_cut_via] [-shield_side {one_side both_side}]
-                         [-shield_tap_instance_insertion_effort {none standard high}] [-stack_distance <float>] [[[-non_default_rule <ndr_name>] [-shield_net <net_name>] [-bottom_shield_layer <layer>] [-top_preferred_layer <layer>] [-bottom_preferred_layer <layer>] [-preferred_routing_layer_effort {low medium high}]] ] [-mask <mask_number> [-layer_mask_range <bottomLayerNum:topLayerNum>]]
-
-**ERROR: (IMPTCM-4):	The value "M2" specified for the object type of argument "-bottom_preferred_layer" is not a valid object. Review the command specification and remove the argument or specify a legal value.
-
-<CMD> create_route_type -name trunk_rule -bottom_preferred_layer M4 -top_preferred_layer M5
-**ERROR: (IMPTCM-162):	"M4" does not match any object in design for specified type "layer " object in command "create_route_type".
-
-Usage: create_route_type [-help] [-em_ndr_dist <float>] [-em_ndr_rule <rule_name>] [-min_stack_layer <layer>] -name <string>
-                         [-one_side_spacing_range <bottomLayerNum:topLayerNum] [-prefer_multi_cut_via] [-shield_side {one_side both_side}]
-                         [-shield_tap_instance_insertion_effort {none standard high}] [-stack_distance <float>] [[[-non_default_rule <ndr_name>] [-shield_net <net_name>] [-bottom_shield_layer <layer>] [-top_preferred_layer <layer>] [-bottom_preferred_layer <layer>] [-preferred_routing_layer_effort {low medium high}]] ] [-mask <mask_number> [-layer_mask_range <bottomLayerNum:topLayerNum>]]
-
-**ERROR: (IMPTCM-4):	The value "M4" specified for the object type of argument "-bottom_preferred_layer" is not a valid object. Review the command specification and remove the argument or specify a legal value.
-
-<CMD> create_route_type -name top_rule -bottom_preferred_layer M6 -top_preferred_layer M7
-**ERROR: (IMPTCM-162):	"M6" does not match any object in design for specified type "layer " object in command "create_route_type".
-
-Usage: create_route_type [-help] [-em_ndr_dist <float>] [-em_ndr_rule <rule_name>] [-min_stack_layer <layer>] -name <string>
-                         [-one_side_spacing_range <bottomLayerNum:topLayerNum] [-prefer_multi_cut_via] [-shield_side {one_side both_side}]
-                         [-shield_tap_instance_insertion_effort {none standard high}] [-stack_distance <float>] [[[-non_default_rule <ndr_name>] [-shield_net <net_name>] [-bottom_shield_layer <layer>] [-top_preferred_layer <layer>] [-bottom_preferred_layer <layer>] [-preferred_routing_layer_effort {low medium high}]] ] [-mask <mask_number> [-layer_mask_range <bottomLayerNum:topLayerNum>]]
-
-**ERROR: (IMPTCM-4):	The value "M6" specified for the object type of argument "-bottom_preferred_layer" is not a valid object. Review the command specification and remove the argument or specify a legal value.
-
-<CMD> set_ccopt_property -net_type leaf route_type leaf_rule
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'route_type' is keyed.
-
-<CMD> set_ccopt_property -net_type trunk route_type trunk_rule
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'route_type' is keyed.
-
-<CMD> set_ccopt_property -net_type top route_type top_rule
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'route_type' is keyed.
-
-<CMD> set_ccopt_property routing_top_min_fanout 16
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'routing_top_min_fanout' is keyed.
-
-Multithreaded Timing Analysis is initialized with 12 threads
-
-**ERROR: (TCLCMD-119):	No module selected
-
-<CMD> set_ccopt_property target_max_trans 0.3ns
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'target_max_trans' is keyed.
-
-<CMD> set_ccopt_property -net_type leaf target_max_trans 35ps
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'target_max_trans' is keyed.
-
-<CMD> set_ccopt_property -net_type trunk target_max_trans 40ps
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'target_max_trans' is keyed.
-
-<CMD> set_ccopt_property -net_type top target_max_trans 40ps
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'target_max_trans' is keyed.
-
-<CMD> set_ccopt_property target_skew 40ps
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'target_skew' is keyed.
-
-<CMD> set_ccopt_property buffer_cells {
-    BUFx4_ASAP7_75t_R
-    BUFx8_ASAP7_75t_R
-    BUFx10_ASAP7_75t_R
-    BUFx12_ASAP7_75t_R
-    BUFx12f_ASAP7_75t_R
-    BUFx16f_ASAP7_75t_R
-    BUFx24_ASAP7_75t_R
-    BUFx8_ASAP7_75t_L
-    BUFx10_ASAP7_75t_L
-    BUFx12_ASAP7_75t_L
-    BUFx12f_ASAP7_75t_L
-    BUFx16f_ASAP7_75t_L
-    BUFx24_ASAP7_75t_L
-}
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'buffer_cells' is keyed.
-
-<CMD> set_ccopt_property inverter_cells {
-    CKINVDCx8_ASAP7_75t_R
-    CKINVDCx12_ASAP7_75t_R
-    CKINVDCx16_ASAP7_75t_R
-}
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'inverter_cells' is keyed.
-
-<CMD> set_ccopt_property use_inverters auto
-**ERROR: (IMPCCOPT-2065):	The command 'set_ccopt_property' can only be used for keyless properties until a design is loaded. The property 'use_inverters' is keyed.
-
-<CMD> setOptMode -reclaimArea true -leakageToDynamicRatio 0.5 -powerEffort high -fixFanoutLoad true
-**ERROR: (IMPOPT-581):	Design not in memory.
-
-<CMD> optDesign -prefix preCTS -preCTS
-Executing: place_opt_design -opt -prefix preCTS
-% Begin place_opt_design (date=08/27 12:02:11, mem=1899.7M)
-**ERROR: (IMPSP-9506):	Design must be in memory before running 'place_opt_design'.
-% End place_opt_design (date=08/27 12:02:11, total cpu=0:00:00.0, real=0:00:00.0, peak res=1899.7M, current mem=1899.7M)
-<CMD> refinePlace
-**ERROR: Design must be in memory before running "refinePlace"
-Design must be in memory before running "refinePlace"
-<CMD> checkPlace ./verify_rpt/checkPlace_before_cts.rpt
-**ERROR: Design must be in memory before running "checkPlace"
-Design must be in memory before running "checkPlace"
-Missing checkPlace report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/checkPlace_before_cts.rpt
-<CMD> setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
-**ERROR: (IMPSYC-6373):	Unable to find layer object in the db.
-**ERROR: (IMPSYC-6373):	Unable to find layer object in the db.
-<CMD> clock_opt_design
-Cannot run clock_opt_design because current DB is not PODV2 DB
-No clk instTerm found on SRAM instance 0x0
-<CMD> refinePlace
-**ERROR: Design must be in memory before running "refinePlace"
-Design must be in memory before running "refinePlace"
-<CMD> checkPlace ./verify_rpt/checkPlace_after_cts.rpt
-**ERROR: Design must be in memory before running "checkPlace"
-Design must be in memory before running "checkPlace"
-Missing checkPlace report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/checkPlace_after_cts.rpt
-<CMD> applyGlobalNets
-**ERROR: Design must be in memory before running "applyGlobalNets"
-Design must be in memory before running "applyGlobalNets"
-Missing PG special-route DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_drc_after_trim_full.rpt
-<CMD> all_constraint_modes -active
-<CMD> set_interactive_constraint_modes $active_constraint_modes
-**WARN: (TCLCMD-513):	The software could not find a matching object of the specified type for the pattern '*'
-<CMD> set_propagated_clock [all_clocks]
-**ERROR: (TCLCMD-1129):	Design must be in memory before running 'set_propagated_clock'.
-<CMD> set_interactive_constraint_modes {}
-
-<CMD> optDesign -prefix postCTS -postCTS -setup -hold
-**optDesign ... cpu = 0:00:00, real = 0:00:00, mem = 1899.8M, totSessionCpu=0:00:19 **
-**ERROR: (IMPOPT-569):	Design data is not loaded.
-Type 'man IMPOPT-569' for more detail.
-1
-<CMD> checkPlace ./verify_rpt/checkPlace_after_postcts.rpt
-**ERROR: Design must be in memory before running "checkPlace"
-Design must be in memory before running "checkPlace"
-Missing checkPlace report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/checkPlace_after_postcts.rpt
-<CMD> applyGlobalNets
-**ERROR: Design must be in memory before running "applyGlobalNets"
-Design must be in memory before running "applyGlobalNets"
-Missing PG special-route DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_drc_after_trim_full.rpt
-<CMD> timeDesign -postCTS -outDir ./reports/timing_postCTS
-**ERROR: (IMPOPT-6029):	Timing Library is not loaded yet.
-
-<CMD> timeDesign -postCTS -hold -outDir ./reports/timing_postCTS_hold
-**ERROR: (IMPOPT-6029):	Timing Library is not loaded yet.
-
-<CMD> saveDesign ./saved/axi_ram_postCTS.enc
-**ERROR: (IMPSYT-7095):	Cannot save design because no design is loaded.
-<CMD> setSIMode -enable_delay_report true -enable_glitch_report true
-<CMD> setAnalysisMode -analysisType onChipVariation
-<CMD> setDelayCalMode -SIAware true -equivalent_waveform_model propagation
-AAE_INFO: switching setDelayCal -siAware from false to true ...
-AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
-<CMD> setExtractRCMode -engine postRoute -effortLevel medium
-<CMD> setNanoRouteMode -reset
-<CMD> setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
-**ERROR: (IMPSYC-6373):	Unable to find layer object in the db.
-**ERROR: (IMPSYC-6373):	Unable to find layer object in the db.
-No SRAM instances found before SRAM route guard setup
-No SRAM instances found before SRAM signal-route setup
-<CMD> setNanoRouteMode -quiet -route_strict_honor_route_rule true -route_strictly_honor_1d_routing true -route_detail_no_taper_in_layers 2:7 -route_detail_no_taper_on_output_pin true -route_use_auto_via false -route_with_via_only_for_stdcell_pin true -route_detail_use_multi_cut_via_effort low -route_with_timing_driven true -route_with_si_driven true -route_detail_fix_antenna false -route_detail_merge_abutting_cut true -route_detail_end_iteration 20
-<CMD> routeDesign -globalDetail
-% Begin routeDesign (date=08/27 12:02:11, mem=1902.4M)
-#WARNING (NRIF-18) Design must be in memory.
-% End routeDesign (date=08/27 12:02:11, total cpu=0:00:00.0, real=0:00:00.0, peak res=1903.0M, current mem=1903.0M)
-0
-<CMD> routeDesign -viaOpt -wireOpt -trackOpt
-% Begin routeDesign (date=08/27 12:02:11, mem=1903.0M)
-#WARNING (NRIF-18) Design must be in memory.
-% End routeDesign (date=08/27 12:02:11, total cpu=0:00:00.1, real=0:00:01.0, peak res=1903.0M, current mem=1903.0M)
-0
-<CMD> setNanoRouteMode -quiet -route_with_timing_driven true -route_with_si_driven true
-<CMD> ecoRoute -fix_drc
-**ERROR: Design must be in memory before running "ecoRoute"
-Design must be in memory before running "ecoRoute"
-<CMD> setOptMode -fixCap true -fixTran true -fixFanoutLoad true -fixGlitch true -reclaimArea false -setupTargetSlack 0.020 -holdTargetSlack 0.020 -detailDrvFailureReason true -detailDrvFailureReasonMaxNumNets 100
-**ERROR: (IMPOPT-581):	Design not in memory.
-
-<CMD> optDesign -postRoute -setup -hold -prefix postRoute
-**optDesign ... cpu = 0:00:00, real = 0:00:00, mem = 1903.2M, totSessionCpu=0:00:19 **
-**ERROR: (IMPOPT-569):	Design data is not loaded.
-Type 'man IMPOPT-569' for more detail.
-1
-<CMD> applyGlobalNets
-**ERROR: Design must be in memory before running "applyGlobalNets"
-Design must be in memory before running "applyGlobalNets"
-<CMD> ecoRoute -fix_drc
-**ERROR: Design must be in memory before running "ecoRoute"
-Design must be in memory before running "ecoRoute"
-<CMD> timeDesign -postRoute -outDir ./reports/timing_postRoute_preSiRepair
-**ERROR: (IMPOPT-6029):	Timing Library is not loaded yet.
-
-<CMD> applyGlobalNets
-**ERROR: Design must be in memory before running "applyGlobalNets"
-Design must be in memory before running "applyGlobalNets"
-<CMD> setFillerMode -reset
-<CMD> setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -add_fillers_with_drc false -fitGap true -honorPrerouteAsObs true -diffCellViol true
-# Cell library update failed. If Filler were part of the update, those cells may not be usable by the command.
-**WARN: (IMPSP-5123):	Cell FILLER_ASAP7_75t_R is not found.
-Type 'man IMPSP-5123' for more detail.
-**WARN: (IMPSP-5123):	Cell FILLERxp5_ASAP7_75t_R is not found.
-Type 'man IMPSP-5123' for more detail.
-**WARN: (IMPSP-5123):	Cell FILLER_ASAP7_75t_L is not found.
-Type 'man IMPSP-5123' for more detail.
-**WARN: (IMPSP-5123):	Cell FILLERxp5_ASAP7_75t_L is not found.
-Type 'man IMPSP-5123' for more detail.
-<CMD> addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
-**ERROR: (IMPSP-501):	Design must be in memory before running "addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true".
-
-No filler instances with prefix FILLER were inserted
-<CMD> checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt
-**ERROR: (IMPSP-501):	Design must be in memory before running "checkFiller -file ./verify_rpt/checkFiller_after_filler.rpt".
--1
-<CMD> checkPlace ./verify_rpt/checkPlace_after_filler.rpt
-**ERROR: Design must be in memory before running "checkPlace"
-Design must be in memory before running "checkPlace"
-Missing checkPlace report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/checkPlace_after_filler.rpt
-Cannot verify post-filler PG before the lower core PG is built
-<CMD> verify_drc -report ./verify_rpt/pg_drc_after_filler.rpt
-**ERROR: (IMPVFG-1178):	Design must be in memory before running 'verify_drc'.
-**WARN: (IMPVFG-1179):	verify_drc failed.
-Missing DRC report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/verify_rpt/pg_drc_after_filler.rpt
-<CMD> timeDesign -postRoute -outDir ./reports/timing_postRoute
-**ERROR: (IMPOPT-6029):	Timing Library is not loaded yet.
-
-<CMD> timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold
-**ERROR: (IMPOPT-6029):	Timing Library is not loaded yet.
-
-Missing SI glitch report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/reports/timing_postRoute/axi_ram_postRoute.SI_Glitches.rpt.gz
-<CMD> report_noise -bumpy_waveform -threshold 0 > ./reports/bumpy_transition_postRoute.rpt
-**ERROR: (IMPESI-3145):	report_noise command requires the design to be loaded first.
-
-<CMD> verify_drc -report ./verify_rpt/drc_postroute.rpt
-**ERROR: (IMPVFG-1178):	Design must be in memory before running 'verify_drc'.
-**WARN: (IMPVFG-1179):	verify_drc failed.
-<CMD> verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
-**ERROR: (IMPVFC-78):	Design must be in memory before running 'verifyConnectivity'.
-**WARN: (IMPVFC-79):	verifyConnectivity failed.
-<CMD> saveDesign ./saved/axi_ram_routed.enc
-**ERROR: (IMPSYT-7095):	Cannot save design because no design is loaded.
-
-*** Memory Usage v#2 (Current mem = 2008.457M, initial mem = 839.699M) ***
-*** Message Summary: 16 warning(s), 979 error(s)
-
---- Ending "Innovus" (totcpu=0:00:19.4, real=0:02:17, mem=2008.5M) ---
+setDesignMode -process 7
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+setMultiCpuUsage -acquireLicense 12
+setMultiCpuUsage -localCpu 12
+setDistributeHost -local
+floorPlan -s 135.168 75.264 2.16 2.16 2.16 2.16
+checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_proto.rpt
+checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_hierFP_final.rpt
+checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_before_pnr.rpt

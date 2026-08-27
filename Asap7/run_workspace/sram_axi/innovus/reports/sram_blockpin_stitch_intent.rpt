@@ -1,7 +1,0 @@
-strategy deterministic_m5_edge_taps
-source_layer M4
-tap_layer M5
-tap_depth 8.64
-tap_count 16
-expected_connected_ports 32
-nearest_target_sroute disabled

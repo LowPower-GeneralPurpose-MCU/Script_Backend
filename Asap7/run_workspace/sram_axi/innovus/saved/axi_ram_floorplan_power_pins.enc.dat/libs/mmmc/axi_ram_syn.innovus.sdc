@@ -1,1 +1,0 @@
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/outputs/axi_ram_syn.innovus.sdc
