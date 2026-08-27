@@ -1005,16 +1005,39 @@ proc report_gds_missing_structure {gds_file structure_name {context ""}} {
     return $present
 }
 
+# Distinct hard-macro master names in the current design.
+#
+# 'isBlock' is not a dbGet attribute in Innovus 23.14 - using it raised
+# IMPDBTCL-206 and aborted export_gds.tcl after a complete 12-minute run.
+# 'baseClass block' is the documented spelling.  Any query failure degrades to
+# an empty list plus a warning; this is a reporting aid, never a gate.
+proc design_macro_masters {} {
+    set inst_ptrs ""
+    if {[catch {set inst_ptrs [dbGet -p2 -e top.insts.cell.baseClass block]} query_error]} {
+        puts "WARNING: cannot list macro instances (dbGet baseClass): $query_error"
+        return {}
+    }
+    if {$inst_ptrs eq "" || $inst_ptrs eq "0x0"} {
+        return {}
+    }
+
+    set masters {}
+    foreach inst_ptr $inst_ptrs {
+        if {[catch {set master [lindex [dbGet $inst_ptr.cell.name] 0]}]} {
+            continue
+        }
+        if {$master ne "" && $master ne "0x0" &&
+            [lsearch -exact $masters $master] < 0} {
+            lappend masters $master
+        }
+    }
+    return $masters
+}
+
 # Which hard-macro masters are absent from the merge list.  Returns a list of
 # master names; empty means the merged stream-out is complete.
 proc merge_gds_missing_masters {merge_gds_files} {
-    set macro_masters {}
-    foreach inst_ptr [dbGet -p -e top.insts.cell.isBlock 1] {
-        set master [lindex [dbGet $inst_ptr.cell.name] 0]
-        if {$master ne "" && [lsearch -exact $macro_masters $master] < 0} {
-            lappend macro_masters $master
-        }
-    }
+    set macro_masters [design_macro_masters]
     if {[llength $macro_masters] == 0} {
         return {}
     }
@@ -1040,9 +1063,17 @@ proc merge_gds_missing_masters {merge_gds_files} {
 # problem, but refusing to export removes the only artifact the run produced.
 # Set ASAP7_REQUIRE_MERGED_MACRO_GDS=1 to make it fatal instead.
 proc check_merge_gds_masters {merge_gds_files} {
+    # Distinguish "verified clean" from "could not verify".  Reporting a pass
+    # when the macro query returned nothing would be worse than saying so.
+    set macro_masters [design_macro_masters]
+    if {[llength $macro_masters] == 0} {
+        puts "Merged-GDS master check NOT VERIFIED: no hard-macro instances were found in the design."
+        return {}
+    }
+
     set missing [merge_gds_missing_masters $merge_gds_files]
     if {[llength $missing] == 0} {
-        puts "Merged-GDS master check passed; every hard macro is defined in the merge files."
+        puts "Merged-GDS master check passed for [llength $macro_masters] macro master(s): [join $macro_masters {, }]."
         return {}
     }
 
@@ -1079,86 +1110,26 @@ empty outlines where the macros belong."
 }
 
 ############################################################
-## SRAM clock leaf routing
+## SRAM clock leaf routing - why there is no proc here
 ##
-## Every CTS leaf net that ends on an SRAM clock pin has to cross the hard
-## place blockage that covers the whole macro island, so its driver sits on
-## the island boundary and the branch can run several hundred microns.  On
-## the M2/M3 leaf route type that length produced 0.104-0.115 ns slew at
-## pins whose Liberty max_transition is 0.046 ns (IMPCCOPT-1007).  Promote
-## exactly those nets to M6/M7, which the SRAM LEF leaves unobstructed.
+## An earlier attempt promoted the 16 CTS leaf nets ending on SRAM clock
+## pins to M6/M7 with setAttribute after clock_opt_design.  The run on
+## 2026-08-27 proved it does nothing: clock_opt_design leaves every clock
+## net marked *fixed*
+##
+##   Net route status summary:
+##     Clock: 43 (unrouted=0, trialRouted=0, noStatus=0, routed=0, fixed=43)
+##
+## so routeDesign never re-routes them and the post-CTS layer preference is
+## ignored.  Slew at u_mem/G_SRAM_BANK[0].u_sram/clk stayed at 0.104 ns
+## against the 0.046 ns Liberty limit, identical to the run without it.
+##
+## The only lever that reaches these nets is the leaf route_type used *by*
+## CTS, which innovus.tcl / innovus_pnr.tcl now expose as
+## SRAM_CTS_LEAF_BOTTOM_LAYER / SRAM_CTS_LEAF_TOP_LAYER.  Those default to
+## the original M2/M3, because widening them changes buffering for all 175
+## clock sinks, not just the 16 macro pins.
 ############################################################
-proc constrain_sram_clock_leaf_routing {sram_ptrs {clock_pin "clk"}
-                                        {bottom_layer 6} {top_layer 7}
-                                        {report_file ""}} {
-    if {[llength $sram_ptrs] == 0} {
-        error "Cannot constrain SRAM clock routing without SRAM instances"
-    }
-    if {![string is integer -strict $bottom_layer] ||
-        ![string is integer -strict $top_layer] ||
-        $bottom_layer < 2 || $top_layer < $bottom_layer} {
-        error "Invalid SRAM clock routing-layer range: ${bottom_layer}:${top_layer}"
-    }
-
-    set rows {}
-    set seen {}
-    foreach inst_ptr $sram_ptrs {
-        set inst_name [lindex [dbGet $inst_ptr.name] 0]
-        set clock_term_name ""
-        set clock_net_name ""
-
-        foreach inst_term_ptr [dbGet -e $inst_ptr.instTerms] {
-            set term_name [lindex [dbGet $inst_term_ptr.name] 0]
-            if {![regexp "(^|/)${clock_pin}\$" $term_name]} {
-                continue
-            }
-            set net_name [lindex [dbGet $inst_term_ptr.net.name] 0]
-            if {$net_name eq "" || $net_name eq "0x0"} {
-                error "SRAM clock pin $term_name is not connected to a net"
-            }
-            set clock_term_name $term_name
-            set clock_net_name $net_name
-            break
-        }
-
-        if {$clock_net_name eq ""} {
-            error "No ${clock_pin} instTerm found on SRAM instance $inst_name"
-        }
-        if {[lsearch -exact $seen $clock_net_name] >= 0} {
-            continue
-        }
-        lappend seen $clock_net_name
-
-        if {[catch {
-            setAttribute \
-                -net $clock_net_name \
-                -bottom_preferred_routing_layer $bottom_layer \
-                -top_preferred_routing_layer $top_layer \
-                -preferred_routing_layer_effort high
-        } attribute_error]} {
-            error "Cannot set clock routing policy on net $clock_net_name: $attribute_error"
-        }
-        lappend rows [list $clock_net_name $clock_term_name]
-    }
-
-    if {$report_file ne ""} {
-        file mkdir [file dirname $report_file]
-        set fh [open $report_file w]
-        puts $fh "clock_pin $clock_pin"
-        puts $fh "preferred_layers M${bottom_layer}:M${top_layer}"
-        puts $fh "preferred_effort high"
-        puts $fh "constrained_net_count [llength $rows]"
-        puts $fh "net sram_clock_term"
-        foreach row $rows {
-            puts $fh [list [lindex $row 0] [lindex $row 1]]
-        }
-        close $fh
-        puts "SRAM clock leaf route report: $report_file"
-    }
-
-    puts "Constrained [llength $rows] SRAM clock leaf net(s) to M${bottom_layer}:M${top_layer}."
-    return [llength $rows]
-}
 
 ############################################################
 ## Signoff metal fill

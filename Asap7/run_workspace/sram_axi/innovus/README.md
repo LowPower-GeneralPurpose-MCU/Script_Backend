@@ -197,8 +197,8 @@ verifyConnectivity -type special -noUnroutedNet
 ## Merged-GDS master name (IMPOGDS-217 / IMPOGDS-218)
 
 `streamOut -merge` matches merged structures to design masters by **exact
-name** and has no cell-name remapping parameter. When the SRAM GDS stores its
-layout under a name other than `$SRAM_MASTER`, Innovus reports only
+name** and has no cell-name remapping parameter. When no merge file defines a
+structure called `$SRAM_MASTER`, Innovus reports only
 
 ```
 **WARN: (IMPOGDS-217): Master cell: srambank_256x4x32_6t122 not found in merged file(s) ...
@@ -207,62 +207,108 @@ layout under a name other than `$SRAM_MASTER`, Innovus reports only
 
 and exports a top-level GDS with empty outlines where the macros should be.
 Neither warning stops the run, so this used to reach `signoff_handoff.rpt` as
-`SIGNOFF_CANDIDATE_EXPORTED`.
+an unqualified `SIGNOFF_CANDIDATE_EXPORTED`.
+
+### What the shipped file actually is
+
+`asap7_sram_0p0/gds/srambank_32b.gds` defines 108 structures, and they are the
+SRAM **primitive library**, not an assembled bank:
+
+```
+sram_cell_6t_122      tapcell_sram_6t122     sramcol_x32_sram_6t122
+array_x32x4_sram_6t122  senseamp_sram_6t122  srlatch_sram_6t122
+iocolgrp_sram_6t122_v2  FILLER_BLANK_6t122   dummy_sram_6t122   ...
+```
+
+There is no `srambank_256x4x32_6t122` here, and renaming one of these to the
+bank name would put the wrong geometry under every macro instance. The macro's
+own layout belongs with its other generated views, next to
+`generated/LIB/srambank_256x4x32_6t122.lib` and
+`generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef`.
 
 ### Diagnose
 
 ```sh
-python3 ./scripts/gds_structure_tool.py list \
-    /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds
+# What does a candidate file contain?  TOP marks structures nothing references.
+python3 ./scripts/gds_structure_tool.py list <candidate.gds>
+
+# Where is the generated macro layout?
+find /home/user1/Desktop/asap7/asap7_sram_0p0 \
+     \( -name '*.gds' -o -name '*.gds.gz' -o -name '*.oas' \) -print
 ```
 
-The tool prints every structure and marks the ones no `SREF`/`AREF`
-references, i.e. the candidates for the macro layout.
-
-### Fix
+Once the right file is found:
 
 ```sh
-python3 ./scripts/gds_structure_tool.py rename \
-    /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds \
-    /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_256x4x32_6t122.gds \
-    --to srambank_256x4x32_6t122
-
-export ASAP7_SRAM_GDS=/home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_256x4x32_6t122.gds
+export ASAP7_SRAM_GDS=/absolute/path/to/srambank_256x4x32_6t122.gds
 ```
 
-`rename` rewrites the `STRNAME` definition and every `SNAME` reference, streams
-the file record by record (no size limit), and is a no-op when the target name
-already exists. Add `--from <name>` when the file has more than one top
-structure.
+`gds_structure_tool.py rename` exists for the narrower case where a file does
+hold the macro layout under a different name. It rewrites the `STRNAME`
+definition and every `SNAME` reference and is a no-op when the target name
+already exists. It is not a way to substitute a primitive for a macro.
 
-### Guards
+### Guard
 
-- `assert_gds_contains_structure` runs in `innovus.tcl` and `innovus_pnr.tcl`
-  right after `flow_checks.tcl` is sourced, so a name mismatch stops the run
-  before any placement work and prints the structure names actually present.
-- `assert_merge_gds_masters` runs in `export_gds.tcl` and checks **every** hard
-  macro master against the full `-merge` list before stream-out.
+`check_merge_gds_masters` runs in `export_gds.tcl` immediately before
+`streamOut` and checks **every** hard-macro master against the full `-merge`
+list. By default it **warns and continues**, records the missing masters in
+`signoff_handoff.rpt` under `# Macro GDS:`, and repeats them in the closing
+banner. Set `ASAP7_REQUIRE_MERGED_MACRO_GDS=1` to make it refuse to export.
+
+Macro instances are found with `dbGet -p2 -e top.insts.cell.baseClass block`.
+`isBlock` is **not** a dbGet attribute in Innovus 23.14 — using it raised
+`IMPDBTCL-206` and aborted `export_gds.tcl` after a complete 12-minute run, so
+both the query and the call site now degrade to a warning instead of throwing.
+When the query yields nothing the check reports `NOT VERIFIED`, never `passed`.
+
+> **Do not move this check earlier.** `viewDefinition.tcl` sources
+> `sram_macro_setup.tcl`, and `viewDefinition.tcl` is evaluated *inside*
+> `init_design`. An error raised from there aborts `init_design`, leaves no
+> design in memory, and every later command fails with
+> `Design must be in memory` — one bad assertion produced 979 errors that way.
 
 ## SRAM clock leaf routing
 
 Every CTS leaf net ending on an SRAM clock pin has to cross the hard place
 blockage that covers the macro island, so its driver lands on the island
 boundary and the branch can run several hundred microns. On the M2/M3
-`leaf_rule` that produced 0.104–0.115 ns slew at pins whose Liberty
+`leaf_rule` that produces 0.104 ns slew at pins whose Liberty
 `max_transition` is 0.046 ns — ten `IMPCCOPT-1007` warnings that every
-"real DRV" gate classified as unfixable clock-net violations.
+"real DRV" gate classifies as unfixable clock-net violations.
 
-`constrain_sram_clock_leaf_routing` promotes exactly those nets to M6/M7, the
-only signal layers the SRAM abstract leaves unobstructed, and writes
-`reports/sram_clock_leaf_route_constraints.rpt`. Override the layers with
-`SRAM_CLOCK_LEAF_BOTTOM_LAYER` / `SRAM_CLOCK_LEAF_TOP_LAYER` before
-`clock_opt_design`; set the bottom layer back to 2 to reproduce the original
-M2/M3 routing.
+### What does not work
 
-Note that CCOpt still sizes and inserts buffers against its own M2/M3 leaf
-estimate. If `IMPCCOPT-1007` survives, raise `leaf_rule` itself in
-`create_route_type` rather than relaxing `target_max_trans` — 46 ps is a
-Liberty limit on the macro pin, not a project target.
+Promoting those 16 nets with `setAttribute -net ... -top_preferred_routing_layer`
+after `clock_opt_design`. Measured on 2026-08-27: the constraint applied to all
+16 nets, and the postRoute slew was **byte-identical** to the run without it.
+The reason is in the log:
+
+```
+Net route status summary:
+  Clock: 43 (unrouted=0, trialRouted=0, noStatus=0, routed=0, fixed=43)
+```
+
+`clock_opt_design` marks every clock net **fixed**, so `routeDesign` never
+re-routes them and a post-CTS layer preference is silently ignored.
+
+### The only lever that reaches them
+
+The leaf `route_type` used *by* CTS, exposed as
+
+```tcl
+set SRAM_CTS_LEAF_BOTTOM_LAYER 2   ;# default
+set SRAM_CTS_LEAF_TOP_LAYER    3   ;# default
+```
+
+Both default to the original values, so the flow behaves exactly as before.
+Raising the top layer affects all 175 clock sinks, not just the 16 macro pins,
+which is why it is opt-in. After any change, compare
+`reports/timing_postRoute/axi_ram_postRoute.tran.gz` and the `IMPCCOPT-1007`
+count against the baseline before keeping it.
+
+Do **not** relax `target_max_trans` to silence the warning: 46 ps is a Liberty
+limit on the macro pin, not a project target.
 
 ## Metal fill engine
 

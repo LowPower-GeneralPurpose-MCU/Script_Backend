@@ -467,10 +467,23 @@ set INVCells {
     CKINVDCx16_ASAP7_75t_R
 }
 
+# Leaf route type.  Defaults to the original M2/M3.
+#
+# The 16 leaf nets that end on SRAM clock pins run several hundred microns,
+# because the hard place blockage over the macro island forces every clock
+# buffer to the island boundary.  On M2/M3 that gives 0.104 ns slew at
+# u_mem/G_SRAM_BANK[0].u_sram/clk against a 0.046 ns Liberty limit
+# (IMPCCOPT-1007).  This route_type is the only lever that reaches those
+# nets: clock_opt_design marks every clock net *fixed*, so any post-CTS
+# setAttribute on them is silently ignored by routeDesign.
+#
+# Raising the top layer here affects all 175 clock sinks, not just the 16
+# macro pins, so it stays opt-in:
+#   set SRAM_CTS_LEAF_TOP_LAYER 5    ;# before sourcing this file
 create_route_type \
     -name leaf_rule \
-    -bottom_preferred_layer M2 \
-    -top_preferred_layer M3
+    -bottom_preferred_layer M${SRAM_CTS_LEAF_BOTTOM_LAYER} \
+    -top_preferred_layer M${SRAM_CTS_LEAF_TOP_LAYER}
 
 create_route_type \
     -name trunk_rule \
@@ -521,26 +534,6 @@ setDesignMode \
 # IMPCCOPT-2048 "clock trees are already defined" failure in this flow.
 clock_opt_design
 
-# Every CTS leaf net that ends on an SRAM clock pin must cross the hard place
-# blockage covering the whole macro island, so its driver lands on the island
-# boundary and the branch can run several hundred microns.  On the M2/M3
-# leaf_rule that length produced 0.104-0.115 ns slew at pins whose Liberty
-# max_transition is 0.046 ns (10 x IMPCCOPT-1007 in the 2026-08-23 run).
-# The SRAM abstract leaves M6/M7 unobstructed, so promote exactly those 16
-# nets and let postCTS optimization and NanoRoute honour the new layers.
-# This is a routing-quality improvement, not a correctness gate, so a failure
-# here must never discard a CTS run that already took minutes.
-if {[catch {
-    constrain_sram_clock_leaf_routing \
-        $SRAM_PTRS \
-        clk \
-        $SRAM_CLOCK_LEAF_BOTTOM_LAYER \
-        $SRAM_CLOCK_LEAF_TOP_LAYER \
-        ./reports/sram_clock_leaf_route_constraints.rpt
-} sram_clock_leaf_error]} {
-    puts stderr "WARNING: SRAM clock leaf routing not constrained: $sram_clock_leaf_error"
-    puts stderr "WARNING: clock leaf nets keep the M2/M3 leaf_rule; expect IMPCCOPT-1007 at the SRAM clk pins."
-}
 
 # Legalize CTS cells before postCTS optimization.  Report the temporary M1 rail
 # gaps left around inserted cells, but defer strict connectivity until fillers

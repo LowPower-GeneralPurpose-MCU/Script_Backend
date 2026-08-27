@@ -21,15 +21,16 @@ set SRAM_ROOT "${ASAP7}/asap7_sram_0p0"
 
 set SRAM_LIB "${SRAM_ROOT}/generated/LIB/${SRAM_MASTER}.lib"
 set SRAM_LEF "${SRAM_ROOT}/generated/LEF/4xLEF/${SRAM_MASTER}.lef.4x.lef"
-# The shipped ASAP7 SRAM GDS stores its layout under the file's own bank
-# name, which does not have to match $SRAM_MASTER.  streamOut -merge matches
-# by exact structure name and has no remapping parameter, so a mismatch is
-# reported only as IMPOGDS-217/218 and silently exports hollow macros.
-# Point this at a renamed copy when the names differ:
-#   python3 ./scripts/gds_structure_tool.py list <file.gds>
-#   python3 ./scripts/gds_structure_tool.py rename <file.gds> <renamed.gds> \
-#       --to srambank_256x4x32_6t122
-#   export ASAP7_SRAM_GDS=/absolute/path/to/renamed.gds
+# streamOut -merge matches merged structures to design masters by exact name
+# and has no remapping parameter, so a file that does not define a structure
+# called $SRAM_MASTER is reported only as IMPOGDS-217/218 and exports hollow
+# macro outlines.
+#
+# gds/srambank_32b.gds is the SRAM *primitive library* (bitcell, column,
+# sense amp, tap, filler...), not the assembled bank, so it cannot satisfy
+# the merge on its own.  Point this at the generated per-macro GDS instead:
+#   python3 ./scripts/gds_structure_tool.py list <candidate.gds>
+#   export ASAP7_SRAM_GDS=/absolute/path/to/srambank_256x4x32_6t122.gds
 if {[info exists ::env(ASAP7_SRAM_GDS)] && $::env(ASAP7_SRAM_GDS) ne ""} {
     set SRAM_GDS $::env(ASAP7_SRAM_GDS)
 } else {
@@ -126,16 +127,20 @@ proc sram_orientation_for_column {column} {
     return $SRAM_MIRROR_ORIENT
 }
 
-# CTS leaf nets that terminate on an SRAM clock pin are promoted to these
-# layers after clock_opt_design.  M6/M7 are the only signal layers the SRAM
-# abstract leaves unobstructed, and the island blockage forces every clock
-# buffer to sit outside the macro array.  Set the bottom layer back to 2 only
-# to reproduce the original M2/M3 leaf routing.
-if {![info exists SRAM_CLOCK_LEAF_BOTTOM_LAYER]} {
-    set SRAM_CLOCK_LEAF_BOTTOM_LAYER 6
+# Preferred layers for the CTS leaf route_type.  These are the ONLY knob that
+# reaches the leaf nets ending on SRAM clock pins, because clock_opt_design
+# marks every clock net fixed and routeDesign then ignores per-net layer
+# preferences set afterwards.
+#
+# Defaults reproduce the original M2/M3 exactly.  Raising the top layer trades
+# upper-layer resource across all 175 clock sinks for shorter effective RC on
+# the 16 long macro branches; measure IMPCCOPT-1007 and the postRoute
+# .tran report before keeping any change.
+if {![info exists SRAM_CTS_LEAF_BOTTOM_LAYER]} {
+    set SRAM_CTS_LEAF_BOTTOM_LAYER 2
 }
-if {![info exists SRAM_CLOCK_LEAF_TOP_LAYER]} {
-    set SRAM_CLOCK_LEAF_TOP_LAYER 7
+if {![info exists SRAM_CTS_LEAF_TOP_LAYER]} {
+    set SRAM_CTS_LEAF_TOP_LAYER 3
 }
 
 # Always keep SRAM placement as a complete deterministic 4x4 array before
@@ -149,9 +154,6 @@ foreach f [list $SRAM_LIB $SRAM_LEF $SRAM_GDS] {
     }
 }
 
-# The GDS must define a structure named exactly like the LEF/Liberty master.
-# Checking here costs one file scan and turns an ignorable stream-out warning
-# into a stop before any placement work is done.
 puts "===================================================="
 puts "ASAP7 SRAM CORNER-ISLAND SETUP"
 puts " - Design       : $DESIGN"

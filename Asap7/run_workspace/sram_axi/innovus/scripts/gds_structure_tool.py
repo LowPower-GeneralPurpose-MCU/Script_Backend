@@ -18,9 +18,16 @@ Usage
     python3 gds_structure_tool.py list   <in.gds>
     python3 gds_structure_tool.py rename <in.gds> <out.gds> --to NEW [--from OLD]
 
-With `--from` omitted, `rename` picks the single top structure (a structure
-that no SREF/AREF refers to).  If a structure named NEW already exists the
-file is left untouched and the command reports that no rename was needed.
+`list` is the diagnostic: it prints every structure and marks the ones no
+SREF/AREF references.
+
+`rename` is only correct when the file really does contain the macro layout
+under a different name.  It is NOT a way to make a primitive library stand in
+for an assembled macro: ASAP7's gds/srambank_32b.gds holds the SRAM building
+blocks (bitcell, column, sense amp, tap, filler), and renaming one of those
+to the bank name would place the wrong geometry under every macro instance.
+When `list` shows building blocks rather than a bank, find the generated
+per-macro GDS instead.
 
 The tool is dependency-free and streams the file record by record, so it works
 on large GDS files without loading them into memory.
@@ -176,7 +183,11 @@ def main(argv=None):
     p_list.add_argument("gds")
     p_list.set_defaults(func=cmd_list)
 
-    p_ren = sub.add_parser("rename", help="write a copy with one structure renamed")
+    p_ren = sub.add_parser(
+        "rename",
+        help="write a copy with one structure renamed (only when the file "
+             "really holds the macro layout under another name)",
+    )
     p_ren.add_argument("gds")
     p_ren.add_argument("out")
     p_ren.add_argument("--to", dest="to_name", required=True,

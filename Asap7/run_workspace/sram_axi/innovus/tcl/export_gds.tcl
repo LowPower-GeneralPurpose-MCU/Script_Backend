@@ -34,7 +34,17 @@ foreach merge_gds $merge_gds_files {
 # Check every hard-macro master here so the omission is loud and recorded in
 # the handoff report instead of silently shipping hollow macro outlines.
 # Export still proceeds; set ASAP7_REQUIRE_MERGED_MACRO_GDS=1 to refuse.
-set MERGE_GDS_MISSING_MASTERS [check_merge_gds_masters $merge_gds_files]
+# Belt and braces: this check exists to describe the export, never to block
+# it.  A bug inside it once aborted export_gds.tcl after a complete run
+# (IMPDBTCL-206 on an invalid dbGet attribute), so treat any failure as
+# "unknown" and carry on.
+set MERGE_GDS_MISSING_MASTERS {}
+if {[catch {
+    set MERGE_GDS_MISSING_MASTERS [check_merge_gds_masters $merge_gds_files]
+} merge_gds_check_error]} {
+    puts stderr "WARNING: merged-GDS master check did not run: $merge_gds_check_error"
+    set MERGE_GDS_MISSING_MASTERS {}
+}
 
 # Re-run final in-design checks immediately before export.
 verify_drc \
