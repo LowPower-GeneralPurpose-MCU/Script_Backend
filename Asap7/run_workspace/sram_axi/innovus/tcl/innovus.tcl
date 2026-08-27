@@ -77,7 +77,6 @@ if {![file exists ./tcl/innovus.globals]} {
     error "Run this script from the project root; missing ./tcl/innovus.globals"
 }
 
-set init_design_uniquify 1
 source ./tcl/innovus.globals
 source ./tcl/prepare_innovus_sdc.tcl
 source ./tcl/sync_genus_handoff.tcl
@@ -220,9 +219,6 @@ set core_llx [dbGet top.fPlan.coreBox_llx]
 set core_lly [dbGet top.fPlan.coreBox_lly]
 set core_urx [dbGet top.fPlan.coreBox_urx]
 set core_ury [dbGet top.fPlan.coreBox_ury]
-
-set row_height [dbGet head.sites.size_y]
-set site_width [dbGet head.sites.size_x]
 
 # Macro-slide audit before any power or standard-cell placement.
 set SRAM_PTRS [dbGet -p2 top.insts.cell.name $SRAM_MASTER]

@@ -36,14 +36,6 @@ foreach required_var {
     }
 }
 
-proc pg_upper_positive_mod {value period} {
-    set result [expr {fmod($value, $period)}]
-    if {$result < 0.0} {
-        set result [expr {$result + $period}]
-    }
-    return $result
-}
-
 proc pg_upper_snap_up_to_layer_track {value layer} {
     set pitch [pg_layer_pitch $layer]
     set offset [pg_layer_offset $layer]

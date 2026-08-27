@@ -2,7 +2,6 @@
 ## Add metal fill only after routed DRC/antenna/connectivity are clean
 ############################################################
 
-set IN_DESIGN_REPORTS_CLEAN 0
 set SIGNOFF_CANDIDATE_READY 0
 set DENSITY_SIGNOFF_STATUS "NOT_RUN"
 
@@ -63,7 +62,7 @@ run_metal_fill_signoff \
     $GDS_MAP_FILE \
     "./${DESIGN}.metalfill_signoff.rpt" \
     ./pegasus_fill
-set density_status [publish_metal_fill_density_status \
+publish_metal_fill_density_status \
     "./${DESIGN}.metalfill_signoff.rpt" \
     ./verify_rpt/metal_density_abstract_after_fill.rpt]
 
@@ -157,7 +156,7 @@ setMetalFill \
 # Keep the project-required fill command unchanged.
 addMetalFill -snap -squareShape
 
-set density_status [publish_metal_fill_density_status \
+publish_metal_fill_density_status \
     "./${DESIGN}.metalfill.rpt" \
     ./verify_rpt/metal_density_abstract_after_fill.rpt]
 
@@ -205,7 +204,6 @@ if {[catch {
     assert_clean_timing_summary \
         ./reports/timing_postFill_hold/axi_ram_postRoute_hold.summary.gz hold
     assert_si_glitch_policy $postfill_si_report post-fill
-    set IN_DESIGN_REPORTS_CLEAN 1
     set SIGNOFF_CANDIDATE_READY 1
 } postfill_report_error]} {
     puts stderr "Post-fill reports are not clean: $postfill_report_error"

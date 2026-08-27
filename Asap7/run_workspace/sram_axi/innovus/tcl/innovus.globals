@@ -36,25 +36,26 @@ foreach lef $init_lef_file {
     }
 }
 
+# --- Design inputs.  Every one of these differs from the Innovus default. ---
+set init_top_cell    $DESIGN
+set init_gnd_net     {VSS}
+set init_pwr_net     {VDD}
+set init_mmmc_file   {./tcl/viewDefinition.tcl}
+set init_verilog     "./outputs/${DESIGN}_syn.v"
+# Default is NULL; the SRAM abstract needs a layout view name.
+set init_layout_view {layout}
+# Default is 0.  optDesign requires a unique netlist (IMPOPT-3213).
+set init_design_uniquify 1
+
+# --- Cadence session boilerplate, kept verbatim from the generated globals.
+# Values whose documented default already matched (defHierChar, init_abstract_view,
+# init_design_settop) were dropped; these are either non-default or undocumented,
+# so they stay. ---
 set ::TimeLib::tsgMarkCellLatchConstructFlag 1
 set conf_qxconf_file {NULL}
 set conf_qxlib_file {NULL}
-set defHierChar {/}
 set distributed_client_message_echo {1}
 set distributed_mmmc_disable_reports_auto_redirection {0}
-
-set init_abstract_view {abstract}
-set init_layout_view   {layout}
-
-set init_design_settop 1
-set init_top_cell      $DESIGN
-
-set init_gnd_net {VSS}
-set init_pwr_net {VDD}
-
-set init_mmmc_file {./tcl/viewDefinition.tcl}
-set init_verilog   "./outputs/${DESIGN}_syn.v"
-
 set latch_time_borrow_mode max_borrow
 set pegDefaultResScaleFactor 1
 set pegDetailResScaleFactor 1

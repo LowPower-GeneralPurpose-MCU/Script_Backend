@@ -16,7 +16,6 @@ foreach d {outputs reports verify_rpt saved} {
     file mkdir $d
 }
 
-set init_design_uniquify 1
 source ./tcl/innovus.globals
 init_design
 

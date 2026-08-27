@@ -57,13 +57,6 @@ proc publish_si_glitch_report {source_report output_report} {
     return $violation_count
 }
 
-proc assert_clean_si_glitch_report {report_file} {
-    set violation_count [si_glitch_violation_count $report_file]
-    if {$violation_count != 0} {
-        error "SI analysis has $violation_count glitch violation(s); inspect [file normalize $report_file]"
-    }
-}
-
 proc require_zero_si_glitches {} {
     if {[info exists ::env(INNOVUS_REQUIRE_ZERO_SI)]} {
         switch -nocase -- $::env(INNOVUS_REQUIRE_ZERO_SI) {
@@ -549,27 +542,6 @@ proc verify_pg_connectivity_or_stop {report_file} {
     assert_clean_pg_connectivity_report $report_file
 }
 
-proc verify_pg_special_drc_or_stop {report_file {layer_range {M4 M9}}} {
-    set verify_cmd [list \
-        verify_drc \
-        -check_only special \
-        -layer_range $layer_range]
-
-    set owned_areas [pg_top_level_owned_drc_areas]
-    if {[llength $owned_areas] != 0} {
-        lappend verify_cmd -area $owned_areas
-        write_pg_drc_scope_report \
-            ./verify_rpt/sram_macro_abstract_drc_scope.rpt \
-            $owned_areas
-        puts "PG DRC scope: checking top-level logic, island borders, and inter-macro PG gaps; SRAM macro-internal LEF pin shapes remain an IP-level signoff responsibility."
-    }
-
-    lappend verify_cmd -report $report_file
-    {*}$verify_cmd
-
-    assert_clean_pg_special_drc_report $report_file
-}
-
 proc pg_append_unique_drc_box {box boxes_var} {
     upvar 1 $boxes_var boxes
 
@@ -681,23 +653,6 @@ proc pg_top_level_owned_drc_areas {} {
     }
 
     return $areas
-}
-
-proc write_pg_drc_scope_report {report_file owned_areas} {
-    global SRAM_MACRO_BOXES
-
-    set fp [open $report_file w]
-    puts $fp "check_scope top_level_owned_pg"
-    puts $fp "reason SRAM macro-internal pin geometry belongs to hard-IP signoff; top-level verifies logic regions, island borders, inter-macro collectors, and deterministic M5 tap corridors"
-    puts $fp "top_level_area_count [llength $owned_areas]"
-    foreach area $owned_areas {
-        puts $fp "top_level_area $area"
-    }
-    puts $fp "excluded_hard_macro_count [llength $SRAM_MACRO_BOXES]"
-    foreach macro $SRAM_MACRO_BOXES {
-        puts $fp "hard_macro $macro"
-    }
-    close $fp
 }
 
 proc write_skipped_report {report_file reason} {
@@ -913,46 +868,6 @@ proc gds_pad_name {name} {
     return $name
 }
 
-# Every structure name defined in a GDS file, in definition order.
-# Walks record headers and seeks over payloads, so cost scales with the
-# record count rather than the file size.
-proc gds_structure_names {gds_file} {
-    if {![file exists $gds_file]} {
-        error "Cannot read structure names: missing GDS file $gds_file"
-    }
-    set fh [open $gds_file rb]
-    fconfigure $fh -translation binary
-    set names {}
-    while {1} {
-        set head [read $fh 4]
-        if {[string length $head] < 4} {
-            break
-        }
-        binary scan $head Sucucu reclen rtype rdtype
-        if {$reclen < 4} {
-            break
-        }
-        set payload [expr {$reclen - 4}]
-        if {$rtype == 6 && $rdtype == 6} {
-            set raw ""
-            if {$payload > 0} {
-                set raw [read $fh $payload]
-            }
-            lappend names [string trimright $raw "\x00"]
-        } else {
-            if {$payload > 0} {
-                seek $fh $payload current
-            }
-            # ENDLIB
-            if {$rtype == 4 && $rdtype == 0} {
-                break
-            }
-        }
-    }
-    close $fh
-    return $names
-}
-
 # Fast membership test: look for the exact STRNAME record bytes for this
 # name instead of walking every record.
 proc gds_has_structure {gds_file structure_name} {
@@ -982,27 +897,6 @@ proc gds_has_structure {gds_file structure_name} {
     }
     close $fh
     return $found
-}
-
-# Report the structure names a GDS actually defines.  Never called from
-# anywhere reachable by init_design: viewDefinition.tcl is evaluated inside
-# init_design, and an error raised there aborts it with no design in memory.
-proc report_gds_missing_structure {gds_file structure_name {context ""}} {
-    set label $gds_file
-    if {$context ne ""} {
-        set label "$context ($gds_file)"
-    }
-    set present [gds_structure_names $gds_file]
-    set shown $present
-    if {[llength $present] > 20} {
-        set shown [concat [lrange $present 0 19] \
-            [list "... and [expr {[llength $present] - 20}] more"]]
-    }
-    puts "GDS $label does not define structure '$structure_name'."
-    puts "  Structures found: [join $shown {, }]"
-    puts "  Inspect the file with:"
-    puts "    python3 ./scripts/gds_structure_tool.py list $gds_file"
-    return $present
 }
 
 # Distinct hard-macro master names in the current design.

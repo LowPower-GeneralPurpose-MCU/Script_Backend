@@ -37,9 +37,9 @@ if {[info exists ::env(ASAP7_SRAM_GDS)] && $::env(ASAP7_SRAM_GDS) ne ""} {
     set SRAM_GDS "${SRAM_ROOT}/gds/srambank_32b.gds"
 }
 
-# Simulation-only model. Do not synthesize this reg-array model.
-set SRAM_SIM_VERILOG \
-    "${SRAM_ROOT}/generated/verilog/${SRAM_MASTER}.v"
+# Simulation-only reg-array model, for reference; never read by this flow
+# and never synthesized:
+#   ${SRAM_ROOT}/generated/verilog/${SRAM_MASTER}.v
 
 # ------------------------------------------------------------------
 # 4x Innovus database dimensions.

@@ -285,7 +285,6 @@ foreach ptr $SRAM_PTRS {
     incr sram_pin_tap_index
 }
 
-set SRAM_PIN_TAPS_BUILT 1
 set SRAM_BLOCKPIN_STITCH_DONE 1
 
 editTrim -nets {VSS VDD}

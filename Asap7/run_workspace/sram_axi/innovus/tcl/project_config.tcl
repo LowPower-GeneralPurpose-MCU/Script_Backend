@@ -61,7 +61,6 @@ if {[info exists ::env(INNOVUS_RUN_ANTENNA_CHECK)] &&
 }
 
 set STREAMOUT_UNITS 4000
-set POWER_NETS {VDD VSS}
 
 # The SRAM data/control input pins have a 0.320 ns Liberty max-transition
 # limit.  Use a tighter design rule to reserve margin for routed RC and SI.
