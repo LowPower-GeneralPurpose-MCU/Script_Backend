@@ -11,6 +11,8 @@ foreach required_variable {
     SRAM_BLOCKAGE_BORDER_ROWS SRAM_BLOCKAGE_BORDER
     SRAM_MACRO_GAP_X SRAM_MACRO_GAP_Y
     SRAM_HALO_L SRAM_HALO_B SRAM_HALO_R SRAM_HALO_T
+    SRAM_HALO_ROWS SRAM_HALO
+    SRAM_ISLAND_BLOCKAGE_TYPE SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY
 } {
     if {![info exists $required_variable]} {
         error "Missing $required_variable; run innovus_macroFP.tcl first"
@@ -353,11 +355,29 @@ foreach {side clearance} [list \
     }
 }
 
-cutRow -area $SRAM_ISLAND_CUT_BOX
+# Row handling inside the island.
+#
+# Cutting the whole island box also deleted the rows inside every four-row
+# channel, so no cell could ever be placed there regardless of blockage type.
+# Cut only the macro bodies and the channel rows survive.
+if {$SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY} {
+    set island_cut_macros [dbGet -p2 -e top.insts.cell.name $SRAM_MASTER]
+    if {[llength $island_cut_macros] != $SRAM_COUNT} {
+        error "Expected $SRAM_COUNT SRAM macros before cutting rows; found [llength $island_cut_macros]"
+    }
+    foreach island_cut_ptr $island_cut_macros {
+        cutRow -area [lindex [dbGet $island_cut_ptr.box] 0]
+    }
+} else {
+    cutRow -area $SRAM_ISLAND_CUT_BOX
+}
 
+# A soft blockage admits buffers, inverters, clock gates, tie cells and level
+# shifters only; every other cell is placed outside.  That gives CTS somewhere
+# to put a clock buffer inside the island without letting logic in.
 createPlaceBlockage \
     -name SRAM_ISLAND_GROUP_BLOCKAGE \
-    -type hard \
+    -type $SRAM_ISLAND_BLOCKAGE_TYPE \
     -noCutByCore \
     -box $SRAM_ISLAND_CUT_BOX
 
@@ -371,6 +391,13 @@ puts $blockage_report \
 puts $blockage_report "row_height $ASAP7_ROW_HEIGHT"
 puts $blockage_report "inter_macro_gap_rows $SRAM_MACRO_GAP_ROWS"
 puts $blockage_report "inter_macro_gap_um $SRAM_MACRO_GAP_X"
+puts $blockage_report "halo_rows $SRAM_HALO_ROWS"
+puts $blockage_report "halo_um $SRAM_HALO"
+puts $blockage_report \
+    "free_channel_rows [expr {$SRAM_MACRO_GAP_ROWS - 2 * $SRAM_HALO_ROWS}]"
+puts $blockage_report "place_blockage_type $SRAM_ISLAND_BLOCKAGE_TYPE"
+puts $blockage_report \
+    "cut_rows_under_macros_only $SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY"
 puts $blockage_report \
     "blockage_border_rows $SRAM_BLOCKAGE_BORDER_ROWS"
 puts $blockage_report "blockage_border_um $SRAM_BLOCKAGE_BORDER"

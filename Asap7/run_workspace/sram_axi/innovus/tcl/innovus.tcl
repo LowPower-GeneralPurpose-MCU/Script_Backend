@@ -512,6 +512,26 @@ set_ccopt_property buffer_cells $BUFCells
 set_ccopt_property inverter_cells $INVCells
 set_ccopt_property use_inverters auto
 
+# Max fanout on the SRAM output pins.  A macro output driving several loads
+# yields slew that the DRV tables classify as "not real", which is how the
+# clock-pin violation went unnoticed for three runs.  Forcing 1 makes
+# optimization buffer at the source.  Never fatal: the filter depends on the
+# library pin naming, so a miss must not discard the run.
+if {$SRAM_OUTPUT_MAX_FANOUT > 0} {
+    if {[catch {
+        set sram_out_pins [get_lib_pins -quiet \
+            */${SRAM_MASTER}/* -filter "@direction == out"]
+        if {[sizeof_collection $sram_out_pins] == 0} {
+            error "no output lib pins matched */${SRAM_MASTER}/*"
+        }
+        set_max_fanout $SRAM_OUTPUT_MAX_FANOUT $sram_out_pins
+        puts "Applied max_fanout $SRAM_OUTPUT_MAX_FANOUT to\
+ [sizeof_collection $sram_out_pins] SRAM output pin(s)."
+    } sram_max_fanout_error]} {
+        puts stderr "WARNING: SRAM output max_fanout not applied: $sram_max_fanout_error"
+    }
+}
+
 setOptMode \
     -reclaimArea true \
     -leakageToDynamicRatio 0.5 \
@@ -599,7 +619,11 @@ saveDesign ./saved/axi_ram_postCTS.enc
 setSIMode \
     -enable_delay_report true \
     -enable_glitch_report true
-setAnalysisMode -analysisType onChipVariation
+# -cppr both removes the pessimism Innovus would otherwise double-count on the
+# clock path shared by launch and capture.  This design has a single clock tree
+# feeding 175 sinks, so the shared portion is long and the recovered margin is
+# real, not cosmetic.
+setAnalysisMode -analysisType onChipVariation -cppr both
 setDelayCalMode \
     -SIAware true \
     -equivalent_waveform_model propagation
@@ -710,8 +734,8 @@ publish_si_glitch_report \
 report_noise -bumpy_waveform -threshold 0 \
     > ./reports/bumpy_transition_postRoute.rpt
 
-verify_drc \
-    -report ./verify_rpt/drc_postroute.rpt
+# Repair first, then gate.  A clean run does exactly one verify_drc as before.
+repair_postroute_drc ./verify_rpt/drc_postroute.rpt
 
 verify_antenna_if_enabled ./verify_rpt/antenna_postroute.rpt
 

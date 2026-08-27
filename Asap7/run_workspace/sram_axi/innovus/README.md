@@ -270,42 +270,59 @@ When the query yields nothing the check reports `NOT VERIFIED`, never `passed`.
 
 ## SRAM clock leaf routing
 
-Every CTS leaf net ending on an SRAM clock pin has to cross the hard place
-blockage that covers the macro island, so its driver lands on the island
-boundary and the branch can run several hundred microns. On the M2/M3
-`leaf_rule` that produces 0.104 ns slew at pins whose Liberty
-`max_transition` is 0.046 ns — ten `IMPCCOPT-1007` warnings that every
-"real DRV" gate classifies as unfixable clock-net violations.
+Slew at the 16 SRAM clock pins is 0.104 ns against a 0.046 ns Liberty
+`max_transition` — ten `IMPCCOPT-1007` warnings that every "real DRV" gate
+classifies as unfixable clock-net violations.
+
+### Measured, not assumed
+
+Parsing `outputs/axi_ram_pnr.def` and sampling 50 points per wire segment:
+
+| Layer | On macro body | In island gaps | Outside island | LEF OBS |
+| --- | --- | --- | --- | --- |
+| M2 | **0.0 µm** | 0.0 | 316.8 | blocked |
+| M3 | **0.0 µm** | 0.0 | 310.8 | free |
+| M4 | **0.0 µm** | 2243.6 | 286.6 | blocked |
+| M5 | **0.0 µm** | 527.9 | 752.2 | blocked |
+| M6 | **0.0 µm** | 508.1 | 677.0 | free |
+| M7 | **0.0 µm** | 100.8 | 1243.6 | free |
+
+Two things follow.
+
+**The macro OBS is respected exactly.** Not one micron of clock wire sits over
+a macro body, and `verify_drc` returns 0 — the independent confirmation.
+`createPlaceBlockage` blocks *placement only*; the DEF carries a single
+blockage and its type is `PLACEMENT`. What keeps routing off the macro is the
+SRAM LEF obstruction, which is why `sram_route_guard.tcl` is deliberately
+`enabled 0` (see `reports/sram_route_guard.rpt`).
+
+**Layer is not the problem — distance is.** The longest branches, `u_mem/CTS_9`
+to `BANK[0]/clk` and `u_mem/CTS_3` to `BANK[7]/clk`, are ~452 µm of which
+**~447 µm is already on M4**. M2 and M3 never enter the island at all: the
+router escapes upward and crosses through the 4.32 µm inter-macro channels.
 
 ### What does not work
 
-Promoting those 16 nets with `setAttribute -net ... -top_preferred_routing_layer`
-after `clock_opt_design`. Measured on 2026-08-27: the constraint applied to all
-16 nets, and the postRoute slew was **byte-identical** to the run without it.
-The reason is in the log:
+- **Raising `leaf_rule` above M2/M3.** The router already reaches M4 on its
+  own for these nets. Changing the CTS route type moves nothing.
+- **`setAttribute -net ... -top_preferred_routing_layer` after
+  `clock_opt_design`.** Measured on 2026-08-27: applied to all 16 nets, and
+  postRoute slew was byte-identical. `clock_opt_design` leaves every clock net
+  marked **fixed** (`Clock: 43 (... routed=0, fixed=43)`), so `routeDesign`
+  never re-routes them.
 
-```
-Net route status summary:
-  Clock: 43 (unrouted=0, trialRouted=0, noStatus=0, routed=0, fixed=43)
-```
+### What would work
 
-`clock_opt_design` marks every clock net **fixed**, so `routeDesign` never
-re-routes them and a post-CTS layer preference is silently ignored.
+Give CTS somewhere to put a buffer inside the island. Today the hard place
+blockage covers the whole array plus its 2.16 µm border, so nine of the ten
+violating buffers sit at x = 506.952 or y = 708.480 — right on the boundary,
+~450 µm from the pin they drive. Keeping a few standard-cell rows inside the
+4.32 µm channels, or switching that blockage from `hard` to `soft`, shortens
+the branch at its source.
 
-### The only lever that reaches them
-
-The leaf `route_type` used *by* CTS, exposed as
-
-```tcl
-set SRAM_CTS_LEAF_BOTTOM_LAYER 2   ;# default
-set SRAM_CTS_LEAF_TOP_LAYER    3   ;# default
-```
-
-Both default to the original values, so the flow behaves exactly as before.
-Raising the top layer affects all 175 clock sinks, not just the 16 macro pins,
-which is why it is opt-in. After any change, compare
-`reports/timing_postRoute/axi_ram_postRoute.tran.gz` and the `IMPCCOPT-1007`
-count against the baseline before keeping it.
+`SRAM_CTS_LEAF_BOTTOM_LAYER` / `SRAM_CTS_LEAF_TOP_LAYER` still exist and still
+default to the original M2/M3, but the measurement above says they are not the
+lever to pull.
 
 Do **not** relax `target_max_trans` to silence the warning: 46 ps is a Liberty
 limit on the macro pin, not a project target.
@@ -398,3 +415,79 @@ visible at a glance.
 `innovus.tcl` (806 lines) and `innovus_pnr.tcl` (652) still overlap heavily, but
 they diverge in scattered places rather than sharing a clean prefix, so merging
 them is a real refactor and was left alone.
+
+
+## Adopted from the reference ROHM180 flow (2026-08-27)
+
+Four changes, after comparing against the hierarchical RISC-V PnR flow.
+
+### 1. Soft island blockage + one-row halo
+
+The clock-slew defect had a purely geometric cause. The halo was two rows on
+every side of a **four-row** channel, so the halos of two facing macros met
+exactly in the middle and the channel held **zero legal sites** — the original
+comment in `sram_macro_setup.tcl` said so out loud. On top of that,
+`cutRow -area $SRAM_ISLAND_CUT_BOX` deleted the channel rows outright. CTS
+therefore had to place every clock buffer outside the island, and the longest
+leaf branch measured 452 µm in `axi_ram_pnr.def`.
+
+| Knob | Was | Now | Effect |
+| --- | --- | --- | --- |
+| `SRAM_HALO_ROWS` | 2 (tied to the blockage border) | **1** | 4 − 2×1 = **2 free rows** per channel |
+| `SRAM_ISLAND_BLOCKAGE_TYPE` | `hard` | **`soft`** | buffers, inverters, clock gates, tie cells, level shifters only |
+| `SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY` | — | **1** | cut rows under macro bodies, keep channel rows |
+
+`-type soft` is the precise mechanism: per Innovus TCR 23.14 it admits exactly
+the cell classes CTS needs and keeps all other logic outside. Macro positions,
+island size, the 4.32 µm channel, PG geometry and the pin plan are **unchanged**,
+so the floorplan numbers stay valid.
+
+Restore the previous behaviour with `set SRAM_HALO_ROWS 2` and
+`set SRAM_ISLAND_BLOCKAGE_TYPE hard` before sourcing the flow.
+
+> The reference flow's own `createPlaceBlockage -allMacro -outerRingBySide
+> $rowx2 ...` would **not** have helped by itself: a two-row ring on each side
+> of its four-row channel also consumes the whole channel. The lever is the
+> halo width and the blockage *type*, not the ring shape.
+
+### 2. `set_max_fanout 1` on the SRAM output pins
+
+`SRAM_OUTPUT_MAX_FANOUT` (default 1) applies the reference flow's
+`set_max_fanout 1 [get_lib_pins */RSP*/* -filter "@direction == out"]` to this
+project's master. A macro output driving several loads produces slew the DRV
+tables report as "not real" — the same class of defect that hid the clock-pin
+violation for three runs. Wrapped in `catch`: the pin filter depends on library
+naming and a miss must not discard the run. Set to 0 to disable.
+
+### 3. `-cppr both`
+
+`setAnalysisMode -analysisType onChipVariation -cppr both`. With OCV and no
+CPPR, the clock path shared by launch and capture is de-rated twice. One clock
+tree feeds 175 sinks here, so the shared portion is long and the recovered
+margin is real.
+
+### 4. Bounded post-route DRC repair
+
+`repair_postroute_drc` runs `verify_drc`, and only if it is dirty runs
+`ecoRoute -fix_drc` + `optDesign -postRoute -drv`, re-checks, up to two passes.
+A clean run does exactly one `verify_drc`, as before. The existing
+`assert_clean_drc_report` gate still has the final say — this only gives a
+dirty run a chance to fix itself first, the way the reference flow's
+"these two steps can be repeated until done" loop does.
+
+### Deliberately not adopted
+
+- **`setRouteMode -earlyGlobalReverseDirection` over the macros.** The
+  mechanism already exists in `sram_route_guard.tcl`. It only alters the eGR
+  congestion estimate on the named layer inside the named box, and the ASAP7
+  SRAM abstract already blocks M1/M2/M4/V4/M5 over the macro body — the DEF
+  measurement found **0 µm** of any net over a macro body. There is no capacity
+  left there to discourage. The reference flow needs it because ROHM180 has
+  five layers and its macro leaves M5 open. Enabling the guard here would also
+  switch on its `createRouteBlk -layer {M6 M7}`, blocking the only free layers.
+- **Tie cells (`addTieHiLo`).** This flow ties through
+  `globalNetConnect -type tiehi/tielo` to the rails. Whether ASAP7 ships
+  TIEHI/TIELO cells could not be verified from here, so nothing was changed.
+- **Filler before routing.** A trade-off, not an improvement: it avoids
+  `IMPSP-5217` but freezes cell sites before `optDesign -postRoute`. The
+  current order verifies clean (DRC 0) after filler insertion.

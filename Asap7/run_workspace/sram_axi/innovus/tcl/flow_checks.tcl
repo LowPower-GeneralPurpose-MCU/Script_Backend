@@ -1163,3 +1163,59 @@ proc run_metal_fill_signoff {layer_map_file report_file {work_dir ./pegasus_fill
     puts "Signoff metal fill completed using $reason."
     return $report_file
 }
+
+############################################################
+## Bounded post-route DRC repair
+##
+## The reference flow this project was compared against repairs and re-checks
+## in a loop ("these two steps can be repeated until done") instead of
+## stopping at the first dirty report.  Repair here, then let the existing
+## assert decide - so a clean run is unchanged and a dirty one gets a chance
+## to fix itself before the gate closes.  Bounded, because an unbounded repair
+## loop on a design that cannot converge just burns hours.
+############################################################
+proc drc_violation_count {report_file} {
+    if {![file exists $report_file]} {
+        return -1
+    }
+    set fh [open $report_file r]
+    set text [read $fh]
+    close $fh
+    if {[regexp {No DRC violations were found} $text]} {
+        return 0
+    }
+    if {[regexp {(\d+)\s+violation} $text -> n]} {
+        return $n
+    }
+    return -1
+}
+
+proc repair_postroute_drc {report_file {max_passes 2}} {
+    verify_drc -report $report_file
+    set n [drc_violation_count $report_file]
+    if {$n == 0} {
+        puts "Post-route DRC is clean; no repair pass needed."
+        return 0
+    }
+
+    for {set pass 1} {$pass <= $max_passes} {incr pass} {
+        puts "Post-route DRC repair pass $pass of $max_passes (violations: $n)."
+        if {[catch {ecoRoute -fix_drc} eco_error]} {
+            puts stderr "WARNING: ecoRoute -fix_drc failed on pass $pass: $eco_error"
+        }
+        if {[catch {
+            optDesign -postRoute -drv -prefix drvFix${pass}
+        } opt_error]} {
+            puts stderr "WARNING: optDesign -postRoute -drv failed on pass $pass: $opt_error"
+        }
+        verify_drc -report $report_file
+        set n [drc_violation_count $report_file]
+        if {$n == 0} {
+            puts "Post-route DRC cleaned after $pass repair pass(es)."
+            return $pass
+        }
+    }
+
+    puts stderr "Post-route DRC still reports $n violation(s) after $max_passes repair pass(es); the gate below will stop the flow."
+    return -1
+}

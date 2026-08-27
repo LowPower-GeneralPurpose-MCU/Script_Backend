@@ -69,12 +69,69 @@ set SRAM_BLOCKAGE_BORDER [expr {
 set margin_dist $SRAM_BLOCKAGE_BORDER
 set SRAM_EDGE_GAP_X 0.0
 set SRAM_EDGE_GAP_Y 0.0
-# Individual two-row halos exactly meet inside every four-row inter-macro gap.
-# The group hard blockage additionally covers all macro bodies and all gaps.
-set SRAM_HALO_L $SRAM_BLOCKAGE_BORDER
-set SRAM_HALO_B $SRAM_BLOCKAGE_BORDER
-set SRAM_HALO_R $SRAM_BLOCKAGE_BORDER
-set SRAM_HALO_T $SRAM_BLOCKAGE_BORDER
+
+# ------------------------------------------------------------------
+# Halo rows around each macro.
+#
+# This used to be $SRAM_BLOCKAGE_BORDER_ROWS, i.e. two rows.  Two rows on each
+# side of a four-row channel meet exactly in the middle, so the channel held
+# ZERO legal sites no matter what the group blockage said.  That is why CTS had
+# to place every clock buffer outside the island: the longest leaf branch then
+# ran 452 um (measured in axi_ram_pnr.def, 447 um of it on M4) and slew at the
+# SRAM clk pins reached 0.104 ns against a 0.046 ns Liberty max_transition
+# (10 x IMPCCOPT-1007).
+#
+# One halo row leaves 4 - 2*1 = 2 rows of legal sites in every channel, which
+# the soft group blockage below then reserves for buffers and inverters only.
+# Set this back to 2 to reproduce the original floorplan exactly.
+# ------------------------------------------------------------------
+if {![info exists SRAM_HALO_ROWS]} {
+    set SRAM_HALO_ROWS 1
+}
+if {![string is integer -strict $SRAM_HALO_ROWS] || $SRAM_HALO_ROWS < 1} {
+    error "SRAM_HALO_ROWS must be a positive integer, got $SRAM_HALO_ROWS"
+}
+if {2 * $SRAM_HALO_ROWS >= $SRAM_MACRO_GAP_ROWS} {
+    puts "WARNING: SRAM_HALO_ROWS=$SRAM_HALO_ROWS leaves no legal site in the\
+ ${SRAM_MACRO_GAP_ROWS}-row inter-macro channel; CTS will not be able to place\
+ a clock buffer inside the island."
+}
+set SRAM_HALO [expr {$SRAM_HALO_ROWS * $ASAP7_ROW_HEIGHT}]
+set SRAM_HALO_L $SRAM_HALO
+set SRAM_HALO_B $SRAM_HALO
+set SRAM_HALO_R $SRAM_HALO
+set SRAM_HALO_T $SRAM_HALO
+
+# ------------------------------------------------------------------
+# Island placement blockage.
+#
+# "soft" lets Innovus place buffers, inverters, clock gates, tie cells and
+# level shifters inside the blockage while every other cell stays outside
+# (Innovus TCR 23.14, createPlaceBlockage -type).  That is exactly the split
+# this island needs: CTS buffering may enter the channels, logic may not.
+# Set to "hard" to restore the previous behaviour.
+#
+# Cutting rows across the whole island box also deleted the channel rows, so
+# even a soft blockage would have had nothing to place on.  Cut only the macro
+# bodies instead.
+# ------------------------------------------------------------------
+if {![info exists SRAM_ISLAND_BLOCKAGE_TYPE]} {
+    set SRAM_ISLAND_BLOCKAGE_TYPE soft
+}
+if {[lsearch -exact {hard soft} $SRAM_ISLAND_BLOCKAGE_TYPE] < 0} {
+    error "SRAM_ISLAND_BLOCKAGE_TYPE must be hard or soft, got $SRAM_ISLAND_BLOCKAGE_TYPE"
+}
+if {![info exists SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY]} {
+    set SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY 1
+}
+
+# Max fanout on the SRAM output pins.  A macro output driving several loads
+# produces slew the DRV tables never flag as "real", which is the same class of
+# defect as the clock-pin slew above.  Forcing 1 makes optimization buffer at
+# the source.  Set to 0 to disable.
+if {![info exists SRAM_OUTPUT_MAX_FANOUT]} {
+    set SRAM_OUTPUT_MAX_FANOUT 1
+}
 
 # The top/right edges of the rectangular group blockage are also two rows from
 # the physical SRAM bbox.
