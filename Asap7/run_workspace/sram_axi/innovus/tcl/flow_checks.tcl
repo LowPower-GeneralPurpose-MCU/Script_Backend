@@ -894,3 +894,373 @@ proc assert_filler_inserted {{prefix "FILLER"}} {
         error "No filler instances with prefix ${prefix} were inserted"
     }
 }
+
+############################################################
+## Merged-GDS master checks
+##
+## streamOut -merge matches merged structures to design masters by exact
+## name and has no cell-name remapping parameter.  A name mismatch is
+## reported only as IMPOGDS-217/218, which does not stop the run, so the
+## exported top-level GDS silently loses the macro geometry.  These procs
+## turn that warning into a hard stop before stream-out.
+############################################################
+
+# Pad a GDS ASCII name to an even byte count, as the format requires.
+proc gds_pad_name {name} {
+    if {[string length $name] % 2} {
+        return "${name}\x00"
+    }
+    return $name
+}
+
+# Every structure name defined in a GDS file, in definition order.
+# Walks record headers and seeks over payloads, so cost scales with the
+# record count rather than the file size.
+proc gds_structure_names {gds_file} {
+    if {![file exists $gds_file]} {
+        error "Cannot read structure names: missing GDS file $gds_file"
+    }
+    set fh [open $gds_file rb]
+    fconfigure $fh -translation binary
+    set names {}
+    while {1} {
+        set head [read $fh 4]
+        if {[string length $head] < 4} {
+            break
+        }
+        binary scan $head Sucucu reclen rtype rdtype
+        if {$reclen < 4} {
+            break
+        }
+        set payload [expr {$reclen - 4}]
+        if {$rtype == 6 && $rdtype == 6} {
+            set raw ""
+            if {$payload > 0} {
+                set raw [read $fh $payload]
+            }
+            lappend names [string trimright $raw "\x00"]
+        } else {
+            if {$payload > 0} {
+                seek $fh $payload current
+            }
+            # ENDLIB
+            if {$rtype == 4 && $rdtype == 0} {
+                break
+            }
+        }
+    }
+    close $fh
+    return $names
+}
+
+# Fast membership test: look for the exact STRNAME record bytes for this
+# name instead of walking every record.
+proc gds_has_structure {gds_file structure_name} {
+    if {![file exists $gds_file]} {
+        error "Cannot search structures: missing GDS file $gds_file"
+    }
+    set padded [gds_pad_name $structure_name]
+    set pattern [binary format Scc [expr {4 + [string length $padded]}] 6 6]
+    append pattern $padded
+    set pattern_length [string length $pattern]
+
+    set fh [open $gds_file rb]
+    fconfigure $fh -translation binary
+    set chunk_size [expr {8 * 1024 * 1024}]
+    set carry ""
+    set found 0
+    while {![eof $fh]} {
+        set chunk [read $fh $chunk_size]
+        if {$chunk eq ""} {
+            break
+        }
+        if {[string first $pattern "${carry}${chunk}"] >= 0} {
+            set found 1
+            break
+        }
+        set carry [string range $chunk end-[expr {$pattern_length - 2}] end]
+    }
+    close $fh
+    return $found
+}
+
+# Fail with the names that are actually present, so the fix is obvious.
+proc assert_gds_contains_structure {gds_file structure_name {context ""}} {
+    set label $gds_file
+    if {$context ne ""} {
+        set label "$context ($gds_file)"
+    }
+    if {[gds_has_structure $gds_file $structure_name]} {
+        return
+    }
+    set present [gds_structure_names $gds_file]
+    set shown $present
+    if {[llength $present] > 20} {
+        set shown [concat [lrange $present 0 19] \
+            [list "... and [expr {[llength $present] - 20}] more"]]
+    }
+    error "GDS $label does not define structure '$structure_name'.\
+streamOut -merge would drop this master (IMPOGDS-217/218) and export empty\
+macro outlines. Structures found: [join $shown {, }].\
+Rename the structure with:\
+  python3 ./scripts/gds_structure_tool.py rename $gds_file <renamed.gds> --to $structure_name\
+then point ASAP7_SRAM_GDS at the renamed file."
+}
+
+# Every macro master placed in the design must be defined in one of the
+# merge files, otherwise stream-out produces a hollow top-level GDS.
+proc assert_merge_gds_masters {merge_gds_files} {
+    set macro_masters {}
+    foreach inst_ptr [dbGet -p -e top.insts.cell.isBlock 1] {
+        set master [lindex [dbGet $inst_ptr.cell.name] 0]
+        if {$master ne "" && $master ni $macro_masters} {
+            lappend macro_masters $master
+        }
+    }
+    if {[llength $macro_masters] == 0} {
+        puts "No hard macros in the design; skipping merged-GDS master check."
+        return
+    }
+
+    set missing {}
+    foreach master $macro_masters {
+        set found 0
+        foreach gds_file $merge_gds_files {
+            if {[gds_has_structure $gds_file $master]} {
+                set found 1
+                break
+            }
+        }
+        if {!$found} {
+            lappend missing $master
+        }
+    }
+    if {[llength $missing] > 0} {
+        error "Merged stream-out would drop [llength $missing] macro master(s):\
+[join $missing {, }]. This is the IMPOGDS-217/218 failure mode: the merge\
+files are readable but none defines a structure with the master's exact name.\
+Use ./scripts/gds_structure_tool.py list <file.gds> to see the real names."
+    }
+    puts "Merged-GDS master check passed for [llength $macro_masters] macro master(s)."
+}
+
+############################################################
+## SRAM clock leaf routing
+##
+## Every CTS leaf net that ends on an SRAM clock pin has to cross the hard
+## place blockage that covers the whole macro island, so its driver sits on
+## the island boundary and the branch can run several hundred microns.  On
+## the M2/M3 leaf route type that length produced 0.104-0.115 ns slew at
+## pins whose Liberty max_transition is 0.046 ns (IMPCCOPT-1007).  Promote
+## exactly those nets to M6/M7, which the SRAM LEF leaves unobstructed.
+############################################################
+proc constrain_sram_clock_leaf_routing {sram_ptrs {clock_pin "clk"}
+                                        {bottom_layer 6} {top_layer 7}
+                                        {report_file ""}} {
+    if {[llength $sram_ptrs] == 0} {
+        error "Cannot constrain SRAM clock routing without SRAM instances"
+    }
+    if {![string is integer -strict $bottom_layer] ||
+        ![string is integer -strict $top_layer] ||
+        $bottom_layer < 2 || $top_layer < $bottom_layer} {
+        error "Invalid SRAM clock routing-layer range: ${bottom_layer}:${top_layer}"
+    }
+
+    set rows {}
+    set seen {}
+    foreach inst_ptr $sram_ptrs {
+        set inst_name [lindex [dbGet $inst_ptr.name] 0]
+        set clock_term_name ""
+        set clock_net_name ""
+
+        foreach inst_term_ptr [dbGet -e $inst_ptr.instTerms] {
+            set term_name [lindex [dbGet $inst_term_ptr.name] 0]
+            if {![regexp "(^|/)${clock_pin}\$" $term_name]} {
+                continue
+            }
+            set net_name [lindex [dbGet $inst_term_ptr.net.name] 0]
+            if {$net_name eq "" || $net_name eq "0x0"} {
+                error "SRAM clock pin $term_name is not connected to a net"
+            }
+            set clock_term_name $term_name
+            set clock_net_name $net_name
+            break
+        }
+
+        if {$clock_net_name eq ""} {
+            error "No ${clock_pin} instTerm found on SRAM instance $inst_name"
+        }
+        if {[lsearch -exact $seen $clock_net_name] >= 0} {
+            continue
+        }
+        lappend seen $clock_net_name
+
+        if {[catch {
+            setAttribute \
+                -net $clock_net_name \
+                -bottom_preferred_routing_layer $bottom_layer \
+                -top_preferred_routing_layer $top_layer \
+                -preferred_routing_layer_effort high
+        } attribute_error]} {
+            error "Cannot set clock routing policy on net $clock_net_name: $attribute_error"
+        }
+        lappend rows [list $clock_net_name $clock_term_name]
+    }
+
+    if {$report_file ne ""} {
+        file mkdir [file dirname $report_file]
+        set fh [open $report_file w]
+        puts $fh "clock_pin $clock_pin"
+        puts $fh "preferred_layers M${bottom_layer}:M${top_layer}"
+        puts $fh "preferred_effort high"
+        puts $fh "constrained_net_count [llength $rows]"
+        puts $fh "net sram_clock_term"
+        foreach row $rows {
+            puts $fh [list [lindex $row 0] [lindex $row 1]]
+        }
+        close $fh
+        puts "SRAM clock leaf route report: $report_file"
+    }
+
+    puts "Constrained [llength $rows] SRAM clock leaf net(s) to M${bottom_layer}:M${top_layer}."
+    return [llength $rows]
+}
+
+############################################################
+## Signoff metal fill
+##
+## setMetalFill / addMetalFill / fill_setting_save are obsolete
+## (IMPMF-5050 / IMPMF-5045 / IMPMF-5054) and Cadence replaces them with
+## the Pegasus-backed add_metal_fill_signoff flow.  That flow needs a
+## Pegasus/PVS fill rule deck or a named PVS technology; the ASAP7
+## educational PDK ships neither, so the selection below stays automatic
+## and reports which engine actually ran instead of failing the flow.
+############################################################
+
+# Path to a Pegasus/PVS fill rule deck, or "" when none is configured.
+proc metal_fill_signoff_rule_file {} {
+    if {[info exists ::env(ASAP7_PEGASUS_FILL_RULE_FILE)] &&
+        $::env(ASAP7_PEGASUS_FILL_RULE_FILE) ne ""} {
+        return $::env(ASAP7_PEGASUS_FILL_RULE_FILE)
+    }
+    return ""
+}
+
+# Named PVS technology, an alternative to a rule deck.
+proc metal_fill_signoff_technology {} {
+    if {[info exists ::env(ASAP7_PEGASUS_FILL_TECHNOLOGY)] &&
+        $::env(ASAP7_PEGASUS_FILL_TECHNOLOGY) ne ""} {
+        return $::env(ASAP7_PEGASUS_FILL_TECHNOLOGY)
+    }
+    return ""
+}
+
+# Why the signoff engine can or cannot run, as a human-readable reason.
+proc metal_fill_signoff_readiness {} {
+    set rule_file [metal_fill_signoff_rule_file]
+    set technology [metal_fill_signoff_technology]
+
+    if {$rule_file eq "" && $technology eq ""} {
+        return [list 0 "no ASAP7_PEGASUS_FILL_RULE_FILE and no ASAP7_PEGASUS_FILL_TECHNOLOGY"]
+    }
+    if {$rule_file ne "" && ![file exists $rule_file]} {
+        return [list 0 "rule file does not exist: [file normalize $rule_file]"]
+    }
+    if {[info commands add_metal_fill_signoff] eq ""} {
+        return [list 0 "add_metal_fill_signoff is not available in this Innovus installation"]
+    }
+    if {$rule_file ne ""} {
+        return [list 1 "rule file [file normalize $rule_file]"]
+    }
+    return [list 1 "PVS technology $technology"]
+}
+
+# Resolve the requested engine.  Returns "signoff", "legacy" or "skip".
+proc metal_fill_engine {} {
+    set mode auto
+    if {[info exists ::env(INNOVUS_METAL_FILL_MODE)] &&
+        $::env(INNOVUS_METAL_FILL_MODE) ne ""} {
+        set mode [string tolower $::env(INNOVUS_METAL_FILL_MODE)]
+    }
+    if {[lsearch -exact {auto signoff legacy skip} $mode] < 0} {
+        error "INNOVUS_METAL_FILL_MODE must be auto, signoff, legacy or skip"
+    }
+
+    # Back-compatible override: INNOVUS_RUN_LEGACY_METAL_FILL=0 means an
+    # external flow owns fill, so skip it here.
+    if {$mode eq "auto" && [info exists ::env(INNOVUS_RUN_LEGACY_METAL_FILL)]} {
+        switch -nocase -- $::env(INNOVUS_RUN_LEGACY_METAL_FILL) {
+            0 - false - no - off { return "skip" }
+            1 - true - yes - on  { }
+            default {
+                error "INNOVUS_RUN_LEGACY_METAL_FILL must be 0/1, false/true, no/yes or off/on"
+            }
+        }
+    }
+
+    lassign [metal_fill_signoff_readiness] ready reason
+
+    switch -- $mode {
+        skip    { return "skip" }
+        legacy  { return "legacy" }
+        signoff {
+            if {!$ready} {
+                error "INNOVUS_METAL_FILL_MODE=signoff but the signoff fill engine is unusable: $reason"
+            }
+            return "signoff"
+        }
+        auto {
+            if {$ready} {
+                puts "Metal fill: using the signoff engine ($reason)."
+                return "signoff"
+            }
+            puts "Metal fill: falling back to the obsolete in-design engine because $reason."
+            puts "Metal fill: set ASAP7_PEGASUS_FILL_RULE_FILE or ASAP7_PEGASUS_FILL_TECHNOLOGY to use add_metal_fill_signoff."
+            return "legacy"
+        }
+    }
+}
+
+# Run the Pegasus-backed fill and load the result into the design.
+proc run_metal_fill_signoff {layer_map_file report_file {work_dir ./pegasus_fill}} {
+    lassign [metal_fill_signoff_readiness] ready reason
+    if {!$ready} {
+        error "Cannot run signoff metal fill: $reason"
+    }
+    if {![file exists $layer_map_file]} {
+        error "Cannot run signoff metal fill: missing layer map $layer_map_file"
+    }
+
+    set rule_file [metal_fill_signoff_rule_file]
+    set technology [metal_fill_signoff_technology]
+
+    file mkdir $work_dir
+    file mkdir [file dirname $report_file]
+
+    set_metal_fill_signoff_mode -reset all
+
+    # Density floors mirror MINIMUMDENSITY in the project tech LEF.  Window
+    # size and step stay with the rule deck, which is the only place per-layer
+    # windows can be expressed.
+    set_metal_fill_signoff_mode \
+        -layer_map_file $layer_map_file \
+        -min_density {25 {M1 M2 M3} 10 M4 15 M5 25 {M6 M7 M8 M9} 20 Pad} \
+        -temp_working_dir $work_dir \
+        -report_file $report_file
+
+    set fill_args [list -fill -fill_output_mode gdsii]
+    if {$rule_file ne ""} {
+        lappend fill_args -rule_file $rule_file
+    } else {
+        lappend fill_args -technology $technology
+    }
+
+    eval add_metal_fill_signoff $fill_args
+
+    # Bring the hierarchical fill database back into the Innovus design so
+    # extraction, timing and verify_drc see the same shapes signoff will.
+    add_metal_fill_signoff -auto_load_fills
+
+    puts "Signoff metal fill completed using $reason."
+    return $report_file
+}

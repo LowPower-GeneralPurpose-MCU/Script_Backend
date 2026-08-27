@@ -193,3 +193,101 @@ After power planning:
 ```tcl
 verifyConnectivity -type special -noUnroutedNet
 ```
+
+## Merged-GDS master name (IMPOGDS-217 / IMPOGDS-218)
+
+`streamOut -merge` matches merged structures to design masters by **exact
+name** and has no cell-name remapping parameter. When the SRAM GDS stores its
+layout under a name other than `$SRAM_MASTER`, Innovus reports only
+
+```
+**WARN: (IMPOGDS-217): Master cell: srambank_256x4x32_6t122 not found in merged file(s) ...
+**WARN: (IMPOGDS-218): Number of master cells not found after merging: 1
+```
+
+and exports a top-level GDS with empty outlines where the macros should be.
+Neither warning stops the run, so this used to reach `signoff_handoff.rpt` as
+`SIGNOFF_CANDIDATE_EXPORTED`.
+
+### Diagnose
+
+```sh
+python3 ./scripts/gds_structure_tool.py list \
+    /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds
+```
+
+The tool prints every structure and marks the ones no `SREF`/`AREF`
+references, i.e. the candidates for the macro layout.
+
+### Fix
+
+```sh
+python3 ./scripts/gds_structure_tool.py rename \
+    /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds \
+    /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_256x4x32_6t122.gds \
+    --to srambank_256x4x32_6t122
+
+export ASAP7_SRAM_GDS=/home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_256x4x32_6t122.gds
+```
+
+`rename` rewrites the `STRNAME` definition and every `SNAME` reference, streams
+the file record by record (no size limit), and is a no-op when the target name
+already exists. Add `--from <name>` when the file has more than one top
+structure.
+
+### Guards
+
+- `assert_gds_contains_structure` runs in `innovus.tcl` and `innovus_pnr.tcl`
+  right after `flow_checks.tcl` is sourced, so a name mismatch stops the run
+  before any placement work and prints the structure names actually present.
+- `assert_merge_gds_masters` runs in `export_gds.tcl` and checks **every** hard
+  macro master against the full `-merge` list before stream-out.
+
+## SRAM clock leaf routing
+
+Every CTS leaf net ending on an SRAM clock pin has to cross the hard place
+blockage that covers the macro island, so its driver lands on the island
+boundary and the branch can run several hundred microns. On the M2/M3
+`leaf_rule` that produced 0.104–0.115 ns slew at pins whose Liberty
+`max_transition` is 0.046 ns — ten `IMPCCOPT-1007` warnings that every
+"real DRV" gate classified as unfixable clock-net violations.
+
+`constrain_sram_clock_leaf_routing` promotes exactly those nets to M6/M7, the
+only signal layers the SRAM abstract leaves unobstructed, and writes
+`reports/sram_clock_leaf_route_constraints.rpt`. Override the layers with
+`SRAM_CLOCK_LEAF_BOTTOM_LAYER` / `SRAM_CLOCK_LEAF_TOP_LAYER` before
+`clock_opt_design`; set the bottom layer back to 2 to reproduce the original
+M2/M3 routing.
+
+Note that CCOpt still sizes and inserts buffers against its own M2/M3 leaf
+estimate. If `IMPCCOPT-1007` survives, raise `leaf_rule` itself in
+`create_route_type` rather than relaxing `target_max_trans` — 46 ps is a
+Liberty limit on the macro pin, not a project target.
+
+## Metal fill engine
+
+`setMetalFill` / `addMetalFill` / `fill_setting_save` are obsolete
+(`IMPMF-5050` / `IMPMF-5045` / `IMPMF-5054`). `add_fill_and_verify.tcl` now
+selects an engine through `metal_fill_engine`:
+
+| `INNOVUS_METAL_FILL_MODE` | Behaviour |
+| --- | --- |
+| `auto` (default) | Use `add_metal_fill_signoff` when a Pegasus rule deck or PVS technology is configured, otherwise fall back to the obsolete commands and say so. |
+| `signoff` | Require the signoff engine; error out with the reason if it is unusable. |
+| `legacy` | Force the obsolete in-design commands. |
+| `skip` | Skip fill entirely; an external flow owns density closure. |
+
+Point the signoff engine at a rule deck with either
+
+```sh
+export ASAP7_PEGASUS_FILL_RULE_FILE=/path/to/fill.rul
+# or
+export ASAP7_PEGASUS_FILL_TECHNOLOGY=<pvs_technology>
+```
+
+The ASAP7 educational PDK ships neither, so `auto` resolves to `legacy` on a
+stock install. `INNOVUS_RUN_LEGACY_METAL_FILL=0` still means `skip`.
+
+Per-layer density windows (M5 is 80×80 with a 40 µm step, Pad is 400×400) can
+only be expressed in the rule deck, not through
+`set_metal_fill_signoff_mode -window_size`, which takes a single scalar.

@@ -29,6 +29,12 @@ foreach merge_gds $merge_gds_files {
     }
 }
 
+# streamOut -merge drops any master whose exact name is absent from the merge
+# files and reports it only as IMPOGDS-217/218, which does not stop the run.
+# Verify every hard-macro master up front so a hollow GDS can never be handed
+# off as a signoff candidate.
+assert_merge_gds_masters $merge_gds_files
+
 # Re-run final in-design checks immediately before export.
 verify_drc \
     -report ./verify_rpt/drc_final.rpt

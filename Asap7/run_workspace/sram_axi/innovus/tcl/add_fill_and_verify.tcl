@@ -34,30 +34,40 @@ if {!$ROUTE_FILL_PREREQS_CLEAN} {
     puts "===================================================="
 } else {
 
-# This project requires in-design fill after the strict routed-design gate.
-# Set the environment override to 0 only when Pegasus owns the fill step.
-set RUN_LEGACY_METAL_FILL 1
-if {[info exists ::env(INNOVUS_RUN_LEGACY_METAL_FILL)]} {
-    switch -nocase -- $::env(INNOVUS_RUN_LEGACY_METAL_FILL) {
-        1 - true - yes - on  { set RUN_LEGACY_METAL_FILL 1 }
-        0 - false - no - off { set RUN_LEGACY_METAL_FILL 0 }
-        default {
-            error "INNOVUS_RUN_LEGACY_METAL_FILL must be 0/1, false/true, no/yes or off/on"
-        }
-    }
-}
+# Pick the fill engine.  "auto" prefers add_metal_fill_signoff and falls back
+# to the obsolete in-design commands when no Pegasus rule deck is configured;
+# INNOVUS_METAL_FILL_MODE forces signoff, legacy or skip.  The older
+# INNOVUS_RUN_LEGACY_METAL_FILL=0 override still means "skip, Pegasus owns it".
+set METAL_FILL_ENGINE [metal_fill_engine]
 
-if {!$RUN_LEGACY_METAL_FILL} {
+if {$METAL_FILL_ENGINE eq "skip"} {
     set DENSITY_SIGNOFF_STATUS "EXTERNAL_FILL_REQUIRED"
     write_skipped_report ./verify_rpt/drc_after_fill.rpt \
-        "Skipped because INNOVUS_RUN_LEGACY_METAL_FILL=0. Use this override only when a separate Pegasus flow owns metal fill and density closure."
+        "Skipped because the fill engine resolved to 'skip' (INNOVUS_METAL_FILL_MODE=skip or INNOVUS_RUN_LEGACY_METAL_FILL=0). Use this only when a separate Pegasus flow owns metal fill and density closure."
     write_skipped_report ./verify_rpt/antenna_after_fill.rpt \
         "Skipped because metal fill was not run."
     write_skipped_report ./verify_rpt/connectivity_after_fill.rpt \
         "Skipped because metal fill was not run."
-    puts "Metal fill skipped because INNOVUS_RUN_LEGACY_METAL_FILL=0; a separate Pegasus fill flow must complete density closure."
+    puts "Metal fill skipped by request; a separate Pegasus fill flow must complete density closure."
 } else {
 
+if {$METAL_FILL_ENGINE eq "signoff"} {
+
+# Pegasus-backed signoff fill.  Density windows and per-layer rules come from
+# the rule deck, which is the only place per-layer window sizes (M5 80x80,
+# Pad 400x400 in this tech LEF) can be expressed.
+run_metal_fill_signoff \
+    $GDS_MAP_FILE \
+    "./${DESIGN}.metalfill_signoff.rpt" \
+    ./pegasus_fill
+set density_status [publish_metal_fill_density_status \
+    "./${DESIGN}.metalfill_signoff.rpt" \
+    ./verify_rpt/metal_density_abstract_after_fill.rpt]
+
+} else {
+
+# Obsolete in-design fill (IMPMF-5050 / IMPMF-5045 / IMPMF-5054).  Kept as the
+# fallback because the ASAP7 educational PDK ships no Pegasus fill rule deck.
 # M1-M3
 setMetalFill \
     -layer {M1 M2 M3} \
@@ -147,6 +157,12 @@ addMetalFill -snap -squareShape
 set density_status [publish_metal_fill_density_status \
     "./${DESIGN}.metalfill.rpt" \
     ./verify_rpt/metal_density_abstract_after_fill.rpt]
+
+}
+
+# Both engines see only the SRAM LEF obstruction, not the macro's internal
+# metal, so abstract-view density stays provisional until the merged GDS is
+# checked in Pegasus or Calibre.
 set DENSITY_SIGNOFF_STATUS "PENDING_MERGED_GDS_SIGNOFF"
 
 verify_drc \
@@ -195,7 +211,7 @@ if {[catch {
 }
 
 puts "===================================================="
-puts "METAL FILL ADDED"
+puts "METAL FILL ADDED (engine: $METAL_FILL_ENGINE)"
 puts "In-design DRC, connectivity, timing and real DRV gates are clean."
 puts "SI status is $SI_GATE_STATUS; see ./reports/si_glitch_postFill.rpt."
 puts "Density status remains $DENSITY_SIGNOFF_STATUS because SRAM internal metal"

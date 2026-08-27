@@ -21,7 +21,20 @@ set SRAM_ROOT "${ASAP7}/asap7_sram_0p0"
 
 set SRAM_LIB "${SRAM_ROOT}/generated/LIB/${SRAM_MASTER}.lib"
 set SRAM_LEF "${SRAM_ROOT}/generated/LEF/4xLEF/${SRAM_MASTER}.lef.4x.lef"
-set SRAM_GDS "${SRAM_ROOT}/gds/srambank_32b.gds"
+# The shipped ASAP7 SRAM GDS stores its layout under the file's own bank
+# name, which does not have to match $SRAM_MASTER.  streamOut -merge matches
+# by exact structure name and has no remapping parameter, so a mismatch is
+# reported only as IMPOGDS-217/218 and silently exports hollow macros.
+# Point this at a renamed copy when the names differ:
+#   python3 ./scripts/gds_structure_tool.py list <file.gds>
+#   python3 ./scripts/gds_structure_tool.py rename <file.gds> <renamed.gds> \
+#       --to srambank_256x4x32_6t122
+#   export ASAP7_SRAM_GDS=/absolute/path/to/renamed.gds
+if {[info exists ::env(ASAP7_SRAM_GDS)] && $::env(ASAP7_SRAM_GDS) ne ""} {
+    set SRAM_GDS $::env(ASAP7_SRAM_GDS)
+} else {
+    set SRAM_GDS "${SRAM_ROOT}/gds/srambank_32b.gds"
+}
 
 # Simulation-only model. Do not synthesize this reg-array model.
 set SRAM_SIM_VERILOG \
@@ -113,6 +126,18 @@ proc sram_orientation_for_column {column} {
     return $SRAM_MIRROR_ORIENT
 }
 
+# CTS leaf nets that terminate on an SRAM clock pin are promoted to these
+# layers after clock_opt_design.  M6/M7 are the only signal layers the SRAM
+# abstract leaves unobstructed, and the island blockage forces every clock
+# buffer to sit outside the macro array.  Set the bottom layer back to 2 only
+# to reproduce the original M2/M3 leaf routing.
+if {![info exists SRAM_CLOCK_LEAF_BOTTOM_LAYER]} {
+    set SRAM_CLOCK_LEAF_BOTTOM_LAYER 6
+}
+if {![info exists SRAM_CLOCK_LEAF_TOP_LAYER]} {
+    set SRAM_CLOCK_LEAF_TOP_LAYER 7
+}
+
 # Always keep SRAM placement as a complete deterministic 4x4 array before
 # finish_macroFP.tcl.  Set this to 0 only for an intentional manual GUI study
 # of the seed placement.
@@ -122,6 +147,16 @@ foreach f [list $SRAM_LIB $SRAM_LEF $SRAM_GDS] {
     if {![file exists $f]} {
         error "Missing ASAP7 SRAM macro view: [file normalize $f]"
     }
+}
+
+# The GDS must define a structure named exactly like the LEF/Liberty master.
+# Checking here costs one file scan and turns an ignorable stream-out warning
+# into a stop before any placement work is done.
+# innovus.globals sources this file before flow_checks.tcl is available, so
+# this is only an opportunistic early check.  innovus.tcl and innovus_pnr.tcl
+# run the same assertion unconditionally once the proc exists.
+if {[info commands assert_gds_contains_structure] ne ""} {
+    assert_gds_contains_structure $SRAM_GDS $SRAM_MASTER "ASAP7 SRAM macro"
 }
 
 puts "===================================================="
