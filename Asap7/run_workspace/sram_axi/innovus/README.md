@@ -419,75 +419,93 @@ them is a real refactor and was left alone.
 
 ## Adopted from the reference ROHM180 flow (2026-08-27)
 
-Four changes, after comparing against the hierarchical RISC-V PnR flow.
+Two changes kept, one experiment measured and reverted, one bug found.
 
-### 1. Soft island blockage + one-row halo
+### Kept: `-cppr both`
 
-The clock-slew defect had a purely geometric cause. The halo was two rows on
-every side of a **four-row** channel, so the halos of two facing macros met
-exactly in the middle and the channel held **zero legal sites** — the original
-comment in `sram_macro_setup.tcl` said so out loud. On top of that,
-`cutRow -area $SRAM_ISLAND_CUT_BOX` deleted the channel rows outright. CTS
-therefore had to place every clock buffer outside the island, and the longest
-leaf branch measured 452 µm in `axi_ram_pnr.def`.
+`setAnalysisMode -analysisType onChipVariation -cppr both`. Without CPPR the
+clock path shared by launch and capture is de-rated twice. One clock tree feeds
+175 sinks here, so the shared portion is long and the recovered margin is real.
 
-| Knob | Was | Now | Effect |
-| --- | --- | --- | --- |
-| `SRAM_HALO_ROWS` | 2 (tied to the blockage border) | **1** | 4 − 2×1 = **2 free rows** per channel |
-| `SRAM_ISLAND_BLOCKAGE_TYPE` | `hard` | **`soft`** | buffers, inverters, clock gates, tie cells, level shifters only |
-| `SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY` | — | **1** | cut rows under macro bodies, keep channel rows |
+### Kept: bounded post-route DRC repair
 
-`-type soft` is the precise mechanism: per Innovus TCR 23.14 it admits exactly
-the cell classes CTS needs and keeps all other logic outside. Macro positions,
-island size, the 4.32 µm channel, PG geometry and the pin plan are **unchanged**,
-so the floorplan numbers stay valid.
+`repair_postroute_drc` runs `verify_drc`; only if it is dirty does it run
+`ecoRoute -fix_drc` + `optDesign -postRoute -drv`, then re-check, up to two
+passes. A clean run does exactly one `verify_drc`, as before, and the existing
+`assert_clean_drc_report` gate still has the final say. This mirrors the
+reference flow's "these two steps can be repeated until done" loop. Confirmed
+firing in the 19:16 run (`drvFix1`, `drvFix2`).
 
-Restore the previous behaviour with `set SRAM_HALO_ROWS 2` and
-`set SRAM_ISLAND_BLOCKAGE_TYPE hard` before sourcing the flow.
-
-> The reference flow's own `createPlaceBlockage -allMacro -outerRingBySide
-> $rowx2 ...` would **not** have helped by itself: a two-row ring on each side
-> of its four-row channel also consumes the whole channel. The lever is the
-> halo width and the blockage *type*, not the ring shape.
-
-### 2. `set_max_fanout 1` on the SRAM output pins
+### Fixed: `set_max_fanout` was silently dropped
 
 `SRAM_OUTPUT_MAX_FANOUT` (default 1) applies the reference flow's
-`set_max_fanout 1 [get_lib_pins */RSP*/* -filter "@direction == out"]` to this
-project's master. A macro output driving several loads produces slew the DRV
-tables report as "not real" — the same class of defect that hid the clock-pin
-violation for three runs. Wrapped in `catch`: the pin filter depends on library
-naming and a miss must not discard the run. Set to 0 to disable.
+`set_max_fanout 1` to this project's SRAM outputs. The first attempt produced
 
-### 3. `-cppr both`
+```
+**ERROR: (TCLCMD-1048): constraints are specified but no constraint mode is
+enabled interactively.
+```
 
-`setAnalysisMode -analysisType onChipVariation -cppr both`. With OCV and no
-CPPR, the clock path shared by launch and capture is de-rated twice. One clock
-tree feeds 175 sinks here, so the shared portion is long and the recovered
-margin is real.
+`set_max_fanout` is an SDC command: outside an interactive constraint mode
+Innovus prints that and **drops the constraint without raising a Tcl error**, so
+the surrounding `catch` never saw it. It is now bracketed by
+`set_interactive_constraint_modes [all_constraint_modes -active]` … `{}`, the
+same pattern the flow already uses for `set_propagated_clock`.
 
-### 4. Bounded post-route DRC repair
+### Measured and reverted: opening the inter-macro channels
 
-`repair_postroute_drc` runs `verify_drc`, and only if it is dirty runs
-`ecoRoute -fix_drc` + `optDesign -postRoute -drv`, re-checks, up to two passes.
-A clean run does exactly one `verify_drc`, as before. The existing
-`assert_clean_drc_report` gate still has the final say — this only gives a
-dirty run a chance to fix itself first, the way the reference flow's
-"these two steps can be repeated until done" loop does.
+The clock-slew defect is geometric. With a 2-row halo on each side of a 4-row
+channel the halos meet exactly, so the channel holds zero legal sites — the
+original comment in `sram_macro_setup.tcl` said so — and CTS had to place every
+clock buffer outside the island.
+
+The 19:16 run tried `SRAM_HALO_ROWS 1` + `SRAM_ISLAND_BLOCKAGE_TYPE soft` +
+`SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY 1`. It did exactly what it was meant to
+— and broke power.
+
+| | Baseline | Channels open |
+| --- | --- | --- |
+| `IMPCCOPT-1007` (SRAM clk slew) | 10 | **0** |
+| postRoute `max_tran` violations | 4 | **0** |
+| CTS buffer location | island edge (x 506.952) | **inside channel, y 177.12** |
+| CTS skew (target 0.040 ns) | 0.039 | **0.096** |
+| PG DRC after filler | 0 | **27** (22× V4 CUTSPACING at x≈251.3) |
+| PG connectivity after filler | clean | **999 opens** (IMPVFC-92) |
+| Placed instances | 257,074 | 276,732 |
+| Flow | reached GDS | **stopped before metal fill** |
+
+Root cause of the breakage: the channels already carry the island PG — an M5
+stripe runs the full height of every gap column (`reports/sram_island_pg_edges.rpt`).
+Cells placed there collide with those stripes on V4, and their M1 rails form
+isolated segments that no filler can bridge across a macro, so they never reach
+the mesh. Fillers also filled the newly exposed channel rows, which is most of
+the +19,658 instances.
+
+**Opening the channels is not a floorplan knob on its own — it needs channel PG
+straps designed first.** All three defaults are back to the configuration that
+runs clean end to end. The knobs remain so the experiment is one line to repeat:
+
+```tcl
+set SRAM_HALO_ROWS 1
+set SRAM_ISLAND_BLOCKAGE_TYPE soft
+set SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY 1
+```
+
+`reports/sram_island_blockage_geometry.rpt` now prints `halo_rows`,
+`free_channel_rows`, `place_blockage_type` and `cut_rows_under_macros_only`, so
+which configuration produced a run is visible from the report alone.
 
 ### Deliberately not adopted
 
-- **`setRouteMode -earlyGlobalReverseDirection` over the macros.** The
-  mechanism already exists in `sram_route_guard.tcl`. It only alters the eGR
-  congestion estimate on the named layer inside the named box, and the ASAP7
-  SRAM abstract already blocks M1/M2/M4/V4/M5 over the macro body — the DEF
-  measurement found **0 µm** of any net over a macro body. There is no capacity
-  left there to discourage. The reference flow needs it because ROHM180 has
-  five layers and its macro leaves M5 open. Enabling the guard here would also
-  switch on its `createRouteBlk -layer {M6 M7}`, blocking the only free layers.
+- **`setRouteMode -earlyGlobalReverseDirection` over the macros.** The mechanism
+  already exists in `sram_route_guard.tcl`. It only alters the eGR congestion
+  estimate on the named layer inside the named box, and the ASAP7 SRAM abstract
+  already blocks M1/M2/M4/V4/M5 over the macro body — the DEF measurement found
+  **0 µm** of any net over a macro body. There is no capacity left there to
+  discourage. Enabling the guard would also switch on its
+  `createRouteBlk -layer {M6 M7}`, blocking the only free layers.
 - **Tie cells (`addTieHiLo`).** This flow ties through
   `globalNetConnect -type tiehi/tielo` to the rails. Whether ASAP7 ships
-  TIEHI/TIELO cells could not be verified from here, so nothing was changed.
+  TIEHI/TIELO cells could not be verified here, so nothing was changed.
 - **Filler before routing.** A trade-off, not an improvement: it avoids
-  `IMPSP-5217` but freezes cell sites before `optDesign -postRoute`. The
-  current order verifies clean (DRC 0) after filler insertion.
+  `IMPSP-5217` but freezes cell sites before `optDesign -postRoute`.

@@ -71,30 +71,46 @@ set SRAM_EDGE_GAP_X 0.0
 set SRAM_EDGE_GAP_Y 0.0
 
 # ------------------------------------------------------------------
-# Halo rows around each macro.
+# Opening the inter-macro channels to standard cells: MEASURED, REJECTED.
 #
-# This used to be $SRAM_BLOCKAGE_BORDER_ROWS, i.e. two rows.  Two rows on each
-# side of a four-row channel meet exactly in the middle, so the channel held
-# ZERO legal sites no matter what the group blockage said.  That is why CTS had
-# to place every clock buffer outside the island: the longest leaf branch then
-# ran 452 um (measured in axi_ram_pnr.def, 447 um of it on M4) and slew at the
-# SRAM clk pins reached 0.104 ns against a 0.046 ns Liberty max_transition
-# (10 x IMPCCOPT-1007).
+# The 2026-08-27 19:16 run tried SRAM_HALO_ROWS 1 + a soft island blockage +
+# cutting rows only under the macro bodies, so CTS could put clock buffers in
+# the four-row channels.  It worked, and it broke power:
 #
-# One halo row leaves 4 - 2*1 = 2 rows of legal sites in every channel, which
-# the soft group blockage below then reserves for buffers and inverters only.
-# Set this back to 2 to reproduce the original floorplan exactly.
+#   IMPCCOPT-1007 (SRAM clk slew)   10  ->  0      buffers landed at y=177.12,
+#   postRoute max_tran violations    4  ->  0      i.e. inside the channel
+#   CTS skew                     0.039  ->  0.096 ns  (target 0.040)
+#   PG DRC after filler              0  ->  27     22x V4 CUTSPACING at
+#                                                  x~251.3, inside gap col_1
+#   PG connectivity after filler  clean ->  999 opens (IMPVFC-92)
+#   Placed instances           257,074  ->  276,732  fillers filled the
+#                                                    channel rows too
+#   Flow                    reached GDS ->  stopped before metal fill
+#
+# Root cause: the channels already carry the island PG (M5 stripes in every
+# gap column, see reports/sram_island_pg_edges.rpt).  Cells placed there
+# collide with those stripes on V4, and their M1 rails form isolated segments
+# no filler can bridge across a macro, so they never reach the mesh.
+#
+# Opening the channels therefore needs channel PG straps designed first.  It is
+# not a floorplan knob on its own.  Defaults below stay at the configuration
+# that runs clean end to end; flip them together to repeat the experiment.
 # ------------------------------------------------------------------
 if {![info exists SRAM_HALO_ROWS]} {
-    set SRAM_HALO_ROWS 1
+    set SRAM_HALO_ROWS $SRAM_BLOCKAGE_BORDER_ROWS
 }
 if {![string is integer -strict $SRAM_HALO_ROWS] || $SRAM_HALO_ROWS < 1} {
     error "SRAM_HALO_ROWS must be a positive integer, got $SRAM_HALO_ROWS"
 }
-if {2 * $SRAM_HALO_ROWS >= $SRAM_MACRO_GAP_ROWS} {
-    puts "WARNING: SRAM_HALO_ROWS=$SRAM_HALO_ROWS leaves no legal site in the\
- ${SRAM_MACRO_GAP_ROWS}-row inter-macro channel; CTS will not be able to place\
- a clock buffer inside the island."
+set SRAM_FREE_CHANNEL_ROWS \
+    [expr {$SRAM_MACRO_GAP_ROWS - 2 * $SRAM_HALO_ROWS}]
+if {$SRAM_FREE_CHANNEL_ROWS <= 0} {
+    puts "SRAM channels are fully covered by halos (gap ${SRAM_MACRO_GAP_ROWS} rows,\
+ halo ${SRAM_HALO_ROWS} rows each side): no cell can be placed there, which is\
+ the intended configuration."
+} else {
+    puts "SRAM channels expose $SRAM_FREE_CHANNEL_ROWS legal row(s):\
+ verify PG connectivity and PG DRC after filler before trusting the result."
 }
 set SRAM_HALO [expr {$SRAM_HALO_ROWS * $ASAP7_ROW_HEIGHT}]
 set SRAM_HALO_L $SRAM_HALO
@@ -116,13 +132,13 @@ set SRAM_HALO_T $SRAM_HALO
 # bodies instead.
 # ------------------------------------------------------------------
 if {![info exists SRAM_ISLAND_BLOCKAGE_TYPE]} {
-    set SRAM_ISLAND_BLOCKAGE_TYPE soft
+    set SRAM_ISLAND_BLOCKAGE_TYPE hard
 }
 if {[lsearch -exact {hard soft} $SRAM_ISLAND_BLOCKAGE_TYPE] < 0} {
     error "SRAM_ISLAND_BLOCKAGE_TYPE must be hard or soft, got $SRAM_ISLAND_BLOCKAGE_TYPE"
 }
 if {![info exists SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY]} {
-    set SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY 1
+    set SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY 0
 }
 
 # Max fanout on the SRAM output pins.  A macro output driving several loads

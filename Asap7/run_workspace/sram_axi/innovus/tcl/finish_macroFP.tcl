@@ -11,7 +11,7 @@ foreach required_variable {
     SRAM_BLOCKAGE_BORDER_ROWS SRAM_BLOCKAGE_BORDER
     SRAM_MACRO_GAP_X SRAM_MACRO_GAP_Y
     SRAM_HALO_L SRAM_HALO_B SRAM_HALO_R SRAM_HALO_T
-    SRAM_HALO_ROWS SRAM_HALO
+    SRAM_HALO_ROWS SRAM_HALO SRAM_FREE_CHANNEL_ROWS
     SRAM_ISLAND_BLOCKAGE_TYPE SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY
 } {
     if {![info exists $required_variable]} {
@@ -393,8 +393,7 @@ puts $blockage_report "inter_macro_gap_rows $SRAM_MACRO_GAP_ROWS"
 puts $blockage_report "inter_macro_gap_um $SRAM_MACRO_GAP_X"
 puts $blockage_report "halo_rows $SRAM_HALO_ROWS"
 puts $blockage_report "halo_um $SRAM_HALO"
-puts $blockage_report \
-    "free_channel_rows [expr {$SRAM_MACRO_GAP_ROWS - 2 * $SRAM_HALO_ROWS}]"
+puts $blockage_report "free_channel_rows $SRAM_FREE_CHANNEL_ROWS"
 puts $blockage_report "place_blockage_type $SRAM_ISLAND_BLOCKAGE_TYPE"
 puts $blockage_report \
     "cut_rows_under_macros_only $SRAM_ISLAND_CUT_ROWS_UNDER_MACROS_ONLY"
@@ -416,7 +415,6 @@ puts $blockage_report "desired_blockage_box $SRAM_ISLAND_BLOCKAGE_BOX"
 puts $blockage_report "local_sram_pg_cut_box $SRAM_ISLAND_CUT_BOX"
 puts $blockage_report "no_mesh_box $SRAM_NO_MESH_BOX"
 puts $blockage_report "place_blockage_box $SRAM_ISLAND_CUT_BOX"
-puts $blockage_report "place_blockage_type hard"
 puts $blockage_report "no_cut_by_core true"
 close $blockage_report
 

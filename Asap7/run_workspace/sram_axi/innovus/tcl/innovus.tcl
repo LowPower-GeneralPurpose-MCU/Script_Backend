@@ -524,10 +524,18 @@ if {$SRAM_OUTPUT_MAX_FANOUT > 0} {
         if {[sizeof_collection $sram_out_pins] == 0} {
             error "no output lib pins matched */${SRAM_MASTER}/*"
         }
+        # set_max_fanout is an SDC command: outside an interactive constraint
+        # mode Innovus prints TCLCMD-1048 and drops it silently (it does not
+        # raise a Tcl error, so catch alone never sees it).
+        set sram_fanout_modes [all_constraint_modes -active]
+        set_interactive_constraint_modes $sram_fanout_modes
         set_max_fanout $SRAM_OUTPUT_MAX_FANOUT $sram_out_pins
+        set_interactive_constraint_modes {}
         puts "Applied max_fanout $SRAM_OUTPUT_MAX_FANOUT to\
- [sizeof_collection $sram_out_pins] SRAM output pin(s)."
+ [sizeof_collection $sram_out_pins] SRAM output pin(s) in mode(s)\
+ $sram_fanout_modes."
     } sram_max_fanout_error]} {
+        catch {set_interactive_constraint_modes {}}
         puts stderr "WARNING: SRAM output max_fanout not applied: $sram_max_fanout_error"
     }
 }
