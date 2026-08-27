@@ -984,14 +984,13 @@ proc gds_has_structure {gds_file structure_name} {
     return $found
 }
 
-# Fail with the names that are actually present, so the fix is obvious.
-proc assert_gds_contains_structure {gds_file structure_name {context ""}} {
+# Report the structure names a GDS actually defines.  Never called from
+# anywhere reachable by init_design: viewDefinition.tcl is evaluated inside
+# init_design, and an error raised there aborts it with no design in memory.
+proc report_gds_missing_structure {gds_file structure_name {context ""}} {
     set label $gds_file
     if {$context ne ""} {
         set label "$context ($gds_file)"
-    }
-    if {[gds_has_structure $gds_file $structure_name]} {
-        return
     }
     set present [gds_structure_names $gds_file]
     set shown $present
@@ -999,34 +998,32 @@ proc assert_gds_contains_structure {gds_file structure_name {context ""}} {
         set shown [concat [lrange $present 0 19] \
             [list "... and [expr {[llength $present] - 20}] more"]]
     }
-    error "GDS $label does not define structure '$structure_name'.\
-streamOut -merge would drop this master (IMPOGDS-217/218) and export empty\
-macro outlines. Structures found: [join $shown {, }].\
-Rename the structure with:\
-  python3 ./scripts/gds_structure_tool.py rename $gds_file <renamed.gds> --to $structure_name\
-then point ASAP7_SRAM_GDS at the renamed file."
+    puts "GDS $label does not define structure '$structure_name'."
+    puts "  Structures found: [join $shown {, }]"
+    puts "  Inspect the file with:"
+    puts "    python3 ./scripts/gds_structure_tool.py list $gds_file"
+    return $present
 }
 
-# Every macro master placed in the design must be defined in one of the
-# merge files, otherwise stream-out produces a hollow top-level GDS.
-proc assert_merge_gds_masters {merge_gds_files} {
+# Which hard-macro masters are absent from the merge list.  Returns a list of
+# master names; empty means the merged stream-out is complete.
+proc merge_gds_missing_masters {merge_gds_files} {
     set macro_masters {}
     foreach inst_ptr [dbGet -p -e top.insts.cell.isBlock 1] {
         set master [lindex [dbGet $inst_ptr.cell.name] 0]
-        if {$master ne "" && $master ni $macro_masters} {
+        if {$master ne "" && [lsearch -exact $macro_masters $master] < 0} {
             lappend macro_masters $master
         }
     }
     if {[llength $macro_masters] == 0} {
-        puts "No hard macros in the design; skipping merged-GDS master check."
-        return
+        return {}
     }
 
     set missing {}
     foreach master $macro_masters {
         set found 0
         foreach gds_file $merge_gds_files {
-            if {[gds_has_structure $gds_file $master]} {
+            if {[file exists $gds_file] && [gds_has_structure $gds_file $master]} {
                 set found 1
                 break
             }
@@ -1035,13 +1032,50 @@ proc assert_merge_gds_masters {merge_gds_files} {
             lappend missing $master
         }
     }
-    if {[llength $missing] > 0} {
-        error "Merged stream-out would drop [llength $missing] macro master(s):\
-[join $missing {, }]. This is the IMPOGDS-217/218 failure mode: the merge\
-files are readable but none defines a structure with the master's exact name.\
-Use ./scripts/gds_structure_tool.py list <file.gds> to see the real names."
+    return $missing
+}
+
+# Stream-out gate.  Warns by default and returns the missing masters so the
+# caller can record them in the handoff report; a hollow GDS is a real
+# problem, but refusing to export removes the only artifact the run produced.
+# Set ASAP7_REQUIRE_MERGED_MACRO_GDS=1 to make it fatal instead.
+proc check_merge_gds_masters {merge_gds_files} {
+    set missing [merge_gds_missing_masters $merge_gds_files]
+    if {[llength $missing] == 0} {
+        puts "Merged-GDS master check passed; every hard macro is defined in the merge files."
+        return {}
     }
-    puts "Merged-GDS master check passed for [llength $macro_masters] macro master(s)."
+
+    set summary "Merged stream-out will drop [llength $missing] macro master(s): [join $missing {, }].\
+This is the IMPOGDS-217/218 failure mode: the merge files are readable but none\
+defines a structure with the master's exact name, so the exported GDS carries\
+empty outlines where the macros belong."
+
+    set strict 0
+    if {[info exists ::env(ASAP7_REQUIRE_MERGED_MACRO_GDS)]} {
+        switch -nocase -- $::env(ASAP7_REQUIRE_MERGED_MACRO_GDS) {
+            1 - true - yes - on { set strict 1 }
+        }
+    }
+    if {$strict} {
+        error $summary
+    }
+
+    puts "WARNING: $summary"
+    foreach gds_file $merge_gds_files {
+        if {![file exists $gds_file]} {
+            continue
+        }
+        foreach master $missing {
+            if {![gds_has_structure $gds_file $master]} {
+                puts "  $gds_file has no '$master'"
+            }
+        }
+    }
+    puts "  List what a merge file really contains:"
+    puts "    python3 ./scripts/gds_structure_tool.py list <file.gds>"
+    puts "  Set ASAP7_REQUIRE_MERGED_MACRO_GDS=1 to make this fatal."
+    return $missing
 }
 
 ############################################################

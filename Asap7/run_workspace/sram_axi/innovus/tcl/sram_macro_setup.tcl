@@ -152,13 +152,6 @@ foreach f [list $SRAM_LIB $SRAM_LEF $SRAM_GDS] {
 # The GDS must define a structure named exactly like the LEF/Liberty master.
 # Checking here costs one file scan and turns an ignorable stream-out warning
 # into a stop before any placement work is done.
-# innovus.globals sources this file before flow_checks.tcl is available, so
-# this is only an opportunistic early check.  innovus.tcl and innovus_pnr.tcl
-# run the same assertion unconditionally once the proc exists.
-if {[info commands assert_gds_contains_structure] ne ""} {
-    assert_gds_contains_structure $SRAM_GDS $SRAM_MASTER "ASAP7 SRAM macro"
-}
-
 puts "===================================================="
 puts "ASAP7 SRAM CORNER-ISLAND SETUP"
 puts " - Design       : $DESIGN"

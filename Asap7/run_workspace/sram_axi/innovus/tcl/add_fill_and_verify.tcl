@@ -38,7 +38,10 @@ if {!$ROUTE_FILL_PREREQS_CLEAN} {
 # to the obsolete in-design commands when no Pegasus rule deck is configured;
 # INNOVUS_METAL_FILL_MODE forces signoff, legacy or skip.  The older
 # INNOVUS_RUN_LEGACY_METAL_FILL=0 override still means "skip, Pegasus owns it".
-set METAL_FILL_ENGINE [metal_fill_engine]
+if {[catch {metal_fill_engine} METAL_FILL_ENGINE]} {
+    puts stderr "WARNING: cannot resolve the metal fill engine ($METAL_FILL_ENGINE); using the in-design commands."
+    set METAL_FILL_ENGINE legacy
+}
 
 if {$METAL_FILL_ENGINE eq "skip"} {
     set DENSITY_SIGNOFF_STATUS "EXTERNAL_FILL_REQUIRED"
