@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Thu Aug 27 12:14:08 2026                
+#  Created on Thu Aug 27 12:45:12 2026                
 #                                                     
 #######################################################
 
@@ -1186,22 +1186,6 @@ refinePlace
 checkPlace ./verify_rpt/checkPlace_before_cts.rpt
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
 clock_opt_design
-setAttribute -net u_mem/CTS_9 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_8 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_7 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net CTS_6 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net CTS_7 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_5 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_4 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_3 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_14 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_13 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_1 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net CTS_2 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net CTS_3 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_19 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_18 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
-setAttribute -net u_mem/CTS_17 -bottom_preferred_routing_layer 6 -top_preferred_routing_layer 7 -preferred_routing_layer_effort high
 refinePlace
 checkPlace ./verify_rpt/checkPlace_after_cts.rpt
 applyGlobalNets
@@ -1964,7 +1948,6 @@ report_noise -bumpy_waveform -threshold 0 > ./reports/bumpy_transition_postRoute
 verify_drc -report ./verify_rpt/drc_postroute.rpt
 verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_postroute.rpt
 saveDesign ./saved/axi_ram_routed.enc
-zoomBox -153.03725 -131.73350 850.84300 766.95350
 setSIMode -enable_delay_report true -enable_glitch_report true
 setNanoRouteMode -quiet -route_with_timing_driven true -route_with_si_driven true
 ecoRoute -fix_drc
@@ -1981,5 +1964,15 @@ verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/conn
 timeDesign -postRoute -outDir ./reports/timing_postFill
 timeDesign -postRoute -hold -outDir ./reports/timing_postFill_hold
 saveDesign ./saved/axi_ram_filled.enc
-zoomBox -228.89575 -241.73950 952.14000 815.53950
-zoomBox -318.14075 -371.15825 1071.31300 872.69950
+verify_drc -report ./verify_rpt/drc_final.rpt
+verifyConnectivity -type all -error 1000 -warning 1000 -report ./verify_rpt/connectivity_final.rpt
+saveNetlist ./outputs/axi_ram_pnr_lec.v -excludeLeafCell -removePowerGround
+saveNetlist ./outputs/axi_ram_pnr_sta.v
+defOut -floorplan -netlist -routing ./outputs/axi_ram_pnr.def
+streamOut ./outputs/axi_ram_pnr.gds -libName WORK -units 4000 -mode ALL -mapFile /home/user1/Desktop/Script_Backend/Asap7/run_workspace/sram_axi/innovus/tcl/streamOut.map -dieAreaAsBoundary -merge {/home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds /home/user1/Desktop/asap7/asap7_sram_0p0/gds/srambank_32b.gds}
+report_area > ./verify_rpt/area_final.rpt
+report_power > ./verify_rpt/power_final.rpt
+report_timing > ./verify_rpt/timing_final.rpt
+report_gates > ./verify_rpt/gate_final.rpt
+saveDesign ./saved/axi_ram_signoff_candidate.enc
+zoomBox -154.59575 -97.44850 849.28475 801.23875

@@ -1,0 +1,4 @@
+    Hinst Name       Module Name          Inst Count           Total Area
+----------------------------------------------------------------------
+axi_ram                                         1784           338443.091
+  u_mem              asap7_sram_64k_1rw          713           336526.229

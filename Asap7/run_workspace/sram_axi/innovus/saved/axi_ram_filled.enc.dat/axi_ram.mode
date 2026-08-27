@@ -49,7 +49,7 @@ catch {setNanoRouteMode -quiet -drouteStartIteration 0}
 catch {setNanoRouteMode -quiet -route_detail_use_lef_pin_taper_rule true}
 catch {setNanoRouteMode -quiet -route_detail_use_min_spacing_for_blockage auto}
 catch {setNanoRouteMode -quiet -route_detail_use_multi_cut_via_effort "low"}
-catch {setNanoRouteMode -quiet -extract_design_signature 70680415}
+catch {setNanoRouteMode -quiet -extract_design_signature 99855706}
 catch {setNanoRouteMode -quiet -extract_rc_model_file "${::IMEX::libVar}/misc/rc_model.bin"}
 catch {setNanoRouteMode -quiet -route_extract_third_party_compatible false}
 catch {setNanoRouteMode -quiet -route_global_exp_timing_driven_use_tif_timing_engine_for_import_design true}
@@ -65,7 +65,7 @@ catch {setNanoRouteMode -quiet -route_with_si_driven true}
 catch {setNanoRouteMode -quiet -route_with_si_post_route_fix false}
 catch {setNanoRouteMode -quiet -route_with_timing_driven true}
 catch {setNanoRouteMode -quiet -route_with_via_only_for_stdcell_pin "true"}
-catch {setNanoRouteMode -quiet -timingEngine ".timing_file_4170315.tif.gz"}
+catch {setNanoRouteMode -quiet -timingEngine ".timing_file_150793.tif.gz"}
 
 catch { setPlaceMode -macroPlaceMode 0 }
 catch { setPlaceMode -place_design_refine_macro false }
