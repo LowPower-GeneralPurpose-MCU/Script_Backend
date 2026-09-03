@@ -301,6 +301,14 @@ set_db / .library $ALL_TIMING_LIBS
 # 4x-scaled tech LEF pairs with the 4x-scaled QRC tech file, so wire lengths
 # and per-unit RC compensate each other.
 #
+# The LEF and QRC files are handed over as root attributes, NOT with the
+# read_physical command.  read_physical is an init-flow command that requires
+# the state machine to already be at 'timing_initialized'; at this point in
+# the script Genus is still 'uninitialized' (setting the .library attribute
+# does not advance the state machine) and it aborts with TUI-340.  The
+# lef_library / qrc_tech_file attributes are consumed by init_design, exactly
+# like the .library attribute set above.
+#
 # Set MCU_GENUS_PHYSICAL=0 to fall back to the old wireload behaviour.
 # ------------------------------------------------------------------------
 set GENUS_PHYSICAL [genus_env_flag MCU_GENUS_PHYSICAL 1]
@@ -309,13 +317,18 @@ if {$GENUS_PHYSICAL} {
     foreach lef_file $PHYSICAL_LEFS {
         genus_require_file "physical LEF" $lef_file
     }
-    read_physical -lef $PHYSICAL_LEFS
-    puts "Genus physical: read [llength $PHYSICAL_LEFS] LEF files"
-    if {[file isfile $QRC_FILE]} {
-        genus_try_set_root_attribute qrc_tech_file $QRC_FILE
+    if {[genus_try_set_root_attribute lef_library $PHYSICAL_LEFS]} {
+        puts "Genus physical: registered [llength $PHYSICAL_LEFS] LEF files"
+        if {[file isfile $QRC_FILE]} {
+            genus_try_set_root_attribute qrc_tech_file $QRC_FILE
+        } else {
+            puts "WARNING: QRC tech file missing, PLE falls back to LEF cap"
+            puts "         tables: [file normalize $QRC_FILE]"
+        }
     } else {
-        puts "WARNING: QRC tech file missing, PLE falls back to LEF cap"
-        puts "         tables: [file normalize $QRC_FILE]"
+        set GENUS_PHYSICAL 0
+        puts "WARNING: this Genus version rejected the lef_library attribute;"
+        puts "         synthesis timing will contain NO wire delay"
     }
 } else {
     puts "WARNING: Genus physical mode disabled by MCU_GENUS_PHYSICAL=0;"
@@ -422,9 +435,14 @@ if {[lsearch -exact {low medium high} $SYN_EFFORT] < 0} {
 puts "Genus synthesis effort: $SYN_EFFORT"
 
 if {$GENUS_PHYSICAL} {
-    set_db / .interconnect_mode ple
-    puts "Genus interconnect mode: ple (physical layout estimation)"
+    if {[genus_try_set_root_attribute interconnect_mode ple]} {
+        puts "Genus interconnect mode: ple (physical layout estimation)"
+    } else {
+        puts "WARNING: PLE could not be enabled; synthesis timing will"
+        puts "         contain NO wire delay"
+    }
 }
+puts "Genus interconnect mode in effect: [get_db / .interconnect_mode]"
 
 set_db / .syn_generic_effort $SYN_EFFORT
 syn_generic
