@@ -29,21 +29,6 @@ proc genus_env_flag {name default_value} {
     }
 }
 
-proc genus_host_cpu_count {cap} {
-    set count 0
-    if {![catch {open /proc/cpuinfo r} cpu_file]} {
-        set count [regexp -all -line {^processor\s} [read $cpu_file]]
-        close $cpu_file
-    }
-    if {$count < 1} {
-        set count 1
-    }
-    if {$count > $cap} {
-        set count $cap
-    }
-    return $count
-}
-
 proc genus_try_set_root_attribute {name value} {
     if {[catch {set_db / .$name $value} message]} {
         puts "WARNING: cannot set Genus attribute $name=$value: $message"
@@ -289,26 +274,37 @@ if {[genus_env_flag GENUS_ENABLE_SUPER_THREAD 0]} {
     set GENUS_SERVERS [genus_env_value GENUS_SUPER_THREAD_SERVERS localhost]
     genus_try_set_root_attribute super_thread_servers $GENUS_SERVERS
     genus_try_set_root_attribute max_cpus_per_server $GENUS_CPUS
+    # The default remote-shell command is 'rsh', which modern Linux
+    # distributions do not ship.  ssh to localhost works once key-based
+    # login is set up; override with GENUS_SUPER_THREAD_RSH if needed.
+    genus_try_set_root_attribute super_thread_rsh_command \
+        [genus_env_value GENUS_SUPER_THREAD_RSH ssh]
+    # Each server is a separate process.  Size GENUS_CPUS against free RAM,
+    # not against the core count: the last run peaked at 4.4 GB on a host
+    # with 12.9 GB total.
     if {[catch {test_super_thread_servers} message]} {
         error "Genus super-thread server check failed: $message"
     }
     puts "Genus execution: super-thread, servers=$GENUS_SERVERS, CPUs=$GENUS_CPUS"
 } else {
-    catch {reset_db super_thread_servers}
-    # max_cpus_per_server 0 switches multi-threading OFF.  The last run
-    # logged "Number of threads: 0 * 1" and 100.8% CPU on a 12-CPU host,
-    # and Genus had already warned PBS-2 ("should be run with a minimum of
-    # 8 threads").  The attribute default is 8.
+    # Keep the tool in ONE process.
     #
-    # This is local MULTI-threading, not super-threading: no extra servers,
-    # no extra licence, and one process image so memory does not multiply
-    # (peak was 4.4 GB of 12.9 GB with only 0.7 GB free).
-    set GENUS_CPUS [genus_env_value GENUS_CPUS [genus_host_cpu_count 8]]
-    if {![string is integer -strict $GENUS_CPUS] || $GENUS_CPUS < 1} {
-        error "GENUS_CPUS must be a positive integer"
-    }
-    genus_try_set_root_attribute max_cpus_per_server $GENUS_CPUS
-    puts "Genus execution: single process, $GENUS_CPUS threads"
+    # max_cpus_per_server is not a shared-memory thread count: any value
+    # above 0 makes Genus fork that many CPU *server processes*, i.e. it
+    # enters super-threading.  Setting it to 8 here produced
+    #   Info : Attempting to launch a super-threading server. [ST-120]
+    #        : Attempting to Launch server 1 of 8.
+    # which on this host fails or stalls for two reasons: the default
+    # super_thread_rsh_command is 'rsh', which Ubuntu does not ship, and
+    # the machine had 0.7 GB free of 12.9 GB against a 4.4 GB peak, so
+    # eight more processes would not fit.
+    #
+    # reset_db restores the attribute DEFAULT rather than clearing it, so
+    # the server list is emptied explicitly instead.
+    genus_try_set_root_attribute super_thread_servers {}
+    genus_try_set_root_attribute max_cpus_per_server 0
+    puts "Genus execution: single process (set GENUS_ENABLE_SUPER_THREAD=1"
+    puts "                 to distribute, see the branch above)"
 }
 
 set_db / .hdl_unconnected_value 0
