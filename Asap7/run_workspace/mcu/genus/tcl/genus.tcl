@@ -290,6 +290,38 @@ set_db / .auto_ungroup both
 set_db / .lp_insert_clock_gating false
 set_db / .library $ALL_TIMING_LIBS
 
+# ------------------------------------------------------------------------
+# Physical-aware synthesis.
+#
+# Without LEF + PLE, Genus ran in wireload mode with no wireload model at
+# all: reports/qor_syn.rpt showed 'Wireload mode: enclosed', wireload
+# '<none>' and 'Net Area 0.000', i.e. ZERO interconnect delay.  Every clock
+# then met with large positive slack, which for a ~260k-instance 7 nm design
+# says nothing about whether the netlist can close after routing.  The
+# 4x-scaled tech LEF pairs with the 4x-scaled QRC tech file, so wire lengths
+# and per-unit RC compensate each other.
+#
+# Set MCU_GENUS_PHYSICAL=0 to fall back to the old wireload behaviour.
+# ------------------------------------------------------------------------
+set GENUS_PHYSICAL [genus_env_flag MCU_GENUS_PHYSICAL 1]
+if {$GENUS_PHYSICAL} {
+    set PHYSICAL_LEFS [concat [list $TECH_LEF] $CELL_LEFS [list $SRAM_LEF]]
+    foreach lef_file $PHYSICAL_LEFS {
+        genus_require_file "physical LEF" $lef_file
+    }
+    read_physical -lef $PHYSICAL_LEFS
+    puts "Genus physical: read [llength $PHYSICAL_LEFS] LEF files"
+    if {[file isfile $QRC_FILE]} {
+        genus_try_set_root_attribute qrc_tech_file $QRC_FILE
+    } else {
+        puts "WARNING: QRC tech file missing, PLE falls back to LEF cap"
+        puts "         tables: [file normalize $QRC_FILE]"
+    }
+} else {
+    puts "WARNING: Genus physical mode disabled by MCU_GENUS_PHYSICAL=0;"
+    puts "         synthesis timing will contain NO wire delay"
+}
+
 create_library_set -name libset_tt -timing $ALL_TIMING_LIBS
 create_rc_corner \
     -name rc_typ \
@@ -350,8 +382,8 @@ foreach module_pattern {
 init_design
 set_interactive_constraint_modes mode_func
 
-if {[sizeof_collection [get_clocks *]] != 17} {
-    error "Expected 17 clocks (9 primary + 8 generated); inspect the SDC"
+if {[sizeof_collection [get_clocks *]] != 18} {
+    error "Expected 18 clocks (9 primary + 1 forwarded + 8 gated); inspect the SDC"
 }
 
 if {[info exists ::dc::sdc_failed_commands] &&
@@ -389,6 +421,11 @@ if {[lsearch -exact {low medium high} $SYN_EFFORT] < 0} {
 }
 puts "Genus synthesis effort: $SYN_EFFORT"
 
+if {$GENUS_PHYSICAL} {
+    set_db / .interconnect_mode ple
+    puts "Genus interconnect mode: ple (physical layout estimation)"
+}
+
 set_db / .syn_generic_effort $SYN_EFFORT
 syn_generic
 set_db / .syn_map_effort $SYN_EFFORT
@@ -401,6 +438,7 @@ report_area -depth 5 > ./reports/area_hierarchy_syn.rpt
 report_timing -max_paths 100 > ./reports/timing_syn.rpt
 report_power > ./reports/power_syn.rpt
 report_gates > ./reports/gates_syn.rpt
+catch {report sequential -deleted > ./reports/deleted_sequential_syn.rpt}
 report_qor > ./reports/qor_syn.rpt
 report_hierarchy > ./reports/hierarchy_syn.rpt
 check_timing_intent -verbose > ./reports/timing_intent_post_syn.rpt

@@ -233,7 +233,14 @@ module top_soc (
     localparam MST_AMT = 4;
     localparam SLV_AMT = 6;
     localparam MST_ID_WIDTH = 5;
-    localparam AXI_OUTSTANDING_AMT = 8;
+    // Số read burst outstanding tối đa mà interconnect theo dõi cho mỗi master.
+    // Ràng buộc thật của hệ thống: DMA read master có CMD_DEPTH = 4
+    // (interrupt/dma/dma_axi_master.v); icache, dcache và debug-DTM chỉ phát
+    // 1 outstanding read. Giá trị cũ (8) làm ROB và các FIFO outstanding to
+    // gấp đôi mà không thêm băng thông.
+    // Tham số này cũng quyết định ROB_TAG_WIDTH -> ROB_ID_WIDTH -> SLV_ID_WIDTH,
+    // nên ID phía slave hẹp đi theo (8 -> 4 cho ID rộng 10 -> 9 bit).
+    localparam AXI_OUTSTANDING_AMT = 4;
     localparam ROB_TAG_WIDTH = $clog2(AXI_OUTSTANDING_AMT);
     localparam ROB_ID_WIDTH = ROB_TAG_WIDTH + MST_ID_WIDTH;
     localparam SLV_ID_WIDTH = ROB_ID_WIDTH + $clog2(MST_AMT);
@@ -687,7 +694,7 @@ module top_soc (
         .NUM_HARTS      (1),
         .HART_IDX_W     (1),
         .AXI_ADDR_WIDTH (32),
-        .AXI_ID_WIDTH   (SLV_ID_WIDTH),     // AXI Interconnect sử dụng 7-bit ID cho Slave
+        .AXI_ID_WIDTH   (SLV_ID_WIDTH),     // = ROB_TAG_WIDTH + MST_ID_WIDTH + $clog2(MST_AMT)
         .PIPELINE_IRQ   (1)
     ) u_clint (
         // Clocks & Reset

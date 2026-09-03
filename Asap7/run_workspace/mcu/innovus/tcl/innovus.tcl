@@ -26,8 +26,8 @@ globalNetConnect VDD -type pgpin -pin VDD -inst * -verbose
 globalNetConnect VSS -type pgpin -pin VSS -inst * -verbose
 
 set_interactive_constraint_modes [all_constraint_modes]
-if {[sizeof_collection [all_clocks]] < 17} {
-    error "Incomplete multi-clock SDC handoff; fewer than 17 clocks are active"
+if {[sizeof_collection [all_clocks]] < 18} {
+    error "Incomplete multi-clock SDC handoff; fewer than 18 clocks are active"
 }
 set_interactive_constraint_modes {}
 

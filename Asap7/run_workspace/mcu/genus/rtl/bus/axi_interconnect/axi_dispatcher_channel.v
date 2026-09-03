@@ -891,7 +891,18 @@ module dsp_read_channel
 );
     // Localparam initialization
     localparam OUTST_CTN_W = $clog2(OUTSTANDING_AMT) + 1;
-    localparam ROB_MAX_BURST_BEATS = 64;
+    // Số beat tối đa của một read burst mà ROB có thể đệm.
+    // beat_mem_q trong utils/ROB.v có ROB_DEPTH * ROB_MAX_BURST_BEATS entry,
+    // nên tham số này quyết định trực tiếp diện tích của dispatcher đọc.
+    // Burst dài nhất trong SoC là 16 beat: DMA giới hạn MAX_BURST = 64 byte
+    // (interrupt/dma/dma.v) / 4 byte mỗi beat; icache và dcache dùng 4 beat;
+    // debug-DTM dùng 1 beat.
+    //
+    // CẢNH BÁO: nếu một master phát ARLEN > ROB_MAX_BURST_BEATS-1 thì ROB
+    // clamp số beat mong đợi (alloc_len_ok_c trong utils/ROB.v) và bật cờ
+    // r_overflow_o, transaction sẽ hỏng. Khi tăng MAX_BURST của DMA thì phải
+    // tăng giá trị này theo.
+    localparam ROB_MAX_BURST_BEATS = 16;
     localparam ROB_BEAT_CNT_W = $clog2(ROB_MAX_BURST_BEATS + 1);
     localparam ROB_ID_COUNT = (1 << TRANS_MST_ID_W);
     localparam ROB_ID_PTR_W = $clog2(OUTSTANDING_AMT);

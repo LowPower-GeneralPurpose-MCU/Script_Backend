@@ -52,11 +52,17 @@ if {[file size $SRAM_GDS] == 0} {
     error "SRAM GDS is empty: [file normalize $SRAM_GDS]"
 }
 
+# No max-transition override.  prepare_innovus_sdc rewrites the first number
+# of EVERY set_max_transition command it sees, which would flatten the
+# per-domain values the SDC now sets (100 ps on CLK_CORE/CLK_CPU, 150 ps on
+# the AXI group, 250 ps on the peripheral domains) back to a single 300 ps.
+# The unit converter already scales the SDC ps values into ns correctly, so
+# the override is redundant as well as harmful.  SIGNAL_MAX_TRANSITION_NS in
+# project_config.tcl still documents the 320 ps SRAM macro pin limit.
 prepare_innovus_sdc \
     $SYN_SDC \
     $INNOVUS_SDC \
-    $INNOVUS_PATH_GROUPS \
-    $SIGNAL_MAX_TRANSITION_NS
+    $INNOVUS_PATH_GROUPS
 
 puts "============================================================"
 puts "INNOVUS PRECHECK PASSED"
