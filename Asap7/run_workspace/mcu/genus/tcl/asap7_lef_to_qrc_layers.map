@@ -1,0 +1,23 @@
+# LEF layer -> QRC tech file layer, Cadence format.
+#
+# Both stacks report 10 routing layers, but they are not the same 10:
+#   LEF : M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
+#   QRC : LISD M1 M2 M3 M4 M5 M6 M7 M8 M9
+# Genus paired them by position, so the last run mapped LEF M1 onto QRC
+# LISD, LEF M4 onto QRC M3, LEF M6 onto QRC M5 and LEF M8 onto QRC M7
+# (see the four PHYS-25 warnings in genus.log).  Every layer therefore
+# picked up the R and C of the layer below it.
+#
+# This file forces name-based matching.  Vias are deliberately left out:
+# the QRC via names are not visible from the PHYS-25 messages.  If the
+# QRC layer names turn out to differ from the ones below, fix them here
+# and rerun; PHYS-25 disappearing from genus.log is the pass criterion.
+M1 M1 \
+M2 M2 \
+M3 M3 \
+M4 M4 \
+M5 M5 \
+M6 M6 \
+M7 M7 \
+M8 M8 \
+M9 M9

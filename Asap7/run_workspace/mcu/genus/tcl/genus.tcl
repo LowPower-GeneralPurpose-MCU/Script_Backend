@@ -29,6 +29,21 @@ proc genus_env_flag {name default_value} {
     }
 }
 
+proc genus_host_cpu_count {cap} {
+    set count 0
+    if {![catch {open /proc/cpuinfo r} cpu_file]} {
+        set count [regexp -all -line {^processor\s} [read $cpu_file]]
+        close $cpu_file
+    }
+    if {$count < 1} {
+        set count 1
+    }
+    if {$count > $cap} {
+        set count $cap
+    }
+    return $count
+}
+
 proc genus_try_set_root_attribute {name value} {
     if {[catch {set_db / .$name $value} message]} {
         puts "WARNING: cannot set Genus attribute $name=$value: $message"
@@ -280,12 +295,41 @@ if {[genus_env_flag GENUS_ENABLE_SUPER_THREAD 0]} {
     puts "Genus execution: super-thread, servers=$GENUS_SERVERS, CPUs=$GENUS_CPUS"
 } else {
     catch {reset_db super_thread_servers}
-    genus_try_set_root_attribute max_cpus_per_server 0
-    puts "Genus execution: single process"
+    # max_cpus_per_server 0 switches multi-threading OFF.  The last run
+    # logged "Number of threads: 0 * 1" and 100.8% CPU on a 12-CPU host,
+    # and Genus had already warned PBS-2 ("should be run with a minimum of
+    # 8 threads").  The attribute default is 8.
+    #
+    # This is local MULTI-threading, not super-threading: no extra servers,
+    # no extra licence, and one process image so memory does not multiply
+    # (peak was 4.4 GB of 12.9 GB with only 0.7 GB free).
+    set GENUS_CPUS [genus_env_value GENUS_CPUS [genus_host_cpu_count 8]]
+    if {![string is integer -strict $GENUS_CPUS] || $GENUS_CPUS < 1} {
+        error "GENUS_CPUS must be a positive integer"
+    }
+    genus_try_set_root_attribute max_cpus_per_server $GENUS_CPUS
+    puts "Genus execution: single process, $GENUS_CPUS threads"
 }
 
 set_db / .hdl_unconnected_value 0
 set_db / .hdl_track_filename_row_col true
+
+# hdl_index_mux_threshold defaults to 0, i.e. a variable index read such as
+# ram[index] is NEVER built as a binary mux - it is expanded into AND/OR
+# logic and blasted.  That is where the 92583 AOI22xp33 cells of the last
+# completed run came from (icache/dcache generic_data_ram, ROB beat_mem_q),
+# and it is what the repeated "Running post blast mux optimization" lines
+# in genus.log are chewing through.  Building proper mux components for
+# wide indexed reads usually cuts both area and elaborate/generic runtime.
+#
+# This changes netlist structure.  Set MCU_INDEX_MUX_THRESHOLD=0 to restore
+# the previous behaviour if LEC or QoR regresses.
+set INDEX_MUX_THRESHOLD [genus_env_value MCU_INDEX_MUX_THRESHOLD 8]
+if {![string is integer -strict $INDEX_MUX_THRESHOLD] ||
+    $INDEX_MUX_THRESHOLD < 0} {
+    error "MCU_INDEX_MUX_THRESHOLD must be a non-negative integer"
+}
+genus_try_set_root_attribute hdl_index_mux_threshold $INDEX_MUX_THRESHOLD
 set_db / .auto_ungroup both
 set_db / .lp_insert_clock_gating false
 set_db / .library $ALL_TIMING_LIBS
@@ -319,6 +363,18 @@ if {$GENUS_PHYSICAL} {
     }
     if {[genus_try_set_root_attribute lef_library $PHYSICAL_LEFS]} {
         puts "Genus physical: registered [llength $PHYSICAL_LEFS] LEF files"
+        # Map LEF layer names onto QRC layer names before the QRC file is
+        # read.  Without it Genus matches the two stacks by position and
+        # every layer inherits the parasitics of the layer below (PHYS-25).
+        set QRC_LAYER_MAP \
+            [file join $GENUS_TCL_DIR asap7_lef_to_qrc_layers.map]
+        if {[file isfile $QRC_LAYER_MAP]} {
+            genus_try_set_root_attribute \
+                extract_rc_lef_tech_file_map $QRC_LAYER_MAP
+        } else {
+            puts "WARNING: LEF-to-QRC layer map missing; layer parasitics"
+            puts "         will be mis-assigned: [file normalize $QRC_LAYER_MAP]"
+        }
         if {[file isfile $QRC_FILE]} {
             genus_try_set_root_attribute qrc_tech_file $QRC_FILE
         } else {
