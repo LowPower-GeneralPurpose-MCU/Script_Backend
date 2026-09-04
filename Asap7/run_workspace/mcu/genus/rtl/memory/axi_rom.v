@@ -96,7 +96,7 @@ module axi_rom #(
     localparam W_IDLE = 2'd0, W_SINK = 2'd1, W_RESP = 2'd2;
     reg [1:0] w_state;
 
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             w_state       <= W_IDLE;
             s_axi_awready <= 1'b0;
@@ -145,7 +145,7 @@ module axi_rom #(
     reg [2:0]            ar_size_reg;
     reg [7:0]            r_count;
 
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             r_state       <= R_IDLE;
             s_axi_arready <= 1'b0;

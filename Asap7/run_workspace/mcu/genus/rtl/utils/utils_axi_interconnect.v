@@ -122,7 +122,7 @@ module skid_buffer
             assign fwd_valid_o = ~empty;
             assign fwd_data_o  = mem[rd_ptr[0]];
 
-            always @(posedge clk) begin
+            always @(posedge clk or negedge rst_n) begin
                 if (!rst_n) begin
                     wr_ptr <= 2'd0;
                     rd_ptr <= 2'd0;
@@ -146,7 +146,7 @@ module skid_buffer
             assign fwd_valid_o = out_valid;
             assign bwd_ready_o = ~skid_valid;
 
-            always @(posedge clk) begin
+            always @(posedge clk or negedge rst_n) begin
                 if (!rst_n) begin
                     out_valid  <= 1'b0;
                     skid_valid <= 1'b0;
@@ -184,7 +184,7 @@ module skid_buffer
             assign fwd_valid_o = valid_reg;
             assign bwd_ready_o = fwd_ready_i | ~valid_reg;
 
-            always @(posedge clk) begin
+            always @(posedge clk or negedge rst_n) begin
                 if (!rst_n) begin
                     valid_reg <= 1'b0;
                 end else if (bwd_ready_o) begin

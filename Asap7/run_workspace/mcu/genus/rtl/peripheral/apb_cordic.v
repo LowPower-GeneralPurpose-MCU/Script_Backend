@@ -15,7 +15,13 @@ module apb_cordic #(
     input  wire [3:0]             pstrb,
     output reg                    pready,
     output reg  [DATA_WIDTH-1:0]  prdata,
-    output reg                    pslverr
+    output reg                    pslverr,
+
+    // Bao cho mang clock gating biet loi CORDIC dang can clock.  PSEL chi mo
+    // cong trong luc co truy cap bus, ma mot lenh START can them ~18 chu ky
+    // nua de chay het 16 vong lap - neu cat clock ngay thi FSM DONG BANG o
+    // CALC: STATUS ket o BUSY va X_OUT/Y_OUT khong bao gio cap nhat.
+    output wire                   o_active
 );
 
     // =========================================
@@ -192,6 +198,11 @@ module apb_cordic #(
             endcase
         end
     end
+
+    // Con dang chay khi FSM roi IDLE, HOAC khi bit START vua duoc ghi nhung
+    // FSM chua kip nhin thay no.  Ca hai deu la flop tren pclk, nen tin hieu
+    // nay la MUC - dung truc tiep lam `en` cho clock gate o top_soc.
+    assign o_active = (state != IDLE) || reg_ctrl[0];
 
     // Quyết định hướng quay: d = 1 nếu z >= 0, ngược lại d = 0
     wire d = (z_reg >= 0);

@@ -149,6 +149,12 @@ module f_register_file (
     assign dbg_read_data = f_regfile[dbg_read_addr];
     
     integer i;
+    // CO Y dung reset dong bo o day, va nhanh reset CO Y de trong: mang thanh
+    // ghi dau phay dong khong duoc reset (phan mem phai tu nap truoc khi doc),
+    // nen khong co trang thai nao can xoa - `if (!reset_n)` chi de CHAN GHI
+    // trong luc reset.  Dung doi sang `posedge clk or negedge reset_n`: lam vay
+    // se sinh ra chan reset cho 32 thanh ghi 32-bit ma khong duoc gi ca.
+    // Moi khoi tuan tu KHAC trong thiet ke deu dung reset bat dong bo.
     always @(posedge clk) begin
         if (!reset_n) begin
 
