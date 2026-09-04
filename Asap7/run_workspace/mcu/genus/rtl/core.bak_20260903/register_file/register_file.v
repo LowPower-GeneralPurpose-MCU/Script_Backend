@@ -208,54 +208,14 @@ module csr_register_file (
     output reg [31:0] dbg_read_data,  // Đọc mọi CSR
     input         dbg_reg_write_en,
     input  [11:0] dbg_reg_write_addr, // Trỏ thẳng vào địa chỉ CSR 12-bit
-    input  [31:0] dbg_reg_write_data,
-
-    // Vi pham "ghi vao CSR chi doc" -> lenh nay phai raise illegal-instruction.
-    // Tin hieu duoc tinh tu {csr_write_addr, csr_op, csr_write_en} nen no DA o
-    // dung tang EX/MEM, cung tang voi ecall/ebreak - mepc se tro dung lenh gay
-    // loi ma khong can them logic nao.
-    output                   csr_illegal_write
+    input  [31:0] dbg_reg_write_data
 );
 
     localparam [31:0] MVENDORID  = 32'h0;
     localparam [31:0] MARCHID    = 32'h0;
     localparam [31:0] MIMPID     = 32'h01000000;
     localparam [31:0] MHARTID    = 32'h0;
-    // =====================================================================
-    // F1 - MISA phai mo ta DUNG cai da hien thuc.
-    //
-    // Gia tri cu 32'h40001120 khai bao I + M + F, va KHONG khai A, KHONG khai C.
-    // Ca ba deu sai so voi RTL:
-    //
-    //   F (bit 5)  : KHAI nhung KHONG CO. riscv_pipeline.v dat ENABLE_FPU = 0,
-    //                f_register_file tra ve 0, wb_f_write_data = 0. Thu vien
-    //                runtime doc MISA de chon code path -> se phat lenh FP roi
-    //                nhan ket qua rac, im lang. Bo bit F.
-    //   C (bit 2)  : CO nhung KHONG KHAI. Bo giai nen + FSM ghep nua lenh (F3)
-    //                trong instruction_fetch da hien thuc day du RVC. Khai len.
-    //   A (bit 0)  : mot phan. LR.W / SC.W chay dung. Nhung 9 ma AMO*.W thi
-    //                KHONG: chung bat dong thoi mem_read va mem_write, ma FSM
-    //                cua data_cache o IDLE kiem `if (cpu_read_req) ... else if
-    //                (cpu_write_req)` - doc thang, phan GHI bi nuot im lang.
-    //                Vi vay MAC DINH tat A. Khi nao data_cache co FSM
-    //                AMO_READ -> ALU -> AMO_WRITE (va AWLOCK that) thi bat
-    //                ENABLE_A_EXTENSION len 1 O CA HAI NOI:
-    //                  - localparam ENABLE_A_EXTENSION o day
-    //                  - parameter  ENABLE_A_EXTENSION cua main_control_unit
-    //                Hai noi phai khop, neu khong MISA lai lech voi decoder.
-    // =====================================================================
-    localparam ENABLE_A_EXTENSION = 0;   // xem ghi chu tren truoc khi bat len 1
-
-    localparam integer MISA_A = 0;
-    localparam integer MISA_C = 2;
-    localparam integer MISA_I = 8;
-    localparam integer MISA_M = 12;
-
-    localparam [31:0] MISA = (32'd1 << 30)     |  // MXL = 1 -> XLEN = 32
-                             (32'd1 << MISA_I) |  // I - co so
-                             (32'd1 << MISA_M) |  // M - nhan / chia
-                             (32'd1 << MISA_C) |  // C - lenh nen 16 bit
-                             ((ENABLE_A_EXTENSION != 0) ? (32'd1 << MISA_A) : 32'd0);
+    localparam [31:0] MISA       = 32'h40001120;
 
     reg [31:0] mstatus;
     reg [31:0] mie;
@@ -314,48 +274,12 @@ module csr_register_file (
         end
     endfunction
 
-    // =====================================================================
-    // Phat hien ghi vao CSR chi doc.
-    //
-    // Quy uoc dia chi cua RISC-V: csr[11:10] == 2'b11 nghia la READ-ONLY. Nhom
-    // nay gom mvendorid / marchid / mimpid / mhartid (0xF1x) va toan bo dai
-    // 0xC00-0xCFF (cycle / time / instret ban chi doc). misa la 0x301 nen KHONG
-    // thuoc nhom - dung, vi misa la WARL ghi duoc.
-    //
-    // Truoc day bang CSR xu ly moi dia chi nhu nhau: ghi vao mot CSR chi doc
-    // hay khong ton tai chi don gian roi vao khoang khong, khong bao loi.
-    //
-    // Dieu kien PHAI la "lenh nay THUC SU ghi" (csr_op != 0): csrrs/csrrc voi
-    // rs1 = x0 - tuc gia lenh `csrr` - khong ghi gi ca. Viec ep csr_op ve 0
-    // trong truong hop do duoc lam o tang ID (instruction_decode.csr_op); neu
-    // khong thi mot lenh `csrr t0, cycle` hoan toan hop le se bi bao illegal.
-    // =====================================================================
-    assign csr_illegal_write = csr_write_en && (csr_op != 2'b00) &&
-                               (csr_write_addr[11:10] == 2'b11);
-
-    // =====================================================================
-    // G2 - danh sach nhay cua mux doc CSR PHAI liet ke tuong minh.
-    //
-    // `always @(*) csr_read_data = csr_read_value(csr_addr);` trong co ve dung,
-    // nhung @(*) chi suy ra danh sach nhay tu cac tin hieu XUAT HIEN TRONG CAU
-    // LENH. Cac thanh ghi ma function DOC BEN TRONG than cua no (mcycle,
-    // minstret, mepc...) khong duoc mot so cong cu dua vao danh sach do.
-    //
-    // Hau qua rat kho thay: cong doc DONG BANG. Nhieu lenh `csrr t0, mcycle`
-    // lien tiep co CUNG csr_addr, nen khoi khong bao gio duoc kich hoat lai va
-    // deu tra ve gia tri tai thoi diem csr_addr doi lan cuoi. Bo dem VAN chay
-    // dung, chi rieng duong doc la chet - mo hinh tham chieu khong bat duoc.
-    //
-    // KHI THEM MOT CSR MOI: them thanh ghi cua no vao ca csr_read_value LAN
-    // danh sach duoi day. Quen dong thu hai = CSR do doc ra gia tri cu, im lang.
-    // =====================================================================
-    always @(csr_addr  or csr_addr_lane1 or dbg_reg_read_addr or
-             mstatus   or mie            or mtvec     or mscratch or
-             mepc      or mcause         or mtval     or mip_val  or
-             mcycle    or minstret       or
-             dcsr      or dpc            or dscratch0) begin
+    always @(*) begin
         csr_read_data = csr_read_value(csr_addr);
         csr_read_data_lane1 = csr_read_value(csr_addr_lane1);
+    end
+
+    always @(*) begin
         dbg_read_data = csr_read_value(dbg_reg_read_addr);
     end
     

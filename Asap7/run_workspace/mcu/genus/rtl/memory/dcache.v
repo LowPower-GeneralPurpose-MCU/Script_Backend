@@ -22,7 +22,9 @@ module data_cache #(
     input  wire [C_M_AXI_DATA_W-1:0]     cpu_write_data,
     input  wire                          mem_unsigned, 
     input  wire [1:0]                    mem_size,
-    input  wire                          uncache_en,
+    // Ban TO HOP tu dia chi song cua CPU. KHONG dung truc tiep trong FSM - xem
+    // ghi chu ve chot uncache ben duoi; ten `uncache_en` la ban DA CHOT.
+    input  wire                          uncache_en_i,
     output reg  [C_M_AXI_DATA_W-1:0]     cpu_read_data,
     output reg                           dcache_hit, 
     output reg                           dcache_stall,
@@ -129,13 +131,29 @@ module data_cache #(
         end
     endfunction
 
-    assign m_axi_awid = 0; assign m_axi_awsize = mem_size; assign m_axi_awburst = 2'b01; 
-    assign m_axi_awlock = 0; assign m_axi_awcache = uncache_en ? 4'b0000 : 4'b0011;
-    assign m_axi_awprot = 3'b000; assign m_axi_awqos = 0; assign m_axi_awregion = 0; assign m_axi_awlen = 0; 
-    assign m_axi_arid = 0; assign m_axi_arsize = $clog2(C_M_AXI_DATA_W/8); assign m_axi_arburst = 2'b01;
-    assign m_axi_arlock = 0; assign m_axi_arcache = uncache_en ? 4'b0000 : 4'b0011;
-    assign m_axi_arprot = 3'b000; assign m_axi_arqos = 0; assign m_axi_arregion = 0;
-
+    // =========================================================================
+    // uncache_en PHAI duoc chot cung luc voi req_addr.
+    //
+    // `uncache_en_i` la to hop tu dia chi SONG cua CPU (xem macro
+    // `SOC_IS_UNCACHED trong top_soc.v). ARADDR/AWADDR da duoc chot vao
+    // req_addr, nhung truoc day ARLEN, ARCACHE va AWCACHE van lay tu tin hieu
+    // song:
+    //
+    //     m_axi_arlen = uncache_en ? 8'd0 : BURST_LEN;
+    //
+    // Khi mot nhanh doan sai / trap doi dia chi tu vung CACHEABLE sang vung
+    // UNCACHED trong luc ARVALID dang cho ARREADY, ARLEN nhay 3 -> 0 GIUA
+    // HANDSHAKE. AXI4 yeu cau moi tin hieu cua kenh dia chi phai ON DINH tu khi
+    // VALID len cho toi khi READY len. Vi pham nay lam slave va interconnect bat
+    // dong y ve so beat cua burst -> ROB treo slot, bus chet.
+    //
+    // Rang buoc do CO THAT: chinh FSM ben duoi da xu ly ca "dia chi doi giua mot
+    // lan miss" (`if (cpu_addr == req_addr)` o trang thai DONE).
+    //
+    // Sua bang cach chot uncache cung nhip voi req_addr, roi dat lai ten
+    // `uncache_en` cho ban DA CHOT - nho vay moi cho dung ben duoi tu dong lay
+    // ban dung ma khong sot cho nao.
+    // =========================================================================
     localparam IDLE   = 3'd0,
                AR_REQ = 3'd1,
                R_WAIT = 3'd2,
@@ -143,8 +161,19 @@ module data_cache #(
                W_REQ  = 3'd4,
                B_WAIT = 3'd5,
                DONE   = 3'd6;
-               
+
     reg [2:0] state, next_state;
+    reg       uncache_r;
+
+    wire uncache_en = (state == IDLE) ? uncache_en_i : uncache_r;
+
+    assign m_axi_awid = 0; assign m_axi_awsize = mem_size; assign m_axi_awburst = 2'b01;
+    assign m_axi_awlock = 0; assign m_axi_awcache = uncache_en ? 4'b0000 : 4'b0011;
+    assign m_axi_awprot = 3'b000; assign m_axi_awqos = 0; assign m_axi_awregion = 0; assign m_axi_awlen = 0; 
+    assign m_axi_arid = 0; assign m_axi_arsize = $clog2(C_M_AXI_DATA_W/8); assign m_axi_arburst = 2'b01;
+    assign m_axi_arlock = 0; assign m_axi_arcache = uncache_en ? 4'b0000 : 4'b0011;
+    assign m_axi_arprot = 3'b000; assign m_axi_arqos = 0; assign m_axi_arregion = 0;
+
     reg [C_WAYS-1:0] valid_arr [0:NUM_SETS-1];
     reg [$clog2(C_WAYS)-1:0] rr_ptr [0:NUM_SETS-1];
 
@@ -184,11 +213,15 @@ module data_cache #(
     integer i, w;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            state <= IDLE; req_addr <= 0;
+            state <= IDLE; req_addr <= 0; uncache_r <= 1'b0;
             for (i=0; i<NUM_SETS; i=i+1) begin valid_arr[i]<=0; rr_ptr[i]<=0; end
         end else begin
             state <= next_state;
-            if (state == IDLE && (cpu_read_req || cpu_write_req)) req_addr <= cpu_addr;
+            // Chot dia chi VA thuoc tinh cacheability cua no trong CUNG mot nhip.
+            if (state == IDLE && (cpu_read_req || cpu_write_req)) begin
+                req_addr  <= cpu_addr;
+                uncache_r <= uncache_en_i;
+            end
             if (state == R_WAIT && m_axi_rvalid && m_axi_rready) begin
                 if (uncache_en) fetch_buffer[C_M_AXI_DATA_W-1:0] <= m_axi_rdata;
                 else fetch_buffer <= {m_axi_rdata, fetch_buffer[BLOCK_W-1:C_M_AXI_DATA_W]};

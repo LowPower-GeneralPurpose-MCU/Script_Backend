@@ -10,21 +10,7 @@ module if_id_register (
     input [31:0] instr, pc_plus_4, pc_in,
     input predict_taken, btb_hit,
     output reg [31:0] if_id_instr, if_id_pc_plus_4, if_id_pc_in,
-    output reg if_id_predict_taken, if_id_btb_hit,
-    // -----------------------------------------------------------------------
-    // KHOAN NO I - bit "day la LENH THAT, khong phai bong bong", sinh o day va
-    // chay suot ba thanh ghi pipeline.
-    //
-    // Truoc day khong tang nao co bit nay. flush KHONG xoa pc_in, nen mot bong
-    // bong van "trong giong" mot lenh that: no mang PC CU. Hai hau qua deu that:
-    //   1. minstret dem ca bong bong load-use / flush_jal / flush_temp.
-    //   2. NANG HON: ngat roi vao dung chu ky do se dat mepc = PC cua mot lenh
-    //      DA RETIRE -> mret chay lai no. Do la ly do irq_ok phai AND voi
-    //      ex_mem_valid trong riscv_pipeline.v.
-    //
-    // Gia: ba flip-flop.
-    // -----------------------------------------------------------------------
-    output reg if_id_valid
+    output reg if_id_predict_taken, if_id_btb_hit
 );
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
@@ -33,17 +19,14 @@ module if_id_register (
             if_id_pc_plus_4 <= 32'd0;
             if_id_predict_taken <= 1'b0;
             if_id_btb_hit <= 1'b0;
-            if_id_valid <= 1'b0;
         end else if (riscv_start && !riscv_done) begin            
             if (flush) begin
                 if_id_instr <= 32'h00000013; // NOP (addi x0, x0, 0)
                 if_id_predict_taken <= 1'b0;
                 if_id_btb_hit <= 1'b0;
-                if_id_valid <= 1'b0;
             end else if (stall) begin
                 // Đóng băng, không thay đổi giá trị
             end else begin
-                if_id_valid <= 1'b1;
                 if_id_pc_in <= pc_in;
                 if_id_instr <= instr;
                 if_id_pc_plus_4 <= pc_plus_4;
@@ -63,8 +46,6 @@ module id_ex_register #(
     input riscv_start, input riscv_done,
     input [ROB_TAG_W-1:0] rob_tag,
     input rob_valid,
-    input if_id_valid,             // khoan no I - xem ghi chu o if_id_register
-    input illegal_instr,           // V5 - ma lenh khong ton tai, di toi EX/MEM
     input [31:0] if_id_pc_plus_4, if_id_pc_in,
     input [2:0] funct3,
     input [31:0] read_data1, read_data2, ext_imm,
@@ -106,9 +87,7 @@ module id_ex_register #(
     output reg [4:0] id_ex_fpu_operation,
     output reg [31:0] id_ex_read_f_data1, id_ex_read_f_data2,
     output reg [ROB_TAG_W-1:0] id_ex_rob_tag,
-    output reg id_ex_rob_valid,
-    output reg id_ex_valid,
-    output reg id_ex_illegal
+    output reg id_ex_rob_valid
 );
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
@@ -128,17 +107,12 @@ module id_ex_register #(
             id_ex_f_to_x <= 1'b0; id_ex_x_to_f <= 1'b0;
             id_ex_fpu_operation <= 5'd0;
             id_ex_ecall <= 1'b0; id_ex_mret <= 1'b0; id_ex_ebreak <= 1'b0;
-            id_ex_valid <= 1'b0; id_ex_illegal <= 1'b0;
             // (Reset các biến khác nếu cần, nhưng các tín hiệu điều khiển trên là quan trọng nhất)
         end else if (riscv_start && !riscv_done) begin
             if (flush) begin
                 // BÆ¡m NOP (Chá»‰ cáº§n táº¯t cÃ¡c cá» thay Ä‘á»•i tráº¡ng thÃ¡i há»‡ thá»‘ng)
                 id_ex_instr <= 32'h00000013;
                 id_ex_rob_valid <= 1'b0;
-                // Bong bong: khong phai lenh that, va khong duoc mang bit illegal
-                // cua lenh vua bi xoa - neu khong thi trap se ban vao mot NOP.
-                id_ex_valid <= 1'b0;
-                id_ex_illegal <= 1'b0;
                 id_ex_reg_write <= 1'b0;
                 id_ex_alu_src <= 1'b0;
                 id_ex_mem_write <= 1'b0;
@@ -174,8 +148,6 @@ module id_ex_register #(
                 id_ex_pc_plus_4 <= if_id_pc_plus_4; id_ex_pc_in <= if_id_pc_in;
                 id_ex_rob_tag <= rob_tag;
                 id_ex_rob_valid <= rob_valid;
-                id_ex_valid <= if_id_valid;      // khoan no I - day chuyen bit valid
-                id_ex_illegal <= illegal_instr;
                 id_ex_funct3 <= funct3;
                 id_ex_read_data1 <= read_data1; id_ex_read_data2 <= read_data2;
                 id_ex_ext_imm <= ext_imm; id_ex_branch_target <= branch_target;
@@ -211,8 +183,6 @@ module ex_mem_register #(
     input riscv_start, input riscv_done,
     input [ROB_TAG_W-1:0] id_ex_rob_tag,
     input id_ex_rob_valid,
-    input id_ex_valid,           // khoan no I - xem ghi chu o if_id_register
-    input id_ex_illegal,         // V5 - nguon cua trap_illegal
     input [31:0] alu_result, id_ex_ext_imm,
     input [4:0] id_ex_rd,
     input [31:0] id_ex_pc_plus_4, id_ex_pc_in, id_ex_branch_target,
@@ -239,12 +209,7 @@ module ex_mem_register #(
     output reg [31:0] ex_mem_csr_write_data, ex_mem_instr, ex_mem_fpu_result, ex_mem_f_store_data,
     output reg ex_mem_f_reg_write, ex_mem_f_mem_to_reg, ex_mem_f_mem_write,
     output reg [ROB_TAG_W-1:0] ex_mem_rob_tag,
-    output reg ex_mem_rob_valid,
-    // ex_mem_valid la dieu kien BAT BUOC cua irq_ok va cua instret_pulse trong
-    // riscv_pipeline.v. Lay tu id_ex_valid nen no la mot day chay suot ba tang,
-    // khong phai "khong bi flush o rieng ranh gioi nay".
-    output reg ex_mem_valid,
-    output reg ex_mem_illegal
+    output reg ex_mem_rob_valid
 );
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
@@ -258,13 +223,10 @@ module ex_mem_register #(
             ex_mem_csr_we <= 1'b0; ex_mem_csr_op <= 2'b00;
             ex_mem_ecall <= 1'b0; ex_mem_ebreak <= 1'b0; ex_mem_mret <= 1'b0;
             ex_mem_f_reg_write <= 1'b0; ex_mem_f_mem_to_reg <= 1'b0; ex_mem_f_mem_write <= 1'b0;
-            ex_mem_valid <= 1'b0; ex_mem_illegal <= 1'b0;
         end else if (riscv_start && !riscv_done) begin
             if (flush) begin
                 ex_mem_instr <= 32'h00000013;
                 ex_mem_rob_valid <= 1'b0;
-                ex_mem_valid <= 1'b0;
-                ex_mem_illegal <= 1'b0;
                 ex_mem_reg_write <= 1'b0;
                 ex_mem_mem_write <= 1'b0;
                 ex_mem_mem_read <= 1'b0;
@@ -286,8 +248,6 @@ module ex_mem_register #(
                 ex_mem_alu_result <= alu_result; ex_mem_rd <= id_ex_rd;
                 ex_mem_rob_tag <= id_ex_rob_tag;
                 ex_mem_rob_valid <= id_ex_rob_valid;
-                ex_mem_valid <= id_ex_valid;
-                ex_mem_illegal <= id_ex_illegal;
                 ex_mem_branch_target <= id_ex_branch_target; ex_mem_pc_plus_4 <= id_ex_pc_plus_4;
                 ex_mem_pc_in <= id_ex_pc_in; ex_mem_branch <= id_ex_branch;
                 ex_mem_branch_taken <= branch_taken; ex_mem_jal <= id_ex_jal;

@@ -6,17 +6,7 @@
 // This replacement keeps the public ports compatible with the existing project,
 // but only issues lane 0. Lane 1 fetch/cache ports are tied off.
 module riscv_pipeline #(
-    parameter ENABLE_TOMASULO_INTEGER = 0,
-    // -------------------------------------------------------------------------
-    // F6 - 0: `ecall` trap vao mtvec roi CHAY TIEP (dung chuan, mac dinh).
-    //      1: giu hanh vi cu "dung han khi gap ecall" cho testbench nghiem thu cu.
-    //
-    // Voi gia tri cu (khong co tham so, luon dung han) thi `riscv_done` len 1 o
-    // lan `ecall` DAU TIEN, va vi moi thanh ghi pipeline lan pc_reg deu co dieu
-    // kien `riscv_start && !riscv_done`, ca loi DONG BANG VINH VIEN. Do la di
-    // san cua testbench lot vao RTL production: mot syscall lam chet chip.
-    // -------------------------------------------------------------------------
-    parameter HALT_ON_ECALL = 0
+    parameter ENABLE_TOMASULO_INTEGER = 0
 )(
     input  wire        clk,
     input  wire        reset_n,
@@ -296,20 +286,6 @@ module riscv_pipeline #(
     wire        stall_WB;
     wire        is_sleeping_internal;
 
-    // ---- day "lenh that, khong phai bong bong" chay suot ba tang ----
-    wire        if_id_valid;
-    wire        id_ex_valid;
-    wire        ex_mem_valid;
-
-    // ---- illegal-instruction: ID -> EX -> MEM ----
-    wire        illegal_instr;     // ID:  ma lenh khong ton tai
-    wire        id_ex_illegal;     // EX
-    wire        ex_mem_illegal;    // MEM: nguon cua trap_illegal
-    wire        csr_illegal_write; // MEM: ghi vao CSR chi doc
-
-    // ---- F3: dang lay nua thu nhat cua lenh 32 bit vat bien ----
-    wire        if_realign_stall;
-
     // =========================================================================
     // Trap and interrupt logic
     // =========================================================================
@@ -317,150 +293,33 @@ module riscv_pipeline #(
                           (msip_i & mie_val[3])  |
                           (mtip_i & mie_val[7]);
 
-    // -------------------------------------------------------------------------
-    // KHOAN NO C - ngat duoc quy cho lenh dang o EX/MEM, KHONG cho lenh o tang IF.
-    //
-    // Truoc day: mepc = pc_in (PC tang IF) trong khi flush_trap xoa CA BON thanh
-    // ghi pipeline. Bon lenh dang bay trong ID, EX, MEM, WB bi huy, nhung mepc
-    // tro toi mot lenh TRE HON tat ca chung - mret quay ve SAU chung. Mot ngat
-    // ngoai lang le nuot toi bon lenh, khong dau vet. Voi RTOS / ISR dinh ky thi
-    // chuong trinh mat lenh lien tuc.
-    //
-    // Bay gio ngat duoc doi xu nhu mot ngoai le quy cho lenh o EX/MEM, tai dung
-    // nguyen duong da chay dung cho ecall/ebreak: mepc = ex_mem_pc_in, lenh do bi
-    // huy va CHAY LAI sau mret; moi lenh tre hon van con trong pipeline nen cung
-    // chay lai.
-    //
-    // Dieu kien ex_mem_valid la BAT BUOC: flush khong xoa ex_mem_pc_in, nen nhan
-    // ngat khi EX/MEM la bong bong se cho mepc tro vao lenh DA RETIRE -> chay hai
-    // lan. Hoan ngat lai vai chu ky la vo hai (meip/msip/mtip la MUC, khong phai
-    // xung), va khong be tac: bong bong chi sinh ra tu flush, ma sau moi flush
-    // luon co lenh that di qua. WFI co duong danh thuc RIENG (wake_interrupt,
-    // khong qua mstatus.MIE).
-    // -------------------------------------------------------------------------
-    wire irq_ok          = ex_mem_valid & mstatus_mie_val;
-    wire is_external_irq = meip_i & mie_val[11] & irq_ok;
-    wire is_software_irq = msip_i & mie_val[3]  & irq_ok;
-    wire is_timer_irq    = mtip_i & mie_val[7]  & irq_ok;
+    wire is_external_irq = meip_i & mie_val[11] & mstatus_mie_val;
+    wire is_software_irq = msip_i & mie_val[3]  & mstatus_mie_val;
+    wire is_timer_irq    = mtip_i & mie_val[7]  & mstatus_mie_val;
     wire trap_interrupt  = is_external_irq | is_software_irq | is_timer_irq;
-
-    // -------------------------------------------------------------------------
-    // V5 - illegal-instruction (mcause = 2).
-    //
-    // Hai nguon, ca hai deu la thuoc tinh cua lenh dang o EX/MEM nen chung KHONG
-    // the xung dot ve mepc/mtval:
-    //   ex_mem_illegal    : ma lenh khong ton tai (decoder dat, di theo pipeline)
-    //   csr_illegal_write : csrrw/csrrs/csrrc ghi vao CSR chi doc (csr[11:10]=11)
-    //
-    // Truoc ban sua nay KHONG co illegal-instruction nao: nhanh `default` rong
-    // cua main_control_unit khien moi opcode la chay im lang nhu NOP - khong the
-    // debug firmware, va mot ma lenh hong se troi qua ma khong ai biet.
-    // -------------------------------------------------------------------------
-    wire trap_illegal    = csr_illegal_write | ex_mem_illegal;
-
-    wire trap_enter      = ex_mem_ecall | ex_mem_ebreak | trap_interrupt | trap_illegal;
+    wire trap_enter      = ex_mem_ecall | ex_mem_ebreak | trap_interrupt;
     wire mret_exec       = ex_mem_mret;
 
     wire [31:0] trap_cause = (trap_interrupt && is_external_irq) ? 32'h8000000b :
                              (trap_interrupt && is_software_irq) ? 32'h80000003 :
                              (trap_interrupt && is_timer_irq)    ? 32'h80000007 :
                              ex_mem_ecall                        ? 32'd11       :
-                             ex_mem_ebreak                       ? 32'd3        :
-                             trap_illegal                        ? 32'd2        : 32'd0;
-
-    // Mot nguon duy nhat cho ca ngoai le lan ngat - xem ghi chu khoan no C.
-    wire [31:0] trap_pc_value = ex_mem_pc_in;
-
-    // mtval cua illegal-instruction mang chinh ma lenh gay loi (dac ta cho phep).
-    // Truoc day mtval luon la 0, nen handler khong co cach nao biet lenh nao sai.
-    wire [31:0] trap_val_value = trap_illegal ? ex_mem_instr : 32'd0;
+                             ex_mem_ebreak                       ? 32'd3        : 32'd0;
+    wire [31:0] trap_pc_value = trap_interrupt ? pc_in : ex_mem_pc_in;
 
     // =========================================================================
     // Stall/flush policy
     // =========================================================================
-    // -------------------------------------------------------------------------
-    // KHOAN NO D - stall bo nho DONG BANG TOAN BO mat phang dieu khien.
-    //
-    // Trong moi thanh ghi pipeline, `flush` duoc kiem TRUOC `stall`, nen khi hai
-    // tin hieu cung len thi flush THANG. Voi bo nho tre 0 chu ky dieu do vo hai;
-    // bat do tre len thi cac cap sau deu that:
-    //
-    //   flush_id_ex (load-use)  x  stall_id_ex (dcache)
-    //       lw  a0, 0(s0)   <- o MEM, D$ miss, dcache_stall = 1 hang chuc chu ky
-    //       lw  a1, 0(s1)   <- o EX
-    //       add a2, a1, x0  <- o ID  => load_use_stall = 1 => flush_id_ex = 1
-    //       Lenh o EX khong the di tiep vi EX/MEM dong bang, va ID/EX bi XOA.
-    //       `lw a1` BIEN MAT khoi chuong trinh.
-    //
-    //   flush_ex_mem (mf_alu_stall)  x  stall_ex_mem (dcache)
-    //       Bo nhan bom bong bong vao EX/MEM moi chu ky no chay. Neu MEM dang giu
-    //       mot lenh CHO BO NHO thi lenh do bi xoa truoc khi lay duoc du lieu.
-    //
-    // Quy tac dung: mot stall TOAN CUC (bo nho) phai THANG MOI hanh dong cuc bo
-    // (bong bong load-use, bong bong bo nhan, doi huong nhanh, trap). Pipeline
-    // khong nhuc nhich thi khong co gi de bom bong bong vao, cung khong co gi de
-    // xoa.
-    //
-    // An toan vi moi nguon flush deu la MUC lay tu trang thai dang dong bang, nen
-    // chung GIU NGUYEN suot thoi gian dong bang va co hieu luc ngay khi no het:
-    //     flush_branch / flush_trap  <- ex_mem_*        (dong bang)
-    //     flush_jal / load_use_stall <- id_ex_*, if_id_* (dong bang)
-    // Ngoai le duy nhat la trap_interrupt lay tu chan ben ngoai - nhung ngat la
-    // MUC chu khong phai xung nen hoan lai vai chu ky la vo hai.
-    //
-    // Khong be tac: dcache_stall luon ha xuong sau do tre bo nho. Va neu lenh o
-    // MEM la mot `sw` bi commit_kill chan thi yeu cau ghi rut xuong, giao dich
-    // ket thuc, stall ha - trap dien ra ngay sau do.
-    // -------------------------------------------------------------------------
-    wire mem_freeze = dcache_stall;
-
-    // F4 - cong lenh chi mo khi that su dang lay lenh.
-    wire fetch_enable = ~(stall_IF | is_sleeping_internal | dbg_halted);
-
     wire stall_if_id  = dcache_stall | mf_alu_stall | load_use_stall | stall_ID;
-
-    // KHOAN NO R - mot lan lay lenh chi SINH RA lenh that khi cong MO va bo nho
-    // SAN SANG. Tang IF da co dung khai niem do (fetch_valid); o day gop lai
-    // thanh DUNG mot tin hieu, khop tung chu voi no. Truoc day chi nua sau
-    // (icache_stall) duoc bom bong bong; nua truoc (~fetch_enable) thi khong -
-    // nen moi lan halt / ngu, IF/ID van CHOT mot NOP gia voi if_id_valid = 1 va
-    // no duoc dem nhu mot lenh that.
-    wire if_fetch_bubble = ~fetch_enable | icache_stall;
-
-    wire flush_if_id  = ~mem_freeze &
-                        (flush_trap | flush_branch | flush_jal |
-                         (if_fetch_bubble  & !stall_if_id) |
-                         (if_realign_stall & !stall_if_id));
+    wire flush_if_id  = flush_trap | flush_branch | flush_jal |
+                        (icache_stall & !stall_if_id);
     wire stall_id_ex  = dcache_stall | mf_alu_stall | stall_EX;
-    wire flush_id_ex  = ~mem_freeze &
-                        (flush_trap | flush_branch | load_use_stall |
-                         (flush_jal & !stall_id_ex));
+    wire flush_id_ex  = flush_trap | flush_branch | load_use_stall |
+                        (flush_jal & !stall_id_ex);
     wire stall_ex_mem = dcache_stall | stall_MEM;
-    wire flush_ex_mem = ~mem_freeze & (flush_trap | flush_branch | mf_alu_stall);
+    wire flush_ex_mem = flush_trap | flush_branch | mf_alu_stall;
     wire stall_mem_wb = dcache_stall | stall_WB;
-    wire flush_mem_wb = ~mem_freeze & flush_trap;
-
-    // -------------------------------------------------------------------------
-    // KHOAN NO I - minstret phai dem LENH RETIRE, khong dem chu ky.
-    //
-    // Truoc day `instret_en = !dbg_halted`, dung y het `count_en` cua mcycle.
-    // Nghia la minstret KHONG phai bo dem lenh - no la mot BAN SAO cua mcycle:
-    // moi phep do IPC, moi profiler, moi con so CoreMark/Dhrystone doc ra so chu
-    // ky chu khong phai so lenh.
-    //
-    // Diem retire cua loi 5 tang nay la RANH GIOI EX/MEM -> MEM/WB. Ba dieu kien,
-    // moi dieu kien loai bo dung mot thu:
-    //   ex_mem_valid   loai BONG BONG (load-use, mf_alu_stall, flush nhanh).
-    //   !stall_mem_wb  loai DEM LAI - khi stall, ex_mem_valid giu 1 nhieu chu ky.
-    //                  Day cung la dieu kien lam minstret BAT BIEN voi do tre
-    //                  bo nho.
-    //   !trap_enter    loai LENH BAY. Theo dac ta, lenh gay trap KHONG retire.
-    //                  Dung trap_enter chu KHONG dung flush_trap: flush_trap con
-    //                  bao gom mret_exec, ma `mret` la lenh binh thuong - no CO
-    //                  retire.
-    // -------------------------------------------------------------------------
-    wire instret_pulse = ex_mem_valid & ~stall_mem_wb & ~trap_enter &
-                         riscv_start  & ~riscv_done;
+    wire flush_mem_wb = flush_trap;
 
     assign pc_in = pc_reg;
     assign mem_size_top     = ex_mem_mem_size;
@@ -476,30 +335,10 @@ module riscv_pipeline #(
         end else if (riscv_start && !riscv_done) begin
             if (dbg_halted && !dbg_resume_req) begin
                 pc_reg <= dpc_out;
-            end else if ((flush_trap || flush_branch || flush_jal) && !dcache_stall) begin
-                // Doi huong PC cung phai CHO bo nho: neu khong thi PC nhay di trong
-                // khi IF/ID dang dong bang (mem_freeze chan flush), va lenh o dich
-                // bi bo qua.
+            end else if (flush_trap || flush_branch || flush_jal) begin
                 pc_reg <= pc_out;
-            // KHOAN NO R - PC chi duoc tien khi THAT SU co mot lan lay lenh.
-            //
-            // Truoc day dieu kien la `!stall_IF`, mot BAN SAO GAN DUNG cua
-            // `fetch_enable`. Hai cai lech nhau dung mot chu ky o lan resume:
-            //     resume_pulse = dbg_halted_reg && dbg_resume_req
-            //     stall_IF     = ((dbg_halted_reg || ...) && !resume_pulse) || ...
-            //     fetch_enable = ~(stall_IF | is_sleeping | dbg_halted)
-            // Trong chu ky co resume_pulse, stall_IF da ha nhung dbg_halted VAN
-            // con 1 (no chi xoa o canh sau), nen fetch_enable van bang 0. Ket qua:
-            // pc_reg TIEN LEN trong khi khong lenh nao duoc lay - lenh o dia chi
-            // do bi NHAY QUA. Dung mot lenh moi lan halt.
-            //
-            // Dung fetch_enable truc tiep: no la nguon duy nhat quyet dinh "chu ky
-            // nay co lay lenh khong", va da duoc dung o ca ba cho khac
-            // (icache_read_req, fetch_valid cua tang IF, if_fetch_bubble).
-            end else if (fetch_enable && !load_use_stall && !if_realign_stall &&
+            end else if (!stall_IF && !load_use_stall &&
                          !icache_stall && !dcache_stall && !mf_alu_stall) begin
-                // F3: if_realign_stall giu PC dung yen trong nhip lay nua thu nhat,
-                // de nhip sau tang IF van con pc_in de tinh dia chi word ke tiep.
                 pc_reg <= pc_out;
             end
         end
@@ -508,10 +347,7 @@ module riscv_pipeline #(
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
             flush_temp <= 1'b0;
-        end else if (riscv_start && !riscv_done && !dcache_stall) begin
-            // Cung ly do: flush_temp la ban tre mot nhip cua lan doi huong. Neu no
-            // chay trong luc pipeline dong bang thi no het han TRUOC khi lan doi
-            // huong that su xay ra.
+        end else if (riscv_start && !riscv_done) begin
             flush_temp <= flush_branch || flush_jal || flush_trap;
         end
     end
@@ -542,14 +378,6 @@ module riscv_pipeline #(
         .bpu_correct(bpu_correct),
         .predict_target(predict_target),
         .fetch_two_valid(1'b0),
-
-        // F3/F4 - FSM ghep nua lenh va cong lay lenh
-        .clk(clk),
-        .icache_stall_in(icache_stall),
-        .fetch_enable(fetch_enable),
-        .if_accept(~stall_if_id),
-        .realign_stall(if_realign_stall),
-
         .pc_out(pc_out),
         .pc_plus_4(pc_plus_4),
         .pc_plus_8(pc_plus_8_unused),
@@ -579,8 +407,7 @@ module riscv_pipeline #(
         .if_id_pc_plus_4(if_id_pc_plus_4),
         .if_id_pc_in(if_id_pc_in),
         .if_id_predict_taken(if_id_predict_taken),
-        .if_id_btb_hit(if_id_btb_hit),
-        .if_id_valid(if_id_valid)
+        .if_id_btb_hit(if_id_btb_hit)
     );
 
     // =========================================================================
@@ -621,7 +448,6 @@ module riscv_pipeline #(
         .csr_op(csr_op),
         .csr_we(csr_we),
         .wfi_req(wfi_req_internal),
-        .illegal_instr(illegal_instr),
         .fpu_en(fpu_en),
         .f_reg_write(f_reg_write),
         .f_mem_to_reg(f_mem_to_reg),
@@ -657,12 +483,12 @@ module riscv_pipeline #(
         .csr_op(ex_mem_csr_op),
         .csr_write_en(ex_mem_csr_we),
         .count_en(!dbg_halted),
-        .instret_en(instret_pulse),   // khoan no I - dem LENH RETIRE, khong dem chu ky
+        .instret_en(!dbg_halted),
         .trap_enter(trap_enter),
         .mret_exec(mret_exec),
         .trap_cause(trap_cause),
         .trap_pc(trap_pc_value),
-        .trap_val(trap_val_value),
+        .trap_val(32'd0),
         .mtvec_out(mtvec_pc),
         .mepc_out(mepc_pc),
         .mie_out(mie_val),
@@ -676,8 +502,7 @@ module riscv_pipeline #(
         .dbg_read_data(csr_dbg_read_data),
         .dbg_reg_write_en(dbg_csr_we),
         .dbg_reg_write_addr(dbg_reg_write_addr[11:0]),
-        .dbg_reg_write_data(dbg_reg_write_data),
-        .csr_illegal_write(csr_illegal_write)
+        .dbg_reg_write_data(dbg_reg_write_data)
     );
 
     assign csr_read_data_fwd =
@@ -732,8 +557,6 @@ module riscv_pipeline #(
         .riscv_done(riscv_done),
         .rob_tag({ROB_TAG_W{1'b0}}),
         .rob_valid(1'b0),
-        .if_id_valid(if_id_valid),
-        .illegal_instr(illegal_instr),
         .if_id_pc_plus_4(if_id_pc_plus_4),
         .if_id_pc_in(if_id_pc_in),
         .funct3(funct3),
@@ -823,9 +646,7 @@ module riscv_pipeline #(
         .id_ex_read_f_data1(id_ex_read_f_data1),
         .id_ex_read_f_data2(id_ex_read_f_data2),
         .id_ex_rob_tag(id_ex_rob_tag),
-        .id_ex_rob_valid(id_ex_rob_valid),
-        .id_ex_valid(id_ex_valid),
-        .id_ex_illegal(id_ex_illegal)
+        .id_ex_rob_valid(id_ex_rob_valid)
     );
 
     // =========================================================================
@@ -904,8 +725,6 @@ module riscv_pipeline #(
         .riscv_done(riscv_done),
         .id_ex_rob_tag(id_ex_rob_tag),
         .id_ex_rob_valid(id_ex_rob_valid),
-        .id_ex_valid(id_ex_valid),
-        .id_ex_illegal(id_ex_illegal),
         .alu_result(alu_result),
         .id_ex_ext_imm(id_ex_ext_imm),
         .id_ex_rd(id_ex_rd),
@@ -969,9 +788,7 @@ module riscv_pipeline #(
         .ex_mem_f_mem_to_reg(ex_mem_f_mem_to_reg),
         .ex_mem_f_mem_write(ex_mem_f_mem_write),
         .ex_mem_rob_tag(ex_mem_rob_tag),
-        .ex_mem_rob_valid(ex_mem_rob_valid),
-        .ex_mem_valid(ex_mem_valid),
-        .ex_mem_illegal(ex_mem_illegal)
+        .ex_mem_rob_valid(ex_mem_rob_valid)
     );
 
     // =========================================================================
@@ -988,10 +805,6 @@ module riscv_pipeline #(
         .ex_mem_instr(ex_mem_instr),
         .ex_mem_mem_write(ex_mem_mem_write | ex_mem_f_mem_write),
         .ex_mem_mem_read(ex_mem_mem_read),
-        // KHOAN NO C - chan GHI to hop ngay trong chu ky nhan trap. flush_ex_mem
-        // chi co hieu luc o suon xung ke tiep, nen khong co day nay thi mot `sw`
-        // van GHI THAT roi chay lai sau mret -> ghi hai lan.
-        .commit_kill(trap_enter),
         .mem_read_data(mem_read_data),
         .dcache_read_req(dcache_read_req),
         .dcache_write_req(dcache_write_req),
@@ -1055,9 +868,6 @@ module riscv_pipeline #(
         .rs1(rs1),
         .rs2(rs2),
         .id_ex_mem_read(id_ex_mem_read),
-        // G4 - interlock phai dua tren mem_to_reg: SC.W co mem_read = 0 nhung
-        // rd VAN nhan ma trang thai 0/1 tu duong bo nho.
-        .id_ex_mem_to_reg(id_ex_mem_to_reg),
         .id_ex_jal(id_ex_jal),
         .id_ex_jalr(id_ex_jalr),
         .id_ex_rd(id_ex_rd),
@@ -1109,10 +919,7 @@ module riscv_pipeline #(
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
             riscv_done <= 1'b0;
-        end else if (riscv_start && (HALT_ON_ECALL != 0)) begin
-            // Chi dung han khi duoc yeu cau tuong minh (bo dung nghiem thu cu).
-            // Mac dinh HALT_ON_ECALL = 0: `ecall` chi la mot trap binh thuong,
-            // riscv_done giu 0 mai mai va loi chay tiep.
+        end else if (riscv_start) begin
             if (ex_mem_ecall || mem_wb_ecall) begin
                 riscv_done <= 1'b1;
             end
