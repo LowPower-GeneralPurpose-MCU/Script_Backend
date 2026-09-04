@@ -72,7 +72,7 @@ module branch_target_buffer (
     assign predict_target = btb_hit ? {targets[fetch_index], 2'b00} : (pc_in + 4);
     
     integer i;
-    always @(posedge clk) begin
+    always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
             for (i = 0; i < ENTRY; i = i + 1) begin
                 valids[i] <= 1'b0;
@@ -109,7 +109,7 @@ module branch_history_table (
     assign predict_taken = !btb_hit ? 1'b0 : (predicts[pc_in[5:2]] == 2'b10 || predicts[pc_in[5:2]] == 2'b11) ? 1'b1 : 1'b0;
     
     integer i;
-    always @(posedge clk) begin
+    always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
             for (i = 0; i < ENTRY; i = i + 1) begin
                 predicts[i] <= 2'b10; // Reset to weakly taken

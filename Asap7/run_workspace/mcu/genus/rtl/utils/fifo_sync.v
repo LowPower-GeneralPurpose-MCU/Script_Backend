@@ -46,7 +46,7 @@ module sync_fifo
     assign data_o = mem[rd_addr];
 
     // Write logic
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             wr_ptr <= {(ADDR_WIDTH+1){1'b0}};
         end else if (wr_en) begin
@@ -56,7 +56,7 @@ module sync_fifo
     end
 
     // Read logic
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             rd_ptr <= {(ADDR_WIDTH+1){1'b0}};
         end else if (rd_en) begin

@@ -241,6 +241,7 @@ module top_soc (
     wire gpio_clk_req;
     wire pwm_clk_req;
     wire cordic_clk_req;
+    wire cordic_active;   // loi CORDIC dang chay - phai giu clock cho no
 
     // Gating cho Core (từ clk_core)
     clock_gate cg_cpu   (.clk_in(clk_core), .en(clk_en_cpu_s),  .test_en(1'b0), .clk_out(clk_cpu));
@@ -1227,7 +1228,11 @@ module top_soc (
     end
     assign gpio_clk_req   = psel_1 | (|psel_gpio_ext);
     assign pwm_clk_req    = psel_2 | (|psel_pwm_ext);
-    assign cordic_clk_req = psel_6 | (|psel_cordic_ext);
+    // CORDIC khac GPIO/PWM: no khong chi la mot dong thanh ghi, ma la mot LOI
+    // TINH TOAN nhieu chu ky.  Neu chi keo dai theo PSEL thi lenh START se mat
+    // clock ngay sau chu ky ghi va FSM ket o CALC vinh vien (STATUS ket BUSY,
+    // X_OUT/Y_OUT khong bao gio ra).  Vi vay phai OR them `cordic_active`.
+    assign cordic_clk_req = psel_6 | (|psel_cordic_ext) | cordic_active;
 
     // S0: UART
     apb_uart u_apb_uart (
@@ -1291,7 +1296,8 @@ module top_soc (
     // S6: CORDIC
     apb_cordic u_apb_cordic (
         .pclk(clk_cordic), .presetn(reset_apb_n_sync),
-        .psel(psel_6), .penable(penable_6), .pwrite(pwrite_6), .paddr(paddr_6[11:0]), .pwdata(pwdata_6), .pstrb(pstrb_6), .prdata(prdata_6), .pready(pready_6), .pslverr(pslverr_6)
+        .psel(psel_6), .penable(penable_6), .pwrite(pwrite_6), .paddr(paddr_6[11:0]), .pwdata(pwdata_6), .pstrb(pstrb_6), .prdata(prdata_6), .pready(pready_6), .pslverr(pslverr_6),
+        .o_active(cordic_active)
     );
 
     // S7: Syscon

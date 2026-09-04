@@ -91,7 +91,7 @@ module arbiter_iwrr_1cycle
     end
 
     // Sequential: update last_grant_idx and credits
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             last_grant_idx <= {IDX_W{1'b0}};
             for (i = 0; i < REQ_W; i = i + 1)
