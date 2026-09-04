@@ -1,65 +1,30 @@
 `timescale 1ns / 1ps
 
 // =============================================================================
-// SUB-MODULES (Tag RAM & Data RAM)
-// =============================================================================
-module generic_tag_ram #(
-    parameter WAYS       = 2,
-    parameter INDEX_W    = 4,
-    parameter TAG_W      = 25
-)(
-    input  wire                       clk,
-    input  wire [INDEX_W-1:0]         index,
-    input  wire [WAYS-1:0]            write_en,
-    input  wire [TAG_W-1:0]           write_tag,
-    output wire [(WAYS*TAG_W)-1:0]    tag_out
-);
-    genvar i;
-    generate
-        for (i = 0; i < WAYS; i = i + 1) begin : tag_ways
-`ifdef FPGA
-            (* ram_style = "distributed" *)
-`endif
-            reg [TAG_W-1:0] ram [0:(1<<INDEX_W)-1];
-            assign tag_out[(i+1)*TAG_W-1 : i*TAG_W] = ram[index];
-            always @(posedge clk) begin
-                if (write_en[i]) ram[index] <= write_tag;
-            end
-        end
-    endgenerate
-endmodule
-
-module generic_data_ram #(
-    parameter WAYS       = 2,
-    parameter INDEX_W    = 4,
-    parameter BLOCK_W    = 64
-)(
-    input  wire                       clk,
-    input  wire [INDEX_W-1:0]         index,
-    input  wire [WAYS-1:0]            write_en,
-    input  wire [BLOCK_W-1:0]         write_data,
-    output wire [(WAYS*BLOCK_W)-1:0]  data_out
-);
-    genvar i;
-    generate
-        for (i = 0; i < WAYS; i = i + 1) begin : data_ways
-`ifdef FPGA
-            (* ram_style = "distributed" *)
-`endif
-            reg [BLOCK_W-1:0] ram [0:(1<<INDEX_W)-1];
-            assign data_out[(i+1)*BLOCK_W-1 : i*BLOCK_W] = ram[index];
-            always @(posedge clk) begin
-                if (write_en[i]) ram[index] <= write_data;
-            end
-        end
-    endgenerate
-endmodule
-
-// =============================================================================
 // MAIN MODULE: Instruction Cache
 // =============================================================================
+//
+// 32 KiB, 2-way set associative, 16-byte blocks (1024 sets).
+//
+// Storage is held in ASAP7 srambank_256x4x32_6t122 hard macros through
+// cache_data_array / cache_tag_array:
+//   data : 2 ways x 4 macros, addressed by {index[9:0], word_idx[1:0]}
+//   tag  : 2 ways x 1 macro,  addressed by index[9:0]
+// Valid bits and the round-robin victim pointer stay in flip-flops because the
+// macros have no reset.
+//
+// The macros read synchronously, so a cached access takes two cycles: the
+// address phase (IDLE) issues the array read and the compare phase (LOOKUP)
+// resolves hit/miss.  A hit therefore stalls the fetch stage for one cycle;
+// removing that cycle would require the core to present the next PC one cycle
+// early, which is outside this module.
+//
+// Refill writes each AXI read beat straight into the data array, so no
+// block-wide fetch buffer is needed.  The tag is written in DONE together with
+// the valid bit, keeping tag and valid consistent for the next lookup.
+// =============================================================================
 module instruction_cache #(
-    parameter C_CACHE_SIZE       = 1024,
+    parameter C_CACHE_SIZE       = 32768,
     parameter C_BLOCK_SIZE       = 16,
     parameter C_WAYS             = 2,
     parameter C_M_AXI_ID_W       = 5,
@@ -67,15 +32,15 @@ module instruction_cache #(
     parameter C_M_AXI_DATA_W     = 32
 )(
     input  wire                          clk,
-    input  wire                          rst_n,          
-    
+    input  wire                          rst_n,
+
     input  wire                          cpu_read_req,
     input  wire [C_M_AXI_ADDR_W-1:0]     cpu_addr,
     input  wire                          uncache_en,
     output reg  [C_M_AXI_DATA_W-1:0]     cpu_read_data,
     output reg                           icache_hit,
     output reg                           icache_stall,
-    
+
     output wire [C_M_AXI_ID_W-1:0]       m_axi_awid,
     output wire [C_M_AXI_ADDR_W-1:0]     m_axi_awaddr,
     output wire [7:0]                    m_axi_awlen,
@@ -117,70 +82,123 @@ module instruction_cache #(
     output reg                           m_axi_rready
 );
 
-    localparam BLOCK_W      = C_BLOCK_SIZE * 8;
-    localparam OFFSET_W     = $clog2(C_BLOCK_SIZE);
-    localparam NUM_SETS     = C_CACHE_SIZE / (C_BLOCK_SIZE * C_WAYS);
-    localparam INDEX_W      = $clog2(NUM_SETS);
-    localparam TAG_W        = C_M_AXI_ADDR_W - INDEX_W - OFFSET_W;
-    localparam BURST_LEN    = (BLOCK_W / C_M_AXI_DATA_W) - 1;
+    localparam BLOCK_W       = C_BLOCK_SIZE * 8;
+    localparam OFFSET_W      = $clog2(C_BLOCK_SIZE);
+    localparam NUM_SETS      = C_CACHE_SIZE / (C_BLOCK_SIZE * C_WAYS);
+    localparam INDEX_W       = $clog2(NUM_SETS);
+    localparam TAG_W         = C_M_AXI_ADDR_W - INDEX_W - OFFSET_W;
+    localparam WORDS_PER_BLK = BLOCK_W / C_M_AXI_DATA_W;
+    localparam WORD_IDX_W    = $clog2(WORDS_PER_BLK);
+    localparam DATA_ADDR_W   = INDEX_W + WORD_IDX_W;
+    localparam BURST_LEN     = WORDS_PER_BLK - 1;
+    localparam WAY_IDX_W     = $clog2(C_WAYS);
 
     assign m_axi_awid = 0; assign m_axi_awaddr = 0; assign m_axi_awlen = 0;
     assign m_axi_awsize = 0; assign m_axi_awburst = 0; assign m_axi_awlock = 0;
     assign m_axi_awcache = 0; assign m_axi_awprot = 0; assign m_axi_awqos = 0;
     assign m_axi_awregion = 0; assign m_axi_awvalid = 0;
-    assign m_axi_wdata = 0; assign m_axi_wstrb = 0; assign m_axi_wlast = 0; 
+    assign m_axi_wdata = 0; assign m_axi_wstrb = 0; assign m_axi_wlast = 0;
     assign m_axi_wvalid = 0; assign m_axi_bready = 1'b1;
-    
-    assign m_axi_arid = 0; assign m_axi_arsize = $clog2(C_M_AXI_DATA_W/8); 
+
+    assign m_axi_arid = 0; assign m_axi_arsize = $clog2(C_M_AXI_DATA_W/8);
     assign m_axi_arburst = 2'b01; assign m_axi_arlock = 1'b0;
     assign m_axi_arcache = uncache_en ? 4'b0000 : 4'b0011;
     assign m_axi_arprot = 3'b100; assign m_axi_arqos = 4'b0000; assign m_axi_arregion = 4'b0000;
 
-    wire [(C_WAYS*BLOCK_W)-1:0] data_out_bus;
-    wire [(C_WAYS*TAG_W)-1:0]   tag_out_bus;
-    reg  [C_WAYS-1:0]           valid_arr [0:NUM_SETS-1];
-    reg  [$clog2(C_WAYS)-1:0]   rr_ptr    [0:NUM_SETS-1];
-    
     localparam IDLE   = 3'd0,
-               AR_REQ = 3'd1,
-               R_WAIT = 3'd2,
-               DONE   = 3'd3;
-               
-    reg [2:0]  state, next_state;
-    reg [C_WAYS-1:0] way_update;
-    reg [BLOCK_W-1:0] fetch_buffer;
-    reg [C_M_AXI_ADDR_W-1:0] miss_addr;
-    
-    wire [C_M_AXI_ADDR_W-1:0] current_addr = (state == IDLE) ? cpu_addr : miss_addr;
-    wire [TAG_W-1:0]          tag          = current_addr[C_M_AXI_ADDR_W-1 : C_M_AXI_ADDR_W-TAG_W];
-    wire [INDEX_W-1:0]        index        = current_addr[OFFSET_W+INDEX_W-1 : OFFSET_W];
-    wire [OFFSET_W-1:0]       offset       = current_addr[OFFSET_W-1 : 0];
-    wire [$clog2(BLOCK_W/C_M_AXI_DATA_W)-1:0] word_idx = offset[OFFSET_W-1 : $clog2(C_M_AXI_DATA_W/8)];
+               LOOKUP = 3'd1,
+               AR_REQ = 3'd2,
+               R_WAIT = 3'd3,
+               DONE   = 3'd4;
 
-    generic_data_ram #(.WAYS(C_WAYS), .INDEX_W(INDEX_W), .BLOCK_W(BLOCK_W)) DATA_RAM (
-        .clk(clk), .index(index), .write_en(way_update), .write_data(fetch_buffer), .data_out(data_out_bus)
+    reg [2:0]                  state, next_state;
+    reg [C_M_AXI_ADDR_W-1:0]   miss_addr;
+    reg [C_M_AXI_DATA_W-1:0]   refill_word;
+    reg [WORD_IDX_W-1:0]       beat_cnt;
+
+    // Valid bits and the victim pointer must survive reset, so they stay in
+    // flip-flops instead of the reset-less SRAM macros.
+    reg [C_WAYS-1:0]           valid_arr [0:NUM_SETS-1];
+    reg [WAY_IDX_W-1:0]        rr_ptr    [0:NUM_SETS-1];
+
+    wire [C_M_AXI_ADDR_W-1:0] current_addr = (state == IDLE) ? cpu_addr : miss_addr;
+    wire [TAG_W-1:0]          tag      = current_addr[C_M_AXI_ADDR_W-1 : C_M_AXI_ADDR_W-TAG_W];
+    wire [INDEX_W-1:0]        index    = current_addr[OFFSET_W+INDEX_W-1 : OFFSET_W];
+    wire [OFFSET_W-1:0]       offset   = current_addr[OFFSET_W-1 : 0];
+    wire [WORD_IDX_W-1:0]     word_idx = offset[OFFSET_W-1 : $clog2(C_M_AXI_DATA_W/8)];
+
+    wire [WAY_IDX_W-1:0]      victim_way = rr_ptr[index];
+
+    // Array control
+    reg  [C_WAYS-1:0]         way_update;
+    wire                      array_read  = (state == IDLE) && cpu_read_req && !uncache_en;
+    wire                      refill_beat = (state == R_WAIT) && !uncache_en &&
+                                            m_axi_rvalid && m_axi_rready;
+
+    reg  [C_WAYS-1:0]         data_write_en;
+    wire [DATA_ADDR_W-1:0]    data_addr = (state == R_WAIT) ? {index, beat_cnt}
+                                                            : {index, word_idx};
+
+    wire [(C_WAYS*C_M_AXI_DATA_W)-1:0] data_out_bus;
+    wire [(C_WAYS*TAG_W)-1:0]          tag_out_bus;
+
+    always @(*) begin
+        data_write_en = {C_WAYS{1'b0}};
+        if (refill_beat) data_write_en[victim_way] = 1'b1;
+    end
+
+    cache_data_array #(
+        .WAYS   (C_WAYS),
+        .ADDR_W (DATA_ADDR_W)
+    ) DATA_RAM (
+        .clk        (clk),
+        .addr       (data_addr),
+        .read       (array_read),
+        .write_en   (data_write_en),
+        .write_data (m_axi_rdata),
+        .read_data  (data_out_bus)
     );
-    generic_tag_ram #(.WAYS(C_WAYS), .INDEX_W(INDEX_W), .TAG_W(TAG_W)) TAG_RAM (
-        .clk(clk), .index(index), .write_en(way_update), .write_tag(tag), .tag_out(tag_out_bus)
+
+    cache_tag_array #(
+        .WAYS   (C_WAYS),
+        .ADDR_W (INDEX_W),
+        .TAG_W  (TAG_W)
+    ) TAG_RAM (
+        .clk       (clk),
+        .addr      (index),
+        .read      (array_read),
+        .write_en  (way_update),
+        .write_tag (tag),
+        .read_tag  (tag_out_bus)
     );
 
     integer i, w;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            state <= IDLE; fetch_buffer <= 0; miss_addr <= 0;
-            for (i=0; i<NUM_SETS; i=i+1) begin valid_arr[i]<=0; rr_ptr[i]<=0; end
+            state       <= IDLE;
+            miss_addr   <= 0;
+            refill_word <= 0;
+            beat_cnt    <= 0;
+            for (i = 0; i < NUM_SETS; i = i + 1) begin
+                valid_arr[i] <= 0;
+                rr_ptr[i]    <= 0;
+            end
         end else begin
             state <= next_state;
-            if (state == IDLE && cpu_read_req && !icache_hit) miss_addr <= cpu_addr;
+
+            if (state == IDLE && cpu_read_req) miss_addr <= cpu_addr;
+
+            if (state == AR_REQ) beat_cnt <= 0;
 
             if (state == R_WAIT && m_axi_rvalid && m_axi_rready) begin
-                if (uncache_en) fetch_buffer[C_M_AXI_DATA_W-1:0] <= m_axi_rdata;
-                else fetch_buffer <= {m_axi_rdata, fetch_buffer[BLOCK_W-1:C_M_AXI_DATA_W]};
+                beat_cnt <= beat_cnt + 1'b1;
+                if (uncache_en || beat_cnt == word_idx) refill_word <= m_axi_rdata;
             end
 
             if (state == DONE && !uncache_en) begin
-                for (w=0; w<C_WAYS; w=w+1) if (way_update[w]) valid_arr[index][w] <= 1'b1;
-                rr_ptr[index] <= rr_ptr[index] + 1;
+                for (w = 0; w < C_WAYS; w = w + 1)
+                    if (way_update[w]) valid_arr[index][w] <= 1'b1;
+                rr_ptr[index] <= rr_ptr[index] + 1'b1;
             end
         end
     end
@@ -188,41 +206,58 @@ module instruction_cache #(
     reg hit_flag;
     reg [C_M_AXI_DATA_W-1:0] read_word;
 
+    // Hit resolution uses the array outputs captured for miss_addr, so it is
+    // only meaningful in LOOKUP.
+    always @(*) begin
+        hit_flag  = 1'b0;
+        read_word = {C_M_AXI_DATA_W{1'b0}};
+        for (w = 0; w < C_WAYS; w = w + 1) begin
+            if (valid_arr[index][w] && tag_out_bus[w*TAG_W +: TAG_W] == tag) begin
+                hit_flag  = 1'b1;
+                read_word = data_out_bus[w*C_M_AXI_DATA_W +: C_M_AXI_DATA_W];
+            end
+        end
+    end
+
     always @(*) begin
         next_state    = state;
         icache_hit    = 1'b0;
-        icache_stall  = 1'b0; 
-        cpu_read_data = 0;
-        way_update    = 0;
+        icache_stall  = 1'b0;
+        cpu_read_data = {C_M_AXI_DATA_W{1'b0}};
+        way_update    = {C_WAYS{1'b0}};
         m_axi_arvalid = 1'b0;
         m_axi_rready  = 1'b0;
-        
+
         if (uncache_en) begin
-            m_axi_arlen  = 8'd0; 
+            m_axi_arlen  = 8'd0;
             m_axi_araddr = current_addr;
         end else begin
-            m_axi_arlen  = BURST_LEN; 
+            m_axi_arlen  = BURST_LEN;
             m_axi_araddr = {tag, index, {OFFSET_W{1'b0}}};
-        end
-
-        hit_flag = 1'b0; read_word = 0;
-        for (w=0; w<C_WAYS; w=w+1) begin
-            if (!uncache_en && valid_arr[index][w] && tag_out_bus[w*TAG_W +: TAG_W] == tag) begin
-                hit_flag = 1'b1;
-                read_word = data_out_bus[(w*BLOCK_W) + (word_idx*C_M_AXI_DATA_W) +: C_M_AXI_DATA_W];
-            end
         end
 
         case (state)
             IDLE: begin
+                // Address phase: the SRAM read is issued here and resolved in
+                // LOOKUP, so even a hit costs one stall cycle.
                 if (cpu_read_req) begin
-                    if (uncache_en) begin
-                        icache_stall = 1'b1; next_state = AR_REQ;
-                    end else if (hit_flag) begin
-                        icache_hit = 1'b1; cpu_read_data = read_word;
+                    icache_stall = 1'b1;
+                    next_state   = uncache_en ? AR_REQ : LOOKUP;
+                end
+            end
+            LOOKUP: begin
+                next_state = IDLE;
+                if (cpu_read_req && cpu_addr == miss_addr) begin
+                    if (hit_flag) begin
+                        icache_hit    = 1'b1;
+                        cpu_read_data = read_word;
                     end else begin
-                        icache_stall = 1'b1; next_state = AR_REQ;
+                        icache_stall = 1'b1;
+                        next_state   = AR_REQ;
                     end
+                end else begin
+                    // Lệnh fetch đã bị flush trong lúc đọc mảng SRAM
+                    icache_stall = 1'b1;
                 end
             end
             AR_REQ: begin
@@ -236,22 +271,25 @@ module instruction_cache #(
             DONE: begin
                 // Kiểm tra xem CPU có vừa bị flush nhảy PC đi nơi khác không
                 if (cpu_addr == miss_addr) begin
-                    icache_stall = 1'b0;
-                    icache_hit   = 1'b1;
-                    cpu_read_data = uncache_en ?
-                        fetch_buffer[C_M_AXI_DATA_W-1:0] : fetch_buffer[word_idx*C_M_AXI_DATA_W +: C_M_AXI_DATA_W];
+                    icache_stall  = 1'b0;
+                    icache_hit    = 1'b1;
+                    cpu_read_data = refill_word;
                 end else begin
-                    // Nếu PC đã thay đổi, HỦY việc trả lệnh này cho CPU (giữ stall để cycle sau IDLE xử lý PC mới)
-                    icache_stall = 1'b1;
-                    icache_hit   = 1'b0;
-                    cpu_read_data = {C_M_AXI_DATA_W{1'b0}}; 
+                    // Nếu PC đã thay đổi, HỦY việc trả lệnh này cho CPU
+                    icache_stall  = 1'b1;
+                    icache_hit    = 1'b0;
+                    cpu_read_data = {C_M_AXI_DATA_W{1'b0}};
                 end
-                
-                // Vẫn ghi dữ liệu vừa fetch vào SRAM để tận dụng (vì đằng nào cũng tốn công fetch)
-                if (!uncache_en) way_update[rr_ptr[index]] = 1'b1; 
+
+                // Tag và valid được ghi cùng lúc để lookup kế tiếp luôn nhất quán
+                if (!uncache_en) way_update[victim_way] = 1'b1;
                 next_state = IDLE;
             end
             default: next_state = IDLE;
         endcase
     end
+
+    wire _unused_ok = &{1'b0, m_axi_awready, m_axi_wready, m_axi_bid,
+                        m_axi_bresp, m_axi_bvalid, m_axi_rid, m_axi_rresp};
+
 endmodule

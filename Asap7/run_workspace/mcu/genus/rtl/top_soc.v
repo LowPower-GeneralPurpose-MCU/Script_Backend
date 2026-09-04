@@ -445,7 +445,11 @@ module top_soc (
 
     // --- M0. ICACHE ---
     wire ic_uncache_en = (cpu_inst_addr >= 32'h4000_0000 && cpu_inst_addr <= 32'h47FF_FFFF);
-    instruction_cache u_icache (
+    instruction_cache #(
+        .C_CACHE_SIZE (32768),   // 32 KiB
+        .C_BLOCK_SIZE (16),
+        .C_WAYS       (2)
+    ) u_icache (
         .clk             (clk_cpu),              // clk_cpu (400MHz)
         .rst_n           (reset_core_n_sync),
         .cpu_read_req    (cpu_inst_req),
@@ -495,7 +499,11 @@ module top_soc (
 
     // --- M1. DCACHE ---
     wire dc_uncache_en = (cpu_data_addr >= 32'h4000_0000 && cpu_data_addr <= 32'h47FF_FFFF);
-    data_cache u_dcache (
+    data_cache #(
+        .C_CACHE_SIZE (32768),   // 32 KiB
+        .C_BLOCK_SIZE (16),
+        .C_WAYS       (4)
+    ) u_dcache (
         .clk             (clk_cpu),              // clk_cpu (400MHz)
         .rst_n           (reset_core_n_sync),
         .cpu_read_req    (cpu_data_rd_req),
@@ -584,7 +592,7 @@ module top_soc (
         .TRANS_MST_ID_W(MST_ID_WIDTH), .ROB_TAG_W(ROB_TAG_WIDTH), .ROB_ID_WIDTH(ROB_ID_WIDTH), .TRANS_SLV_ID_W(SLV_ID_WIDTH),
         .MST_WEIGHT (128'h00000005_00000004_00000003_00000001),
         .SLV_BASE_ADDR (192'h0200_0000_4000_0000_8000_0000_3000_0000_2000_0000_0001_0000),
-        .SLV_ADDR_MASK (192'hFFFF_0000_F800_0000_FC00_0000_FF00_0000_FFFE_0000_FFFF_0000)
+        .SLV_ADDR_MASK (192'hFFFF_0000_F800_0000_FC00_0000_FF00_0000_FFFC_0000_FFFF_0000)
     ) u_axi_interconnect (
         .ACLK_i          (clk_axi), // AXI Bus chạy clk_axi (luôn sống)
         .ARESETn_i       (reset_axi_n_sync),
@@ -620,8 +628,8 @@ module top_soc (
 
     axi_ram #(
         .ID_WIDTH(SLV_ID_WIDTH),
-        .ADDR_MASK(32'h0001_FFFF),
-        .MEM_DEPTH(32768)
+        .ADDR_MASK(32'h0003_FFFF),
+        .MEM_DEPTH(65536)
     ) u_axi_ram (
         .clk(clk_axi), .rst_n(reset_axi_n_sync),
         .s_axi_awid(s1_awid), .s_axi_awaddr(s1_awaddr), .s_axi_awlen(s1_awlen), .s_axi_awsize(s1_awsize), .s_axi_awburst(s1_awburst), .s_axi_awlock(s1_awlock), .s_axi_awcache(s1_awcache), .s_axi_awprot(s1_awprot), .s_axi_awqos(s1_awqos), .s_axi_awregion(s1_awregion), .s_axi_awvalid(s1_awvalid), .s_axi_awready(s1_awready),

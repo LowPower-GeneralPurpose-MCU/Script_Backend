@@ -1,11 +1,11 @@
 `timescale 1ns / 1ps
 
-// 128-KiB AXI4 SRAM slave for ASAP7 hard SRAM macros.
+// 256-KiB AXI4 SRAM slave for ASAP7 hard SRAM macros.
 //
 // Memory implementation:
-//   32 x srambank_256x4x32_6t122
+//   64 x srambank_256x4x32_6t122
 //   each macro = 1024 words x 32 bits = 4 KiB
-//   total      = 32768 words x 32 bits = 128 KiB
+//   total      = 65536 words x 32 bits = 256 KiB
 //
 // Important implementation choice:
 //   The ASAP7 macro is single-port 1RW and has no byte-write mask.
@@ -27,10 +27,10 @@ module axi_ram #(
     parameter ADDR_WIDTH = 32,
     parameter DATA_WIDTH = 32,
     parameter ID_WIDTH   = 5,
-    parameter ADDR_MASK  = 32'h0001_FFFF,
+    parameter ADDR_MASK  = 32'h0003_FFFF,
     // Retained for compatibility with the original MCU instantiation.
-    // This hard-macro implementation supports exactly 32768 x 32 bits.
-    parameter MEM_DEPTH  = 32768
+    // This hard-macro implementation supports exactly 65536 x 32 bits.
+    parameter MEM_DEPTH  = 65536
 )(
     input  wire                      clk,
     input  wire                      rst_n,
@@ -129,7 +129,7 @@ module axi_ram #(
     // Hard-macro SRAM interface
     reg         mem_read;
     reg         mem_write;
-    reg  [16:0] mem_addr;
+    reg  [17:0] mem_addr;
     reg  [31:0] mem_wdata;
     wire [31:0] mem_rdata;
 
@@ -149,7 +149,7 @@ module axi_ram #(
           (s_axi_arburst == AXI_BURST_INCR));
 
     // ASAP7 macro bank wrapper.
-    asap7_sram_128k_1rw u_mem (
+    asap7_sram_256k_1rw u_mem (
         .clk   (clk),
         .read  (mem_read),
         .write (mem_write),
@@ -162,18 +162,18 @@ module axi_ram #(
     always @(*) begin
         mem_read  = 1'b0;
         mem_write = 1'b0;
-        mem_addr  = 17'b0;
+        mem_addr  = 18'b0;
         mem_wdata = 32'b0;
 
         case (state)
             S_W_RMW_READ: begin
                 mem_read = 1'b1;
-                mem_addr = w_addr_reg[16:0] & ADDR_MASK[16:0];
+                mem_addr = w_addr_reg[17:0] & ADDR_MASK[17:0];
             end
 
             S_W_WRITE: begin
                 mem_write = 1'b1;
-                mem_addr  = w_addr_reg[16:0] & ADDR_MASK[16:0];
+                mem_addr  = w_addr_reg[17:0] & ADDR_MASK[17:0];
 
                 // Inline byte-lane merge for partial writes.
                 // For a full write all four byte lanes are replaced.
@@ -186,7 +186,7 @@ module axi_ram #(
 
             S_R_ISSUE: begin
                 mem_read = 1'b1;
-                mem_addr = r_addr_reg[16:0] & ADDR_MASK[16:0];
+                mem_addr = r_addr_reg[17:0] & ADDR_MASK[17:0];
             end
 
             default: begin
