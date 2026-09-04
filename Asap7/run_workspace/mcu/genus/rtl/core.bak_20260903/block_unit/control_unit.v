@@ -4,15 +4,6 @@
 `timescale 1ns / 1ps
 
 module main_control_unit #(
-    // AMO*.W bat DONG THOI mem_read va mem_write, nhung FSM cua data_cache o
-    // IDLE kiem `if (cpu_read_req) ... else if (cpu_write_req)` - doc thang,
-    // phan GHI bi nuot im lang. Vi vay A mac dinh TAT: AMO tro thanh
-    // illegal-instruction thay vi chay sai am tham.
-    //
-    // Bat len 1 CHI KHI data_cache da co FSM AMO_READ -> ALU -> AMO_WRITE (va
-    // AWLOCK that), va phai bat CUNG LUC voi localparam ENABLE_A_EXTENSION
-    // trong register_file.v (bit A cua MISA) - neu khong MISA lai lech decoder.
-    parameter ENABLE_A_EXTENSION = 0,
     parameter ENABLE_F_EXTENSION = 0
 ) (
     input [6:0] opcode,
@@ -39,11 +30,7 @@ module main_control_unit #(
     output reg f_mem_write,
     output reg f_to_x,
     output reg x_to_f,
-    output reg [4:0] fpu_operation,
-    // V5 - ma lenh khong ton tai -> illegal-instruction (mcause = 2, mtval = ma lenh).
-    // Quy tac fail-safe: khoi tao bang 1, MOI nhanh hop le phai tu ha xuong 0.
-    // Nhanh `default` rong cua case cu khien moi opcode la chay im lang nhu NOP.
-    output reg illegal_instr
+    output reg [4:0] fpu_operation
 );
 
     always @(*) begin 
@@ -68,36 +55,29 @@ module main_control_unit #(
         f_to_x = 1'b0;
         x_to_f = 1'b0;
         fpu_operation = 5'b00000;
-        illegal_instr = 1'b1;      // fail-safe: nhanh hop le phai tu ha xuong
-
+        
         case (opcode)
             7'b0110011: begin
                 reg_write = 1'b1;
                 alu_op = 2'b10;
-                // Bang tra cuu cu la ANH XA DONG NHAT funct3 -> md_operation.
-                // Gan vo dieu kien la vo hai: chi khi funct7 = 0x01 thi md_type moi bat.
-                md_operation = funct3;
-                case (funct7)
-                    7'b0000000: illegal_instr = 1'b0;   // add sll slt sltu xor srl or and
-                    7'b0000001: illegal_instr = 1'b0;   // M: ca 8 funct3 deu ton tai
-                    // sub / sra la HAI o duy nhat cua funct7 = 0x20. `xor`/`add` voi
-                    // funct7 = 0x20 KHONG ton tai - truoc day chung chay nhu add.
-                    7'b0100000: illegal_instr = (funct3 != 3'b000) && (funct3 != 3'b101);
-                    default:    ;                       // giu illegal_instr = 1
-                endcase
+                if (funct7 == 7'b0000001) begin
+                    case (funct3)
+                        3'b000: md_operation = 3'b000;
+                        3'b001: md_operation = 3'b001;
+                        3'b010: md_operation = 3'b010;
+                        3'b011: md_operation = 3'b011;
+                        3'b100: md_operation = 3'b100;
+                        3'b101: md_operation = 3'b101;
+                        3'b110: md_operation = 3'b110;
+                        3'b111: md_operation = 3'b111;
+                    endcase
+                end
             end
             
             7'b0010011: begin
                 reg_write = 1'b1;
                 alu_src = 1'b1;
                 alu_op = 2'b10;
-                case (funct3)
-                    // RV32: shamt = instr[24:20], nen instr[25] PHAI bang 0.
-                    3'b001:  illegal_instr = (funct7 != 7'b0000000);                  // slli
-                    3'b101:  illegal_instr = (funct7 != 7'b0000000) &&
-                                             (funct7 != 7'b0100000);                  // srli/srai
-                    default: illegal_instr = 1'b0;
-                endcase
             end
             
             7'b0000011: begin
@@ -107,14 +87,30 @@ module main_control_unit #(
                 reg_write = 1'b1;
                 alu_op = 2'b00;
                 case (funct3)
-                    3'b000: begin mem_size = 2'b00; mem_unsigned = 1'b0; illegal_instr = 1'b0; end // lb
-                    3'b001: begin mem_size = 2'b01; mem_unsigned = 1'b0; illegal_instr = 1'b0; end // lh
-                    3'b010: begin mem_size = 2'b10; mem_unsigned = 1'b0; illegal_instr = 1'b0; end // lw
-                    3'b100: begin mem_size = 2'b00; mem_unsigned = 1'b1; illegal_instr = 1'b0; end // lbu
-                    3'b101: begin mem_size = 2'b01; mem_unsigned = 1'b1; illegal_instr = 1'b0; end // lhu
-                    // 011 = ld, 110 = lwu, 111 = reserved: deu la RV64. Truoc day chung
-                    // chay nhu `lw`. Ha mem_read de dia chi rac khong di toi bo nho.
-                    default: begin mem_size = 2'b10; mem_unsigned = 1'b0; mem_read = 1'b0; end
+                    3'b000: begin
+                        mem_size = 2'b00;
+                        mem_unsigned = 1'b0;
+                    end
+                    3'b001: begin
+                        mem_size = 2'b01;
+                        mem_unsigned = 1'b0;
+                    end
+                    3'b010: begin
+                        mem_size = 2'b10;
+                        mem_unsigned = 1'b0;
+                    end
+                    3'b100: begin
+                        mem_size = 2'b00;
+                        mem_unsigned = 1'b1;
+                    end
+                    3'b101: begin
+                        mem_size = 2'b01;
+                        mem_unsigned = 1'b1;
+                    end
+                    default: begin
+                        mem_size = 2'b10;
+                        mem_unsigned = 1'b0;
+                    end
                 endcase
             end
             
@@ -123,35 +119,33 @@ module main_control_unit #(
                 mem_write = 1'b1;
                 alu_op = 2'b00;
                 case (funct3)
-                    3'b000: begin mem_size = 2'b00; illegal_instr = 1'b0; end   // sb
-                    3'b001: begin mem_size = 2'b01; illegal_instr = 1'b0; end   // sh
-                    3'b010: begin mem_size = 2'b10; illegal_instr = 1'b0; end   // sw
-                    // 011 = sd (RV64), 100..111 = reserved. Truoc day chay nhu `sw`:
-                    // mot ma lenh khong ton tai GHI THAT vao bo nho.
-                    default: begin mem_size = 2'b10; mem_write = 1'b0; end
+                    3'b000: mem_size = 2'b00;
+                    3'b001: mem_size = 2'b01;
+                    3'b010: mem_size = 2'b10;
+                    default: mem_size = 2'b10;
                 endcase
             end
 
             7'b0101111: begin
-                // funct3 = 011 la AMO*.D - chi RV64. Moi funct3 khac khong ton tai.
-                // Khi ENABLE_A_EXTENSION = 0 thi ca nhom giu illegal_instr = 1.
-                if (ENABLE_A_EXTENSION && funct3 == 3'b010) begin
+                if (funct3 == 3'b010) begin
                     alu_src = 1'b1;
                     alu_op = 2'b00;
                     mem_size = 2'b10;
                     reg_write = 1'b1;
                     mem_to_reg = 1'b1;
                     case (funct7[6:2])
-                        5'b00010: begin mem_read = 1'b1; mem_write = 1'b0; illegal_instr = 1'b0; end // LR.W
-                        5'b00011: begin mem_read = 1'b0; mem_write = 1'b1; illegal_instr = 1'b0; end // SC.W
-                        // Chin ma AMO con lai: doc gia tri cu VA ghi gia tri moi.
-                        5'b00000, 5'b00001, 5'b00100, 5'b01000, 5'b01100,
-                        5'b10000, 5'b10100, 5'b11000, 5'b11100: begin
-                            mem_read = 1'b1; mem_write = 1'b1; illegal_instr = 1'b0;
+                        5'b00010: begin // LR.W
+                            mem_read = 1'b1;
+                            mem_write = 1'b0;
                         end
-                        // Ma chua dinh nghia: truoc day roi vao `default` va chay
-                        // read-modify-write voi amo_write_data = rs2 - tuc nhu mot `sw`.
-                        default: begin mem_read = 1'b0; mem_write = 1'b0; end
+                        5'b00011: begin // SC.W
+                            mem_read = 1'b0;
+                            mem_write = 1'b1;
+                        end
+                        default: begin  // AMO*.W read old value and write new value
+                            mem_read = 1'b1;
+                            mem_write = 1'b1;
+                        end
                     endcase
                 end
             end
@@ -159,43 +153,31 @@ module main_control_unit #(
             7'b1100011: begin
                 branch = 1'b1;
                 alu_op = 2'b01;
-                // 010 va 011 la hai o duy nhat khong ton tai. Truoc day chung chay qua
-                // bo so sanh voi `default: branch_taken = 0` - mot lenh nhay "khong bao
-                // gio nhay", chay im lang.
-                illegal_instr = (funct3 == 3'b010) || (funct3 == 3'b011);
             end
             
-            7'b0110111: begin lui   = 1'b1; reg_write = 1'b1; illegal_instr = 1'b0; end  // LUI
-            7'b0010111: begin auipc = 1'b1; reg_write = 1'b1; illegal_instr = 1'b0; end  // AUIPC
-            7'b1101111: begin jal   = 1'b1; reg_write = 1'b1; illegal_instr = 1'b0; end  // JAL
-
-            7'b1100111: begin                                                            // JALR
+            7'b0110111: begin
+                lui = 1'b1;
+                reg_write = 1'b1;
+            end
+            
+            7'b0010111: begin
+                auipc = 1'b1;
+                reg_write = 1'b1;
+            end
+            
+            7'b1101111: begin
+                jal = 1'b1;
+                reg_write = 1'b1;
+            end
+            
+            7'b1100111: begin
                 jalr = 1'b1;
                 reg_write = 1'b1;
                 alu_src = 1'b1;
-                illegal_instr = (funct3 != 3'b000);
             end
-
-            // ---- FENCE ----
-            // Loi mot hart, bo nho hop nhat khong dat lai thu tu -> `fence` la NOP HOP LE.
-            // Viet thanh nhanh RIENG de no khong bi mac dinh moi thanh illegal.
-            // funct3 = 001 la FENCE.I (Zifencei): CHUA hien thuc duong invalidate
-            // I-cache o SoC nay, nen bao illegal thay vi chay im lang nhu NOP.
-            7'b0001111: begin
-                illegal_instr = (funct3 != 3'b000);
-            end
-
-            // ---- SYSTEM ----
-            // funct3 = 000: bon lenh dac quyen ecall/ebreak/mret/wfi chi khac nhau o
-            // instr[31:20] ma o day khong co du 32 bit - GIU illegal_instr = 1, va
-            // instruction_decode (noi bon hang so 32 bit da ton tai) ha no xuong.
-            // funct3 = 100 khong ton tai trong Zicsr: truoc day no dat reg_write = 1 va
-            // csr_op = 2'b00, nen chay nhu mot lenh doc CSR khong ghi.
+            
             7'b1110011: begin
-                if (funct3 != 3'b000) begin
-                    reg_write = 1'b1;
-                    illegal_instr = (funct3 == 3'b100);
-                end
+                if (funct3 != 3'b000) reg_write = 1'b1;
             end
             
             7'b0000111: begin

@@ -221,18 +221,7 @@ module instruction_fetch (
     input wire bpu_correct,
     input wire [31:0] predict_target,
     input wire fetch_two_valid,
-
-    // ---- F4: dong cong khi khong thuc su lay lenh ----
-    // fetch_enable = ~(stall_IF | is_sleeping | dbg_halted), tinh o riscv_pipeline.v
-    input wire clk,
-    input wire icache_stall_in,
-    input wire fetch_enable,
-
-    // ---- F3: bat tay voi thanh ghi IF/ID ----
-    input  wire if_accept,        // IF/ID se chot trong chu ky nay (= !stall_if_id)
-    output wire realign_stall,    // dang lay nua thu nhat: giu PC, bom bong bong
-
-    output reg [31:0] pc_out,
+    output reg [31:0] pc_out, 
     output wire [31:0] pc_plus_4,
     output wire [31:0] pc_plus_8,
     output wire [31:0] instr,
@@ -245,99 +234,11 @@ module instruction_fetch (
     input wire [31:0] icache_read_data_lane1
 );
 
-    localparam [31:0] IF_NOP = 32'h00000013;
-
-    // =============================================================================
-    // F3 - lenh 32 bit VAT QUA HAI WORD khi C bat.
-    //
-    // Bo nho lenh tra ve WORD DA CAN LE chua pc_in. Voi C bat, mot lenh 32 bit co
-    // the bat dau o bien 2 byte, khi do 32 bit cua no nam vat qua hai word:
-    //
-    //      dia chi:   ... 0x100 ......... 0x104 ...
-    //      bo nho :  [ B B A A ]        [ D D C C ]
-    //                      ^^^^ nua THAP cua lenh o 0x102
-    //                                       ^^^^ nua CAO cua lenh o 0x102
-    //
-    // Ma cu:  assign instr = instr0_compressed ? instr0_expanded : icache_read_data;
-    // tuc lay nguyen word tai 0x100 = {A,A,B,B} - KHONG LIEN QUAN GI den lenh that.
-    //
-    // Day la loi kinh dien cua RVC: khong xuat hien khi test chi co lenh 32 bit,
-    // cung khong xuat hien khi test chi co lenh nen. No chi hien ra khi mot CHUOI
-    // LE lenh nen day mot lenh 32 bit sang bien le - tuc trong MOI chuong trinh
-    // that duoc bien dich voi -march=rv32imac.
-    //
-    // Cach sua: FSM hai trang thai, ton them 1 chu ky va CHI khi thuc su vat bien:
-    //
-    //   ST_IDLE, pc[1]=1, lenh khong nen  -> lay word tai {pc[31:2],00}, giu nua
-    //                                        tren [31:16] vao rl_half. Bat
-    //                                        realign_stall: bom bong bong vao
-    //                                        IF/ID va giu pc_reg.
-    //   ST_JOIN                           -> doi dia chi icache sang word ke tiep,
-    //                                        ghep {icache_read_data[15:0], rl_half}.
-    //                                        Ha realign_stall, pipeline chay tiep.
-    //
-    // Dung rl_pc lam bao ve thay vi liet ke cac tin hieu doi huong: PC co the bi
-    // doi bat ngo boi trap, nhanh doan sai, jal/jalr, VA boi Debug Module ghi dpc.
-    // So sanh rl_pc voi pc_in bat duoc TAT CA truong hop do bang mot dieu kien.
-    //
-    // Khong dung cong icache lane 1 (dia chi pc+4) cho re vi cong do da bi tie-off
-    // o top_soc.v; lam vay se bat SoC phai phuc vu hai cong lenh vinh vien.
-    // =============================================================================
-    localparam ST_IDLE = 1'b0;
-    localparam ST_JOIN = 1'b1;
-
-    reg        rl_state;
-    reg [15:0] rl_half;        // nua THAP cua lenh vat bien, lay o chu ky truoc
-    reg [31:0] rl_pc;          // PC ma nua tren thuoc ve - dung de tu bao ve
-
-    // Du lieu lenh chi hop le khi cong dang mo va bo nho khong stall (F4).
-    wire fetch_valid = fetch_enable && !icache_stall_in;
-
     wire [15:0] instr0_half = pc_in[1] ? icache_read_data[31:16] : icache_read_data[15:0];
-    wire        raw_compressed = (instr0_half[1:0] != 2'b11);
-
-    // Lenh 32 bit bat dau o bien 2 byte -> vat qua hai word.
-    wire need_realign = pc_in[1] && !raw_compressed;
-
-    // Dang o nhip thu hai VA nua da giu van thuoc ve dung PC nay.
-    wire joining = (rl_state == ST_JOIN) && (rl_pc == pc_in);
-
-    // Trong nhip ghep, instr0_half tro toi word KE TIEP nen khong duoc dung de
-    // xet "co nen hay khong" nua - ep ve khong nen.
-    wire instr0_compressed = joining ? 1'b0 : raw_compressed;
-
+    wire        instr0_compressed = (instr0_half[1:0] != 2'b11);
     wire [31:0] instr0_expanded;
     wire [31:0] seq_pc = pc_in + (instr0_compressed ? 32'd2 :
                                   (fetch_two_valid ? 32'd8 : 32'd4));
-
-    // Giu PC va bom bong bong trong nhip lay nua thu nhat.
-    assign realign_stall = (rl_state == ST_IDLE) && need_realign && fetch_valid;
-
-    always @(posedge clk or negedge reset_n) begin
-        if (!reset_n) begin
-            rl_state <= ST_IDLE;
-            rl_half  <= 16'd0;
-            rl_pc    <= 32'd0;
-        end else begin
-            case (rl_state)
-                ST_IDLE: begin
-                    if (need_realign && fetch_valid) begin
-                        rl_half  <= icache_read_data[31:16];
-                        rl_pc    <= pc_in;
-                        rl_state <= ST_JOIN;
-                    end
-                end
-                ST_JOIN: begin
-                    if (rl_pc != pc_in) begin
-                        // PC bi doi huong duoi chan: bo nua da giu, lam lai tu dau.
-                        rl_state <= ST_IDLE;
-                    end else if (if_accept && fetch_valid) begin
-                        rl_state <= ST_IDLE;
-                    end
-                end
-            endcase
-        end
-    end
 
     riscv_c_decompressor C_DEC0 (
         .instr16(instr0_half),
@@ -369,34 +270,12 @@ module instruction_fetch (
         end
     end
     
-    // ---- F4: khong phat yeu cau khi dang halt / ngu / stall ----
-    // Truoc: `assign icache_read_req = 1'b1;` - phat yeu cau ke ca khi dang halt,
-    // dang ngu (WFI), hay dang stall. Voi icache thuan thi vo hai ve chuc nang,
-    // nhung no dot cong suat dong lien tuc: mang tag+data 4864 flip-flop bi doc
-    // MOI chu ky. Voi mot MCU low-power day la lang phi khong the bien minh.
-    //
-    // Khi cong bi dong, `instr` duoc ep ve NOP thay vi du lieu cu. An toan vi moi
-    // dieu kien dong cong deu keo theo pc_reg dung yen (stall_IF), nen lenh se
-    // duoc lay lai dung o chu ky mo cong.
-    assign icache_read_req = fetch_enable;
-    assign icache_read_req_lane1 = 1'b0;
-
-    // ---- F3: nhip ghep lay word KE TIEP ----
-    assign icache_addr = joining ? ({pc_in[31:2], 2'b00} + 32'd4) : pc_in;
-    assign icache_addr_lane1 = 32'd0;
-
-    // Thu tu uu tien cua mux lenh:
-    //   1. cong dong           -> NOP (an toan: pc_reg dung yen, se lay lai sau)
-    //   2. dang ghep           -> {nua tren cua word ke tiep, nua duoi da giu}
-    //   3. lenh nen            -> ban da giai nen
-    //   4. dang lay nua dau    -> NOP (bong bong, di kem realign_stall)
-    //   5. con lai             -> lenh 32 bit da can le
-    assign instr = (!fetch_valid)     ? IF_NOP :
-                   joining            ? {icache_read_data[15:0], rl_half} :
-                   instr0_compressed  ? instr0_expanded :
-                   need_realign       ? IF_NOP :
-                                        icache_read_data;
-    assign instr_lane1 = IF_NOP;
+    assign icache_read_req = 1'b1;
+    assign icache_read_req_lane1 = 1'b1;
+    assign icache_addr = pc_in;
+    assign icache_addr_lane1 = pc_in + 32'd4;
+    assign instr = instr0_compressed ? instr0_expanded : icache_read_data;
+    assign instr_lane1 = instr0_compressed ? 32'h00000013 : icache_read_data_lane1;
     assign pc_plus_4 = pc_in + (instr0_compressed ? 32'd2 : 32'd4);
     assign pc_plus_8 = pc_in + 32'd8;
 
@@ -438,7 +317,6 @@ module instruction_decode (
     output [1:0] csr_op,
     output csr_we,
     output wire wfi_req,
-    output illegal_instr,   // V5 - ma lenh khong ton tai -> illegal-instruction
     output fpu_en,
     output f_reg_write,
     output f_mem_to_reg,
@@ -494,60 +372,9 @@ module instruction_decode (
     assign wfi_req = (if_id_instr == 32'h10500073);
     
     assign csr_addr = if_id_instr[31:20];
-    // -------------------------------------------------------------------------
-    // Quy tac "lenh nay co THUC SU ghi CSR khong"
-    //
-    // Truoc day: csr_op = funct3[1:0] cho moi lenh SYSTEM co funct3 != 0. Sai voi
-    // csrrs/csrrc (va hai bien the ...i) khi nguon bang 0:
-    //
-    //     csrr t0, mcycle     ==     csrrs t0, mcycle, x0
-    //
-    // Theo dac ta, csrrs/csrrc voi rs1 = x0 (hoac uimm = 0) KHONG duoc ghi CSR.
-    // Loi cu van ghi lai chinh gia tri vua doc. Voi mcycle hau qua nhin thay
-    // ngay: khoi `if (count_en) mcycle <= mcycle + 1` va nhanh ghi CSR cung nam
-    // trong mot always, nhanh ghi dung sau nen thang - moi lan DOC mcycle lam
-    // MAT mot nhip dem.
-    //
-    // Phai sua truoc csr_illegal_write, vi tin hieu do dua vao csr_op de phat
-    // hien "ghi vao CSR chi doc". Neu khong sua thi mot lenh `csrr t0, cycle`
-    // hoan toan hop le se bi bao illegal-instruction.
-    //
-    // Van giu csr_we = "day la mot lenh CSR" (tang EX dung no de chon
-    // alu_result = csr_read_data, va rd van phai nhan gia tri cu). Chi co csr_op
-    // bi ep ve 2'b00 khi khong ghi - do la tin hieu tep CSR dung lam write enable.
-    // -------------------------------------------------------------------------
-    wire csr_src_is_zero = (rs1 == 5'd0);            // rs1 hoac uimm[4:0]: cung truong bit
-    wire csr_set_or_clr  = (funct3[1:0] != 2'b01);   // 10 = set, 11 = clear
-    wire csr_does_write  = is_system && (funct3 != 3'b000) &&
-                           !(csr_set_or_clr && csr_src_is_zero);
-
     assign csr_we = is_system && (funct3 != 3'b000);
-    assign csr_op = csr_does_write ? funct3[1:0] : 2'b00;
-
-    // -------------------------------------------------------------------------
-    // KHOAN NO H - bon lenh dac quyen la ngoai le duy nhat khong nam trong bang
-    // hop le cua main_control_unit.
-    //
-    // opcode = 0x73 voi funct3 = 000 khong phan biet duoc bang {opcode, funct3,
-    // funct7}: ecall / ebreak / mret / wfi chi khac nhau o instr[31:20], ma
-    // main_control_unit khong nhan du 32 bit. Vi vay no de nguyen
-    // illegal_instr = 1 cho ca nhom, va o day - noi bon hang so 32 bit VON DA
-    // ton tai - ta ha bit do xuong.
-    //
-    // KHONG chep bon hang so sang control_unit.v: chung se thanh hai ban sao va
-    // hai noi de lech nhau.
-    //
-    // Truoc ban sua nay, MOI ma lenh 0x73 funct3 = 000 khac bon cai tren -
-    // `sret` (0x10200073), `dret`, hay bat ky imm12 nao - deu chay im lang nhu
-    // NOP thay vi raise illegal-instruction.
-    //
-    // Phep AND-NOT chinh xac vi sys_priv_ok KEO THEO (opcode = 0x73 && funct3 =
-    // 000): no khong the ha nham illegal_instr cua mot opcode khac.
-    // -------------------------------------------------------------------------
-    wire cu_illegal;
-    wire sys_priv_ok = ecall | ebreak | mret | wfi_req;
-    assign illegal_instr = cu_illegal & ~sys_priv_ok;
-
+    assign csr_op = (is_system && funct3 != 3'b000) ? funct3[1:0] : 2'b00;
+    
     main_control_unit MCU (
         .opcode(opcode),
         .funct7(funct7),
@@ -573,10 +400,9 @@ module instruction_decode (
         .f_mem_write(f_mem_write),
         .f_to_x(f_to_x),
         .x_to_f(x_to_f),
-        .fpu_operation(fpu_operation),
-        .illegal_instr(cu_illegal)
+        .fpu_operation(fpu_operation)
     );
-
+    
     alu_control_unit ACU (
         .alu_op(alu_op),
         .funct3(funct3),
@@ -779,23 +605,6 @@ module memory_access (
     input [31:0] ex_mem_instr,
     input ex_mem_mem_write,
     input ex_mem_mem_read,
-    // -------------------------------------------------------------------------
-    // KHOAN NO C - huy commit TO HOP trong chinh chu ky nhan trap.
-    //
-    // flush_ex_mem la xoa DONG BO: no chi co hieu luc o suon xung KE TIEP. Ngay
-    // trong chu ky trap_enter = 1, lenh dang o MEM van lai to hop
-    // dcache_write_req, nen mot `sw` GHI THAT vao bo nho trong khi reg_write cua
-    // chinh no bi flush_mem_wb giet. Lenh commit MOT NUA roi chay lai sau mret
-    // -> ghi hai lan.
-    //
-    // Doi chieu: csr_write_en KHONG dinh loi nay vi trong register_file.v no nam
-    // trong chuoi `if (trap_enter) ... else if (csr_write_en)`. Ba duong ghi
-    // cung o tang MEM, hai duong thieu la chan; day la mot trong hai.
-    //
-    // Doc KHONG bi chan: doc lai la vo hai voi RAM/cache, va chan no chi keo dai
-    // duong to hop ma khong duoc gi.
-    // -------------------------------------------------------------------------
-    input commit_kill,
     output [31:0] mem_read_data,
     output dcache_read_req,
     output dcache_write_req,
@@ -820,13 +629,7 @@ module memory_access (
             reservation_valid <= 1'b0;
             reservation_addr  <= 32'd0;
         end else begin
-            if (commit_kill) begin
-                // Giu nguyen reservation. Mot `sc.w` bi huy ma van xoa reservation
-                // thi lan chay lai sau mret se that bai gia - dac ta cho phep SC
-                // that bai ngau nhien nen khong sai, nhung vong lap LR/SC se song
-                // vo ich.
-                reservation_valid <= reservation_valid;
-            end else if (amo_lr && ex_mem_mem_read) begin
+            if (amo_lr && ex_mem_mem_read) begin
                 reservation_valid <= 1'b1;
                 reservation_addr  <= ex_mem_alu_result;
             end else if (amo_sc) begin
@@ -859,8 +662,7 @@ module memory_access (
 
     assign dcache_read_req = ex_mem_mem_read;
     // SC.W: only write if reservation matches
-    assign dcache_write_req = commit_kill ? 1'b0 :
-                              amo_sc      ? sc_success : ex_mem_mem_write;
+    assign dcache_write_req = amo_sc ? sc_success : ex_mem_mem_write;
     assign dcache_addr = ex_mem_alu_result;
     assign dcache_write_data = ex_mem_atomic ? amo_write_data : ex_mem_mem_write_data;
     // SC.W result: 0 = success, 1 = failure (per RISC-V spec)
