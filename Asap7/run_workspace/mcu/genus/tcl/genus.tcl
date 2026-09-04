@@ -1,6 +1,6 @@
 ############################################################
 ## Cadence Genus synthesis flow for MCU top_soc
-## ASAP7 RVT + LVT, TT 0.7 V 25 C, 32 SRAM hard macros
+## ASAP7 RVT + LVT, TT 0.7 V 25 C; SRAM macro budget in project_config.tcl
 ############################################################
 
 set GENUS_TCL_DIR [file dirname [file normalize [info script]]]
@@ -142,9 +142,11 @@ proc genus_generate_boot_rom_include {mem_path include_path depth} {
 
 proc genus_run_static_checks {} {
     global RTL_FILES RTL_ROOT SDC_FILE SRAM_MASTER SRAM_EXPECTED_COUNT SRAM_CAPACITY_BYTES
+    global SRAM_RAM_COUNT SRAM_ICACHE_COUNT SRAM_DCACHE_COUNT SRAM_MACRO_BYTES
+    global SRAM_ITCM_COUNT SRAM_DTCM_COUNT
 
-    if {[llength $RTL_FILES] != 53} {
-        error "Expected exactly 53 RTL files, found [llength $RTL_FILES]"
+    if {[llength $RTL_FILES] != 55} {
+        error "Expected exactly 55 RTL files, found [llength $RTL_FILES]"
     }
 
     set seen [dict create]
@@ -176,8 +178,29 @@ proc genus_run_static_checks {} {
     set top_file [file join $RTL_ROOT top_soc.v]
     genus_require_text "Boot ROM INIT_FILE" \
         $top_file {\.INIT_FILE[ \t\r\n]*\([ \t\r\n]*"rtl/memory/boot\.mem"[ \t\r\n]*\)}
-    genus_require_text "Top-level AXI RAM depth" \
+    # System RAM is two 128 KiB slave ports, not one 256 KiB port.  Both halves
+    # must exist or DMA silently shares an arbiter with the CPU again.
+    genus_require_text "AXI RAM half depth" \
         $top_file {\.MEM_DEPTH[ \t\r\n]*\([ \t\r\n]*32768[ \t\r\n]*\)}
+    genus_require_text "AXI RAM lo half" $top_file {u_axi_ram_lo}
+    genus_require_text "AXI RAM hi half" $top_file {u_axi_ram_hi}
+    genus_require_text "Seven interconnect slaves" \
+        $top_file {localparam[ \t\r\n]+SLV_AMT[ \t\r\n]*=[ \t\r\n]*7[ \t\r\n]*;}
+
+    # The TCMs must stay off the bus: they are selected by address on the core
+    # ports, never instantiated as interconnect slaves.
+    genus_require_text "ITCM instance" $top_file {u_itcm}
+    genus_require_text "DTCM instance" $top_file {u_dtcm}
+    genus_require_text "ITCM decode" $top_file {SOC_IS_ITCM}
+    genus_require_text "DTCM decode" $top_file {SOC_IS_DTCM}
+
+    # Cache geometry drives SRAM_ICACHE_COUNT / SRAM_DCACHE_COUNT below.  Pin the
+    # instantiated sizes so an RTL edit cannot silently desynchronise the macro
+    # budget from the floorplan.
+    genus_require_text "I-cache size 16 KiB" \
+        $top_file {instruction_cache[ \t\r\n]+#\([^)]*C_CACHE_SIZE[ \t\r\n]*\([ \t\r\n]*16384}
+    genus_require_text "D-cache size 16 KiB" \
+        $top_file {data_cache[ \t\r\n]+#\([^)]*C_CACHE_SIZE[ \t\r\n]*\([ \t\r\n]*16384}
 
     set axi_rom_file [file join $RTL_ROOT memory axi_rom.v]
     genus_require_text "Synthesizable boot ROM table" \
@@ -187,20 +210,41 @@ proc genus_run_static_checks {} {
     genus_require_text "AXI RAM default depth" \
         $axi_ram_file {parameter[ \t\r\n]+MEM_DEPTH[ \t\r\n]*=[ \t\r\n]*32768}
     genus_require_text "AXI RAM hard macro wrapper" \
-        $axi_ram_file {asap7_sram_128k_1rw[ \t\r\n]+[A-Za-z_][A-Za-z0-9_$]*[ \t\r\n]*\(}
+        $axi_ram_file {asap7_sram_1rw[ \t\r\n]+#\([^)]*ADDR_W}
 
-    set sram_wrapper_file [file join $RTL_ROOT memory asap7_sram_128k_1rw.v]
+    # The 256 KiB shim is gone: axi_ram sizes asap7_sram_1rw directly, so the
+    # generic bank array is what has to stay intact.
+    set sram_wrapper_file [file join $RTL_ROOT memory asap7_sram_1rw.v]
+    genus_require_text "SRAM row address width" \
+        $sram_wrapper_file {localparam[ \t\r\n]+ROW_ADDR_W[ \t\r\n]*=[ \t\r\n]*10}
     genus_require_text "SRAM bank address decode" \
-        $sram_wrapper_file {addr\[16:12\]}
+        $sram_wrapper_file {addr\[ADDR_W-1:ROW_ADDR_W\]}
     genus_require_text "SRAM row address decode" \
-        $sram_wrapper_file {addr\[11:2\]}
-    genus_require_text "SRAM generated bank count" \
-        $sram_wrapper_file {for[ \t\r\n]*\([ \t\r\n]*i[ \t\r\n]*=[ \t\r\n]*0[ \t\r\n]*;[ \t\r\n]*i[ \t\r\n]*<[ \t\r\n]*32}
+        $sram_wrapper_file {addr\[ROW_ADDR_W-1:0\]}
     genus_require_text "SRAM hard macro instance" \
         $sram_wrapper_file $SRAM_MASTER
 
-    if {$SRAM_EXPECTED_COUNT != 32 || $SRAM_CAPACITY_BYTES != 131072} {
-        error "SRAM config must describe 32 macros and 128 KiB"
+    # Derive the expectation from project_config.tcl rather than repeating the
+    # numbers here: the two drifted apart once already.
+    set expected_ram_bytes [expr {256 * 1024}]
+    if {$SRAM_CAPACITY_BYTES != $expected_ram_bytes} {
+        error "Main RAM must be 256 KiB, config describes $SRAM_CAPACITY_BYTES bytes"
+    }
+    if {$SRAM_RAM_COUNT != [expr {$expected_ram_bytes / $SRAM_MACRO_BYTES}]} {
+        error "SRAM_RAM_COUNT does not match 256 KiB of $SRAM_MACRO_BYTES-byte macros"
+    }
+    # 16 KiB I-cache: 2 ways x (2 data + 1 tag).  16 KiB D-cache: 4 ways x (1 + 1).
+    if {$SRAM_ICACHE_COUNT != 6 || $SRAM_DCACHE_COUNT != 8} {
+        error "Cache macro budget must be 6 (I) + 8 (D) for 16 KiB caches"
+    }
+    # 16 KiB per TCM = 4 macros each.
+    if {$SRAM_ITCM_COUNT != 4 || $SRAM_DTCM_COUNT != 4} {
+        error "TCM macro budget must be 4 (I) + 4 (D) for 16 KiB TCMs"
+    }
+    set derived_total [expr {$SRAM_RAM_COUNT + $SRAM_ICACHE_COUNT + $SRAM_DCACHE_COUNT
+                             + $SRAM_ITCM_COUNT + $SRAM_DTCM_COUNT}]
+    if {$SRAM_EXPECTED_COUNT != $derived_total} {
+        error "SRAM_EXPECTED_COUNT ($SRAM_EXPECTED_COUNT) != RAM + cache ($derived_total)"
     }
 
     foreach clint_file [glob -nocomplain [file join $RTL_ROOT interrupt CLINT *.v]] {
@@ -210,7 +254,7 @@ proc genus_run_static_checks {} {
         }
     }
 
-    puts "MCU static checks passed: 53 RTL files, boot image, SRAM wrapper and SDC"
+    puts "MCU static checks passed: 55 RTL files, boot image, SRAM wrapper and SDC"
 }
 
 proc check_sram_library_cell {master} {
@@ -430,10 +474,11 @@ uniquify $TOP
 check_design -unresolved > ./reports/check_design_unresolved.rpt
 
 # Keep the controller/wrapper boundary and the hard-macro array visible for
-# physical planning and for the post-map 32-instance invariant.
+# physical planning and for the post-map macro-count invariant.
 foreach module_pattern {
     axi_ram
-    asap7_sram_128k_1rw
+    asap7_sram_1rw
+    tcm
     riscv_pipeline
     instruction_cache
     data_cache

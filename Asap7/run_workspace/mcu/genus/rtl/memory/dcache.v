@@ -4,13 +4,13 @@
 // MAIN MODULE: Data Cache
 // =============================================================================
 //
-// 32 KiB, 4-way set associative, 16-byte blocks (512 sets), write-through with
+// 16 KiB, 4-way set associative, 16-byte blocks (256 sets), write-through with
 // no write allocate.
 //
 // Storage is held in ASAP7 srambank_256x4x32_6t122 hard macros through
 // cache_data_array / cache_tag_array:
-//   data : 4 ways x 2 macros, addressed by {index[8:0], word_idx[1:0]}
-//   tag  : 4 ways x 1 macro,  addressed by index[8:0]
+//   data : 4 ways x 1 macro, addressed by {index[7:0], word_idx[1:0]}
+//   tag  : 4 ways x 1 macro, addressed by index[7:0]
 // Valid bits and the round-robin victim pointer stay in flip-flops because the
 // macros have no reset.
 //
@@ -20,7 +20,7 @@
 // word back, because the macro has no byte-write mask.
 // =============================================================================
 module data_cache #(
-    parameter C_CACHE_SIZE       = 32768,
+    parameter C_CACHE_SIZE       = 16384,
     parameter C_BLOCK_SIZE       = 16,
     parameter C_WAYS             = 4,
     parameter C_M_AXI_ID_W       = 5,
@@ -149,23 +149,6 @@ module data_cache #(
         end
     endfunction
 
-<<<<<<< HEAD
-    assign m_axi_awid = 0; assign m_axi_awsize = mem_size; assign m_axi_awburst = 2'b01;
-    assign m_axi_awlock = 0; assign m_axi_awcache = uncache_en ? 4'b0000 : 4'b0011;
-    assign m_axi_awprot = 3'b000; assign m_axi_awqos = 0; assign m_axi_awregion = 0; assign m_axi_awlen = 0;
-    assign m_axi_arid = 0; assign m_axi_arsize = $clog2(C_M_AXI_DATA_W/8); assign m_axi_arburst = 2'b01;
-    assign m_axi_arlock = 0; assign m_axi_arcache = uncache_en ? 4'b0000 : 4'b0011;
-    assign m_axi_arprot = 3'b000; assign m_axi_arqos = 0; assign m_axi_arregion = 0;
-
-    localparam IDLE   = 3'd0,
-               LOOKUP = 3'd1,
-               AR_REQ = 3'd2,
-               R_WAIT = 3'd3,
-               AW_REQ = 3'd4,
-               W_REQ  = 3'd5,
-               B_WAIT = 3'd6,
-               DONE   = 3'd7;
-=======
     // =========================================================================
     // uncache_en PHAI duoc chot cung luc voi req_addr.
     //
@@ -190,12 +173,13 @@ module data_cache #(
     // ban dung ma khong sot cho nao.
     // =========================================================================
     localparam IDLE   = 3'd0,
-               AR_REQ = 3'd1,
-               R_WAIT = 3'd2,
-               AW_REQ = 3'd3,
-               W_REQ  = 3'd4,
-               B_WAIT = 3'd5,
-               DONE   = 3'd6;
+               LOOKUP = 3'd1,
+               AR_REQ = 3'd2,
+               R_WAIT = 3'd3,
+               AW_REQ = 3'd4,
+               W_REQ  = 3'd5,
+               B_WAIT = 3'd6,
+               DONE   = 3'd7;
 
     reg [2:0] state, next_state;
     reg       uncache_r;
@@ -204,16 +188,11 @@ module data_cache #(
 
     assign m_axi_awid = 0; assign m_axi_awsize = mem_size; assign m_axi_awburst = 2'b01;
     assign m_axi_awlock = 0; assign m_axi_awcache = uncache_en ? 4'b0000 : 4'b0011;
-    assign m_axi_awprot = 3'b000; assign m_axi_awqos = 0; assign m_axi_awregion = 0; assign m_axi_awlen = 0; 
+    assign m_axi_awprot = 3'b000; assign m_axi_awqos = 0; assign m_axi_awregion = 0; assign m_axi_awlen = 0;
     assign m_axi_arid = 0; assign m_axi_arsize = $clog2(C_M_AXI_DATA_W/8); assign m_axi_arburst = 2'b01;
     assign m_axi_arlock = 0; assign m_axi_arcache = uncache_en ? 4'b0000 : 4'b0011;
     assign m_axi_arprot = 3'b000; assign m_axi_arqos = 0; assign m_axi_arregion = 0;
 
-    reg [C_WAYS-1:0] valid_arr [0:NUM_SETS-1];
-    reg [$clog2(C_WAYS)-1:0] rr_ptr [0:NUM_SETS-1];
->>>>>>> c5b8921ce3aaa314b1f2dff37d2ef4ea0934d092
-
-    reg [2:0]                state, next_state;
     reg [C_M_AXI_ADDR_W-1:0] req_addr;
     reg [C_M_AXI_DATA_W-1:0] refill_word;
     reg [WORD_IDX_W-1:0]     beat_cnt;
@@ -288,11 +267,11 @@ module data_cache #(
     integer i, w;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-<<<<<<< HEAD
             state       <= IDLE;
             req_addr    <= 0;
             refill_word <= 0;
             beat_cnt    <= 0;
+            uncache_r   <= 1'b0;
             for (i = 0; i < NUM_SETS; i = i + 1) begin
                 valid_arr[i] <= 0;
                 rr_ptr[i]    <= 0;
@@ -300,21 +279,14 @@ module data_cache #(
         end else begin
             state <= next_state;
 
-            if (state == IDLE && (cpu_read_req || cpu_write_req)) req_addr <= cpu_addr;
-
-            if (state == AR_REQ) beat_cnt <= 0;
-
-=======
-            state <= IDLE; req_addr <= 0; uncache_r <= 1'b0;
-            for (i=0; i<NUM_SETS; i=i+1) begin valid_arr[i]<=0; rr_ptr[i]<=0; end
-        end else begin
-            state <= next_state;
             // Chot dia chi VA thuoc tinh cacheability cua no trong CUNG mot nhip.
             if (state == IDLE && (cpu_read_req || cpu_write_req)) begin
                 req_addr  <= cpu_addr;
                 uncache_r <= uncache_en_i;
             end
->>>>>>> c5b8921ce3aaa314b1f2dff37d2ef4ea0934d092
+
+            if (state == AR_REQ) beat_cnt <= 0;
+
             if (state == R_WAIT && m_axi_rvalid && m_axi_rready) begin
                 beat_cnt <= beat_cnt + 1'b1;
                 if (uncache_en || beat_cnt == word_idx) refill_word <= m_axi_rdata;

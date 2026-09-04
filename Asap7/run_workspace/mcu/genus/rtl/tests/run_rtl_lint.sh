@@ -21,8 +21,8 @@ cd "$rtl_dir"
 shopt -s globstar nullglob
 rtl=(**/*.v)
 
-if [[ "${#rtl[@]}" -ne 53 ]]; then
-    echo "Expected 53 synthesizable Verilog files, found ${#rtl[@]}" >&2
+if [[ "${#rtl[@]}" -ne 55 ]]; then
+    echo "Expected 55 synthesizable Verilog files, found ${#rtl[@]}" >&2
     exit 1
 fi
 

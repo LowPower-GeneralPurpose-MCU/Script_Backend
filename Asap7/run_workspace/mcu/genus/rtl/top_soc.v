@@ -467,7 +467,10 @@ module top_soc (
     // 5. KHAI BÁO CÁC KÊNH AXI CHI TIẾT (Không viết tắt)
     // =========================================================================
     localparam MST_AMT = 4;
-    localparam SLV_AMT = 6;
+    // Slave 1 and slave 6 are the two halves of system RAM.  They are separate
+    // slave ports on purpose: the bank decode inside one axi_ram serialises, so
+    // only distinct ports let a CPU access and a DMA access proceed together.
+    localparam SLV_AMT = 7;
     localparam MST_ID_WIDTH = 5;
     // Số read burst outstanding tối đa mà interconnect theo dõi cho mỗi master.
     // Ràng buộc thật của hệ thống: DMA read master có CMD_DEPTH = 4
@@ -612,63 +615,69 @@ module top_soc (
     wire [SLV_ID_WIDTH-1:0] s5_arid; wire [31:0] s5_araddr; wire [7:0] s5_arlen; wire [2:0] s5_arsize; wire [1:0] s5_arburst; wire [2:0] s5_arprot; wire s5_arvalid; wire s5_arready;
     wire [SLV_ID_WIDTH-1:0] s5_rid; wire [31:0] s5_rdata; wire [1:0] s5_rresp; wire s5_rlast; wire s5_rvalid; wire s5_rready;
 
-    wire s0_awlock, s1_awlock, s2_awlock, s3_awlock, s4_awlock, s5_awlock;
-    wire [3:0] s0_awcache, s1_awcache, s2_awcache, s3_awcache, s4_awcache, s5_awcache;
-    wire [3:0] s0_awqos, s1_awqos, s2_awqos, s3_awqos, s4_awqos, s5_awqos;
-    wire [3:0] s0_awregion, s1_awregion, s2_awregion, s3_awregion, s4_awregion, s5_awregion;
-    wire s0_arlock, s1_arlock, s2_arlock, s3_arlock, s4_arlock, s5_arlock;
-    wire [3:0] s0_arcache, s1_arcache, s2_arcache, s3_arcache, s4_arcache, s5_arcache;
-    wire [3:0] s0_arqos, s1_arqos, s2_arqos, s3_arqos, s4_arqos, s5_arqos;
-    wire [3:0] s0_arregion, s1_arregion, s2_arregion, s3_arregion, s4_arregion, s5_arregion;
+    wire [SLV_ID_WIDTH-1:0] s6_awid; wire [31:0] s6_awaddr; wire [7:0] s6_awlen; wire [2:0] s6_awsize; wire [1:0] s6_awburst; wire [2:0] s6_awprot; wire s6_awvalid; wire s6_awready;
+    wire [31:0] s6_wdata; wire [3:0] s6_wstrb; wire s6_wlast; wire s6_wvalid; wire s6_wready;
+    wire [SLV_ID_WIDTH-1:0] s6_bid; wire [1:0] s6_bresp; wire s6_bvalid; wire s6_bready;
+    wire [SLV_ID_WIDTH-1:0] s6_arid; wire [31:0] s6_araddr; wire [7:0] s6_arlen; wire [2:0] s6_arsize; wire [1:0] s6_arburst; wire [2:0] s6_arprot; wire s6_arvalid; wire s6_arready;
+    wire [SLV_ID_WIDTH-1:0] s6_rid; wire [31:0] s6_rdata; wire [1:0] s6_rresp; wire s6_rlast; wire s6_rvalid; wire s6_rready;
+
+    wire s0_awlock, s1_awlock, s2_awlock, s3_awlock, s4_awlock, s5_awlock, s6_awlock;
+    wire [3:0] s0_awcache, s1_awcache, s2_awcache, s3_awcache, s4_awcache, s5_awcache, s6_awcache;
+    wire [3:0] s0_awqos, s1_awqos, s2_awqos, s3_awqos, s4_awqos, s5_awqos, s6_awqos;
+    wire [3:0] s0_awregion, s1_awregion, s2_awregion, s3_awregion, s4_awregion, s5_awregion, s6_awregion;
+    wire s0_arlock, s1_arlock, s2_arlock, s3_arlock, s4_arlock, s5_arlock, s6_arlock;
+    wire [3:0] s0_arcache, s1_arcache, s2_arcache, s3_arcache, s4_arcache, s5_arcache, s6_arcache;
+    wire [3:0] s0_arqos, s1_arqos, s2_arqos, s3_arqos, s4_arqos, s5_arqos, s6_arqos;
+    wire [3:0] s0_arregion, s1_arregion, s2_arregion, s3_arregion, s4_arregion, s5_arregion, s6_arregion;
 
       // --- KÊNH WRITE ADDRESS ---
-    assign s_axi_awready = {s5_awready, s4_awready, s3_awready, s2_awready, s1_awready, s0_awready};
-    assign {s5_awid, s4_awid, s3_awid, s2_awid, s1_awid, s0_awid}       = s_axi_awid;
-    assign {s5_awaddr, s4_awaddr, s3_awaddr, s2_awaddr, s1_awaddr, s0_awaddr} = s_axi_awaddr;
-    assign {s5_awlen, s4_awlen, s3_awlen, s2_awlen, s1_awlen, s0_awlen}   = s_axi_awlen;
-    assign {s5_awsize, s4_awsize, s3_awsize, s2_awsize, s1_awsize, s0_awsize} = s_axi_awsize;
-    assign {s5_awburst, s4_awburst, s3_awburst, s2_awburst, s1_awburst, s0_awburst} = s_axi_awburst;
-    assign {s5_awlock, s4_awlock, s3_awlock, s2_awlock, s1_awlock, s0_awlock} = s_axi_awlock;
-    assign {s5_awcache, s4_awcache, s3_awcache, s2_awcache, s1_awcache, s0_awcache} = s_axi_awcache;
-    assign {s5_awprot, s4_awprot, s3_awprot, s2_awprot, s1_awprot, s0_awprot} = s_axi_awprot;
-    assign {s5_awqos, s4_awqos, s3_awqos, s2_awqos, s1_awqos, s0_awqos} = s_axi_awqos;
-    assign {s5_awregion, s4_awregion, s3_awregion, s2_awregion, s1_awregion, s0_awregion} = s_axi_awregion;
-    assign {s5_awvalid, s4_awvalid, s3_awvalid, s2_awvalid, s1_awvalid, s0_awvalid} = s_axi_awvalid;
+    assign s_axi_awready = {s6_awready, s5_awready, s4_awready, s3_awready, s2_awready, s1_awready, s0_awready};
+    assign {s6_awid, s5_awid, s4_awid, s3_awid, s2_awid, s1_awid, s0_awid}       = s_axi_awid;
+    assign {s6_awaddr, s5_awaddr, s4_awaddr, s3_awaddr, s2_awaddr, s1_awaddr, s0_awaddr} = s_axi_awaddr;
+    assign {s6_awlen, s5_awlen, s4_awlen, s3_awlen, s2_awlen, s1_awlen, s0_awlen}   = s_axi_awlen;
+    assign {s6_awsize, s5_awsize, s4_awsize, s3_awsize, s2_awsize, s1_awsize, s0_awsize} = s_axi_awsize;
+    assign {s6_awburst, s5_awburst, s4_awburst, s3_awburst, s2_awburst, s1_awburst, s0_awburst} = s_axi_awburst;
+    assign {s6_awlock, s5_awlock, s4_awlock, s3_awlock, s2_awlock, s1_awlock, s0_awlock} = s_axi_awlock;
+    assign {s6_awcache, s5_awcache, s4_awcache, s3_awcache, s2_awcache, s1_awcache, s0_awcache} = s_axi_awcache;
+    assign {s6_awprot, s5_awprot, s4_awprot, s3_awprot, s2_awprot, s1_awprot, s0_awprot} = s_axi_awprot;
+    assign {s6_awqos, s5_awqos, s4_awqos, s3_awqos, s2_awqos, s1_awqos, s0_awqos} = s_axi_awqos;
+    assign {s6_awregion, s5_awregion, s4_awregion, s3_awregion, s2_awregion, s1_awregion, s0_awregion} = s_axi_awregion;
+    assign {s6_awvalid, s5_awvalid, s4_awvalid, s3_awvalid, s2_awvalid, s1_awvalid, s0_awvalid} = s_axi_awvalid;
 
     // --- KÊNH WRITE DATA ---
-    assign s_axi_wready  = {s5_wready, s4_wready, s3_wready, s2_wready, s1_wready, s0_wready};
-    assign {s5_wdata, s4_wdata, s3_wdata, s2_wdata, s1_wdata, s0_wdata}   = s_axi_wdata;
-    assign {s5_wstrb, s4_wstrb, s3_wstrb, s2_wstrb, s1_wstrb, s0_wstrb}   = s_axi_wstrb;
-    assign {s5_wlast, s4_wlast, s3_wlast, s2_wlast, s1_wlast, s0_wlast}   = s_axi_wlast;
-    assign {s5_wvalid, s4_wvalid, s3_wvalid, s2_wvalid, s1_wvalid, s0_wvalid} = s_axi_wvalid;
+    assign s_axi_wready  = {s6_wready, s5_wready, s4_wready, s3_wready, s2_wready, s1_wready, s0_wready};
+    assign {s6_wdata, s5_wdata, s4_wdata, s3_wdata, s2_wdata, s1_wdata, s0_wdata}   = s_axi_wdata;
+    assign {s6_wstrb, s5_wstrb, s4_wstrb, s3_wstrb, s2_wstrb, s1_wstrb, s0_wstrb}   = s_axi_wstrb;
+    assign {s6_wlast, s5_wlast, s4_wlast, s3_wlast, s2_wlast, s1_wlast, s0_wlast}   = s_axi_wlast;
+    assign {s6_wvalid, s5_wvalid, s4_wvalid, s3_wvalid, s2_wvalid, s1_wvalid, s0_wvalid} = s_axi_wvalid;
 
     // --- KÊNH WRITE RESPONSE ---
-    assign {s5_bready, s4_bready, s3_bready, s2_bready, s1_bready, s0_bready} = s_axi_bready;
-    assign s_axi_bid     = {s5_bid, s4_bid, s3_bid, s2_bid, s1_bid, s0_bid};
-    assign s_axi_bresp   = {s5_bresp, s4_bresp, s3_bresp, s2_bresp, s1_bresp, s0_bresp};
-    assign s_axi_bvalid  = {s5_bvalid, s4_bvalid, s3_bvalid, s2_bvalid, s1_bvalid, s0_bvalid};
+    assign {s6_bready, s5_bready, s4_bready, s3_bready, s2_bready, s1_bready, s0_bready} = s_axi_bready;
+    assign s_axi_bid     = {s6_bid, s5_bid, s4_bid, s3_bid, s2_bid, s1_bid, s0_bid};
+    assign s_axi_bresp   = {s6_bresp, s5_bresp, s4_bresp, s3_bresp, s2_bresp, s1_bresp, s0_bresp};
+    assign s_axi_bvalid  = {s6_bvalid, s5_bvalid, s4_bvalid, s3_bvalid, s2_bvalid, s1_bvalid, s0_bvalid};
 
     // --- KÊNH READ ADDRESS ---
-    assign s_axi_arready = {s5_arready, s4_arready, s3_arready, s2_arready, s1_arready, s0_arready};
-    assign {s5_arid, s4_arid, s3_arid, s2_arid, s1_arid, s0_arid}       = s_axi_arid;
-    assign {s5_araddr, s4_araddr, s3_araddr, s2_araddr, s1_araddr, s0_araddr} = s_axi_araddr;
-    assign {s5_arlen, s4_arlen, s3_arlen, s2_arlen, s1_arlen, s0_arlen}   = s_axi_arlen;
-    assign {s5_arsize, s4_arsize, s3_arsize, s2_arsize, s1_arsize, s0_arsize} = s_axi_arsize;
-    assign {s5_arburst, s4_arburst, s3_arburst, s2_arburst, s1_arburst, s0_arburst} = s_axi_arburst;
-    assign {s5_arlock, s4_arlock, s3_arlock, s2_arlock, s1_arlock, s0_arlock} = s_axi_arlock;
-    assign {s5_arcache, s4_arcache, s3_arcache, s2_arcache, s1_arcache, s0_arcache} = s_axi_arcache;
-    assign {s5_arprot, s4_arprot, s3_arprot, s2_arprot, s1_arprot, s0_arprot} = s_axi_arprot;
-    assign {s5_arqos, s4_arqos, s3_arqos, s2_arqos, s1_arqos, s0_arqos} = s_axi_arqos;
-    assign {s5_arregion, s4_arregion, s3_arregion, s2_arregion, s1_arregion, s0_arregion} = s_axi_arregion;
-    assign {s5_arvalid, s4_arvalid, s3_arvalid, s2_arvalid, s1_arvalid, s0_arvalid} = s_axi_arvalid;
+    assign s_axi_arready = {s6_arready, s5_arready, s4_arready, s3_arready, s2_arready, s1_arready, s0_arready};
+    assign {s6_arid, s5_arid, s4_arid, s3_arid, s2_arid, s1_arid, s0_arid}       = s_axi_arid;
+    assign {s6_araddr, s5_araddr, s4_araddr, s3_araddr, s2_araddr, s1_araddr, s0_araddr} = s_axi_araddr;
+    assign {s6_arlen, s5_arlen, s4_arlen, s3_arlen, s2_arlen, s1_arlen, s0_arlen}   = s_axi_arlen;
+    assign {s6_arsize, s5_arsize, s4_arsize, s3_arsize, s2_arsize, s1_arsize, s0_arsize} = s_axi_arsize;
+    assign {s6_arburst, s5_arburst, s4_arburst, s3_arburst, s2_arburst, s1_arburst, s0_arburst} = s_axi_arburst;
+    assign {s6_arlock, s5_arlock, s4_arlock, s3_arlock, s2_arlock, s1_arlock, s0_arlock} = s_axi_arlock;
+    assign {s6_arcache, s5_arcache, s4_arcache, s3_arcache, s2_arcache, s1_arcache, s0_arcache} = s_axi_arcache;
+    assign {s6_arprot, s5_arprot, s4_arprot, s3_arprot, s2_arprot, s1_arprot, s0_arprot} = s_axi_arprot;
+    assign {s6_arqos, s5_arqos, s4_arqos, s3_arqos, s2_arqos, s1_arqos, s0_arqos} = s_axi_arqos;
+    assign {s6_arregion, s5_arregion, s4_arregion, s3_arregion, s2_arregion, s1_arregion, s0_arregion} = s_axi_arregion;
+    assign {s6_arvalid, s5_arvalid, s4_arvalid, s3_arvalid, s2_arvalid, s1_arvalid, s0_arvalid} = s_axi_arvalid;
 
     // --- KÊNH READ DATA ---
-    assign {s5_rready, s4_rready, s3_rready, s2_rready, s1_rready, s0_rready} = s_axi_rready;
-    assign s_axi_rid     = {s5_rid, s4_rid, s3_rid, s2_rid, s1_rid, s0_rid};
-    assign s_axi_rdata   = {s5_rdata, s4_rdata, s3_rdata, s2_rdata, s1_rdata, s0_rdata};
-    assign s_axi_rresp   = {s5_rresp, s4_rresp, s3_rresp, s2_rresp, s1_rresp, s0_rresp};
-    assign s_axi_rlast   = {s5_rlast, s4_rlast, s3_rlast, s2_rlast, s1_rlast, s0_rlast};
-    assign s_axi_rvalid  = {s5_rvalid, s4_rvalid, s3_rvalid, s2_rvalid, s1_rvalid, s0_rvalid};
+    assign {s6_rready, s5_rready, s4_rready, s3_rready, s2_rready, s1_rready, s0_rready} = s_axi_rready;
+    assign s_axi_rid     = {s6_rid, s5_rid, s4_rid, s3_rid, s2_rid, s1_rid, s0_rid};
+    assign s_axi_rdata   = {s6_rdata, s5_rdata, s4_rdata, s3_rdata, s2_rdata, s1_rdata, s0_rdata};
+    assign s_axi_rresp   = {s6_rresp, s5_rresp, s4_rresp, s3_rresp, s2_rresp, s1_rresp, s0_rresp};
+    assign s_axi_rlast   = {s6_rlast, s5_rlast, s4_rlast, s3_rlast, s2_rlast, s1_rlast, s0_rlast};
+    assign s_axi_rvalid  = {s6_rvalid, s5_rvalid, s4_rvalid, s3_rvalid, s2_rvalid, s1_rvalid, s0_rvalid};
     // =========================================================================
     // 6. INSTANTIATE CÁC MASTER MODULES
     // =========================================================================    
@@ -679,15 +688,42 @@ module top_soc (
     wire [31:0] ic_rdata;   wire [1:0]  ic_rresp;   wire        ic_rlast;   
     wire        ic_rvalid;  wire        ic_rready;
 
+    // =========================================================================
+    // Tightly Coupled Memory
+    //
+    // ITCM and DTCM hang off the core ports, before the caches and off the AXI
+    // interconnect entirely, so an access can neither miss nor queue behind a
+    // DMA burst.  Latency is a constant 2 cycles (3 for a byte/halfword store,
+    // which the macro's missing byte-write mask turns into read-modify-write) -
+    // the same as a cache hit, with the miss case and the bus removed.
+    //
+    //   ITCM  0x0002_0000 - 0x0002_3FFF  16 KiB  ISR and DSP/CNN inner loops
+    //   DTCM  0x0002_4000 - 0x0002_7FFF  16 KiB  core stack, real-time state
+    //
+    // Neither range is claimed by any interconnect slave, so a DMA access to
+    // them decodes to no slave and is reported as an error rather than
+    // silently landing somewhere else.  Code is copied into the ITCM through
+    // the load/store port, which is why the ITCM has both a fetch and a data
+    // port and the DTCM only a data port.
+    // =========================================================================
+    `define SOC_IS_ITCM(a) (((a) & 32'hFFFF_C000) == 32'h0002_0000)
+    `define SOC_IS_DTCM(a) (((a) & 32'hFFFF_C000) == 32'h0002_4000)
+
+    wire if_sel_itcm = `SOC_IS_ITCM(cpu_inst_addr);
+    wire ls_sel_itcm = `SOC_IS_ITCM(cpu_data_addr);
+    wire ls_sel_dtcm = `SOC_IS_DTCM(cpu_data_addr);
+    wire ls_sel_tcm  = ls_sel_itcm | ls_sel_dtcm;
+
+    // Cache-side responses, muxed onto the core ports further down.
+    wire [31:0] ic_cpu_rdata; wire ic_cpu_hit; wire ic_cpu_stall;
+    wire [31:0] dc_cpu_rdata; wire dc_cpu_hit; wire dc_cpu_stall;
+
+    // TCM responses.
+    wire [31:0] itcm_f_rdata; wire itcm_f_hit; wire itcm_f_stall;
+    wire [31:0] itcm_d_rdata; wire itcm_d_hit; wire itcm_d_stall;
+    wire [31:0] dtcm_d_rdata; wire dtcm_d_hit; wire dtcm_d_stall;
+
     // --- M0. ICACHE ---
-<<<<<<< HEAD
-    wire ic_uncache_en = (cpu_inst_addr >= 32'h4000_0000 && cpu_inst_addr <= 32'h47FF_FFFF);
-    instruction_cache #(
-        .C_CACHE_SIZE (32768),   // 32 KiB
-        .C_BLOCK_SIZE (16),
-        .C_WAYS       (2)
-    ) u_icache (
-=======
     // =========================================================================
     // PMA - vung KHONG duoc cache
     //
@@ -711,20 +747,22 @@ module top_soc (
     //   0x4000_0000 mask 0xF800_0000 -> cua so APB   (slave 4, 128 MB)
     //   0x0200_0000 mask 0xFFFF_0000 -> CLINT        (slave 5, 64 KB)
     // =========================================================================
-    `define SOC_IS_UNCACHED(a) ( ((a) & 32'hF800_0000) == 32'h4000_0000 || \
-                                 ((a) & 32'hFFFF_0000) == 32'h0200_0000 )
+    `define SOC_IS_UNCACHED(a) ( ((a) & 32'hF800_0000) == 32'h4000_0000 ||                                  ((a) & 32'hFFFF_0000) == 32'h0200_0000 )
 
     wire ic_uncache_en = `SOC_IS_UNCACHED(cpu_inst_addr);
-    instruction_cache u_icache (
->>>>>>> c5b8921ce3aaa314b1f2dff37d2ef4ea0934d092
+    instruction_cache #(
+        .C_CACHE_SIZE (16384),   // 16 KiB - xem ghi chu macro budget trong
+        .C_BLOCK_SIZE (16),      // rtl/flow/project_config.tcl
+        .C_WAYS       (2)
+    ) u_icache (
         .clk             (clk_cpu),              // clk_cpu (400MHz)
         .rst_n           (reset_core_n_sync),
-        .cpu_read_req    (cpu_inst_req),
+        .cpu_read_req    (cpu_inst_req & ~if_sel_itcm),
         .cpu_addr        (cpu_inst_addr),
         .uncache_en_i    (ic_uncache_en),
-        .cpu_read_data   (cpu_inst_data),
-        .icache_hit      (cpu_inst_hit),
-        .icache_stall    (cpu_inst_stall),
+        .cpu_read_data   (ic_cpu_rdata),
+        .icache_hit      (ic_cpu_hit),
+        .icache_stall    (ic_cpu_stall),
         
         // Nối vào dây lõi ICache (400MHz)
         .m_axi_awready   (1'b0),      .m_axi_wready  (1'b0),
@@ -765,31 +803,26 @@ module top_soc (
     wire [4:0]  dc_rid;     wire [31:0] dc_rdata;   wire [1:0]  dc_rresp;   wire        dc_rlast;   wire dc_rvalid; wire dc_rready;
 
     // --- M1. DCACHE ---
-<<<<<<< HEAD
-    wire dc_uncache_en = (cpu_data_addr >= 32'h4000_0000 && cpu_data_addr <= 32'h47FF_FFFF);
-    data_cache #(
-        .C_CACHE_SIZE (32768),   // 32 KiB
-        .C_BLOCK_SIZE (16),
-        .C_WAYS       (4)
-    ) u_dcache (
-=======
     // Cung mot dinh nghia PMA voi I-cache - xem ghi chu o `SOC_IS_UNCACHED tren.
     // Day la duong QUAN TRONG: thieu CLINT o day thi `mtime` bi cache va chet.
     wire dc_uncache_en = `SOC_IS_UNCACHED(cpu_data_addr);
-    data_cache u_dcache (
->>>>>>> c5b8921ce3aaa314b1f2dff37d2ef4ea0934d092
+    data_cache #(
+        .C_CACHE_SIZE (16384),   // 16 KiB - xem ghi chu macro budget trong
+        .C_BLOCK_SIZE (16),      // rtl/flow/project_config.tcl
+        .C_WAYS       (4)
+    ) u_dcache (
         .clk             (clk_cpu),              // clk_cpu (400MHz)
         .rst_n           (reset_core_n_sync),
-        .cpu_read_req    (cpu_data_rd_req),
-        .cpu_write_req   (cpu_data_wr_req),
+        .cpu_read_req    (cpu_data_rd_req & ~ls_sel_tcm),
+        .cpu_write_req   (cpu_data_wr_req & ~ls_sel_tcm),
         .cpu_addr        (cpu_data_addr),
         .cpu_write_data  (cpu_data_wdata),
         .mem_unsigned    (cpu_data_unsigned),
         .mem_size        (cpu_data_size),
         .uncache_en_i    (dc_uncache_en),
-        .cpu_read_data   (cpu_data_rdata),
-        .dcache_hit      (cpu_data_hit),
-        .dcache_stall    (cpu_data_stall),
+        .cpu_read_data   (dc_cpu_rdata),
+        .dcache_hit      (dc_cpu_hit),
+        .dcache_stall    (dc_cpu_stall),
         
         // Nối vào dây lõi DCache (400MHz)
         .m_axi_awid      (dc_awid),   .m_axi_awaddr  (dc_awaddr), .m_axi_awlen   (dc_awlen),
@@ -866,6 +899,69 @@ module top_soc (
         .m_axi_rid       (m2_rid), .m_axi_rdata(m2_rdata), .m_axi_rresp(m2_rresp), .m_axi_rlast(m2_rlast), .m_axi_rvalid(m2_rvalid), .m_axi_rready(m2_rready)
     );
 
+
+    // =========================================================================
+    // 6b. TIGHTLY COUPLED MEMORY
+    // =========================================================================
+    tcm #(
+        .SIZE_BYTES     (16384),
+        .HAS_FETCH_PORT (1)
+    ) u_itcm (
+        .clk        (clk_cpu),
+        .rst_n      (reset_core_n_sync),
+        .f_req      (cpu_inst_req & if_sel_itcm),
+        .f_addr     (cpu_inst_addr),
+        .f_rdata    (itcm_f_rdata),
+        .f_hit      (itcm_f_hit),
+        .f_stall    (itcm_f_stall),
+        .d_rd_req   (cpu_data_rd_req & ls_sel_itcm),
+        .d_wr_req   (cpu_data_wr_req & ls_sel_itcm),
+        .d_addr     (cpu_data_addr),
+        .d_wdata    (cpu_data_wdata),
+        .d_size     (cpu_data_size),
+        .d_unsigned (cpu_data_unsigned),
+        .d_rdata    (itcm_d_rdata),
+        .d_hit      (itcm_d_hit),
+        .d_stall    (itcm_d_stall)
+    );
+
+    // No instruction is ever fetched from the DTCM, so its fetch port is tied
+    // off and optimised away by HAS_FETCH_PORT = 0.
+    tcm #(
+        .SIZE_BYTES     (16384),
+        .HAS_FETCH_PORT (0)
+    ) u_dtcm (
+        .clk        (clk_cpu),
+        .rst_n      (reset_core_n_sync),
+        .f_req      (1'b0),
+        .f_addr     (32'b0),
+        .f_rdata    (),
+        .f_hit      (),
+        .f_stall    (),
+        .d_rd_req   (cpu_data_rd_req & ls_sel_dtcm),
+        .d_wr_req   (cpu_data_wr_req & ls_sel_dtcm),
+        .d_addr     (cpu_data_addr),
+        .d_wdata    (cpu_data_wdata),
+        .d_size     (cpu_data_size),
+        .d_unsigned (cpu_data_unsigned),
+        .d_rdata    (dtcm_d_rdata),
+        .d_hit      (dtcm_d_hit),
+        .d_stall    (dtcm_d_stall)
+    );
+
+    // Core ports: exactly one responder is selected by the address, so these
+    // are pure selects, not a merge of concurrent answers.
+    assign cpu_inst_data  = if_sel_itcm ? itcm_f_rdata : ic_cpu_rdata;
+    assign cpu_inst_hit   = if_sel_itcm ? itcm_f_hit   : ic_cpu_hit;
+    assign cpu_inst_stall = if_sel_itcm ? itcm_f_stall : ic_cpu_stall;
+
+    assign cpu_data_rdata = ls_sel_dtcm ? dtcm_d_rdata :
+                            ls_sel_itcm ? itcm_d_rdata : dc_cpu_rdata;
+    assign cpu_data_hit   = ls_sel_dtcm ? dtcm_d_hit   :
+                            ls_sel_itcm ? itcm_d_hit   : dc_cpu_hit;
+    assign cpu_data_stall = ls_sel_dtcm ? dtcm_d_stall :
+                            ls_sel_itcm ? itcm_d_stall : dc_cpu_stall;
+
     // =========================================================================
     // 7. AXI INTERCONNECT
     // =========================================================================
@@ -874,8 +970,16 @@ module top_soc (
         .OUTSTANDING_AMT(AXI_OUTSTANDING_AMT),
         .TRANS_MST_ID_W(MST_ID_WIDTH), .ROB_TAG_W(ROB_TAG_WIDTH), .ROB_ID_WIDTH(ROB_ID_WIDTH), .TRANS_SLV_ID_W(SLV_ID_WIDTH),
         .MST_WEIGHT (128'h00000005_00000004_00000003_00000001),
-        .SLV_BASE_ADDR (192'h0200_0000_4000_0000_8000_0000_3000_0000_2000_0000_0001_0000),
-        .SLV_ADDR_MASK (192'hFFFF_0000_F800_0000_FC00_0000_FF00_0000_FFFC_0000_FFFF_0000)
+        // slave 6..0, most significant field first:
+        //   6: 0x2002_0000 RAM hi  128 KB   mask FFFE_0000
+        //   5: 0x0200_0000 CLINT   64 KB    mask FFFF_0000
+        //   4: 0x4000_0000 APB     128 MB   mask F800_0000
+        //   3: 0x8000_0000 SDRAM   64 MB    mask FC00_0000
+        //   2: 0x3000_0000 QSPI    16 MB    mask FF00_0000
+        //   1: 0x2000_0000 RAM lo  128 KB   mask FFFE_0000
+        //   0: 0x0001_0000 ROM     64 KB    mask FFFF_0000
+        .SLV_BASE_ADDR (224'h2002_0000_0200_0000_4000_0000_8000_0000_3000_0000_2000_0000_0001_0000),
+        .SLV_ADDR_MASK (224'hFFFE_0000_FFFF_0000_F800_0000_FC00_0000_FF00_0000_FFFE_0000_FFFF_0000)
     ) u_axi_interconnect (
         .ACLK_i          (clk_axi), // AXI Bus chạy clk_axi (luôn sống)
         .ARESETn_i       (reset_axi_n_sync),
@@ -909,17 +1013,43 @@ module top_soc (
         .s_axi_rid(s0_rid), .s_axi_rdata(s0_rdata), .s_axi_rresp(s0_rresp), .s_axi_rlast(s0_rlast), .s_axi_rvalid(s0_rvalid), .s_axi_rready(s0_rready)
     );
 
+    // =========================================================================
+    // System RAM, 256 KiB split into two independent 128 KiB slave ports.
+    //
+    // One axi_ram serialises every access it owns (single-port 1RW macros, no
+    // byte-write mask), and the interconnect gives each slave port its own
+    // arbiter.  Splitting the range is therefore what removes CPU/DMA
+    // contention; the 32-macro bank decode inside each half does not.
+    //
+    // Software places DMA buffers in the hi half and stack/heap in the lo half:
+    //   lo  0x2000_0000 - 0x2001_FFFF  CPU: RTOS stack, heap, static data
+    //   hi  0x2002_0000 - 0x2003_FFFF  DMA: network RX/TX, ADC, framebuffer
+    // =========================================================================
     axi_ram #(
         .ID_WIDTH(SLV_ID_WIDTH),
-        .ADDR_MASK(32'h0003_FFFF),
-        .MEM_DEPTH(65536)
-    ) u_axi_ram (
+        .ADDR_MASK(32'h0001_FFFF),
+        .MEM_DEPTH(32768)
+    ) u_axi_ram_lo (
         .clk(clk_axi), .rst_n(reset_axi_n_sync),
         .s_axi_awid(s1_awid), .s_axi_awaddr(s1_awaddr), .s_axi_awlen(s1_awlen), .s_axi_awsize(s1_awsize), .s_axi_awburst(s1_awburst), .s_axi_awlock(s1_awlock), .s_axi_awcache(s1_awcache), .s_axi_awprot(s1_awprot), .s_axi_awqos(s1_awqos), .s_axi_awregion(s1_awregion), .s_axi_awvalid(s1_awvalid), .s_axi_awready(s1_awready),
         .s_axi_wdata(s1_wdata), .s_axi_wstrb(s1_wstrb), .s_axi_wlast(s1_wlast), .s_axi_wvalid(s1_wvalid), .s_axi_wready(s1_wready),
         .s_axi_bid(s1_bid), .s_axi_bresp(s1_bresp), .s_axi_bvalid(s1_bvalid), .s_axi_bready(s1_bready),
         .s_axi_arid(s1_arid), .s_axi_araddr(s1_araddr), .s_axi_arlen(s1_arlen), .s_axi_arsize(s1_arsize), .s_axi_arburst(s1_arburst), .s_axi_arlock(s1_arlock), .s_axi_arcache(s1_arcache), .s_axi_arprot(s1_arprot), .s_axi_arqos(s1_arqos), .s_axi_arregion(s1_arregion), .s_axi_arvalid(s1_arvalid), .s_axi_arready(s1_arready),
         .s_axi_rid(s1_rid), .s_axi_rdata(s1_rdata), .s_axi_rresp(s1_rresp), .s_axi_rlast(s1_rlast), .s_axi_rvalid(s1_rvalid), .s_axi_rready(s1_rready)
+    );
+
+    // Hi half: DMA-facing buffers.  Same macro budget as the lo half.
+    axi_ram #(
+        .ID_WIDTH(SLV_ID_WIDTH),
+        .ADDR_MASK(32'h0001_FFFF),
+        .MEM_DEPTH(32768)
+    ) u_axi_ram_hi (
+        .clk(clk_axi), .rst_n(reset_axi_n_sync),
+        .s_axi_awid(s6_awid), .s_axi_awaddr(s6_awaddr), .s_axi_awlen(s6_awlen), .s_axi_awsize(s6_awsize), .s_axi_awburst(s6_awburst), .s_axi_awlock(s6_awlock), .s_axi_awcache(s6_awcache), .s_axi_awprot(s6_awprot), .s_axi_awqos(s6_awqos), .s_axi_awregion(s6_awregion), .s_axi_awvalid(s6_awvalid), .s_axi_awready(s6_awready),
+        .s_axi_wdata(s6_wdata), .s_axi_wstrb(s6_wstrb), .s_axi_wlast(s6_wlast), .s_axi_wvalid(s6_wvalid), .s_axi_wready(s6_wready),
+        .s_axi_bid(s6_bid), .s_axi_bresp(s6_bresp), .s_axi_bvalid(s6_bvalid), .s_axi_bready(s6_bready),
+        .s_axi_arid(s6_arid), .s_axi_araddr(s6_araddr), .s_axi_arlen(s6_arlen), .s_axi_arsize(s6_arsize), .s_axi_arburst(s6_arburst), .s_axi_arlock(s6_arlock), .s_axi_arcache(s6_arcache), .s_axi_arprot(s6_arprot), .s_axi_arqos(s6_arqos), .s_axi_arregion(s6_arregion), .s_axi_arvalid(s6_arvalid), .s_axi_arready(s6_arready),
+        .s_axi_rid(s6_rid), .s_axi_rdata(s6_rdata), .s_axi_rresp(s6_rresp), .s_axi_rlast(s6_rlast), .s_axi_rvalid(s6_rvalid), .s_axi_rready(s6_rready)
     );
 
     axi_spi_flash #(

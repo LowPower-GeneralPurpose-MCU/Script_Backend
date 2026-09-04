@@ -1,15 +1,29 @@
 # MCU ASIC flow — ASAP7 + Cadence Genus/Innovus
 
-Thư mục này là workspace đã chuẩn hóa cho `top_soc`. Flow giữ nguyên vùng RAM
-chính 128 KiB của MCU, nhưng thay mảng RTL suy diễn bằng 32 hard macro
-`srambank_256x4x32_6t122` (mỗi macro 1024 x 32 bit, tương đương 4 KiB).
+Thư mục này là workspace đã chuẩn hóa cho `top_soc`. Toàn bộ bộ nhớ on-chip
+dùng hard macro `srambank_256x4x32_6t122` (mỗi macro 1024 x 32 bit = 4 KiB),
+không dùng mảng RTL suy diễn.
+
+Ngân sách macro hiện tại là **86**, khai báo tại `genus/rtl/flow/project_config.tcl`
+và được `genus.tcl` kiểm tra lại sau khi map:
+
+| Khối | Dung lượng | Macro | Ghi chú |
+|---|---|---|---|
+| System RAM lo | 128 KiB | 32 | AXI slave 1 @ `0x2000_0000` |
+| System RAM hi | 128 KiB | 32 | AXI slave 6 @ `0x2002_0000` |
+| I-cache | 16 KiB | 6 | 2-way, 512 set (4 data + 2 tag) |
+| D-cache | 16 KiB | 8 | 4-way, 256 set (4 data + 4 tag) |
+| ITCM | 16 KiB | 4 | ngoài bus, nối thẳng core |
+| DTCM | 16 KiB | 4 | ngoài bus, nối thẳng core |
+
+Xem `MEMORY_ARCHITECTURE.md` để biết vì sao chia như vậy.
 
 Bố cục chạy hiện tại:
 
 ```text
 mcu/
 ├── genus/
-│   ├── rtl/                 # 53 RTL file, SRAM wrapper và test
+│   ├── rtl/                 # 55 RTL file, SRAM wrapper và test
 │   ├── tcl/                 # Genus Tcl, SDC và filelist
 │   ├── outputs/             # Được tạo khi chạy, không commit
 │   └── reports/             # Được tạo khi chạy, không commit
@@ -50,11 +64,20 @@ Ngoài `ASAP7_ROOT`/`ASAP7_HOME`, flow hỗ trợ các override tách riêng nh�
 
 ## Những gì đã chuẩn hóa
 
-- `genus/rtl/memory/axi_ram.v` là AXI4 slave nối tới SRAM 1RW; truy cập được tuần tự hóa
-  và ghi từng byte dùng read-modify-write vì macro không có byte-write mask.
-- `genus/rtl/memory/asap7_sram_128k_1rw.v` ánh xạ `addr[16:12]` thành 32 bank và tạo đúng
-  32 hard-macro instance. Behavioral Verilog của macro chỉ dành cho mô phỏng,
-  không nằm trong filelist tổng hợp.
+- `genus/rtl/memory/axi_ram.v` là AXI4 slave nối tới SRAM 1RW, kích thước theo
+  tham số `MEM_DEPTH`; ghi dưới 32 bit dùng read-modify-write vì macro không có
+  byte-write mask. Một instance tuần tự hóa mọi truy cập trong vùng của nó, nên
+  System RAM được chia thành **hai** instance trên hai slave port khác nhau để
+  CPU và DMA thực sự chạy song song.
+- `genus/rtl/memory/asap7_sram_1rw.v` là mảng bank tổng quát: `addr[ADDR_W-1:10]`
+  chọn macro, `addr[9:0]` chọn hàng. Cache, TCM và axi_ram đều dùng lại nó, nên
+  chỉ cần đổi tham số là đổi số macro. Behavioral Verilog của macro chỉ dành cho
+  mô phỏng, không nằm trong filelist tổng hợp.
+- `genus/rtl/memory/tcm.v` là ITCM/DTCM nối thẳng vào core port, nằm ngoài AXI
+  interconnect: không bao giờ miss, không bao giờ xếp hàng sau DMA. Latency là
+  hằng số 2 chu kỳ (3 với store byte/halfword do read-modify-write), bằng đúng
+  cache hit - cái được bỏ đi là trường hợp miss và tranh chấp bus, không phải
+  chu kỳ pipeline.
 - Filelist RTL có thứ tự cố định và include path tương thích filesystem Linux.
 - Các kết nối hở/implicit net quan trọng ở cache, APB và lane 1 của core đã
   được xử lý trước khi tổng hợp.
@@ -65,9 +88,9 @@ Ngoài `ASAP7_ROOT`/`ASAP7_HOME`, flow hỗ trợ các override tách riêng nh�
 - Innovus kiểm tra đầy đủ Liberty/LEF/QRC/GDS, chuyển SDC từ ps/fF sang ns/pF,
   rồi tạo SRAM island 4 hàng x 8 cột với halo và placement blockage.
 
-Không chuyển register file, I-cache, D-cache, FIFO, ROB hoặc boot ROM sang
-macro này: các khối đó cần multi-port, byte mask hoặc initialization không phù
-hợp với SRAM 1RW hiện có. RAM hard macro cũng không được preload từ `boot.mem`;
+Không chuyển register file, FIFO, ROB hoặc boot ROM sang macro này: các khối
+đó cần multi-port, byte mask hoặc initialization không phù hợp với SRAM 1RW
+hiện có. I-cache, D-cache và TCM thì đã dùng macro. RAM hard macro cũng không được preload từ `boot.mem`;
 boot ROM hiện tại vẫn đảm nhiệm nội dung khởi động.
 
 Có thể kiểm tra độc lập AXI-to-SRAM controller bằng model đồng bộ chính thức:
@@ -77,7 +100,7 @@ bash genus/rtl/tests/run_rtl_lint.sh
 bash genus/rtl/tests/run_axi_ram_verilator.sh
 ```
 
-Lệnh đầu lint cấu trúc toàn bộ 53 RTL file với top `top_soc`. Lệnh thứ hai bao
+Lệnh đầu lint cấu trúc toàn bộ 55 RTL file với top `top_soc`. Lệnh thứ hai bao
 phủ full-word write/read, byte-strobe read-modify-write, chọn bank và phản hồi
 `SLVERR` cho địa chỉ không word-aligned. Danh sách warning bị miễn trong lint
 là warning debt của RTL gốc; báo cáo Genus/CDC/RDC vẫn phải được review độc lập.
@@ -101,7 +124,7 @@ lần chạy đầu. Sau khi chạy, cần kiểm tra ít nhất:
 - `reports/timing_intent_post_syn.rpt`
 - `reports/timing_syn.rpt`, `area_syn.rpt`, `power_syn.rpt`
 - `reports/messages_all.rpt`
-- `outputs/top_soc_syn.v` phải chứa đúng 32 SRAM macro
+- `outputs/top_soc_syn.v` phải chứa đúng 86 SRAM macro
 
 ## Chạy Innovus đến checkpoint floorplan
 

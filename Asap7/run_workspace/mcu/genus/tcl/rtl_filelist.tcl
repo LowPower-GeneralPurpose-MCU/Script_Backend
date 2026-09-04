@@ -47,9 +47,9 @@ set RTL_FILES [list \
     [file join $RTL_ROOT interrupt plic plic_reg_bus.v] \
     [file join $RTL_ROOT interrupt plic plic.v] \
     [file join $RTL_ROOT memory asap7_sram_1rw.v] \
-    [file join $RTL_ROOT memory asap7_sram_256k_1rw.v] \
     [file join $RTL_ROOT memory cache_sram_array.v] \
     [file join $RTL_ROOT memory axi_ram.v] \
+    [file join $RTL_ROOT memory tcm.v] \
     [file join $RTL_ROOT memory axi_rom.v] \
     [file join $RTL_ROOT memory axi_sdram_controller.v] \
     [file join $RTL_ROOT memory axi_spi_flash.v] \

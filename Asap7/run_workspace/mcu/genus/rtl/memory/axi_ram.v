@@ -1,16 +1,27 @@
 `timescale 1ns / 1ps
 
-// 256-KiB AXI4 SRAM slave for ASAP7 hard SRAM macros.
+// AXI4 SRAM slave for ASAP7 hard SRAM macros, sized by MEM_DEPTH.
 //
 // Memory implementation:
-//   64 x srambank_256x4x32_6t122
-//   each macro = 1024 words x 32 bits = 4 KiB
-//   total      = 65536 words x 32 bits = 256 KiB
+//   MEM_DEPTH words x 32 bits, built from srambank_256x4x32_6t122 macros
+//   through asap7_sram_1rw, which banks 1024-word macros automatically.
+//   MEM_DEPTH = 32768 -> 128 KiB -> 32 macros
+//   MEM_DEPTH = 65536 -> 256 KiB -> 64 macros
 //
 // Important implementation choice:
 //   The ASAP7 macro is single-port 1RW and has no byte-write mask.
-//   This AXI slave therefore serializes SRAM accesses globally.
-//   Partial AXI writes (WSTRB != 4'b1111) are implemented by read-modify-write.
+//   One instance therefore serializes SRAM accesses across its own address
+//   range: two instances on two interconnect slave ports are what makes CPU
+//   and DMA traffic actually concurrent, not the bank decode inside one
+//   instance.  See the system RAM split in top_soc.v.
+//   Partial AXI writes (WSTRB != 4'b1111) are implemented by read-modify-write,
+//   which costs two extra macro cycles: one to read the stored word, one to
+//   write the merged word back.
+//
+//   Who pays it: only the CPU write-through path.  dma_axi_master always
+//   drives WSTRB = 4'b1111 (see its WSTRB assign), so DMA traffic never
+//   read-modify-writes.  The cost falls on sb/sh stores forwarded by the
+//   write-through D-cache, and on debug-module writes.
 //
 // Supported:
 //   DATA_WIDTH = 32
@@ -21,16 +32,19 @@
 //   WRAP bursts and unaligned/non-32-bit transfers return SLVERR.
 //
 // This is a correctness-first implementation for ASIC macro integration.
-// It intentionally does not attempt multi-bank concurrent access.
+// A single instance intentionally does not attempt multi-bank concurrent
+// access; concurrency comes from instantiating several of them.
 
 module axi_ram #(
     parameter ADDR_WIDTH = 32,
     parameter DATA_WIDTH = 32,
     parameter ID_WIDTH   = 5,
-    parameter ADDR_MASK  = 32'h0003_FFFF,
-    // Retained for compatibility with the original MCU instantiation.
-    // This hard-macro implementation supports exactly 65536 x 32 bits.
-    parameter MEM_DEPTH  = 65536
+    // ADDR_MASK must select exactly the MEM_DEPTH words this instance owns:
+    //   MEM_DEPTH = 32768 -> ADDR_MASK = 32'h0001_FFFF
+    //   MEM_DEPTH = 65536 -> ADDR_MASK = 32'h0003_FFFF
+    parameter ADDR_MASK  = 32'h0001_FFFF,
+    // Must be a power of two; asap7_sram_1rw banks it into 1024-word macros.
+    parameter MEM_DEPTH  = 32768
 )(
     input  wire                      clk,
     input  wire                      rst_n,
@@ -96,14 +110,17 @@ module axi_ram #(
         S_IDLE       = 4'd0,
         S_W_WAIT     = 4'd1,
         S_W_RMW_READ = 4'd2,
-        S_W_RMW_WAIT = 4'd3,
-        S_W_WRITE    = 4'd4,
-        S_W_RESP     = 4'd5,
-        S_R_ISSUE    = 4'd6,
-        S_R_WAIT     = 4'd7,
-        S_R_SEND     = 4'd8;
+        S_W_WRITE    = 4'd3,
+        S_W_RESP     = 4'd4,
+        S_R_ISSUE    = 4'd5,
+        S_R_WAIT     = 4'd6,
+        S_R_SEND     = 4'd7;
 
     reg [3:0] state;
+
+    // Byte address width of this instance: MEM_DEPTH words of 4 bytes.
+    localparam WORD_ADDR_W = $clog2(MEM_DEPTH);
+    localparam BYTE_ADDR_W = WORD_ADDR_W + 2;
 
     // Write burst context
     reg [ADDR_WIDTH-1:0] w_addr_reg;
@@ -129,7 +146,7 @@ module axi_ram #(
     // Hard-macro SRAM interface
     reg         mem_read;
     reg         mem_write;
-    reg  [17:0] mem_addr;
+    reg  [BYTE_ADDR_W-1:0] mem_addr;
     reg  [31:0] mem_wdata;
     wire [31:0] mem_rdata;
 
@@ -148,12 +165,16 @@ module axi_ram #(
         !((s_axi_arburst == AXI_BURST_FIXED) ||
           (s_axi_arburst == AXI_BURST_INCR));
 
-    // ASAP7 macro bank wrapper.
-    asap7_sram_256k_1rw u_mem (
+    // ASAP7 macro bank array.  asap7_sram_1rw decodes the upper word-address
+    // bits into 1024-word macros, so MEM_DEPTH alone sets the macro count.
+    asap7_sram_1rw #(
+        .ADDR_W (WORD_ADDR_W),
+        .DATA_W (32)
+    ) u_mem (
         .clk   (clk),
         .read  (mem_read),
         .write (mem_write),
-        .addr  (mem_addr),
+        .addr  (mem_addr[BYTE_ADDR_W-1:2]),
         .wdata (mem_wdata),
         .rdata (mem_rdata)
     );
@@ -162,18 +183,18 @@ module axi_ram #(
     always @(*) begin
         mem_read  = 1'b0;
         mem_write = 1'b0;
-        mem_addr  = 18'b0;
+        mem_addr  = {BYTE_ADDR_W{1'b0}};
         mem_wdata = 32'b0;
 
         case (state)
             S_W_RMW_READ: begin
                 mem_read = 1'b1;
-                mem_addr = w_addr_reg[17:0] & ADDR_MASK[17:0];
+                mem_addr = w_addr_reg[BYTE_ADDR_W-1:0] & ADDR_MASK[BYTE_ADDR_W-1:0];
             end
 
             S_W_WRITE: begin
                 mem_write = 1'b1;
-                mem_addr  = w_addr_reg[17:0] & ADDR_MASK[17:0];
+                mem_addr  = w_addr_reg[BYTE_ADDR_W-1:0] & ADDR_MASK[BYTE_ADDR_W-1:0];
 
                 // Inline byte-lane merge for partial writes.
                 // For a full write all four byte lanes are replaced.
@@ -186,7 +207,7 @@ module axi_ram #(
 
             S_R_ISSUE: begin
                 mem_read = 1'b1;
-                mem_addr = r_addr_reg[17:0] & ADDR_MASK[17:0];
+                mem_addr = r_addr_reg[BYTE_ADDR_W-1:0] & ADDR_MASK[BYTE_ADDR_W-1:0];
             end
 
             default: begin
@@ -325,13 +346,14 @@ module axi_ram #(
                     end
                 end
 
-                // Issue synchronous macro read for partial write.
+                // Issue the synchronous macro read for a partial write.  The
+                // macro registers dataout on this state's clock edge, so
+                // mem_rdata is already valid in S_W_WRITE and the separate wait
+                // state this used to pass through was pure delay.  Removing it
+                // takes a byte or halfword store from three extra macro cycles
+                // to two, and does not lengthen any path: the
+                // dataout -> merge -> din path was always inside S_W_WRITE.
                 S_W_RMW_READ: begin
-                    state <= S_W_RMW_WAIT;
-                end
-
-                // One wait cycle: macro dataout has been updated by read edge.
-                S_W_RMW_WAIT: begin
                     state <= S_W_WRITE;
                 end
 

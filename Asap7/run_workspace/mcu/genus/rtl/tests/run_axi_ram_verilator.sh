@@ -28,7 +28,7 @@ verilator \
     -Wno-TIMESCALEMOD \
     --Mdir "$work_dir/obj" \
     "$macro_model" \
-    "$rtl_dir/memory/asap7_sram_128k_1rw.v" \
+    "$rtl_dir/memory/asap7_sram_1rw.v" \
     "$rtl_dir/memory/axi_ram.v" \
     "$script_dir/tb_axi_ram.sv"
 

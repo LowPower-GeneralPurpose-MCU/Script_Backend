@@ -120,22 +120,31 @@ set QRC_FILE [mcu_resolve_path QRC_FILE \
 # One generated 256x4x32 block contains 1024 words x 32 bits = 4 KiB.
 #
 # Macro budget:
-#   main AXI RAM 256 KiB : 64 macros
-#   I-cache 32 KiB       : 2 ways x 4 data macros + 2 ways x 1 tag macro = 10
-#   D-cache 32 KiB       : 4 ways x 2 data macros + 4 ways x 1 tag macro = 12
+#   main AXI RAM 256 KiB : 64 macros, as 2 x 128 KiB slave ports of 32
+#   I-cache 16 KiB       : 2 ways x 2 data macros + 2 ways x 1 tag macro = 6
+#   D-cache 16 KiB       : 4 ways x 1 data macro  + 4 ways x 1 tag macro = 8
+#   ITCM 16 KiB          : 4 macros
+#   DTCM 16 KiB          : 4 macros
 #
-# Cache tag macros are deliberately under-used (18/19 tag bits out of 32, and
-# only 512 of 1024 rows in the D-cache) because the generator ships no narrower
-# or shallower variant.  Every way needs its own macro so a lookup can read all
-# ways in one cycle.
+# The caches were 32 KiB (10 + 12 = 22 macros).  For an IoT-class workload the
+# extra 16 KiB per cache buys roughly 1-2 % hit rate while costing 8 macros of
+# area and the leakage of their tag arrays, so both were halved.
+#
+# Cache tag macros are deliberately under-used (19/20 tag bits out of 32, and
+# only 512 / 256 of 1024 rows in the I-cache / D-cache) because the generator
+# ships no narrower or shallower variant.  Every way needs its own macro so a
+# lookup can read all ways in one cycle.
 set SRAM_MASTER         "srambank_256x4x32_6t122"
 set SRAM_MACRO_BYTES    [expr {1024 * 4}]
 
 set SRAM_RAM_COUNT      64
-set SRAM_ICACHE_COUNT   10
-set SRAM_DCACHE_COUNT   12
+set SRAM_ICACHE_COUNT   6
+set SRAM_DCACHE_COUNT   8
+set SRAM_ITCM_COUNT     4
+set SRAM_DTCM_COUNT     4
 set SRAM_CACHE_COUNT    [expr {$SRAM_ICACHE_COUNT + $SRAM_DCACHE_COUNT}]
-set SRAM_EXPECTED_COUNT [expr {$SRAM_RAM_COUNT + $SRAM_CACHE_COUNT}]
+set SRAM_TCM_COUNT      [expr {$SRAM_ITCM_COUNT + $SRAM_DTCM_COUNT}]
+set SRAM_EXPECTED_COUNT [expr {$SRAM_RAM_COUNT + $SRAM_CACHE_COUNT + $SRAM_TCM_COUNT}]
 set SRAM_CAPACITY_BYTES [expr {$SRAM_RAM_COUNT * $SRAM_MACRO_BYTES}]
 
 # Floorplan grids: the main RAM island sits at the core edge, the cache island

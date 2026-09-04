@@ -4,12 +4,12 @@
 // MAIN MODULE: Instruction Cache
 // =============================================================================
 //
-// 32 KiB, 2-way set associative, 16-byte blocks (1024 sets).
+// 16 KiB, 2-way set associative, 16-byte blocks (512 sets).
 //
 // Storage is held in ASAP7 srambank_256x4x32_6t122 hard macros through
 // cache_data_array / cache_tag_array:
-//   data : 2 ways x 4 macros, addressed by {index[9:0], word_idx[1:0]}
-//   tag  : 2 ways x 1 macro,  addressed by index[9:0]
+//   data : 2 ways x 2 macros, addressed by {index[8:0], word_idx[1:0]}
+//   tag  : 2 ways x 1 macro,  addressed by index[8:0]
 // Valid bits and the round-robin victim pointer stay in flip-flops because the
 // macros have no reset.
 //
@@ -24,7 +24,7 @@
 // the valid bit, keeping tag and valid consistent for the next lookup.
 // =============================================================================
 module instruction_cache #(
-    parameter C_CACHE_SIZE       = 32768,
+    parameter C_CACHE_SIZE       = 16384,
     parameter C_BLOCK_SIZE       = 16,
     parameter C_WAYS             = 2,
     parameter C_M_AXI_ID_W       = 5,
@@ -118,9 +118,10 @@ module instruction_cache #(
     // ban dung ma khong sot cho nao.
     // =========================================================================
     localparam IDLE   = 3'd0,
-               AR_REQ = 3'd1,
-               R_WAIT = 3'd2,
-               DONE   = 3'd3;
+               LOOKUP = 3'd1,
+               AR_REQ = 3'd2,
+               R_WAIT = 3'd3,
+               DONE   = 3'd4;
 
     reg [2:0] state, next_state;
     reg       uncache_r;
@@ -139,30 +140,7 @@ module instruction_cache #(
     assign m_axi_arcache = uncache_en ? 4'b0000 : 4'b0011;
     assign m_axi_arprot = 3'b100; assign m_axi_arqos = 4'b0000; assign m_axi_arregion = 4'b0000;
 
-<<<<<<< HEAD
-    localparam IDLE   = 3'd0,
-               LOOKUP = 3'd1,
-               AR_REQ = 3'd2,
-               R_WAIT = 3'd3,
-               DONE   = 3'd4;
-=======
-    wire [(C_WAYS*BLOCK_W)-1:0] data_out_bus;
-    wire [(C_WAYS*TAG_W)-1:0]   tag_out_bus;
-    reg  [C_WAYS-1:0]           valid_arr [0:NUM_SETS-1];
-    reg  [$clog2(C_WAYS)-1:0]   rr_ptr    [0:NUM_SETS-1];
-    
-    reg [C_WAYS-1:0] way_update;
-    reg [BLOCK_W-1:0] fetch_buffer;
-    reg [C_M_AXI_ADDR_W-1:0] miss_addr;
-    
-    wire [C_M_AXI_ADDR_W-1:0] current_addr = (state == IDLE) ? cpu_addr : miss_addr;
-    wire [TAG_W-1:0]          tag          = current_addr[C_M_AXI_ADDR_W-1 : C_M_AXI_ADDR_W-TAG_W];
-    wire [INDEX_W-1:0]        index        = current_addr[OFFSET_W+INDEX_W-1 : OFFSET_W];
-    wire [OFFSET_W-1:0]       offset       = current_addr[OFFSET_W-1 : 0];
-    wire [$clog2(BLOCK_W/C_M_AXI_DATA_W)-1:0] word_idx = offset[OFFSET_W-1 : $clog2(C_M_AXI_DATA_W/8)];
->>>>>>> c5b8921ce3aaa314b1f2dff37d2ef4ea0934d092
 
-    reg [2:0]                  state, next_state;
     reg [C_M_AXI_ADDR_W-1:0]   miss_addr;
     reg [C_M_AXI_DATA_W-1:0]   refill_word;
     reg [WORD_IDX_W-1:0]       beat_cnt;
@@ -226,11 +204,11 @@ module instruction_cache #(
     integer i, w;
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-<<<<<<< HEAD
             state       <= IDLE;
             miss_addr   <= 0;
             refill_word <= 0;
             beat_cnt    <= 0;
+            uncache_r   <= 1'b0;
             for (i = 0; i < NUM_SETS; i = i + 1) begin
                 valid_arr[i] <= 0;
                 rr_ptr[i]    <= 0;
@@ -238,20 +216,13 @@ module instruction_cache #(
         end else begin
             state <= next_state;
 
-            if (state == IDLE && cpu_read_req) miss_addr <= cpu_addr;
-
-            if (state == AR_REQ) beat_cnt <= 0;
-=======
-            state <= IDLE; fetch_buffer <= 0; miss_addr <= 0; uncache_r <= 1'b0;
-            for (i=0; i<NUM_SETS; i=i+1) begin valid_arr[i]<=0; rr_ptr[i]<=0; end
-        end else begin
-            state <= next_state;
             // Chot dia chi VA thuoc tinh cacheability cua no trong CUNG mot nhip.
-            if (state == IDLE && cpu_read_req && !icache_hit) begin
+            if (state == IDLE && cpu_read_req) begin
                 miss_addr <= cpu_addr;
                 uncache_r <= uncache_en_i;
             end
->>>>>>> c5b8921ce3aaa314b1f2dff37d2ef4ea0934d092
+
+            if (state == AR_REQ) beat_cnt <= 0;
 
             if (state == R_WAIT && m_axi_rvalid && m_axi_rready) begin
                 beat_cnt <= beat_cnt + 1'b1;
