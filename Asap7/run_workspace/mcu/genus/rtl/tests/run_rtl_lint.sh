@@ -19,7 +19,18 @@ fi
 
 cd "$rtl_dir"
 shopt -s globstar nullglob
-rtl=(**/*.v)
+# tests/ khong nam trong filelist tong hop: no chua model hanh vi cua hard macro
+# (duoc truyen rieng qua $macro_model) va cac testbench.  Bo qua no o day de con
+# so khop dung voi `find ... ! -path '*/tests/*'` ma run_soc_sim.sh va filelist
+# cua Genus dung - neu khong, model bi nap hai lan va con so 55 khong bao gio
+# dung.
+rtl=()
+for f in **/*.v; do
+    case "$f" in
+        tests/*) continue ;;
+    esac
+    rtl+=("$f")
+done
 
 if [[ "${#rtl[@]}" -ne 55 ]]; then
     echo "Expected 55 synthesizable Verilog files, found ${#rtl[@]}" >&2

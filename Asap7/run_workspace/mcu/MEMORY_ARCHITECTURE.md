@@ -8,6 +8,13 @@ cấp: `srambank_256x4x32_6t122`, 1024 word × 32 bit = 4 KiB, **single-port 1RW
 **đọc đồng bộ** (dataout có register), **không có byte-write mask**. Ba tính
 chất này quyết định gần như mọi thứ bên dưới.
 
+> Tài liệu này ghi các quyết định **đã chốt**. Những gì còn sai, còn thiếu, và
+> kế hoạch sửa theo từng phase nằm ở [MEMORY_FIX_PLAN.md](MEMORY_FIX_PLAN.md).
+> Đáng chú ý: mục 2 (tách system RAM) và mục 3 (TCM) dưới đây đều đã được bổ
+> sung ở đó — nửa RAM `hi` nay là vùng **uncached** dành cho DMA buffer, và
+> TCM có hai giới hạn kiến trúc (DMA và debugger không với tới được) cần biết
+> trước khi dựa vào nó.
+
 ## 1. Cache: 32 KiB → 16 KiB
 
 | | Trước | Sau |
@@ -108,6 +115,14 @@ lane, rồi ghi lại.
 **Ai trả giá này:** chỉ đường CPU write-through. `dma_axi_master.v` luôn phát
 `WSTRB = 4'b1111`, nên **DMA không bao giờ read-modify-write**. Chi phí rơi vào
 `sb`/`sh` do D-cache write-through chuyển tiếp, và vào ghi từ debug module.
+
+> Cả hai đường đó **thật sự không chạy** cho tới 2026-09-05: `dcache.v` và
+> `dtm_axi_master.v` diễn đạt store dưới 32 bit bằng `AWSIZE` nhỏ và địa chỉ lẻ
+> thay vì bằng `WSTRB`, nên `axi_ram` trả `SLVERR` và bỏ qua. Không master nào
+> kiểm tra `BRESP`, nên lỗi im lặng. Xem P6 trong
+> [MEMORY_FIX_PLAN.md](MEMORY_FIX_PLAN.md). Bất biến này nay được chốt bằng
+> `genus/rtl/tests/tb_mem_paths.sv` — nó đọc lại RAM **bằng DMA**, tức bằng một
+> master không đi qua cache, nên cache không che được nữa.
 
 FSM ghi của `axi_ram` trước đây đi qua một state chờ thuần túy giữa lần đọc và
 lần ghi trộn. Macro đã register dataout ngay ở cạnh clock của state đọc, nên dữ

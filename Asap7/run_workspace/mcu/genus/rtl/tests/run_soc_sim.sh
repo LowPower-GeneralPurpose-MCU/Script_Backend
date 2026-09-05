@@ -3,7 +3,8 @@
 #
 #   ./run_soc_sim.sh apb    - SoC_testbench.sv : quet thanh ghi APB cua ngoai vi
 #   ./run_soc_sim.sh fw     - tb_top_soc.v     : chay firmware that qua CPU
-#   ./run_soc_sim.sh all    - ca hai (mac dinh)
+#   ./run_soc_sim.sh mem    - tb_mem_paths.sv  : RAM hi / TCM / DMA / store MMIO
+#   ./run_soc_sim.sh all    - ca ba (mac dinh)
 #
 # Bien moi truong ghi de duoc:
 #   XSIM_BIN   thu muc bin cua Vivado  (mac dinh: /d/Xilinx/Vivado/2024.1/bin)
@@ -29,6 +30,7 @@ XSIM_BIN="${XSIM_BIN:-/d/Xilinx/Vivado/2024.1/bin}"
 OUT_DIR="$(winpath "${OUT_DIR:-$HERE/sim_work}")"
 FW_MEM="$(winpath "${FW_MEM:-$REPO/Driver/my_soc_firmware_word.mem}")"
 APB_TB="$REPO/Test_bench/SoC_testbench.sv"
+MEM_TB="$HERE/tb_mem_paths.sv"
 FW_TB="$REPO/Driver/tb_top_soc.v"
 MODE="${1:-all}"
 
@@ -67,9 +69,21 @@ run_fw() {
     printf 'UART: '; grep -o 'char=.' xsim_fw.log | sed 's/char=//' | tr -d '\n'; echo
 }
 
+run_mem() {
+    echo "=== memory-path testbench ==="
+    xvlog.bat -sv -work mem "${INC[@]}" -f rtl_files.f "$MEM_TB" > xvlog_mem.log
+    xelab.bat -relax -s mem_sim -timescale 1ns/1ps mem.tb_mem_paths -L mem > xelab_mem.log
+    printf 'run all
+quit
+' > run.tcl
+    xsim.bat mem_sim -tclbatch run.tcl > xsim_mem.log
+    grep -E '^\[FAIL\]|^\[INFO\]|PASS COUNT|FAIL COUNT|TIMEOUTS|RESULT' xsim_mem.log || true
+}
+
 case "$MODE" in
     apb) run_apb ;;
     fw)  run_fw ;;
-    all) run_apb; run_fw ;;
-    *)   echo "cach dung: $0 [apb|fw|all]"; exit 1 ;;
+    mem) run_mem ;;
+    all) run_apb; run_fw; run_mem ;;
+    *)   echo "cach dung: $0 [apb|fw|mem|all]"; exit 1 ;;
 esac

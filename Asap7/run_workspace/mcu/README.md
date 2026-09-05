@@ -100,6 +100,20 @@ bash genus/rtl/tests/run_rtl_lint.sh
 bash genus/rtl/tests/run_axi_ram_verilator.sh
 ```
 
+Ba testbench mức SoC chạy bằng Vivado XSim:
+
+```bash
+bash genus/rtl/tests/run_soc_sim.sh all
+```
+
+- `apb` — `Test_bench/SoC_testbench.sv`, quét thanh ghi ngoại vi APB.
+- `fw` — `Driver/tb_top_soc.v`, chạy firmware thật qua CPU tới khi in UART và WFI.
+- `mem` — `genus/rtl/tests/tb_mem_paths.sv`, phủ những đường mà hai cái trên
+  không chạm tới: nửa RAM uncached `0x2002_0000`, ITCM/DTCM, trọng tài port F/D
+  của TCM, DMA ghi rồi CPU đọc, thứ tự store vào MMIO, đường ghi/đọc của
+  debugger, và một phép **đo độ trễ** khẳng định D-cache thật sự hit. Xem
+  [MEMORY_FIX_PLAN.md](MEMORY_FIX_PLAN.md) mục 5.
+
 Lệnh đầu lint cấu trúc toàn bộ 55 RTL file với top `top_soc`. Lệnh thứ hai bao
 phủ full-word write/read, byte-strobe read-modify-write, chọn bank và phản hồi
 `SLVERR` cho địa chỉ không word-aligned. Danh sách warning bị miễn trong lint

@@ -94,6 +94,28 @@ module dtm_axi_master #(
 
     reg [2:0] state;
 
+    // Tren AXI, mot transfer duoi 32 bit tren bus 32 bit duoc dien dat bang
+    // WSTRB: dia chi can word, AxSIZE bang be rong BUS, va byte nam o LANE ung
+    // voi dia chi.  Debug Module thi dua sang mot gia tri CAN PHAI (sbdata0
+    // giu byte o [7:0]), nen phai nhan doi no ra cac lane truoc khi phat.
+    //
+    // Truoc day ba thu deu sai: AWSIZE/ARSIZE lay thang i_size, AWADDR/ARADDR
+    // mang ca hai bit thap, va WDATA khong dich lane.  axi_ram chi nhan
+    // AxSIZE = 3'd2 va dia chi can word nen no tra SLVERR va khong ghi gi ca -
+    // moi lenh ghi char/short tu GDB am tham khong co tac dung.  Xem
+    // tests/tb_mem_paths.sv nhom T9.
+    function automatic [DATA_WIDTH-1:0] lane_align_wdata;
+        input [DATA_WIDTH-1:0] w_data;
+        input [1:0]            size;
+        begin
+            case (size)
+                2'd0:    lane_align_wdata = {4{w_data[7:0]}};
+                2'd1:    lane_align_wdata = {2{w_data[15:0]}};
+                default: lane_align_wdata = w_data;
+            endcase
+        end
+    endfunction
+
     // Hàm tạo WSTRB dựa trên kích thước và LSB của địa chỉ
     function automatic [3:0] get_wstrb;
         input [1:0] size;
@@ -121,17 +143,17 @@ module dtm_axi_master #(
                     if (i_req) begin
                         if (i_op == 2'd2) begin // WRITE
                             state <= ST_W_ADDR;
-                            m_axi_awaddr  <= i_addr;
-                            m_axi_awsize  <= {1'b0, i_size};
+                            m_axi_awaddr  <= {i_addr[ADDR_WIDTH-1:2], 2'b00};
+                            m_axi_awsize  <= $clog2(DATA_WIDTH/8);
                             m_axi_awvalid <= 1'b1;
-                            m_axi_wdata   <= i_wdata;
+                            m_axi_wdata   <= lane_align_wdata(i_wdata, i_size);
                             m_axi_wstrb   <= get_wstrb(i_size, i_addr[1:0]);
                             m_axi_wvalid  <= 1'b1;
                             m_axi_bready  <= 1'b1;
                         end else if (i_op == 2'd1) begin // READ
                             state <= ST_R_ADDR;
-                            m_axi_araddr  <= i_addr;
-                            m_axi_arsize  <= {1'b0, i_size};
+                            m_axi_araddr  <= {i_addr[ADDR_WIDTH-1:2], 2'b00};
+                            m_axi_arsize  <= $clog2(DATA_WIDTH/8);
                             m_axi_arvalid <= 1'b1;
                             m_axi_rready  <= 1'b1;
                         end

@@ -38,3 +38,12 @@
 
 # Kept on purpose: tcl/, scripts/, reports/, verify_rpt/ and the handoff text
 # reports, which are small and are the record of what a run produced.
+
+# ---------------------------------------------------------------------------
+# Vivado XSim run artifacts.
+#
+# run_soc_sim.sh bien dich toan bo RTL vao mot thu muc lam viec (mac dinh
+# rtl/tests/sim_work): thu vien xsim.dir, wdb waveform va log cua xvlog/xelab.
+# Tat ca deu tao lai duoc bang cach chay lai script.
+# ---------------------------------------------------------------------------
+**/tests/sim_work/
