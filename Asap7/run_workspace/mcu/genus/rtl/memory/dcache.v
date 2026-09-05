@@ -135,6 +135,28 @@ module data_cache #(
         end
     endfunction
 
+    // Bus la 32 bit va moi slave phia sau (axi_ram, cau AXI-to-APB, CLINT) deu
+    // decode theo WORD.  Tren AXI, mot store duoi 32 bit duoc dien dat bang
+    // WSTRB - byte nam o LANE ung voi dia chi - chu khong phai bang AWSIZE nho
+    // hon hay bang mot AWADDR le.  cpu_write_data thi nguoc lai: no can phai
+    // (gia tri o [7:0] hoac [15:0]), vi mang trong cache tron bang
+    // write_data_with_size chu khong theo lane.
+    //
+    // Nhan doi gia tri ra ca bon lane la cach re nhat de bac cau hai quy uoc
+    // do: WSTRB da chon dung lane roi, cac lane con lai bi bo qua.
+    function automatic [31:0] lane_align_wdata;
+        input [31:0] w_data; input [1:0] size;
+        reg [31:0] res;
+        begin
+            case (size)
+                2'b00:   res = {4{w_data[7:0]}};
+                2'b01:   res = {2{w_data[15:0]}};
+                default: res = w_data;
+            endcase
+            lane_align_wdata = res;
+        end
+    endfunction
+
     function automatic [3:0] gen_wstrb;
         input [1:0] size; input [1:0] offset;
         reg [3:0] strb;
@@ -186,7 +208,11 @@ module data_cache #(
 
     wire uncache_en = (state == IDLE) ? uncache_en_i : uncache_r;
 
-    assign m_axi_awid = 0; assign m_axi_awsize = mem_size; assign m_axi_awburst = 2'b01;
+    // AWSIZE la be rong cua BUS, khong phai be rong cua lenh store.  De no
+    // bang mem_size thi mot `sb` phat AWSIZE = 0 va axi_ram - chi nhan
+    // AxSIZE = 3'd2 - tra SLVERR roi bo qua beat.  Xem ghi chu ve
+    // m_axi_awaddr ben duoi.
+    assign m_axi_awid = 0; assign m_axi_awsize = $clog2(C_M_AXI_DATA_W/8); assign m_axi_awburst = 2'b01;
     assign m_axi_awlock = 0; assign m_axi_awcache = uncache_en ? 4'b0000 : 4'b0011;
     assign m_axi_awprot = 3'b000; assign m_axi_awqos = 0; assign m_axi_awregion = 0; assign m_axi_awlen = 0;
     assign m_axi_arid = 0; assign m_axi_arsize = $clog2(C_M_AXI_DATA_W/8); assign m_axi_arburst = 2'b01;
@@ -214,13 +240,26 @@ module data_cache #(
     // Keep the AXI payload/address datapath outside the cache control
     // combinational process.  This removes a false combinational loop between
     // CPU read data and AMO write data at the SoC boundary.
-    assign m_axi_awaddr = current_addr;
-    assign m_axi_wdata  = cpu_write_data;
+    // Dia chi phat ra bus PHAI can word.  Truoc day ca hai duong duoi day
+    // mang nguyen hai bit thap cua dia chi CPU, nen moi `sb`/`sh` va moi
+    // `lb`/`lh` uncached bi axi_ram tu choi bang SLVERR va am tham khong lam
+    // gi.  D-cache khong kiem tra BRESP/RRESP nen loi hoan toan im lang:
+    // voi vung cacheable, write hit van cap nhat mang cua cache nen CPU doc
+    // lai thay dung trong khi RAM that khong bao gio nhan duoc byte do; voi
+    // DMAPOOL (uncached, khong co cache che lai) du lieu mat ngay lap tuc.
+    //
+    // Byte lane van duoc bao toan: WSTRB chon lane khi ghi, va khi doc thi
+    // read_data_with_size da trich lane bang byte_offset san roi - no von
+    // luon giai thiet nhan ve nguyen word chua dia chi do.
+    //
+    // Hoi quy cho truong hop nay o tests/tb_mem_paths.sv nhom T2 va T6.
+    assign m_axi_awaddr = {current_addr[C_M_AXI_ADDR_W-1:2], 2'b00};
+    assign m_axi_wdata  = lane_align_wdata(cpu_write_data, mem_size);
     assign m_axi_wstrb  = gen_wstrb(mem_size, byte_offset);
     assign m_axi_wlast  = 1'b1;
     assign m_axi_arlen  = uncache_en ? 8'd0 : BURST_LEN;
     assign m_axi_araddr = uncache_en
-        ? current_addr
+        ? {current_addr[C_M_AXI_ADDR_W-1:2], 2'b00}
         : {tag, index, {OFFSET_W{1'b0}}};
 
     // Array control

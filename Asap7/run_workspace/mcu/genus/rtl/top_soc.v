@@ -739,16 +739,43 @@ module top_soc (
     //   timekeeping va tick cua RTOS chet.
     //
     // Cac cua so con lai deu DUOC cache va dung nhu vay: ROM 0x0001_0000, SRAM
-    // 0x2000_0000, QSPI flash 0x3000_0000, SDRAM 0x8000_0000.
+    // 0x2000_0000 (nua LO), QSPI flash 0x3000_0000, SDRAM 0x8000_0000.
+    //
+    // NUA HI CUA SYSTEM RAM (0x2002_0000, slave 6) LA UNCACHED - CO Y.
+    //
+    // System RAM duoc tach thanh hai slave port de CPU va DMA chay song song
+    // (xem ghi chu o muc 5).  Nhung song song ve BANG THONG khong tu dong dung
+    // ve CHUC NANG: chip nay khong co snoop, D-cache la write-through va KHONG
+    // co cong invalidate/flush nao ca.  Nen chieu "DMA ghi -> CPU doc" bi hong:
+    // DMA ghi thang vao SRAM, D-cache van giu line cu (clean, hop le), CPU doc
+    // ra gia tri cu MAI MAI cho toi khi line bi evict ngau nhien.  Khong the
+    // vong tranh bang phan mem vi truoc day RAM khong he co bi danh uncached.
+    //
+    // Cach re nhat de dong lo hong do la cho hai nua HAI THUOC TINH khac nhau,
+    // thay vi chi hai cong khac nhau:
+    //
+    //   LO 0x2000_0000-0x2001_FFFF  cacheable  - vung lam viec cua CPU (.data,
+    //                                            .bss, stack, heap)
+    //   HI 0x2002_0000-0x2003_FFFF  UNCACHED   - pool DMA buffer
+    //
+    // Dat buffer DMA vao nua HI thi bai toan coherency BIEN MAT tu goc, khong
+    // can snoop, khong can dirty bit, khong can lenh CMO.  Day la mo hinh chuan
+    // cua MCU khong coherent (vung NOCACHE cua STM32H7, .sram2 cua NXP).
+    // Linker script Driver/ld/soc.ld dinh nghia vung DMAPOOL va section
+    // `.dmabuf` tro vao day.
+    //
+    // Doi lai: doc/ghi nua HI tu CPU cham hon vi khong co cache - dung noi.  Do
+    // la vung cho DMA, khong phai cho CPU tinh toan.
     //
     // Viet bang mat na bit thay vi so sanh >= / <= : re hon ve dien tich va khop
     // 1:1 voi SLV_BASE_ADDR / SLV_ADDR_MASK cua axi_interconnect ben duoi, nen
     // hai bang dia chi khong the lech nhau ma khong ai thay.
     //
-    //   0x4000_0000 mask 0xF800_0000 -> cua so APB   (slave 4, 128 MB)
-    //   0x0200_0000 mask 0xFFFF_0000 -> CLINT        (slave 5, 64 KB)
+    //   0x4000_0000 mask 0xF800_0000 -> cua so APB      (slave 4, 128 MB)
+    //   0x0200_0000 mask 0xFFFF_0000 -> CLINT           (slave 5, 64 KB)
+    //   0x2002_0000 mask 0xFFFE_0000 -> RAM HI / DMA    (slave 6, 128 KB)
     // =========================================================================
-    `define SOC_IS_UNCACHED(a) ( ((a) & 32'hF800_0000) == 32'h4000_0000 ||                                  ((a) & 32'hFFFF_0000) == 32'h0200_0000 )
+    `define SOC_IS_UNCACHED(a) ( ((a) & 32'hF800_0000) == 32'h4000_0000 ||                                  ((a) & 32'hFFFF_0000) == 32'h0200_0000 ||                                  ((a) & 32'hFFFE_0000) == 32'h2002_0000 )
 
     wire ic_uncache_en = `SOC_IS_UNCACHED(cpu_inst_addr);
     instruction_cache #(
