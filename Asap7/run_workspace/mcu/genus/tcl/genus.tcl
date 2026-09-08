@@ -37,6 +37,47 @@ proc genus_try_set_root_attribute {name value} {
     return 1
 }
 
+# -----------------------------------------------------------------------------
+# T2 - Multi-Vt: RVT la mac dinh, LVT chi de va critical path.
+#
+# Ban tong hop 2026-09-08 ra 99.5% LVT: 52936/52953 flop la SEQ_LVT, ca thiet ke
+# chi con 395 cell RVT.  Nguyen nhan KHONG phai thu tu trong STD_LIBS (RVT da
+# duoc dat truoc LVT o do roi) ma la CLK_CPU chi con 11 ps margin, nen mapper
+# phai voi sang LVT o gan nhu moi diem de dong duoc timing.
+#
+# Cong thuc: cam LVT trong syn_generic + syn_map de toan bo thiet ke ra RVT, roi
+# mo lai LVT truoc syn_opt de no CHI thay vao nhung duong con vi pham.  LVT tro
+# thanh mieng va thay vi mac dinh.
+#
+# PHU THUOC: chi co tac dung sau khi duong JALR (T1 trong pipeline_stage.v) da
+# duoc go.  Neu critical path van la 2354 ps thi syn_opt se lai phai doi gan het
+# sang LVT va ket qua khong khac gi ban cu.
+#
+# Tat qua trinh bang: set MCU_MULTI_VT 0  (hoac bien moi truong MCU_MULTI_VT=0)
+# -----------------------------------------------------------------------------
+proc mcu_lvt_lib_cells {} {
+    set lvt {}
+    foreach cell_obj [get_db lib_cells] {
+        set cell_name [get_db $cell_obj .name]
+        # Cell LVT cua ASAP7 ket thuc bang _L, ban RVT bang _R.
+        if {[string match "*_ASAP7_75t_L" $cell_name]} {
+            lappend lvt $cell_obj
+        }
+    }
+    return $lvt
+}
+
+proc mcu_set_lvt_dont_use {cells value} {
+    set n 0
+    foreach cell_obj $cells {
+        if {[catch {set_db $cell_obj .dont_use $value}]} {
+            continue
+        }
+        incr n
+    }
+    return $n
+}
+
 proc genus_require_file {label path} {
     if {[file isfile $path]} {
         return
@@ -549,16 +590,70 @@ if {$GENUS_PHYSICAL} {
 }
 puts "Genus interconnect mode in effect: [get_db / .interconnect_mode]"
 
+if {![info exists MCU_MULTI_VT]} {
+    set MCU_MULTI_VT [expr {[info exists ::env(MCU_MULTI_VT)] ? $::env(MCU_MULTI_VT) : 1}]
+}
+set MCU_LVT_CELLS {}
+if {$MCU_MULTI_VT} {
+    set MCU_LVT_CELLS [mcu_lvt_lib_cells]
+    if {[llength $MCU_LVT_CELLS] == 0} {
+        puts "WARNING: multi-Vt requested but no LVT library cell matched *_ASAP7_75t_L"
+    } else {
+        set blocked [mcu_set_lvt_dont_use $MCU_LVT_CELLS true]
+        puts "Multi-Vt: LVT blocked for syn_generic/syn_map ($blocked of [llength $MCU_LVT_CELLS] cells)"
+    }
+}
+
 set_db / .syn_generic_effort $SYN_EFFORT
 syn_generic
 set_db / .syn_map_effort $SYN_EFFORT
 syn_map
+
+if {[llength $MCU_LVT_CELLS] > 0} {
+    mcu_set_lvt_dont_use $MCU_LVT_CELLS false
+    puts "Multi-Vt: LVT released for syn_opt"
+    # Chi co y nghia khi LVT da duoc mo lai: bao syn_opt uu tien ha leakage o
+    # nhung duong con du margin, tuc day nguoc ve RVT cho nhung cho khong can.
+    genus_try_set_root_attribute leakage_power_effort high
+}
+
 set_db / .syn_opt_effort $SYN_EFFORT
 syn_opt
 
 report_area > ./reports/area_syn.rpt
 report_area -depth 5 > ./reports/area_hierarchy_syn.rpt
 report_timing -max_paths 100 > ./reports/timing_syn.rpt
+# -----------------------------------------------------------------------------
+# T5 - power chi co nghia khi co activity annotation.
+#
+# .lib cua srambank_256x4x32_6t122 CO day du bang internal_power (rise_power /
+# fall_power theo power_template_7x7_x1) va khai bao `cell_leakage_power : 0`.
+# Nen con so 85.2 mW o dong `bbox` cua ban 2026-09-08 KHONG phai gia tri mac dinh
+# cua thu vien - do la dynamic power that, tinh tu toggle rate MAC DINH cua Genus
+# ap dong thoi len ca 84 macro.  Thuc te moi thoi diem chi mot macro duoc truy
+# cap, nen con so do cao hon su that hang chuc lan.
+#
+# Hai he qua phai nho:
+#   1. Khong co annotation thi power_syn.rpt chi dung de SO SANH hai ban tong
+#      hop voi nhau, khong dung de bao cao mot con so tuyet doi.
+#   2. Leakage cua SRAM bang 0 THEO DINH NGHIA cua .lib, nen tong leakage luon
+#      thieu di phan cua 84 macro - ke ca sau CTS.
+#   3. Dong `clock` gan bang 0 la vi chua co clock tree; chi sau CTS trong
+#      Innovus no moi thanh mot so hang that.
+#
+# Dat MCU_SAIF tro toi file SAIF de annotate.  Sinh file do bang:
+#     rtl/tests/run_soc_sim.sh SAIF=1 fw     ->  rtl/tests/sim_work/fw.saif
+# Bao boc bang catch: neu phien ban Genus nay khong nhan cu phap do thi flow van
+# chay tiep voi power khong annotate, chi in canh bao.
+if {[info exists ::env(MCU_SAIF)] && [file isfile $::env(MCU_SAIF)]} {
+    if {[catch {read_saif -instance top_soc $::env(MCU_SAIF)} saif_msg]} {
+        puts "WARNING: read_saif that bai, power se KHONG duoc annotate: $saif_msg"
+    } else {
+        puts "Power: da annotate activity tu $::env(MCU_SAIF)"
+    }
+} else {
+    puts "Power: KHONG co SAIF - dong 'bbox' trong power_syn.rpt la toggle rate mac dinh, dung tin con so tuyet doi"
+}
 report_power > ./reports/power_syn.rpt
 report_gates > ./reports/gates_syn.rpt
 catch {report sequential -deleted > ./reports/deleted_sequential_syn.rpt}

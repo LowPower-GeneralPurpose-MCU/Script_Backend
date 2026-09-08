@@ -1045,7 +1045,18 @@ module top_soc (
         //   1: 0x2000_0000 RAM lo  128 KB   mask FFFE_0000
         //   0: 0x0001_0000 ROM     64 KB    mask FFFF_0000
         .SLV_BASE_ADDR (224'h2002_0000_0200_0000_4000_0000_8000_0000_3000_0000_2000_0000_0001_0000),
-        .SLV_ADDR_MASK (224'hFFFE_0000_FFFF_0000_F800_0000_FC00_0000_FF00_0000_FFFE_0000_FFFF_0000)
+        .SLV_ADDR_MASK (224'hFFFE_0000_FFFF_0000_F800_0000_FC00_0000_FF00_0000_FFFE_0000_FFFF_0000),
+        // T3 - do sau FIFO write-data theo tung slave, cung thu tu 6..0 nhu tren.
+        // Mot bo cho moi master (MST_AMT=4), moi o rong 36 bit; 32 -> 8 tiet kiem
+        // 4*24*36 = 3456 flop moi slave, 32 -> 2 tiet kiem 4320.
+        //   6 RAM hi : 8  - chiu burst cua cache line
+        //   5 CLINT  : 2  - chi ghi don nhip
+        //   4 APB    : 2  - chi ghi don nhip
+        //   3 SDRAM  : 8  - chiu burst
+        //   2 QSPI   : 2  - chi doc; Genus da tu xoa duong W
+        //   1 RAM lo : 8  - chiu burst
+        //   0 ROM    : 2  - chi doc; Genus da tu xoa duong W
+        .SLV_W_FIFO_DEPTH (224'h0000_0008_0000_0002_0000_0002_0000_0008_0000_0002_0000_0008_0000_0002)
     ) u_axi_interconnect (
         .ACLK_i          (clk_axi), // AXI Bus chạy clk_axi (luôn sống)
         .ARESETn_i       (reset_axi_n_sync),

@@ -775,7 +775,21 @@ module sa_W_channel
     // Transaction configuration
     parameter                       DATA_WIDTH          = 32,
     parameter                       ADDR_WIDTH          = 32,
-    parameter                       TRANS_DATA_LEN_W    = 8                                 // Bus width of xLEN (AXI4: 8-bit, burst 1-256)
+    parameter                       TRANS_DATA_LEN_W    = 8,                                // Bus width of xLEN (AXI4: 8-bit, burst 1-256)
+    // T3 - do sau cua FIFO dem write-data, MOT bo cho MOI master.
+    //
+    // Truoc day hard-code 32.  Voi DATA_INFO_W = DATA_WIDTH + STRB_WIDTH = 36 va
+    // MST_AMT = 4 thi mot sa_W_channel ton 4*32*36 = 4608 flop, va no duoc nhan
+    // ban cho TUNG slave.  Trong ban tong hop 2026-09-08, nam sa_W_channel con
+    // song chiem ~11000 cell moi cai = 52% ca interconnect = 28% ca SoC.
+    //
+    // FIFO nay KHONG phai store-and-forward: no chi quyet dinh mot master duoc
+    // chay truoc bao nhieu beat TRUOC KHI AW cua no thang trong tai.  Backpressure
+    // la `dsp_WREADY_o = ~fifo_wdata_full`, con `AW_stall_o` bam vao FIFO order
+    // (do sau OUTSTANDING_AMT) chu KHONG bam vao FIFO nay - nen ha do sau khong
+    // the gay deadlock, chi lam master phai doi som hon.  Slave chi nhan ghi don
+    // nhip (APB, CLINT) khong can hon 2.
+    parameter                       W_FIFO_DEPTH        = 32
 )
 (
     // Input declaration
@@ -941,7 +955,7 @@ module sa_W_channel
             #(
                 .FIFO_TYPE(0),
                 .DATA_WIDTH(DATA_INFO_W),
-                .FIFO_DEPTH(32)
+                .FIFO_DEPTH(W_FIFO_DEPTH)
             ) fifo_wdata (
                 .clk(ACLK_i),
                 .rst_n(ARESETn_i),
@@ -1205,7 +1219,9 @@ module ai_slave_arbitration
     // Slave info configuration
     parameter                       SLV_ID              = 0,
     parameter                       SLV_ID_MSB_IDX      = 30,
-    parameter                       SLV_ID_LSB_IDX      = 30
+    parameter                       SLV_ID_LSB_IDX      = 30,
+    // T3 - do sau FIFO write-data rieng cho slave nay (xem sa_W_channel)
+    parameter                       W_FIFO_DEPTH        = 32
 )
 (
     // Input declaration
@@ -1405,7 +1421,8 @@ module ai_slave_arbitration
         .MST_ID_W(MST_ID_W),
         .DATA_WIDTH(DATA_WIDTH),
         .ADDR_WIDTH(ADDR_WIDTH),
-        .TRANS_DATA_LEN_W(TRANS_DATA_LEN_W)
+        .TRANS_DATA_LEN_W(TRANS_DATA_LEN_W),
+        .W_FIFO_DEPTH(W_FIFO_DEPTH)
     ) W_channel (
         // Input
         .ACLK_i(ACLK_i),
