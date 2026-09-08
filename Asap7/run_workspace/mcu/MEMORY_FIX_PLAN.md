@@ -219,10 +219,15 @@ không phải của hệ thống bộ nhớ, và sửa nó cần một testcase 
 
 ### Phase 1 — Store buffer cho D-cache (P2) — ĐÃ SỬA VÀ VERIFY
 
-**Kết quả đo (`mem`, 2026-09-08).** Store cacheable: **35 → 1 chu kỳ** `clk_cpu`.
+**Kết quả đo, 2026-09-08.** Store cacheable: **35 → 1 chu kỳ** `clk_cpu`.
 Đổi lại, một read miss ngay sau chuỗi store phải chờ buffer xả nên đi từ 57 lên
 ~90 chu kỳ — đúng phần đánh đổi của quy tắc 2 dưới đây. Testbench `mem` lên
 **109/109 PASS**, thêm nhóm `TS` đo trực tiếp ba tính chất của buffer.
+
+**End-to-end (`fw`, A/B trên cùng một firmware, chỉ đảo `dcache.v` + `top_soc.v`):
+2 831 456 000 → 1 528 046 000 ns, nhanh hơn 1.85×.** Đây là bài test MMIO
+ordering thật (driver UART) mà mục "verify bắt buộc" số 4 dưới đây yêu cầu —
+nó vừa chứng minh thứ tự đúng, vừa cho con số hiệu năng. `apb` giữ 256/256.
 
 **Sai lệch so với thiết kế gốc dưới đây:** entry KHÔNG mang cờ `is_device`.
 Store uncached đơn giản là *không bao giờ* vào buffer — nó giữ nguyên đường
