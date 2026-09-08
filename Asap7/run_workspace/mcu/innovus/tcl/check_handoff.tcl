@@ -11,8 +11,18 @@ proc read_binary_file {path label} {
 
 proc check_mapped_sram_count {netlist master expected} {
     set text [read_binary_file $netlist "Genus netlist"]
-    set pattern [format {(^|\n)[ \t]*%s[ \t]+[^;\n]*\(} $master]
-    set count [regexp -all -- $pattern $text]
+    # write_hdl xuong dong truoc ten instance khi ten escaped qua dai, nen
+    # '(' khong chac nam cung dong voi ten module.  Pattern doi '(' cung dong
+    # bo qua dung 12 macro cache trong generate block -> 72/84 gia.  Xem
+    # check_sram_mapped_netlist trong genus/tcl/genus.tcl.
+    regsub -all {[ \t\r\n]+} $text " " flat
+    set escaped_master [string map {. \\.} $master]
+    set count 0
+    foreach stmt [split $flat ";"] {
+        if {[regexp -- "^ ?$escaped_master\[ \t\]" $stmt]} {
+            incr count
+        }
+    }
     if {$count != $expected} {
         error "Genus handoff has $count instances of $master; expected $expected"
     }

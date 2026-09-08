@@ -328,8 +328,26 @@ proc check_sram_mapped_netlist {netlist master expected} {
     set text [read $fp]
     close $fp
 
-    set pattern [format {(^|\n)[ \t]*%s[ \t]+[^;\n]*\(} $master]
-    set count [regexp -all -- $pattern $text]
+    # write_hdl dat ten instance XUONG DONG SAU khi ten escaped qua dai.
+    # Moi macro nam trong generate block (12 macro cua I-cache + D-cache)
+    # deu roi vao dang do:
+    #
+    #     srambank_256x4x32_6t122
+    #          \u_icache_DATA_RAM_G_DATA_WAY[0].u_sram_G_SRAM_BANK[0].u_sram
+    #          (.banksel (n_63173), ...);
+    #
+    # Pattern cu doi dau '(' nam CUNG DONG voi ten module, nen no bo qua
+    # DUNG 12 macro nay -> dem 72/84 va abort mot lan chay hoan toan dung
+    # (ban 2026-09-08).  Chuan hoa khoang trang truoc, roi dem cac cau lenh
+    # BAT DAU bang ten master, de cho xuong dong khong con anh huong.
+    regsub -all {[ \t\r\n]+} $text " " flat
+    set escaped_master [string map {. \\.} $master]
+    set count 0
+    foreach stmt [split $flat ";"] {
+        if {[regexp -- "^ ?$escaped_master\[ \t\]" $stmt]} {
+            incr count
+        }
+    }
     puts "Mapped SRAM instances: $count (expected $expected)"
     if {$count != $expected} {
         error "Mapped SRAM count mismatch for $master"
