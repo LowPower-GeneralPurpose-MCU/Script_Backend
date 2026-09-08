@@ -220,7 +220,10 @@ module csr_register_file (
     // Tin hieu duoc tinh tu {csr_write_addr, csr_op, csr_write_en} nen no DA o
     // dung tang EX/MEM, cung tang voi ecall/ebreak - mepc se tro dung lenh gay
     // loi ma khong can them logic nao.
-    output                   csr_illegal_write
+    output                   csr_illegal_write,
+
+    // C5 - truy cap mot CSR KHONG HIEN THUC. Cung tang EX/MEM, cung ly do.
+    output                   csr_illegal_addr
 );
 
     localparam [31:0] MVENDORID  = 32'h0;
@@ -308,14 +311,75 @@ module csr_register_file (
                 12'h342: csr_read_value = mcause;
                 12'h343: csr_read_value = mtval;
                 12'h344: csr_read_value = mip_val;
-                12'hB00, 12'hC00, 12'hC01: csr_read_value = mcycle[31:0];
-                12'hB80, 12'hC80, 12'hC81: csr_read_value = mcycle[63:32];
-                12'hB02, 12'hC02:          csr_read_value = minstret[31:0];
-                12'hB82, 12'hC82:          csr_read_value = minstret[63:32];
+                // C4 - `time` (0xC01) / `timeh` (0xC81) DA BI BO khoi bang nay.
+                //
+                // Truoc day chung duoc alias vao mcycle. Nhung `time` theo dac ta
+                // la `mtime` cua CLINT chay bang rtc_clk 32.768 kHz, con mcycle
+                // dem chu ky clk_cpu 400 MHz - lech he so ~12200 lan. Moi `rdtime`
+                // trong firmware (RTOS tick, delay, timeout) deu sai, va sai IM
+                // LANG vi gia tri van tang deu.
+                //
+                // Khong noi thang CLINT vao day: mtime la bo dem 64 bit o mien
+                // clk_axi, core o clk_cpu. Dua 64 bit qua CDC can Gray hoac
+                // handshake; lam au thi doc ra gia tri rach nua tren/nua duoi -
+                // mot lop bug te hon cai dang sua.
+                //
+                // Bo khoi bang -> roi vao csr_exists() = 0 -> illegal-instruction.
+                // Day la hanh vi chuan cua core khong co Zicntr day du: firmware
+                // bat trap va doc mtime qua MMIO tai 0x0200_BFF8.
+                12'hB00, 12'hC00: csr_read_value = mcycle[31:0];
+                12'hB80, 12'hC80: csr_read_value = mcycle[63:32];
+                12'hB02, 12'hC02: csr_read_value = minstret[31:0];
+                12'hB82, 12'hC82: csr_read_value = minstret[63:32];
                 12'h7b0: csr_read_value = dcsr;
                 12'h7b1: csr_read_value = dpc;
                 12'h7b2: csr_read_value = dscratch0;
                 default: csr_read_value = 32'b0;
+            endcase
+        end
+    endfunction
+
+    // =====================================================================
+    // C5 - CSR NAO THUC SU TON TAI.
+    //
+    // Dac ta: truy cap mot CSR khong hien thuc PHAI raise illegal-instruction.
+    // Do la cach duy nhat phan mem do nang luc phan cung. Truoc day nhanh
+    // `default` cua csr_read_value tra 32'b0, nen `csrr t0, mcountinhibit`,
+    // `csrr t0, pmpcfg0`, `csrr t0, mstatush` deu tra 0 va firmware tuong chung
+    // TON TAI. Mia mai la huong GHI da lam rat ky (csr_illegal_write) con huong
+    // DOC thi bo ngo.
+    //
+    // C6 - nhom debug 0x7B0-0x7B2 chi TON TAI khi hart dang o Debug Mode. Truoc
+    // day firmware M-mode ghi duoc dcsr - ke ca bit `step`, tuc tu dua minh vao
+    // trang thai single-step ma khong co debugger nao dang gan. Khong anh huong
+    // OpenOCD: no di qua cong dbg_reg_write_en rieng, khong qua pipeline.
+    //
+    // BAT BIEN PHAI GIU: them mot CSR moi = sua BA cho -
+    //   1. csr_read_value        (gia tri doc ra)
+    //   2. danh sach nhay cua always block  (neu khong: cong doc dong bang)
+    //   3. csr_exists            (neu khong: CSR moi bi bao illegal)
+    // =====================================================================
+    // `in_debug` la DOI SO chu khong phai tin hieu doc ben trong than ham.
+    // Ly do: giong het khoan no G2 ghi o duoi - mot so cong cu chi suy ra danh
+    // sach nhay tu cac tin hieu XUAT HIEN TRONG BIEU THUC GOI, khong nhin vao
+    // than ham. Neu doc `dbg_halted` ben trong thi csr_illegal_addr co the
+    // DONG BANG khi dbg_halted doi ma csr_write_addr thi khong.
+    function automatic csr_exists;
+        input [11:0] addr;
+        input        in_debug;
+        begin
+            case (addr)
+                12'hF11, 12'hF12, 12'hF13, 12'hF14,          // mvendorid..mhartid
+                12'h300, 12'h301, 12'h304, 12'h305,          // mstatus misa mie mtvec
+                12'h340, 12'h341, 12'h342, 12'h343, 12'h344, // mscratch..mip
+                12'hB00, 12'hB80, 12'hB02, 12'hB82,          // mcycle(h) minstret(h)
+                12'hC00, 12'hC80, 12'hC02, 12'hC82:          // cycle(h) instret(h)
+                    csr_exists = 1'b1;
+                // Debug CSR: chi ton tai trong Debug Mode.
+                12'h7b0, 12'h7b1, 12'h7b2:
+                    csr_exists = in_debug;
+                default:
+                    csr_exists = 1'b0;
             endcase
         end
     endfunction
@@ -338,6 +402,19 @@ module csr_register_file (
     // =====================================================================
     assign csr_illegal_write = csr_write_en && (csr_op != 2'b00) &&
                                (csr_write_addr[11:10] == 2'b11);
+
+    // =====================================================================
+    // C5 - truy cap CSR khong ton tai.
+    //
+    // KHAC csr_illegal_write o dieu kien csr_op: cho illegal-write thi phai
+    // "lenh nay THUC SU ghi", con o day thi mot lenh chi DOC (`csrr`, tuc
+    // csrrs voi rs1 = x0) van phai trap. Vi vay dung mot minh csr_write_en.
+    //
+    // csr_write_en la ex_mem_csr_we, ma instruction_decode dinh nghia la "DAY LA
+    // MOT LENH CSR" (doc hoac ghi) chu khong phai "lenh nay ghi" - dung chinh
+    // xac thu can o day.
+    // =====================================================================
+    assign csr_illegal_addr = csr_write_en && !csr_exists(csr_write_addr, dbg_halted);
 
     // =====================================================================
     // G2 - danh sach nhay cua mux doc CSR PHAI liet ke tuong minh.
@@ -402,7 +479,15 @@ module csr_register_file (
                 dcsr <= dbg_reg_write_data;
             end
             // Nếu phần mềm cố tình ghi đè DPC bằng lệnh CSR write nội bộ...
-            else if (csr_write_en && (csr_op != 2'b00) && (csr_write_addr == 12'h7b1)) begin
+            // C7 - `!trap_enter` la BAT BUOC.
+            //
+            // Nhanh nay nam NGOAI chuoi `if (trap_enter) ... else if (csr_write_en)`
+            // ben duoi, nen mot `csrw dpc` bi trap (vi du chinh no illegal khi
+            // khong o Debug Mode) van GHI THAT roi chay lai sau mret -> ghi hai
+            // lan. Dung cung mot lop loi voi "KHOAN NO C" da sua cho `sw` o
+            // memory_access.
+            else if (csr_write_en && (csr_op != 2'b00) && !trap_enter &&
+                     (csr_write_addr == 12'h7b1)) begin
                 dpc <= csr_write_data;
             end
 
@@ -433,7 +518,17 @@ module csr_register_file (
                         mstatus[12:11] <= csr_write_data[12:11];
                     end
                     12'h304: mie <= csr_write_data & 32'h00000888;
-                    12'h305: mtvec <= csr_write_data;
+                    // C3 - mtvec la WARL, hai bit thap la truong MODE.
+                    //
+                    // Truoc day ghi nguyen si, va instruction_fetch dung
+                    // `pc_out = mtvec_in` THANG. Firmware nao ghi mtvec = base|1
+                    // (che do VECTORED - FreeRTOS va nhieu BSP lam the) se nhay
+                    // vao base+1, tuc mot dia chi le -> lay lenh sai hoan toan.
+                    //
+                    // Chi MODE 0 (direct) va 1 (vectored) ton tai; 2-3 la reserved
+                    // nen WARL ep ve 0. Bit [1] luon 0 sau khi ghi.
+                    // Dia chi vector duoc tinh o riscv_pipeline.v (trap_vector).
+                    12'h305: mtvec <= {csr_write_data[31:2], 1'b0, csr_write_data[0]};
                     12'h340: mscratch <= csr_write_data;
                     12'h341: mepc <= csr_write_data;
                     12'h342: mcause <= csr_write_data;

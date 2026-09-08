@@ -33,6 +33,7 @@ module riscv_pipeline #(
     input  wire [31:0] icache_read_data,
     input  wire        icache_hit,
     input  wire        icache_stall,
+    input  wire        icache_error,   // B3 - loi bus khi lay lenh -> mcause 1
     output wire        icache_read_req_lane1,
     output wire [31:0] icache_addr_lane1,
     input  wire [31:0] icache_read_data_lane1,
@@ -47,6 +48,7 @@ module riscv_pipeline #(
     input  wire [31:0] dcache_read_data,
     input  wire        dcache_hit,
     input  wire        dcache_stall,
+    input  wire        dcache_error,   // B2 - loi bus khi truy cap du lieu -> mcause 5/7
 
     output wire [1:0]  mem_size_top,
     output wire        mem_unsigned_top,
@@ -302,10 +304,17 @@ module riscv_pipeline #(
     wire        ex_mem_valid;
 
     // ---- illegal-instruction: ID -> EX -> MEM ----
+    // ---- B3: instruction access fault chay IF -> ID -> EX -> MEM ----
+    wire        instr_fault;
+    wire        if_id_fault;
+    wire        id_ex_fault;
+    wire        ex_mem_fault;      // MEM: nguon cua trap_instr_access
+
     wire        illegal_instr;     // ID:  ma lenh khong ton tai
     wire        id_ex_illegal;     // EX
     wire        ex_mem_illegal;    // MEM: nguon cua trap_illegal
     wire        csr_illegal_write; // MEM: ghi vao CSR chi doc
+    wire        csr_illegal_addr;  // MEM: truy cap CSR khong hien thuc (C5/C6)
 
     // ---- F3: dang lay nua thu nhat cua lenh 32 bit vat bien ----
     wire        if_realign_stall;
@@ -356,24 +365,116 @@ module riscv_pipeline #(
     // cua main_control_unit khien moi opcode la chay im lang nhu NOP - khong the
     // debug firmware, va mot ma lenh hong se troi qua ma khong ai biet.
     // -------------------------------------------------------------------------
-    wire trap_illegal    = csr_illegal_write | ex_mem_illegal;
+    // C5/C6 bo sung nguon thu ba: truy cap CSR khong hien thuc (ke ca nhom debug
+    // 0x7B0-0x7B2 khi khong o Debug Mode). Cung tang EX/MEM nen khong xung dot
+    // mepc/mtval voi hai nguon kia.
+    wire ex_mem_is_mem   = ex_mem_mem_read | ex_mem_mem_write;
 
-    wire trap_enter      = ex_mem_ecall | ex_mem_ebreak | trap_interrupt | trap_illegal;
+    wire trap_illegal    = csr_illegal_write | csr_illegal_addr | ex_mem_illegal;
+
+    // -------------------------------------------------------------------------
+    // C1 - ACCESS FAULT (mcause 1 / 5 / 7).
+    //
+    // Hai nguon, sinh o hai tang khac nhau nhung deu NHAN o tang MEM:
+    //   ex_mem_fault : loi khi LAY LENH nay. I-cache bao luc fetch, bit di theo
+    //                  pipeline (B3) nen toi MEM van gan dung lenh do.
+    //   dcache_error : loi khi TRUY CAP DU LIEU. Xung mot chu ky, dung chu ky
+    //                  dcache_stall ha, nen lenh van con o MEM.
+    //
+    // dcache_error da duoc D-cache rang buoc bang `cpu_addr == req_addr` nen no
+    // khong the len cho mot lenh da bi flush. Van AND them ex_mem_valid de bong
+    // bong khong sinh trap - cung ly do voi irq_ok (khoan no C).
+    // -------------------------------------------------------------------------
+    wire trap_instr_access = ex_mem_valid & ex_mem_fault;
+    wire trap_data_access  = ex_mem_valid & ex_mem_is_mem & dcache_error;
+    wire trap_st_access    = trap_data_access &  ex_mem_mem_write;
+    wire trap_ld_access    = trap_data_access & ~ex_mem_mem_write;
+
+    // -------------------------------------------------------------------------
+    // C2 - LOAD / STORE ADDRESS MISALIGNED (mcause 4 / 6).
+    //
+    // Truoc ban sua nay KHONG co kiem tra can le nao: `lw a0, 1(s0)` di thang
+    // vao cache, cache lay word chua dia chi do va tra ve gia tri SAI. Khong
+    // exception nao de RTOS bat, khong dau vet nao de debug.
+    //
+    // mem_size: 00 = byte, 01 = halfword, 10 = word (xem control_unit.v).
+    // Byte thi khong bao gio lech duoc nen khong co nhanh cho no.
+    //
+    // Dieu kien (ex_mem_mem_read | ex_mem_mem_write) la BAT BUOC du mem_size
+    // mac dinh 2'b00: no lam y dinh ro rang va khong phu thuoc vao gia tri mac
+    // dinh cua mot tin hieu o module khac.
+    //
+    // ex_mem_valid loai bong bong - cung ly do voi irq_ok (khoan no C).
+    // -------------------------------------------------------------------------
+    wire mem_ms_word     = (ex_mem_mem_size == 2'b10) && (ex_mem_alu_result[1:0] != 2'b00);
+    wire mem_ms_half     = (ex_mem_mem_size == 2'b01) &&  ex_mem_alu_result[0];
+    wire mem_misaligned  = ex_mem_valid & ex_mem_is_mem & (mem_ms_word | mem_ms_half);
+
+    // Store thang khi mot lenh vua doc vua ghi (AMO). A dang tat nen truong hop
+    // do khong xay ra, nhung viet ro de khong phu thuoc vao dieu do.
+    wire trap_st_misaligned = mem_misaligned &  ex_mem_mem_write;
+    wire trap_ld_misaligned = mem_misaligned & ~ex_mem_mem_write;
+    wire trap_misaligned    = trap_ld_misaligned | trap_st_misaligned;
+
+    wire trap_enter      = ex_mem_ecall | ex_mem_ebreak | trap_interrupt |
+                           trap_illegal | trap_misaligned |
+                           trap_instr_access | trap_data_access;
     wire mret_exec       = ex_mem_mret;
 
+    // Thu tu uu tien theo bang "Synchronous exception priority" cua dac ta:
+    // ngat truoc moi ngoai le; roi illegal / ebreak / ecall (ba cai loai tru
+    // nhau nen thu tu giua chung khong quan trong); roi MISALIGNED.
     wire [31:0] trap_cause = (trap_interrupt && is_external_irq) ? 32'h8000000b :
                              (trap_interrupt && is_software_irq) ? 32'h80000003 :
                              (trap_interrupt && is_timer_irq)    ? 32'h80000007 :
                              ex_mem_ecall                        ? 32'd11       :
                              ex_mem_ebreak                       ? 32'd3        :
-                             trap_illegal                        ? 32'd2        : 32'd0;
+                             trap_instr_access                   ? 32'd1        :
+                             trap_illegal                        ? 32'd2        :
+                             trap_st_misaligned                  ? 32'd6        :
+                             trap_ld_misaligned                  ? 32'd4        :
+                             trap_st_access                      ? 32'd7        :
+                             trap_ld_access                      ? 32'd5        : 32'd0;
 
     // Mot nguon duy nhat cho ca ngoai le lan ngat - xem ghi chu khoan no C.
     wire [31:0] trap_pc_value = ex_mem_pc_in;
 
+    // -------------------------------------------------------------------------
+    // C3 - dia chi vector cua trap.
+    //
+    // mtvec[1:0] la truong MODE (WARL, ep o register_file.v):
+    //   0 = DIRECT   : moi trap vao BASE
+    //   1 = VECTORED : INTERRUPT vao BASE + 4*cause, EXCEPTION van vao BASE
+    //
+    // Tinh o day thay vi trong instruction_fetch vi day la noi da co trap_cause;
+    // IF chi can nhan mot dia chi da san sang va khong phai doi.
+    //
+    // Bo cong nay nam trong cone cua nhanh `trap_enter` o mux PC - mot cone
+    // RIENG, ngan, lay tu thanh ghi ex_mem_*. No khong dung vao duong toi han
+    // seq_pc (xem P1 trong CORE_FIX_PLAN.md).
+    //
+    // cause[4:0] la du: 5 bit phu het 0-31, va mtvec_base da can le 4 byte nen
+    // phep cong chi cham toi bit [6:2] - mot bo dem 5 bit, khong phai adder 32 bit.
+    // -------------------------------------------------------------------------
+    wire [31:0] mtvec_base   = {mtvec_pc[31:2], 2'b00};
+    wire        mtvec_vector = mtvec_pc[0];
+    wire [31:0] trap_vector  = (mtvec_vector && trap_cause[31])
+                             ? (mtvec_base + {25'd0, trap_cause[4:0], 2'b00})
+                             : mtvec_base;
+
     // mtval cua illegal-instruction mang chinh ma lenh gay loi (dac ta cho phep).
     // Truoc day mtval luon la 0, nen handler khong co cach nao biet lenh nao sai.
-    wire [31:0] trap_val_value = trap_illegal ? ex_mem_instr : 32'd0;
+    // mtval cua misaligned mang DIA CHI gay loi (dac ta cho phep, va day la thu
+    // duy nhat handler dung duoc). Uu tien phai KHOP voi trap_cause o tren:
+    // trap_illegal thang trap_misaligned.
+    // Uu tien PHAI khop tung dong voi trap_cause o tren.
+    //   mcause 1       -> mtval = PC gay loi
+    //   mcause 2       -> mtval = ma lenh
+    //   mcause 4/5/6/7 -> mtval = dia chi gay loi
+    wire [31:0] trap_val_value = trap_instr_access ? ex_mem_pc_in      :
+                                 trap_illegal      ? ex_mem_instr      :
+                                 trap_misaligned   ? ex_mem_alu_result :
+                                 trap_data_access  ? ex_mem_alu_result : 32'd0;
 
     // =========================================================================
     // Stall/flush policy
@@ -525,7 +626,7 @@ module riscv_pipeline #(
         .trap_enter(trap_enter),
         .mret_exec(mret_exec),
         .reset_vector_in(reset_vector_in),
-        .mtvec_in(mtvec_pc),
+        .mtvec_in(trap_vector),   // C3 - da tinh ca che do vectored
         .mepc_in(mepc_pc),
         .ex_mem_branch_target(ex_mem_branch_target),
         .id_ex_jal_target(id_ex_jal_target),
@@ -546,6 +647,7 @@ module riscv_pipeline #(
         // F3/F4 - FSM ghep nua lenh va cong lay lenh
         .clk(clk),
         .icache_stall_in(icache_stall),
+        .icache_error_in(icache_error),
         .fetch_enable(fetch_enable),
         .if_accept(~stall_if_id),
         .realign_stall(if_realign_stall),
@@ -554,6 +656,7 @@ module riscv_pipeline #(
         .pc_plus_4(pc_plus_4),
         .pc_plus_8(pc_plus_8_unused),
         .instr(instr),
+        .instr_fault(instr_fault),
         .instr_lane1(instr_lane1_unused),
         .icache_read_req(icache_read_req),
         .icache_read_req_lane1(if_lane1_req_unused),
@@ -580,7 +683,9 @@ module riscv_pipeline #(
         .if_id_pc_in(if_id_pc_in),
         .if_id_predict_taken(if_id_predict_taken),
         .if_id_btb_hit(if_id_btb_hit),
-        .if_id_valid(if_id_valid)
+        .instr_fault(instr_fault),
+        .if_id_valid(if_id_valid),
+        .if_id_fault(if_id_fault)
     );
 
     // =========================================================================
@@ -677,7 +782,8 @@ module riscv_pipeline #(
         .dbg_reg_write_en(dbg_csr_we),
         .dbg_reg_write_addr(dbg_reg_write_addr[11:0]),
         .dbg_reg_write_data(dbg_reg_write_data),
-        .csr_illegal_write(csr_illegal_write)
+        .csr_illegal_write(csr_illegal_write),
+        .csr_illegal_addr(csr_illegal_addr)
     );
 
     assign csr_read_data_fwd =
@@ -733,6 +839,7 @@ module riscv_pipeline #(
         .rob_tag({ROB_TAG_W{1'b0}}),
         .rob_valid(1'b0),
         .if_id_valid(if_id_valid),
+        .if_id_fault(if_id_fault),
         .illegal_instr(illegal_instr),
         .if_id_pc_plus_4(if_id_pc_plus_4),
         .if_id_pc_in(if_id_pc_in),
@@ -825,7 +932,8 @@ module riscv_pipeline #(
         .id_ex_rob_tag(id_ex_rob_tag),
         .id_ex_rob_valid(id_ex_rob_valid),
         .id_ex_valid(id_ex_valid),
-        .id_ex_illegal(id_ex_illegal)
+        .id_ex_illegal(id_ex_illegal),
+        .id_ex_fault(id_ex_fault)
     );
 
     // =========================================================================
@@ -906,6 +1014,7 @@ module riscv_pipeline #(
         .id_ex_rob_valid(id_ex_rob_valid),
         .id_ex_valid(id_ex_valid),
         .id_ex_illegal(id_ex_illegal),
+        .id_ex_fault(id_ex_fault),
         .alu_result(alu_result),
         .id_ex_ext_imm(id_ex_ext_imm),
         .id_ex_rd(id_ex_rd),
@@ -971,7 +1080,8 @@ module riscv_pipeline #(
         .ex_mem_rob_tag(ex_mem_rob_tag),
         .ex_mem_rob_valid(ex_mem_rob_valid),
         .ex_mem_valid(ex_mem_valid),
-        .ex_mem_illegal(ex_mem_illegal)
+        .ex_mem_illegal(ex_mem_illegal),
+        .ex_mem_fault(ex_mem_fault)
     );
 
     // =========================================================================

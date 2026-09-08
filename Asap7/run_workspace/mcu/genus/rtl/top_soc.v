@@ -298,9 +298,26 @@ module top_soc (
     wire dma_irq_sync;
     cdc_sync_bit u_sync_dma_irq (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(|dma_irq), .q_out(dma_irq_sync));
 
+    // PLIC source 7 - bus fault on a BUFFERED D-cache store.
+    //
+    // With a store buffer a cacheable store retires before its BRESP comes
+    // back, so this fault cannot be a synchronous exception any more: mepc
+    // would point at the wrong instruction.  It is reported as an interrupt
+    // instead, the way most MCUs report an imprecise bus fault.  Uncached
+    // stores (MMIO, CLINT, the DMA pool) are never buffered and keep the
+    // precise mcause-7 path through `dcache_error`.
+    //
+    // Raised in clk_cpu, consumed by the PLIC in clk_apb, so it crosses the
+    // same way the DMA interrupt does.  dcache.v stretches the pulse to 256
+    // clk_cpu cycles precisely so this sampler cannot miss it.
+    wire dc_sb_error;
+    wire dc_sb_error_sync;
+    cdc_sync_bit u_sync_dc_sb_err (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync),
+                                   .d_in(dc_sb_error), .q_out(dc_sb_error_sync));
+
     wire [31:1] periph_dma_req = { 25'd0, i2c_dma_rx, i2c_dma_tx, spi_dma_rx, spi_dma_tx, uart_dma_rx, uart_dma_tx };
     wire [31:1] periph_dma_clr;
-    wire [31:0] plic_irq_src = { 25'd0, dma_irq_sync, wdt_irq, i2c_irq, spi_irq, gpio_irq, uart_irq, 1'b0 };
+    wire [31:0] plic_irq_src = { 24'd0, dc_sb_error_sync, dma_irq_sync, wdt_irq, i2c_irq, spi_irq, gpio_irq, uart_irq, 1'b0 };
 
     wire [31:0] syscon_reset_vector;
     // -------------------------------------------------------------------------
@@ -334,6 +351,7 @@ module top_soc (
     // =========================================================================
     wire [31:0] cpu_inst_addr, cpu_inst_data, cpu_data_addr, cpu_data_wdata, cpu_data_rdata;
     wire cpu_inst_req, cpu_inst_hit, cpu_inst_stall, cpu_data_rd_req, cpu_data_wr_req, cpu_data_hit, cpu_data_stall, cpu_data_unsigned;
+    wire cpu_inst_error, cpu_data_error;   // C1 - loi bus tu cache ve core
     wire [1:0] cpu_data_size;
     wire dbg_halt_req, dbg_resume_req, dbg_halted, dbg_reg_write_en;
     wire [15:0] dbg_reg_read_addr, dbg_reg_write_addr;
@@ -439,6 +457,7 @@ module top_soc (
         .icache_read_data   (cpu_inst_data),
         .icache_hit         (cpu_inst_hit),
         .icache_stall       (cpu_inst_stall),
+        .icache_error       (cpu_inst_error),
         .icache_read_req_lane1(),
         .icache_addr_lane1  (),
         .icache_read_data_lane1(32'b0),
@@ -451,6 +470,7 @@ module top_soc (
         .dcache_read_data   (cpu_data_rdata),
         .dcache_hit         (cpu_data_hit),
         .dcache_stall       (cpu_data_stall),
+        .dcache_error       (cpu_data_error),
         .mem_size_top       (cpu_data_size),
         .mem_unsigned_top   (cpu_data_unsigned),
         .wfi_sleep_out      (wfi_sleep_state),
@@ -716,8 +736,8 @@ module top_soc (
     wire ls_sel_tcm  = ls_sel_itcm | ls_sel_dtcm;
 
     // Cache-side responses, muxed onto the core ports further down.
-    wire [31:0] ic_cpu_rdata; wire ic_cpu_hit; wire ic_cpu_stall;
-    wire [31:0] dc_cpu_rdata; wire dc_cpu_hit; wire dc_cpu_stall;
+    wire [31:0] ic_cpu_rdata; wire ic_cpu_hit; wire ic_cpu_stall; wire ic_cpu_error;
+    wire [31:0] dc_cpu_rdata; wire dc_cpu_hit; wire dc_cpu_stall; wire dc_cpu_error;
 
     // TCM responses.
     wire [31:0] itcm_f_rdata; wire itcm_f_hit; wire itcm_f_stall;
@@ -791,6 +811,7 @@ module top_soc (
         .cpu_read_data   (ic_cpu_rdata),
         .icache_hit      (ic_cpu_hit),
         .icache_stall    (ic_cpu_stall),
+        .icache_error    (ic_cpu_error),
         
         // Nối vào dây lõi ICache (400MHz)
         .m_axi_awready   (1'b0),      .m_axi_wready  (1'b0),
@@ -835,9 +856,14 @@ module top_soc (
     // Day la duong QUAN TRONG: thieu CLINT o day thi `mtime` bi cache va chet.
     wire dc_uncache_en = `SOC_IS_UNCACHED(cpu_data_addr);
     data_cache #(
-        .C_CACHE_SIZE (16384),   // 16 KiB - xem ghi chu macro budget trong
-        .C_BLOCK_SIZE (16),      // rtl/flow/project_config.tcl
-        .C_WAYS       (4)
+        .C_CACHE_SIZE    (16384), // 16 KiB - xem ghi chu macro budget trong
+        .C_BLOCK_SIZE    (16),    // rtl/flow/project_config.tcl
+        // 2-way, khong phai 4-way: mot macro 1024x32 giu tron mot way, nen
+        // 4-way ton 4 macro tag ma moi macro chi dung 256x20 bit.  Ha xuong
+        // 2-way gap doi so set, tag vua 2 macro (8 -> 6 macro, 32 -> 24 KiB),
+        // so macro data khong doi.
+        .C_WAYS          (2),
+        .STORE_BUF_DEPTH (4)
     ) u_dcache (
         .clk             (clk_cpu),              // clk_cpu (400MHz)
         .rst_n           (reset_core_n_sync),
@@ -851,6 +877,8 @@ module top_soc (
         .cpu_read_data   (dc_cpu_rdata),
         .dcache_hit      (dc_cpu_hit),
         .dcache_stall    (dc_cpu_stall),
+        .dcache_error    (dc_cpu_error),
+        .dcache_sb_error (dc_sb_error),
         
         // Nối vào dây lõi DCache (400MHz)
         .m_axi_awid      (dc_awid),   .m_axi_awaddr  (dc_awaddr), .m_axi_awlen   (dc_awlen),
@@ -989,6 +1017,16 @@ module top_soc (
                             ls_sel_itcm ? itcm_d_hit   : dc_cpu_hit;
     assign cpu_data_stall = ls_sel_dtcm ? dtcm_d_stall :
                             ls_sel_itcm ? itcm_d_stall : dc_cpu_stall;
+
+    // -------------------------------------------------------------------------
+    // C1 - duong bao loi bus ve CPU.
+    //
+    // TCM khong bao gio loi: no la SRAM noi thang core, khong qua bus, khong co
+    // dia chi nao trong dai cua no ma khong ton tai. Nen khi TCM duoc chon thi
+    // ep 0 - dung mau mux voi ba duong con lai o tren.
+    // -------------------------------------------------------------------------
+    assign cpu_inst_error = if_sel_itcm ? 1'b0 : ic_cpu_error;
+    assign cpu_data_error = ls_sel_tcm  ? 1'b0 : dc_cpu_error;
 
     // =========================================================================
     // 7. AXI INTERCONNECT

@@ -66,7 +66,10 @@ run_fw() {
     printf 'run all\nquit\n' > run.tcl
     xsim.bat fw_sim -tclbatch run.tcl > xsim_fw.log
     grep -E '\[TB\]\[PASS\]|\[TB\]\[FAIL\]|SIMULATION' xsim_fw.log || true
-    printf 'UART: '; grep -o 'char=.' xsim_fw.log | sed 's/char=//' | tr -d '\n'; echo
+    # `|| true` la BAT BUOC: voi set -euo pipefail, mot lan chay khong in duoc
+    # ky tu UART nao lam grep tra 1 -> ca script THOAT, va run_mem khong bao gio
+    # chay. Tuc la mot regression o fw se GIAU luon ket qua cua mem.
+    printf 'UART: '; { grep -o 'char=.' xsim_fw.log || true; } | sed 's/char=//' | tr -d '\n'; echo
 }
 
 run_mem() {

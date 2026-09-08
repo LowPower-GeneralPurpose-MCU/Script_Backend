@@ -43,6 +43,18 @@ module instruction_cache #(
     output reg                           icache_hit,
     output reg                           icache_stall,
 
+    // -------------------------------------------------------------------------
+    // B3 - LOI BUS KHI LAY LENH (mcause 1 - instruction access fault).
+    //
+    // Truoc day m_axi_rresp nam trong danh sach "co y bo qua". Nhay vao mot dia
+    // chi khong map -> interconnect tra DECERR -> cache van bao hit va dua rac
+    // vao pipeline. CPU chay rac, khong trap, khong dau vet.
+    //
+    // Xung mot chu ky, dung chu ky lenh duoc tra ve, de tang IF gan no vao dung
+    // lenh do roi cho no di suot pipeline toi tang MEM.
+    // -------------------------------------------------------------------------
+    output wire                          icache_error,
+
     output wire [C_M_AXI_ID_W-1:0]       m_axi_awid,
     output wire [C_M_AXI_ADDR_W-1:0]     m_axi_awaddr,
     output wire [7:0]                    m_axi_awlen,
@@ -125,6 +137,7 @@ module instruction_cache #(
 
     reg [2:0] state, next_state;
     reg       uncache_r;
+    reg       bus_err_r;   // B3 - da thay RRESP loi trong giao dich nay
 
     wire uncache_en = (state == IDLE) ? uncache_en_i : uncache_r;
 
@@ -209,6 +222,7 @@ module instruction_cache #(
             refill_word <= 0;
             beat_cnt    <= 0;
             uncache_r   <= 1'b0;
+            bus_err_r   <= 1'b0;
             for (i = 0; i < NUM_SETS; i = i + 1) begin
                 valid_arr[i] <= 0;
                 rr_ptr[i]    <= 0;
@@ -220,7 +234,14 @@ module instruction_cache #(
             if (state == IDLE && cpu_read_req) begin
                 miss_addr <= cpu_addr;
                 uncache_r <= uncache_en_i;
+                bus_err_r <= 1'b0;      // B3 - moi giao dich bat dau sach
             end
+
+            // RRESP = 2'b10 (SLVERR) hoac 2'b11 (DECERR); bit [1] phu ca hai.
+            // Chot lai vi mot burst refill co 4 beat: chi can MOT beat loi la ca
+            // line khong dung duoc.
+            if (state == R_WAIT && m_axi_rvalid && m_axi_rready && m_axi_rresp[1])
+                bus_err_r <= 1'b1;
 
             if (state == AR_REQ) beat_cnt <= 0;
 
@@ -316,14 +337,21 @@ module instruction_cache #(
                 end
 
                 // Tag và valid được ghi cùng lúc để lookup kế tiếp luôn nhất quán
-                if (!uncache_en) way_update[victim_way] = 1'b1;
+                // B3 - khong danh dau line hop le khi loi. Neu danh dau thi lan
+                // fetch SAU se HIT vao line rac va khong con loi nao de bao: mot
+                // lan loi bien thanh loi vinh vien va im lang.
+                if (!uncache_en && !bus_err_r) way_update[victim_way] = 1'b1;
                 next_state = IDLE;
             end
             default: next_state = IDLE;
         endcase
     end
 
+    // B3 - dong bien voi icache_hit: chinh chu ky lenh duoc tra ve cho core.
+    assign icache_error = (state == DONE) && bus_err_r && (cpu_addr == miss_addr);
+
+    // m_axi_rresp DA DUOC DUNG o tren - khong con "co y bo qua" nua.
     wire _unused_ok = &{1'b0, m_axi_awready, m_axi_wready, m_axi_bid,
-                        m_axi_bresp, m_axi_bvalid, m_axi_rid, m_axi_rresp};
+                        m_axi_bresp, m_axi_bvalid, m_axi_rid};
 
 endmodule

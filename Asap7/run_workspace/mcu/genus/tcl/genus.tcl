@@ -201,6 +201,12 @@ proc genus_run_static_checks {} {
         $top_file {instruction_cache[ \t\r\n]+#\([^)]*C_CACHE_SIZE[ \t\r\n]*\([ \t\r\n]*16384}
     genus_require_text "D-cache size 16 KiB" \
         $top_file {data_cache[ \t\r\n]+#\([^)]*C_CACHE_SIZE[ \t\r\n]*\([ \t\r\n]*16384}
+    # Associativity is what sets the tag-macro count, so pin it too: an edit
+    # back to 4-way would need 8 macros and silently break the floorplan.
+    genus_require_text "D-cache 2-way" \
+        $top_file {data_cache[ \t\r\n]+#\(.*?C_WAYS[ \t\r\n]*\([ \t\r\n]*2[ \t\r\n]*\)}
+    genus_require_text "D-cache store buffer" \
+        $top_file {data_cache[ \t\r\n]+#\(.*?STORE_BUF_DEPTH[ \t\r\n]*\([ \t\r\n]*4[ \t\r\n]*\)}
 
     set axi_rom_file [file join $RTL_ROOT memory axi_rom.v]
     genus_require_text "Synthesizable boot ROM table" \
@@ -233,9 +239,11 @@ proc genus_run_static_checks {} {
     if {$SRAM_RAM_COUNT != [expr {$expected_ram_bytes / $SRAM_MACRO_BYTES}]} {
         error "SRAM_RAM_COUNT does not match 256 KiB of $SRAM_MACRO_BYTES-byte macros"
     }
-    # 16 KiB I-cache: 2 ways x (2 data + 1 tag).  16 KiB D-cache: 4 ways x (1 + 1).
-    if {$SRAM_ICACHE_COUNT != 6 || $SRAM_DCACHE_COUNT != 8} {
-        error "Cache macro budget must be 6 (I) + 8 (D) for 16 KiB caches"
+    # Both caches are 16 KiB / 2-way: 2 ways x (2 data + 1 tag) = 6 macros each.
+    # The D-cache was 4-way (8 macros); halving the ways doubled the sets, which
+    # halved the tag macros without changing the data macros.
+    if {$SRAM_ICACHE_COUNT != 6 || $SRAM_DCACHE_COUNT != 6} {
+        error "Cache macro budget must be 6 (I) + 6 (D) for 16 KiB 2-way caches"
     }
     # 16 KiB per TCM = 4 macros each.
     if {$SRAM_ITCM_COUNT != 4 || $SRAM_DTCM_COUNT != 4} {

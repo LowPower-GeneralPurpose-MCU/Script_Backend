@@ -177,10 +177,22 @@ module main_control_unit #(
             end
 
             // ---- FENCE ----
-            // Loi mot hart, bo nho hop nhat khong dat lai thu tu -> `fence` la NOP HOP LE.
             // Viet thanh nhanh RIENG de no khong bi mac dinh moi thanh illegal.
             // funct3 = 001 la FENCE.I (Zifencei): CHUA hien thuc duong invalidate
             // I-cache o SoC nay, nen bao illegal thay vi chay im lang nhu NOP.
+            //
+            // funct3 = 000 (FENCE) hien van la NOP, nhung ly do CU cho dieu do -
+            // "mot hart, bo nho hop nhat khong dat lai thu tu" - DA KHONG CON
+            // DUNG tu khi D-cache co store buffer (MEMORY_FIX_PLAN.md Phase 1):
+            // mot store cacheable retire truoc khi no toi RAM, nen no CO the bi
+            // mot master khac (debugger qua SBA) nhin thay dao thu tu.
+            //
+            // Thu tu voi DMA van an toan theo cau truc: khoi dong DMA la mot ghi
+            // MMIO, ma moi truy cap uncached deu ep D-cache xa het store buffer
+            // truoc.  Cho ho duy nhat la debugger ghi bo nho luc core dang chay.
+            //
+            // De `fence` xa buffer that su can dan mot bit dieu khien tu day
+            // xuyen id_ex/ex_mem toi cong `cpu_fence` cua data_cache.  Chua lam.
             7'b0001111: begin
                 illegal_instr = (funct3 != 3'b000);
             end

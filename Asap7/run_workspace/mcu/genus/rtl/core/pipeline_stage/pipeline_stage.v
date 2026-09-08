@@ -226,6 +226,7 @@ module instruction_fetch (
     // fetch_enable = ~(stall_IF | is_sleeping | dbg_halted), tinh o riscv_pipeline.v
     input wire clk,
     input wire icache_stall_in,
+    input wire icache_error_in,   // B3 - loi bus tu I-cache, dong bien voi du lieu
     input wire fetch_enable,
 
     // ---- F3: bat tay voi thanh ghi IF/ID ----
@@ -237,6 +238,7 @@ module instruction_fetch (
     output wire [31:0] pc_plus_8,
     output wire [31:0] instr,
     output wire [31:0] instr_lane1,
+    output wire instr_fault,      // B3 - lenh vua tra ve den tu dia chi loi bus
     output wire icache_read_req,
     output wire icache_read_req_lane1,
     output wire [31:0] icache_addr,
@@ -307,8 +309,34 @@ module instruction_fetch (
     wire instr0_compressed = joining ? 1'b0 : raw_compressed;
 
     wire [31:0] instr0_expanded;
-    wire [31:0] seq_pc = pc_in + (instr0_compressed ? 32'd2 :
-                                  (fetch_two_valid ? 32'd8 : 32'd4));
+
+    // -------------------------------------------------------------------------
+    // P1 - MUX PHAI DAT SAU ADDER, KHONG PHAI TRUOC.
+    //
+    // Ma cu:  seq_pc = pc_in + (instr0_compressed ? 32'd2 : 32'd4);
+    //
+    // `instr0_compressed` phu thuoc DU LIEU RA TU I-CACHE (qua fetch_valid <-
+    // icache_stall_in). Viet mux TRUOC adder buoc bo cong 32 bit phai bat dau
+    // SAU KHI cache tra loi. Genus khong tu dao duoc vi do la mot toan hang that.
+    //
+    // reports/timing_syn.rpt Path 1 (slack +6 ps tren chu ky 2500 ps) di dung
+    // duong do:
+    //     u_icache/state_reg[0] -> mux hit cua cache -> u_core/IF_add_279_30_*
+    //                           -> IF_ID_if_id_pc_plus_4_reg[31]
+    // Chuoi IF_add_279_30_g457..g401 la ~30 tang NAND2/NOR2 (ripple carry) va
+    // chiem tu moc 974 ps den 2332 ps = 1358 ps, tuc 58 % duong toi han.
+    //
+    // Bay gio hai bo cong chay SONG SONG ngay tu dau chu ky, khong doi cache;
+    // `instr0_compressed` chi con dieu khien mot tang mux 2:1 o cuoi.
+    // pc+2 va pc+4 chi khac nhau o carry cua bit 1 nen tong hop chia se duoc gan
+    // het logic - dien tich tang khong dang ke.
+    //
+    // Nhanh `fetch_two_valid ? 32'd8` da bi bo: riscv_pipeline.v noi cung cong do
+    // bang 1'b0 (che do scalar, lane 1 tat), nen do la code chet.
+    // -------------------------------------------------------------------------
+    wire [31:0] pc_p2 = pc_in + 32'd2;
+    wire [31:0] pc_p4 = pc_in + 32'd4;
+    wire [31:0] seq_pc = instr0_compressed ? pc_p2 : pc_p4;
 
     // Giu PC va bom bong bong trong nhip lay nua thu nhat.
     assign realign_stall = (rl_state == ST_IDLE) && need_realign && fetch_valid;
@@ -391,13 +419,31 @@ module instruction_fetch (
     //   3. lenh nen            -> ban da giai nen
     //   4. dang lay nua dau    -> NOP (bong bong, di kem realign_stall)
     //   5. con lai             -> lenh 32 bit da can le
+    // -------------------------------------------------------------------------
+    // B3 - khi I-cache bao loi bus thi DU LIEU LA RAC.
+    //
+    // Ep ve NOP thay vi de rac chay vao decoder: neu khong, mot bit pattern ngau
+    // nhien co the giai ma thanh `illegal` (mcause 2 - SAI nguyen nhan), hoac te
+    // hon, thanh mot lenh HOP LE nhu `sw` va ghi that vao bo nho truoc khi trap
+    // kip nhan. NOP thi vo hai; bit `instr_fault` di kem moi la thu sinh ra trap.
+    // -------------------------------------------------------------------------
+    assign instr_fault = fetch_valid & icache_error_in;
+
     assign instr = (!fetch_valid)     ? IF_NOP :
+                   icache_error_in    ? IF_NOP :
                    joining            ? {icache_read_data[15:0], rl_half} :
                    instr0_compressed  ? instr0_expanded :
                    need_realign       ? IF_NOP :
                                         icache_read_data;
     assign instr_lane1 = IF_NOP;
-    assign pc_plus_4 = pc_in + (instr0_compressed ? 32'd2 : 32'd4);
+
+    // `fetch_two_valid` chi phuc vu che do superscalar hai lane, ma riscv_pipeline
+    // noi cung 1'b0. Giu cong de khong doi giao dien module, neu bo P1.
+    wire _unused_if = &{1'b0, fetch_two_valid};
+    // Cung mot bieu thuc voi seq_pc - dung lai thay vi suy dien them mot cap
+    // adder nua tren cung duong toi han. Ten `pc_plus_4` giu nguyen cho tuong
+    // thich; gia tri that la "PC cua lenh KE TIEP" (pc+2 voi lenh nen).
+    assign pc_plus_4 = seq_pc;
     assign pc_plus_8 = pc_in + 32'd8;
 
 endmodule
@@ -857,7 +903,28 @@ module memory_access (
         endcase
     end
 
-    assign dcache_read_req = ex_mem_mem_read;
+    // -------------------------------------------------------------------------
+    // B1 - DOC cung phai bi commit_kill chan.
+    //
+    // Comment cu noi "doc lai la vo hai voi RAM/cache, va chan no chi keo dai
+    // duong to hop ma khong duoc gi". Dieu do dung khi trap chi den tu
+    // ecall/ebreak/ngat. No KHONG con dung khi chinh dia chi la thu gay trap:
+    //
+    //   lw a0, 1(s0)   <- misaligned, hoac tro vao vung khong map
+    //   -> neu van phat cpu_read_req thi cache keo dcache_stall len ca chuc chu
+    //      ky, `mem_freeze = dcache_stall` chan flush_trap, va trap bi HOAN lai
+    //      cho toi khi giao dich rac chay xong. Voi dia chi khong map thi phai
+    //      doi ca timeout cua interconnect.
+    //
+    // Khong tao vong to hop: trap_enter chi phu thuoc thanh ghi ex_mem_* va cac
+    // chan ngat, khong phu thuoc dcache_stall.
+    //
+    // An toan voi FSM cua cache: o LOOKUP, `cpu_read_req` ha lam FSM roi vao
+    // nhanh else -> next_state = IDLE, khong treo. O AR_REQ/R_WAIT/DONE, FSM
+    // khong nhin cpu_read_req de tien state nen giao dich dang bay van ket thuc
+    // binh thuong.
+    // -------------------------------------------------------------------------
+    assign dcache_read_req = ex_mem_mem_read & ~commit_kill;
     // SC.W: only write if reservation matches
     assign dcache_write_req = commit_kill ? 1'b0 :
                               amo_sc      ? sc_success : ex_mem_mem_write;

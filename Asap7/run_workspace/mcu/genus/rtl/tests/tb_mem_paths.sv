@@ -172,6 +172,7 @@ module tb_mem_paths;
     // ky) voi cache miss (mot vong AXI qua CDC 400/200) - hai truong hop tra ve
     // cung gia tri nen khong the phan biet bang du lieu.
     integer last_xact_cycles;
+    integer dc_set;
 
     // Giu request on dinh cho toi khi thay `hit` - dung giao thuc ma dcache,
     // icache va tcm deu dung: `stall` cao suot, `hit` la xung mot chu ky.
@@ -463,15 +464,64 @@ module tb_mem_paths;
             end
         end
 
-        if (uut.u_dcache.valid_arr[0] != 0) begin
+        // Set index duoc TINH tu tham so cua chinh DUT, khong viet cung so 0.
+        // Truoc day D-cache la 4-way / 256 set nen 0x2000_7000 roi vao set 0;
+        // khi ha xuong 2-way so set gap doi va cung dia chi do roi vao set 256.
+        // Bai test khong duoc doi hinh hoc cache la mot hang so.
+        dc_set = ((ADDR_RAM_LO + 32'h7000) >> uut.u_dcache.OFFSET_W) &
+                 ((1 << uut.u_dcache.INDEX_W) - 1);
+        if (uut.u_dcache.valid_arr[dc_set] != 0) begin
             pass_count = pass_count + 1;
-            $display("[PASS] D-cache da allocate line: valid_arr[set 0] = %b",
-                     uut.u_dcache.valid_arr[0]);
+            $display("[PASS] D-cache da allocate line: valid_arr[set %0d] = %b",
+                     dc_set, uut.u_dcache.valid_arr[dc_set]);
         end else begin
             fail_count = fail_count + 1;
-            $display("[FAIL] D-cache khong allocate line nao: valid_arr[set 0] = %b",
-                     uut.u_dcache.valid_arr[0]);
+            $display("[FAIL] D-cache khong allocate line nao: valid_arr[set %0d] = %b",
+                     dc_set, uut.u_dcache.valid_arr[dc_set]);
         end
+
+        // ------------------------------------------------------------------
+        // TS - Store buffer (MEMORY_FIX_PLAN.md Phase 1 / P2).
+        //
+        // Ba thu phai dung cung luc, va chi do do tre moi thay duoc hai cai dau:
+        //   1. store cacheable retire nhanh nhu mot load hit;
+        //   2. chuoi store DAI HON do sau FIFO van khong nuot entry nao;
+        //   3. du lieu that su toi RAM, khong chi nam trong mang cua cache.
+        //
+        // (3) duoc bao dam boi chinh chinh sach no-write-allocate: cac dia chi
+        // duoi day chua tung duoc nap, nen store la MISS va khong dung vao mang.
+        // Doc lai la mot read miss -> gia tri phai di tu RAM ve.
+        // ------------------------------------------------------------------
+        $display("");
+        $display("--- TS: store buffer ---");
+
+        // Xa buffer truoc khi do, de phep do khong dinh du am cua test truoc.
+        lw(ADDR_SYSCON + 32'h000, junk);
+
+        sw(ADDR_RAM_LO + 32'h7100, 32'hAAAA_0001);
+        if (last_xact_cycles <= 3) begin
+            pass_count = pass_count + 1;
+            $display("[PASS] store cacheable retire trong %0d chu ky", last_xact_cycles);
+        end else begin
+            fail_count = fail_count + 1;
+            $display("[FAIL] store cacheable ton %0d chu ky - store buffer khong nhan",
+                     last_xact_cycles);
+        end
+
+        // Chuoi 8 store lien tiep vao FIFO sau 4: phai tran, stall va drain.
+        for (i = 0; i < 8; i = i + 1)
+            sw(ADDR_RAM_LO + 32'h7200 + i*4, 32'hB000_0000 + i);
+
+        for (i = 0; i < 8; i = i + 1) begin
+            lw(ADDR_RAM_LO + 32'h7200 + i*4, d);
+            chk32("TS chuoi store vuot do sau FIFO", d, 32'hB000_0000 + i);
+        end
+
+        // Thu tu giua hai store cung dia chi: gia tri cuoi phai thang.
+        sw(ADDR_RAM_LO + 32'h7300, 32'hC0DE_0001);
+        sw(ADDR_RAM_LO + 32'h7300, 32'hC0DE_0002);
+        lw(ADDR_RAM_LO + 32'h7300, d);
+        chk32("TS hai store cung dia chi giu dung thu tu", d, 32'hC0DE_0002);
 
         // ------------------------------------------------------------------
         // T1 - RAM hi, truy cap word. Chung minh slave 6 ton tai va tra loi.
@@ -747,6 +797,18 @@ module tb_mem_paths;
         // Cung nhu vay tren RAM lo (cacheable) - debugger khong qua cache nen
         // day la duong khac han.
         sw(ADDR_RAM_LO + 32'h6000, 32'h0000_0000);
+
+        // FENCE thu cong.  Store tren la CACHEABLE nen no chi di vao store
+        // buffer roi retire ngay; chua chac da toi RAM khi debugger ghi de len
+        // cung line ngay sau do.  Mot truy cap UNCACHED bat store buffer phai
+        // xa het truoc (quy tac 2 trong dcache.v), nen doc mot thanh ghi APB
+        // chinh la lenh fence duy nhat SoC nay dang co.
+        //
+        // Rang buoc nay khong dung cho DMA: thanh ghi DMA la MMIO, nen chinh
+        // hanh dong khoi dong DMA da xa store buffer roi.  No chi dung cho
+        // debugger, master duy nhat vao thang AXI ma khong qua CPU.
+        lw(ADDR_SYSCON + 32'h000, junk);
+
         sba_xact(2'd2, 2'd0, ADDR_RAM_LO + 32'h6001, 32'h0000_00C3, d, sba_resp);
         chk32("SBA ghi byte vao RAM lo: BRESP OKAY", {30'b0, sba_resp}, 32'h0);
         dma_copy(ADDR_DMA_CH0, ADDR_RAM_LO + 32'h6000, ADDR_RAM_HI + 32'h0900, 32'd4, ok);

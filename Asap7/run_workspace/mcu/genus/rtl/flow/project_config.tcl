@@ -122,7 +122,7 @@ set QRC_FILE [mcu_resolve_path QRC_FILE \
 # Macro budget:
 #   main AXI RAM 256 KiB : 64 macros, as 2 x 128 KiB slave ports of 32
 #   I-cache 16 KiB       : 2 ways x 2 data macros + 2 ways x 1 tag macro = 6
-#   D-cache 16 KiB       : 4 ways x 1 data macro  + 4 ways x 1 tag macro = 8
+#   D-cache 16 KiB       : 2 ways x 2 data macros + 2 ways x 1 tag macro = 6
 #   ITCM 16 KiB          : 4 macros
 #   DTCM 16 KiB          : 4 macros
 #
@@ -139,7 +139,7 @@ set SRAM_MACRO_BYTES    [expr {1024 * 4}]
 
 set SRAM_RAM_COUNT      64
 set SRAM_ICACHE_COUNT   6
-set SRAM_DCACHE_COUNT   8
+set SRAM_DCACHE_COUNT   6
 set SRAM_ITCM_COUNT     4
 set SRAM_DTCM_COUNT     4
 set SRAM_CACHE_COUNT    [expr {$SRAM_ICACHE_COUNT + $SRAM_DCACHE_COUNT}]

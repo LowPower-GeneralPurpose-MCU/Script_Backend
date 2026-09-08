@@ -4,13 +4,20 @@
 // MAIN MODULE: Data Cache
 // =============================================================================
 //
-// 16 KiB, 4-way set associative, 16-byte blocks (256 sets), write-through with
-// no write allocate.
+// 16 KiB, 2-way set associative, 16-byte blocks (512 sets), write-through with
+// no write allocate, and a store buffer in front of the AXI write channel.
 //
 // Storage is held in ASAP7 srambank_256x4x32_6t122 hard macros through
 // cache_data_array / cache_tag_array:
-//   data : 4 ways x 1 macro, addressed by {index[7:0], word_idx[1:0]}
-//   tag  : 4 ways x 1 macro, addressed by index[7:0]
+//   data : 2 ways x 2 macros, addressed by {index[8:0], word_idx[1:0]}
+//   tag  : 2 ways x 1 macro,  addressed by index[8:0]
+//
+// Associativity is 2, not 4.  The macro is 1024 x 32 and holds one way, so a
+// 4-way cache needs four tag macros of which each stores 256 x 20 bits - 16 KiB
+// of silicon for 640 bytes of tag.  Halving the ways doubles the sets, so the
+// tags fit in two macros instead of four (8 -> 6 macros, 32 -> 24 KiB) while the
+// data macros are unchanged.  The cost is the conflict-miss difference between
+// 2-way and 4-way at 16 KiB, roughly 1-3 % on embedded workloads.
 // Valid bits and the round-robin victim pointer stay in flip-flops because the
 // macros have no reset.
 //
@@ -22,7 +29,9 @@
 module data_cache #(
     parameter C_CACHE_SIZE       = 16384,
     parameter C_BLOCK_SIZE       = 16,
-    parameter C_WAYS             = 4,
+    parameter C_WAYS             = 2,
+    // Store-buffer depth.  Must be a power of two and >= 2.
+    parameter STORE_BUF_DEPTH    = 4,
     parameter C_M_AXI_ID_W       = 5,
     parameter C_M_AXI_ADDR_W     = 32,
     parameter C_M_AXI_DATA_W     = 32
@@ -43,6 +52,40 @@ module data_cache #(
     output reg                           dcache_hit,
     output reg                           dcache_stall,
 
+    // -------------------------------------------------------------------------
+    // B2 - LOI BUS (mcause 5 / 7).
+    //
+    // Truoc day module nay CHU DONG vut bo m_axi_rresp / m_axi_bresp bang dong
+    //     wire _unused_ok = &{1'b0, m_axi_bid, m_axi_bresp, ... m_axi_rresp};
+    // Interconnect tra DECERR cho dia chi khong map, axi_ram tra SLVERR cho dia
+    // chi lech word, APB default slave tra pslverr -> tat ca bay hoi. Toan bo ha
+    // tang phat hien loi o phia bus da co, chi thieu day noi toi CPU.
+    //
+    // Xung dung MOT chu ky, dung chu ky dcache_stall ha, nen lenh gay loi VAN
+    // con o tang MEM -> mepc/mtval tu dung.
+    // -------------------------------------------------------------------------
+    output wire                          dcache_error,
+
+    // -------------------------------------------------------------------------
+    // Bus error on a BUFFERED store - IMPRECISE by construction.
+    //
+    // A cacheable store retires as soon as it enters the store buffer, so the
+    // BRESP that carries the error arrives long after the instruction left the
+    // MEM stage: mepc/mtval can no longer point at it.  Reporting it through
+    // `dcache_error` would therefore trap the WRONG instruction, which is worse
+    // than not trapping at all.
+    //
+    // It is instead raised as a level on a spare PLIC line (see top_soc.v), the
+    // way most MCUs route an imprecise bus fault.  The pulse is stretched so the
+    // much slower clk_apb PLIC gateway cannot miss it.
+    //
+    // Stores that keep a PRECISE fault: every uncached store (MMIO, CLINT, the
+    // DMA pool) still goes down the blocking AW/W/B path below and still reports
+    // through `dcache_error`.  Only stores to normal cacheable memory become
+    // imprecise.
+    // -------------------------------------------------------------------------
+    output wire                          dcache_sb_error,
+
     output wire [C_M_AXI_ID_W-1:0]       m_axi_awid,
     output wire [C_M_AXI_ADDR_W-1:0]     m_axi_awaddr,
     output wire [7:0]                    m_axi_awlen,
@@ -53,17 +96,17 @@ module data_cache #(
     output wire [2:0]                    m_axi_awprot,
     output wire [3:0]                    m_axi_awqos,
     output wire [3:0]                    m_axi_awregion,
-    output reg                           m_axi_awvalid,
+    output wire                          m_axi_awvalid,
     input  wire                          m_axi_awready,
     output wire [C_M_AXI_DATA_W-1:0]     m_axi_wdata,
     output wire [(C_M_AXI_DATA_W/8)-1:0] m_axi_wstrb,
     output wire                          m_axi_wlast,
-    output reg                           m_axi_wvalid,
+    output wire                          m_axi_wvalid,
     input  wire                          m_axi_wready,
     input  wire [C_M_AXI_ID_W-1:0]       m_axi_bid,
     input  wire [1:0]                    m_axi_bresp,
     input  wire                          m_axi_bvalid,
-    output reg                           m_axi_bready,
+    output wire                          m_axi_bready,
     output wire [C_M_AXI_ID_W-1:0]       m_axi_arid,
     output wire [C_M_AXI_ADDR_W-1:0]     m_axi_araddr,
     output wire [7:0]                    m_axi_arlen,
@@ -204,16 +247,83 @@ module data_cache #(
                DONE   = 3'd7;
 
     reg [2:0] state, next_state;
+    reg       fsm_awvalid, fsm_wvalid, fsm_bready;
     reg       uncache_r;
+    reg       bus_err_r;   // B2 - da thay RRESP/BRESP loi trong giao dich nay
 
     wire uncache_en = (state == IDLE) ? uncache_en_i : uncache_r;
+
+    // =========================================================================
+    // STORE BUFFER (MEMORY_FIX_PLAN.md Phase 1 / P2)
+    //
+    // Before: every store - hit or miss - held dcache_stall high for a whole
+    // AW/W/B round trip across the 400 MHz -> clk_axi CDC, so store-heavy code
+    // ran at bus speed no matter how big the cache was.
+    //
+    // Now a CACHEABLE store retires in the same 2 cycles as a load hit: the
+    // merged word goes into the SRAM array (on a hit) and the AXI write goes
+    // into this FIFO, which a small independent FSM drains in the background.
+    //
+    // Four ordering rules keep that safe.  Each one is load-bearing:
+    //
+    //  1. UNCACHED stores are never buffered.  A device register write must be
+    //     visible before the next register read, and its error must stay
+    //     precise, so it keeps the blocking AW_REQ/W_REQ/B_WAIT path below.
+    //  2. Any access that needs the bus - an uncached load or store, or a
+    //     cacheable read MISS - waits for `sb_drained` first.  That is what
+    //     stops a device access from passing an earlier buffered memory store,
+    //     and what stops a refill from reading a line whose pending store has
+    //     not landed yet.
+    //  3. A cacheable load HIT needs no forwarding: a store hit already merged
+    //     its bytes into the array, so the array is the newest copy.  A store
+    //     MISS does not touch the array, but the line is invalid, so the next
+    //     load to it misses and rule 2 drains the buffer before the refill.
+    //  4. A store whose slot is unavailable (`sb_full`) simply keeps stalling
+    //     in LOOKUP, which degrades to the old behaviour instead of dropping.
+    //
+    // Rules 1 and 2 together mean the buffer can only ever be non-empty while
+    // the main FSM is in IDLE or LOOKUP, so the two never drive AW/W/B at the
+    // same time and no arbiter is needed.
+    //
+    // Test T7 in tests/tb_mem_paths.sv exists specifically to catch a violation
+    // of rule 1.
+    // =========================================================================
+    localparam SB_PTR_W = $clog2(STORE_BUF_DEPTH);
+
+    localparam SB_IDLE = 2'd0,
+               SB_AW   = 2'd1,
+               SB_W    = 2'd2,
+               SB_B    = 2'd3;
+
+    reg [1:0]                    sb_state;
+    reg [C_M_AXI_ADDR_W-1:0]     sb_addr [0:STORE_BUF_DEPTH-1];
+    reg [C_M_AXI_DATA_W-1:0]     sb_data [0:STORE_BUF_DEPTH-1];
+    reg [(C_M_AXI_DATA_W/8)-1:0] sb_strb [0:STORE_BUF_DEPTH-1];
+
+    // One extra bit on each pointer separates full from empty.
+    reg [SB_PTR_W:0] sb_wptr, sb_rptr;
+
+    wire [SB_PTR_W-1:0] sb_head  = sb_rptr[SB_PTR_W-1:0];
+    wire [SB_PTR_W-1:0] sb_tail  = sb_wptr[SB_PTR_W-1:0];
+    wire                sb_empty = (sb_wptr == sb_rptr);
+    wire                sb_full  = (sb_wptr[SB_PTR_W] != sb_rptr[SB_PTR_W]) &&
+                                   (sb_tail == sb_head);
+    wire                sb_active = (sb_state != SB_IDLE);
+
+    // `sb_empty` alone is not enough to hand the write channel back: the last
+    // entry is popped when its BRESP arrives, and the drain FSM is still in
+    // SB_B at that moment.  Everything that needs the bus waits on this.
+    wire                sb_drained = sb_empty && (sb_state == SB_IDLE);
+
+    reg  [7:0] sb_err_cnt;   // stretches the imprecise error for the APB PLIC
+    assign dcache_sb_error = (sb_err_cnt != 8'd0);
 
     // AWSIZE la be rong cua BUS, khong phai be rong cua lenh store.  De no
     // bang mem_size thi mot `sb` phat AWSIZE = 0 va axi_ram - chi nhan
     // AxSIZE = 3'd2 - tra SLVERR roi bo qua beat.  Xem ghi chu ve
     // m_axi_awaddr ben duoi.
     assign m_axi_awid = 0; assign m_axi_awsize = $clog2(C_M_AXI_DATA_W/8); assign m_axi_awburst = 2'b01;
-    assign m_axi_awlock = 0; assign m_axi_awcache = uncache_en ? 4'b0000 : 4'b0011;
+    assign m_axi_awlock = 0; assign m_axi_awcache = (sb_active || !uncache_en) ? 4'b0011 : 4'b0000;
     assign m_axi_awprot = 3'b000; assign m_axi_awqos = 0; assign m_axi_awregion = 0; assign m_axi_awlen = 0;
     assign m_axi_arid = 0; assign m_axi_arsize = $clog2(C_M_AXI_DATA_W/8); assign m_axi_arburst = 2'b01;
     assign m_axi_arlock = 0; assign m_axi_arcache = uncache_en ? 4'b0000 : 4'b0011;
@@ -237,6 +347,13 @@ module data_cache #(
 
     wire [WAY_IDX_W-1:0]      victim_way  = rr_ptr[index];
 
+    // A cacheable store enters the buffer in exactly one cycle: the LOOKUP
+    // cycle that also releases the core.  Gating the array write with the same
+    // term keeps the merge single-shot when the buffer is full and LOOKUP has
+    // to be held for several cycles.
+    wire sb_push = (state == LOOKUP) && cpu_write_req && !uncache_en &&
+                   (cpu_addr == req_addr) && !sb_full;
+
     // Keep the AXI payload/address datapath outside the cache control
     // combinational process.  This removes a false combinational loop between
     // CPU read data and AMO write data at the SoC boundary.
@@ -253,9 +370,17 @@ module data_cache #(
     // luon giai thiet nhan ve nguyen word chua dia chi do.
     //
     // Hoi quy cho truong hop nay o tests/tb_mem_paths.sv nhom T2 va T6.
-    assign m_axi_awaddr = {current_addr[C_M_AXI_ADDR_W-1:2], 2'b00};
-    assign m_axi_wdata  = lane_align_wdata(cpu_write_data, mem_size);
-    assign m_axi_wstrb  = gen_wstrb(mem_size, byte_offset);
+    //
+    // While the buffer drains it owns the write channel; the direct path below
+    // is what an UNCACHED store uses.  The two are mutually exclusive by
+    // construction (see rules 1 and 2 above), so this is a select, not an
+    // arbiter.
+    assign m_axi_awaddr = sb_active ? sb_addr[sb_head]
+                                    : {current_addr[C_M_AXI_ADDR_W-1:2], 2'b00};
+    assign m_axi_wdata  = sb_active ? sb_data[sb_head]
+                                    : lane_align_wdata(cpu_write_data, mem_size);
+    assign m_axi_wstrb  = sb_active ? sb_strb[sb_head]
+                                    : gen_wstrb(mem_size, byte_offset);
     assign m_axi_wlast  = 1'b1;
     assign m_axi_arlen  = uncache_en ? 8'd0 : BURST_LEN;
     assign m_axi_araddr = uncache_en
@@ -311,6 +436,7 @@ module data_cache #(
             refill_word <= 0;
             beat_cnt    <= 0;
             uncache_r   <= 1'b0;
+            bus_err_r   <= 1'b0;
             for (i = 0; i < NUM_SETS; i = i + 1) begin
                 valid_arr[i] <= 0;
                 rr_ptr[i]    <= 0;
@@ -322,7 +448,16 @@ module data_cache #(
             if (state == IDLE && (cpu_read_req || cpu_write_req)) begin
                 req_addr  <= cpu_addr;
                 uncache_r <= uncache_en_i;
+                bus_err_r <= 1'b0;      // B2 - moi giao dich bat dau sach
             end
+
+            // B2 - RRESP/BRESP = 2'b10 (SLVERR) hoac 2'b11 (DECERR); bit [1] phu
+            // ca hai. Chot lai thay vi dung truc tiep vi mot burst refill co 4
+            // beat: chi can MOT beat loi la ca line khong dung duoc.
+            if (state == R_WAIT && m_axi_rvalid && m_axi_rready && m_axi_rresp[1])
+                bus_err_r <= 1'b1;
+            if (state == B_WAIT && m_axi_bvalid && m_axi_bready && m_axi_bresp[1])
+                bus_err_r <= 1'b1;
 
             if (state == AR_REQ) beat_cnt <= 0;
 
@@ -336,6 +471,62 @@ module data_cache #(
                     if (way_update[w]) valid_arr[index][w] <= 1'b1;
                 rr_ptr[index] <= rr_ptr[index] + 1'b1;
             end
+        end
+    end
+
+    // =========================================================================
+    // Store-buffer FIFO and its drain FSM.
+    //
+    // The FSM is deliberately single-outstanding (one AW/W/B at a time): the
+    // win here is decoupling the CORE from the bus, not pipelining the bus, and
+    // a single outstanding write keeps store order on the wire trivially equal
+    // to program order without needing BID tracking.
+    // =========================================================================
+    integer k;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            sb_state   <= SB_IDLE;
+            sb_wptr    <= {(SB_PTR_W+1){1'b0}};
+            sb_rptr    <= {(SB_PTR_W+1){1'b0}};
+            sb_err_cnt <= 8'd0;
+            for (k = 0; k < STORE_BUF_DEPTH; k = k + 1) begin
+                sb_addr[k] <= {C_M_AXI_ADDR_W{1'b0}};
+                sb_data[k] <= {C_M_AXI_DATA_W{1'b0}};
+                sb_strb[k] <= {(C_M_AXI_DATA_W/8){1'b0}};
+            end
+        end else begin
+            // Push.  req_addr is the address the array lookup used, and
+            // cpu_addr == req_addr in sb_push proves the store instruction is
+            // still the one presenting mem_size / cpu_write_data.
+            if (sb_push) begin
+                sb_addr[sb_tail] <= {req_addr[C_M_AXI_ADDR_W-1:2], 2'b00};
+                sb_data[sb_tail] <= lane_align_wdata(cpu_write_data, mem_size);
+                sb_strb[sb_tail] <= gen_wstrb(mem_size, byte_offset);
+                sb_wptr          <= sb_wptr + 1'b1;
+            end
+
+            case (sb_state)
+                SB_IDLE: if (!sb_empty) sb_state <= SB_AW;
+                SB_AW:   if (m_axi_awready) sb_state <= SB_W;
+                SB_W:    if (m_axi_wready)  sb_state <= SB_B;
+                SB_B: if (m_axi_bvalid) begin
+                    // Pop on the response, not on the W beat: the entry has to
+                    // stay addressable until the slave has taken it, and
+                    // sb_drained must not go true before the B arrives.
+                    sb_rptr  <= sb_rptr + 1'b1;
+                    sb_state <= SB_IDLE;
+                    // SLVERR (2'b10) or DECERR (2'b11); bit [1] covers both.
+                    if (m_axi_bresp[1]) sb_err_cnt <= 8'd255;
+                end
+                default: sb_state <= SB_IDLE;
+            endcase
+
+            // Hold the imprecise error long enough for the clk_apb PLIC gateway
+            // to latch it, then release so a single fault cannot wedge the line
+            // permanently.  A new fault reloads the counter above.
+            if (sb_err_cnt != 8'd0 &&
+                !(sb_state == SB_B && m_axi_bvalid && m_axi_bresp[1]))
+                sb_err_cnt <= sb_err_cnt - 8'd1;
         end
     end
 
@@ -382,8 +573,7 @@ module data_cache #(
 
         if (refill_beat) begin
             data_write_en[victim_way] = 1'b1;
-        end else if (state == LOOKUP && cpu_write_req && !uncache_en &&
-                     cpu_addr == req_addr && hit_flag) begin
+        end else if (sb_push && hit_flag) begin
             // The macro has no byte mask, so merge and rewrite the whole word.
             data_write_word = write_data_with_size(
                 read_word, cpu_write_data, mem_size, byte_offset);
@@ -391,19 +581,34 @@ module data_cache #(
         end
     end
 
+    // The main FSM only ever drives the write channel for an UNCACHED store;
+    // the drain FSM drives it for everything else.  Rules 1 and 2 make the two
+    // mutually exclusive, so these are ORs, not an arbiter.
+    assign m_axi_awvalid = fsm_awvalid || (sb_state == SB_AW);
+    assign m_axi_wvalid  = fsm_wvalid  || (sb_state == SB_W);
+    assign m_axi_bready  = fsm_bready  || (sb_state == SB_B);
+
     always @(*) begin
         next_state    = state; dcache_hit    = 1'b0; dcache_stall  = 1'b0;
         way_update    = {C_WAYS{1'b0}};
 
-        m_axi_awvalid = 0; m_axi_wvalid = 0; m_axi_bready = 0; m_axi_arvalid = 0; m_axi_rready = 0;
+        fsm_awvalid = 0; fsm_wvalid = 0; fsm_bready = 0; m_axi_arvalid = 0; m_axi_rready = 0;
         case (state)
             IDLE: begin
                 // Address phase: the SRAM read is issued here and resolved in
                 // LOOKUP, so even a hit costs one stall cycle.
                 if (cpu_read_req || cpu_write_req) begin
                     dcache_stall = 1'b1;
-                    if (uncache_en) next_state = cpu_read_req ? AR_REQ : AW_REQ;
-                    else            next_state = LOOKUP;
+                    if (uncache_en) begin
+                        // Rule 2.  A device access must not pass a buffered
+                        // memory store, so hold here until the last BRESP has
+                        // landed.  Re-latching the same req_addr every cycle
+                        // while waiting is harmless.
+                        if (sb_drained)
+                            next_state = cpu_read_req ? AR_REQ : AW_REQ;
+                    end else begin
+                        next_state = LOOKUP;
+                    end
                 end
             end
             LOOKUP: begin
@@ -413,13 +618,27 @@ module data_cache #(
                         dcache_stall = 1'b0;
                         dcache_hit   = 1'b1;
                         next_state   = IDLE;
-                    end else begin
+                    end else if (sb_drained) begin
                         next_state = AR_REQ;
                     end
+                    // Rule 2 again, read side: a refill must not read a line
+                    // that a still-buffered store belongs to.  Holding here is
+                    // safe because array_read only fires in IDLE, so hit_flag
+                    // and read_word keep the values this lookup produced.
                 end else if (cpu_write_req && cpu_addr == req_addr) begin
-                    // Write-through: the store always goes to AXI.  On a hit the
-                    // merged word was written into the array by data_write_en.
-                    next_state = AW_REQ;
+                    // Write-through with a store buffer: the AXI write is
+                    // handed to the FIFO and the core is released now.  On a
+                    // hit the merged word went into the array in this same
+                    // cycle (data_write_en, gated by sb_push).
+                    //
+                    // When the FIFO is full there is no slot to hand it to, so
+                    // stay here stalling - the pre-buffer behaviour - until the
+                    // drain FSM frees one.
+                    if (!sb_full) begin
+                        dcache_stall = 1'b0;
+                        dcache_hit   = 1'b1;
+                        next_state   = IDLE;
+                    end
                 end else begin
                     // Lệnh đã bị flush trong lúc đọc mảng SRAM
                     next_state = IDLE;
@@ -437,22 +656,28 @@ module data_cache #(
                 end
             end
             AW_REQ: begin
-                dcache_stall = 1'b1; m_axi_awvalid = 1'b1;
+                dcache_stall = 1'b1; fsm_awvalid = 1'b1;
                 if (m_axi_awready) next_state = W_REQ;
             end
             W_REQ: begin
-                dcache_stall = 1'b1; m_axi_wvalid = 1'b1;
+                dcache_stall = 1'b1; fsm_wvalid = 1'b1;
                 if (m_axi_wready) next_state = B_WAIT;
             end
             B_WAIT: begin
-                dcache_stall = 1'b1; m_axi_bready = 1'b1;
+                dcache_stall = 1'b1; fsm_bready = 1'b1;
                 if (m_axi_bvalid) next_state = DONE;
             end
             DONE: begin
                 // 1. LUÔN CẬP NHẬT TAG/VALID NẾU LÀ READ MISS (Không Uncache).
                 // Kể cả khi CPU đã Flush đổi địa chỉ, ta vẫn giữ block vừa fetch.
                 // Dữ liệu đã được ghi từng beat trong R_WAIT.
-                if (cpu_read_req && !uncache_en) begin
+                // B2 - `!bus_err_r` la BAT BUOC. Neu van danh dau valid thi line
+                // rac (du lieu tu mot giao dich DECERR) tro thanh hop le, va lan
+                // doc SAU se HIT vao no - tra du lieu sai ma khong con loi nao de
+                // bao. Mot lan loi bien thanh loi VINH VIEN va im lang.
+                // Du lieu da ghi vao mang o R_WAIT khong sao: valid = 0 nen khong
+                // ai doc toi.
+                if (cpu_read_req && !uncache_en && !bus_err_r) begin
                     way_update[victim_way] = 1'b1;
                 end
 
@@ -473,6 +698,11 @@ module data_cache #(
         endcase
     end
 
-    wire _unused_ok = &{1'b0, m_axi_bid, m_axi_bresp, m_axi_rid, m_axi_rresp};
+    // B2 - dong bien voi dcache_hit: chinh chu ky lenh duoc tra ve cho core.
+    assign dcache_error = (state == DONE) && bus_err_r && (cpu_addr == req_addr);
+
+    // m_axi_bresp / m_axi_rresp DA DUOC DUNG o tren - khong con nam trong danh
+    // sach "co y bo qua" nua.
+    wire _unused_ok = &{1'b0, m_axi_bid, m_axi_rid};
 
 endmodule
