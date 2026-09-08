@@ -10,6 +10,9 @@
 #   XSIM_BIN   thu muc bin cua Vivado  (mac dinh: /d/Xilinx/Vivado/2024.1/bin)
 #   FW_MEM     anh firmware cho che do fw
 #   OUT_DIR    thu muc lam viec        (mac dinh: ./sim_work)
+#   SAIF=1     che do fw ghi them sim_work/fw.saif de Genus annotate power
+#              (chay Genus voi MCU_SAIF=<duong dan toi file do>).  Mac dinh tat
+#              vi no lam cham lan chay dang ke.
 set -euo pipefail
 
 # Cac binary cua Vivado la chuong trinh Windows: chung khong hieu duong dan kieu
@@ -33,6 +36,7 @@ APB_TB="$REPO/Test_bench/SoC_testbench.sv"
 MEM_TB="$HERE/tb_mem_paths.sv"
 FW_TB="$REPO/Driver/tb_top_soc.v"
 MODE="${1:-all}"
+SAIF="${SAIF:-0}"
 
 export PATH="$XSIM_BIN:$PATH"
 command -v xvlog.bat >/dev/null 2>&1 || { echo "khong tim thay xvlog trong $XSIM_BIN"; exit 1; }
@@ -62,9 +66,26 @@ run_fw() {
     # cho thu muc nay len TRUOC rtl/ tren duong dan include.
     python "$HERE/gen_boot_rom.py" "$FW_MEM" "$OUT_DIR/fw_inc"
     xvlog.bat -sv -work fw -i "$OUT_DIR/fw_inc" "${INC[@]}" -f rtl_files.f "$FW_TB" > xvlog_fw.log
-    xelab.bat -relax -s fw_sim -timescale 1ns/1ps fw.tb_top_soc -L fw > xelab_fw.log
-    printf 'run all\nquit\n' > run.tcl
+    # log_saif doi netlist co thong tin trace, nen SAIF=1 phai elaborate voi
+    # -debug typical.  Chay cham hon nhieu - do la ly do no khong bat mac dinh.
+    XELAB_DEBUG=""
+    if [ "$SAIF" = "1" ]; then XELAB_DEBUG="-debug typical"; fi
+    xelab.bat -relax $XELAB_DEBUG -s fw_sim -timescale 1ns/1ps fw.tb_top_soc -L fw > xelab_fw.log
+    if [ "$SAIF" = "1" ]; then
+        # Toggle count cho Genus: khong co no thi report_power ap toggle rate
+        # mac dinh len ca 84 macro SRAM cung luc, ra con so cao gap hang chuc lan.
+        printf 'open_saif "fw.saif"\nlog_saif [get_objects -r /tb_top_soc/*]\nrun all\nclose_saif\nquit\n' > run.tcl
+    else
+        printf 'run all\nquit\n' > run.tcl
+    fi
     xsim.bat fw_sim -tclbatch run.tcl > xsim_fw.log
+    if [ "$SAIF" = "1" ]; then
+        if [ -s fw.saif ]; then
+            echo "SAIF: $OUT_DIR/fw.saif ($(wc -c < fw.saif) byte) -> chay Genus voi MCU_SAIF tro toi file nay"
+        else
+            echo "SAIF: KHONG sinh duoc fw.saif, xem xsim_fw.log"
+        fi
+    fi
     grep -E '\[TB\]\[PASS\]|\[TB\]\[FAIL\]|SIMULATION' xsim_fw.log || true
     # `|| true` la BAT BUOC: voi set -euo pipefail, mot lan chay khong in duoc
     # ky tu UART nao lam grep tra 1 -> ca script THOAT, va run_mem khong bao gio

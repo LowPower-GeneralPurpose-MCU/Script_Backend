@@ -24,6 +24,10 @@ module axi_interconnect
     parameter                       SLV_ID_LSB_IDX      = ADDR_WIDTH - $clog2(SLV_AMT),
     parameter [SLV_AMT*ADDR_WIDTH-1:0] SLV_BASE_ADDR    = {SLV_AMT*ADDR_WIDTH{1'b0}},
     parameter [SLV_AMT*ADDR_WIDTH-1:0] SLV_ADDR_MASK    = {SLV_AMT*ADDR_WIDTH{1'b1}},
+    // T3 - do sau FIFO write-data cho TUNG slave, dong goi 32 bit mot truong,
+    // cung thu tu voi SLV_BASE_ADDR (slave 0 o bit thap nhat).  Mac dinh 32 giu
+    // nguyen hanh vi cu cho moi ban instantiate chua khai bao gi.
+    parameter [SLV_AMT*32-1:0]      SLV_W_FIFO_DEPTH    = {SLV_AMT{32'd32}},
     // Dispatcher DATA depth configuration
     parameter                       DSP_RDATA_DEPTH     = 16
 )
@@ -650,7 +654,8 @@ module axi_interconnect
                     .TRANS_WR_RESP_W(TRANS_WR_RESP_W),
                     .SLV_ID(slv_idx),
                     .SLV_ID_MSB_IDX(SLV_ID_MSB_IDX),
-                    .SLV_ID_LSB_IDX(SLV_ID_LSB_IDX)
+                    .SLV_ID_LSB_IDX(SLV_ID_LSB_IDX),
+                    .W_FIFO_DEPTH(SLV_W_FIFO_DEPTH[slv_idx*32 +: 32])
                 ) slave_arbitration (
                     .ACLK_i(ACLK_i),
                     .ARESETn_i(ARESETn_i),

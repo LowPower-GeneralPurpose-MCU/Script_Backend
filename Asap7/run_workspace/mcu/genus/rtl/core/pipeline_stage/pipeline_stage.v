@@ -372,6 +372,29 @@ module instruction_fetch (
         .instr32(instr0_expanded)
     );
 
+    // -------------------------------------------------------------------------
+    // T1 - dich JALR tinh NGOAI chuoi uu tien cua next-PC.
+    //
+    // Truoc: phep cong nam trong mot nhanh cua `always @(*)` ben duoi. Genus coi
+    // ca khoi la mot vung dieu khien, gan no vao mot CDN_DP_region roi VO HIEU
+    // vung do cho datapath optimization (RTLOPT-55), nen bo cong 32 bit bi map
+    // thanh ripple carry tran: mot chuoi MAJIxp5/MAJx2/INVx1 lap ~28 lan, ton
+    // 1612 ps trong 2354 ps cua critical path (68%) - xem qor_syn.rpt.
+    //
+    // Dua no ra mot `assign` doc lap thi datapath extractor giu lai duoc phep
+    // cong nhu mot toan tu, va duoc tu do chon CLA / carry-select.
+    //
+    // Ngu nghia KHONG doi mot bit nao: van la cung mot bieu thuc, chi khac cho
+    // dat. Bit 0 bi xoa theo dung dinh nghia JALR cua RISC-V (spec: dia chi dich
+    // duoc tinh roi dat bit 0 ve 0).
+    //
+    // CANH BAO con lai: startpoint cua path la `ex_mem_csr_addr`, tuc du lieu doc
+    // CSR duoc forward vao `alu_in1`. Mot JALR ngay sau lenh CSR van la worst
+    // case. Neu sau khi re-synth van khong du margin thi buoc tiep theo la tinh
+    // `jalr_target` o tang EX va cho no qua mot thanh ghi.
+    // -------------------------------------------------------------------------
+    wire [31:0] jalr_target = (alu_in1 + id_ex_ext_imm) & 32'hFFFFFFFE;
+
     always @(*) begin
         if (!reset_n) begin
             pc_out = reset_vector_in;
@@ -385,7 +408,7 @@ module instruction_fetch (
             // Use pipelined pc_plus_4: correct for compressed (pc+2) and 32-bit (pc+4)
             pc_out = ex_mem_pc_plus_4;
         end else if (id_ex_jalr) begin
-            pc_out = (alu_in1 + id_ex_ext_imm) & 32'hFFFFFFFE;
+            pc_out = jalr_target;
         end else if (id_ex_jal) begin
             pc_out = id_ex_jal_target;
         end else if (btb_hit && predict_taken) begin
