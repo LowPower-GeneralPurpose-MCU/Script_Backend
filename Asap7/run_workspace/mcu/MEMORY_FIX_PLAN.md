@@ -35,17 +35,24 @@ Slave: 7. Domain: `clk_cpu` 400 MHz (gated) / `clk_axi` 200 MHz / `clk_apb` 100 
 |---|---|---|
 | System RAM (2 x 128 KiB) | 64 | 256 KiB |
 | I-cache 16 KiB, 2-way | 6 | 24 KiB |
-| D-cache 16 KiB, 4-way | 8 | 32 KiB |
+| D-cache 16 KiB, 2-way | 6 | 24 KiB |
 | ITCM | 4 | 16 KiB |
 | DTCM | 4 | 16 KiB |
-| **Tổng** | **86** | **344 KiB** |
+| **Tổng** | **84** | **336 KiB** |
 
-System RAM chiếm **74%** số macro. Đây là khối chi phối diện tích die.
+System RAM chiếm **76%** số macro. Đây là khối chi phối diện tích die.
+
+D-cache từng là 4-way / 8 macro. Macro `1024 x 32` giữ trọn **một** way, nên
+4-way cần 4 macro tag mà mỗi macro chỉ dùng `256 x 20` bit — 16 KiB silicon cho
+640 byte tag thật. Hạ xuống 2-way gấp đôi số set, tag vừa 2 macro thay vì 4; số
+macro data không đổi. Giá phải trả là chênh lệch conflict miss giữa 2-way và
+4-way ở 16 KiB, cỡ 1–3 % trên workload nhúng.
 
 ### 1.3 Đặc tính cache
 
-- **D-cache**: 16 KiB, 4-way, block 16 B, **write-through, no write-allocate**,
-  không dirty bit, **không có store buffer**, **không có cổng invalidate/flush/CMO**.
+- **D-cache**: 16 KiB, 2-way, block 16 B, **write-through, no write-allocate**,
+  không dirty bit, **store buffer 4 entry** (Phase 1, xong), **không có cổng
+  invalidate/flush/CMO**.
 - **I-cache**: 16 KiB, 2-way, block 16 B.
 - **TCM**: đọc 2 chu kỳ · ghi word 2 chu kỳ · ghi byte/halfword **3 chu kỳ**
   (read-modify-write, vì macro không có byte-write mask). Ưu tiên cố định D > F.
@@ -58,7 +65,7 @@ System RAM chiếm **74%** số macro. Đây là khối chi phối diện tích 
 |---|---|---|---|
 | **P0** | DMA ghi thì CPU đọc ra dữ liệu cũ (không có coherency, không có vùng uncached cho RAM) | Chặn chức năng | **0 — xong** |
 | **P1** | Nửa RAM `hi` và cả ITCM/DTCM không có trong linker, 40/86 macro là silicon chết | Lãng phí | **0 — xong (cơ chế)** |
-| **P2** | D-cache không có store buffer, mỗi store stall core trọn một vòng AXI qua CDC 400 sang 200 | Hiệu năng | 1 |
+| **P2** | D-cache không có store buffer, mỗi store stall core trọn một vòng AXI qua CDC 400 sang 200 | Hiệu năng | **1 — xong (35 → 1 chu kỳ)** |
 | **P3** | DMA và debugger không với tới được TCM | Giới hạn kiến trúc | 2 |
 | **P4** | Không có clock gating riêng cho RAM `hi`; 64 macro toggle clock vô điều kiện | Ngược mục tiêu LowPower | 3 |
 | **P5** | Không có ECC/parity trên 344 KiB SRAM | Chấp nhận có ý thức | 4 |
@@ -210,9 +217,34 @@ không phải của hệ thống bộ nhớ, và sửa nó cần một testcase 
 > mù mà không biết còn bao nhiêu slack là đánh bạc với tape-out. Máy đang dùng
 > **không có Cadence Genus**, nên các phase này phải làm trên máy có license.
 
-### Phase 1 — Store buffer cho D-cache (P2)
+### Phase 1 — Store buffer cho D-cache (P2) — ĐÃ SỬA VÀ VERIFY
 
-**Vấn đề.** FSM hiện tại: `IDLE -> LOOKUP -> AW_REQ -> W -> B_WAIT -> IDLE`, và
+**Kết quả đo (`mem`, 2026-09-08).** Store cacheable: **35 → 1 chu kỳ** `clk_cpu`.
+Đổi lại, một read miss ngay sau chuỗi store phải chờ buffer xả nên đi từ 57 lên
+~90 chu kỳ — đúng phần đánh đổi của quy tắc 2 dưới đây. Testbench `mem` lên
+**109/109 PASS**, thêm nhóm `TS` đo trực tiếp ba tính chất của buffer.
+
+**Sai lệch so với thiết kế gốc dưới đây:** entry KHÔNG mang cờ `is_device`.
+Store uncached đơn giản là *không bao giờ* vào buffer — nó giữ nguyên đường
+`AW_REQ/W_REQ/B_WAIT` cũ và vẫn báo lỗi **chính xác** qua `dcache_error`. Nhờ
+vậy quy tắc "write-through nghiêm ngặt cho thiết bị" thành đúng theo cấu trúc
+thay vì phải cưỡng chế bằng logic, và hai FSM không bao giờ cùng lái kênh ghi
+nên không cần trọng tài.
+
+**Hệ quả PHẢI biết — lỗi bus của store cacheable trở thành imprecise.** Store đã
+retire trước khi BRESP về, nên `mepc` không còn trỏ vào nó được. Nó được báo
+bằng **PLIC nguồn 7** (`dcache_sb_error`, xem `top_soc.v`) thay vì exception
+đồng bộ. Store uncached — MMIO, CLINT, DMA pool — không đổi: vẫn precise.
+
+**Còn thiếu: `FENCE` chưa xả buffer.** `control_unit.v` decode `fence` thành NOP
+với lý do "một hart, bộ nhớ không đặt lại thứ tự" — lý do đó bây giờ SAI đối với
+master ngoài. Thứ tự với DMA vẫn an toàn theo cấu trúc (khởi động DMA là ghi
+MMIO ⇒ uncached ⇒ ép xả buffer trước). Chỗ hở duy nhất là **debugger ghi bộ nhớ
+trong lúc core đang chạy**; hiện phải xả bằng một truy cập uncached bất kỳ
+(xem T9). Nối `fence` thật cần thêm một bit điều khiển xuyên pipeline — việc của
+core, không nằm trong phase này.
+
+**Vấn đề (ghi lại nguyên văn thiết kế gốc).** FSM hiện tại: `IDLE -> LOOKUP -> AW_REQ -> W -> B_WAIT -> IDLE`, và
 `dcache_stall = 1` suốt đoạn đó. Mỗi lệnh `sw` đều stall core trọn một vòng AXI
 round-trip **qua cầu bất đồng bộ 400 sang 200 MHz**. Vòng lặp ghi mảng chạy ở tốc
 độ `clk_axi`, không phải `clk_cpu` — 400 MHz gần như vô nghĩa với code store-heavy.
@@ -461,12 +493,14 @@ Phase 4  --- ECC ------------------------------------  chỉ nếu hướng sả
 | P1 | Linker: DMAPOOL + ITCM/DTCM + sections | 0 | Xong | `Driver/ld/soc.ld` |
 | P1b | Firmware dùng thật `.dmabuf` / `.itcm_text` | 0 | Chưa — máy không có toolchain RISC-V | `Driver/src/` |
 | P6 | AWSIZE / căn địa chỉ / lane WDATA cho store dưới 32 bit | 0 | Xong, đã verify (T2/T6/T9) | `memory/dcache.v`, `debug/dtm_axi_master.v` |
-| P2 | Store buffer D-cache | 1 | Chưa | `genus/rtl/memory/dcache.v` |
+| P2 | Store buffer D-cache | 1 | **Xong, đã verify (TS/T7/T9)** | `genus/rtl/memory/dcache.v`, `top_soc.v` |
+| P2b | D-cache 4-way → 2-way, thu hồi 2 macro tag | 1 | **Xong, đã verify (TP)** | `top_soc.v`, `flow/project_config.tcl`, `tcl/genus.tcl` |
+| P2c | `FENCE` xả store buffer | — | **Chưa** — cần bit điều khiển xuyên pipeline | `core/block_unit/control_unit.v`, `core/pipeline_register/`, `core/riscv_pipeline.v` |
 | P3 | Đường DMA/debug vào TCM | 2 | Chờ quyết định A/B/C | `genus/rtl/memory/tcm.v`, `top_soc.v` |
 | P4a | Gate clock RAM hi | 3 | Chưa | `top_soc.v`, `peripheral/apb_syscon.v` |
 | P4b | ICG per-bank | 3 | Chưa | `genus/rtl/memory/asap7_sram_1rw.v` |
 | P5 | ECC/parity | 4 | Quyết định có ý thức: bỏ qua | — |
-| V1 | Test RAM hi / TCM / DMA coherency / store ordering | mọi phase | **Xong, 99/99 PASS** | `genus/rtl/tests/tb_mem_paths.sv` |
+| V1 | Test RAM hi / TCM / DMA coherency / store ordering | mọi phase | **Xong, 109/109 PASS** | `genus/rtl/tests/tb_mem_paths.sv` |
 | V2 | Đếm file trong lint khớp filelist tổng hợp | — | Xong | `genus/rtl/tests/run_rtl_lint.sh` |
 | — | Chạy `verilator` lint | — | Chưa chạy được — máy không có verilator | máy có verilator |
 | — | **Chạy lại Genus** | GATE | **Chặn mọi phase sau** | máy có license |
