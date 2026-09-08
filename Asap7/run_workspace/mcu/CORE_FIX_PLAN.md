@@ -20,7 +20,7 @@ bash genus/rtl/tests/run_soc_sim.sh all
 | Testbench | Baseline |
 |---|---|
 | `apb` — `Test_bench/SoC_testbench.sv` | **PASS 256 / FAIL 0** |
-| `fw` — `Driver/tb_top_soc.v` | **PASS** — UART in `HELLO RISC-V UART TEST!`, CPU tới WFI |
+| `fw` — `Driver/tb_top_soc.v` | **PASS** — UART in `HELLO RISC-V UART TEST!`, CPU tới WFI (2026-09-08 sau Phase F: **t = 1 528 046 000 ns**, trước đó 2 831 456 000) |
 | `mem` — `genus/rtl/tests/tb_mem_paths.sv` | **PASS 99 / FAIL 0 / TIMEOUT 0** (2026-09-08: **109/109** sau Phase F) |
 
 Ba bộ này **không** phủ được exception, CSR conformance hay dự đoán nhánh. Mỗi
@@ -443,9 +443,13 @@ Slack `CLK_CPU` lần đo cuối chỉ +5.5 ps, nên **Genus phải xác nhận 
 thiếu slack: hạ `ENTRY` về 32 (`INDEX = 5`) trước, rồi mới xét chốt
 `predict_target` vào một flop.
 
-**Đo được gì:** testbench `fw` báo UART khớp tại một mốc thời gian tất định
-(baseline `t = 2 226 406 000 ns`). Đó là phép đo hiệu năng end-to-end duy nhất
-hiện có — dùng nó để so trước/sau. Vẫn nên thêm một đoạn firmware gọi hàm lồng
+**Đo được gì:** testbench `fw` báo UART khớp tại một mốc thời gian tất định.
+Đó là phép đo hiệu năng end-to-end duy nhất hiện có — dùng nó để so trước/sau.
+
+> **Cẩn thận với con số `t = 2 226 406 000 ns` ghi ngày 2026-09-05.** Nó gắn với
+> một bản build firmware khác, nên KHÔNG so trực tiếp được với các lần đo sau.
+> Muốn so trước/sau thì phải đảo đúng các file của thay đổi đang xét rồi chạy
+> lại `fw` trên **cùng** file `.mem` — như đã làm cho Phase F ở §8. Vẫn nên thêm một đoạn firmware gọi hàm lồng
 nhau và so `minstret`/`mcycle` để đo riêng bộ dự đoán.
 
 ---
@@ -473,12 +477,23 @@ Genus để xác nhận trước khi chốt.
 Thiết kế đầy đủ đã nằm ở [MEMORY_FIX_PLAN.md](MEMORY_FIX_PLAN.md) § Phase 1.
 Không lặp lại ở đây. Hai điểm bổ sung:
 
-**Đã làm ngày 2026-09-08, trước Phase G.** Hai ghi chú dưới đây giữ lại vì
-chúng vẫn mô tả đúng đánh đổi:
+**Đã làm ngày 2026-09-08, trước Phase G.**
 
-* ~~**Chỉ làm sau Phase G.**~~ Làm trước G nghĩa là trần IPC 0.5 (P5) vẫn còn,
-  nên lợi ích end-to-end chưa hiện hết. Nhưng đường store không còn là nút cổ
-  chai riêng nữa: 35 → 1 chu kỳ, và phần lợi đó không mất đi khi làm G.
+**Đo A/B trên cùng một firmware**, chỉ đảo `memory/dcache.v` + `top_soc.v`:
+
+| | `fw` UART khớp tại | store cacheable |
+|---|---|---|
+| 4-way, không store buffer | 2 831 456 000 ns | 35 chu kỳ |
+| 2-way, store buffer 4 entry | **1 528 046 000 ns** | **1 chu kỳ** |
+
+**Nhanh hơn 1.85×, giảm 46 % thời gian chạy end-to-end** — và đạt được trong
+khi ĐỒNG THỜI hạ D-cache từ 4-way xuống 2-way.
+
+* ~~**Chỉ làm sau Phase G.**~~ **Lập luận này đã bị số đo bác bỏ.** Kế hoạch cũ
+  cho rằng F vô nghĩa khi trần IPC còn kẹp ở 0.5 vì P5. Thực tế 1.85× cho thấy
+  ngược lại: trần IPC 0.5 chỉ chặn phần *thực thi*, còn store buffer gỡ phần
+  *chờ bus* — hai nút cổ chai khác nhau, không che nhau. Với firmware thật
+  (driver UART, store-heavy) thì chờ bus mới là phần chi phối.
 * Lỗi bus của store **đã trở thành imprecise** đúng như dự đoán. Quyết định đã
   chốt: báo qua **ngắt riêng (PLIC nguồn 7)**, không phải exception đồng bộ.
   Store uncached vẫn giữ đường precise `dcache_error` → mcause 7.
