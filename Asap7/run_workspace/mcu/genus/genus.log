@@ -3,19 +3,19 @@ Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
 Cadence and the Cadence logo are registered trademarks and Genus is a trademark
 of Cadence Design Systems, Inc. in the United States and other countries.
 
-[02:38:59.206298] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+[02:46:31.206210] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 Version: 23.14-s090_1, built Wed Feb 26 17:49:50 PST 2025
 Options: -files tcl/genus.tcl 
-Date:    Thu Sep 10 02:38:59 2026
+Date:    Thu Sep 10 02:46:31 2026
 Host:    user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*1physical cpu*AMD Ryzen 5 7545U 1024KB) (13556652KB)
-PID:     2222278
+PID:     2259553
 OS:      Ubuntu 26.04.1 LTS
 
 Checking out license: Genus_Synthesis
-[02:39:00.298144] Periodic Lic check successful
-[02:39:00.822433] Feature usage summary:
-[02:39:00.822434] Genus_Synthesis
+[02:46:32.246145] Periodic Lic check successful
+[02:46:32.246154] Feature usage summary:
+[02:46:32.246155] Genus_Synthesis
 
 
 
@@ -24,10 +24,10 @@ Checking out license: Genus_Synthesis
 
 
 
-Finished executable startup (1 second elapsed).
+Finished executable startup (2 seconds elapsed).
 
 Loading tool scripts...
-Finished loading tool scripts (11 seconds elapsed).
+Finished loading tool scripts (10 seconds elapsed).
 
 #@ Processing -files option
 @genus:root: 1> source tcl/genus.tcl
@@ -39,7 +39,7 @@ Finished loading tool scripts (11 seconds elapsed).
 @file(genus.tcl) 10: set SDC_FILE [file join $GENUS_TCL_DIR constraint.sdc]
 @file(genus.tcl) 11: cd $GENUS_DIR
 @file(genus.tcl) 13: source [file join $RTL_ROOT flow project_config.tcl]
-Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl' (Thu Sep 10 02:39:12 JST 2026)...
+Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl' (Thu Sep 10 02:46:43 JST 2026)...
 #@ Begin verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl
 @file(project_config.tcl) 5: if {![info exists FLOW_ROOT]} {
     set FLOW_ROOT [file dirname [file dirname [file normalize [info script]]]]
@@ -179,7 +179,7 @@ MCU ASAP7 CONFIGURATION
 ============================================================
 #@ End verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl
 @file(genus.tcl) 14: source [file join $GENUS_TCL_DIR rtl_filelist.tcl]
-Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/rtl_filelist.tcl' (Thu Sep 10 02:39:12 JST 2026)...
+Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/rtl_filelist.tcl' (Thu Sep 10 02:46:43 JST 2026)...
 #@ Begin verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/rtl_filelist.tcl
 @file(rtl_filelist.tcl) 5: set RTL_INCLUDE_DIRS [list \
     $RTL_ROOT \
@@ -266,17 +266,627 @@ Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/r
 @file(genus.tcl) 309: proc check_sram_library_cell ...
 @file(genus.tcl) 323: proc check_sram_mapped_netlist ...
 @file(genus.tcl) 357: genus_run_static_checks
+Generated synthesizable boot ROM table: 4 words
+MCU static checks passed: 58 RTL files, boot image, SRAM wrapper and SDC
+@file(genus.tcl) 358: foreach timing_lib $STD_LIBS {
+    genus_require_liberty $timing_lib
+}
+@file(genus.tcl) 361: genus_require_liberty $SRAM_LIB $SRAM_MASTER
+@file(genus.tcl) 363: foreach dir {outputs reports logs} {
+    file mkdir $dir
+}
+@file(genus.tcl) 366: foreach pattern {./outputs/* ./reports/* ./logs/*} {
+    foreach stale [glob -nocomplain $pattern] {
+        file delete -force $stale
+    }
+}
+@file(genus.tcl) 372: set_db / .init_lib_search_path [list $STD_LIB_DIR [file dirname $SRAM_LIB]]
+  Setting attribute of root '/': 'init_lib_search_path' = /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB
+@file(genus.tcl) 373: set_db / .script_search_path [list $GENUS_TCL_DIR]
+  Setting attribute of root '/': 'script_search_path' = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl
+@file(genus.tcl) 374: set_db / .init_hdl_search_path \
+    [concat [list $RTL_ROOT] $RTL_INCLUDE_DIRS]
+  Setting attribute of root '/': 'init_hdl_search_path' = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/plic
+@file(genus.tcl) 379: genus_try_set_root_attribute auto_super_thread false
+  Setting attribute of root '/': 'auto_super_thread' = false
+@file(genus.tcl) 380: if {[genus_env_flag GENUS_ENABLE_SUPER_THREAD 0]} {
+    set GENUS_CPUS [genus_env_value GENUS_CPUS 4]
+    if {![string is integer -strict $GENUS_CPUS] || $GENUS_CPUS < 1} {
+        error "GENUS_CPUS must be a positive integer"
+    }
+    set GENUS_SERVERS [genus_env_value GENUS_SUPER_THREAD_SERVERS localhost]
+    genus_try_set_root_attribute super_thread_servers $GENUS_SERVERS
+    genus_try_set_root_attribute max_cpus_per_server $GENUS_CPUS
+    # The default remote-shell command is 'rsh', which modern Linux
+    # distributions do not ship.  ssh to localhost works once key-based
+    # login is set up; override with GENUS_SUPER_THREAD_RSH if needed.
+    genus_try_set_root_attribute super_thread_rsh_command \
+        [genus_env_value GENUS_SUPER_THREAD_RSH ssh]
+    # Each server is a separate process.  Size GENUS_CPUS against free RAM,
+    # not against the core count: the last run peaked at 4.4 GB on a host
+    # with 12.9 GB total.
+    if {[catch {test_super_thread_servers} message]} {
+        error "Genus super-thread server check failed: $message"
+    }
+    puts "Genus execution: super-thread, servers=$GENUS_SERVERS, CPUs=$GENUS_CPUS"
+} else {
+    # Keep the tool in ONE process.
+    #
+    # max_cpus_per_server is not a shared-memory thread count: any value
+    # above 0 makes Genus fork that many CPU *server processes*, i.e. it
+    # enters super-threading.  Setting it to 8 here produced
+    #   Info : Attempting to launch a super-threading server. [ST-120]
+    #        : Attempting to Launch server 1 of 8.
+    # which on this host fails or stalls for two reasons: the default
+    # super_thread_rsh_command is 'rsh', which Ubuntu does not ship, and
+    # the machine had 0.7 GB free of 12.9 GB against a 4.4 GB peak, so
+    # eight more processes would not fit.
+    #
+    # reset_db restores the attribute DEFAULT rather than clearing it, so
+    # the server list is emptied explicitly instead.
+    genus_try_set_root_attribute super_thread_servers {}
+    genus_try_set_root_attribute max_cpus_per_server 0
+    puts "Genus execution: single process (set GENUS_ENABLE_SUPER_THREAD=1"
+    puts "                 to distribute, see the branch above)"
+}
+  Setting attribute of root '/': 'super_thread_servers' = 
+  Setting attribute of root '/': 'max_cpus_per_server' = 0
+Genus execution: single process (set GENUS_ENABLE_SUPER_THREAD=1
+                 to distribute, see the branch above)
+@file(genus.tcl) 421: set_db / .hdl_unconnected_value 0
+  Setting attribute of root '/': 'hdl_unconnected_value' = 0
+@file(genus.tcl) 422: set_db / .hdl_track_filename_row_col true
+Info   : Enabled hdl_track_filename_row_col attribute.
+       : Setting this attribute to 'true' can have an impact on the run time. Use this attribute only when filename, line number, and column information are needed in reports.
+  Setting attribute of root '/': 'hdl_track_filename_row_col' = true
+@file(genus.tcl) 434: set INDEX_MUX_THRESHOLD [genus_env_value MCU_INDEX_MUX_THRESHOLD 8]
+@file(genus.tcl) 435: if {![string is integer -strict $INDEX_MUX_THRESHOLD] ||
+    $INDEX_MUX_THRESHOLD < 0} {
+    error "MCU_INDEX_MUX_THRESHOLD must be a non-negative integer"
+}
+@file(genus.tcl) 439: genus_try_set_root_attribute hdl_index_mux_threshold $INDEX_MUX_THRESHOLD
+  Setting attribute of root '/': 'hdl_index_mux_threshold' = 8
+@file(genus.tcl) 440: set_db / .auto_ungroup both
+  Setting attribute of root '/': 'auto_ungroup' = both
+@file(genus.tcl) 441: set_db / .lp_insert_clock_gating false
+  Setting attribute of root '/': 'lp_insert_clock_gating' = false
+@file(genus.tcl) 442: set_db / .library $ALL_TIMING_LIBS
+
+  Message Summary for Library all 11 libraries:
+  *********************************************
+  An unsupported construct was detected in this library. [LBR-40]: 20
+  *********************************************
+ 
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib'.
+        : The nominal operating condition is represented, either by the nominal PVT values specified in the library source (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_AO_RVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_OA_RVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_AO_LVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib'.
+Info    : Created nominal operating condition. [LBR-412]
+        : Operating condition '_nominal_' was created for the PVT values (1.000000, 0.700000, 25.000000) in library 'srambank_256x4x32_6t122.lib'.
+Warning : Inconsistency detected among the units specified in the timing libraries being used. [LBR-714]
+        : Libraries with inconsistent time/capacitance units were loaded.
+        : Default system time/capacitance unit will be used.
+  Setting attribute of root '/': 'library' = /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib
+@file(genus.tcl) 465: set GENUS_PHYSICAL [genus_env_flag MCU_GENUS_PHYSICAL 1]
+@file(genus.tcl) 466: if {$GENUS_PHYSICAL} {
+    set PHYSICAL_LEFS [concat [list $TECH_LEF] $CELL_LEFS [list $SRAM_LEF]]
+    foreach lef_file $PHYSICAL_LEFS {
+        genus_require_file "physical LEF" $lef_file
+    }
+    if {[genus_try_set_root_attribute lef_library $PHYSICAL_LEFS]} {
+        puts "Genus physical: registered [llength $PHYSICAL_LEFS] LEF files"
+        # Map LEF layer names onto QRC layer names before the QRC file is
+        # read.  Without it Genus matches the two stacks by position and
+        # every layer inherits the parasitics of the layer below (PHYS-25).
+        set QRC_LAYER_MAP \
+            [file join $GENUS_TCL_DIR asap7_lef_to_qrc_layers.map]
+        if {[file isfile $QRC_LAYER_MAP]} {
+            genus_try_set_root_attribute \
+                extract_rc_lef_tech_file_map $QRC_LAYER_MAP
+        } else {
+            puts "WARNING: LEF-to-QRC layer map missing; layer parasitics"
+            puts "         will be mis-assigned: [file normalize $QRC_LAYER_MAP]"
+        }
+        if {[file isfile $QRC_FILE]} {
+            genus_try_set_root_attribute qrc_tech_file $QRC_FILE
+        } else {
+            puts "WARNING: QRC tech file missing, PLE falls back to LEF cap"
+            puts "         tables: [file normalize $QRC_FILE]"
+        }
+    } else {
+        set GENUS_PHYSICAL 0
+        puts "WARNING: this Genus version rejected the lef_library attribute;"
+        puts "         synthesis timing will contain NO wire delay"
+    }
+} else {
+    puts "WARNING: Genus physical mode disabled by MCU_GENUS_PHYSICAL=0;"
+    puts "         synthesis timing will contain NO wire delay"
+}
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'VIA9Pad' has no resistance value.
+        : If this is the expected behavior, this message can be ignored.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'VIA89' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'VIA78' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'VIA67' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'VIA56' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'VIA45' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'VIA34' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'VIA23' has no resistance value.
+Info    : Via with no resistance will have a value of '0.0' assigned for resistance value. [PHYS-129]
+        : Via 'VIA12' has no resistance value.
+Warning : Site already defined before, duplicated site will be ignored. [PHYS-106]
+        : Site 'asap7sc7p5t' read already, this site in file '/home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef' is ignored.
+
+  According to lef_library, there are total 10 routing layers [ V(5) / H(5) ]
+
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'M1' [line 132 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+        : Check the wire parameter in LEF technology files.
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'M2' [line 197 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'M3' [line 248 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'M4' [line 329 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'M5' [line 414 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'M6' [line 495 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'M7' [line 571 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'M8' [line 599 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'M9' [line 626 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'EDGECAPACITANCE' parameter is missing for layer 'Pad' [line 650 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'M1' [line 132 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'M2' [line 197 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'M3' [line 248 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'M4' [line 329 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'M5' [line 414 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'M6' [line 495 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'M7' [line 571 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'M8' [line 599 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'M9' [line 626 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Missing wire parameter. [PHYS-15]
+        : 'CPERSQDIST' parameter is missing for layer 'Pad' [line 650 in file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef]
+Warning : Maximum message print count reached. [MESG-11]
+        : Maximum print count of '20' reached for message 'PHYS-15'.
+Warning : The variant range of wire parameters is too large. An example of wire parameters are, a WIDTH for layer, PITCH for layer, MINSPACING for layers, etc. [PHYS-12]
+        : The variant range (0.144, 8.96) of 'PITCH' for layers 'M1' and 'Pad' is too large.
+        : Check the consistency of the parameters, and see if you can ignore this message or you're using different LEF file with wrong parameters.
+Warning : The value of the wire parameter is too big. [PHYS-13]
+        : The 'PITCH: 8.96' of layer 'Pad' is much bigger than others.
+        : Check the consistency of the specified wire parameter.
+Warning : The variant range of wire parameters is too large. An example of wire parameters are, a WIDTH for layer, PITCH for layer, MINSPACING for layers, etc. [PHYS-12]
+        : The variant range (0.012, 4.48) of 'OFFSET' for layers 'M4' and 'Pad' is too large.
+Warning : The value of the wire parameter is too big. [PHYS-13]
+        : The 'OFFSET: 4.48' of layer 'Pad' is much bigger than others.
+Warning : The value of the wire parameter is too small. [PHYS-14]
+        : The 'OFFSET: 0.012' of layer 'M4' is much less than others.
+        : Check the consistency of the specified wire parameter.
+Warning : The value of the wire parameter is too small. [PHYS-14]
+        : The 'OFFSET: 0.012' of layer 'M4' is much less than others.
+Warning : The value of the wire parameter is too small. [PHYS-14]
+        : The 'OFFSET: 0.012' of layer 'M4' is much less than others.
+Warning : The value of the wire parameter is too small. [PHYS-14]
+        : The 'OFFSET: 0.012' of layer 'M4' is much less than others.
+Warning : The variant range of wire parameters is too large. An example of wire parameters are, a WIDTH for layer, PITCH for layer, MINSPACING for layers, etc. [PHYS-12]
+        : The variant range (0.072, 8) of 'MINSPACING' for layers 'M1' and 'Pad' is too large.
+Warning : The value of the wire parameter is too big. [PHYS-13]
+        : The 'MINSPACING: 8' of layer 'Pad' is much bigger than others.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx10_ASAP7_75t_R cannot be found in library.
+        : Ensure that the proper library files are available and have been imported.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx1_ASAP7_75t_R cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx2_ASAP7_75t_R cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx2b_ASAP7_75t_R cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx4_ASAP7_75t_R cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx6_ASAP7_75t_R cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILLER_ASAP7_75t_R cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILLERxp5_ASAP7_75t_R cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell TAPCELL_ASAP7_75t_R cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell TAPCELL_WITH_FILLER_ASAP7_75t_R cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx10_ASAP7_75t_L cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx1_ASAP7_75t_L cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx2_ASAP7_75t_L cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx2b_ASAP7_75t_L cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx4_ASAP7_75t_L cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell DECAPx6_ASAP7_75t_L cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILLER_ASAP7_75t_L cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell FILLERxp5_ASAP7_75t_L cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell TAPCELL_ASAP7_75t_L cannot be found in library.
+Warning : Physical cell not defined in library. [PHYS-279]
+        : The physical (LEF) cell TAPCELL_WITH_FILLER_ASAP7_75t_L cannot be found in library.
+  Setting attribute of root '/': 'lef_library' = /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef
+Genus physical: registered 4 LEF files
+  Setting attribute of root '/': 'extract_rc_lef_tech_file_map' = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/asap7_lef_to_qrc_layers.map
+
+  According to qrc_tech_file, there are total 9 routing layers [ V(5) / H(4) ]
+
+Warning : LEF has more layers than cap table. [PHYS-24]
+        : Lef 'asap7_tech_4x_201209.lef' has '10' routing layers, technology file 'qrcTechFile_typ03_scaled4xV06' has '9' layers. Use technology file layers
+        : Check LEF and cap table file. Set attribute 'lef_cap_consistency_check_enable' false to skip the check.
+  Setting attribute of root '/': 'qrc_tech_file' = /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
+@file(genus.tcl) 526: proc mcu_libs_present ...
+@file(genus.tcl) 535: set MCU_MULTI_CORNER [genus_env_flag MCU_MULTI_CORNER 1]
+@file(genus.tcl) 537: create_library_set -name libset_tt -timing $ALL_TIMING_LIBS
+@file(genus.tcl) 538: create_rc_corner \
+    -name rc_typ \
+    -pre_route_res 1.0 \
+    -post_route_res 1.0 \
+    -pre_route_cap 1.0 \
+    -post_route_cap 1.0 \
+    -post_route_cross_cap 1.0 \
+    -pre_route_clock_res 0.0 \
+    -pre_route_clock_cap 0.0 \
+    -temperature 25
+@file(genus.tcl) 548: create_opcond \
+    -name opcond_tt_0p7v_25c \
+    -process 1.0 \
+    -voltage 0.7 \
+    -temperature 25
+@file(genus.tcl) 553: create_timing_condition \
+    -name tc_tt \
+    -library_sets libset_tt \
+    -opcond opcond_tt_0p7v_25c
+@file(genus.tcl) 557: create_delay_corner \
+    -name dc_tt \
+    -timing_condition tc_tt \
+    -rc_corner rc_typ
+@file(genus.tcl) 561: create_constraint_mode \
+    -name mode_func \
+    -sdc_files $SDC_FILE
+@file(genus.tcl) 564: create_analysis_view \
+    -name view_tt \
+    -constraint_mode mode_func \
+    -delay_corner dc_tt
+@file(genus.tcl) 568: set MCU_SETUP_VIEWS {view_tt}
+@file(genus.tcl) 569: set MCU_HOLD_VIEWS  {view_tt}
+@file(genus.tcl) 571: if {$MCU_MULTI_CORNER} {
+    set corner_missing {}
+    if {![mcu_libs_present $STD_LIBS_SS]} { lappend corner_missing SS }
+    if {![mcu_libs_present $STD_LIBS_FF]} { lappend corner_missing FF }
+
+    if {[llength $corner_missing] > 0} {
+        puts "WARNING: ===================================================="
+        puts "WARNING: khong tim thay du thu vien cho goc: $corner_missing"
+        puts "WARNING: da tim trong $STD_LIB_DIR theo ten ..._<goc>_ccs_..."
+        puts "WARNING: -> quay ve MOT goc TT.  KHONG co phan tich hold that,"
+        puts "WARNING:    va setup chua he duoc kiem o goc cham."
+        puts "WARNING: ===================================================="
+    } else {
+        create_library_set -name libset_ss -timing $ALL_TIMING_LIBS_SS
+        create_library_set -name libset_ff -timing $ALL_TIMING_LIBS_FF
+        create_rc_corner -name rc_ss -pre_route_res 1.0 -post_route_res 1.0 -pre_route_cap 1.0 -post_route_cap 1.0 -post_route_cross_cap 1.0 -pre_route_clock_res 0.0 -pre_route_clock_cap 0.0 -temperature 100
+        create_rc_corner -name rc_ff -pre_route_res 1.0 -post_route_res 1.0 -pre_route_cap 1.0 -post_route_cap 1.0 -post_route_cross_cap 1.0 -pre_route_clock_res 0.0 -pre_route_clock_cap 0.0 -temperature 0
+        create_timing_condition -name tc_ss -library_sets libset_ss
+        create_timing_condition -name tc_ff -library_sets libset_ff
+        create_delay_corner -name dc_ss -timing_condition tc_ss -rc_corner rc_ss
+        create_delay_corner -name dc_ff -timing_condition tc_ff -rc_corner rc_ff
+        create_analysis_view -name view_ss -constraint_mode mode_func -delay_corner dc_ss
+        create_analysis_view -name view_ff -constraint_mode mode_func -delay_corner dc_ff
+        set MCU_SETUP_VIEWS {view_ss view_tt}
+        set MCU_HOLD_VIEWS  {view_ff view_tt}
+    }
+} else {
+    puts "Multi-corner: TAT boi MCU_MULTI_CORNER=0 - chi con view_tt"
+}
+@file(genus.tcl) 601: set_analysis_view -setup $MCU_SETUP_VIEWS -hold $MCU_HOLD_VIEWS
+@file(genus.tcl) 602: puts "Analysis views: setup = $MCU_SETUP_VIEWS ; hold = $MCU_HOLD_VIEWS"
+Analysis views: setup = view_ss view_tt ; hold = view_ff view_tt
+@file(genus.tcl) 617: foreach rtl $RTL_FILES {
+    puts "Reading RTL: [file normalize $rtl]"
+    if {[catch {read_hdl -define {ASAP7} $rtl} rd_err]} {
+        error "read_hdl -define ASAP7 that bai tren $rtl: $rd_err"
+    }
+}
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/bin_gray_convert.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/cdc_bridge.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/clock_gate.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/fifo_async.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/fifo_sync.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/utils_axi_interconnect.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/utils_dma.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/apb_interconnect/apb_async_bridge.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/apb_interconnect/apb_interconnect.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_async_bridge.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_dispatcher_channel.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_slave_arbitration.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_interconnect/axi_interconnect.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/bus/axi_to_apb_bridge.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/branch_prediction_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/control_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/floating_point_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/forwarding_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/multiplier_divider_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/block_unit/pipeline_control_unit.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/pipeline_register/pipeline_register.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/pipeline_stage/pipeline_stage.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/register_file/register_file.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/core/riscv_pipeline.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/debug/dtm_axi_master.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/debug/rv_debug_module_sba.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/debug/rv_jtag_dtm.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_core.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint_reg_bus.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT/clint.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_axi_master.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma_core.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma/dma.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/plic/plic_core.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/plic/plic_reg_bus.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/plic/plic.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/asap7_sram_1rw.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/cache_sram_array.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_ram.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/tcm.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_rom.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_sdram_controller.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/axi_spi_flash.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/dcache.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/icache.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_cordic.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_gpio.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_i2c.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_pwm.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_spi.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_syscon.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_uart.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/peripheral/apb_watchdog.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v
+(* KEEP_HIERARCHY = "yes", DONT_TOUCH = "yes" *)
+   |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'KEEP_HIERARCHY' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v' on line 87, column 4.
+(* KEEP_HIERARCHY = "yes", DONT_TOUCH = "yes" *)
+                           |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'DONT_TOUCH' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v' on line 87, column 28.
+(* DONT_TOUCH = "yes" *)
+   |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'DONT_TOUCH' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v' on line 151, column 4.
+(* DONT_TOUCH = "yes" *)
+   |
+Warning : Unused attribute. [VLOGPT-506]
+        : Attribute 'DONT_TOUCH' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v' on line 164, column 4.
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/ascon_core.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/apb_ascon.v
+Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/top_soc.v
+@file(genus.tcl) 624: elaborate $TOP
+  Libraries have 334 usable logic and 46 usable sequential lib-cells.
+Info    : Elaborating Design. [ELAB-1]
+        : Elaborating top-level block 'top_soc' from file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/top_soc.v'.
+Info    : Reversed the data and condition priority for priority mux chain (possibly created from loop based RTL), using new loop reversal algorithm. [CDFG-780]
+        : Priority chain of muxes in module 'axi_read_reorder_buffer_SLV_AMT7_DATA_WIDTH32_ID_WIDTH5_LEN_WIDTH8_RESP_WIDTH2_ROB_DEPTH4_MAX_BURST_BEATS16_ROB_TAG_W2_BEAT_CNT_W5_ID_COUNT32_ID_PTR_W2_ID_CNT_W3_ROB_ID_WIDTH7_SLV_PTR_W3' for signal 'grant_idx_c' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v' on line 667.
+Info    : Reversed the data and condition priority for priority mux chain (possibly created from loop based RTL), using new loop reversal algorithm. [CDFG-780]
+        : Priority chain of muxes in module 'axi_read_reorder_buffer_SLV_AMT7_DATA_WIDTH32_ID_WIDTH5_LEN_WIDTH8_RESP_WIDTH2_ROB_DEPTH4_MAX_BURST_BEATS16_ROB_TAG_W2_BEAT_CNT_W5_ID_COUNT32_ID_PTR_W2_ID_CNT_W3_ROB_ID_WIDTH7_SLV_PTR_W3' for signal 'slv_grant_c' in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/utils/ROB.v' on line 667.
+Info    : Done Elaborating Design. [ELAB-3]
+        : Done elaborating 'top_soc'.
+Checking for source RTL...
+Check completed for source RTL.
+Running Unified Mux Engine Tricks...
+Completed Unified Mux Engine Tricks
+
+Stage: post_elab
+-------------------------------------------------------
+| Trick             | Accepts | Rejects | Runtime (s) | 
+-------------------------------------------------------
+| ume_constant_bmux |       0 |       0 |        0.01 | 
+| ume_merge         |       0 |       0 |        0.00 | 
+| ume_ssm           |       0 |       0 |        0.10 | 
+| ume_cse           |       1 |       0 |        0.52 | 
+| ume_shrink        |      31 |       0 |        0.08 | 
+| ume_sweep         |       2 |       0 |        0.12 | 
+| ume_constant_bmux |       0 |       0 |        0.01 | 
+| ume_merge         |       0 |       0 |        0.00 | 
+| ume_ssm           |       0 |       0 |        0.09 | 
+| ume_cse           |       0 |       0 |        0.36 | 
+| ume_shrink        |       0 |       0 |        0.02 | 
+| ume_sweep         |       0 |       0 |        0.11 | 
+-------------------------------------------------------
+Starting optimize datapath shifters [v1.0] (stage: post_elab, startdef: top_soc, recur: true)
+Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.005s)
+Starting clip mux common data inputs [v1.0] (stage: post_elab, startdef: top_soc, recur: true)
+Completed clip mux common data inputs (accepts: 0, rejects: 0, runtime: 0.027s)
+Starting clip the non-user hierarchies [v2.0] (stage: post_elab, startdef: top_soc, recur: true)
+Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.007s)
+Starting basic netlist cleanup [v1.0] (stage: post_elab, startdef: top_soc, recur: true)
+Completed basic netlist cleanup (accepts: 0, rejects: 0, runtime: 0.006s)
+
+Stage: post_elab
+--------------------------------------------------------------------
+| Transform                      | Accepts | Rejects | Runtime (s) | 
+--------------------------------------------------------------------
+| hlo_optimize_datapath_shifters |       0 |       0 |        0.00 | 
+| hlo_clip_mux_input             |       0 |       0 |        0.03 | 
+| hlo_clip                       |       0 |       0 |        0.01 | 
+| hlo_cleanup                    |       0 |       0 |        0.01 | 
+--------------------------------------------------------------------
+Info    : To insure proper verification, preserved netlist point(s) because they are involved in combinational loop(s). To disable this, set the 'cb_preserve_ports_nets' root attribute to 'false'. [ELABUTL-133]
+        : Preserved input pins of 1 hierarchical instance(s)  Set the 'print_ports_nets_preserved_for_cb' root attribute to 'true' to print out the affected nets and hierarchical instances.
+
+UM:   flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   elaborate
+@file(genus.tcl) 625: uniquify $TOP
+@file(genus.tcl) 626: check_design -unresolved > ./reports/check_design_unresolved.rpt
+
+@file(genus.tcl) 649: set MCU_PRESERVE_MODULES {
+    axi_ram
+    asap7_sram_1rw
+    tcm
+    riscv_pipeline
+    instruction_cache
+    data_cache
+    axi_interconnect
+    RingOscillator
+    xilinx_not
+    xilinx_nand
+    xilinx_primitive_not
+    xilinx_primitive_nand
+}
+@file(genus.tcl) 663: set MCU_ALL_MODULES [get_db modules]
+@file(genus.tcl) 664: foreach module_pattern $MCU_PRESERVE_MODULES {
+    set matched {}
+    foreach module_obj $MCU_ALL_MODULES {
+        set module_name [get_db $module_obj .name]
+        if {$module_name eq $module_pattern ||
+            [string match "${module_pattern}_*" $module_name]} {
+            lappend matched $module_obj
+        }
+    }
+    if {[llength $matched] == 0} {
+        error "preserve-hierarchy: khong module nao khop '$module_pattern' - kiem tra hau to uniquify trong reports/hierarchy_elaborated.rpt"
+    }
+    foreach module_obj $matched {
+        set_db $module_obj .ungroup_ok false
+        puts "Preserve hierarchy: [get_db $module_obj .name]"
+    }
+}
+  Setting attribute of module 'axi_ram_ID_WIDTH9_ADDR_MASK32h0001ffff_MEM_DEPTH32768': 'ungroup_ok' = false
+Preserve hierarchy: axi_ram_ID_WIDTH9_ADDR_MASK32h0001ffff_MEM_DEPTH32768
+  Setting attribute of module 'axi_ram_ID_WIDTH9_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1': 'ungroup_ok' = false
+Preserve hierarchy: axi_ram_ID_WIDTH9_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W11_DATA_W32': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W11_DATA_W32
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W11_DATA_W32_1': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W11_DATA_W32_1
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W9_DATA_W19': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W9_DATA_W19
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W9_DATA_W19_1': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W9_DATA_W19_1
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W11_DATA_W32_2': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W11_DATA_W32_2
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W11_DATA_W32_3': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W11_DATA_W32_3
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W9_DATA_W19_2': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W9_DATA_W19_2
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W9_DATA_W19_3': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W9_DATA_W19_3
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W12_DATA_W32': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W12_DATA_W32
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W12_DATA_W32_1': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W12_DATA_W32_1
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W15_DATA_W32': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W15_DATA_W32
+  Setting attribute of module 'asap7_sram_1rw_ADDR_W15_DATA_W32_1': 'ungroup_ok' = false
+Preserve hierarchy: asap7_sram_1rw_ADDR_W15_DATA_W32_1
+  Setting attribute of module 'tcm_SIZE_BYTES16384_HAS_FETCH_PORT1': 'ungroup_ok' = false
+Preserve hierarchy: tcm_SIZE_BYTES16384_HAS_FETCH_PORT1
+  Setting attribute of module 'tcm_SIZE_BYTES16384_HAS_FETCH_PORT0': 'ungroup_ok' = false
+Preserve hierarchy: tcm_SIZE_BYTES16384_HAS_FETCH_PORT0
+  Setting attribute of module 'riscv_pipeline': 'ungroup_ok' = false
+Preserve hierarchy: riscv_pipeline
+  Setting attribute of module 'instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2': 'ungroup_ok' = false
+Preserve hierarchy: instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2
+  Setting attribute of module 'data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4': 'ungroup_ok' = false
+Preserve hierarchy: data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4
+  Setting attribute of module 'axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_ROB_TAG_W2_ROB_ID_WIDTH7_TRANS_SLV_ID_W9_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff0000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0': 'ungroup_ok' = false
+Preserve hierarchy: axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_ROB_TAG_W2_ROB_ID_WIDTH7_TRANS_SLV_ID_W9_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff0000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0
+  Setting attribute of module 'RingOscillator': 'ungroup_ok' = false
+Preserve hierarchy: RingOscillator
+  Setting attribute of module 'xilinx_not': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_not
+  Setting attribute of module 'xilinx_not_1': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_not_1
+  Setting attribute of module 'xilinx_not_2': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_not_2
+  Setting attribute of module 'xilinx_not_3': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_not_3
+  Setting attribute of module 'xilinx_not_4': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_not_4
+  Setting attribute of module 'xilinx_not_5': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_not_5
+  Setting attribute of module 'xilinx_nand': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_nand
+  Setting attribute of module 'xilinx_primitive_not': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_primitive_not
+  Setting attribute of module 'xilinx_primitive_not_1': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_primitive_not_1
+  Setting attribute of module 'xilinx_primitive_not_2': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_primitive_not_2
+  Setting attribute of module 'xilinx_primitive_not_3': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_primitive_not_3
+  Setting attribute of module 'xilinx_primitive_not_4': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_primitive_not_4
+  Setting attribute of module 'xilinx_primitive_not_5': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_primitive_not_5
+  Setting attribute of module 'xilinx_primitive_nand': 'ungroup_ok' = false
+Preserve hierarchy: xilinx_primitive_nand
+@file(genus.tcl) 692: set MCU_RO_INSTS {}
+@file(genus.tcl) 693: foreach inst_obj [get_db insts -if {.hdl_name == *RingOscillator* ||
+                                    .name == *ro_invs_not_gate* ||
+                                    .name == *ro_nand_nand_gate*}] {
+    lappend MCU_RO_INSTS $inst_obj
+}
+Error   : Evaluation for '-if/-expr' option failed. [TUI-180] [get_db]
+        : Expression '.hdl_name == *RingOscillator* ||
+                                    .name == *ro_invs_not_gate* ||
+                                    .name == *ro_nand_nand_gate*' provided to '-if/-expr' option is invalid.
+        : Check '-if/-expr' option.
 #@ End verbose source ./tcl/genus.tcl
-Expected exactly 55 RTL files, found 58
+1
 Encountered problems processing file: tcl/genus.tcl
 WARNING: This version of the tool is 559 days old.
-@genus:root: 2> exitt
-invalid command name "exitt"
-@genus:root: 3> exit
+@genus:root: 2> exit
 
 Lic Summary:
-[02:41:45.063418] Cdslmd servers: vm-fsemi-edu02-h4l0gt0b
-[02:41:45.063426] Feature usage summary:
-[02:41:45.063426] Genus_Synthesis
+[02:48:17.256746] Cdslmd servers: vm-fsemi-edu02-h4l0gt0b
+[02:48:17.781041] Feature usage summary:
+[02:48:17.781041] Genus_Synthesis
 
 Normal exit.
