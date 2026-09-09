@@ -133,7 +133,31 @@ module sa_Ax_channel
     // Slave info configuration
     parameter                       SLV_ID              = 0,
     parameter                       SLV_ID_MSB_IDX      = 30,
-    parameter                       SLV_ID_LSB_IDX      = 30
+    parameter                       SLV_ID_LSB_IDX      = 30,
+    // -------------------------------------------------------------------------
+    // R4 - khong mang LOCK/CACHE/QOS/REGION qua FIFO cua tung master.
+    //
+    // top_soc.v:1063 noi CUNG bon truong nay bang hang so cho MOI master:
+    //   m_AWLOCK_i = 0, m_AWCACHE_i = 4'b0011, m_AWQOS_i = 0, m_AWREGION_i = 0
+    // = 13 bit hang so. (AxPROT 3 bit KHONG phai hang so - no la tin hieu that
+    // cua tung master, nen van di qua FIFO nhu cu.)
+    //
+    // FIFO nay sau OUTSTANDING_AMT, mot cai cho MOI master, MOI kenh (AW/AR),
+    // MOI slave: 4 x 4 x 2 x 7 x 13 bit = 2 912 flop hang so. Genus dep sach
+    // chung (13 912 flop bi xoa trong bay khoi slave_arbitration -
+    // reports/deleted_sequential_syn.rpt), nen DAT AXI_SIDEBAND_EN = 0 KHONG
+    // giam dien tich cuoi cung mot chut nao. Cai duoc la thoi gian elaborate /
+    // generic, peak memory, va mot netlist ma LEC/DFT ve sau doc duoc.
+    //
+    // Mac dinh 1 = mang day du nhu cu, nen moi ban instantiate khong khai bao gi
+    // giu nguyen hanh vi. Khi dat 0 thi bon truong duoc TAI TAO o dau ra tu bon
+    // parameter hang so ben duoi - gia tri o chan slave khong doi mot bit nao.
+    // -------------------------------------------------------------------------
+    parameter                       AXI_SIDEBAND_EN     = 1,
+    parameter [0:0]                 AXI_LOCK_CONST      = 1'b0,
+    parameter [3:0]                 AXI_CACHE_CONST     = 4'b0011,
+    parameter [3:0]                 AXI_QOS_CONST       = 4'b0000,
+    parameter [3:0]                 AXI_REGION_CONST    = 4'b0000
 )
 (
     // Input declaration
@@ -180,7 +204,10 @@ module sa_Ax_channel
     output                                  xDATA_fifo_order_wr_en_o
 );
     // Local parameters initialization
-    localparam ADDR_INFO_W  = DSP_ID_W + ADDR_WIDTH + TRANS_BURST_W + TRANS_DATA_LEN_W + TRANS_DATA_SIZE_W + 1 + 4 + 3 + 4 + 4; // +LOCK+CACHE+PROT+QOS+REGION
+    // R4 - 13 bit sideband hang so (LOCK 1 + CACHE 4 + QOS 4 + REGION 4) chi nam
+    // trong payload khi AXI_SIDEBAND_EN != 0. PROT (3 bit) LUON di qua.
+    localparam SB_W         = (AXI_SIDEBAND_EN != 0) ? (1 + 4 + 4 + 4) : 0;
+    localparam ADDR_INFO_W  = DSP_ID_W + ADDR_WIDTH + TRANS_BURST_W + TRANS_DATA_LEN_W + TRANS_DATA_SIZE_W + 3 + SB_W; // +PROT (+LOCK+CACHE+QOS+REGION khi bat)
     localparam AX_INFO_W    = TRANS_SLV_ID_W + ADDR_WIDTH + TRANS_BURST_W + TRANS_DATA_LEN_W + TRANS_DATA_SIZE_W + 1 + 4 + 3 + 4 + 4; // +LOCK+CACHE+PROT+QOS+REGION
     localparam ID_PAD_W     = TRANS_SLV_ID_W - MST_ID_W - DSP_ID_W;
     
@@ -374,7 +401,19 @@ module sa_Ax_channel
         // Dispatcher interface
         assign dsp_AxREADY_o[mst_idx] = ~(dsp_dispatcher_full_i[mst_idx] | fifo_addr_info_full[mst_idx]);
         // FIFO
-        assign ADDR_info[mst_idx] = {dsp_AxID_i[DSP_ID_W*(mst_idx+1)-1-:DSP_ID_W], dsp_AxADDR_i[ADDR_WIDTH*(mst_idx+1)-1-:ADDR_WIDTH], dsp_AxBURST_i[TRANS_BURST_W*(mst_idx+1)-1-:TRANS_BURST_W], dsp_AxLEN_i[TRANS_DATA_LEN_W*(mst_idx+1)-1-:TRANS_DATA_LEN_W], dsp_AxSIZE_i[TRANS_DATA_SIZE_W*(mst_idx+1)-1-:TRANS_DATA_SIZE_W], dsp_AxLOCK_i[mst_idx], dsp_AxCACHE_i[4*(mst_idx+1)-1-:4], dsp_AxPROT_i[3*(mst_idx+1)-1-:3], dsp_AxQOS_i[4*(mst_idx+1)-1-:4], dsp_AxREGION_i[4*(mst_idx+1)-1-:4]};
+        // R4 - hai cach dong goi, khac nhau dung 13 bit sideband hang so.
+        if (AXI_SIDEBAND_EN != 0) begin : G_SIDEBAND_FULL
+            assign ADDR_info[mst_idx] = {dsp_AxID_i[DSP_ID_W*(mst_idx+1)-1-:DSP_ID_W], dsp_AxADDR_i[ADDR_WIDTH*(mst_idx+1)-1-:ADDR_WIDTH], dsp_AxBURST_i[TRANS_BURST_W*(mst_idx+1)-1-:TRANS_BURST_W], dsp_AxLEN_i[TRANS_DATA_LEN_W*(mst_idx+1)-1-:TRANS_DATA_LEN_W], dsp_AxSIZE_i[TRANS_DATA_SIZE_W*(mst_idx+1)-1-:TRANS_DATA_SIZE_W], dsp_AxLOCK_i[mst_idx], dsp_AxCACHE_i[4*(mst_idx+1)-1-:4], dsp_AxPROT_i[3*(mst_idx+1)-1-:3], dsp_AxQOS_i[4*(mst_idx+1)-1-:4], dsp_AxREGION_i[4*(mst_idx+1)-1-:4]};
+            assign {AxID_valid[mst_idx], AxADDR_valid[mst_idx], AxBURST_valid[mst_idx], AxLEN_valid[mst_idx], AxSIZE_valid[mst_idx], AxLOCK_valid[mst_idx], AxCACHE_valid[mst_idx], AxPROT_valid[mst_idx], AxQOS_valid[mst_idx], AxREGION_valid[mst_idx]} = ADDR_info_valid[mst_idx];
+        end else begin : G_SIDEBAND_TIED
+            assign ADDR_info[mst_idx] = {dsp_AxID_i[DSP_ID_W*(mst_idx+1)-1-:DSP_ID_W], dsp_AxADDR_i[ADDR_WIDTH*(mst_idx+1)-1-:ADDR_WIDTH], dsp_AxBURST_i[TRANS_BURST_W*(mst_idx+1)-1-:TRANS_BURST_W], dsp_AxLEN_i[TRANS_DATA_LEN_W*(mst_idx+1)-1-:TRANS_DATA_LEN_W], dsp_AxSIZE_i[TRANS_DATA_SIZE_W*(mst_idx+1)-1-:TRANS_DATA_SIZE_W], dsp_AxPROT_i[3*(mst_idx+1)-1-:3]};
+            assign {AxID_valid[mst_idx], AxADDR_valid[mst_idx], AxBURST_valid[mst_idx], AxLEN_valid[mst_idx], AxSIZE_valid[mst_idx], AxPROT_valid[mst_idx]} = ADDR_info_valid[mst_idx];
+            assign AxLOCK_valid[mst_idx]   = AXI_LOCK_CONST;
+            assign AxCACHE_valid[mst_idx]  = AXI_CACHE_CONST;
+            assign AxQOS_valid[mst_idx]    = AXI_QOS_CONST;
+            assign AxREGION_valid[mst_idx] = AXI_REGION_CONST;
+            wire _unused_sideband = &{1'b0, dsp_AxLOCK_i[mst_idx], dsp_AxCACHE_i[4*(mst_idx+1)-1-:4], dsp_AxQOS_i[4*(mst_idx+1)-1-:4], dsp_AxREGION_i[4*(mst_idx+1)-1-:4]};
+        end
         assign AxADDR_i[mst_idx] = dsp_AxADDR_i[ADDR_WIDTH*(mst_idx+1)-1-:ADDR_WIDTH];
         // The dispatcher already decoded the target slave using SLV_BASE_ADDR/SLV_ADDR_MASK.
         // Re-decoding here with fixed high address bits breaks non-contiguous maps such as
@@ -383,7 +422,6 @@ module sa_Ax_channel
         assign dsp_AxVALID_dec[mst_idx] = slv_addr_decoder[mst_idx] & dsp_AxVALID_i[mst_idx];
         assign dsp_handshake_occur[mst_idx] = dsp_AxVALID_dec[mst_idx] & dsp_AxREADY_o[mst_idx];
         assign fifo_addr_info_wr_en[mst_idx] = dsp_handshake_occur[mst_idx];
-        assign {AxID_valid[mst_idx], AxADDR_valid[mst_idx], AxBURST_valid[mst_idx], AxLEN_valid[mst_idx], AxSIZE_valid[mst_idx], AxLOCK_valid[mst_idx], AxCACHE_valid[mst_idx], AxPROT_valid[mst_idx], AxQOS_valid[mst_idx], AxREGION_valid[mst_idx]} = ADDR_info_valid[mst_idx];
         // ADDR mask controller
         assign rd_addr_info[mst_idx] = arb_grant_valid[mst_idx] & xADDR_channel_shift_en & AxVALID_o_nxt;
         assign fifo_addr_info_rd_en[mst_idx] = rd_addr_info[mst_idx] & (~msk_addr_crossing_flag[mst_idx] | msk_split_addr_sel[mst_idx]);
@@ -1221,7 +1259,13 @@ module ai_slave_arbitration
     parameter                       SLV_ID_MSB_IDX      = 30,
     parameter                       SLV_ID_LSB_IDX      = 30,
     // T3 - do sau FIFO write-data rieng cho slave nay (xem sa_W_channel)
-    parameter                       W_FIFO_DEPTH        = 32
+    parameter                       W_FIFO_DEPTH        = 32,
+    // R4 - xem ghi chu trong sa_Ax_channel
+    parameter                       AXI_SIDEBAND_EN     = 1,
+    parameter [0:0]                 AXI_LOCK_CONST      = 1'b0,
+    parameter [3:0]                 AXI_CACHE_CONST     = 4'b0011,
+    parameter [3:0]                 AXI_QOS_CONST       = 4'b0000,
+    parameter [3:0]                 AXI_REGION_CONST    = 4'b0000
 )
 (
     // Input declaration
@@ -1362,6 +1406,11 @@ module ai_slave_arbitration
     // Write channel
     // Write Address channel
     sa_Ax_channel #(
+        .AXI_SIDEBAND_EN(AXI_SIDEBAND_EN),
+        .AXI_LOCK_CONST(AXI_LOCK_CONST),
+        .AXI_CACHE_CONST(AXI_CACHE_CONST),
+        .AXI_QOS_CONST(AXI_QOS_CONST),
+        .AXI_REGION_CONST(AXI_REGION_CONST),
         .MST_AMT(MST_AMT),
         .OUTSTANDING_AMT(OUTSTANDING_AMT),
         .MST_WEIGHT(MST_WEIGHT),
@@ -1473,6 +1522,11 @@ module ai_slave_arbitration
     // Read channel
     // Read Address channel
     sa_Ax_channel #(
+        .AXI_SIDEBAND_EN(AXI_SIDEBAND_EN),
+        .AXI_LOCK_CONST(AXI_LOCK_CONST),
+        .AXI_CACHE_CONST(AXI_CACHE_CONST),
+        .AXI_QOS_CONST(AXI_QOS_CONST),
+        .AXI_REGION_CONST(AXI_REGION_CONST),
         .MST_AMT(MST_AMT),
         .OUTSTANDING_AMT(OUTSTANDING_AMT),
         .MST_WEIGHT(MST_WEIGHT),

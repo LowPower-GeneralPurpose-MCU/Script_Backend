@@ -4,6 +4,7 @@
 #   ./run_soc_sim.sh apb    - SoC_testbench.sv : quet thanh ghi APB cua ngoai vi
 #   ./run_soc_sim.sh fw     - tb_top_soc.v     : chay firmware that qua CPU
 #   ./run_soc_sim.sh mem    - tb_mem_paths.sv  : RAM hi / TCM / DMA / store MMIO
+#   ./run_soc_sim.sh ascon  - tb_ascon_apb.sv  : KAT ASCON-128 / ASCON-Hash qua APB
 #   ./run_soc_sim.sh all    - ca ba (mac dinh)
 #
 # Bien moi truong ghi de duoc:
@@ -34,6 +35,7 @@ OUT_DIR="$(winpath "${OUT_DIR:-$HERE/sim_work}")"
 FW_MEM="$(winpath "${FW_MEM:-$REPO/Driver/my_soc_firmware_word.mem}")"
 APB_TB="$REPO/Test_bench/SoC_testbench.sv"
 MEM_TB="$HERE/tb_mem_paths.sv"
+ASCON_TB="$HERE/tb_ascon_apb.sv"
 FW_TB="$REPO/Driver/tb_top_soc.v"
 MODE="${1:-all}"
 SAIF="${SAIF:-0}"
@@ -104,10 +106,22 @@ quit
     grep -E '^\[FAIL\]|^\[INFO\]|PASS COUNT|FAIL COUNT|TIMEOUTS|RESULT' xsim_mem.log || true
 }
 
+run_ascon() {
+    echo "=== ASCON KAT testbench ==="
+    xvlog.bat -sv -work asc "${INC[@]}" -f rtl_files.f "$ASCON_TB" > xvlog_ascon.log
+    xelab.bat -relax -s ascon_sim -timescale 1ns/1ps asc.tb_ascon_apb -L asc > xelab_ascon.log
+    printf 'run all
+quit
+' > run.tcl
+    xsim.bat ascon_sim -tclbatch run.tcl > xsim_ascon.log
+    grep -E '^\[TB\]\[FAIL\]|PASS COUNT|FAIL COUNT|RESULT' xsim_ascon.log || true
+}
+
 case "$MODE" in
-    apb) run_apb ;;
-    fw)  run_fw ;;
-    mem) run_mem ;;
-    all) run_apb; run_fw; run_mem ;;
-    *)   echo "cach dung: $0 [apb|fw|mem|all]"; exit 1 ;;
+    apb)   run_apb ;;
+    fw)    run_fw ;;
+    mem)   run_mem ;;
+    ascon) run_ascon ;;
+    all)   run_apb; run_fw; run_mem; run_ascon ;;
+    *)     echo "cach dung: $0 [apb|fw|mem|ascon|all]"; exit 1 ;;
 esac

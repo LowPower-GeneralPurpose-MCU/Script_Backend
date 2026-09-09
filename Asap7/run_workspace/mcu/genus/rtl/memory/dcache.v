@@ -48,6 +48,20 @@ module data_cache #(
     // Ban TO HOP tu dia chi song cua CPU. KHONG dung truc tiep trong FSM - xem
     // ghi chu ve chot uncache ben duoi; ten `uncache_en` la ban DA CHOT.
     input  wire                          uncache_en_i,
+
+    // -------------------------------------------------------------------------
+    // R1b - bat tay hai chu ky cho lenh nguyen tu doc-sua-ghi.
+    //
+    // `cpu_amo_req` len khi lenh o tang MEM la mot AMO that (khong phai LR/SC).
+    // Cache giu no them DUNG mot chu ky trong LOOKUP: chu ky dau tra gia tri cu
+    // va bao `dcache_amo_capture`, chu ky sau moi nhan ket qua ALU de day vao
+    // store buffer. Nho vay chuoi
+    //   state -> so tag -> mux way -> AMO ALU o u_core/MEM -> nguoc ve day
+    // bi cat lam doi, moi nua bat dau hoac ket thuc o mot thanh ghi.
+    // -------------------------------------------------------------------------
+    input  wire                          cpu_amo_req,
+    output wire                          dcache_amo_capture,
+
     output reg  [C_M_AXI_DATA_W-1:0]     cpu_read_data,
     output reg                           dcache_hit,
     output reg                           dcache_stall,
@@ -351,8 +365,13 @@ module data_cache #(
     // cycle that also releases the core.  Gating the array write with the same
     // term keeps the merge single-shot when the buffer is full and LOOKUP has
     // to be held for several cycles.
+    // R1b - `amo_hold` danh dau chu ky DAU cua mot AMO: chua duoc day vao store
+    // buffer, chua duoc nha stall, vi ket qua ALU chua ton tai.
+    reg  amo_pending;
+    wire amo_hold = cpu_amo_req && !amo_pending;
+
     wire sb_push = (state == LOOKUP) && cpu_write_req && !uncache_en &&
-                   (cpu_addr == req_addr) && !sb_full;
+                   (cpu_addr == req_addr) && !sb_full && !amo_hold;
 
     // Keep the AXI payload/address datapath outside the cache control
     // combinational process.  This removes a false combinational loop between
@@ -375,12 +394,49 @@ module data_cache #(
     // is what an UNCACHED store uses.  The two are mutually exclusive by
     // construction (see rules 1 and 2 above), so this is a select, not an
     // arbiter.
+    // -------------------------------------------------------------------------
+    // R1a - payload W cua duong FSM duoc CHOT, khong con to hop tu cpu_write_data.
+    //
+    // Truoc:  m_axi_wdata = sb_active ? sb_data[sb_head]
+    //                                 : lane_align_wdata(cpu_write_data, mem_size);
+    // Nhanh thu hai la mot duong TO HOP chay thang tu `cpu_write_data` ra chan
+    // AXI, tuc ra thang FIFO CDC cua u_dc_axi_bridge. Ma `cpu_write_data` cho
+    // mot lenh nguyen tu lai la ket qua cua ca chuoi
+    //
+    //   dcache state -> so tag 2-way -> mux way -> read_data_with_size
+    //     -> AMO ALU trong u_core/MEM -> quay nguoc ve day
+    //
+    // Do chinh la 99 trong 100 duong toi han cua ban tong hop 2026-09-09
+    // (`u_dcache_state_reg[0]` -> `u_dc_axi_bridge_u_w_fifo.../buffer_reg`,
+    // slack +2 ps). Chot payload vao thanh ghi CAT HAN duong do: dau ra AXI gio
+    // chi den tu flop (`sb_data[sb_head]` hoac `fsm_wdata_q`).
+    //
+    // An toan ve thoi diem chot: duong FSM (khac duong store buffer) chi phuc vu
+    // giao dich UNCACHED. Suot IDLE -> AW_REQ -> W_REQ -> B_WAIT thi
+    // `dcache_stall` giu nguyen 1, nen lenh dung yen o tang MEM va
+    // `cpu_write_data` / `mem_size` / `cpu_addr` khong doi. Chot lap lai o moi
+    // chu ky IDLE co yeu cau la vo hai va idempotent.
+    //
+    // KHONG doi hanh vi mot chu ky nao: gia tri co mat o W_REQ y het truoc day.
+    // Gia: 32 + 4 flop.
+    // -------------------------------------------------------------------------
+    reg [C_M_AXI_DATA_W-1:0]     fsm_wdata_q;
+    reg [(C_M_AXI_DATA_W/8)-1:0] fsm_wstrb_q;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            fsm_wdata_q <= {C_M_AXI_DATA_W{1'b0}};
+            fsm_wstrb_q <= {(C_M_AXI_DATA_W/8){1'b0}};
+        end else if (state == IDLE && (cpu_read_req || cpu_write_req)) begin
+            fsm_wdata_q <= lane_align_wdata(cpu_write_data, mem_size);
+            fsm_wstrb_q <= gen_wstrb(mem_size, byte_offset);
+        end
+    end
+
     assign m_axi_awaddr = sb_active ? sb_addr[sb_head]
                                     : {current_addr[C_M_AXI_ADDR_W-1:2], 2'b00};
-    assign m_axi_wdata  = sb_active ? sb_data[sb_head]
-                                    : lane_align_wdata(cpu_write_data, mem_size);
-    assign m_axi_wstrb  = sb_active ? sb_strb[sb_head]
-                                    : gen_wstrb(mem_size, byte_offset);
+    assign m_axi_wdata  = sb_active ? sb_data[sb_head] : fsm_wdata_q;
+    assign m_axi_wstrb  = sb_active ? sb_strb[sb_head] : fsm_wstrb_q;
     assign m_axi_wlast  = 1'b1;
     assign m_axi_arlen  = uncache_en ? 8'd0 : BURST_LEN;
     assign m_axi_araddr = uncache_en
@@ -518,7 +574,16 @@ module data_cache #(
                     // SLVERR (2'b10) or DECERR (2'b11); bit [1] covers both.
                     if (m_axi_bresp[1]) sb_err_cnt <= 8'd255;
                 end
-                default: sb_state <= SB_IDLE;
+                // R8 - khong con `default`.
+                //
+                // `sb_state` rong 2 bit va bon ma SB_IDLE/SB_AW/SB_W/SB_B phu
+                // KIN 4 gia tri, nen nhanh default khong the toi duoc va Genus
+                // bao CDFG-472 moi lan chay. No khong he la luoi an toan: thanh
+                // ghi khong the giu gia tri nao khac de ma roi vao do.
+                //
+                // Muon co phong thu that thi phai doi sang one-hot va kiem tra
+                // popcount != 1 - do la mot quyet dinh khac, khong phai mot dong
+                // `default` cho co.
             endcase
 
             // Hold the imprecise error long enough for the clk_apb PLIC gateway
@@ -550,6 +615,19 @@ module data_cache #(
                 read_word = data_out_bus[w*C_M_AXI_DATA_W +: C_M_AXI_DATA_W];
             end
         end
+    end
+
+    // R1b - dat sau khoi tinh `hit_flag` o tren vi no dung tin hieu do.
+    assign dcache_amo_capture = (state == LOOKUP) && amo_hold && !uncache_en &&
+                                (cpu_addr == req_addr) && hit_flag;
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            amo_pending <= 1'b0;
+        else if (state != LOOKUP)
+            amo_pending <= 1'b0;
+        else if (dcache_amo_capture)
+            amo_pending <= 1'b1;
     end
 
     always @(*) begin
@@ -615,9 +693,14 @@ module data_cache #(
                 dcache_stall = 1'b1;
                 if (cpu_read_req && cpu_addr == req_addr) begin
                     if (hit_flag) begin
-                        dcache_stall = 1'b0;
-                        dcache_hit   = 1'b1;
-                        next_state   = IDLE;
+                        // R1b - mot AMO phai o lai them mot chu ky. `amo_hold`
+                        // chi cao o chu ky dau; chu ky sau no ha va nhanh nay
+                        // nha stall y het truoc day.
+                        if (!amo_hold) begin
+                            dcache_stall = 1'b0;
+                            dcache_hit   = 1'b1;
+                            next_state   = IDLE;
+                        end
                     end else if (sb_drained) begin
                         next_state = AR_REQ;
                     end
@@ -683,9 +766,35 @@ module data_cache #(
 
                 // 2. RÀNG BUỘC TÍN HIỆU TRẢ VỀ CPU BẰNG ĐỊA CHỈ
                 if (cpu_addr == req_addr) begin
-                    // Nhả stall và báo Hit vì lệnh vẫn còn nguyên (không bị Flush)
-                    dcache_stall = 1'b0;
-                    dcache_hit   = 1'b1;
+                    // ---------------------------------------------------------
+                    // R11 - mot AMO TRUOT phai chay lai vong tra cuu, khong duoc
+                    // nha o day.
+                    //
+                    // Loi NAY CO TU TRUOC R1b. Mot AMO dat CA cpu_read_req va
+                    // cpu_write_req. O LOOKUP, nhanh doc duoc uu tien; neu TRUOT
+                    // thi FSM di AR_REQ -> R_WAIT -> DONE. Nhung `sb_push` doi
+                    // `state == LOOKUP`, nen khi DONE nha stall thi lenh nguyen
+                    // tu RETIRE MA KHONG HE GHI. Mot `amoadd` vao line chua nam
+                    // trong cache am tham bien thanh mot lenh doc.
+                    //
+                    // Sua: giu stall va quay ve IDLE. Line vua duoc nap va
+                    // way_update da danh dau valid ngay trong chu ky nay, nen
+                    // vong thu hai chac chan HIT roi chay dung nhip hai chu ky
+                    // cua R1b.
+                    //
+                    // `!bus_err_r` la bat buoc: khi refill loi thi way_update bi
+                    // chan (xem muc 1 o tren), line KHONG valid, nen vong thu hai
+                    // se truot tiep -> lap vo han. Truong hop do phai nha ra de
+                    // `dcache_error` o duoi bao trap.
+                    // ---------------------------------------------------------
+                    if (cpu_amo_req && !uncache_en && !bus_err_r) begin
+                        dcache_stall = 1'b1;
+                        dcache_hit   = 1'b0;
+                    end else begin
+                        // Nhả stall và báo Hit vì lệnh vẫn còn nguyên (không bị Flush)
+                        dcache_stall = 1'b0;
+                        dcache_hit   = 1'b1;
+                    end
                 end else begin
                     // Lệnh đã bị Flush sang địa chỉ khác. Giữ stall để FSM quay về IDLE.
                     dcache_stall  = 1'b1;
@@ -694,7 +803,11 @@ module data_cache #(
 
                 next_state = IDLE;
             end
-            default: next_state = IDLE;
+            // R8 - khong con `default`: xem ghi chu o case sb_state ben tren.
+            // `state` rong 3 bit va tam ma IDLE..DONE (3'd0..3'd7) phu KIN 8 gia
+            // tri, nen default la nhanh chet (CDFG-472). Moi ngo ra cua khoi nay
+            // da duoc gan mac dinh o dau always @(*) nen bo default KHONG sinh
+            // latch.
         endcase
     end
 

@@ -498,6 +498,42 @@ if {$GENUS_PHYSICAL} {
     puts "         synthesis timing will contain NO wire delay"
 }
 
+# -----------------------------------------------------------------------------
+# F2 - ba goc, va hold TACH KHOI setup.
+#
+# Truoc: dung MOT library_set (TT 0.7 V 25 C), MOT delay_corner, MOT view, va
+# `set_analysis_view -setup {view_tt} -hold {view_tt}`. Nghia la thiet ke CHUA
+# TUNG duoc phan tich hold o goc nhanh, cung chua tung duoc phan tich setup o goc
+# cham. Voi 12 420 flop reset bat dong bo va hang loat CDC thi hold o goc FF la
+# rui ro that, khong phai ly thuyet.
+#
+# Bon dieu co y trong khoi nay:
+#
+#  1. Neu ban PDK tren may khong co du SS/FF thi flow KHONG gay: no in canh bao
+#     that to va quay ve che do mot goc nhu cu. Tat han bang MCU_MULTI_CORNER=0.
+#     (Genus chay tren may Linux khac nen khong kiem tra truoc duoc tu day.)
+#  2. Timing condition cua SS/FF co y KHONG khai bao opcond: de Genus lay dung
+#     operating condition danh dinh ghi trong chinh .lib, thay vi ta doan P/V/T
+#     roi ep sai. TT giu opcond tuong minh nhu cu de ket qua da co khong doi.
+#  3. rc_corner rieng cho tung goc chi de khop NHIET DO; ca ba dung chung mot
+#     QRC tech file vi PDK chi co mot.
+#  4. SRAM .lib chi co MOT goc (xem project_config.tcl), nen do tre cua 84 macro
+#     giong het nhau o ca ba view. Phai nho dieu do khi doc bao cao hold.
+#
+# Chi phi: ba view lam thoi gian phan tich timing tang khoang ba lan. Nen bu lai
+# bang cach cho Genus chay nhieu thread - PBS-2 dang bao no chay 1 thread.
+# -----------------------------------------------------------------------------
+proc mcu_libs_present {libs} {
+    foreach lib $libs {
+        if {![file isfile $lib]} {
+            return 0
+        }
+    }
+    return 1
+}
+
+set MCU_MULTI_CORNER [genus_env_flag MCU_MULTI_CORNER 1]
+
 create_library_set -name libset_tt -timing $ALL_TIMING_LIBS
 create_rc_corner \
     -name rc_typ \
@@ -529,11 +565,60 @@ create_analysis_view \
     -name view_tt \
     -constraint_mode mode_func \
     -delay_corner dc_tt
-set_analysis_view -setup {view_tt} -hold {view_tt}
+set MCU_SETUP_VIEWS {view_tt}
+set MCU_HOLD_VIEWS  {view_tt}
 
+if {$MCU_MULTI_CORNER} {
+    set corner_missing {}
+    if {![mcu_libs_present $STD_LIBS_SS]} { lappend corner_missing SS }
+    if {![mcu_libs_present $STD_LIBS_FF]} { lappend corner_missing FF }
+
+    if {[llength $corner_missing] > 0} {
+        puts "WARNING: ===================================================="
+        puts "WARNING: khong tim thay du thu vien cho goc: $corner_missing"
+        puts "WARNING: da tim trong $STD_LIB_DIR theo ten ..._<goc>_ccs_..."
+        puts "WARNING: -> quay ve MOT goc TT.  KHONG co phan tich hold that,"
+        puts "WARNING:    va setup chua he duoc kiem o goc cham."
+        puts "WARNING: ===================================================="
+    } else {
+        create_library_set -name libset_ss -timing $ALL_TIMING_LIBS_SS
+        create_library_set -name libset_ff -timing $ALL_TIMING_LIBS_FF
+        create_rc_corner -name rc_ss -pre_route_res 1.0 -post_route_res 1.0 -pre_route_cap 1.0 -post_route_cap 1.0 -post_route_cross_cap 1.0 -pre_route_clock_res 0.0 -pre_route_clock_cap 0.0 -temperature 100
+        create_rc_corner -name rc_ff -pre_route_res 1.0 -post_route_res 1.0 -pre_route_cap 1.0 -post_route_cap 1.0 -post_route_cross_cap 1.0 -pre_route_clock_res 0.0 -pre_route_clock_cap 0.0 -temperature 0
+        create_timing_condition -name tc_ss -library_sets libset_ss
+        create_timing_condition -name tc_ff -library_sets libset_ff
+        create_delay_corner -name dc_ss -timing_condition tc_ss -rc_corner rc_ss
+        create_delay_corner -name dc_ff -timing_condition tc_ff -rc_corner rc_ff
+        create_analysis_view -name view_ss -constraint_mode mode_func -delay_corner dc_ss
+        create_analysis_view -name view_ff -constraint_mode mode_func -delay_corner dc_ff
+        set MCU_SETUP_VIEWS {view_ss view_tt}
+        set MCU_HOLD_VIEWS  {view_ff view_tt}
+    }
+} else {
+    puts "Multi-corner: TAT boi MCU_MULTI_CORNER=0 - chi con view_tt"
+}
+
+set_analysis_view -setup $MCU_SETUP_VIEWS -hold $MCU_HOLD_VIEWS
+puts "Analysis views: setup = $MCU_SETUP_VIEWS ; hold = $MCU_HOLD_VIEWS"
+
+# -----------------------------------------------------------------------------
+# `ASAP7` bat nhanh instantiate THANG cell chuan trong rtl/apb_ascon/trng_128b.v.
+#
+# Ring oscillator cua TRNG la mot vong lap to hop. Neu de Genus tu map
+# `assign out = ~i0` thi bo toi uu Boolean gop bay tang inverter thanh mot
+# buffer (hoac xoa han vi la vong lap) -> bo dao dong bien mat va `rand_out`
+# ket o mot gia tri co dinh, KHONG co canh bao nao.  Voi define nay, RTL
+# instantiate INVx1_ASAP7_75t_R / NAND2x1_ASAP7_75t_R truc tiep, va khoi
+# "Ring oscillator" ben duoi dat .preserve len chung.
+#
+# Attribute DONT_TOUCH / KEEP_HIERARCHY trong trng_128b.v la cu phap Vivado -
+# Genus BO QUA hoan toan, dung trong cho no.
+# -----------------------------------------------------------------------------
 foreach rtl $RTL_FILES {
     puts "Reading RTL: [file normalize $rtl]"
-    read_hdl $rtl
+    if {[catch {read_hdl -define {ASAP7} $rtl} rd_err]} {
+        error "read_hdl -define ASAP7 that bai tren $rtl: $rd_err"
+    }
 }
 
 elaborate $TOP
@@ -542,7 +627,26 @@ check_design -unresolved > ./reports/check_design_unresolved.rpt
 
 # Keep the controller/wrapper boundary and the hard-macro array visible for
 # physical planning and for the post-map macro-count invariant.
-foreach module_pattern {
+#
+# F1 - phai khop CA TEN DA UNIQUIFY.
+#
+# `uniquify $TOP` o ngay tren doi ten moi module CO THAM SO thanh <ten>_<thamso>:
+#   data_cache        -> data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_...
+#   axi_ram           -> axi_ram_ID_WIDTH9_ADDR_MASK32h0001ffff_MEM_DEPTH32768
+#   tcm               -> tcm_SIZE_BYTES16384_HAS_FETCH_PORT0
+#   asap7_sram_1rw    -> asap7_sram_1rw_ADDR_W9_DATA_W19
+#   axi_interconnect  -> axi_interconnect_MST_AMT4_SLV_AMT7_...
+#
+# Ban cu goi `get_db modules $module_pattern` voi ten TRAN, nen 6 trong 7 mau
+# khong khop gi ca va IM LANG bo qua: genus.log chi in dung mot dong, cho
+# `riscv_pipeline` - module duy nhat khong co tham so. Hau qua do duoc:
+# `auto_ungroup both` hoa tan ca hai cache, hai TCM va wrapper SRAM vao top_soc,
+# nen reports/area_syn.rpt khong con dong nao cho chung va reports/timing_syn.rpt
+# hien `u_dcache_state_reg[0]` nhu mot startpoint o MUC TOP.
+#
+# Loc bang `string match` thay vi cu phap -if de khong phu thuoc phien ban Genus.
+# `error` khi khong khop la phan quan trong nhat: loi nay da im lang nhieu run.
+set MCU_PRESERVE_MODULES {
     axi_ram
     asap7_sram_1rw
     tcm
@@ -550,11 +654,54 @@ foreach module_pattern {
     instruction_cache
     data_cache
     axi_interconnect
-} {
-    foreach module_obj [get_db modules $module_pattern] {
+    RingOscillator
+    xilinx_not
+    xilinx_nand
+    xilinx_primitive_not
+    xilinx_primitive_nand
+}
+set MCU_ALL_MODULES [get_db modules]
+foreach module_pattern $MCU_PRESERVE_MODULES {
+    set matched {}
+    foreach module_obj $MCU_ALL_MODULES {
+        set module_name [get_db $module_obj .name]
+        if {$module_name eq $module_pattern ||
+            [string match "${module_pattern}_*" $module_name]} {
+            lappend matched $module_obj
+        }
+    }
+    if {[llength $matched] == 0} {
+        error "preserve-hierarchy: khong module nao khop '$module_pattern' - kiem tra hau to uniquify trong reports/hierarchy_elaborated.rpt"
+    }
+    foreach module_obj $matched {
         set_db $module_obj .ungroup_ok false
+        puts "Preserve hierarchy: [get_db $module_obj .name]"
     }
 }
+
+# -----------------------------------------------------------------------------
+# Ring oscillator cua TRNG - CAM MOI TOI UU
+#
+# Giu hierarchy thoi la CHUA DU: trong tung module leaf, Genus van co quyen
+# thay cell da instantiate bang cell khac, hoac xoa mach vi no la vong lap to
+# hop khong dan toi flop nao theo duong to hop hop le.  `.preserve true` cam ca
+# hai.  Dung `error` khi khong khop dung nhu vong ungroup_ok o tren (F1): mot
+# bo dao dong bi xoa am tham la lop loi te nhat - `rand_out` van co ve chay,
+# chi la khong con ngau nhien.
+# -----------------------------------------------------------------------------
+set MCU_RO_INSTS {}
+foreach inst_obj [get_db insts -if {.hdl_name == *RingOscillator* ||
+                                    .name == *ro_invs_not_gate* ||
+                                    .name == *ro_nand_nand_gate*}] {
+    lappend MCU_RO_INSTS $inst_obj
+}
+if {[llength $MCU_RO_INSTS] == 0} {
+    error "ring oscillator: khong tim thay instance nao cua RingOscillator - kiem tra reports/hierarchy_elaborated.rpt va define ASAP7"
+}
+foreach inst_obj $MCU_RO_INSTS {
+    set_db $inst_obj .preserve true
+}
+puts "Ring oscillator: da dat .preserve true cho [llength $MCU_RO_INSTS] instance"
 
 init_design
 set_interactive_constraint_modes mode_func
@@ -571,6 +718,45 @@ if {[info exists ::dc::sdc_failed_commands] &&
     }
     close $fp
     error "SDC contains failed commands; see reports/failed_sdc_commands.rpt"
+}
+
+# -----------------------------------------------------------------------------
+# Ring oscillator - CAT VONG LAP CHO STA
+#
+# Vong: nand.Y -> inv0 -> ... -> inv5 -> nand.B.  Neu khong cat, engine timing
+# se tu chon mot cung de pha vong, va cho ra bao cao khac nhau giua cac lan
+# chay / giua Genus va Innovus.  Cat CHU DONG cung B->Y cua NAND: duong enable
+# A->Y van con nen ket noi khong doi, chi vong hoi tiep bi bo khoi do thi
+# timing.
+#
+# Ngoai ra `io_i_inject` di vao flop cua RingGenerator la mot crossing BAT DONG
+# BO CO Y - do chinh la nguon entropy.  Khai bao false path, neu khong moi lan
+# chay se bao mot dong recovery/removal vo nghia va CO THE keo LVT vao mot mach
+# khong can toc do.
+#
+# CHUA CHAY DUOC O DAY: may nay khong cai Genus (xem [[mcu-sim-setup]]), nen
+# khoi nay moi chi duoc viet theo tai lieu chu chua duoc kiem tren cong cu.
+# Neu ten object khong khop, script se `error` chu khong im lang.
+# -----------------------------------------------------------------------------
+set MCU_RO_NAND_INSTS [get_db insts -if {.base_cell.name == NAND2x1_ASAP7_75t_R* &&
+                                         .name == *ro_nand*}]
+if {[llength $MCU_RO_NAND_INSTS] == 0} {
+    error "ring oscillator: khong tim thay cell NAND cua RO de cat vong timing"
+}
+foreach nand_obj $MCU_RO_NAND_INSTS {
+    if {[catch {set_disable_timing -from B -to Y $nand_obj} dis_err]} {
+        error "ring oscillator: set_disable_timing that bai tren [get_db $nand_obj .name]: $dis_err"
+    }
+}
+puts "Ring oscillator: da cat vong timing tren [llength $MCU_RO_NAND_INSTS] cell NAND"
+
+set MCU_RO_TAP_PINS [get_db pins -if {.name == *ro_invs_not_gate*/*/Y ||
+                                      .name == *ro_nand_nand_gate*/*/Y}]
+if {[llength $MCU_RO_TAP_PINS] > 0} {
+    catch {set_false_path -from $MCU_RO_TAP_PINS}
+    puts "Ring oscillator: false path tu [llength $MCU_RO_TAP_PINS] tap sang RingGenerator"
+} else {
+    puts "WARNING: ring oscillator - khong khop tap pin nao cho false path"
 }
 
 check_sram_library_cell $SRAM_MASTER
@@ -641,6 +827,9 @@ syn_opt
 report_area > ./reports/area_syn.rpt
 report_area -depth 5 > ./reports/area_hierarchy_syn.rpt
 report_timing -max_paths 100 > ./reports/timing_syn.rpt
+# F2 - hold co bao cao rieng. Truoc day khong co dong nao cho hold, vi setup va
+# hold dung chung mot view nen bao cao hold chi lap lai bao cao setup.
+report_timing -early -max_paths 50 > ./reports/timing_hold_syn.rpt
 # -----------------------------------------------------------------------------
 # T5 - power chi co nghia khi co activity annotation.
 #

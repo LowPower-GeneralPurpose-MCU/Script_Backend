@@ -46,15 +46,6 @@ module asap7_sram_1rw #(
         end
     endgenerate
 
-    // The read bank must be remembered because the macro output appears one
-    // cycle after the request.
-    reg [BANK_ADDR_W-1:0] read_bank_q;
-
-    always @(posedge clk) begin
-        if (read)
-            read_bank_q <= bank_sel;
-    end
-
     wire [31:0] macro_wdata;
 
     assign macro_wdata[DATA_W-1:0] = wdata;
@@ -86,6 +77,21 @@ module asap7_sram_1rw #(
         if (NUM_BANKS == 1) begin : G_SINGLE_RDATA
             assign rdata_full = bank_rdata[0];
         end else begin : G_BANKED_RDATA
+            // R6 - `read_bank_q` song trong nhanh nay, khong o muc module.
+            //
+            // Macro tra dataout MOT chu ky sau yeu cau nen phai nho bank da doc.
+            // Nhung voi NUM_BANKS == 1 khong co gi de chon: khai bao o muc module
+            // thi flop do CHET va Genus bao CDFG-508 (`Removing unused flip-flop
+            // register 'read_bank_q'`) o MOI lan chay, cho ca hai mang tag
+            // ADDR_W = 9. Dat trong nhanh > 1 bank thi canh bao bien mat ma hanh
+            // vi khong doi mot bit nao.
+            reg [BANK_ADDR_W-1:0] read_bank_q;
+
+            always @(posedge clk) begin
+                if (read)
+                    read_bank_q <= bank_sel;
+            end
+
             assign rdata_full = bank_rdata[read_bank_q];
         end
     endgenerate

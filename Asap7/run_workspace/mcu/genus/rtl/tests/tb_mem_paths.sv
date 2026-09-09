@@ -148,11 +148,60 @@ module tb_mem_paths;
     reg [1:0]  tb_d_size;
     reg        tb_d_uns;
 
+    // ---------------------------------------------------------------------
+    // R1b / R11 - testbench dong vai TANG MEM cho lenh nguyen tu.
+    //
+    // Testbench nay force cong core-side cua top_soc nen bo qua `memory_access`,
+    // tuc bo qua luon AMO ALU nam trong pipeline_stage.v.  Muon kiem duong AMO
+    // ben trong dcache thi phai mo phong dung giao thuc ma pipeline dung:
+    //   1. giu CA cpu_data_rd_req lan cpu_data_wr_req cung `cpu_data_amo_req`
+    //   2. chot du lieu doc o chu ky co `cpu_data_amo_capture`
+    //   3. tu chu ky sau dat KET QUA ALU len cpu_data_wdata
+    // Day chinh la cach dong lo hong verification ghi trong §14 cua
+    // GENUS_REVIEW_2026-09-09.md ma khong can toolchain RISC-V.
+    // ---------------------------------------------------------------------
+    localparam [4:0] AMO_ADD  = 5'b00000;
+    localparam [4:0] AMO_SWAP = 5'b00001;
+    localparam [4:0] AMO_XOR  = 5'b00100;
+    localparam [4:0] AMO_OR   = 5'b01000;
+    localparam [4:0] AMO_AND  = 5'b01100;
+
+    reg        tb_d_amo;
+    reg [4:0]  tb_amo_op;
+    reg [31:0] tb_amo_rs2;
+    reg [31:0] amo_read_q;
+    integer    amo_capture_cnt;
+
+    always @(posedge clk_400m or negedge rst_n) begin
+        if (!rst_n) amo_read_q <= 32'h0;
+        else if (uut.cpu_data_amo_capture) amo_read_q <= uut.cpu_data_rdata;
+    end
+
+    always @(posedge clk_400m or negedge rst_n) begin
+        if (!rst_n) amo_capture_cnt <= 0;
+        else if (uut.cpu_data_amo_capture) amo_capture_cnt <= amo_capture_cnt + 1;
+    end
+
+    reg [31:0] amo_alu;
+    always @(*) begin
+        case (tb_amo_op)
+            AMO_ADD : amo_alu = amo_read_q + tb_amo_rs2;
+            AMO_SWAP: amo_alu = tb_amo_rs2;
+            AMO_XOR : amo_alu = amo_read_q ^ tb_amo_rs2;
+            AMO_OR  : amo_alu = amo_read_q | tb_amo_rs2;
+            AMO_AND : amo_alu = amo_read_q & tb_amo_rs2;
+            default : amo_alu = tb_amo_rs2;
+        endcase
+    end
+
+    wire [31:0] tb_d_wdata_eff = tb_d_amo ? amo_alu : tb_d_wdata;
+
     initial begin
         tb_if_req = 1'b0;  tb_if_addr = 32'h0;
         tb_d_rd   = 1'b0;  tb_d_wr    = 1'b0;
         tb_d_addr = 32'h0; tb_d_wdata = 32'h0;
         tb_d_size = SZ_W;  tb_d_uns   = 1'b0;
+        tb_d_amo  = 1'b0;  tb_amo_op  = AMO_ADD; tb_amo_rs2 = 32'h0;
 
         force uut.clk_en_cpu_s      = 1'b1;
         force uut.clk_en_dbg_s      = 1'b1;
@@ -161,7 +210,8 @@ module tb_mem_paths;
         force uut.cpu_data_rd_req   = tb_d_rd;
         force uut.cpu_data_wr_req   = tb_d_wr;
         force uut.cpu_data_addr     = tb_d_addr;
-        force uut.cpu_data_wdata    = tb_d_wdata;
+        force uut.cpu_data_wdata    = tb_d_wdata_eff;
+        force uut.cpu_data_amo_req  = tb_d_amo;
         force uut.cpu_data_size     = tb_d_size;
         force uut.cpu_data_unsigned = tb_d_uns;
     end
@@ -246,6 +296,50 @@ module tb_mem_paths;
     endtask
     task automatic lb (input [31:0] a, output [31:0] d);
         begin cpu_xact(1'b0, a, 32'h0, SZ_B, 1'b0, d); end
+    endtask
+
+    // Mot lenh AMO.W hoan chinh.  `old_val` la gia tri D-cache tra ve o chu ky
+    // capture - dung cai se di vao `rd` cua lenh nguyen tu.
+    task automatic amo_w(input  [4:0]  op,
+                         input  [31:0] addr,
+                         input  [31:0] rs2,
+                         output [31:0] old_val);
+        integer n;
+        begin
+            @(negedge clk_400m);
+            tb_amo_op  = op;
+            tb_amo_rs2 = rs2;
+            tb_d_addr  = addr;
+            tb_d_size  = SZ_W;
+            tb_d_uns   = 1'b0;
+            tb_d_rd    = 1'b1;
+            tb_d_wr    = 1'b1;
+            tb_d_amo   = 1'b1;
+
+            n = 0;
+            while ((uut.cpu_data_hit !== 1'b1) && (n < HANDSHAKE_TIMEOUT)) begin
+                @(posedge clk_400m);
+                #0.2;
+                n = n + 1;
+            end
+
+            if (n >= HANDSHAKE_TIMEOUT) begin
+                timeout_hits = timeout_hits + 1;
+                fail_count   = fail_count + 1;
+                $display("[FAIL] TIMEOUT amo addr=%08h sau %0d chu ky", addr, n);
+                old_val = 32'hDEAD_DEAD;
+            end else begin
+                old_val = amo_read_q;
+            end
+            last_xact_cycles = n;
+
+            // Giu them mot canh len y het cpu_xact - xem ghi chu o do.
+            @(posedge clk_400m);
+            #0.2;
+            tb_d_rd  = 1'b0;
+            tb_d_wr  = 1'b0;
+            tb_d_amo = 1'b0;
+        end
     endtask
 
     // Port fetch: chi doc, dung cho ITCM.
@@ -376,6 +470,8 @@ module tb_mem_paths;
     // Kich ban
     // =========================================================================
     reg [31:0] d, e;
+    reg [31:0] amo_old;
+    integer    cap_snap;
     reg [1:0]  sba_resp;
     reg        ok;
     integer    i;
@@ -841,6 +937,95 @@ module tb_mem_paths;
             $display("[INFO] gia tri khac: %08h", d);
         $display("[INFO] -> day chinh la ly do .dmabuf phai nam o DMAPOOL uncached");
 
+
+        // ------------------------------------------------------------------
+        // T10 - LENH NGUYEN TU (AMO).  Dong lo hong verification cua R1a/R1b/
+        //       R11 ghi trong GENUS_REVIEW_2026-09-09.md §14: truoc bai nay
+        //       KHONG testbench nao tren may thuc thi mot AMO, nen R1b va R11
+        //       moi chi duoc kiem bang doc code.
+        // ------------------------------------------------------------------
+        $display("");
+        $display("--- T10: lenh nguyen tu (R1b bat tay 2 chu ky, R11 AMO truot) ---");
+
+        // T10a - AMO tren line DA nam trong cache.  Kiem duong R1b.
+        sw(ADDR_RAM_LO + 32'h6000, 32'h0000_0010);
+        lw(ADDR_RAM_LO + 32'h6000, d);      // nap line vao D-cache
+        chk32("T10a chuan bi: gia tri ban dau", d, 32'h0000_0010);
+
+        cap_snap = amo_capture_cnt;
+        amo_w(AMO_ADD, ADDR_RAM_LO + 32'h6000, 32'h0000_0005, amo_old);
+        chk32("T10a amoadd.w HIT tra ve gia tri CU", amo_old, 32'h0000_0010);
+        if (amo_capture_cnt == cap_snap + 1) begin
+            pass_count = pass_count + 1;
+            $display("[PASS] T10a R1b: dcache_amo_capture xung dung 1 lan");
+        end else begin
+            fail_count = fail_count + 1;
+            $display("[FAIL] T10a R1b: dcache_amo_capture xung %0d lan, mong doi 1",
+                     amo_capture_cnt - cap_snap);
+        end
+        lw(ADDR_RAM_LO + 32'h6000, d);
+        chk32("T10a amoadd.w HIT da ghi 0x10+0x05", d, 32'h0000_0015);
+
+        // T10b - AMO TRUOT cache.  Day chinh la nhanh R11.
+        //   `sw` la write-through KHONG write-allocate nen dia chi nay chua
+        //   bao gio duoc nap vao D-cache.  Truoc khi sua R11, AMO nay retire
+        //   ma khong he ghi: `amo_old` van dung nen phan mem khong thay gi,
+        //   chi co RAM la khong bao gio duoc cap nhat.
+        sw(ADDR_RAM_LO + 32'h6800, 32'h1000_0000);
+        cap_snap = amo_capture_cnt;
+        amo_w(AMO_ADD, ADDR_RAM_LO + 32'h6800, 32'h0000_0007, amo_old);
+        $display("[INFO] T10b AMO truot mat %0d chu ky (HIT o T10a: xem tren)",
+                 last_xact_cycles);
+        chk32("T10b amoadd.w MISS tra ve gia tri CU", amo_old, 32'h1000_0000);
+        if (amo_capture_cnt == cap_snap + 1) begin
+            pass_count = pass_count + 1;
+            $display("[PASS] T10b R11: vong tra cuu thu hai co chay (1 capture)");
+        end else begin
+            fail_count = fail_count + 1;
+            $display("[FAIL] T10b R11: capture %0d lan, mong doi 1 - AMO truot khong ghi",
+                     amo_capture_cnt - cap_snap);
+        end
+
+        // Bang chung manh nhat cho R11: doc lai bang SBA cua debug module, di
+        // thang qua AXI nen KHONG dung mang cache.  Cho store buffer xa het.
+        repeat (200) @(posedge clk_200m);
+        sba_xact(2'd1, 2'd2, ADDR_RAM_LO + 32'h6800, 32'h0, d, sba_resp);
+        chk32("T10b R11: RAM THAT da duoc cap nhat (doc bang SBA)", d, 32'h1000_0007);
+
+        lw(ADDR_RAM_LO + 32'h6800, d);
+        chk32("T10b duong cache cung thay gia tri moi", d, 32'h1000_0007);
+
+        // T10c - amoswap.w tren line da cache.
+        amo_w(AMO_SWAP, ADDR_RAM_LO + 32'h6000, 32'hAABB_CCDD, amo_old);
+        chk32("T10c amoswap.w tra ve gia tri CU", amo_old, 32'h0000_0015);
+        lw(ADDR_RAM_LO + 32'h6000, d);
+        chk32("T10c amoswap.w da ghi toan tu moi", d, 32'hAABB_CCDD);
+
+        // T10d - amoand/amoor tren line da cache.
+        amo_w(AMO_AND, ADDR_RAM_LO + 32'h6000, 32'h00FF_FF00, amo_old);
+        lw(ADDR_RAM_LO + 32'h6000, d);
+        chk32("T10d amoand.w", d, 32'h00BB_CC00);
+        amo_w(AMO_OR, ADDR_RAM_LO + 32'h6000, 32'h1100_0011, amo_old);
+        lw(ADDR_RAM_LO + 32'h6000, d);
+        chk32("T10d amoor.w", d, 32'h11BB_CC11);
+
+        // T10e - QUAN SAT (khong tinh diem): AMO vao vung UNCACHED.
+        //   `dcache_amo_capture` doi !uncache_en, va nhanh sua R11 o DONE cung
+        //   doi !uncache_en.  O IDLE, mot truy cap uncached co ca read lan
+        //   write se di AR_REQ (uu tien doc).  In ra de bao cao, khong sua.
+        $display("");
+        $display("--- T10e: QUAN SAT - AMO vao vung uncached (DMAPOOL) ---");
+        sw(ADDR_RAM_HI + 32'h0A00, 32'h0000_0021);
+        cap_snap = amo_capture_cnt;
+        amo_w(AMO_ADD, ADDR_RAM_HI + 32'h0A00, 32'h0000_0002, amo_old);
+        lw(ADDR_RAM_HI + 32'h0A00, d);
+        $display("[INFO] T10e capture = %0d lan, RAM sau amoadd = %08h (ban dau 0x21, rs2 = 0x2)",
+                 amo_capture_cnt - cap_snap, d);
+        if (d === 32'h0000_0023)
+            $display("[INFO] T10e AMO uncached CO ghi");
+        else
+            $display("[INFO] T10e AMO uncached KHONG ghi - AMO tren vung uncached bi bo am tham");
+
         // ------------------------------------------------------------------
         $display("");
         $display("=== tb_mem_paths ket qua ===");

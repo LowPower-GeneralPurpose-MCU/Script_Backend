@@ -101,6 +101,32 @@ set STD_LIBS [list \
     [file join $STD_LIB_DIR asap7sc7p5t_OA_LVT_TT_ccs_211120.lib] \
     [file join $STD_LIB_DIR asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib]]
 
+# -----------------------------------------------------------------------------
+# F2 - danh sach thu vien cho hai goc con lai.
+#
+# ASAP7 phat hanh cung mot bo file cho ca ba goc, ten chi khac hai chu:
+#   asap7sc7p5t_AO_RVT_TT_ccs_211120.lib
+#   asap7sc7p5t_AO_RVT_SS_ccs_211120.lib
+#   asap7sc7p5t_AO_RVT_FF_ccs_211120.lib
+# nen suy ra bang thay chuoi thay vi liet ke lai hai lan muoi dong. Neu ban PDK
+# tren may khong co du SS/FF thi genus.tcl phat hien va quay ve mot goc, khong
+# gay flow - xem khoi F2 trong tcl/genus.tcl.
+#
+# CANH BAO: `srambank_256x4x32_6t122.lib` chi duoc sinh o MOT goc. Ca ba
+# library_set deu tro toi cung file do, nen do tre cua 84 macro KHONG doi theo
+# goc. Day la gioi han cua PDK, khong phai loi cau hinh - phai nho dieu nay khi
+# doc ket qua hold o goc FF.
+# -----------------------------------------------------------------------------
+proc mcu_corner_lib_list {libs corner} {
+    set out {}
+    foreach lib $libs {
+        lappend out [string map [list "_TT_ccs_" "_${corner}_ccs_"] $lib]
+    }
+    return $out
+}
+set STD_LIBS_SS [mcu_corner_lib_list $STD_LIBS SS]
+set STD_LIBS_FF [mcu_corner_lib_list $STD_LIBS FF]
+
 set TECH_LEF [mcu_resolve_path TECH_LEF \
     {ASAP7_TECH_LEF_FILE} \
     [file join $STDCELL_ROOT techlef_misc asap7_tech_4x_201209.lef]]
@@ -168,7 +194,9 @@ set SRAM_SIM_VERILOG [mcu_resolve_path SRAM_SIM_VERILOG \
     {ASAP7_SRAM_VERILOG_FILE ASAP7_SRAM_VERILOG} \
     [file join $SRAM_ROOT generated verilog "$SRAM_MASTER.v"]]
 
-set ALL_TIMING_LIBS [concat $STD_LIBS [list $SRAM_LIB]]
+set ALL_TIMING_LIBS    [concat $STD_LIBS    [list $SRAM_LIB]]
+set ALL_TIMING_LIBS_SS [concat $STD_LIBS_SS [list $SRAM_LIB]]
+set ALL_TIMING_LIBS_FF [concat $STD_LIBS_FF [list $SRAM_LIB]]
 
 # The macro data/control pins have a 0.320 ns Liberty max-transition.
 set SIGNAL_MAX_TRANSITION_PS 300.0

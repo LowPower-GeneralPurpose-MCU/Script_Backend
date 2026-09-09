@@ -235,6 +235,10 @@ module ex_mem_register #(
     input [31:0] id_ex_pc_plus_4, id_ex_pc_in, id_ex_branch_target,
     input id_ex_mem_write, id_ex_mem_read, id_ex_mem_to_reg, id_ex_reg_write,
     input id_ex_branch, branch_taken, id_ex_jal, id_ex_mem_unsigned,
+    // R2 - JALR di qua EX/MEM giong het nhanh dieu kien: co bit hop le rieng va
+    // dia chi dich da tinh xong o tang EX.
+    input id_ex_jalr,
+    input [31:0] jalr_target,
     input [1:0] id_ex_mem_size,
     input [31:0] id_ex_read_data2, mem_write_data,
     input id_ex_predict_taken, id_ex_btb_hit, id_ex_ecall, id_ex_ebreak, id_ex_mret,
@@ -247,6 +251,8 @@ module ex_mem_register #(
     output reg [4:0] ex_mem_rd,
     output reg ex_mem_mem_write, ex_mem_mem_read, ex_mem_mem_to_reg, ex_mem_reg_write,
     output reg ex_mem_branch, ex_mem_branch_taken, ex_mem_jal, ex_mem_mem_unsigned,
+    output reg ex_mem_jalr,
+    output reg [31:0] ex_mem_jalr_target,
     output reg [1:0] ex_mem_mem_size,
     output reg [31:0] ex_mem_mem_write_data,
     output reg ex_mem_predict_taken, ex_mem_btb_hit, ex_mem_ecall, ex_mem_ebreak, ex_mem_mret,
@@ -272,6 +278,7 @@ module ex_mem_register #(
             ex_mem_reg_write <= 1'b0; ex_mem_mem_write <= 1'b0; ex_mem_mem_read <= 1'b0;
             ex_mem_mem_to_reg <= 1'b0; ex_mem_branch <= 1'b0; ex_mem_branch_taken <= 1'b0;
             ex_mem_jal <= 1'b0; ex_mem_mem_unsigned <= 1'b0; ex_mem_mem_size <= 2'b00;
+            ex_mem_jalr <= 1'b0;
             ex_mem_predict_taken <= 1'b0; ex_mem_btb_hit <= 1'b0;
             ex_mem_csr_we <= 1'b0; ex_mem_csr_op <= 2'b00;
             ex_mem_ecall <= 1'b0; ex_mem_ebreak <= 1'b0; ex_mem_mret <= 1'b0;
@@ -291,6 +298,7 @@ module ex_mem_register #(
                 ex_mem_branch <= 1'b0;
                 ex_mem_branch_taken <= 1'b0;
                 ex_mem_jal <= 1'b0;
+                ex_mem_jalr <= 1'b0;
                 ex_mem_predict_taken <= 1'b0;
                 ex_mem_btb_hit <= 1'b0;
                 ex_mem_ecall <= 1'b0;
@@ -311,6 +319,7 @@ module ex_mem_register #(
                 ex_mem_branch_target <= id_ex_branch_target; ex_mem_pc_plus_4 <= id_ex_pc_plus_4;
                 ex_mem_pc_in <= id_ex_pc_in; ex_mem_branch <= id_ex_branch;
                 ex_mem_branch_taken <= branch_taken; ex_mem_jal <= id_ex_jal;
+                ex_mem_jalr <= id_ex_jalr; ex_mem_jalr_target <= jalr_target;
                 ex_mem_mem_unsigned <= id_ex_mem_unsigned; ex_mem_mem_write <= id_ex_mem_write;
                 ex_mem_mem_read <= id_ex_mem_read; ex_mem_mem_to_reg <= id_ex_mem_to_reg;
                 ex_mem_reg_write <= id_ex_reg_write; ex_mem_mem_size <= id_ex_mem_size;

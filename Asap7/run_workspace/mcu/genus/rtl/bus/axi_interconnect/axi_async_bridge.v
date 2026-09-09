@@ -1,9 +1,45 @@
 `timescale 1ns / 1ps
 
+// -----------------------------------------------------------------------------
+// R3 - do sau cua NAM FIFO CDC la tham so, khong con hard-code 16 slot.
+//
+// Truoc: ca nam kenh deu `DEPTH_LOG2(4)` = 16 entry. `async_fifo` dung buffer
+// bang FLIP-FLOP (`utils/fifo_async.v`) va doc bang mux to hop, nen gia tien ty
+// le thang voi depth x width. Hai instance cua module nay tra:
+//
+//   u_dc_axi_bridge/u_w_fifo   37 bit x 16 = 1887 cell / 4850 um2
+//   u_ic_axi_bridge/u_ar_fifo  53 bit x 16 = 1752 cell / 4272 um2
+//   u_ic_axi_bridge/u_r_fifo   40 bit x 16 = 1700 cell / 4353 um2
+//   u_dc_axi_bridge/u_ar_fifo  53 bit x 16 = 1646 cell / 4029 um2
+//   u_dc_axi_bridge/u_aw_fifo  53 bit x 16 = 1596 cell / 3908 um2
+//   u_dc_axi_bridge/u_b_fifo    7 bit x 16 =  213 cell /  517 um2
+//                                              -> 21 929 um2 tong
+//   (reports/area_syn.rpt, ban tong hop 2026-09-09)
+//
+// Khong master nao can 16 slot:
+//   - icache phat DUNG 1 read outstanding va KHONG BAO GIO ghi (top_soc.v noi
+//     cung awvalid/wvalid = 0 cho cau nay).
+//   - dcache: FSM chinh phat 1 giao dich mot luc; store buffer xa tuan tu
+//     SB_AW -> SB_W -> SB_B nen cung chi 1 outstanding.
+//   - refill mot block la 4 beat (C_BLOCK_SIZE 16 B / 4 B moi word).
+//
+// Depth CHI anh huong thong luong, khong anh huong dung sai: moi kenh deu co
+// backpressure day du (`s_axi_*ready = ~full`, `m_axi_*ready = ~full`). Chieu
+// R/B chay tu m_clk 200 MHz sang s_clk 400 MHz nen phia doc rut nhanh gap doi
+// phia ghi, FIFO khong the day.
+//
+// Mac dinh giu nguyen 4 (= 16 slot) de bat ky ban instantiate nao khong khai
+// bao gi van co hanh vi cu; top_soc.v dat gia tri that cho tung cau.
+// -----------------------------------------------------------------------------
 module axi_async_bridge #(
     parameter ID_WIDTH   = 5,
     parameter ADDR_WIDTH = 32,
-    parameter DATA_WIDTH = 32
+    parameter DATA_WIDTH = 32,
+    parameter AW_DEPTH_LOG2 = 4,
+    parameter W_DEPTH_LOG2  = 4,
+    parameter B_DEPTH_LOG2  = 4,
+    parameter AR_DEPTH_LOG2 = 4,
+    parameter R_DEPTH_LOG2  = 4
 )(
     // --- Slave Interface (Nối với Master thiết bị - VD: Cache ở clk_core) ---
     input  wire                   s_clk,
@@ -100,7 +136,7 @@ module axi_async_bridge #(
     wire [52:0] aw_dout;
     assign {m_axi_awid, m_axi_awaddr, m_axi_awlen, m_axi_awsize, m_axi_awburst, m_axi_awprot} = aw_dout;
 
-    cdc_async_fifo_wrapper #(.DATA_WIDTH(53), .DEPTH_LOG2(4)) u_aw_fifo (
+    cdc_async_fifo_wrapper #(.DATA_WIDTH(53), .DEPTH_LOG2(AW_DEPTH_LOG2)) u_aw_fifo (
         .wclk(s_clk), .wrst_n(s_rst_n), .wen(aw_push), .wdata(aw_din), .wfull(aw_full),
         .rclk(m_clk), .rrst_n(m_rst_n), .ren(aw_pop),  .rdata(aw_dout), .rempty(aw_empty)
     );
@@ -119,7 +155,7 @@ module axi_async_bridge #(
     wire [36:0] w_dout;
     assign {m_axi_wdata, m_axi_wstrb, m_axi_wlast} = w_dout;
 
-    cdc_async_fifo_wrapper #(.DATA_WIDTH(37), .DEPTH_LOG2(4)) u_w_fifo (
+    cdc_async_fifo_wrapper #(.DATA_WIDTH(37), .DEPTH_LOG2(W_DEPTH_LOG2)) u_w_fifo (
         .wclk(s_clk), .wrst_n(s_rst_n), .wen(w_push), .wdata(w_din), .wfull(w_full),
         .rclk(m_clk), .rrst_n(m_rst_n), .ren(w_pop),  .rdata(w_dout), .rempty(w_empty)
     );
@@ -138,7 +174,7 @@ module axi_async_bridge #(
     wire [6:0] b_dout;
     assign {s_axi_bid, s_axi_bresp} = b_dout;
 
-    cdc_async_fifo_wrapper #(.DATA_WIDTH(7), .DEPTH_LOG2(4)) u_b_fifo (
+    cdc_async_fifo_wrapper #(.DATA_WIDTH(7), .DEPTH_LOG2(B_DEPTH_LOG2)) u_b_fifo (
         .wclk(m_clk), .wrst_n(m_rst_n), .wen(b_push), .wdata(b_din), .wfull(b_full),
         .rclk(s_clk), .rrst_n(s_rst_n), .ren(b_pop),  .rdata(b_dout), .rempty(b_empty)
     );
@@ -157,7 +193,7 @@ module axi_async_bridge #(
     wire [52:0] ar_dout;
     assign {m_axi_arid, m_axi_araddr, m_axi_arlen, m_axi_arsize, m_axi_arburst, m_axi_arprot} = ar_dout;
 
-    cdc_async_fifo_wrapper #(.DATA_WIDTH(53), .DEPTH_LOG2(4)) u_ar_fifo (
+    cdc_async_fifo_wrapper #(.DATA_WIDTH(53), .DEPTH_LOG2(AR_DEPTH_LOG2)) u_ar_fifo (
         .wclk(s_clk), .wrst_n(s_rst_n), .wen(ar_push), .wdata(ar_din), .wfull(ar_full),
         .rclk(m_clk), .rrst_n(m_rst_n), .ren(ar_pop),  .rdata(ar_dout), .rempty(ar_empty)
     );
@@ -176,7 +212,7 @@ module axi_async_bridge #(
     wire [39:0] r_dout;
     assign {s_axi_rid, s_axi_rdata, s_axi_rresp, s_axi_rlast} = r_dout;
 
-    cdc_async_fifo_wrapper #(.DATA_WIDTH(40), .DEPTH_LOG2(4)) u_r_fifo (
+    cdc_async_fifo_wrapper #(.DATA_WIDTH(40), .DEPTH_LOG2(R_DEPTH_LOG2)) u_r_fifo (
         .wclk(m_clk), .wrst_n(m_rst_n), .wen(r_push), .wdata(r_din), .wfull(r_full),
         .rclk(s_clk), .rrst_n(s_rst_n), .ren(r_pop),  .rdata(r_dout), .rempty(r_empty)
     );

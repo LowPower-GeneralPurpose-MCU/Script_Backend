@@ -29,7 +29,15 @@ module axi_interconnect
     // nguyen hanh vi cu cho moi ban instantiate chua khai bao gi.
     parameter [SLV_AMT*32-1:0]      SLV_W_FIFO_DEPTH    = {SLV_AMT{32'd32}},
     // Dispatcher DATA depth configuration
-    parameter                       DSP_RDATA_DEPTH     = 16
+    parameter                       DSP_RDATA_DEPTH     = 16,
+    // R4 - xem ghi chu trong axi_slave_arbitration.v, module sa_Ax_channel.
+    // Dat 0 khi moi master deu noi cung LOCK/CACHE/QOS/REGION bang hang so;
+    // khi do bon truong do khong di qua FIFO ma duoc tai tao o dau ra slave.
+    parameter                       AXI_SIDEBAND_EN     = 1,
+    parameter [0:0]                 AXI_LOCK_CONST      = 1'b0,
+    parameter [3:0]                 AXI_CACHE_CONST     = 4'b0011,
+    parameter [3:0]                 AXI_QOS_CONST       = 4'b0000,
+    parameter [3:0]                 AXI_REGION_CONST    = 4'b0000
 )
 (
     // Input declaration
@@ -638,6 +646,11 @@ module axi_interconnect
         for(slv_idx = 0; slv_idx < SLV_AMT; slv_idx = slv_idx + 1) begin : SA_GEN
             if(MST_AMT > 1) begin   // Multiple masters -> Need arbitrate between masters
                 ai_slave_arbitration #(
+                    .AXI_SIDEBAND_EN(AXI_SIDEBAND_EN),
+                    .AXI_LOCK_CONST(AXI_LOCK_CONST),
+                    .AXI_CACHE_CONST(AXI_CACHE_CONST),
+                    .AXI_QOS_CONST(AXI_QOS_CONST),
+                    .AXI_REGION_CONST(AXI_REGION_CONST),
                     .MST_AMT(MST_AMT),
                     .OUTSTANDING_AMT(OUTSTANDING_AMT),
                     .MST_WEIGHT(MST_WEIGHT),
