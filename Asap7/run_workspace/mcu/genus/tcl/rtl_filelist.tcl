@@ -63,6 +63,9 @@ set RTL_FILES [list \
     [file join $RTL_ROOT peripheral apb_syscon.v] \
     [file join $RTL_ROOT peripheral apb_uart.v] \
     [file join $RTL_ROOT peripheral apb_watchdog.v] \
+    [file join $RTL_ROOT apb_ascon trng_128b.v] \
+    [file join $RTL_ROOT apb_ascon ascon_core.v] \
+    [file join $RTL_ROOT apb_ascon apb_ascon.v] \
     [file join $RTL_ROOT top_soc.v]]
 
 foreach rtl_file $RTL_FILES {

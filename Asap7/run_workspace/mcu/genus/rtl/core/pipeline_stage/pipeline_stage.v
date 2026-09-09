@@ -211,11 +211,12 @@ module instruction_fetch (
     input wire [31:0] pc_in, 
     input wire [31:0] ex_mem_pc_in,
     input wire [31:0] ex_mem_pc_plus_4,
-    input wire id_ex_jalr, 
+    // R2 - JALR duoc phan giai o EX/MEM (nhu nhanh dieu kien), khong con o ID/EX.
+    // `alu_in1` / `id_ex_ext_imm` khong con di vao tang nay nua.
+    input wire ex_mem_jalr,
+    input wire [31:0] ex_mem_jalr_target,
     input wire id_ex_jal, 
     input wire btb_hit,
-    input wire [31:0] alu_in1, 
-    input wire [31:0] id_ex_ext_imm,
     input wire predict_taken, 
     input wire actual_taken, 
     input wire bpu_correct,
@@ -373,28 +374,21 @@ module instruction_fetch (
     );
 
     // -------------------------------------------------------------------------
-    // T1 - dich JALR tinh NGOAI chuoi uu tien cua next-PC.
+    // R2 - JALR khong con duoc tinh o day.
     //
-    // Truoc: phep cong nam trong mot nhanh cua `always @(*)` ben duoi. Genus coi
-    // ca khoi la mot vung dieu khien, gan no vao mot CDN_DP_region roi VO HIEU
-    // vung do cho datapath optimization (RTLOPT-55), nen bo cong 32 bit bi map
-    // thanh ripple carry tran: mot chuoi MAJIxp5/MAJx2/INVx1 lap ~28 lan, ton
-    // 1612 ps trong 2354 ps cua critical path (68%) - xem qor_syn.rpt.
+    // Truoc day tang nay chua `wire jalr_target = (alu_in1 + id_ex_ext_imm) &
+    // 32'hFFFFFFFE;` va dung no ngay trong chuoi uu tien ben duoi, nen mot bo
+    // cong 32 bit nam TRUOC ca mux next-PC trong cung mot chu ky. Do la critical
+    // path #1 cua ban tong hop 2026-09-09 (2360 / 2361 ps, slack 0).
     //
-    // Dua no ra mot `assign` doc lap thi datapath extractor giu lai duoc phep
-    // cong nhu mot toan tu, va duoc tu do chon CLA / carry-select.
+    // Bay gio dia chi dich duoc tinh o tang EX (`execute`, xem ghi chu R2 o do),
+    // chot vao EX/MEM, va den day chi con la mot dau vao thanh ghi -> mux.
+    // JALR vi the phan giai CUNG TANG voi nhanh dieu kien.
     //
-    // Ngu nghia KHONG doi mot bit nao: van la cung mot bieu thuc, chi khac cho
-    // dat. Bit 0 bi xoa theo dung dinh nghia JALR cua RISC-V (spec: dia chi dich
-    // duoc tinh roi dat bit 0 ve 0).
-    //
-    // CANH BAO con lai: startpoint cua path la `ex_mem_csr_addr`, tuc du lieu doc
-    // CSR duoc forward vao `alu_in1`. Mot JALR ngay sau lenh CSR van la worst
-    // case. Neu sau khi re-synth van khong du margin thi buoc tiep theo la tinh
-    // `jalr_target` o tang EX va cho no qua mot thanh ghi.
+    // `ex_mem_jalr` va `!bpu_correct` loai tru nhau: JALR khong phai `ex_mem_branch`
+    // nen khi `ex_mem_jalr` = 1 thi `bpu_correct` luon = 1. Thu tu giua hai nhanh
+    // do khong quan trong; dat JALR truoc cho de doc.
     // -------------------------------------------------------------------------
-    wire [31:0] jalr_target = (alu_in1 + id_ex_ext_imm) & 32'hFFFFFFFE;
-
     always @(*) begin
         if (!reset_n) begin
             pc_out = reset_vector_in;
@@ -402,13 +396,13 @@ module instruction_fetch (
             pc_out = mtvec_in;
         end else if (mret_exec) begin
             pc_out = mepc_in;
+        end else if (ex_mem_jalr) begin
+            pc_out = ex_mem_jalr_target;
         end else if (!bpu_correct && actual_taken) begin
             pc_out = ex_mem_branch_target;
         end else if (!bpu_correct && !actual_taken) begin
             // Use pipelined pc_plus_4: correct for compressed (pc+2) and 32-bit (pc+4)
             pc_out = ex_mem_pc_plus_4;
-        end else if (id_ex_jalr) begin
-            pc_out = jalr_target;
         end else if (id_ex_jal) begin
             pc_out = id_ex_jal_target;
         end else if (btb_hit && predict_taken) begin
@@ -692,8 +686,41 @@ module execute #(
     output reg branch_taken,
     output reg [31:0] csr_write_data,
     output mf_alu_stall,
-    output [31:0] fpu_result_out
+    output [31:0] fpu_result_out,
+    // R2 - dia chi dich cua JALR, tinh o EX. Xem ghi chu ngay duoi.
+    output [31:0] jalr_target
 );  
+
+    // -------------------------------------------------------------------------
+    // R2 - phep cong JALR chuyen tu tang IF sang tang EX va di qua MOT THANH GHI.
+    //
+    // Truoc: `instruction_fetch` tinh (alu_in1 + id_ex_ext_imm) & 32'hFFFFFFFE
+    // NGAY TRONG chuoi uu tien next-PC, roi ket qua chay thang vao pc_reg. Duong
+    // do la critical path #1 cua ban tong hop 2026-09-09:
+    //
+    //   EX_MEM_ex_mem_csr_addr_reg[9] -> 14 tang logic forward/CSR (719 ps)
+    //     -> bo cong 32 bit (1326 ps, ripple MAJ/FA)
+    //     -> mux uu tien next-PC + AND5 (315 ps)  -> pc_reg   = 2360 / 2361 ps
+    //
+    // T1 (2026-09-08) da keo phep cong ra mot `assign` rieng, giup datapath
+    // extractor giu duoc no la mot toan tu, nhung KHONG du: no van nam trong
+    // cung mot chu ky voi ca mux next-PC.
+    //
+    // Bay gio: tinh o EX va chot vao EX/MEM. Duong moi la
+    //   forward mux (719 ps) -> bo cong (1326 ps) -> EX/MEM flop = ~2045 ps,
+    // tuc BO duoc 315 ps cua mux next-PC ra khoi duong toi han, va lan doi huong
+    // o chu ky sau chi con flop -> mux -> pc_reg (rat ngan).
+    //
+    // Gia phai tra: JALR bay gio phan giai o EX/MEM giong het nhanh dieu kien,
+    // nen no flush HAI lenh thay vi mot -> them 1 chu ky moi lan JALR. JALR chiem
+    // khoang 2-3 % lenh (chu yeu la `ret`), doi lay ~315 ps tren duong toi han.
+    //
+    // `{sum[31:1], 1'b0}` thay cho `sum & 32'hFFFFFFFE`: cung ngu nghia (spec
+    // RISC-V noi tinh xong dia chi roi dat bit 0 ve 0) nhung la DAY NOI thuan,
+    // khong ton 32 cong AND ngay sau bo cong.
+    // -------------------------------------------------------------------------
+    wire [31:0] jalr_sum = alu_in1 + id_ex_ext_imm;
+    assign jalr_target = {jalr_sum[31:1], 1'b0};
 
     wire [31:0] mul_result;
     wire [31:0] div_result;
@@ -870,7 +897,19 @@ module memory_access (
     output dcache_write_req,
     output [31:0] dcache_addr,
     output [31:0] dcache_write_data,
-    input [31:0] dcache_read_data
+    input [31:0] dcache_read_data,
+
+    // -------------------------------------------------------------------------
+    // R1b - bat tay hai chu ky cho lenh nguyen tu.
+    //
+    // `dcache_amo_req`     : lenh o MEM la mot AMO that (doc-sua-ghi). D-cache
+    //                        dung tin hieu nay de giu them DUNG mot chu ky.
+    // `dcache_amo_capture` : xung mot chu ky tu D-cache, danh dau chu ky ma
+    //                        `dcache_read_data` dang mang GIA TRI CU. MEM chot
+    //                        no vao `amo_read_q` va tinh AMO o chu ky sau.
+    // -------------------------------------------------------------------------
+    output dcache_amo_req,
+    input  dcache_amo_capture
 );
 
     wire        ex_mem_atomic = (ex_mem_instr[6:0] == 7'b0101111);
@@ -905,24 +944,55 @@ module memory_access (
             end
         end
     end
+    // -------------------------------------------------------------------------
+    // R1b - AMO ALU an du lieu tu MOT THANH GHI, khong an thang tu cache.
+    //
+    // Truoc: `amo_write_data` an truc tiep `dcache_read_data`, ma tin hieu do la
+    // ket qua to hop cua ca chuoi trong D-cache (state -> so tag 2-way -> mux
+    // way -> read_data_with_size). Cong voi mot bo cong 32 bit va bon bo so sanh
+    // 32 bit ngay sau do, roi ket qua lai chay NGUOC ve D-cache. Toan bo chuoi
+    // ba module nam trong MOT chu ky CPU - chinh la ho 99/100 duong toi han cua
+    // ban tong hop 2026-09-09 (khoi `SUB_TC_OP_1_Y_SUB_TC_OP20_Y_ADD_TC_OP`
+    // chiem 463 ps).
+    //
+    // Bay gio D-cache giu lenh AMO them dung mot chu ky:
+    //   chu ky 1 (`dcache_amo_capture` = 1): tra ve gia tri cu -> chot amo_read_q
+    //   chu ky 2                           : ALU chay tu FLOP, ket qua ve cache
+    // Nho vay ca hai nua deu bat dau hoac ket thuc o mot thanh ghi.
+    //
+    // Chi lenh AMO that moi ton them chu ky. LR.W (chi doc) va SC.W (chi ghi)
+    // khong dat `dcache_amo_req` nen khong bi anh huong.
+    // -------------------------------------------------------------------------
+    wire amo_rmw = ex_mem_atomic && ex_mem_mem_read && ex_mem_mem_write &&
+                   !amo_lr && !amo_sc;
+    assign dcache_amo_req = amo_rmw && !commit_kill;
+
+    reg [31:0] amo_read_q;
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n)
+            amo_read_q <= 32'd0;
+        else if (dcache_amo_capture)
+            amo_read_q <= dcache_read_data;
+    end
+
     reg [31:0]  amo_write_data;
 
     always @(*) begin
         case (amo_op)
-            5'b00000: amo_write_data = dcache_read_data + ex_mem_mem_write_data; // AMOADD.W
-            5'b00001: amo_write_data = ex_mem_mem_write_data;                    // AMOSWAP.W
-            5'b00100: amo_write_data = dcache_read_data ^ ex_mem_mem_write_data; // AMOXOR.W
-            5'b01100: amo_write_data = dcache_read_data & ex_mem_mem_write_data; // AMOAND.W
-            5'b01000: amo_write_data = dcache_read_data | ex_mem_mem_write_data; // AMOOR.W
-            5'b10000: amo_write_data = ($signed(dcache_read_data) < $signed(ex_mem_mem_write_data)) ?
-                                       dcache_read_data : ex_mem_mem_write_data;  // AMOMIN.W
-            5'b10100: amo_write_data = ($signed(dcache_read_data) > $signed(ex_mem_mem_write_data)) ?
-                                       dcache_read_data : ex_mem_mem_write_data;  // AMOMAX.W
-            5'b11000: amo_write_data = (dcache_read_data < ex_mem_mem_write_data) ?
-                                       dcache_read_data : ex_mem_mem_write_data;  // AMOMINU.W
-            5'b11100: amo_write_data = (dcache_read_data > ex_mem_mem_write_data) ?
-                                       dcache_read_data : ex_mem_mem_write_data;  // AMOMAXU.W
-            default:  amo_write_data = ex_mem_mem_write_data;                    // SC.W write data
+            5'b00000: amo_write_data = amo_read_q + ex_mem_mem_write_data; // AMOADD.W
+            5'b00001: amo_write_data = ex_mem_mem_write_data;              // AMOSWAP.W
+            5'b00100: amo_write_data = amo_read_q ^ ex_mem_mem_write_data; // AMOXOR.W
+            5'b01100: amo_write_data = amo_read_q & ex_mem_mem_write_data; // AMOAND.W
+            5'b01000: amo_write_data = amo_read_q | ex_mem_mem_write_data; // AMOOR.W
+            5'b10000: amo_write_data = ($signed(amo_read_q) < $signed(ex_mem_mem_write_data)) ?
+                                       amo_read_q : ex_mem_mem_write_data;  // AMOMIN.W
+            5'b10100: amo_write_data = ($signed(amo_read_q) > $signed(ex_mem_mem_write_data)) ?
+                                       amo_read_q : ex_mem_mem_write_data;  // AMOMAX.W
+            5'b11000: amo_write_data = (amo_read_q < ex_mem_mem_write_data) ?
+                                       amo_read_q : ex_mem_mem_write_data;  // AMOMINU.W
+            5'b11100: amo_write_data = (amo_read_q > ex_mem_mem_write_data) ?
+                                       amo_read_q : ex_mem_mem_write_data;  // AMOMAXU.W
+            default:  amo_write_data = ex_mem_mem_write_data;              // SC.W write data
         endcase
     end
 
@@ -954,7 +1024,13 @@ module memory_access (
     assign dcache_addr = ex_mem_alu_result;
     assign dcache_write_data = ex_mem_atomic ? amo_write_data : ex_mem_mem_write_data;
     // SC.W result: 0 = success, 1 = failure (per RISC-V spec)
-    assign mem_read_data = amo_sc ? (sc_success ? 32'd0 : 32'd1) : dcache_read_data;
+    //
+    // R1b - voi AMO that, gia tri tra ve rd la gia tri CU, ma o chu ky thu hai
+    // `dcache_read_data` khong con giu no nua -> phai lay tu `amo_read_q`.
+    // LR.W khong phai amo_rmw nen van doc thang tu cache nhu cu.
+    assign mem_read_data = amo_sc  ? (sc_success ? 32'd0 : 32'd1) :
+                           amo_rmw ? amo_read_q :
+                                     dcache_read_data;
     
 endmodule
 

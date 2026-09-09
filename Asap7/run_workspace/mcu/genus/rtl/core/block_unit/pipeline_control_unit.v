@@ -15,7 +15,12 @@ module pipeline_control_unit (
     // o khoi load_use_hazard ben duoi.
     input id_ex_mem_to_reg,
     input id_ex_jal,
+    // R2 - JALR khong con lam flush tu ID/EX. No duoc phan giai o EX/MEM giong
+    // nhanh dieu kien, nen tin hieu flush cua no la `ex_mem_jalr` chu khong phai
+    // `id_ex_jalr`. Cong `id_ex_jalr` van giu de load-use interlock biet lenh o
+    // ID/EX la mot JALR (no VAN doc rs1, nen van co the bi load-use hazard).
     input id_ex_jalr,
+    input ex_mem_jalr,
     input [4:0] id_ex_rd,
     input bpu_correct,
     input trap_enter,
@@ -37,6 +42,7 @@ module pipeline_control_unit (
     output reg  load_use_stall,
     output reg  flush_branch,
     output reg  flush_jal,
+    output reg  flush_jalr,
     output reg  flush_trap,
     output wire stall_IF,
     output wire stall_ID,
@@ -148,7 +154,7 @@ module pipeline_control_unit (
     wire is_resuming = (dbg_halted_reg && dbg_resume_req);
     
     // Tách riêng: Đây là tín hiệu kẹt do Hazard thật sự của CPU
-    wire real_load_use_stall = load_use_hazard && !flush_branch && !flush_jal;
+    wire real_load_use_stall = load_use_hazard && !flush_branch && !flush_jalr && !flush_jal;
     
     // SỰ LỢI HẠI: Pipeline được coi là "moving" nếu không bị kẹt bộ nhớ, ALU, hoặc Hazard thật.
     // Việc ta cố tình bơm NOP sẽ KHÔNG làm pipeline_moving bị kéo xuống 0 nữa!
@@ -184,8 +190,14 @@ module pipeline_control_unit (
     always @(*) begin
         flush_trap = trap_enter || mret_exec;
         flush_branch = !bpu_correct;
-        flush_jal = id_ex_jal || id_ex_jalr;
-        load_use_stall = load_use_hazard && !flush_trap && !flush_branch && !flush_jal;
+        // R2 - JAL van phan giai o ID/EX (dich cua no la PC + imm, tinh xong tu
+        // tang ID, khong dinh forwarding nen khong nam tren duong toi han).
+        // JALR chuyen xuong EX/MEM va co tin hieu flush rieng, hanh xu y het
+        // `flush_branch`.
+        flush_jal = id_ex_jal;
+        flush_jalr = ex_mem_jalr;
+        load_use_stall = load_use_hazard && !flush_trap && !flush_branch &&
+                         !flush_jalr && !flush_jal;
     end
 
     // =========================================================================

@@ -29,7 +29,8 @@ module apb_syscon #(
     output wire                   o_spi_clk_en,
     output wire                   o_i2c_clk_en,
     output wire                   o_gpo_clk_en,
-    output wire                   o_acc_clk_en 
+    output wire                   o_acc_clk_en,
+    output wire                   o_asc_clk_en
 );
 
     // =========================================
@@ -37,10 +38,10 @@ module apb_syscon #(
     // 0x000: RESET_VECTOR (Giờ đã là 32-bit hoàn chỉnh)
     // 0x004: CLK_GATE_CTRL 
     //        [0] PWM, [1] UART, [2] SPI, [3] I2C, 
-    //        [4] GPIO, [5] Accel, [6] Debug Module
+    //        [4] GPIO, [5] Accel, [6] Debug Module, [7] ASCON
     // =========================================
 
-    reg [6:0] clk_gate_reg;
+    reg [7:0] clk_gate_reg;
     reg       cpu_sleep_state;
 
     // Logic Quản lý Sleep/Wakeup CPU
@@ -67,6 +68,7 @@ module apb_syscon #(
     assign o_gpo_clk_en = clk_gate_reg[4];
     assign o_acc_clk_en = clk_gate_reg[5];
     assign o_dbg_clk_en = clk_gate_reg[6];
+    assign o_asc_clk_en = clk_gate_reg[7];
 
     // APB Logic
     wire apb_write = psel && penable && pwrite;
@@ -77,7 +79,8 @@ module apb_syscon #(
             // Mặc định địa chỉ Boot trỏ về Base Address của ROM trong SoC (ví dụ 0x00010000)
             o_reset_vector <= 32'h0001_0000;
             // Mặc định lúc Boot: Bật Clock cho Debug, UART, PWM.
-            clk_gate_reg   <= 7'b1000011; 
+            // Bit 7 (ASCON) TAT sau reset - clock cua no do o_active/psel giu.
+            clk_gate_reg   <= 8'b0100_0011;
             pready         <= 1'b0;
             prdata         <= 32'b0;
             pslverr        <= 1'b0;
@@ -88,7 +91,7 @@ module apb_syscon #(
             if (apb_write) begin
                 case (paddr[11:0])
                     12'h000: o_reset_vector <= pwdata; // Lấy toàn bộ 32-bit
-                    12'h004: clk_gate_reg   <= pwdata[6:0];
+                    12'h004: clk_gate_reg   <= pwdata[7:0];
                     default: pslverr <= 1'b1;
                 endcase
             end
@@ -96,7 +99,7 @@ module apb_syscon #(
             if (apb_read) begin
                 case (paddr[11:0])
                     12'h000: prdata <= o_reset_vector; // Xuất toàn bộ 32-bit
-                    12'h004: prdata <= {25'b0, clk_gate_reg};
+                    12'h004: prdata <= {24'b0, clk_gate_reg};
                     default: begin prdata <= 32'h0; pslverr <= 1'b1; end
                 endcase
             end

@@ -181,9 +181,9 @@ module top_soc (
     // 2. CLOCK GATING NETWORK (ĐÃ PHỤC HỒI 100%)
     // =========================================================================
     wire clk_en_cpu, clk_en_dbg, clk_en_pwm, clk_en_uart;
-    wire clk_en_spi, clk_en_i2c, clk_en_gpio, clk_en_acc;
+    wire clk_en_spi, clk_en_i2c, clk_en_gpio, clk_en_acc, clk_en_asc;
 
-    wire clk_cpu, clk_dbg, clk_pwm, clk_gpio, clk_cordic;
+    wire clk_cpu, clk_dbg, clk_pwm, clk_gpio, clk_cordic, clk_ascon;
     wire clk_uart_gated, clk_spi_gated, clk_i2c_gated;
 
     // -------------------------------------------------------------------------
@@ -242,6 +242,8 @@ module top_soc (
     wire pwm_clk_req;
     wire cordic_clk_req;
     wire cordic_active;   // loi CORDIC dang chay - phai giu clock cho no
+    wire ascon_clk_req;
+    wire ascon_active;    // ASCON/TRNG dang chay - cung phai giu clock
 
     // Gating cho Core (từ clk_core)
     clock_gate cg_cpu   (.clk_in(clk_core), .en(clk_en_cpu_s),  .test_en(1'b0), .clk_out(clk_cpu));
@@ -251,6 +253,7 @@ module top_soc (
     clock_gate cg_pwm   (.clk_in(clk_apb),  .en(clk_en_pwm  | pwm_clk_req),    .test_en(1'b0), .clk_out(clk_pwm));
     clock_gate cg_gpio  (.clk_in(clk_apb),  .en(clk_en_gpio | gpio_clk_req),   .test_en(1'b0), .clk_out(clk_gpio));
     clock_gate cg_cordic(.clk_in(clk_apb),  .en(clk_en_acc  | cordic_clk_req), .test_en(1'b0), .clk_out(clk_cordic));
+    clock_gate cg_ascon (.clk_in(clk_apb),  .en(clk_en_asc  | ascon_clk_req),  .test_en(1'b0), .clk_out(clk_ascon));
     // Gating cho Lõi ngoại vi độc lập (Dual-Clock Cores)
     clock_gate cg_uart  (.clk_in(uart_clk), .en(clk_en_uart_s), .test_en(1'b0), .clk_out(clk_uart_gated));
     clock_gate cg_spi   (.clk_in(spi_clk),  .en(clk_en_spi_s),  .test_en(1'b0), .clk_out(clk_spi_gated));
@@ -274,16 +277,17 @@ module top_soc (
     cdc_sync_bit u_sync_msip_wake (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(cpu_msip_raw[0]), .q_out(cpu_msip_apb_sync));
     wire cpu_irq_wake_apb = cpu_meip_raw | cpu_mtip_apb_sync | cpu_msip_apb_sync;
 
-    wire uart_irq_raw, gpio_irq_raw, spi_irq_raw, i2c_irq_raw, wdt_irq_raw;
+    wire uart_irq_raw, gpio_irq_raw, spi_irq_raw, i2c_irq_raw, wdt_irq_raw, ascon_irq_raw;
     wire uart_dma_tx_raw, uart_dma_rx_raw, spi_dma_tx_raw, spi_dma_rx_raw, i2c_dma_tx_raw, i2c_dma_rx_raw;
 
     // Đồng bộ Ngắt ngoại vi về clk_apb (cho PLIC)
-    wire uart_irq, gpio_irq, spi_irq, i2c_irq, wdt_irq;
+    wire uart_irq, gpio_irq, spi_irq, i2c_irq, wdt_irq, ascon_irq;
     cdc_sync_bit u_sync_uart_irq (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(uart_irq_raw), .q_out(uart_irq));
     cdc_sync_bit u_sync_gpio_irq (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(gpio_irq_raw), .q_out(gpio_irq));
     cdc_sync_bit u_sync_spi_irq  (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(spi_irq_raw),  .q_out(spi_irq));
     cdc_sync_bit u_sync_i2c_irq  (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(i2c_irq_raw),  .q_out(i2c_irq));
     cdc_sync_bit u_sync_wdt_irq  (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(wdt_irq_raw),  .q_out(wdt_irq));
+    cdc_sync_bit u_sync_asc_irq  (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(ascon_irq_raw),.q_out(ascon_irq));
 
     // Đồng bộ DMA Req về clk_axi (cho DMA Controller)
     wire uart_dma_tx, uart_dma_rx, spi_dma_tx, spi_dma_rx, i2c_dma_tx, i2c_dma_rx;
@@ -317,7 +321,7 @@ module top_soc (
 
     wire [31:1] periph_dma_req = { 25'd0, i2c_dma_rx, i2c_dma_tx, spi_dma_rx, spi_dma_tx, uart_dma_rx, uart_dma_tx };
     wire [31:1] periph_dma_clr;
-    wire [31:0] plic_irq_src = { 24'd0, dc_sb_error_sync, dma_irq_sync, wdt_irq, i2c_irq, spi_irq, gpio_irq, uart_irq, 1'b0 };
+    wire [31:0] plic_irq_src = { 23'd0, ascon_irq, dc_sb_error_sync, dma_irq_sync, wdt_irq, i2c_irq, spi_irq, gpio_irq, uart_irq, 1'b0 };
 
     wire [31:0] syscon_reset_vector;
     // -------------------------------------------------------------------------
@@ -350,6 +354,9 @@ module top_soc (
     // 4. LÕI CPU VÀ CACHES (Chạy bằng clk_cpu đã qua Gating)
     // =========================================================================
     wire [31:0] cpu_inst_addr, cpu_inst_data, cpu_data_addr, cpu_data_wdata, cpu_data_rdata;
+    // R1b - bat tay hai chu ky cho lenh nguyen tu (memory/dcache.v, pipeline_stage.v)
+    wire        cpu_data_amo_req;
+    wire        cpu_data_amo_capture;
     wire cpu_inst_req, cpu_inst_hit, cpu_inst_stall, cpu_data_rd_req, cpu_data_wr_req, cpu_data_hit, cpu_data_stall, cpu_data_unsigned;
     wire cpu_inst_error, cpu_data_error;   // C1 - loi bus tu cache ve core
     wire [1:0] cpu_data_size;
@@ -468,6 +475,9 @@ module top_soc (
         .dcache_addr        (cpu_data_addr),
         .dcache_write_data  (cpu_data_wdata),
         .dcache_read_data   (cpu_data_rdata),
+        // R1b - bat tay hai chu ky cho AMO (xem ghi chu trong memory/dcache.v)
+        .dcache_amo_req     (cpu_data_amo_req),
+        .dcache_amo_capture (cpu_data_amo_capture),
         .dcache_hit         (cpu_data_hit),
         .dcache_stall       (cpu_data_stall),
         .dcache_error       (cpu_data_error),
@@ -823,7 +833,17 @@ module top_soc (
     );
 
     // --- CẦU NỐI ICACHE (400MHz) -> AXI INTERCONNECT M0 (200MHz) ---
-    axi_async_bridge u_ic_axi_bridge (
+    // R3 - do sau FIFO CDC dat theo nhu cau THAT, khong dung mac dinh 16.
+    // I-cache chi doc va chi 1 outstanding: AW/W/B khong bao gio duoc dung (bi
+    // noi cung 0 ngay ben duoi), AR chi can giu 1 yeu cau, R chi phai nuot mot
+    // burst 4 beat tu 200 MHz trong khi phia doc chay 400 MHz.
+    axi_async_bridge #(
+        .AW_DEPTH_LOG2 (2),   // 4 slot - kenh tied-off, giu toi thieu
+        .W_DEPTH_LOG2  (2),   // 4 slot - kenh tied-off
+        .B_DEPTH_LOG2  (2),   // 4 slot - kenh tied-off
+        .AR_DEPTH_LOG2 (2),   // 4 slot - 1 outstanding read
+        .R_DEPTH_LOG2  (3)    // 8 slot - gap doi mot burst refill 4 beat
+    ) u_ic_axi_bridge (
         .s_clk(clk_cpu), .s_rst_n(reset_core_n_sync),
         
         // Kênh Write Slave: Ép cứng bằng 0 vì ICache không bao giờ ghi
@@ -874,6 +894,8 @@ module top_soc (
         .mem_unsigned    (cpu_data_unsigned),
         .mem_size        (cpu_data_size),
         .uncache_en_i    (dc_uncache_en),
+        .cpu_amo_req         (cpu_data_amo_req),
+        .dcache_amo_capture  (cpu_data_amo_capture),
         .cpu_read_data   (dc_cpu_rdata),
         .dcache_hit      (dc_cpu_hit),
         .dcache_stall    (dc_cpu_stall),
@@ -893,7 +915,18 @@ module top_soc (
     );
 
     // --- CẦU NỐI DCACHE (400MHz) -> AXI INTERCONNECT M1 (200MHz) ---
-    axi_async_bridge u_dc_axi_bridge (
+    // R3 - xem ghi chu o u_ic_axi_bridge.
+    // D-cache: FSM chinh phat 1 giao dich mot luc, store buffer xa tuan tu
+    // SB_AW -> SB_W -> SB_B nen cung 1 outstanding. Kenh W duoc de rong hon vi
+    // no la noi CPU 400 MHz do store vao bus 200 MHz - 8 slot cho phep hap thu
+    // mot chum store ngan ma khong stall nguoc vao pipeline.
+    axi_async_bridge #(
+        .AW_DEPTH_LOG2 (2),   // 4 slot
+        .W_DEPTH_LOG2  (3),   // 8 slot - dem chum store 400 -> 200 MHz
+        .B_DEPTH_LOG2  (2),   // 4 slot
+        .AR_DEPTH_LOG2 (2),   // 4 slot - 1 outstanding read
+        .R_DEPTH_LOG2  (3)    // 8 slot - gap doi mot burst refill 4 beat
+    ) u_dc_axi_bridge (
         .s_clk(clk_cpu), .s_rst_n(reset_core_n_sync),
         .s_axi_awid(dc_awid), .s_axi_awaddr(dc_awaddr), .s_axi_awlen(dc_awlen), .s_axi_awsize(dc_awsize), .s_axi_awburst(dc_awburst), .s_axi_awprot(dc_awprot), .s_axi_awvalid(dc_awvalid), .s_axi_awready(dc_awready),
         .s_axi_wdata(dc_wdata), .s_axi_wstrb(dc_wstrb), .s_axi_wlast(dc_wlast), .s_axi_wvalid(dc_wvalid), .s_axi_wready(dc_wready),
@@ -1056,7 +1089,17 @@ module top_soc (
         //   2 QSPI   : 2  - chi doc; Genus da tu xoa duong W
         //   1 RAM lo : 8  - chiu burst
         //   0 ROM    : 2  - chi doc; Genus da tu xoa duong W
-        .SLV_W_FIFO_DEPTH (224'h0000_0008_0000_0002_0000_0002_0000_0008_0000_0002_0000_0008_0000_0002)
+        .SLV_W_FIFO_DEPTH (224'h0000_0008_0000_0002_0000_0002_0000_0008_0000_0002_0000_0008_0000_0002),
+        // R4 - bon truong sideband duoi day duoc noi CUNG bang hang so o phan
+        // .m_AWLOCK_i / .m_AWCACHE_i / .m_AWQOS_i / .m_AWREGION_i ngay ben duoi,
+        // giong het cho ca AR. Bao interconnect dung mang chung qua FIFO cua tung
+        // master nua; gia tri o chan slave giu nguyen tung bit nho bon hang so
+        // nay. AxPROT KHONG nam trong day - no la tin hieu that cua tung master.
+        .AXI_SIDEBAND_EN  (0),
+        .AXI_LOCK_CONST   (1'b0),
+        .AXI_CACHE_CONST  (4'b0011),
+        .AXI_QOS_CONST    (4'b0000),
+        .AXI_REGION_CONST (4'b0000)
     ) u_axi_interconnect (
         .ACLK_i          (clk_axi), // AXI Bus chạy clk_axi (luôn sống)
         .ARESETn_i       (reset_axi_n_sync),
@@ -1256,17 +1299,31 @@ module top_soc (
 
     // =========================================================================
     // 9. APB INTERCONNECT VÀ CÁC NGOẠI VI
+    //
+    // Ban do dia chi (khop 1:1 voi param SLVn_BASE/SLVn_MASK cua
+    // apb_interconnect - sua mot ben ma quen ben kia la loi im lang):
+    //   S0  0x4000_0000  4 KB   UART
+    //   S1  0x4000_1000  4 KB   GPIO
+    //   S2  0x4000_2000  4 KB   PWM / Timer
+    //   S3  0x4000_3000  4 KB   SPI
+    //   S4  0x4000_4000  4 KB   I2C
+    //   S5  0x4000_5000  4 KB   Watchdog
+    //   S6  0x4000_6000  4 KB   CORDIC
+    //   S7  0x4000_7000  4 KB   Syscon
+    //   S9  0x4000_8000  16 KB  DMA config   (0x4000_8000-0x4000_BFFF)
+    //   S10 0x4000_C000  4 KB   ASCON + TRNG
+    //   S8  0x4400_0000  64 MB  PLIC
     // =========================================================================
-    wire [31:0] paddr_0, paddr_1, paddr_2, paddr_3, paddr_4, paddr_5, paddr_6, paddr_7, paddr_8, paddr_9;
-    wire [31:0] pwdata_0, pwdata_1, pwdata_2, pwdata_3, pwdata_4, pwdata_5, pwdata_6, pwdata_7, pwdata_8, pwdata_9;
-    wire [31:0] prdata_0, prdata_1, prdata_2, prdata_3, prdata_4, prdata_5, prdata_6, prdata_7, prdata_8, prdata_9;
+    wire [31:0] paddr_0, paddr_1, paddr_2, paddr_3, paddr_4, paddr_5, paddr_6, paddr_7, paddr_8, paddr_9, paddr_10;
+    wire [31:0] pwdata_0, pwdata_1, pwdata_2, pwdata_3, pwdata_4, pwdata_5, pwdata_6, pwdata_7, pwdata_8, pwdata_9, pwdata_10;
+    wire [31:0] prdata_0, prdata_1, prdata_2, prdata_3, prdata_4, prdata_5, prdata_6, prdata_7, prdata_8, prdata_9, prdata_10;
     wire [3:0] pstrb_0, pstrb_1, pstrb_2, pstrb_3, pstrb_4, pstrb_5, pstrb_6, pstrb_7;
     wire [2:0] pprot_0, pprot_1, pprot_2, pprot_3, pprot_4, pprot_5, pprot_6, pprot_7;
-    wire psel_0, psel_1, psel_2, psel_3, psel_4, psel_5, psel_6, psel_7, psel_8, psel_9;
-    wire penable_0, penable_1, penable_2, penable_3, penable_4, penable_5, penable_6, penable_7, penable_8, penable_9;
-    wire pwrite_0, pwrite_1, pwrite_2, pwrite_3, pwrite_4, pwrite_5, pwrite_6, pwrite_7, pwrite_8, pwrite_9;
-    wire pready_0, pready_1, pready_2, pready_3, pready_4, pready_5, pready_6, pready_7, pready_8, pready_9;
-    wire pslverr_0, pslverr_1, pslverr_2, pslverr_3, pslverr_4, pslverr_5, pslverr_6, pslverr_7, pslverr_8, pslverr_9;
+    wire psel_0, psel_1, psel_2, psel_3, psel_4, psel_5, psel_6, psel_7, psel_8, psel_9, psel_10;
+    wire penable_0, penable_1, penable_2, penable_3, penable_4, penable_5, penable_6, penable_7, penable_8, penable_9, penable_10;
+    wire pwrite_0, pwrite_1, pwrite_2, pwrite_3, pwrite_4, pwrite_5, pwrite_6, pwrite_7, pwrite_8, pwrite_9, pwrite_10;
+    wire pready_0, pready_1, pready_2, pready_3, pready_4, pready_5, pready_6, pready_7, pready_8, pready_9, pready_10;
+    wire pslverr_0, pslverr_1, pslverr_2, pslverr_3, pslverr_4, pslverr_5, pslverr_6, pslverr_7, pslverr_8, pslverr_9, pslverr_10;
 
     apb_interconnect u_apb_interconnect (
         .clk(clk_apb), .rst_n(reset_apb_n_sync),
@@ -1280,7 +1337,8 @@ module top_soc (
         .s6_paddr(paddr_6), .s6_psel(psel_6), .s6_penable(penable_6), .s6_pwrite(pwrite_6), .s6_pwdata(pwdata_6), .s6_pstrb(pstrb_6), .s6_pprot(pprot_6), .s6_pready(pready_6), .s6_prdata(prdata_6), .s6_pslverr(pslverr_6),
         .s7_paddr(paddr_7), .s7_psel(psel_7), .s7_penable(penable_7), .s7_pwrite(pwrite_7), .s7_pwdata(pwdata_7), .s7_pstrb(pstrb_7), .s7_pprot(pprot_7), .s7_pready(pready_7), .s7_prdata(prdata_7), .s7_pslverr(pslverr_7),
         .s8_paddr(paddr_8), .s8_psel(psel_8), .s8_penable(penable_8), .s8_pwrite(pwrite_8), .s8_pwdata(pwdata_8), .s8_pready(pready_8), .s8_prdata(prdata_8), .s8_pslverr(pslverr_8),
-        .s9_paddr(paddr_9), .s9_psel(psel_9), .s9_penable(penable_9), .s9_pwrite(pwrite_9), .s9_pwdata(pwdata_9), .s9_pready(pready_9), .s9_prdata(prdata_9), .s9_pslverr(pslverr_9)
+        .s9_paddr(paddr_9), .s9_psel(psel_9), .s9_penable(penable_9), .s9_pwrite(pwrite_9), .s9_pwdata(pwdata_9), .s9_pready(pready_9), .s9_prdata(prdata_9), .s9_pslverr(pslverr_9),
+        .s10_paddr(paddr_10), .s10_psel(psel_10), .s10_penable(penable_10), .s10_pwrite(pwrite_10), .s10_pwdata(pwdata_10), .s10_pready(pready_10), .s10_prdata(prdata_10), .s10_pslverr(pslverr_10)
     );
 
     // -------------------------------------------------------------------------
@@ -1290,16 +1348,18 @@ module top_soc (
     // Hai chu ky la du: `pready <= psel && penable` la mot tang flop duy nhat,
     // nen no can DUNG mot canh sau khi psel ha de tro ve 0.
     // -------------------------------------------------------------------------
-    reg [1:0] psel_gpio_ext, psel_pwm_ext, psel_cordic_ext;
+    reg [1:0] psel_gpio_ext, psel_pwm_ext, psel_cordic_ext, psel_ascon_ext;
     always @(posedge clk_apb or negedge reset_apb_n_sync) begin
         if (!reset_apb_n_sync) begin
             psel_gpio_ext   <= 2'b00;
             psel_pwm_ext    <= 2'b00;
             psel_cordic_ext <= 2'b00;
+            psel_ascon_ext  <= 2'b00;
         end else begin
             psel_gpio_ext   <= {psel_gpio_ext[0],   psel_1};
             psel_pwm_ext    <= {psel_pwm_ext[0],    psel_2};
             psel_cordic_ext <= {psel_cordic_ext[0], psel_6};
+            psel_ascon_ext  <= {psel_ascon_ext[0],  psel_10};
         end
     end
     assign gpio_clk_req   = psel_1 | (|psel_gpio_ext);
@@ -1309,6 +1369,10 @@ module top_soc (
     // clock ngay sau chu ky ghi va FSM ket o CALC vinh vien (STATUS ket BUSY,
     // X_OUT/Y_OUT khong bao gio ra).  Vi vay phai OR them `cordic_active`.
     assign cordic_clk_req = psel_6 | (|psel_cordic_ext) | cordic_active;
+    // ASCON giong CORDIC: mot lenh START chay 12 chu ky, mot khoi du lieu 6/12
+    // chu ky, va TRNG can 128 chu ky lien tuc de `valid` len. `ascon_active`
+    // (busy | START | DATA_VALID | TRNG_EN) giu cong mo suot thoi gian do.
+    assign ascon_clk_req  = psel_10 | (|psel_ascon_ext) | ascon_active;
 
     // S0: UART
     apb_uart u_apb_uart (
@@ -1388,7 +1452,8 @@ module top_soc (
         .o_spi_clk_en  (clk_en_spi),
         .o_i2c_clk_en  (clk_en_i2c),
         .o_gpo_clk_en  (clk_en_gpio),
-        .o_acc_clk_en  (clk_en_acc)
+        .o_acc_clk_en  (clk_en_acc),
+        .o_asc_clk_en  (clk_en_asc)
     );
 
     // S8: PLIC
@@ -1396,6 +1461,17 @@ module top_soc (
         .clk_i(clk_apb), .rst_ni(reset_apb_n_sync),
         .paddr(paddr_8), .psel(psel_8), .penable(penable_8), .pwrite(pwrite_8), .pwdata(pwdata_8), .pready(pready_8), .prdata(prdata_8), .pslverr(pslverr_8),
         .irq_src_i(plic_irq_src), .irq_o(cpu_meip_raw)
+    );
+
+    // S10: ASCON-128 AEAD / ASCON-HASH + TRNG 128-bit  (0x4000_C000, 4 KB)
+    // Chay tren clock DA GATE nhu CORDIC, nen `o_active` bat buoc phai vong ve
+    // `ascon_clk_req` - neu khong FSM se dong bang giua 12 vong hoan vi.
+    apb_ascon u_apb_ascon (
+        .PCLK(clk_ascon), .PRESETn(reset_apb_n_sync),
+        .PSEL(psel_10), .PENABLE(penable_10), .PWRITE(pwrite_10), .PADDR(paddr_10[11:0]),
+        .PWDATA(pwdata_10), .PRDATA(prdata_10), .PREADY(pready_10), .PSLVERR(pslverr_10),
+        .ascon_irq(ascon_irq_raw),
+        .o_active(ascon_active)
     );
 
     // =========================================================================

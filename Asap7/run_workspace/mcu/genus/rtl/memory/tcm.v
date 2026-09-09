@@ -126,10 +126,6 @@ module tcm #(
 
     reg [1:0]              state;
     reg                    owner;
-    // Set when a fetch was ready to go but lost the macro to the data port.
-    // It lets that fetch win the next arbitration, so a run of back-to-back
-    // loads and stores cannot hold instruction fetch off indefinitely.
-    reg                    f_starved;
     reg [BYTE_ADDR_W-1:0]  addr_q;
     reg [DATA_WIDTH-1:0]   wdata_q;
     reg [1:0]              size_q;
@@ -140,11 +136,52 @@ module tcm #(
     wire fetch_req = (HAS_FETCH_PORT != 0) && f_req;
     wire data_req  = d_rd_req || d_wr_req;
 
+    // -------------------------------------------------------------------------
+    // R7 - `f_starved` la WIRE, khong con la reg o muc module.
+    //
+    // Y nghia khong doi: set khi mot fetch da san sang nhung thua macro ve tay
+    // cong D, de fetch do thang vong trong tai -> mot chuoi load/store lien tuc
+    // khong the chan instruction fetch mai mai.
+    //
+    // Nhung `u_dtcm` (top_soc.v:1009) dat HAS_FETCH_PORT = 0, nen trong ban
+    // uniquify `tcm_SIZE_BYTES16384_HAS_FETCH_PORT0` thi `fetch_req` la hang so 0,
+    // khong co gi de doi, va flop nay CHET -> Genus bao CDFG-508 (`Removing
+    // unused flip-flop register 'f_starved'`) o moi lan chay. `u_itcm`
+    // (top_soc.v:985) dung HAS_FETCH_PORT = 1 va VAN giu flop nay.
+    //
+    // Dua no vao generate ben duoi: co cong fetch thi co flop that, khong co thi
+    // la hang so 0 va bien mat sach - het canh bao ma ITCM khong doi hanh vi.
+    // -------------------------------------------------------------------------
+    wire f_starved;
+
     // Port D wins, except against a fetch that already lost once.
     wire f_priority = fetch_req && f_starved;
     wire grant_d    = data_req && !f_priority;
     wire grant_f    = fetch_req && (!data_req || f_starved);
     wire start      = (state == S_IDLE) && (grant_d || grant_f);
+
+    generate
+        if (HAS_FETCH_PORT != 0) begin : G_FETCH_ARB
+            reg f_starved_q;
+
+            always @(posedge clk or negedge rst_n) begin
+                if (!rst_n) begin
+                    f_starved_q <= 1'b0;
+                end else if (state == S_IDLE) begin
+                    // A fetch that is ready but not granted this cycle earns
+                    // priority for the next one; winning clears the claim.
+                    if (fetch_req && !grant_f)
+                        f_starved_q <= 1'b1;
+                    else if (grant_f)
+                        f_starved_q <= 1'b0;
+                end
+            end
+
+            assign f_starved = f_starved_q;
+        end else begin : G_NO_FETCH_ARB
+            assign f_starved = 1'b0;
+        end
+    endgenerate
 
     wire [BYTE_ADDR_W-1:0] start_addr = grant_d ? d_addr[BYTE_ADDR_W-1:0]
                                                 : f_addr[BYTE_ADDR_W-1:0];
@@ -213,7 +250,6 @@ module tcm #(
         if (!rst_n) begin
             state        <= S_IDLE;
             owner        <= OWNER_F;
-            f_starved    <= 1'b0;
             addr_q       <= {BYTE_ADDR_W{1'b0}};
             wdata_q      <= {DATA_WIDTH{1'b0}};
             size_q       <= 2'b10;
@@ -223,13 +259,7 @@ module tcm #(
         end else begin
             case (state)
                 S_IDLE: begin
-                    // A fetch that is ready but not granted this cycle earns
-                    // priority for the next one; winning clears the claim.
-                    if (fetch_req && !grant_f)
-                        f_starved <= 1'b1;
-                    else if (grant_f)
-                        f_starved <= 1'b0;
-
+                    // `f_starved` duoc cap nhat trong generate G_FETCH_ARB o tren.
                     if (start) begin
                         state        <= S_RESP;
                         owner        <= grant_d ? OWNER_D : OWNER_F;

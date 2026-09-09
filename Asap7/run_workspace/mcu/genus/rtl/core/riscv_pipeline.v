@@ -46,6 +46,9 @@ module riscv_pipeline #(
     output wire [31:0] dcache_addr,
     output wire [31:0] dcache_write_data,
     input  wire [31:0] dcache_read_data,
+    // R1b - bat tay hai chu ky cho AMO. Xem ghi chu trong pipeline_stage.v.
+    output wire        dcache_amo_req,
+    input  wire        dcache_amo_capture,
     input  wire        dcache_hit,
     input  wire        dcache_stall,
     input  wire        dcache_error,   // B2 - loi bus khi truy cap du lieu -> mcause 5/7
@@ -290,6 +293,12 @@ module riscv_pipeline #(
     wire        load_use_stall;
     wire        flush_branch;
     wire        flush_jal;
+    // R2 - JALR phan giai o EX/MEM, nen no co tin hieu flush rieng hanh xu y het
+    // `flush_branch`. Xem ghi chu R2 trong pipeline_stage.v.
+    wire        flush_jalr;
+    wire        ex_mem_jalr;
+    wire [31:0] ex_mem_jalr_target;
+    wire [31:0] jalr_target;
     wire        flush_trap;
     wire        stall_IF;
     wire        stall_ID;
@@ -528,13 +537,32 @@ module riscv_pipeline #(
     // no duoc dem nhu mot lenh that.
     wire if_fetch_bubble = ~fetch_enable | icache_stall;
 
+    // -------------------------------------------------------------------------
+    // R2 - `flush_jalr` di kem `flush_branch` o IF/ID va ID/EX, nhung KHONG o
+    // EX/MEM.
+    //
+    // Khi JALR nam o EX/MEM va doi huong: IF/ID giu lenh JALR+4 va ID/EX giu
+    // lenh JALR+8, ca hai deu la duong sai -> phai xoa. Nhung EX/MEM giu CHINH
+    // LENH JALR, no con phai ghi `ra`; xoa no o day la thua.
+    //
+    // Do bang tb firmware that (`rtl/tests/run_soc_sim.sh fw`, cung anh ROM):
+    //     baseline (JALR o ID/EX)                     t = 1 528 046 000
+    //     R2 co flush_jalr trong flush_ex_mem         t = 2 830 376 000  (+85 %)
+    //     R2 bo flush_jalr khoi flush_ex_mem          t = 1 701 796 000  (+11.4 %)
+    // Term thua do mot minh dat 74 diem phan tram. Dung them lai.
+    //
+    // +11.4 % con lai la gia THAT cua viec JALR chuyen tu 1 bong bong sang 2,
+    // doi lay ~315 ps tren duong toi han (bo mux next-PC ra khoi duong cua bo
+    // cong JALR). Firmware nay goi ham rat day nen day la can tren, khong phai
+    // con so trung binh.
+    // -------------------------------------------------------------------------
     wire flush_if_id  = ~mem_freeze &
-                        (flush_trap | flush_branch | flush_jal |
+                        (flush_trap | flush_branch | flush_jalr | flush_jal |
                          (if_fetch_bubble  & !stall_if_id) |
                          (if_realign_stall & !stall_if_id));
     wire stall_id_ex  = dcache_stall | mf_alu_stall | stall_EX;
     wire flush_id_ex  = ~mem_freeze &
-                        (flush_trap | flush_branch | load_use_stall |
+                        (flush_trap | flush_branch | flush_jalr | load_use_stall |
                          (flush_jal & !stall_id_ex));
     wire stall_ex_mem = dcache_stall | stall_MEM;
     wire flush_ex_mem = ~mem_freeze & (flush_trap | flush_branch | mf_alu_stall);
@@ -577,7 +605,7 @@ module riscv_pipeline #(
         end else if (riscv_start && !riscv_done) begin
             if (dbg_halted && !dbg_resume_req) begin
                 pc_reg <= dpc_out;
-            end else if ((flush_trap || flush_branch || flush_jal) && !dcache_stall) begin
+            end else if ((flush_trap || flush_branch || flush_jalr || flush_jal) && !dcache_stall) begin
                 // Doi huong PC cung phai CHO bo nho: neu khong thi PC nhay di trong
                 // khi IF/ID dang dong bang (mem_freeze chan flush), va lenh o dich
                 // bi bo qua.
@@ -613,7 +641,7 @@ module riscv_pipeline #(
             // Cung ly do: flush_temp la ban tre mot nhip cua lan doi huong. Neu no
             // chay trong luc pipeline dong bang thi no het han TRUOC khi lan doi
             // huong that su xay ra.
-            flush_temp <= flush_branch || flush_jal || flush_trap;
+            flush_temp <= flush_branch || flush_jalr || flush_jal || flush_trap;
         end
     end
 
@@ -633,11 +661,10 @@ module riscv_pipeline #(
         .pc_in(pc_in),
         .ex_mem_pc_in(ex_mem_pc_in),
         .ex_mem_pc_plus_4(ex_mem_pc_plus_4),
-        .id_ex_jalr(id_ex_jalr),
+        .ex_mem_jalr(ex_mem_jalr),
+        .ex_mem_jalr_target(ex_mem_jalr_target),
         .id_ex_jal(id_ex_jal),
         .btb_hit(btb_hit),
-        .alu_in1(alu_in1),
-        .id_ex_ext_imm(id_ex_ext_imm),
         .predict_taken(predict_taken),
         .actual_taken(actual_taken),
         .bpu_correct(bpu_correct),
@@ -1000,7 +1027,8 @@ module riscv_pipeline #(
         .branch_taken(branch_taken),
         .csr_write_data(csr_write_data_ex),
         .mf_alu_stall(mf_alu_stall),
-        .fpu_result_out(fpu_result_out)
+        .fpu_result_out(fpu_result_out),
+        .jalr_target(jalr_target)
     );
 
     ex_mem_register #(.ROB_TAG_W(ROB_TAG_W)) EX_MEM (
@@ -1028,6 +1056,8 @@ module riscv_pipeline #(
         .id_ex_branch(id_ex_branch),
         .branch_taken(branch_taken),
         .id_ex_jal(id_ex_jal),
+        .id_ex_jalr(id_ex_jalr),
+        .jalr_target(jalr_target),
         .id_ex_mem_unsigned(id_ex_mem_unsigned),
         .id_ex_mem_size(id_ex_mem_size),
         .id_ex_read_data2(id_ex_read_data2),
@@ -1059,6 +1089,8 @@ module riscv_pipeline #(
         .ex_mem_branch(ex_mem_branch),
         .ex_mem_branch_taken(ex_mem_branch_taken),
         .ex_mem_jal(ex_mem_jal),
+        .ex_mem_jalr(ex_mem_jalr),
+        .ex_mem_jalr_target(ex_mem_jalr_target),
         .ex_mem_mem_unsigned(ex_mem_mem_unsigned),
         .ex_mem_mem_size(ex_mem_mem_size),
         .ex_mem_mem_write_data(ex_mem_mem_write_data),
@@ -1107,7 +1139,9 @@ module riscv_pipeline #(
         .dcache_write_req(dcache_write_req),
         .dcache_addr(dcache_addr),
         .dcache_write_data(dcache_write_data),
-        .dcache_read_data(dcache_read_data)
+        .dcache_read_data(dcache_read_data),
+        .dcache_amo_req(dcache_amo_req),
+        .dcache_amo_capture(dcache_amo_capture)
     );
 
     mem_wb_register #(.ROB_TAG_W(ROB_TAG_W)) MEM_WB (
@@ -1170,6 +1204,7 @@ module riscv_pipeline #(
         .id_ex_mem_to_reg(id_ex_mem_to_reg),
         .id_ex_jal(id_ex_jal),
         .id_ex_jalr(id_ex_jalr),
+        .ex_mem_jalr(ex_mem_jalr),
         .id_ex_rd(id_ex_rd),
         .bpu_correct(bpu_correct),
         .trap_enter(trap_enter),
@@ -1187,6 +1222,7 @@ module riscv_pipeline #(
         .load_use_stall(load_use_stall),
         .flush_branch(flush_branch),
         .flush_jal(flush_jal),
+        .flush_jalr(flush_jalr),
         .flush_trap(flush_trap),
         .stall_IF(stall_IF),
         .stall_ID(stall_ID),
