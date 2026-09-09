@@ -186,8 +186,8 @@ proc genus_run_static_checks {} {
     global SRAM_RAM_COUNT SRAM_ICACHE_COUNT SRAM_DCACHE_COUNT SRAM_MACRO_BYTES
     global SRAM_ITCM_COUNT SRAM_DTCM_COUNT
 
-    if {[llength $RTL_FILES] != 55} {
-        error "Expected exactly 55 RTL files, found [llength $RTL_FILES]"
+    if {[llength $RTL_FILES] != 58} {
+        error "Expected exactly 58 RTL files, found [llength $RTL_FILES]"
     }
 
     set seen [dict create]
@@ -303,7 +303,7 @@ proc genus_run_static_checks {} {
         }
     }
 
-    puts "MCU static checks passed: 55 RTL files, boot image, SRAM wrapper and SDC"
+    puts "MCU static checks passed: 58 RTL files, boot image, SRAM wrapper and SDC"
 }
 
 proc check_sram_library_cell {master} {
