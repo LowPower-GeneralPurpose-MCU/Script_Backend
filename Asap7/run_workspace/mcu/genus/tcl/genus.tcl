@@ -689,17 +689,92 @@ foreach module_pattern $MCU_PRESERVE_MODULES {
 # bo dao dong bi xoa am tham la lop loi te nhat - `rand_out` van co ve chay,
 # chi la khong con ngau nhien.
 # -----------------------------------------------------------------------------
-set MCU_RO_INSTS {}
-foreach inst_obj [get_db insts -if {.hdl_name == *RingOscillator* ||
-                                    .name == *ro_invs_not_gate* ||
-                                    .name == *ro_nand_nand_gate*}] {
-    lappend MCU_RO_INSTS $inst_obj
+# `get_db ... -if {...}` KHONG nhan bieu thuc trai nhieu dong: Genus tra ve
+# "Evaluation for '-if/-expr' option failed. [TUI-180]" va dung script ngay -
+# do la loi cua run 02:48.  Loc bang Tcl + `string match` giong het vong
+# preserve-hierarchy o tren: doc duoc, khong phu thuoc phien ban, va khong can
+# doan xem attribute `.hdl_name` co ton tai hay khong.
+#
+# Loc theo BASE CELL chu khong theo ten instance.  `.name` cua mot inst co the
+# la ten la (`u_cell`) hoac duong dan phan cap tuy phien ban Genus, con base
+# cell thi chac chan.  Trong TOAN BO RTL chi co rtl/apb_ascon/trng_128b.v
+# instantiate thang cell ASAP7 (INVx1 + NAND2x1, nhanh `elsif ASAP7`), nen bo
+# loc nay khong the vo tinh trung mach khac.  Dung tien to `*` vi mot so phien
+# ban tra ve ten co kem ten thu vien.
+set MCU_RO_CELL_PATTERNS  {*INVx1_ASAP7_75t_R* *NAND2x1_ASAP7_75t_R*}
+set MCU_RO_NAND_PATTERNS  {*NAND2x1_ASAP7_75t_R*}
+
+# RingOscillator = 6 tang INVx1 (ro_invs_not_gate_0..5) + 1 NAND2x1 enable.
+# Ep dung con so: neu chi tim thay it hon thi hoac bo loc sai, hoac da co cell
+# bi toi uu an mat - ca hai deu phai dung script chu khong duoc chay tiep.
+set MCU_RO_EXPECTED_CELLS 7
+
+proc mcu_inst_base_cell_name {inst_obj} {
+    set base_cell ""
+    catch {set base_cell [get_db $inst_obj .base_cell]}
+    if {$base_cell eq ""} {
+        return ""
+    }
+    set cell_name ""
+    catch {set cell_name [get_db $base_cell .name]}
+    return $cell_name
 }
-if {[llength $MCU_RO_INSTS] == 0} {
-    error "ring oscillator: khong tim thay instance nao cua RingOscillator - kiem tra reports/hierarchy_elaborated.rpt va define ASAP7"
+
+proc mcu_insts_by_base_cell {patterns} {
+    set matched {}
+    foreach inst_obj [get_db insts] {
+        set cell_name [mcu_inst_base_cell_name $inst_obj]
+        if {$cell_name eq ""} {
+            continue
+        }
+        foreach pattern $patterns {
+            if {[string match $pattern $cell_name]} {
+                lappend matched $inst_obj
+                break
+            }
+        }
+    }
+    return $matched
+}
+
+proc mcu_insts_by_name {patterns} {
+    set matched {}
+    foreach inst_obj [get_db insts] {
+        set inst_name ""
+        catch {set inst_name [get_db $inst_obj .name]}
+        if {$inst_name eq ""} {
+            continue
+        }
+        foreach pattern $patterns {
+            if {[string match $pattern $inst_name]} {
+                lappend matched $inst_obj
+                break
+            }
+        }
+    }
+    return $matched
+}
+
+# Khoi nay chay TRUOC init_design, va toi khong kiem duoc tren tool o day
+# (may nay khong cai Genus) rang `.base_cell` da duoc dien o thoi diem do hay
+# chua.  Neu chua, lui ve loc theo ten instance - hai mau duoi day chi ton tai
+# trong RingOscillator nen khong the trung mach khac.  Ca hai duong deu in ro
+# duong nao da khop de log noi that, va chi `error` khi CA HAI deu rong.
+set MCU_RO_INSTS [mcu_insts_by_base_cell $MCU_RO_CELL_PATTERNS]
+if {[llength $MCU_RO_INSTS] == $MCU_RO_EXPECTED_CELLS} {
+    puts "Ring oscillator: khop $MCU_RO_EXPECTED_CELLS cell theo base cell"
+} elseif {[llength $MCU_RO_INSTS] > 0} {
+    error "ring oscillator: cho $MCU_RO_EXPECTED_CELLS cell ASAP7 da instantiate (6 INVx1 + 1 NAND2x1), tim thay [llength $MCU_RO_INSTS] - co cell da bi toi uu mat, kiem tra reports/hierarchy_elaborated.rpt"
+} else {
+    set MCU_RO_INSTS [mcu_insts_by_name {*ro_invs_not_gate* *ro_nand_nand_gate*}]
+    if {[llength $MCU_RO_INSTS] == 0} {
+        error "ring oscillator: khong khop instance nao theo base cell LAN theo ten - kiem tra define ASAP7 khi read_hdl va reports/hierarchy_elaborated.rpt"
+    }
+    puts "Ring oscillator: base cell chua san sang truoc init_design, lui ve loc theo ten - khop [llength $MCU_RO_INSTS] instance"
 }
 foreach inst_obj $MCU_RO_INSTS {
     set_db $inst_obj .preserve true
+    puts "Ring oscillator: preserve [get_db $inst_obj .name] ([mcu_inst_base_cell_name $inst_obj])"
 }
 puts "Ring oscillator: da dat .preserve true cho [llength $MCU_RO_INSTS] instance"
 
@@ -738,8 +813,9 @@ if {[info exists ::dc::sdc_failed_commands] &&
 # khoi nay moi chi duoc viet theo tai lieu chu chua duoc kiem tren cong cu.
 # Neu ten object khong khop, script se `error` chu khong im lang.
 # -----------------------------------------------------------------------------
-set MCU_RO_NAND_INSTS [get_db insts -if {.base_cell.name == NAND2x1_ASAP7_75t_R* &&
-                                         .name == *ro_nand*}]
+# Lay lai collection sau init_design thay vi dung lai $MCU_RO_INSTS: init_design
+# co the tao lai object, va mot handle cu se im lang tro thanh rong.
+set MCU_RO_NAND_INSTS [mcu_insts_by_base_cell $MCU_RO_NAND_PATTERNS]
 if {[llength $MCU_RO_NAND_INSTS] == 0} {
     error "ring oscillator: khong tim thay cell NAND cua RO de cat vong timing"
 }
@@ -750,8 +826,21 @@ foreach nand_obj $MCU_RO_NAND_INSTS {
 }
 puts "Ring oscillator: da cat vong timing tren [llength $MCU_RO_NAND_INSTS] cell NAND"
 
-set MCU_RO_TAP_PINS [get_db pins -if {.name == *ro_invs_not_gate*/*/Y ||
-                                      .name == *ro_nand_nand_gate*/*/Y}]
+# Tap sang RingGenerator = chan ra cua chinh cac cell RO.  Lay qua `.pins` cua
+# instance thay vi mot mau ten `*/*/Y`: mau do vua la bieu thuc -if nhieu dong
+# (TUI-180) vua gia dinh do sau phan cap co dinh.
+set MCU_RO_TAP_PINS {}
+foreach inst_obj [mcu_insts_by_base_cell $MCU_RO_CELL_PATTERNS] {
+    set inst_pins {}
+    catch {set inst_pins [get_db $inst_obj .pins]}
+    foreach pin_obj $inst_pins {
+        set pin_dir ""
+        catch {set pin_dir [get_db $pin_obj .direction]}
+        if {$pin_dir eq "out" || $pin_dir eq "output"} {
+            lappend MCU_RO_TAP_PINS $pin_obj
+        }
+    }
+}
 if {[llength $MCU_RO_TAP_PINS] > 0} {
     catch {set_false_path -from $MCU_RO_TAP_PINS}
     puts "Ring oscillator: false path tu [llength $MCU_RO_TAP_PINS] tap sang RingGenerator"
