@@ -222204,20 +222204,20 @@
 "object":"/designs/top_soc/instances_seq/u_axi_apb_dma_u_dma_engine_u_rd_master_u_cmd_fifo_wr_ptr_reg[2]",
 "type":"instance"},
 {"index": "2", 
- "date": "Tue Sep 08 15:06:50 UTC 2026",
- "seconds": 1788880010.270244,
+ "date": "Tue Sep 08 17:28:56 UTC 2026",
+ "seconds": 1788888536.8955529,
  "netlist": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v", 
  "netlist_exists": "1", 
  "netlist_normalize": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v", 
- "netlist_mtime": "1788879974", 
- "netlist_timestamp": "Tue Sep 08 15:06:14 UTC 2026", 
+ "netlist_mtime": "1788888503", 
+ "netlist_timestamp": "Tue Sep 08 17:28:23 UTC 2026", 
  "netlist_size": "23257972", 
- "netlist_cksum": "840705435", 
+ "netlist_cksum": "2586042308", 
  "design_name": "top_soc", 
  "synth_workdir": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus", 
  "synthesis_command":"",
  "current_label": "top_soc_synv", 
  "previous_label": "fv_map", 
- "write_verif_file_runtime": 29.986656 
+ "write_verif_file_runtime": 27.558691 
  }
 ]
