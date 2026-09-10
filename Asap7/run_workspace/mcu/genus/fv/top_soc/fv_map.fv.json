@@ -220395,20 +220395,20 @@
 "object":"/designs/top_soc/instances_seq/u_uart_rst_sync_r2_reg",
 "type":"instance"},
 {"index": "1", 
- "date": "Wed Sep 09 18:47:37 UTC 2026",
- "seconds": 1788979657.342507,
+ "date": "Thu Sep 10 05:24:53 UTC 2026",
+ "seconds": 1789017893.289798,
  "netlist": "fv/top_soc/fv_map.v.gz", 
  "netlist_exists": "1", 
  "netlist_normalize": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/fv/top_soc/fv_map.v.gz", 
- "netlist_mtime": "1788979627", 
- "netlist_timestamp": "Wed Sep 09 18:47:07 UTC 2026", 
- "netlist_size": "2288497", 
- "netlist_cksum": "1745043494", 
+ "netlist_mtime": "1789017862", 
+ "netlist_timestamp": "Thu Sep 10 05:24:22 UTC 2026", 
+ "netlist_size": "2288502", 
+ "netlist_cksum": "3299478175", 
  "design_name": "top_soc", 
  "synth_workdir": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus", 
  "synthesis_command":"",
  "current_label": "fv_map", 
  "previous_label": "rtl", 
- "write_verif_file_runtime": 29.340021999999998 
+ "write_verif_file_runtime": 31.052929 
  }
 ]
