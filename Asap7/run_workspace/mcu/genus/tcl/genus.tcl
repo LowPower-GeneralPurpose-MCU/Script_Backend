@@ -950,25 +950,27 @@ mcu_report "area"           {report_area > ./reports/area_syn.rpt}
 mcu_report "area hierarchy" {report_area -depth 5 > ./reports/area_hierarchy_syn.rpt}
 mcu_report "timing setup"   {report_timing -max_paths 100 > ./reports/timing_syn.rpt}
 
-# F2 - hold co bao cao rieng.
+# F2 - hold: GENUS KHONG BAO CAO DUOC, va day la ket luan tu tool chu khong
+# phai phong doan.
 #
-# Genus khong co -early: check type di theo ANALYSIS VIEW.  Mot view nam trong
-# CA HAI danh sach cua set_analysis_view (view_tt) van duoc bao cao theo setup,
-# nen bao cao hold chi co nghia tren view CHI nam ben hold - o day la view_ff
-# khi bat multi-corner.  Neu setup va hold dung chung het view thi khong tach
-# duoc, va noi thang ra thay vi ghi mot file lap lai y nguyen bao cao setup.
-set MCU_HOLD_ONLY_VIEWS {}
-foreach view_name $MCU_HOLD_VIEWS {
-    if {[lsearch -exact $MCU_SETUP_VIEWS $view_name] < 0} {
-        lappend MCU_HOLD_ONLY_VIEWS $view_name
-    }
-}
-if {[llength $MCU_HOLD_ONLY_VIEWS] > 0} {
-    puts "Hold: bao cao tren view chi-hold = $MCU_HOLD_ONLY_VIEWS"
-    mcu_report "timing hold"         {report_timing -views $MCU_HOLD_ONLY_VIEWS -max_paths 50 > ./reports/timing_hold_syn.rpt}
-} else {
-    puts "WARNING: hold dung chung view voi setup ($MCU_SETUP_VIEWS) - khong tach duoc bao cao hold, bo qua timing_hold_syn.rpt"
-}
+# Run 2026-09-10 12:41 da thu `report_timing -views view_ff` (view_ff la view
+# CHI nam ben hold cua set_analysis_view) va Genus tra ve:
+#
+#   Info: Timing analysis will not be done for this view as it is not active.
+#         [TUI-745] View is 'analysis_view:top_soc/view_ff'.
+#         This view is not active for setup.
+#
+# Nghia la `report_timing` cua ban 23.14 CHI phan tich cac view dang active cho
+# SETUP. Khong co -early/-late/-hold, va -views khong the ep no doi sang kiem
+# hold. Dua view_ff sang ben setup cung vo ich: khi do se ra bao cao SETUP o
+# goc FF, khong phai hold.
+#
+# Vi vay bo han bao cao hold o day thay vi de lai mot lenh chac chan that bai.
+# Hold dong o Innovus SAU CTS - va do moi la cho no co nghia: truoc CTS moi
+# clock skew deu bang 0, nen hold slack chi phan anh uncertainty 40 ps cong do
+# tre min cua thu vien, khong phan anh thiet ke that.
+puts "Hold: Genus 23.14 khong bao cao duoc hold (TUI-745 - report_timing chi chay tren view active cho setup)."
+puts "Hold: dong hold o Innovus sau CTS; truoc CTS clock skew = 0 nen so lieu hold o day khong co nghia."
 # -----------------------------------------------------------------------------
 # T5 - power chi co nghia khi co activity annotation.
 #
@@ -1012,6 +1014,79 @@ mcu_report "metric html"    {report_metric -format html -file ./reports/metric_s
 write_do_lec     -revised_design $MAPPED_NETLIST     -logfile ./logs/lec_genus.log     > ./outputs/genus_mapping_hints.do
 
 check_sram_mapped_netlist     $MAPPED_NETLIST $SRAM_MASTER $SRAM_EXPECTED_COUNT
+
+
+# -----------------------------------------------------------------------------
+# KIEM TRA MULTI-CORNER CO THAT KHONG
+#
+# Run 2026-09-10 12:41: reports/qor_syn.rpt in view_ss va view_tt voi so lieu
+# GIONG NHAU DEN TUNG CHU SO tren ca 18 cost group (CLK_CPU 1.2 ps o ca hai),
+# va header cua timing_syn.rpt / area_syn.rpt chi liet ke thu vien ..._TT_ccs_.
+# Tuc la view_ss KHONG duoc phan tich bang du lieu SS - "multi-corner" chi la
+# ba cai ten tro ve cung mot bo du lieu TT.
+#
+# Nghi can nhat: dong `set_db / .library $ALL_TIMING_LIBS` (chi TT) o tren dat
+# Genus vao che do mot-thu-vien, va cac library_set cua MMMC bi bo qua. Cung can
+# xem lai `create_timing_condition -name tc_ss/-name tc_ff` - ca hai KHONG co
+# -opcond trong khi tc_tt co opcond_tt_0p7v_25c.
+#
+# Chua sua o day vi phai co mot run that de xac nhan. Nhung tuyet doi khong de
+# no im lang: bao cao "da ky o goc cham" trong khi thuc te chua he ky la kieu
+# sai nguy hiem nhat. Doc thang tu file text nen khong phu thuoc attribute nao
+# cua tool.
+# -----------------------------------------------------------------------------
+proc mcu_qor_view_slacks {qor_path} {
+    set slacks [dict create]
+    if {![file isfile $qor_path]} {
+        return $slacks
+    }
+    set fh [open $qor_path r]
+    set body [read $fh]
+    close $fh
+    set current_view ""
+    foreach line [split $body "
+"] {
+        if {[regexp {^(view_[A-Za-z0-9_]+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*$}                 $line -> view_name group slack tns violating]} {
+            set current_view $view_name
+            dict set slacks $current_view [list "$group=$slack"]
+        } elseif {$current_view ne "" &&
+                  [regexp {^\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s*$}                       $line -> group slack tns violating]} {
+            dict lappend slacks $current_view "$group=$slack"
+        } elseif {[string match "Total*" [string trim $line]]} {
+            set current_view ""
+        }
+    }
+    return $slacks
+}
+
+if {[llength $MCU_SETUP_VIEWS] > 1} {
+    set qor_slacks [mcu_qor_view_slacks ./reports/qor_syn.rpt]
+    set view_names [lsort [dict keys $qor_slacks]]
+    set identical_pairs {}
+    foreach view_a $view_names {
+        foreach view_b $view_names {
+            if {[string compare $view_a $view_b] >= 0} {
+                continue
+            }
+            if {[dict get $qor_slacks $view_a] eq [dict get $qor_slacks $view_b] &&
+                [llength [dict get $qor_slacks $view_a]] > 1} {
+                lappend identical_pairs "$view_a/$view_b"
+            }
+        }
+    }
+    if {[llength $identical_pairs] > 0} {
+        puts "WARNING: ===================================================="
+        puts "WARNING: MULTI-CORNER KHONG THAT: $identical_pairs cho so lieu"
+        puts "WARNING: slack GIONG HET NHAU tren moi cost group."
+        puts "WARNING: -> Cac view dang dung chung mot bo du lieu thu vien."
+        puts "WARNING:    Kiem tra 'set_db / .library' (dang chi tro TT) va"
+        puts "WARNING:    -opcond thieu o tc_ss/tc_ff."
+        puts "WARNING: -> KHONG duoc coi ket qua nay la da ky o goc cham."
+        puts "WARNING: ===================================================="
+    } else {
+        puts "Multi-corner: cac view cho so lieu khac nhau - goc phan tich la that"
+    }
+}
 
 mcu_report "messages"       {report_messages -all > ./reports/messages_all.rpt}
 
