@@ -1,6 +1,5 @@
 ############################################################
 ## MCU functional timing constraints
-## Genus units: ps / fF
 ############################################################
 
 puts "INFO: BEGIN MCU SDC"
@@ -38,15 +37,6 @@ proc require_scalar_port {name} {
 
 ############################################################
 ## Clock uncertainty
-##
-## Setup uncertainty scales with the period but is capped. Hold uncertainty
-## must NOT scale with the period: it models clock skew + jitter only.
-## The previous single 'set_clock_uncertainty [0.05 * period]' applied to
-## setup AND hold produced
-##   CLK_UART      1000 ps hold uncertainty
-##   CLK_I2C       5000 ps hold uncertainty
-##   CLK_RTC    1526670 ps (1.53 us) hold uncertainty
-## which no amount of buffer insertion in Innovus can ever meet.
 ############################################################
 
 set UNC_SETUP_RATIO  [sdc_env_number MCU_UNC_SETUP_RATIO    0.05]
@@ -124,21 +114,6 @@ set P_I2C   [sdc_env_number MCU_CLK_I2C_PS      100000.0]
 set P_RTC   [sdc_env_number MCU_CLK_RTC_PS    30517578.0]
 set P_TCK   [sdc_env_number MCU_CLK_TCK_PS      100000.0]
 
-# clk_sdram_ext is a board-supplied copy of the AXI clock, phase shifted so
-# the external SDRAM samples in the middle of the data eye. top_soc clocks no
-# flop with it; it only forwards it to the sdram_clk pad (top_soc.v line 63),
-# which is why CLK_SDRAM reported 'No paths' in reports/qor_syn.rpt and showed
-# up as an ineffective exception in reports/timing_intent_post_syn.rpt.
-#
-# ASSUMPTION: the board derives clk_axi and clk_sdram_ext from the same PLL.
-# That is the only configuration in which a phase shift is meaningful and the
-# only one in which this interface can be timed at all, so CLK_SDRAM shares a
-# synchronous clock group with CLK_AXI below. If the two sources are genuinely
-# independent, put CLK_SDRAM/CLK_SDRAM_OUT back into their own -group and
-# close the interface with a resynchronising PHY instead.
-#
-# Default shift is half a period (180 deg), the usual choice for SDR SDRAM.
-# Set MCU_CLK_SDRAM_PHASE_PS to whatever the board actually generates.
 set SDRAM_PHASE [sdc_env_number_nonneg MCU_CLK_SDRAM_PHASE_PS \
     [expr {$P_SDRAM / 2.0}]]
 
@@ -167,10 +142,6 @@ set_clock_gating_check -setup 50.0 -hold 50.0 \
     [get_clocks {CLK_CPU CLK_DBG CLK_PWM CLK_GPIO CLK_CORDIC \
         CLK_UART_G CLK_SPI_G CLK_I2C_G}]
 
-# No phase relationship is guaranteed between the remaining top-level clock
-# ports. The RTL contains explicit CDC bridges/synchronizers between them.
-# CLK_SDRAM and CLK_SDRAM_OUT sit in the CLK_AXI group on purpose - see the
-# assumption documented above.
 set_clock_groups -asynchronous \
     -group [get_clocks {CLK_CORE CLK_CPU}] \
     -group [get_clocks {CLK_AXI CLK_DBG CLK_SDRAM CLK_SDRAM_OUT}] \
@@ -200,30 +171,10 @@ if {[sizeof_collection $DATA_INPUTS] > 0} {
 set_input_transition -min 10.0 $RESET_PORTS
 set_input_transition -max 40.0 $RESET_PORTS
 
-# rst_n and trst_n are external asynchronous resets: no timing relationship to
-# any clock exists at the port. This exception only removes port -> reset
-# synchronizer paths. Recovery/removal from the synchronizer outputs into the
-# rest of the design starts at a flop, not at the port, so it stays timed.
 set_false_path -from $RESET_PORTS
 
 ############################################################
 ## Rang buoc I/O theo tung giao dien
-##
-## Muon tu tcl/constraint.sdc cua sram_axi: file do rang buoc CA
-## [all_inputs] tru clock/reset va CA [all_outputs], nen khong port nao co the
-## roi ra ngoai. File nay chinh xac hon - moi giao dien duoc quy chieu ve dung
-## clock cua no thay vi mot clock chung - nhung doi lai danh sach port la viet
-## tay. Hai lo hong di kem, ca hai deu IM LANG:
-##
-##   1. Mot pattern go sai hoac mot port bi doi ten trong top_soc.v -> ca nhom
-##      port do mat sach input/output delay. Ban cu `return` khong noi gi.
-##   2. Mot port MOI them vao top_soc (vi du khi them mot ngoai vi) khong nam
-##      trong danh sach nao -> khong bao gio duoc rang buoc.
-##
-## Do dung la lop loi da tung xay ra o ungroup_ok va o bo dem 55 file RTL:
-## script chay het, bao cao dep, va mot phan thiet ke khong he duoc kiem.
-## Giu do chinh xac cua cach lam theo giao dien, va chot lai bang mot phep dem
-## o cuoi muc nay - xem "Kiem tra phu kin I/O".
 ############################################################
 
 set SDC_CONSTRAINED_INPUTS  {}
@@ -283,16 +234,6 @@ constrain_input_ports  {flash_io_i*}                     CLK_AXI  $P_AXI
 constrain_output_ports {flash_sck flash_cs_n flash_io_o* \
     flash_io_oe*}                                        CLK_AXI  $P_AXI
 
-# External SDRAM interface. Command, address and write data are launched by
-# clk_axi inside the chip but captured by the SDRAM device on the forwarded
-# sdram_clk, so they are referenced to CLK_SDRAM_OUT and not to CLK_AXI.
-# sdram_clk itself is a clock port and no longer carries a set_output_delay.
-#
-# PLACEHOLDER RATIOS: 0.30/0.15 and 0.25/0.10 of the period are the same
-# provisional numbers this file uses for every other interface. Replace them
-# with the real tSU/tH (outputs) and tAC/tOH (sdram_dq_i) from the SDRAM
-# datasheet before signoff; at 200 MHz a real SDR part normally also needs a
-# multicycle read capture.
 constrain_output_ports {sdram_cke sdram_cs_n sdram_ras_n \
     sdram_cas_n sdram_we_n sdram_ba* sdram_addr* \
     sdram_dq_o* sdram_dq_oe sdram_dqm*}                  CLK_SDRAM_OUT $P_SDRAM
@@ -300,14 +241,6 @@ constrain_input_ports  {sdram_dq_i*}                     CLK_SDRAM_OUT $P_SDRAM
 
 ############################################################
 ## Kiem tra phu kin I/O
-##
-## Chot lai phan tren: moi port du lieu phai da nhan input/output delay. Neu
-## con sot, DUNG chu khong chay tiep - mot port khong rang buoc khong xuat hien
-## trong bat ky bao cao timing nao, nen khong co cach nao phat hien no ve sau.
-##
-## sdram_clk duoc tru ra co chu y: no la clock forward ra pad (CLK_SDRAM_OUT),
-## khong phai port du lieu, nen khong mang set_output_delay - xem ghi chu o
-## khoi SDRAM ben tren.
 ############################################################
 
 proc sdc_describe_ports {label port_collection} {
@@ -342,20 +275,12 @@ if {[sizeof_collection $SDC_UNCONSTRAINED_INPUTS] > 0 ||
 
 puts "INFO: I/O delay phu kin [sizeof_collection $DATA_INPUTS] port vao va [sizeof_collection $DATA_OUTPUTS] port ra"
 
-
 if {[sizeof_collection [all_outputs]] > 0} {
     set_load 10.0 -pin_load [all_outputs]
 }
 
 ############################################################
 ## Design rules
-##
-## The SRAM macro data/control pins carry a 320 ps Liberty max-transition, so
-## 300 ps is the ceiling the whole design must respect. It is NOT a sensible
-## target for the fast domains: at CLK_CPU = 2500 ps it let synthesis leave
-## 218 ps and 220 ps transitions on two consecutive NOR2xp33 gates of the
-## divider critical path (reports/timing_syn.rpt), burning 251 ps of the
-## 2489 ps budget on two minimum-size cells.
 ############################################################
 
 set MAX_TRAN_CEIL_PS [sdc_env_number MCU_MAX_TRAN_CEIL_PS 300.0]

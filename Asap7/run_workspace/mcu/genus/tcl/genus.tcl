@@ -1,6 +1,5 @@
 ############################################################
 ## Cadence Genus synthesis flow for MCU top_soc
-## ASAP7 RVT + LVT, TT 0.7 V 25 C; SRAM macro budget in project_config.tcl
 ############################################################
 
 set GENUS_TCL_DIR [file dirname [file normalize [info script]]]
@@ -39,21 +38,6 @@ proc genus_try_set_root_attribute {name value} {
 
 # -----------------------------------------------------------------------------
 # T2 - Multi-Vt: RVT la mac dinh, LVT chi de va critical path.
-#
-# Ban tong hop 2026-09-08 ra 99.5% LVT: 52936/52953 flop la SEQ_LVT, ca thiet ke
-# chi con 395 cell RVT.  Nguyen nhan KHONG phai thu tu trong STD_LIBS (RVT da
-# duoc dat truoc LVT o do roi) ma la CLK_CPU chi con 11 ps margin, nen mapper
-# phai voi sang LVT o gan nhu moi diem de dong duoc timing.
-#
-# Cong thuc: cam LVT trong syn_generic + syn_map de toan bo thiet ke ra RVT, roi
-# mo lai LVT truoc syn_opt de no CHI thay vao nhung duong con vi pham.  LVT tro
-# thanh mieng va thay vi mac dinh.
-#
-# PHU THUOC: chi co tac dung sau khi duong JALR (T1 trong pipeline_stage.v) da
-# duoc go.  Neu critical path van la 2354 ps thi syn_opt se lai phai doi gan het
-# sang LVT va ket qua khong khac gi ban cu.
-#
-# Tat qua trinh bang: set MCU_MULTI_VT 0  (hoac bien moi truong MCU_MULTI_VT=0)
 # -----------------------------------------------------------------------------
 proc mcu_lvt_lib_cells {} {
     set lvt {}
@@ -328,18 +312,6 @@ proc check_sram_mapped_netlist {netlist master expected} {
     set text [read $fp]
     close $fp
 
-    # write_hdl dat ten instance XUONG DONG SAU khi ten escaped qua dai.
-    # Moi macro nam trong generate block (12 macro cua I-cache + D-cache)
-    # deu roi vao dang do:
-    #
-    #     srambank_256x4x32_6t122
-    #          \u_icache_DATA_RAM_G_DATA_WAY[0].u_sram_G_SRAM_BANK[0].u_sram
-    #          (.banksel (n_63173), ...);
-    #
-    # Pattern cu doi dau '(' nam CUNG DONG voi ten module, nen no bo qua
-    # DUNG 12 macro nay -> dem 72/84 va abort mot lan chay hoan toan dung
-    # (ban 2026-09-08).  Chuan hoa khoang trang truoc, roi dem cac cau lenh
-    # BAT DAU bang ten master, de cho xuong dong khong con anh huong.
     regsub -all {[ \t\r\n]+} $text " " flat
     set escaped_master [string map {. \\.} $master]
     set count 0
@@ -398,20 +370,6 @@ if {[genus_env_flag GENUS_ENABLE_SUPER_THREAD 0]} {
     }
     puts "Genus execution: super-thread, servers=$GENUS_SERVERS, CPUs=$GENUS_CPUS"
 } else {
-    # Keep the tool in ONE process.
-    #
-    # max_cpus_per_server is not a shared-memory thread count: any value
-    # above 0 makes Genus fork that many CPU *server processes*, i.e. it
-    # enters super-threading.  Setting it to 8 here produced
-    #   Info : Attempting to launch a super-threading server. [ST-120]
-    #        : Attempting to Launch server 1 of 8.
-    # which on this host fails or stalls for two reasons: the default
-    # super_thread_rsh_command is 'rsh', which Ubuntu does not ship, and
-    # the machine had 0.7 GB free of 12.9 GB against a 4.4 GB peak, so
-    # eight more processes would not fit.
-    #
-    # reset_db restores the attribute DEFAULT rather than clearing it, so
-    # the server list is emptied explicitly instead.
     genus_try_set_root_attribute super_thread_servers {}
     genus_try_set_root_attribute max_cpus_per_server 0
     puts "Genus execution: single process (set GENUS_ENABLE_SUPER_THREAD=1"
@@ -421,16 +379,6 @@ if {[genus_env_flag GENUS_ENABLE_SUPER_THREAD 0]} {
 set_db / .hdl_unconnected_value 0
 set_db / .hdl_track_filename_row_col true
 
-# hdl_index_mux_threshold defaults to 0, i.e. a variable index read such as
-# ram[index] is NEVER built as a binary mux - it is expanded into AND/OR
-# logic and blasted.  That is where the 92583 AOI22xp33 cells of the last
-# completed run came from (icache/dcache generic_data_ram, ROB beat_mem_q),
-# and it is what the repeated "Running post blast mux optimization" lines
-# in genus.log are chewing through.  Building proper mux components for
-# wide indexed reads usually cuts both area and elaborate/generic runtime.
-#
-# This changes netlist structure.  Set MCU_INDEX_MUX_THRESHOLD=0 to restore
-# the previous behaviour if LEC or QoR regresses.
 set INDEX_MUX_THRESHOLD [genus_env_value MCU_INDEX_MUX_THRESHOLD 8]
 if {![string is integer -strict $INDEX_MUX_THRESHOLD] ||
     $INDEX_MUX_THRESHOLD < 0} {
@@ -439,28 +387,16 @@ if {![string is integer -strict $INDEX_MUX_THRESHOLD] ||
 genus_try_set_root_attribute hdl_index_mux_threshold $INDEX_MUX_THRESHOLD
 set_db / .auto_ungroup both
 set_db / .lp_insert_clock_gating false
-set_db / .library $ALL_TIMING_LIBS
+set MCU_LEGACY_LIBRARY_ATTR [genus_env_flag MCU_LEGACY_LIBRARY_ATTR 0]
+if {$MCU_LEGACY_LIBRARY_ATTR} {
+    set_db / .library $ALL_TIMING_LIBS
+    puts "Library: dat `.library` = goc TT (che do cu, MMMC co the bi bo qua)"
+} else {
+    puts "Library: KHONG dat `.library` - thu vien den tu create_library_set cua tung goc"
+}
 
 # ------------------------------------------------------------------------
 # Physical-aware synthesis.
-#
-# Without LEF + PLE, Genus ran in wireload mode with no wireload model at
-# all: reports/qor_syn.rpt showed 'Wireload mode: enclosed', wireload
-# '<none>' and 'Net Area 0.000', i.e. ZERO interconnect delay.  Every clock
-# then met with large positive slack, which for a ~260k-instance 7 nm design
-# says nothing about whether the netlist can close after routing.  The
-# 4x-scaled tech LEF pairs with the 4x-scaled QRC tech file, so wire lengths
-# and per-unit RC compensate each other.
-#
-# The LEF and QRC files are handed over as root attributes, NOT with the
-# read_physical command.  read_physical is an init-flow command that requires
-# the state machine to already be at 'timing_initialized'; at this point in
-# the script Genus is still 'uninitialized' (setting the .library attribute
-# does not advance the state machine) and it aborts with TUI-340.  The
-# lef_library / qrc_tech_file attributes are consumed by init_design, exactly
-# like the .library attribute set above.
-#
-# Set MCU_GENUS_PHYSICAL=0 to fall back to the old wireload behaviour.
 # ------------------------------------------------------------------------
 set GENUS_PHYSICAL [genus_env_flag MCU_GENUS_PHYSICAL 1]
 if {$GENUS_PHYSICAL} {
@@ -500,28 +436,6 @@ if {$GENUS_PHYSICAL} {
 
 # -----------------------------------------------------------------------------
 # F2 - ba goc, va hold TACH KHOI setup.
-#
-# Truoc: dung MOT library_set (TT 0.7 V 25 C), MOT delay_corner, MOT view, va
-# `set_analysis_view -setup {view_tt} -hold {view_tt}`. Nghia la thiet ke CHUA
-# TUNG duoc phan tich hold o goc nhanh, cung chua tung duoc phan tich setup o goc
-# cham. Voi 12 420 flop reset bat dong bo va hang loat CDC thi hold o goc FF la
-# rui ro that, khong phai ly thuyet.
-#
-# Bon dieu co y trong khoi nay:
-#
-#  1. Neu ban PDK tren may khong co du SS/FF thi flow KHONG gay: no in canh bao
-#     that to va quay ve che do mot goc nhu cu. Tat han bang MCU_MULTI_CORNER=0.
-#     (Genus chay tren may Linux khac nen khong kiem tra truoc duoc tu day.)
-#  2. Timing condition cua SS/FF co y KHONG khai bao opcond: de Genus lay dung
-#     operating condition danh dinh ghi trong chinh .lib, thay vi ta doan P/V/T
-#     roi ep sai. TT giu opcond tuong minh nhu cu de ket qua da co khong doi.
-#  3. rc_corner rieng cho tung goc chi de khop NHIET DO; ca ba dung chung mot
-#     QRC tech file vi PDK chi co mot.
-#  4. SRAM .lib chi co MOT goc (xem project_config.tcl), nen do tre cua 84 macro
-#     giong het nhau o ca ba view. Phai nho dieu do khi doc bao cao hold.
-#
-# Chi phi: ba view lam thoi gian phan tich timing tang khoang ba lan. Nen bu lai
-# bang cach cho Genus chay nhieu thread - PBS-2 dang bao no chay 1 thread.
 # -----------------------------------------------------------------------------
 proc mcu_libs_present {libs} {
     foreach lib $libs {
@@ -534,37 +448,50 @@ proc mcu_libs_present {libs} {
 
 set MCU_MULTI_CORNER [genus_env_flag MCU_MULTI_CORNER 1]
 
-create_library_set -name libset_tt -timing $ALL_TIMING_LIBS
-create_rc_corner \
-    -name rc_typ \
-    -pre_route_res 1.0 \
-    -post_route_res 1.0 \
-    -pre_route_cap 1.0 \
-    -post_route_cap 1.0 \
-    -post_route_cross_cap 1.0 \
-    -pre_route_clock_res 0.0 \
-    -pre_route_clock_cap 0.0 \
-    -temperature 25
-create_opcond \
-    -name opcond_tt_0p7v_25c \
-    -process 1.0 \
-    -voltage 0.7 \
-    -temperature 25
-create_timing_condition \
-    -name tc_tt \
-    -library_sets libset_tt \
-    -opcond opcond_tt_0p7v_25c
-create_delay_corner \
-    -name dc_tt \
-    -timing_condition tc_tt \
-    -rc_corner rc_typ
+# -----------------------------------------------------------------------------
+# MMMC - ba goc dung nghia
+# -----------------------------------------------------------------------------
+
+proc mcu_make_corner {corner libs temperature} {
+    create_library_set -name libset_$corner -timing $libs
+    create_rc_corner \
+        -name rc_$corner \
+        -pre_route_res 1.0 \
+        -post_route_res 1.0 \
+        -pre_route_cap 1.0 \
+        -post_route_cap 1.0 \
+        -post_route_cross_cap 1.0 \
+        -pre_route_clock_res 0.0 \
+        -pre_route_clock_cap 0.0 \
+        -temperature $temperature
+    create_timing_condition -name tc_$corner -library_sets libset_$corner
+    create_delay_corner \
+        -name dc_$corner \
+        -timing_condition tc_$corner \
+        -rc_corner rc_$corner
+}
+
+# Run 2026-09-10 14:01 khong in ra MOT ten file SS/FF nao trong ca 16 MB log,
+# nen khong the biet Genus da nap gi. In thang danh sach da phan giai ra day.
+proc mcu_report_corner_libs {corner libs} {
+    puts "Corner $corner - [llength $libs] file:"
+    foreach lib $libs {
+        if {[file isfile $lib]} {
+            set mark " OK  "
+        } else {
+            set mark "THIEU"
+        }
+        puts "  $mark [file tail $lib]"
+    }
+}
+
 create_constraint_mode \
     -name mode_func \
     -sdc_files $SDC_FILE
-create_analysis_view \
-    -name view_tt \
-    -constraint_mode mode_func \
-    -delay_corner dc_tt
+
+mcu_report_corner_libs TT $ALL_TIMING_LIBS
+mcu_make_corner tt $ALL_TIMING_LIBS 25
+create_analysis_view -name view_tt -constraint_mode mode_func -delay_corner dc_tt
 set MCU_SETUP_VIEWS {view_tt}
 set MCU_HOLD_VIEWS  {view_tt}
 
@@ -574,6 +501,8 @@ if {$MCU_MULTI_CORNER} {
     if {![mcu_libs_present $STD_LIBS_FF]} { lappend corner_missing FF }
 
     if {[llength $corner_missing] > 0} {
+        mcu_report_corner_libs SS $ALL_TIMING_LIBS_SS
+        mcu_report_corner_libs FF $ALL_TIMING_LIBS_FF
         puts "WARNING: ===================================================="
         puts "WARNING: khong tim thay du thu vien cho goc: $corner_missing"
         puts "WARNING: da tim trong $STD_LIB_DIR theo ten ..._<goc>_ccs_..."
@@ -581,14 +510,18 @@ if {$MCU_MULTI_CORNER} {
         puts "WARNING:    va setup chua he duoc kiem o goc cham."
         puts "WARNING: ===================================================="
     } else {
-        create_library_set -name libset_ss -timing $ALL_TIMING_LIBS_SS
-        create_library_set -name libset_ff -timing $ALL_TIMING_LIBS_FF
-        create_rc_corner -name rc_ss -pre_route_res 1.0 -post_route_res 1.0 -pre_route_cap 1.0 -post_route_cap 1.0 -post_route_cross_cap 1.0 -pre_route_clock_res 0.0 -pre_route_clock_cap 0.0 -temperature 100
-        create_rc_corner -name rc_ff -pre_route_res 1.0 -post_route_res 1.0 -pre_route_cap 1.0 -post_route_cap 1.0 -post_route_cross_cap 1.0 -pre_route_clock_res 0.0 -pre_route_clock_cap 0.0 -temperature 0
-        create_timing_condition -name tc_ss -library_sets libset_ss
-        create_timing_condition -name tc_ff -library_sets libset_ff
-        create_delay_corner -name dc_ss -timing_condition tc_ss -rc_corner rc_ss
-        create_delay_corner -name dc_ff -timing_condition tc_ff -rc_corner rc_ff
+        # Neu doi ten goc that bai am tham thi ba danh sach se trung nhau va ba
+        # view lai cho ra cung mot ket qua - dung cai bay da sap mot lan.
+        if {$ALL_TIMING_LIBS_SS eq $ALL_TIMING_LIBS ||
+            $ALL_TIMING_LIBS_FF eq $ALL_TIMING_LIBS ||
+            $ALL_TIMING_LIBS_SS eq $ALL_TIMING_LIBS_FF} {
+            error "MMMC: danh sach thu vien cua cac goc TRUNG nhau - mcu_corner_lib_list khong doi duoc \"_TT_ccs_\". Kiem ten file trong $STD_LIB_DIR."
+        }
+
+        mcu_report_corner_libs SS $ALL_TIMING_LIBS_SS
+        mcu_report_corner_libs FF $ALL_TIMING_LIBS_FF
+        mcu_make_corner ss $ALL_TIMING_LIBS_SS 100
+        mcu_make_corner ff $ALL_TIMING_LIBS_FF 0
         create_analysis_view -name view_ss -constraint_mode mode_func -delay_corner dc_ss
         create_analysis_view -name view_ff -constraint_mode mode_func -delay_corner dc_ff
         set MCU_SETUP_VIEWS {view_ss view_tt}
@@ -602,17 +535,24 @@ set_analysis_view -setup $MCU_SETUP_VIEWS -hold $MCU_HOLD_VIEWS
 puts "Analysis views: setup = $MCU_SETUP_VIEWS ; hold = $MCU_HOLD_VIEWS"
 
 # -----------------------------------------------------------------------------
+# MULTI-Vt: CHAN LVT NGAY SAU KHI NAP THU VIEN, TRUOC KHI ELABORATE
+# -----------------------------------------------------------------------------
+if {![info exists MCU_MULTI_VT]} {
+    set MCU_MULTI_VT [expr {[info exists ::env(MCU_MULTI_VT)] ? $::env(MCU_MULTI_VT) : 1}]
+}
+set MCU_LVT_CELLS {}
+if {$MCU_MULTI_VT} {
+    set MCU_LVT_CELLS [mcu_lvt_lib_cells]
+    if {[llength $MCU_LVT_CELLS] == 0} {
+        puts "WARNING: multi-Vt requested but no LVT library cell matched *_ASAP7_75t_L"
+    } else {
+        set blocked [mcu_set_lvt_dont_use $MCU_LVT_CELLS true]
+        puts "Multi-Vt: LVT blocked TRUOC elaborate ($blocked of [llength $MCU_LVT_CELLS] cells)"
+    }
+}
+
+# -----------------------------------------------------------------------------
 # `ASAP7` bat nhanh instantiate THANG cell chuan trong rtl/apb_ascon/trng_128b.v.
-#
-# Ring oscillator cua TRNG la mot vong lap to hop. Neu de Genus tu map
-# `assign out = ~i0` thi bo toi uu Boolean gop bay tang inverter thanh mot
-# buffer (hoac xoa han vi la vong lap) -> bo dao dong bien mat va `rand_out`
-# ket o mot gia tri co dinh, KHONG co canh bao nao.  Voi define nay, RTL
-# instantiate INVx1_ASAP7_75t_R / NAND2x1_ASAP7_75t_R truc tiep, va khoi
-# "Ring oscillator" ben duoi dat .preserve len chung.
-#
-# Attribute DONT_TOUCH / KEEP_HIERARCHY trong trng_128b.v la cu phap Vivado -
-# Genus BO QUA hoan toan, dung trong cho no.
 # -----------------------------------------------------------------------------
 foreach rtl $RTL_FILES {
     puts "Reading RTL: [file normalize $rtl]"
@@ -625,27 +565,6 @@ elaborate $TOP
 uniquify $TOP
 check_design -unresolved > ./reports/check_design_unresolved.rpt
 
-# Keep the controller/wrapper boundary and the hard-macro array visible for
-# physical planning and for the post-map macro-count invariant.
-#
-# F1 - phai khop CA TEN DA UNIQUIFY.
-#
-# `uniquify $TOP` o ngay tren doi ten moi module CO THAM SO thanh <ten>_<thamso>:
-#   data_cache        -> data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_...
-#   axi_ram           -> axi_ram_ID_WIDTH9_ADDR_MASK32h0001ffff_MEM_DEPTH32768
-#   tcm               -> tcm_SIZE_BYTES16384_HAS_FETCH_PORT0
-#   asap7_sram_1rw    -> asap7_sram_1rw_ADDR_W9_DATA_W19
-#   axi_interconnect  -> axi_interconnect_MST_AMT4_SLV_AMT7_...
-#
-# Ban cu goi `get_db modules $module_pattern` voi ten TRAN, nen 6 trong 7 mau
-# khong khop gi ca va IM LANG bo qua: genus.log chi in dung mot dong, cho
-# `riscv_pipeline` - module duy nhat khong co tham so. Hau qua do duoc:
-# `auto_ungroup both` hoa tan ca hai cache, hai TCM va wrapper SRAM vao top_soc,
-# nen reports/area_syn.rpt khong con dong nao cho chung va reports/timing_syn.rpt
-# hien `u_dcache_state_reg[0]` nhu mot startpoint o MUC TOP.
-#
-# Loc bang `string match` thay vi cu phap -if de khong phu thuoc phien ban Genus.
-# `error` khi khong khop la phan quan trong nhat: loi nay da im lang nhieu run.
 set MCU_PRESERVE_MODULES {
     axi_ram
     asap7_sram_1rw
@@ -681,26 +600,7 @@ foreach module_pattern $MCU_PRESERVE_MODULES {
 
 # -----------------------------------------------------------------------------
 # Ring oscillator cua TRNG - CAM MOI TOI UU
-#
-# Giu hierarchy thoi la CHUA DU: trong tung module leaf, Genus van co quyen
-# thay cell da instantiate bang cell khac, hoac xoa mach vi no la vong lap to
-# hop khong dan toi flop nao theo duong to hop hop le.  `.preserve true` cam ca
-# hai.  Dung `error` khi khong khop dung nhu vong ungroup_ok o tren (F1): mot
-# bo dao dong bi xoa am tham la lop loi te nhat - `rand_out` van co ve chay,
-# chi la khong con ngau nhien.
 # -----------------------------------------------------------------------------
-# `get_db ... -if {...}` KHONG nhan bieu thuc trai nhieu dong: Genus tra ve
-# "Evaluation for '-if/-expr' option failed. [TUI-180]" va dung script ngay -
-# do la loi cua run 02:48.  Loc bang Tcl + `string match` giong het vong
-# preserve-hierarchy o tren: doc duoc, khong phu thuoc phien ban, va khong can
-# doan xem attribute `.hdl_name` co ton tai hay khong.
-#
-# Loc theo BASE CELL chu khong theo ten instance.  `.name` cua mot inst co the
-# la ten la (`u_cell`) hoac duong dan phan cap tuy phien ban Genus, con base
-# cell thi chac chan.  Trong TOAN BO RTL chi co rtl/apb_ascon/trng_128b.v
-# instantiate thang cell ASAP7 (INVx1 + NAND2x1, nhanh `elsif ASAP7`), nen bo
-# loc nay khong the vo tinh trung mach khac.  Dung tien to `*` vi mot so phien
-# ban tra ve ten co kem ten thu vien.
 set MCU_RO_CELL_PATTERNS  {*INVx1_ASAP7_75t_R* *NAND2x1_ASAP7_75t_R*}
 set MCU_RO_NAND_PATTERNS  {*NAND2x1_ASAP7_75t_R*}
 
@@ -755,11 +655,6 @@ proc mcu_insts_by_name {patterns} {
     return $matched
 }
 
-# Khoi nay chay TRUOC init_design, va toi khong kiem duoc tren tool o day
-# (may nay khong cai Genus) rang `.base_cell` da duoc dien o thoi diem do hay
-# chua.  Neu chua, lui ve loc theo ten instance - hai mau duoi day chi ton tai
-# trong RingOscillator nen khong the trung mach khac.  Ca hai duong deu in ro
-# duong nao da khop de log noi that, va chi `error` khi CA HAI deu rong.
 set MCU_RO_INSTS [mcu_insts_by_base_cell $MCU_RO_CELL_PATTERNS]
 if {[llength $MCU_RO_INSTS] == $MCU_RO_EXPECTED_CELLS} {
     puts "Ring oscillator: khop $MCU_RO_EXPECTED_CELLS cell theo base cell"
@@ -797,24 +692,7 @@ if {[info exists ::dc::sdc_failed_commands] &&
 
 # -----------------------------------------------------------------------------
 # Ring oscillator - CAT VONG LAP CHO STA
-#
-# Vong: nand.Y -> inv0 -> ... -> inv5 -> nand.B.  Neu khong cat, engine timing
-# se tu chon mot cung de pha vong, va cho ra bao cao khac nhau giua cac lan
-# chay / giua Genus va Innovus.  Cat CHU DONG cung B->Y cua NAND: duong enable
-# A->Y van con nen ket noi khong doi, chi vong hoi tiep bi bo khoi do thi
-# timing.
-#
-# Ngoai ra `io_i_inject` di vao flop cua RingGenerator la mot crossing BAT DONG
-# BO CO Y - do chinh la nguon entropy.  Khai bao false path, neu khong moi lan
-# chay se bao mot dong recovery/removal vo nghia va CO THE keo LVT vao mot mach
-# khong can toc do.
-#
-# CHUA CHAY DUOC O DAY: may nay khong cai Genus (xem [[mcu-sim-setup]]), nen
-# khoi nay moi chi duoc viet theo tai lieu chu chua duoc kiem tren cong cu.
-# Neu ten object khong khop, script se `error` chu khong im lang.
 # -----------------------------------------------------------------------------
-# Lay lai collection sau init_design thay vi dung lai $MCU_RO_INSTS: init_design
-# co the tao lai object, va mot handle cu se im lang tro thanh rong.
 set MCU_RO_NAND_INSTS [mcu_insts_by_base_cell $MCU_RO_NAND_PATTERNS]
 if {[llength $MCU_RO_NAND_INSTS] == 0} {
     error "ring oscillator: khong tim thay cell NAND cua RO de cat vong timing"
@@ -883,20 +761,6 @@ if {$GENUS_PHYSICAL} {
 }
 puts "Genus interconnect mode in effect: [get_db / .interconnect_mode]"
 
-if {![info exists MCU_MULTI_VT]} {
-    set MCU_MULTI_VT [expr {[info exists ::env(MCU_MULTI_VT)] ? $::env(MCU_MULTI_VT) : 1}]
-}
-set MCU_LVT_CELLS {}
-if {$MCU_MULTI_VT} {
-    set MCU_LVT_CELLS [mcu_lvt_lib_cells]
-    if {[llength $MCU_LVT_CELLS] == 0} {
-        puts "WARNING: multi-Vt requested but no LVT library cell matched *_ASAP7_75t_L"
-    } else {
-        set blocked [mcu_set_lvt_dont_use $MCU_LVT_CELLS true]
-        puts "Multi-Vt: LVT blocked for syn_generic/syn_map ($blocked of [llength $MCU_LVT_CELLS] cells)"
-    }
-}
-
 set_db / .syn_generic_effort $SYN_EFFORT
 syn_generic
 set_db / .syn_map_effort $SYN_EFFORT
@@ -915,19 +779,6 @@ syn_opt
 
 # -----------------------------------------------------------------------------
 # DELIVERABLE TRUOC, BAO CAO SAU
-#
-# Run 2026-09-10 chay het elaborate + syn_generic + syn_map + syn_opt (ket thuc
-# 03:58) roi chet o `report_timing -early`: Genus 23.14 KHONG co option
-# -early/-late/-hold cho report_timing - do la cu phap Innovus/Tempus.  Vi
-# write_hdl nam SAU cac bao cao nen ca run khong de lai mot dong netlist nao:
-# phai tong hop lai tu dau chi vi mot option sai trong mot lenh bao cao.
-#
-# Sua ca hai mat, khong chi cai option:
-#   1. Ghi netlist + SDC NGAY khi syn_opt xong, truoc moi bao cao.
-#   2. Boc moi lenh bao cao bang catch.  Bao cao la thong tin, khong phai
-#      deliverable - mot bao cao hong khong duoc quyen pha ca run.
-# Cac invariant that (check_sram_mapped_netlist) van `error` nhu cu, nhung gio
-# chung chay khi netlist da nam tren dia nen van con vat de debug.
 # -----------------------------------------------------------------------------
 set MAPPED_NETLIST [file join $GENUS_DIR outputs [format "%s_syn.v" $TOP]]
 set MAPPED_SDC     [file join $GENUS_DIR outputs [format "%s_syn.sdc" $TOP]]
@@ -950,49 +801,11 @@ mcu_report "area"           {report_area > ./reports/area_syn.rpt}
 mcu_report "area hierarchy" {report_area -depth 5 > ./reports/area_hierarchy_syn.rpt}
 mcu_report "timing setup"   {report_timing -max_paths 100 > ./reports/timing_syn.rpt}
 
-# F2 - hold: GENUS KHONG BAO CAO DUOC, va day la ket luan tu tool chu khong
-# phai phong doan.
-#
-# Run 2026-09-10 12:41 da thu `report_timing -views view_ff` (view_ff la view
-# CHI nam ben hold cua set_analysis_view) va Genus tra ve:
-#
-#   Info: Timing analysis will not be done for this view as it is not active.
-#         [TUI-745] View is 'analysis_view:top_soc/view_ff'.
-#         This view is not active for setup.
-#
-# Nghia la `report_timing` cua ban 23.14 CHI phan tich cac view dang active cho
-# SETUP. Khong co -early/-late/-hold, va -views khong the ep no doi sang kiem
-# hold. Dua view_ff sang ben setup cung vo ich: khi do se ra bao cao SETUP o
-# goc FF, khong phai hold.
-#
-# Vi vay bo han bao cao hold o day thay vi de lai mot lenh chac chan that bai.
-# Hold dong o Innovus SAU CTS - va do moi la cho no co nghia: truoc CTS moi
-# clock skew deu bang 0, nen hold slack chi phan anh uncertainty 40 ps cong do
-# tre min cua thu vien, khong phan anh thiet ke that.
 puts "Hold: Genus 23.14 khong bao cao duoc hold (TUI-745 - report_timing chi chay tren view active cho setup)."
 puts "Hold: dong hold o Innovus sau CTS; truoc CTS clock skew = 0 nen so lieu hold o day khong co nghia."
 # -----------------------------------------------------------------------------
 # T5 - power chi co nghia khi co activity annotation.
-#
-# .lib cua srambank_256x4x32_6t122 CO day du bang internal_power (rise_power /
-# fall_power theo power_template_7x7_x1) va khai bao `cell_leakage_power : 0`.
-# Nen con so 85.2 mW o dong `bbox` cua ban 2026-09-08 KHONG phai gia tri mac dinh
-# cua thu vien - do la dynamic power that, tinh tu toggle rate MAC DINH cua Genus
-# ap dong thoi len ca 84 macro.  Thuc te moi thoi diem chi mot macro duoc truy
-# cap, nen con so do cao hon su that hang chuc lan.
-#
-# Hai he qua phai nho:
-#   1. Khong co annotation thi power_syn.rpt chi dung de SO SANH hai ban tong
-#      hop voi nhau, khong dung de bao cao mot con so tuyet doi.
-#   2. Leakage cua SRAM bang 0 THEO DINH NGHIA cua .lib, nen tong leakage luon
-#      thieu di phan cua 84 macro - ke ca sau CTS.
-#   3. Dong `clock` gan bang 0 la vi chua co clock tree; chi sau CTS trong
-#      Innovus no moi thanh mot so hang that.
-#
-# Dat MCU_SAIF tro toi file SAIF de annotate.  Sinh file do bang:
-#     rtl/tests/run_soc_sim.sh SAIF=1 fw     ->  rtl/tests/sim_work/fw.saif
-# Bao boc bang catch: neu phien ban Genus nay khong nhan cu phap do thi flow van
-# chay tiep voi power khong annotate, chi in canh bao.
+# -----------------------------------------------------------------------------
 if {[info exists ::env(MCU_SAIF)] && [file isfile $::env(MCU_SAIF)]} {
     if {[catch {read_saif -instance top_soc $::env(MCU_SAIF)} saif_msg]} {
         puts "WARNING: read_saif that bai, power se KHONG duoc annotate: $saif_msg"
@@ -1015,25 +828,8 @@ write_do_lec     -revised_design $MAPPED_NETLIST     -logfile ./logs/lec_genus.l
 
 check_sram_mapped_netlist     $MAPPED_NETLIST $SRAM_MASTER $SRAM_EXPECTED_COUNT
 
-
 # -----------------------------------------------------------------------------
 # KIEM TRA MULTI-CORNER CO THAT KHONG
-#
-# Run 2026-09-10 12:41: reports/qor_syn.rpt in view_ss va view_tt voi so lieu
-# GIONG NHAU DEN TUNG CHU SO tren ca 18 cost group (CLK_CPU 1.2 ps o ca hai),
-# va header cua timing_syn.rpt / area_syn.rpt chi liet ke thu vien ..._TT_ccs_.
-# Tuc la view_ss KHONG duoc phan tich bang du lieu SS - "multi-corner" chi la
-# ba cai ten tro ve cung mot bo du lieu TT.
-#
-# Nghi can nhat: dong `set_db / .library $ALL_TIMING_LIBS` (chi TT) o tren dat
-# Genus vao che do mot-thu-vien, va cac library_set cua MMMC bi bo qua. Cung can
-# xem lai `create_timing_condition -name tc_ss/-name tc_ff` - ca hai KHONG co
-# -opcond trong khi tc_tt co opcond_tt_0p7v_25c.
-#
-# Chua sua o day vi phai co mot run that de xac nhan. Nhung tuyet doi khong de
-# no im lang: bao cao "da ky o goc cham" trong khi thuc te chua he ky la kieu
-# sai nguy hiem nhat. Doc thang tu file text nen khong phu thuoc attribute nao
-# cua tool.
 # -----------------------------------------------------------------------------
 proc mcu_qor_view_slacks {qor_path} {
     set slacks [dict create]
@@ -1079,8 +875,10 @@ if {[llength $MCU_SETUP_VIEWS] > 1} {
         puts "WARNING: MULTI-CORNER KHONG THAT: $identical_pairs cho so lieu"
         puts "WARNING: slack GIONG HET NHAU tren moi cost group."
         puts "WARNING: -> Cac view dang dung chung mot bo du lieu thu vien."
-        puts "WARNING:    Kiem tra 'set_db / .library' (dang chi tro TT) va"
-        puts "WARNING:    -opcond thieu o tc_ss/tc_ff."
+        puts "WARNING:    Hai nguyen nhan da xu ly: `.library` khong con duoc"
+        puts "WARNING:    dat (MCU_LEGACY_LIBRARY_ATTR=0) va -opcond da bo han."
+        puts "WARNING:    Neu VAN trung, doi chieu danh sach file cua tung goc"
+        puts "WARNING:    da in o dau log ('Corner SS/TT/FF - N file')."
         puts "WARNING: -> KHONG duoc coi ket qua nay la da ky o goc cham."
         puts "WARNING: ===================================================="
     } else {
@@ -1089,6 +887,56 @@ if {[llength $MCU_SETUP_VIEWS] > 1} {
 }
 
 mcu_report "messages"       {report_messages -all > ./reports/messages_all.rpt}
+
+# -----------------------------------------------------------------------------
+# DATAPATH CO CON NGUYEN KHONG
+# -----------------------------------------------------------------------------
+proc mcu_message_count {messages_path msg_id} {
+    if {![file isfile $messages_path]} {
+        return -1
+    }
+    set fh [open $messages_path r]
+    set body [read $fh]
+    close $fh
+    # Tach theo dau "|" thay vi regex: bang cua Genus co dinh dang cot co dinh,
+    # va mot regex nhieu backslash rat de hong AM THAM luc ghi file - da hong
+    # dung nhu vay mot lan o chinh cho nay.
+    foreach line [split $body "\n"] {
+        if {[string index $line 0] ne "|"} {
+            continue
+        }
+        set fields [split $line "|"]
+        if {[llength $fields] < 4} {
+            continue
+        }
+        if {[string trim [lindex $fields 1]] ne $msg_id} {
+            continue
+        }
+        set count [string trim [lindex $fields 3]]
+        if {[string is integer -strict $count]} {
+            return $count
+        }
+    }
+    return 0
+}
+
+set MCU_DP_INVALIDATED [mcu_message_count ./reports/messages_all.rpt RTLOPT-55]
+if {$MCU_DP_INVALIDATED > 0} {
+    puts "WARNING: ===================================================="
+    puts "WARNING: RTLOPT-55 xuat hien $MCU_DP_INVALIDATED lan."
+    puts "WARNING: Vung datapath bi vo hieu -> Genus KHONG chon duoc"
+    puts "WARNING: kien truc cong nhanh, bo cong tren duong toi han se la"
+    puts "WARNING: RIPPLE CARRY."
+    puts "WARNING: -> Tim lenh nao doi thu vien hoac thuoc tinh SAU khi RTL"
+    puts "WARNING:    da duoc doc: dont_use, preserve, ungroup_ok."
+    puts "WARNING: -> Doi chieu reports/timing_syn.rpt: chuoi MAJIxp5/MAJx2"
+    puts "WARNING:    lap lai chinh la dau hieu cua ripple."
+    puts "WARNING: ===================================================="
+} elseif {$MCU_DP_INVALIDATED == 0} {
+    puts "Datapath: khong co RTLOPT-55 - cac vung datapath con nguyen ven"
+} else {
+    puts "WARNING: khong doc duoc reports/messages_all.rpt de kiem RTLOPT-55"
+}
 
 puts "============================================================"
 puts "GENUS MCU SYNTHESIS COMPLETED"
