@@ -3,19 +3,19 @@ Copyright 2025 Cadence Design Systems, Inc. All rights reserved worldwide.
 Cadence and the Cadence logo are registered trademarks and Genus is a trademark
 of Cadence Design Systems, Inc. in the United States and other countries.
 
-[17:07:34.206258] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+[17:13:12.206202] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 Version: 23.14-s090_1, built Wed Feb 26 17:49:50 PST 2025
 Options: -files tcl/genus.tcl 
-Date:    Thu Sep 10 17:07:34 2026
+Date:    Thu Sep 10 17:13:12 2026
 Host:    user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*1physical cpu*AMD Ryzen 5 7545U 1024KB) (13556664KB)
-PID:     1230508
+PID:     1258298
 OS:      Ubuntu 26.04.1 LTS
 
 Checking out license: Genus_Synthesis
-[17:07:35.180945] Periodic Lic check successful
-[17:07:35.180953] Feature usage summary:
-[17:07:35.180953] Genus_Synthesis
+[17:13:13.205682] Periodic Lic check successful
+[17:13:13.205691] Feature usage summary:
+[17:13:13.205691] Genus_Synthesis
 
 
 
@@ -24,7 +24,7 @@ Checking out license: Genus_Synthesis
 
 
 
-Finished executable startup (2 seconds elapsed).
+Finished executable startup (1 second elapsed).
 
 Loading tool scripts...
 Finished loading tool scripts (11 seconds elapsed).
@@ -39,7 +39,7 @@ Finished loading tool scripts (11 seconds elapsed).
 @file(genus.tcl) 9: set SDC_FILE [file join $GENUS_TCL_DIR constraint.sdc]
 @file(genus.tcl) 10: cd $GENUS_DIR
 @file(genus.tcl) 12: source [file join $RTL_ROOT flow project_config.tcl]
-Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl' (Thu Sep 10 17:07:46 JST 2026)...
+Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl' (Thu Sep 10 17:13:24 JST 2026)...
 #@ Begin verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl
 @file(project_config.tcl) 5: if {![info exists FLOW_ROOT]} {
     set FLOW_ROOT [file dirname [file dirname [file normalize [info script]]]]
@@ -179,7 +179,7 @@ MCU ASAP7 CONFIGURATION
 ============================================================
 #@ End verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl
 @file(genus.tcl) 13: source [file join $GENUS_TCL_DIR rtl_filelist.tcl]
-Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/rtl_filelist.tcl' (Thu Sep 10 17:07:46 JST 2026)...
+Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/rtl_filelist.tcl' (Thu Sep 10 17:13:24 JST 2026)...
 #@ Begin verbose source /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/rtl_filelist.tcl
 @file(rtl_filelist.tcl) 5: set RTL_INCLUDE_DIRS [list \
     $RTL_ROOT \
@@ -264,32 +264,32 @@ Sourcing '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl/r
 @file(genus.tcl) 113: proc genus_generate_boot_rom_include ...
 @file(genus.tcl) 168: proc genus_run_static_checks ...
 @file(genus.tcl) 293: proc check_sram_library_cell ...
-@file(genus.tcl) 307: proc check_sram_mapped_netlist ...
-@file(genus.tcl) 329: genus_run_static_checks
+@file(genus.tcl) 319: proc check_sram_mapped_netlist ...
+@file(genus.tcl) 341: genus_run_static_checks
 Generated synthesizable boot ROM table: 4 words
 MCU static checks passed: 58 RTL files, boot image, SRAM wrapper and SDC
-@file(genus.tcl) 330: foreach timing_lib $STD_LIBS {
+@file(genus.tcl) 342: foreach timing_lib $STD_LIBS {
     genus_require_liberty $timing_lib
 }
-@file(genus.tcl) 333: genus_require_liberty $SRAM_LIB $SRAM_MASTER
-@file(genus.tcl) 335: foreach dir {outputs reports logs} {
+@file(genus.tcl) 345: genus_require_liberty $SRAM_LIB $SRAM_MASTER
+@file(genus.tcl) 347: foreach dir {outputs reports logs} {
     file mkdir $dir
 }
-@file(genus.tcl) 338: foreach pattern {./outputs/* ./reports/* ./logs/*} {
+@file(genus.tcl) 350: foreach pattern {./outputs/* ./reports/* ./logs/*} {
     foreach stale [glob -nocomplain $pattern] {
         file delete -force $stale
     }
 }
-@file(genus.tcl) 344: set_db / .init_lib_search_path [list $STD_LIB_DIR [file dirname $SRAM_LIB]]
+@file(genus.tcl) 356: set_db / .init_lib_search_path [list $STD_LIB_DIR [file dirname $SRAM_LIB]]
   Setting attribute of root '/': 'init_lib_search_path' = /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB
-@file(genus.tcl) 345: set_db / .script_search_path [list $GENUS_TCL_DIR]
+@file(genus.tcl) 357: set_db / .script_search_path [list $GENUS_TCL_DIR]
   Setting attribute of root '/': 'script_search_path' = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/tcl
-@file(genus.tcl) 346: set_db / .init_hdl_search_path \
+@file(genus.tcl) 358: set_db / .init_hdl_search_path \
     [concat [list $RTL_ROOT] $RTL_INCLUDE_DIRS]
   Setting attribute of root '/': 'init_hdl_search_path' = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/CLINT /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/dma /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/interrupt/plic
-@file(genus.tcl) 351: genus_try_set_root_attribute auto_super_thread false
+@file(genus.tcl) 363: genus_try_set_root_attribute auto_super_thread false
   Setting attribute of root '/': 'auto_super_thread' = false
-@file(genus.tcl) 352: if {[genus_env_flag GENUS_ENABLE_SUPER_THREAD 0]} {
+@file(genus.tcl) 364: if {[genus_env_flag GENUS_ENABLE_SUPER_THREAD 0]} {
     set GENUS_CPUS [genus_env_value GENUS_CPUS 4]
     if {![string is integer -strict $GENUS_CPUS] || $GENUS_CPUS < 1} {
         error "GENUS_CPUS must be a positive integer"
@@ -319,33 +319,33 @@ MCU static checks passed: 58 RTL files, boot image, SRAM wrapper and SDC
   Setting attribute of root '/': 'max_cpus_per_server' = 0
 Genus execution: single process (set GENUS_ENABLE_SUPER_THREAD=1
                  to distribute, see the branch above)
-@file(genus.tcl) 379: set_db / .hdl_unconnected_value 0
+@file(genus.tcl) 391: set_db / .hdl_unconnected_value 0
   Setting attribute of root '/': 'hdl_unconnected_value' = 0
-@file(genus.tcl) 380: set_db / .hdl_track_filename_row_col true
+@file(genus.tcl) 392: set_db / .hdl_track_filename_row_col true
 Info   : Enabled hdl_track_filename_row_col attribute.
        : Setting this attribute to 'true' can have an impact on the run time. Use this attribute only when filename, line number, and column information are needed in reports.
   Setting attribute of root '/': 'hdl_track_filename_row_col' = true
-@file(genus.tcl) 382: set INDEX_MUX_THRESHOLD [genus_env_value MCU_INDEX_MUX_THRESHOLD 8]
-@file(genus.tcl) 383: if {![string is integer -strict $INDEX_MUX_THRESHOLD] ||
+@file(genus.tcl) 394: set INDEX_MUX_THRESHOLD [genus_env_value MCU_INDEX_MUX_THRESHOLD 8]
+@file(genus.tcl) 395: if {![string is integer -strict $INDEX_MUX_THRESHOLD] ||
     $INDEX_MUX_THRESHOLD < 0} {
     error "MCU_INDEX_MUX_THRESHOLD must be a non-negative integer"
 }
-@file(genus.tcl) 387: genus_try_set_root_attribute hdl_index_mux_threshold $INDEX_MUX_THRESHOLD
+@file(genus.tcl) 399: genus_try_set_root_attribute hdl_index_mux_threshold $INDEX_MUX_THRESHOLD
   Setting attribute of root '/': 'hdl_index_mux_threshold' = 8
-@file(genus.tcl) 388: set_db / .auto_ungroup both
+@file(genus.tcl) 400: set_db / .auto_ungroup both
   Setting attribute of root '/': 'auto_ungroup' = both
-@file(genus.tcl) 389: set_db / .lp_insert_clock_gating false
+@file(genus.tcl) 401: set_db / .lp_insert_clock_gating false
   Setting attribute of root '/': 'lp_insert_clock_gating' = false
-@file(genus.tcl) 390: set MCU_LEGACY_LIBRARY_ATTR [genus_env_flag MCU_LEGACY_LIBRARY_ATTR 0]
-@file(genus.tcl) 391: if {$MCU_LEGACY_LIBRARY_ATTR} {
+@file(genus.tcl) 402: set MCU_LEGACY_LIBRARY_ATTR [genus_env_flag MCU_LEGACY_LIBRARY_ATTR 0]
+@file(genus.tcl) 403: if {$MCU_LEGACY_LIBRARY_ATTR} {
     set_db / .library $ALL_TIMING_LIBS
     puts "Library: dat `.library` = goc TT (che do cu, MMMC co the bi bo qua)"
 } else {
     puts "Library: KHONG dat `.library` - thu vien den tu create_library_set cua tung goc"
 }
 Library: KHONG dat `.library` - thu vien den tu create_library_set cua tung goc
-@file(genus.tcl) 401: set GENUS_PHYSICAL [genus_env_flag MCU_GENUS_PHYSICAL 1]
-@file(genus.tcl) 402: if {$GENUS_PHYSICAL} {
+@file(genus.tcl) 413: set GENUS_PHYSICAL [genus_env_flag MCU_GENUS_PHYSICAL 1]
+@file(genus.tcl) 414: if {$GENUS_PHYSICAL} {
     set PHYSICAL_LEFS [concat [list $TECH_LEF] $CELL_LEFS [list $SRAM_LEF]]
     foreach lef_file $PHYSICAL_LEFS {
         genus_require_file "physical LEF" $lef_file
@@ -479,14 +479,14 @@ Warning : LEF has more layers than cap table. [PHYS-24]
         : Lef 'asap7_tech_4x_201209.lef' has '10' routing layers, technology file 'qrcTechFile_typ03_scaled4xV06' has '9' layers. Use technology file layers
         : Check LEF and cap table file. Set attribute 'lef_cap_consistency_check_enable' false to skip the check.
   Setting attribute of root '/': 'qrc_tech_file' = /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
-@file(genus.tcl) 440: proc mcu_libs_present ...
-@file(genus.tcl) 449: set MCU_MULTI_CORNER [genus_env_flag MCU_MULTI_CORNER 1]
-@file(genus.tcl) 455: proc mcu_make_corner ...
-@file(genus.tcl) 476: proc mcu_report_corner_libs ...
-@file(genus.tcl) 488: create_constraint_mode \
+@file(genus.tcl) 452: proc mcu_libs_present ...
+@file(genus.tcl) 461: set MCU_MULTI_CORNER [genus_env_flag MCU_MULTI_CORNER 1]
+@file(genus.tcl) 467: proc mcu_make_corner ...
+@file(genus.tcl) 488: proc mcu_report_corner_libs ...
+@file(genus.tcl) 500: create_constraint_mode \
     -name mode_func \
     -sdc_files $SDC_FILE
-@file(genus.tcl) 492: mcu_report_corner_libs TT $ALL_TIMING_LIBS
+@file(genus.tcl) 504: mcu_report_corner_libs TT $ALL_TIMING_LIBS
 Corner TT - 11 file:
    OK   asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib
    OK   asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib
@@ -499,11 +499,11 @@ Corner TT - 11 file:
    OK   asap7sc7p5t_OA_LVT_TT_ccs_211120.lib
    OK   asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib
    OK   srambank_256x4x32_6t122.lib
-@file(genus.tcl) 493: mcu_make_corner tt $ALL_TIMING_LIBS 25
-@file(genus.tcl) 494: create_analysis_view -name view_tt -constraint_mode mode_func -delay_corner dc_tt
-@file(genus.tcl) 495: set MCU_SETUP_VIEWS {view_tt}
-@file(genus.tcl) 496: set MCU_HOLD_VIEWS  {view_tt}
-@file(genus.tcl) 498: if {$MCU_MULTI_CORNER} {
+@file(genus.tcl) 505: mcu_make_corner tt $ALL_TIMING_LIBS 25
+@file(genus.tcl) 506: create_analysis_view -name view_tt -constraint_mode mode_func -delay_corner dc_tt
+@file(genus.tcl) 507: set MCU_SETUP_VIEWS {view_tt}
+@file(genus.tcl) 508: set MCU_HOLD_VIEWS  {view_tt}
+@file(genus.tcl) 510: if {$MCU_MULTI_CORNER} {
     set corner_missing {}
     if {![mcu_libs_present $STD_LIBS_SS]} { lappend corner_missing SS }
     if {![mcu_libs_present $STD_LIBS_FF]} { lappend corner_missing FF }
@@ -562,7 +562,7 @@ Corner FF - 11 file:
    OK   asap7sc7p5t_OA_LVT_FF_ccs_211120.lib
    OK   asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib
    OK   srambank_256x4x32_6t122.lib
-@file(genus.tcl) 534: set_analysis_view -setup $MCU_SETUP_VIEWS -hold $MCU_HOLD_VIEWS
+@file(genus.tcl) 546: set_analysis_view -setup $MCU_SETUP_VIEWS -hold $MCU_HOLD_VIEWS
 
   Message Summary for Library all 11 libraries:
   *********************************************
@@ -603,13 +603,13 @@ Warning : Inconsistency detected among the units specified in the timing librari
         : Default system time/capacitance unit will be used.
 Info    : Set default library domain. [LBR-109]
         : The default library domain is 'library_domain:tc_ss'.
-@file(genus.tcl) 535: puts "Analysis views: setup = $MCU_SETUP_VIEWS ; hold = $MCU_HOLD_VIEWS"
+@file(genus.tcl) 547: puts "Analysis views: setup = $MCU_SETUP_VIEWS ; hold = $MCU_HOLD_VIEWS"
 Analysis views: setup = view_ss view_tt ; hold = view_ff view_tt
-@file(genus.tcl) 540: if {![info exists MCU_MULTI_VT]} {
+@file(genus.tcl) 552: if {![info exists MCU_MULTI_VT]} {
     set MCU_MULTI_VT [expr {[info exists ::env(MCU_MULTI_VT)] ? $::env(MCU_MULTI_VT) : 1}]
 }
-@file(genus.tcl) 543: set MCU_LVT_CELLS {}
-@file(genus.tcl) 544: if {$MCU_MULTI_VT} {
+@file(genus.tcl) 555: set MCU_LVT_CELLS {}
+@file(genus.tcl) 556: if {$MCU_MULTI_VT} {
     set MCU_LVT_CELLS [mcu_lvt_lib_cells]
     if {[llength $MCU_LVT_CELLS] == 0} {
         puts "WARNING: multi-Vt requested but no LVT library cell matched *_ASAP7_75t_L"
@@ -831,7 +831,7 @@ Analysis views: setup = view_ss view_tt ; hold = view_ff view_tt
   Setting attribute of lib_cell 'TAPCELL_ASAP7_75t_L': 'dont_use' = true
   Setting attribute of lib_cell 'TAPCELL_WITH_FILLER_ASAP7_75t_L': 'dont_use' = true
 Multi-Vt: LVT blocked TRUOC elaborate (212 of 212 cells)
-@file(genus.tcl) 557: foreach rtl $RTL_FILES {
+@file(genus.tcl) 569: foreach rtl $RTL_FILES {
     puts "Reading RTL: [file normalize $rtl]"
     if {[catch {read_hdl -define {ASAP7} $rtl} rd_err]} {
         error "read_hdl -define ASAP7 that bai tren $rtl: $rd_err"
@@ -911,7 +911,7 @@ Warning : Unused attribute. [VLOGPT-506]
 Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/ascon_core.v
 Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/apb_ascon.v
 Reading RTL: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/top_soc.v
-@file(genus.tcl) 564: elaborate $TOP
+@file(genus.tcl) 576: elaborate $TOP
   Libraries have 167 usable logic and 23 usable sequential lib-cells.
 Info    : Elaborating Design. [ELAB-1]
         : Elaborating top-level block 'top_soc' from file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/top_soc.v'.
@@ -931,34 +931,34 @@ Stage: post_elab
 | Trick             | Accepts | Rejects | Runtime (s) | 
 -------------------------------------------------------
 | ume_constant_bmux |       0 |       0 |        0.01 | 
-| ume_merge         |       0 |       0 |        0.01 | 
+| ume_merge         |       0 |       0 |        0.00 | 
 | ume_ssm           |       0 |       0 |        0.08 | 
-| ume_cse           |       1 |       0 |        0.54 | 
+| ume_cse           |       1 |       0 |        0.57 | 
 | ume_shrink        |      31 |       0 |        0.09 | 
-| ume_sweep         |       2 |       0 |        0.11 | 
+| ume_sweep         |       2 |       0 |        0.12 | 
 | ume_constant_bmux |       0 |       0 |        0.00 | 
 | ume_merge         |       0 |       0 |        0.00 | 
-| ume_ssm           |       0 |       0 |        0.07 | 
-| ume_cse           |       0 |       0 |        0.39 | 
-| ume_shrink        |       0 |       0 |        0.03 | 
+| ume_ssm           |       0 |       0 |        0.08 | 
+| ume_cse           |       0 |       0 |        0.43 | 
+| ume_shrink        |       0 |       0 |        0.02 | 
 | ume_sweep         |       0 |       0 |        0.12 | 
 -------------------------------------------------------
 Starting optimize datapath shifters [v1.0] (stage: post_elab, startdef: top_soc, recur: true)
-Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.008s)
+Completed optimize datapath shifters (accepts: 0, rejects: 0, runtime: 0.005s)
 Starting clip mux common data inputs [v1.0] (stage: post_elab, startdef: top_soc, recur: true)
-Completed clip mux common data inputs (accepts: 0, rejects: 0, runtime: 0.021s)
+Completed clip mux common data inputs (accepts: 0, rejects: 0, runtime: 0.017s)
 Starting clip the non-user hierarchies [v2.0] (stage: post_elab, startdef: top_soc, recur: true)
-Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.006s)
+Completed clip the non-user hierarchies (accepts: 0, rejects: 0, runtime: 0.005s)
 Starting basic netlist cleanup [v1.0] (stage: post_elab, startdef: top_soc, recur: true)
-Completed basic netlist cleanup (accepts: 0, rejects: 0, runtime: 0.004s)
+Completed basic netlist cleanup (accepts: 0, rejects: 0, runtime: 0.003s)
 
 Stage: post_elab
 --------------------------------------------------------------------
 | Transform                      | Accepts | Rejects | Runtime (s) | 
 --------------------------------------------------------------------
-| hlo_optimize_datapath_shifters |       0 |       0 |        0.01 | 
+| hlo_optimize_datapath_shifters |       0 |       0 |        0.00 | 
 | hlo_clip_mux_input             |       0 |       0 |        0.02 | 
-| hlo_clip                       |       0 |       0 |        0.01 | 
+| hlo_clip                       |       0 |       0 |        0.00 | 
 | hlo_cleanup                    |       0 |       0 |        0.00 | 
 --------------------------------------------------------------------
 Info    : To insure proper verification, preserved netlist point(s) because they are involved in combinational loop(s). To disable this, set the 'cb_preserve_ports_nets' root attribute to 'false'. [ELABUTL-133]
@@ -966,10 +966,10 @@ Info    : To insure proper verification, preserved netlist point(s) because they
 
 UM:   flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
 UM:*                                                                   elaborate
-@file(genus.tcl) 565: uniquify $TOP
-@file(genus.tcl) 566: check_design -unresolved > ./reports/check_design_unresolved.rpt
+@file(genus.tcl) 577: uniquify $TOP
+@file(genus.tcl) 578: check_design -unresolved > ./reports/check_design_unresolved.rpt
 
-@file(genus.tcl) 568: set MCU_PRESERVE_MODULES {
+@file(genus.tcl) 580: set MCU_PRESERVE_MODULES {
     axi_ram
     asap7_sram_1rw
     tcm
@@ -983,8 +983,8 @@ UM:*                                                                   elaborate
     xilinx_primitive_not
     xilinx_primitive_nand
 }
-@file(genus.tcl) 582: set MCU_ALL_MODULES [get_db modules]
-@file(genus.tcl) 583: foreach module_pattern $MCU_PRESERVE_MODULES {
+@file(genus.tcl) 594: set MCU_ALL_MODULES [get_db modules]
+@file(genus.tcl) 595: foreach module_pattern $MCU_PRESERVE_MODULES {
     set matched {}
     foreach module_obj $MCU_ALL_MODULES {
         set module_name [get_db $module_obj .name]
@@ -1071,14 +1071,14 @@ Preserve hierarchy: xilinx_primitive_not_4
 Preserve hierarchy: xilinx_primitive_not_5
   Setting attribute of module 'xilinx_primitive_nand': 'ungroup_ok' = false
 Preserve hierarchy: xilinx_primitive_nand
-@file(genus.tcl) 604: set MCU_RO_CELL_PATTERNS  {*INVx1_ASAP7_75t_R* *NAND2x1_ASAP7_75t_R*}
-@file(genus.tcl) 605: set MCU_RO_NAND_PATTERNS  {*NAND2x1_ASAP7_75t_R*}
-@file(genus.tcl) 610: set MCU_RO_EXPECTED_CELLS 7
-@file(genus.tcl) 612: proc mcu_inst_base_cell_name ...
-@file(genus.tcl) 623: proc mcu_insts_by_base_cell ...
-@file(genus.tcl) 640: proc mcu_insts_by_name ...
-@file(genus.tcl) 658: set MCU_RO_INSTS [mcu_insts_by_base_cell $MCU_RO_CELL_PATTERNS]
-@file(genus.tcl) 659: if {[llength $MCU_RO_INSTS] == $MCU_RO_EXPECTED_CELLS} {
+@file(genus.tcl) 616: set MCU_RO_CELL_PATTERNS  {*INVx1_ASAP7_75t_R* *NAND2x1_ASAP7_75t_R*}
+@file(genus.tcl) 617: set MCU_RO_NAND_PATTERNS  {*NAND2x1_ASAP7_75t_R*}
+@file(genus.tcl) 622: set MCU_RO_EXPECTED_CELLS 7
+@file(genus.tcl) 624: proc mcu_inst_base_cell_name ...
+@file(genus.tcl) 635: proc mcu_insts_by_base_cell ...
+@file(genus.tcl) 652: proc mcu_insts_by_name ...
+@file(genus.tcl) 670: set MCU_RO_INSTS [mcu_insts_by_base_cell $MCU_RO_CELL_PATTERNS]
+@file(genus.tcl) 671: if {[llength $MCU_RO_INSTS] == $MCU_RO_EXPECTED_CELLS} {
     puts "Ring oscillator: khop $MCU_RO_EXPECTED_CELLS cell theo base cell"
 } elseif {[llength $MCU_RO_INSTS] > 0} {
     error "ring oscillator: cho $MCU_RO_EXPECTED_CELLS cell ASAP7 da instantiate (6 INVx1 + 1 NAND2x1), tim thay [llength $MCU_RO_INSTS] - co cell da bi toi uu mat, kiem tra reports/hierarchy_elaborated.rpt"
@@ -1090,7 +1090,7 @@ Preserve hierarchy: xilinx_primitive_nand
     puts "Ring oscillator: base cell chua san sang truoc init_design, lui ve loc theo ten - khop [llength $MCU_RO_INSTS] instance"
 }
 Ring oscillator: khop 7 cell theo base cell
-@file(genus.tcl) 670: foreach inst_obj $MCU_RO_INSTS {
+@file(genus.tcl) 682: foreach inst_obj $MCU_RO_INSTS {
     set_db $inst_obj .preserve true
     puts "Ring oscillator: preserve [get_db $inst_obj .name] ([mcu_inst_base_cell_name $inst_obj])"
 }
@@ -1108,9 +1108,9 @@ Ring oscillator: preserve u_apb_ascon/u_trng/ro/ro_invs_not_gate_4/inst/u_cell (
 Ring oscillator: preserve u_apb_ascon/u_trng/ro/ro_invs_not_gate_5/inst/u_cell (INVx1_ASAP7_75t_R)
   Setting attribute of inst 'u_cell': 'preserve' = true
 Ring oscillator: preserve u_apb_ascon/u_trng/ro/ro_nand_nand_gate_0/inst/u_cell (NAND2x1_ASAP7_75t_R)
-@file(genus.tcl) 674: puts "Ring oscillator: da dat .preserve true cho [llength $MCU_RO_INSTS] instance"
+@file(genus.tcl) 686: puts "Ring oscillator: da dat .preserve true cho [llength $MCU_RO_INSTS] instance"
 Ring oscillator: da dat .preserve true cho 7 instance
-@file(genus.tcl) 676: init_design
+@file(genus.tcl) 688: init_design
 
   Message Summary for Library all 11 libraries:
   *********************************************
@@ -1157,8 +1157,8 @@ Statistics for commands executed by read_sdc:
  "add_to_collection"        - successful     34 , failed      0 (runtime  0.00)
  "all_inputs"               - successful      1 , failed      0 (runtime  0.00)
  "all_outputs"              - successful      3 , failed      0 (runtime  0.00)
- "create_clock"             - successful      9 , failed      0 (runtime  1.29)
- "create_generated_clock"   - successful      9 , failed      0 (runtime  0.09)
+ "create_clock"             - successful      9 , failed      0 (runtime  1.30)
+ "create_generated_clock"   - successful      9 , failed      0 (runtime  0.10)
  "current_design"           - successful      2 , failed      0 (runtime  0.01)
  "get_clocks"               - successful     30 , failed      0 (runtime  0.00)
  "get_pins"                 - successful      8 , failed      0 (runtime  0.00)
@@ -1173,7 +1173,7 @@ Statistics for commands executed by read_sdc:
  "set_input_delay"          - successful     14 , failed      0 (runtime  0.01)
  "set_input_transition"     - successful      4 , failed      0 (runtime  0.01)
  "set_load"                 - successful      1 , failed      0 (runtime  0.01)
- "set_max_fanout"           - successful      1 , failed      0 (runtime  0.01)
+ "set_max_fanout"           - successful      1 , failed      0 (runtime  0.00)
  "set_max_transition"       - successful      4 , failed      0 (runtime  0.01)
  "set_output_delay"         - successful     14 , failed      0 (runtime  0.00)
  "set_units"                - successful      1 , failed      0 (runtime  0.00)
@@ -1212,11 +1212,11 @@ Statistics for commands executed by read_sdc:
  "sizeof_collection"        - successful     68 , failed      0 (runtime  0.00)
 read_sdc completed in 00:00:00 (hh:mm:ss)
   Setting attribute of root '/': 'read_qrc_tech_file_rc_corner' = true
-@file(genus.tcl) 677: set_interactive_constraint_modes mode_func
-@file(genus.tcl) 679: if {[sizeof_collection [get_clocks *]] != 18} {
+@file(genus.tcl) 689: set_interactive_constraint_modes mode_func
+@file(genus.tcl) 691: if {[sizeof_collection [get_clocks *]] != 18} {
     error "Expected 18 clocks (9 primary + 1 forwarded + 8 gated); inspect the SDC"
 }
-@file(genus.tcl) 683: if {[info exists ::dc::sdc_failed_commands] &&
+@file(genus.tcl) 695: if {[info exists ::dc::sdc_failed_commands] &&
     [llength $::dc::sdc_failed_commands] > 0} {
     set fp [open ./reports/failed_sdc_commands.rpt w]
     foreach failed $::dc::sdc_failed_commands {
@@ -1225,19 +1225,19 @@ read_sdc completed in 00:00:00 (hh:mm:ss)
     close $fp
     error "SDC contains failed commands; see reports/failed_sdc_commands.rpt"
 }
-@file(genus.tcl) 696: set MCU_RO_NAND_INSTS [mcu_insts_by_base_cell $MCU_RO_NAND_PATTERNS]
-@file(genus.tcl) 697: if {[llength $MCU_RO_NAND_INSTS] == 0} {
+@file(genus.tcl) 708: set MCU_RO_NAND_INSTS [mcu_insts_by_base_cell $MCU_RO_NAND_PATTERNS]
+@file(genus.tcl) 709: if {[llength $MCU_RO_NAND_INSTS] == 0} {
     error "ring oscillator: khong tim thay cell NAND cua RO de cat vong timing"
 }
-@file(genus.tcl) 700: foreach nand_obj $MCU_RO_NAND_INSTS {
+@file(genus.tcl) 712: foreach nand_obj $MCU_RO_NAND_INSTS {
     if {[catch {set_disable_timing -from B -to Y $nand_obj} dis_err]} {
         error "ring oscillator: set_disable_timing that bai tren [get_db $nand_obj .name]: $dis_err"
     }
 }
-@file(genus.tcl) 705: puts "Ring oscillator: da cat vong timing tren [llength $MCU_RO_NAND_INSTS] cell NAND"
+@file(genus.tcl) 717: puts "Ring oscillator: da cat vong timing tren [llength $MCU_RO_NAND_INSTS] cell NAND"
 Ring oscillator: da cat vong timing tren 1 cell NAND
-@file(genus.tcl) 710: set MCU_RO_TAP_PINS {}
-@file(genus.tcl) 711: foreach inst_obj [mcu_insts_by_base_cell $MCU_RO_CELL_PATTERNS] {
+@file(genus.tcl) 722: set MCU_RO_TAP_PINS {}
+@file(genus.tcl) 723: foreach inst_obj [mcu_insts_by_base_cell $MCU_RO_CELL_PATTERNS] {
     set inst_pins {}
     catch {set inst_pins [get_db $inst_obj .pins]}
     foreach pin_obj $inst_pins {
@@ -1248,7 +1248,7 @@ Ring oscillator: da cat vong timing tren 1 cell NAND
         }
     }
 }
-@file(genus.tcl) 722: if {[llength $MCU_RO_TAP_PINS] > 0} {
+@file(genus.tcl) 734: if {[llength $MCU_RO_TAP_PINS] > 0} {
     catch {set_false_path -from $MCU_RO_TAP_PINS}
     puts "Ring oscillator: false path tu [llength $MCU_RO_TAP_PINS] tap sang RingGenerator"
 } else {
@@ -1260,9 +1260,9 @@ Warning : At least one of the provided from-point is not a timing startpoint. [T
 Warning : At least one of the provided from-point is not a timing startpoint. [TIM-316]
         : Provided from_point is 'pin:top_soc/u_apb_ascon/u_trng/ro/ro_invs_not_gate_0/inst/u_cell/Y'.
 Ring oscillator: false path tu 7 tap sang RingGenerator
-@file(genus.tcl) 729: check_sram_library_cell $SRAM_MASTER
+@file(genus.tcl) 741: check_sram_library_cell $SRAM_MASTER
 #@ End verbose source ./tcl/genus.tcl
-Expected one loaded library cell for srambank_256x4x32_6t122, found 2
+Nap nhieu loai macro SRAM khac nhau cho srambank_256x4x32_6t122: libset_tt/srambank_256x4x32_6t122/srambank_256x4x32_6t122 libset_ss/srambank_256x4x32_6t122/srambank_256x4x32_6t122
 Encountered problems processing file: tcl/genus.tcl
 WARNING: This version of the tool is 560 days old.
 @genus:root: 2> exitt
@@ -1270,8 +1270,8 @@ invalid command name "exitt"
 @genus:root: 3> exit
 
 Lic Summary:
-[17:10:00.242466] Cdslmd servers: vm-fsemi-edu02-h4l0gt0b
-[17:10:00.242472] Feature usage summary:
-[17:10:00.242473] Genus_Synthesis
+[17:16:10.171385] Cdslmd servers: vm-fsemi-edu02-h4l0gt0b
+[17:16:10.171387] Feature usage summary:
+[17:16:10.171392] Genus_Synthesis
 
 Normal exit.
