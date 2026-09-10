@@ -3,6 +3,7 @@
 ## Genus units: ps / fF
 ############################################################
 
+puts "INFO: BEGIN MCU SDC"
 set_units -time 1.0ps -capacitance 1.0fF
 
 proc sdc_env_number {name default_value} {
@@ -205,22 +206,66 @@ set_input_transition -max 40.0 $RESET_PORTS
 # rest of the design starts at a flop, not at the port, so it stays timed.
 set_false_path -from $RESET_PORTS
 
-proc constrain_input_ports {patterns clock_name period} {
-    set ports [get_ports $patterns]
-    if {[sizeof_collection $ports] == 0} {
-        return
+############################################################
+## Rang buoc I/O theo tung giao dien
+##
+## Muon tu tcl/constraint.sdc cua sram_axi: file do rang buoc CA
+## [all_inputs] tru clock/reset va CA [all_outputs], nen khong port nao co the
+## roi ra ngoai. File nay chinh xac hon - moi giao dien duoc quy chieu ve dung
+## clock cua no thay vi mot clock chung - nhung doi lai danh sach port la viet
+## tay. Hai lo hong di kem, ca hai deu IM LANG:
+##
+##   1. Mot pattern go sai hoac mot port bi doi ten trong top_soc.v -> ca nhom
+##      port do mat sach input/output delay. Ban cu `return` khong noi gi.
+##   2. Mot port MOI them vao top_soc (vi du khi them mot ngoai vi) khong nam
+##      trong danh sach nao -> khong bao gio duoc rang buoc.
+##
+## Do dung la lop loi da tung xay ra o ungroup_ok va o bo dem 55 file RTL:
+## script chay het, bao cao dep, va mot phan thiet ke khong he duoc kiem.
+## Giu do chinh xac cua cach lam theo giao dien, va chot lai bang mot phep dem
+## o cuoi muc nay - xem "Kiem tra phu kin I/O".
+############################################################
+
+set SDC_CONSTRAINED_INPUTS  {}
+set SDC_CONSTRAINED_OUTPUTS {}
+
+proc sdc_require_ports {patterns} {
+    set collected {}
+    foreach pattern $patterns {
+        set ports [get_ports $pattern]
+        if {[sizeof_collection $ports] == 0} {
+            error "SDC: khong top port nao khop '$pattern' - danh sach port trong constraint.sdc da lech voi top_soc.v"
+        }
+        if {$collected eq ""} {
+            set collected $ports
+        } else {
+            set collected [add_to_collection $collected $ports]
+        }
     }
+    return $collected
+}
+
+proc sdc_record_ports {var_name ports} {
+    upvar #0 $var_name accumulated
+    if {$accumulated eq ""} {
+        set accumulated $ports
+    } else {
+        set accumulated [add_to_collection $accumulated $ports]
+    }
+}
+
+proc constrain_input_ports {patterns clock_name period} {
+    set ports [sdc_require_ports $patterns]
     set_input_delay -clock $clock_name -max [expr {0.25 * $period}] $ports
     set_input_delay -clock $clock_name -min [expr {0.10 * $period}] $ports
+    sdc_record_ports SDC_CONSTRAINED_INPUTS $ports
 }
 
 proc constrain_output_ports {patterns clock_name period} {
-    set ports [get_ports $patterns]
-    if {[sizeof_collection $ports] == 0} {
-        return
-    }
+    set ports [sdc_require_ports $patterns]
     set_output_delay -clock $clock_name -max [expr {0.30 * $period}] $ports
     set_output_delay -clock $clock_name -min [expr {0.15 * $period}] $ports
+    sdc_record_ports SDC_CONSTRAINED_OUTPUTS $ports
 }
 
 constrain_input_ports  {tms tdi}                         CLK_TCK  $P_TCK
@@ -252,6 +297,51 @@ constrain_output_ports {sdram_cke sdram_cs_n sdram_ras_n \
     sdram_cas_n sdram_we_n sdram_ba* sdram_addr* \
     sdram_dq_o* sdram_dq_oe sdram_dqm*}                  CLK_SDRAM_OUT $P_SDRAM
 constrain_input_ports  {sdram_dq_i*}                     CLK_SDRAM_OUT $P_SDRAM
+
+############################################################
+## Kiem tra phu kin I/O
+##
+## Chot lai phan tren: moi port du lieu phai da nhan input/output delay. Neu
+## con sot, DUNG chu khong chay tiep - mot port khong rang buoc khong xuat hien
+## trong bat ky bao cao timing nao, nen khong co cach nao phat hien no ve sau.
+##
+## sdram_clk duoc tru ra co chu y: no la clock forward ra pad (CLK_SDRAM_OUT),
+## khong phai port du lieu, nen khong mang set_output_delay - xem ghi chu o
+## khoi SDRAM ben tren.
+############################################################
+
+proc sdc_describe_ports {label port_collection} {
+    set names {}
+    if {[catch {
+        foreach_in_collection port_obj $port_collection {
+            lappend names [get_db $port_obj .name]
+        }
+    }]} {
+        return "$label: [sizeof_collection $port_collection] port (phien ban nay khong liet ke duoc ten)"
+    }
+    return "$label: [join [lsort $names] { }]"
+}
+
+set CLOCK_OUTPUT_PORTS [get_ports {sdram_clk}]
+set DATA_OUTPUTS       [remove_from_collection [all_outputs] $CLOCK_OUTPUT_PORTS]
+
+set SDC_UNCONSTRAINED_INPUTS $DATA_INPUTS
+if {$SDC_CONSTRAINED_INPUTS ne ""} {
+    set SDC_UNCONSTRAINED_INPUTS         [remove_from_collection $DATA_INPUTS $SDC_CONSTRAINED_INPUTS]
+}
+
+set SDC_UNCONSTRAINED_OUTPUTS $DATA_OUTPUTS
+if {$SDC_CONSTRAINED_OUTPUTS ne ""} {
+    set SDC_UNCONSTRAINED_OUTPUTS         [remove_from_collection $DATA_OUTPUTS $SDC_CONSTRAINED_OUTPUTS]
+}
+
+if {[sizeof_collection $SDC_UNCONSTRAINED_INPUTS] > 0 ||
+    [sizeof_collection $SDC_UNCONSTRAINED_OUTPUTS] > 0} {
+    error "SDC: con port du lieu chua co I/O delay. [sdc_describe_ports {input} $SDC_UNCONSTRAINED_INPUTS] | [sdc_describe_ports {output} $SDC_UNCONSTRAINED_OUTPUTS]"
+}
+
+puts "INFO: I/O delay phu kin [sizeof_collection $DATA_INPUTS] port vao va [sizeof_collection $DATA_OUTPUTS] port ra"
+
 
 if {[sizeof_collection [all_outputs]] > 0} {
     set_load 10.0 -pin_load [all_outputs]
