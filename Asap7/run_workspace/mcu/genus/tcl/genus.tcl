@@ -298,10 +298,22 @@ proc check_sram_library_cell {master} {
             lappend matches $cell_obj
         }
     }
-    if {[llength $matches] != 1} {
-        error "Expected one loaded library cell for $master, found [llength $matches]"
+    set names {}
+    foreach cell_obj $matches {
+        set cell_name [get_db $cell_obj .name]
+        if {[lsearch -exact $names $cell_name] < 0} {
+            lappend names $cell_name
+        }
     }
-    puts "Loaded SRAM library cell: [get_db [lindex $matches 0] .name]"
+    # Voi MMMC, cung mot macro duoc nap mot lan cho MOI library_set, nen dem
+    # object se ra 2-3. Dieu can rang buoc la chi co MOT LOAI macro SRAM.
+    if {[llength $names] == 0} {
+        error "Khong nap duoc lib cell nao cho $master"
+    }
+    if {[llength $names] > 1} {
+        error "Nap nhieu loai macro SRAM khac nhau cho $master: $names"
+    }
+    puts "Loaded SRAM library cell: [lindex $names 0] ([llength $matches] ban - mot cho moi library_set)"
 }
 
 proc check_sram_mapped_netlist {netlist master expected} {
