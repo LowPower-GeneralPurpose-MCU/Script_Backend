@@ -219734,20 +219734,20 @@
 "object":"/designs/top_soc/instances_seq/u_sync_dbg_we_sync_reg_reg[0]",
 "type":"instance"},
 {"index": "2", 
- "date": "Thu Sep 10 05:37:41 UTC 2026",
- "seconds": 1789018661.6102278,
+ "date": "Thu Sep 10 06:59:09 UTC 2026",
+ "seconds": 1789023549.2810378,
  "netlist": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v", 
  "netlist_exists": "1", 
  "netlist_normalize": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v", 
- "netlist_mtime": "1789018601", 
- "netlist_timestamp": "Thu Sep 10 05:36:41 UTC 2026", 
+ "netlist_mtime": "1789023492", 
+ "netlist_timestamp": "Thu Sep 10 06:58:12 UTC 2026", 
  "netlist_size": "22754954", 
- "netlist_cksum": "1954937134", 
+ "netlist_cksum": "2256217548", 
  "design_name": "top_soc", 
  "synth_workdir": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus", 
  "synthesis_command":"",
  "current_label": "top_soc_synv", 
  "previous_label": "fv_map", 
- "write_verif_file_runtime": 30.23873 
+ "write_verif_file_runtime": 27.350410999999998 
  }
 ]
