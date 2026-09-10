@@ -14,7 +14,7 @@ set required_files [concat \
     $STD_LIBS \
     $CELL_LEFS \
     [list $TECH_LEF $QRC_FILE $SRAM_LIB $SRAM_LEF $SRAM_GDS \
-        $SYN_NETLIST $SYN_SDC]]
+        $SRAM_TAG_LIB $SRAM_TAG_LEF $SYN_NETLIST $SYN_SDC]]
 
 set missing {}
 foreach required $required_files {
@@ -30,23 +30,30 @@ if {[llength $missing] > 0} {
     error "Run Genus first and verify ASAP7_ROOT"
 }
 
-check_mapped_sram_count \
-    $SYN_NETLIST $SRAM_MASTER $SRAM_EXPECTED_COUNT
 check_top_io_handoff $SYN_NETLIST $SYN_SDC
 
-set sram_lib_text [read_binary_file $SRAM_LIB "SRAM Liberty"]
-if {![regexp [format {cell[ \t\r\n]*\([ \t\r\n]*%s[ \t\r\n]*\)} \
-    $SRAM_MASTER] $sram_lib_text]} {
-    error "SRAM Liberty does not contain cell $SRAM_MASTER"
-}
+# Hai master SRAM: 80 x 256x4x32 (RAM, cache data, TCM) + 4 x 128x4x20 (tag).
+# Kich thuoc LEF duoc ghim vi macro_floorplan.tcl tinh luoi tu chung.
+foreach {master expected lib lef size_pattern} [list \
+    $SRAM_MASTER     $SRAM_EXPECTED_COUNT     $SRAM_LIB     $SRAM_LEF \
+        {SIZE[ \t]+121\.392[ \t]+BY[ \t]+172\.8} \
+    $SRAM_TAG_MASTER $SRAM_TAG_EXPECTED_COUNT $SRAM_TAG_LIB $SRAM_TAG_LEF \
+        {SIZE[ \t]+64[ \t]+BY[ \t]+120\.96}] {
+    check_mapped_sram_count $SYN_NETLIST $master $expected
 
-set sram_lef_text [read_binary_file $SRAM_LEF "SRAM 4x LEF"]
-if {![regexp [format {MACRO[ \t]+%s} $SRAM_MASTER] $sram_lef_text] ||
-    ![regexp {SIZE[ \t]+121\.392[ \t]+BY[ \t]+172\.8} $sram_lef_text]} {
-    error "SRAM 4x LEF master or geometry is unexpected"
-}
-if {![regexp {SYMMETRY[ \t]+[^;\n]*Y} $sram_lef_text]} {
-    error "SRAM 4x LEF does not advertise Y symmetry; macro floorplan uses MY orientation"
+    set lib_text [read_binary_file $lib "SRAM Liberty"]
+    if {![regexp [format {cell[ \t\r\n]*\([ \t\r\n]*%s[ \t\r\n]*\)} $master] $lib_text]} {
+        error "SRAM Liberty does not contain cell $master"
+    }
+
+    set lef_text [read_binary_file $lef "SRAM 4x LEF"]
+    if {![regexp [format {MACRO[ \t]+%s} $master] $lef_text] ||
+        ![regexp $size_pattern $lef_text]} {
+        error "SRAM 4x LEF master or geometry is unexpected for $master"
+    }
+    if {![regexp {SYMMETRY[ \t]+[^;\n]*Y} $lef_text]} {
+        error "SRAM 4x LEF of $master does not advertise Y symmetry; macro floorplan uses MY orientation"
+    }
 }
 if {[file size $SRAM_GDS] == 0} {
     error "SRAM GDS is empty: [file normalize $SRAM_GDS]"
@@ -68,5 +75,5 @@ puts "============================================================"
 puts "INNOVUS PRECHECK PASSED"
 puts " - Netlist : [file normalize $SYN_NETLIST]"
 puts " - SDC     : [file normalize $INNOVUS_SDC]"
-puts " - Macro   : $SRAM_EXPECTED_COUNT x $SRAM_MASTER"
+puts " - Macro   : $SRAM_EXPECTED_COUNT x $SRAM_MASTER + $SRAM_TAG_EXPECTED_COUNT x $SRAM_TAG_MASTER"
 puts "============================================================"

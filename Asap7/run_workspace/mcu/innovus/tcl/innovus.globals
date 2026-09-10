@@ -2,7 +2,7 @@ source ./tcl/project_config.tcl
 
 setLibraryUnit -time 1ns -cap 1pf
 
-set init_lef_file [concat [list $TECH_LEF] $CELL_LEFS [list $SRAM_LEF]]
+set init_lef_file [concat [list $TECH_LEF] $CELL_LEFS [list $SRAM_LEF $SRAM_TAG_LEF]]
 set init_verilog $SYN_NETLIST
 set init_top_cell $TOP
 set init_mmmc_file ./tcl/viewDefinition.tcl
