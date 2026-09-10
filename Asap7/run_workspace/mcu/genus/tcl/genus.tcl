@@ -913,12 +913,62 @@ if {[llength $MCU_LVT_CELLS] > 0} {
 set_db / .syn_opt_effort $SYN_EFFORT
 syn_opt
 
-report_area > ./reports/area_syn.rpt
-report_area -depth 5 > ./reports/area_hierarchy_syn.rpt
-report_timing -max_paths 100 > ./reports/timing_syn.rpt
-# F2 - hold co bao cao rieng. Truoc day khong co dong nao cho hold, vi setup va
-# hold dung chung mot view nen bao cao hold chi lap lai bao cao setup.
-report_timing -early -max_paths 50 > ./reports/timing_hold_syn.rpt
+# -----------------------------------------------------------------------------
+# DELIVERABLE TRUOC, BAO CAO SAU
+#
+# Run 2026-09-10 chay het elaborate + syn_generic + syn_map + syn_opt (ket thuc
+# 03:58) roi chet o `report_timing -early`: Genus 23.14 KHONG co option
+# -early/-late/-hold cho report_timing - do la cu phap Innovus/Tempus.  Vi
+# write_hdl nam SAU cac bao cao nen ca run khong de lai mot dong netlist nao:
+# phai tong hop lai tu dau chi vi mot option sai trong mot lenh bao cao.
+#
+# Sua ca hai mat, khong chi cai option:
+#   1. Ghi netlist + SDC NGAY khi syn_opt xong, truoc moi bao cao.
+#   2. Boc moi lenh bao cao bang catch.  Bao cao la thong tin, khong phai
+#      deliverable - mot bao cao hong khong duoc quyen pha ca run.
+# Cac invariant that (check_sram_mapped_netlist) van `error` nhu cu, nhung gio
+# chung chay khi netlist da nam tren dia nen van con vat de debug.
+# -----------------------------------------------------------------------------
+set MAPPED_NETLIST [file join $GENUS_DIR outputs [format "%s_syn.v" $TOP]]
+set MAPPED_SDC     [file join $GENUS_DIR outputs [format "%s_syn.sdc" $TOP]]
+
+write_hdl > $MAPPED_NETLIST
+write_sdc -view view_tt > $MAPPED_SDC
+puts "Netlist + SDC da ghi TRUOC khi bao cao:"
+puts "  - [file normalize $MAPPED_NETLIST]"
+puts "  - [file normalize $MAPPED_SDC]"
+
+proc mcu_report {label script} {
+    if {[catch {uplevel 1 $script} report_err]} {
+        puts "WARNING: bao cao '$label' that bai, flow van chay tiep: $report_err"
+        return 0
+    }
+    return 1
+}
+
+mcu_report "area"           {report_area > ./reports/area_syn.rpt}
+mcu_report "area hierarchy" {report_area -depth 5 > ./reports/area_hierarchy_syn.rpt}
+mcu_report "timing setup"   {report_timing -max_paths 100 > ./reports/timing_syn.rpt}
+
+# F2 - hold co bao cao rieng.
+#
+# Genus khong co -early: check type di theo ANALYSIS VIEW.  Mot view nam trong
+# CA HAI danh sach cua set_analysis_view (view_tt) van duoc bao cao theo setup,
+# nen bao cao hold chi co nghia tren view CHI nam ben hold - o day la view_ff
+# khi bat multi-corner.  Neu setup va hold dung chung het view thi khong tach
+# duoc, va noi thang ra thay vi ghi mot file lap lai y nguyen bao cao setup.
+set MCU_HOLD_ONLY_VIEWS {}
+foreach view_name $MCU_HOLD_VIEWS {
+    if {[lsearch -exact $MCU_SETUP_VIEWS $view_name] < 0} {
+        lappend MCU_HOLD_ONLY_VIEWS $view_name
+    }
+}
+if {[llength $MCU_HOLD_ONLY_VIEWS] > 0} {
+    puts "Hold: bao cao tren view chi-hold = $MCU_HOLD_ONLY_VIEWS"
+    mcu_report "timing hold"         {report_timing -views $MCU_HOLD_ONLY_VIEWS -max_paths 50 > ./reports/timing_hold_syn.rpt}
+} else {
+    puts "WARNING: hold dung chung view voi setup ($MCU_SETUP_VIEWS) - khong tach duoc bao cao hold, bo qua timing_hold_syn.rpt"
+}
 # -----------------------------------------------------------------------------
 # T5 - power chi co nghia khi co activity annotation.
 #
@@ -950,29 +1000,20 @@ if {[info exists ::env(MCU_SAIF)] && [file isfile $::env(MCU_SAIF)]} {
 } else {
     puts "Power: KHONG co SAIF - dong 'bbox' trong power_syn.rpt la toggle rate mac dinh, dung tin con so tuyet doi"
 }
-report_power > ./reports/power_syn.rpt
-report_gates > ./reports/gates_syn.rpt
-catch {report sequential -deleted > ./reports/deleted_sequential_syn.rpt}
-report_qor > ./reports/qor_syn.rpt
-report_hierarchy > ./reports/hierarchy_syn.rpt
-check_timing_intent -verbose > ./reports/timing_intent_post_syn.rpt
-catch {report_timing -lint > ./reports/timing_lint_post_syn.rpt}
-report_metric -format html -file ./reports/metric_syn.html
+mcu_report "power"          {report_power > ./reports/power_syn.rpt}
+mcu_report "gates"          {report_gates > ./reports/gates_syn.rpt}
+mcu_report "deleted seq"    {report sequential -deleted > ./reports/deleted_sequential_syn.rpt}
+mcu_report "qor"            {report_qor > ./reports/qor_syn.rpt}
+mcu_report "hierarchy"      {report_hierarchy > ./reports/hierarchy_syn.rpt}
+mcu_report "timing intent"  {check_timing_intent -verbose > ./reports/timing_intent_post_syn.rpt}
+mcu_report "timing lint"    {report_timing -lint > ./reports/timing_lint_post_syn.rpt}
+mcu_report "metric html"    {report_metric -format html -file ./reports/metric_syn.html}
 
-set MAPPED_NETLIST [file join $GENUS_DIR outputs [format "%s_syn.v" $TOP]]
-set MAPPED_SDC     [file join $GENUS_DIR outputs [format "%s_syn.sdc" $TOP]]
+write_do_lec     -revised_design $MAPPED_NETLIST     -logfile ./logs/lec_genus.log     > ./outputs/genus_mapping_hints.do
 
-write_hdl > $MAPPED_NETLIST
-write_sdc -view view_tt > $MAPPED_SDC
-write_do_lec \
-    -revised_design $MAPPED_NETLIST \
-    -logfile ./logs/lec_genus.log \
-    > ./outputs/genus_mapping_hints.do
+check_sram_mapped_netlist     $MAPPED_NETLIST $SRAM_MASTER $SRAM_EXPECTED_COUNT
 
-check_sram_mapped_netlist \
-    $MAPPED_NETLIST $SRAM_MASTER $SRAM_EXPECTED_COUNT
-
-report_messages -all > ./reports/messages_all.rpt
+mcu_report "messages"       {report_messages -all > ./reports/messages_all.rpt}
 
 puts "============================================================"
 puts "GENUS MCU SYNTHESIS COMPLETED"
