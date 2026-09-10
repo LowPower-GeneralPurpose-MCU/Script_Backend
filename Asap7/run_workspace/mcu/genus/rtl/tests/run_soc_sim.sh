@@ -50,6 +50,7 @@ cd "$OUT_DIR"
 # cua macro SRAM (trong luong that no la hard macro doc tu .lib/.lef).
 find "$RTL" -name '*.v' ! -path '*/core.bak*' ! -path '*/tests/*' | sort > rtl_files.f
 echo "$RTL/tests/models/srambank_256x4x32_6t122.v" >> rtl_files.f
+echo "$RTL/tests/models/srambank_128x4x20_6t122.v" >> rtl_files.f   # tag cache
 
 INC=(-i "$RTL" -i "$RTL/interrupt/CLINT" -i "$RTL/interrupt/dma" -i "$RTL/interrupt/plic" -i "$RTL/memory")
 

@@ -11,8 +11,9 @@
 //   addr[9:0]         = row inside the selected bank
 //
 // DATA_W may be narrower than 32.  Unused macro write bits are tied low and
-// the unused read bits are dropped, which is how the cache tag arrays reuse
-// this array without a second macro variant.
+// the unused read bits are dropped.  The cache tag arrays no longer come
+// through here: they use srambank_128x4x20_6t122 (asap7_sram_tag_512x20 in
+// cache_sram_array.v), which fits a 512 x 19-bit tag at 95% instead of 29.7%.
 //
 // The macro registers dataout: rdata is valid the cycle after `read` and holds
 // its value until the next read.

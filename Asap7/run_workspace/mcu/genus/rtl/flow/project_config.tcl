@@ -112,9 +112,9 @@ set STD_LIBS [list \
 # tren may khong co du SS/FF thi genus.tcl phat hien va quay ve mot goc, khong
 # gay flow - xem khoi F2 trong tcl/genus.tcl.
 #
-# CANH BAO: `srambank_256x4x32_6t122.lib` chi duoc sinh o MOT goc. Ca ba
-# library_set deu tro toi cung file do, nen do tre cua 84 macro KHONG doi theo
-# goc. Day la gioi han cua PDK, khong phai loi cau hinh - phai nho dieu nay khi
+# CANH BAO: `srambank_256x4x32_6t122.lib` va `srambank_128x4x20_6t122.lib` chi
+# duoc sinh o MOT goc. Ca ba library_set deu tro toi cung hai file do, nen do
+# tre cua 84 macro KHONG doi theo goc. Day la gioi han cua PDK, khong phai loi cau hinh - phai nho dieu nay khi
 # doc ket qua hold o goc FF.
 # -----------------------------------------------------------------------------
 proc mcu_corner_lib_list {libs corner} {
@@ -143,42 +143,58 @@ set QRC_FILE [mcu_resolve_path QRC_FILE \
     {ASAP7_QRC_FILE} \
     [file join $STDCELL_ROOT qrc qrcTechFile_typ03_scaled4xV06]]
 
-# One generated 256x4x32 block contains 1024 words x 32 bits = 4 KiB.
+# Two generated SRAM masters (asap7_sram_0p0 @522eecc ships 36 variants,
+# 64/128/256 rows x 4 x 16..80 bits, all with the same pins):
+#   srambank_256x4x32_6t122 : 1024 words x 32 bits = 4 KiB, LEF 121.392 x 172.8
+#   srambank_128x4x20_6t122 :  512 words x 20 bits,         LEF  64.000 x 120.96
 #
-# Macro budget:
-#   main AXI RAM 256 KiB : 64 macros, as 2 x 128 KiB slave ports of 32
-#   I-cache 16 KiB       : 2 ways x 2 data macros + 2 ways x 1 tag macro = 6
-#   D-cache 16 KiB       : 2 ways x 2 data macros + 2 ways x 1 tag macro = 6
-#   ITCM 16 KiB          : 4 macros
-#   DTCM 16 KiB          : 4 macros
+# Macro budget, 256x4x32 (SRAM_MASTER) = 80:
+#   main AXI RAM 256 KiB : 64, as 2 x 128 KiB slave ports of 32
+#   I-cache data 16 KiB  : 2 ways x 2 = 4
+#   D-cache data 16 KiB  : 2 ways x 2 = 4
+#   ITCM / DTCM 16 KiB   : 4 + 4
+# Macro budget, 128x4x20 (SRAM_TAG_MASTER) = 4:
+#   I-cache tag : 2 ways x 1 (512 sets x 19 bits)
+#   D-cache tag : 2 ways x 1
+#
+# The tags used to sit in 256x4x32 as well, at 29.7% use (512 x 19 of
+# 1024 x 32).  128x4x20 holds them at 95% and is 7741 um^2 instead of 20976,
+# about 52900 um^2 less over the 4 tag macros.  Every way still needs its own
+# macro so a lookup can read all ways in one cycle.
 #
 # The caches were 32 KiB (10 + 12 = 22 macros).  For an IoT-class workload the
 # extra 16 KiB per cache buys roughly 1-2 % hit rate while costing 8 macros of
 # area and the leakage of their tag arrays, so both were halved.
-#
-# Cache tag macros are deliberately under-used (19/20 tag bits out of 32, and
-# only 512 / 256 of 1024 rows in the I-cache / D-cache) because the generator
-# ships no narrower or shallower variant.  Every way needs its own macro so a
-# lookup can read all ways in one cycle.
 set SRAM_MASTER         "srambank_256x4x32_6t122"
+set SRAM_TAG_MASTER     "srambank_128x4x20_6t122"
 set SRAM_MACRO_BYTES    [expr {1024 * 4}]
 
-set SRAM_RAM_COUNT      64
-set SRAM_ICACHE_COUNT   6
-set SRAM_DCACHE_COUNT   6
-set SRAM_ITCM_COUNT     4
-set SRAM_DTCM_COUNT     4
+set SRAM_RAM_COUNT        64
+set SRAM_ICACHE_COUNT     4
+set SRAM_DCACHE_COUNT     4
+set SRAM_ITCM_COUNT       4
+set SRAM_DTCM_COUNT       4
+set SRAM_ICACHE_TAG_COUNT 2
+set SRAM_DCACHE_TAG_COUNT 2
 set SRAM_CACHE_COUNT    [expr {$SRAM_ICACHE_COUNT + $SRAM_DCACHE_COUNT}]
 set SRAM_TCM_COUNT      [expr {$SRAM_ITCM_COUNT + $SRAM_DTCM_COUNT}]
 set SRAM_EXPECTED_COUNT [expr {$SRAM_RAM_COUNT + $SRAM_CACHE_COUNT + $SRAM_TCM_COUNT}]
+set SRAM_TAG_EXPECTED_COUNT [expr {$SRAM_ICACHE_TAG_COUNT + $SRAM_DCACHE_TAG_COUNT}]
 set SRAM_CAPACITY_BYTES [expr {$SRAM_RAM_COUNT * $SRAM_MACRO_BYTES}]
 
-# Floorplan grids: the main RAM island sits at the core edge, the cache island
-# next to it so the 400 MHz cache macros stay close to the logic block.
+# Floorplan grids, left to right: RAM island at the core edge, then the cache
+# island (cache data + TCM, the 400 MHz macros), then one column of tag macros
+# next to the logic block, since the tag compare is on the cache hit path.
+#   RAM   : 8 x 8 = 64 x 256x4x32
+#   cache : 8 x 2 = 16 x 256x4x32 (4 I-data + 4 D-data + 4 ITCM + 4 DTCM)
+#   tag   : 4 x 1 =  4 x 128x4x20
+# The old cache grid was 8 x 3 for 20 macros (12 cache incl. tags + 8 TCM).
 set SRAM_RAM_ROWS       8
 set SRAM_RAM_COLS       8
 set SRAM_CACHE_ROWS     8
-set SRAM_CACHE_COLS     3
+set SRAM_CACHE_COLS     2
+set SRAM_TAG_ROWS       4
+set SRAM_TAG_COLS       1
 
 set SRAM_LIB [mcu_resolve_path SRAM_LIB \
     {ASAP7_SRAM_LIB_FILE ASAP7_SRAM_LIB} \
@@ -194,9 +210,21 @@ set SRAM_SIM_VERILOG [mcu_resolve_path SRAM_SIM_VERILOG \
     {ASAP7_SRAM_VERILOG_FILE ASAP7_SRAM_VERILOG} \
     [file join $SRAM_ROOT generated verilog "$SRAM_MASTER.v"]]
 
-set ALL_TIMING_LIBS    [concat $STD_LIBS    [list $SRAM_LIB]]
-set ALL_TIMING_LIBS_SS [concat $STD_LIBS_SS [list $SRAM_LIB]]
-set ALL_TIMING_LIBS_FF [concat $STD_LIBS_FF [list $SRAM_LIB]]
+set SRAM_TAG_LIB [mcu_resolve_path SRAM_TAG_LIB \
+    {ASAP7_SRAM_TAG_LIB_FILE} \
+    [file join $SRAM_ROOT generated LIB "$SRAM_TAG_MASTER.lib"]]
+set SRAM_TAG_LEF [mcu_resolve_path SRAM_TAG_LEF \
+    {ASAP7_SRAM_TAG_LEF_FILE} \
+    [file join $SRAM_ROOT generated LEF 4xLEF \
+        "$SRAM_TAG_MASTER.lef.4x.lef"]]
+set SRAM_TAG_SIM_VERILOG [mcu_resolve_path SRAM_TAG_SIM_VERILOG \
+    {ASAP7_SRAM_TAG_VERILOG_FILE} \
+    [file join $SRAM_ROOT generated verilog "$SRAM_TAG_MASTER.v"]]
+
+# Ca hai .lib SRAM chi co o goc TT; ca ba library_set dung chung.
+set ALL_TIMING_LIBS    [concat $STD_LIBS    [list $SRAM_LIB $SRAM_TAG_LIB]]
+set ALL_TIMING_LIBS_SS [concat $STD_LIBS_SS [list $SRAM_LIB $SRAM_TAG_LIB]]
+set ALL_TIMING_LIBS_FF [concat $STD_LIBS_FF [list $SRAM_LIB $SRAM_TAG_LIB]]
 
 # The macro data/control pins have a 0.320 ns Liberty max-transition.
 set SIGNAL_MAX_TRANSITION_PS 300.0

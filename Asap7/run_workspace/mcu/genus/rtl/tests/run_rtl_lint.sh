@@ -12,10 +12,16 @@ else
     macro_model="$run_workspace_dir/sram_axi/genus/rtl/srambank_256x4x32_6t122.v"
 fi
 
-if [[ ! -f "$macro_model" ]]; then
-    echo "Missing SRAM simulation model: $macro_model" >&2
-    exit 1
-fi
+# Tag cache dung macro thu hai (512 x 20).  Ban sao nguyen van cua repo nam
+# trong tests/models/, giong cach run_soc_sim.sh nap no.
+tag_macro_model="$rtl_dir/tests/models/srambank_128x4x20_6t122.v"
+
+for model in "$macro_model" "$tag_macro_model"; do
+    if [[ ! -f "$model" ]]; then
+        echo "Missing SRAM simulation model: $model" >&2
+        exit 1
+    fi
+done
 
 cd "$rtl_dir"
 shopt -s globstar nullglob
@@ -63,6 +69,7 @@ verilator \
     -Iinterrupt/dma \
     -Iinterrupt/plic \
     "$macro_model" \
+    "$tag_macro_model" \
     "${rtl[@]}"
 
 echo "MCU_RTL_LINT_PASS (${#rtl[@]} RTL files)"
