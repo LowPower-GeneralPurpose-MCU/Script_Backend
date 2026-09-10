@@ -290,20 +290,31 @@ proc genus_run_static_checks {} {
     puts "MCU static checks passed: 58 RTL files, boot image, SRAM wrapper and SDC"
 }
 
+# Voi MMMC, `.name` cua lib_cell la DUONG DAN "libset_tt/<library>/<cell>",
+# khong phai ten cell - run 17:13 ngay 2026-09-10 dung lai vi so sanh ten do.
+proc mcu_lib_cell_leaf_name {cell_obj} {
+    set leaf ""
+    catch {set leaf [get_db $cell_obj .base_name]}
+    if {$leaf eq ""} {
+        set leaf [file tail [get_db $cell_obj .name]]
+    }
+    return $leaf
+}
+
 proc check_sram_library_cell {master} {
     set matches {}
-    foreach cell_obj [get_db lib_cells] {
-        set cell_name [get_db $cell_obj .name]
-        if {[string match "*$master*" $cell_name]} {
-            lappend matches $cell_obj
-        }
-    }
     set names {}
-    foreach cell_obj $matches {
-        set cell_name [get_db $cell_obj .name]
+    set containers {}
+    foreach cell_obj [get_db lib_cells] {
+        set cell_name [mcu_lib_cell_leaf_name $cell_obj]
+        if {![string match "*$master*" $cell_name]} {
+            continue
+        }
+        lappend matches $cell_obj
         if {[lsearch -exact $names $cell_name] < 0} {
             lappend names $cell_name
         }
+        lappend containers [file dirname [get_db $cell_obj .name]]
     }
     # Voi MMMC, cung mot macro duoc nap mot lan cho MOI library_set, nen dem
     # object se ra 2-3. Dieu can rang buoc la chi co MOT LOAI macro SRAM.
@@ -313,7 +324,7 @@ proc check_sram_library_cell {master} {
     if {[llength $names] > 1} {
         error "Nap nhieu loai macro SRAM khac nhau cho $master: $names"
     }
-    puts "Loaded SRAM library cell: [lindex $names 0] ([llength $matches] ban - mot cho moi library_set)"
+    puts "Loaded SRAM library cell: [lindex $names 0] ([llength $matches] ban: $containers)"
 }
 
 proc check_sram_mapped_netlist {netlist master expected} {
@@ -739,6 +750,35 @@ if {[llength $MCU_RO_TAP_PINS] > 0} {
 }
 
 check_sram_library_cell $SRAM_MASTER
+
+# Buoc multi-Vt truoc elaborate bao "212 of 212" - dung bang so cell LVT cua
+# MOT goc - trong khi sau init_design SRAM co mat o 2 library_set.  Kiem xem
+# LVT cua MOI library_set co that su bi dont_use khong.  Chi DOC: doi dont_use
+# sau elaborate se gay RTLOPT-55.
+if {[llength $MCU_LVT_CELLS] > 0} {
+    set lvt_by_set [dict create]
+    foreach cell_obj [get_db lib_cells] {
+        if {![string match "*_ASAP7_75t_L" [mcu_lib_cell_leaf_name $cell_obj]]} {
+            continue
+        }
+        set libset [lindex [split [get_db $cell_obj .name] /] 0]
+        set blocked 0
+        catch {set blocked [string is true -strict [get_db $cell_obj .dont_use]]}
+        if {![dict exists $lvt_by_set $libset]} {
+            dict set lvt_by_set $libset {0 0}
+        }
+        lassign [dict get $lvt_by_set $libset] total n_blocked
+        dict set lvt_by_set $libset [list [incr total] [incr n_blocked $blocked]]
+    }
+    dict for {libset counts} $lvt_by_set {
+        lassign $counts total n_blocked
+        if {$n_blocked < $total} {
+            puts "WARNING: Multi-Vt: $libset co $total cell LVT nhung chi $n_blocked bi dont_use"
+        } else {
+            puts "Multi-Vt: $libset - $n_blocked/$total cell LVT bi dont_use"
+        }
+    }
+}
 
 if {![catch {
     set sram_outputs \
