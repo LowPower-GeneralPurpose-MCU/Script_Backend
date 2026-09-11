@@ -39,26 +39,15 @@ module top_soc (
     input  wire        tdi,
     output wire        tdo,
 
-    // Ngoại vi
-    input  wire        uart_rx,
-    output wire        uart_tx,
-
-    input  wire [31:0] gpio_in,
-    output wire [31:0] gpio_out,
-    output wire [31:0] gpio_oe,
-    output wire        pwm_out,
-
-    output wire        spi_sck,
-    output wire        spi_mosi,
-    input  wire        spi_miso,
-    output wire        spi_ss,
-
-    input  wire        i2c_scl_i,
-    output wire        i2c_scl_o,
-    output wire        i2c_scl_oe,
-    input  wire        i2c_sda_i,
-    output wire        i2c_sda_o,
-    output wire        i2c_sda_oe,
+    // -------------------------------------------------------------------------
+    // 32 PAD DA NANG PA0..PA31 (2026-09-11) - thay cho chan rieng cua UART, SPI,
+    // I2C, PWM va 32 GPIO. Chuc nang cua tung pad chon trong apb_pinmux.v (bang
+    // AF co dinh). Mac dinh sau reset: PA0 = UART0_TX, PA1 = UART0_RX, con lai
+    // la GPIO vao. Bo ba in/out/oe noi thang vao pad cell cua pad ring.
+    // -------------------------------------------------------------------------
+    input  wire [31:0] pad_in,
+    output wire [31:0] pad_out,
+    output wire [31:0] pad_oe,
 
     output wire        flash_sck,
     output wire        flash_cs_n,
@@ -101,6 +90,8 @@ module top_soc (
     // =========================================================================
     wire wdt_rst;
     wire ndmreset_req;
+    wire sw_rst_req;      // SYSCON SW_RESET (nhu AIRCR.SYSRESETREQ)
+    wire dbg_allow;       // SYSCON SEC_CTRL: 0 -> Debug Module bi giu reset
 
     // -------------------------------------------------------------------------
     // BO DIEU KHIEN RESET
@@ -148,8 +139,8 @@ module top_soc (
             dmrst_cnt  <= RST_STRETCH;
             dmrst_n_q  <= 1'b0;
         end else begin
-            // --- reset he thong: watchdog HOAC ndmreset ---
-            if (wdt_rst | ndmreset_req) begin
+            // --- reset he thong: watchdog, ndmreset HOAC SW reset ---
+            if (wdt_rst | ndmreset_req | sw_rst_req) begin
                 sysrst_cnt <= RST_STRETCH;
                 sysrst_n_q <= 1'b0;
             end else if (sysrst_cnt != 6'd0) begin
@@ -173,15 +164,20 @@ module top_soc (
     end
 
     wire reset_sys_n_raw = rst_n & sysrst_n_q;
-    wire reset_dm_n_raw  = rst_n & dmrst_n_q;
+    // Debug Module con bi giu reset khi SYSCON chua cho phep debug (SEC_CTRL:
+    // UNDECIDED sau POR, hoac LOCKED) - xem ghi chu KHOA DEBUG trong
+    // apb_syscon.v. DM trong reset thi haltreq, ndmreset, SBA deu bang 0.
+    wire reset_dm_n_raw  = rst_n & dmrst_n_q & dbg_allow;
 
-    // Hai reset_sync, cung mot clock: mot cho he thong, mot cho Debug Module
-    // (song sot qua ndmreset - xem ghi chu tren). Truoc day co 8 bo, moi mien
-    // clock mot bo.
+    // Ba reset_sync, cung mot clock: he thong (warm), Debug Module (song sot
+    // qua ndmreset - xem ghi chu tren), va POR (chi chan rst_n) cho cac thanh
+    // ghi SYSCON phai song qua warm reset: RESET_VECTOR, RST_CAUSE, SEC_CTRL.
     wire reset_sys_n;
     wire reset_dbg_n;
+    wire reset_por_n;
     reset_sync u_sys_rst_sync (.clk(clk), .rst_in_n(reset_sys_n_raw), .rst_out_n(reset_sys_n));
     reset_sync u_dbg_rst_sync (.clk(clk), .rst_in_n(reset_dm_n_raw),  .rst_out_n(reset_dbg_n));
+    reset_sync u_por_rst_sync (.clk(clk), .rst_in_n(rst_n),           .rst_out_n(reset_por_n));
 
     // -------------------------------------------------------------------------
     // RTC TICK: chan rtc_clk -> xung mot chu ky clk moi chu ky RTC.
@@ -207,9 +203,11 @@ module top_soc (
     // =========================================================================
     wire clk_en_cpu, clk_en_dbg, clk_en_pwm, clk_en_uart;
     wire clk_en_spi, clk_en_i2c, clk_en_gpio, clk_en_acc, clk_en_asc;
+    wire clk_en_uart1, clk_en_tim0, clk_en_tim1;
 
     wire clk_cpu, clk_dbg, clk_pwm, clk_gpio, clk_cordic, clk_ascon;
     wire clk_uart, clk_spi, clk_i2c;
+    wire clk_uart1, clk_tim0, clk_tim1;
 
     // -------------------------------------------------------------------------
     // ENABLE cua clock gate: noi THANG, khong dong bo.
@@ -257,10 +255,13 @@ module top_soc (
     wire uart_clk_req;
     wire spi_clk_req;
     wire i2c_clk_req;
+    wire uart1_clk_req;
+    wire tim0_clk_req;
+    wire tim1_clk_req;
 
     // CPU: tat khi WFI (xem wfi_sleep_q)
     clock_gate cg_cpu   (.clk_in(clk), .en(clk_en_cpu),                   .test_en(1'b0), .clk_out(clk_cpu));
-    // Debug Module
+    // Debug Module - enable do DEBUGGER quyet dinh, xem clk_en_dbg o muc 6
     clock_gate cg_dbg   (.clk_in(clk), .en(clk_en_dbg),                   .test_en(1'b0), .clk_out(clk_dbg));
     // Ngoai vi APB - mo cong khi dang bi truy cap
     clock_gate cg_pwm   (.clk_in(clk), .en(clk_en_pwm  | pwm_clk_req),    .test_en(1'b0), .clk_out(clk_pwm));
@@ -270,6 +271,12 @@ module top_soc (
     clock_gate cg_uart  (.clk_in(clk), .en(clk_en_uart | uart_clk_req),   .test_en(1'b0), .clk_out(clk_uart));
     clock_gate cg_spi   (.clk_in(clk), .en(clk_en_spi  | spi_clk_req),    .test_en(1'b0), .clk_out(clk_spi));
     clock_gate cg_i2c   (.clk_in(clk), .en(clk_en_i2c  | i2c_clk_req),    .test_en(1'b0), .clk_out(clk_i2c));
+    // 2026-09-11 - UART1, TIM0, TIM1: cung co che voi UART0 (CLK_GATE_CTRL
+    // [8]/[9]/[10] hoac dang bi truy cap). Timer tat bit thi bo dem dung - dung
+    // nghia "gate ca ngoai vi" nhu PWM.
+    clock_gate cg_uart1 (.clk_in(clk), .en(clk_en_uart1 | uart1_clk_req), .test_en(1'b0), .clk_out(clk_uart1));
+    clock_gate cg_tim0  (.clk_in(clk), .en(clk_en_tim0  | tim0_clk_req),  .test_en(1'b0), .clk_out(clk_tim0));
+    clock_gate cg_tim1  (.clk_in(clk), .en(clk_en_tim1  | tim1_clk_req),  .test_en(1'b0), .clk_out(clk_tim1));
 
     // =========================================================================
     // 3. TÍN HIỆU NGẮT
@@ -279,12 +286,24 @@ module top_soc (
     // =========================================================================
     wire [0:0] cpu_msip_raw;
     wire [0:0] cpu_mtip_raw;
-    wire       cpu_meip_raw;
 
-    wire cpu_irq_wake = cpu_meip_raw | cpu_mtip_raw[0] | cpu_msip_raw[0];
+    // CLIC -> core (xem interrupt/clic/clic.v va muc 9 ben duoi)
+    wire       clic_irq_valid;
+    wire [4:0] clic_irq_id;
+    wire [7:0] clic_irq_level;
+    wire       clic_irq_shv;
+    wire       clic_ack;
+    wire [4:0] clic_ack_id;
+
+    // Danh thuc clock CPU: moi ngat CLIC dang cho va da enable, cong msip/mtip
+    // cho che do CLINT. Den thua mot chut (core con so muc voi mil/mintthresh)
+    // chi ton mot lan mo clock, khong the ket.
+    wire cpu_irq_wake = clic_irq_valid | cpu_mtip_raw[0] | cpu_msip_raw[0];
 
     wire uart_irq, gpio_irq, spi_irq, i2c_irq, wdt_irq, ascon_irq;
+    wire uart1_irq, tim0_irq, tim1_irq;
     wire uart_dma_tx, uart_dma_rx, spi_dma_tx, spi_dma_rx, i2c_dma_tx, i2c_dma_rx;
+    wire uart1_dma_tx, uart1_dma_rx;
 
     wire [3:0] dma_irq;
 
@@ -297,14 +316,43 @@ module top_soc (
     // stores (MMIO, CLINT, the DMA pool) are never buffered and keep the
     // precise mcause-7 path through `dcache_error`.
     //
-    // Raised in clk_cpu, consumed by the PLIC in clk - the same clock tree, so
+    // Raised in clk_cpu, consumed by the CLIC in clk - the same clock tree, so
     // it is wired straight through.  dcache.v still stretches the pulse to 256
-    // cycles; that was sized for the old clk_apb sampler and is harmless now.
+    // cycles; the CLIC treats source 26 as rising-edge by default, so the
+    // stretch is harmless and a late ISR cannot miss it.
     wire dc_sb_error;
 
-    wire [31:1] periph_dma_req = { 25'd0, i2c_dma_rx, i2c_dma_tx, spi_dma_rx, spi_dma_tx, uart_dma_rx, uart_dma_tx };
+    // DMA request: UART1 lay slot 7/8 (periph_num 7/8 trong DMA CTRL).
+    wire [31:1] periph_dma_req = { 23'd0, uart1_dma_rx, uart1_dma_tx,
+                                   i2c_dma_rx, i2c_dma_tx, spi_dma_rx, spi_dma_tx, uart_dma_rx, uart_dma_tx };
     wire [31:1] periph_dma_clr;
-    wire [31:0] plic_irq_src = { 23'd0, ascon_irq, dc_sb_error, |dma_irq, wdt_irq, i2c_irq, spi_irq, gpio_irq, uart_irq, 1'b0 };
+
+    // -------------------------------------------------------------------------
+    // Nguon ngat CLIC - ID = vi tri bit (bang ID cung nam o dau clic.v).
+    //   0-2, 4-6, 8-15 : de trong (0-15 danh cho ngat chuan cua RISC-V)
+    //   3 msip  7 mtip (tu CLINT - dung o che do CLIC; che do CLINT van qua mie)
+    //   16 UART0 17 UART1 18 GPIO 19 SPI 20 I2C 21 WDT
+    //   22..25 DMA kenh 0..3 - MOI KENH MOT NGUON (truoc day |dma_irq)
+    //   26 loi store buffer D$  27 ASCON  28 TIM0  29 TIM1
+    // -------------------------------------------------------------------------
+    wire [31:0] clic_irq_src;
+    assign clic_irq_src[2:0]   = 3'd0;
+    assign clic_irq_src[3]     = cpu_msip_raw[0];
+    assign clic_irq_src[6:4]   = 3'd0;
+    assign clic_irq_src[7]     = cpu_mtip_raw[0];
+    assign clic_irq_src[15:8]  = 8'd0;
+    assign clic_irq_src[16]    = uart_irq;
+    assign clic_irq_src[17]    = uart1_irq;
+    assign clic_irq_src[18]    = gpio_irq;
+    assign clic_irq_src[19]    = spi_irq;
+    assign clic_irq_src[20]    = i2c_irq;
+    assign clic_irq_src[21]    = wdt_irq;
+    assign clic_irq_src[25:22] = dma_irq;
+    assign clic_irq_src[26]    = dc_sb_error;
+    assign clic_irq_src[27]    = ascon_irq;
+    assign clic_irq_src[28]    = tim0_irq;
+    assign clic_irq_src[29]    = tim1_irq;
+    assign clic_irq_src[31:30] = 2'd0;
 
     wire [31:0] syscon_reset_vector;
     // -------------------------------------------------------------------------
@@ -317,8 +365,8 @@ module top_soc (
     // cao.
     //
     // Neu clk_cpu dung giua mot burst doc: I-cache khong bao gio dua RREADY len
-    // nua -> slot ROB trong axi_interconnect bi giu VINH VIEN, va cac master
-    // khac (DMA, debug) don lai phia sau cho toi khi treo ca bus.
+    // nua -> slave dang tra burst do bi ket o R, va cac master khac (DMA,
+    // debug) doc cung slave don lai phia sau cho toi khi treo ca bus.
     //
     // `*_stall` cua hai cache len trong suot moi giao dich va chi ha khi giao
     // dich xong, nen `~stall` chinh la dieu kien "khong con gi outstanding".
@@ -388,9 +436,16 @@ module top_soc (
         .clk                (clk_cpu),
         .reset_n            (reset_sys_n),
         .riscv_start        (1'b1),
-        .meip_i             (cpu_meip_raw),
+        // PLIC da bo (2026-09-11): ngat ngoai chi con qua CLIC (mtvec.mode = 11).
+        .meip_i             (1'b0),
         .msip_i             (cpu_msip_raw[0]),
         .mtip_i             (cpu_mtip_raw[0]),
+        .clic_irq_valid_i   (clic_irq_valid),
+        .clic_irq_id_i      (clic_irq_id),
+        .clic_irq_level_i   (clic_irq_level),
+        .clic_irq_shv_i     (clic_irq_shv),
+        .clic_ack_o         (clic_ack),
+        .clic_ack_id_o      (clic_ack_id),
         .reset_vector_in    (syscon_reset_vector),
         .riscv_done         (),
         .icache_read_req    (cpu_inst_req),
@@ -441,14 +496,18 @@ module top_soc (
     // Số read burst outstanding tối đa mà interconnect theo dõi cho mỗi master.
     // Ràng buộc thật của hệ thống: DMA read master có CMD_DEPTH = 4
     // (interrupt/dma/dma_axi_master.v); icache, dcache và debug-DTM chỉ phát
-    // 1 outstanding read. Giá trị cũ (8) làm ROB và các FIFO outstanding to
-    // gấp đôi mà không thêm băng thông.
-    // Tham số này cũng quyết định ROB_TAG_WIDTH -> ROB_ID_WIDTH -> SLV_ID_WIDTH,
-    // nên ID phía slave hẹp đi theo (8 -> 4 cho ID rộng 10 -> 9 bit).
+    // 1 outstanding read. Giá trị cũ (8) làm các FIFO outstanding to gấp đôi
+    // mà không thêm băng thông.
     localparam AXI_OUTSTANDING_AMT = 4;
-    localparam ROB_TAG_WIDTH = $clog2(AXI_OUTSTANDING_AMT);
-    localparam ROB_ID_WIDTH = ROB_TAG_WIDTH + MST_ID_WIDTH;
-    localparam SLV_ID_WIDTH = ROB_ID_WIDTH + $clog2(MST_AMT);
+    // ID phía slave = {master_id, ID gốc của master} = 2 + 5 = 7 bit.
+    // Trước 2026-09-11 còn thêm 2 bit ROB tag ở giữa (9 bit); ROB đã bỏ - xem
+    // ghi chú ở dsp_read_channel trong bus/axi_interconnect/axi_dispatcher_channel.v.
+    localparam SLV_ID_WIDTH = MST_ID_WIDTH + $clog2(MST_AMT);
+    // FIFO RDATA của mỗi cặp (master, slave) trong dispatcher đọc. Nó chỉ tách
+    // nhịp slave khỏi master, không phải chỗ đệm cả burst: R đi đúng thứ tự AR
+    // và mọi master nhận R ngay (xem điều kiện 3 ở dsp_read_channel), nên 2 ô
+    // đủ cho 1 beat/chu kỳ. 16 (mặc định) = 4 x 7 x 16 x 40 = 17920 flop.
+    localparam AXI_RDATA_DEPTH = 2;
 
     wire [MST_AMT*5-1:0]  m_axi_awid;   wire [MST_AMT*32-1:0] m_axi_awaddr; wire [MST_AMT*8-1:0]  m_axi_awlen;
     wire [MST_AMT*3-1:0]  m_axi_awsize; wire [MST_AMT*2-1:0]  m_axi_awburst; wire [MST_AMT*3-1:0]  m_axi_awprot;
@@ -891,6 +950,41 @@ module top_soc (
     wire sba_req, sba_ack;
     wire [1:0] sba_op, sba_size, sba_resp;
     wire [31:0] sba_addr, sba_wdata, sba_rdata;
+    wire dm_active, dm_busy, dbg_sleep, dbg_wdt_stop;
+
+    // -------------------------------------------------------------------------
+    // CLOCK DEBUG MODULE DO DEBUGGER QUYET DINH (2026-09-11).
+    //
+    // Ban cu: clk_en_dbg = CLK_GATE_CTRL[6], bit FIRMWARE ghi. Firmware tat bit
+    // do la tu khoa JTAG vinh vien: DM dong bang, khong nhan duoc lenh DMI nao
+    // de ma bat lai.
+    //
+    // Nay clock DM mo khi:
+    //   dm_active  - debugger da ghi dmactive = 1 (dang trong phien debug)
+    //   dmi_req_s  - co mot lenh DMI dang cho: danh thuc DM de no tra loi, ke ca
+    //                khi dmactive = 0 (OpenOCD doc dmstatus truoc tien)
+    //   dm_busy    - DM dang tra loi / cho SBA
+    //   dbg_clk_hold - them 8 chu ky sau cung, de dtm_axi_master ve IDLE va
+    //                resp_valid ha han truoc khi cong dong
+    // Tuong duong CDBGPWRUPREQ cua ARM: mien debug bat/tat theo debugger.
+    //
+    // dmi_req_valid la tin hieu mien TCK: dong bo 2FF bang clk KHONG gate (chinh
+    // clk_dbg dang tat thi khong dong bo duoc). Duong TCK -> CLK_SYS nam trong
+    // rang buoc max_delay/false_path -hold co san cua constraint.sdc.
+    // -------------------------------------------------------------------------
+    wire      dmi_req_s;
+    reg [3:0] dbg_clk_hold;
+    cdc_sync_bit u_sync_dmi_wake (.clk_dst(clk), .rst_dst_n(reset_dbg_n),
+                                  .d_in(dmi_req_valid), .q_out(dmi_req_s));
+    always @(posedge clk or negedge reset_dbg_n) begin
+        if (!reset_dbg_n)
+            dbg_clk_hold <= 4'd0;
+        else if (dm_active | dmi_req_s | dm_busy)
+            dbg_clk_hold <= 4'd8;
+        else if (dbg_clk_hold != 4'd0)
+            dbg_clk_hold <= dbg_clk_hold - 4'd1;
+    end
+    assign clk_en_dbg = dm_active | dmi_req_s | dm_busy | (dbg_clk_hold != 4'd0);
 
     // DMI giua u_jtag_dtm (tck) va u_debug_module (clk_dbg): CDC DUY NHAT con
     // lai trong chip - handshake req/resp qua 3FF o moi ben, bus du lieu giu
@@ -912,7 +1006,11 @@ module top_soc (
         .axi_req            (sba_req), .axi_op(sba_op), .axi_size(sba_size), .axi_addr(sba_addr), .axi_wdata(sba_wdata), .axi_ack(sba_ack), .axi_rdata(sba_rdata), .axi_resp(sba_resp),
         .cpu_halt_req       (dbg_halt_req_raw), .cpu_resume_req (dbg_resume_req_raw), .cpu_halted (dbg_halted_raw),
         .cpu_reg_read_addr  (dbg_reg_read_addr), .cpu_reg_read_data(dbg_reg_read_data), .cpu_reg_write_en(dbg_reg_write_en_raw), .cpu_reg_write_addr(dbg_reg_write_addr), .cpu_reg_write_data(dbg_reg_write_data),
-        .ndmreset_req       (ndmreset_req)
+        .ndmreset_req       (ndmreset_req),
+        .dmactive_o         (dm_active),
+        .busy_o             (dm_busy),
+        .dbg_sleep_o        (dbg_sleep),
+        .dbg_wdt_stop_o     (dbg_wdt_stop)
     );
 
     dtm_axi_master u_dtm_axi (
@@ -994,10 +1092,20 @@ module top_soc (
     //
     // TCM khong bao gio loi: no la SRAM noi thang core, khong qua bus, khong co
     // dia chi nao trong dai cua no ma khong ton tai. Nen khi TCM duoc chon thi
-    // ep 0 - dung mau mux voi ba duong con lai o tren.
+    // ep 0.
+    //
+    // DUNG ls_sel_tcm, KHONG dung ls_sel_tcm_rsp nhu ba mux o tren. Ban _rsp
+    // chua ~cpu_data_fence, ma trong core dcache_fence = commit_kill ? 0 : fence
+    // va commit_kill = trap_enter <- trap_data_access <- dcache_error. Dung _rsp
+    // o day khep mot VONG TO HOP (Genus 2026-09-11: TIM-20 + 2 cdn_loop_breaker
+    // trong u_core/MEM, "timing results should not be trusted").
+    // Bo _rsp o duong LOI la an toan: core chi xet dcache_error khi
+    // ex_mem_is_mem (= mem_read | mem_write), ma mot fence co ca hai bang 0 -
+    // luc do loi bi bo qua bat ke mux chon gi. Khi khong co fence, hai tin hieu
+    // bang nhau. Hit/stall/rdata van phai dung _rsp (ly do P2c o tren).
     // -------------------------------------------------------------------------
     assign cpu_inst_error = if_sel_itcm ? 1'b0 : ic_cpu_error;
-    assign cpu_data_error = ls_sel_tcm_rsp ? 1'b0 : dc_cpu_error;
+    assign cpu_data_error = ls_sel_tcm ? 1'b0 : dc_cpu_error;
 
     // =========================================================================
     // 7. AXI INTERCONNECT
@@ -1005,7 +1113,8 @@ module top_soc (
     axi_interconnect #(
         .MST_AMT(MST_AMT), .SLV_AMT(SLV_AMT),
         .OUTSTANDING_AMT(AXI_OUTSTANDING_AMT),
-        .TRANS_MST_ID_W(MST_ID_WIDTH), .ROB_TAG_W(ROB_TAG_WIDTH), .ROB_ID_WIDTH(ROB_ID_WIDTH), .TRANS_SLV_ID_W(SLV_ID_WIDTH),
+        .TRANS_MST_ID_W(MST_ID_WIDTH), .TRANS_SLV_ID_W(SLV_ID_WIDTH),
+        .DSP_RDATA_DEPTH(AXI_RDATA_DEPTH),
         .MST_WEIGHT (128'h00000005_00000004_00000003_00000001),
         // slave 6..0, most significant field first:
         //   6: 0x2002_0000 RAM hi  128 KB   mask FFFE_0000
@@ -1197,7 +1306,7 @@ module top_soc (
         .NUM_HARTS      (1),
         .HART_IDX_W     (1),
         .AXI_ADDR_WIDTH (32),
-        .AXI_ID_WIDTH   (SLV_ID_WIDTH),     // = ROB_TAG_WIDTH + MST_ID_WIDTH + $clog2(MST_AMT)
+        .AXI_ID_WIDTH   (SLV_ID_WIDTH),     // = MST_ID_WIDTH + $clog2(MST_AMT)
         .PIPELINE_IRQ   (1)
     ) u_clint (
         // Clocks & Reset
@@ -1274,18 +1383,41 @@ module top_soc (
     //   S7  0x4000_7000  4 KB   Syscon
     //   S9  0x4000_8000  16 KB  DMA config   (0x4000_8000-0x4000_BFFF)
     //   S10 0x4000_C000  4 KB   ASCON + TRNG
-    //   S8  0x4400_0000  64 MB  PLIC
+    //   S11 0x4000_D000  4 KB   UART1                 (2026-09-11)
+    //   S12 0x4000_E000  4 KB   TIM0                  (2026-09-11)
+    //   S13 0x4000_F000  4 KB   TIM1                  (2026-09-11)
+    //   S14 0x4002_0000  4 KB   PINMUX                (2026-09-11)
+    //   S8  0x4400_0000  64 MB  CLIC (thay PLIC; thanh ghi o 8 KB dau)
     // =========================================================================
     wire [31:0] paddr_0, paddr_1, paddr_2, paddr_3, paddr_4, paddr_5, paddr_6, paddr_7, paddr_8, paddr_9, paddr_10;
     wire [31:0] pwdata_0, pwdata_1, pwdata_2, pwdata_3, pwdata_4, pwdata_5, pwdata_6, pwdata_7, pwdata_8, pwdata_9, pwdata_10;
     wire [31:0] prdata_0, prdata_1, prdata_2, prdata_3, prdata_4, prdata_5, prdata_6, prdata_7, prdata_8, prdata_9, prdata_10;
-    wire [3:0] pstrb_0, pstrb_1, pstrb_2, pstrb_3, pstrb_4, pstrb_5, pstrb_6, pstrb_7;
+    wire [3:0] pstrb_0, pstrb_1, pstrb_2, pstrb_3, pstrb_4, pstrb_5, pstrb_6, pstrb_7, pstrb_8;
     wire [2:0] pprot_0, pprot_1, pprot_2, pprot_3, pprot_4, pprot_5, pprot_6, pprot_7;
     wire psel_0, psel_1, psel_2, psel_3, psel_4, psel_5, psel_6, psel_7, psel_8, psel_9, psel_10;
     wire penable_0, penable_1, penable_2, penable_3, penable_4, penable_5, penable_6, penable_7, penable_8, penable_9, penable_10;
     wire pwrite_0, pwrite_1, pwrite_2, pwrite_3, pwrite_4, pwrite_5, pwrite_6, pwrite_7, pwrite_8, pwrite_9, pwrite_10;
     wire pready_0, pready_1, pready_2, pready_3, pready_4, pready_5, pready_6, pready_7, pready_8, pready_9, pready_10;
     wire pslverr_0, pslverr_1, pslverr_2, pslverr_3, pslverr_4, pslverr_5, pslverr_6, pslverr_7, pslverr_8, pslverr_9, pslverr_10;
+    wire [31:0] paddr_11, paddr_12, paddr_13, paddr_14;
+    wire [31:0] pwdata_11, pwdata_12, pwdata_13, pwdata_14;
+    wire [31:0] prdata_11, prdata_12, prdata_13, prdata_14;
+    wire [3:0]  pstrb_11, pstrb_12, pstrb_13, pstrb_14;
+    wire psel_11, psel_12, psel_13, psel_14;
+    wire penable_11, penable_12, penable_13, penable_14;
+    wire pwrite_11, pwrite_12, pwrite_13, pwrite_14;
+    wire pready_11, pready_12, pready_13, pready_14;
+    wire pslverr_11, pslverr_12, pslverr_13, pslverr_14;
+
+    // Tin hieu ngoai vi <-> pinmux (truoc day la chan top_soc)
+    wire        uart_rx, uart_tx, uart1_rx, uart1_tx;
+    wire [31:0] gpio_in, gpio_out, gpio_oe;
+    wire        pwm_out;
+    wire        spi_sck, spi_mosi, spi_miso, spi_ss;
+    wire        i2c_scl_i, i2c_scl_o, i2c_scl_oe;
+    wire        i2c_sda_i, i2c_sda_o, i2c_sda_oe;
+    wire [3:0]  tim0_ch_i, tim0_ch_o, tim0_ch_oe;
+    wire [3:0]  tim1_ch_i, tim1_ch_o, tim1_ch_oe;
 
     apb_interconnect u_apb_interconnect (
         .clk(clk), .rst_n(reset_sys_n),
@@ -1298,9 +1430,13 @@ module top_soc (
         .s5_paddr(paddr_5), .s5_psel(psel_5), .s5_penable(penable_5), .s5_pwrite(pwrite_5), .s5_pwdata(pwdata_5), .s5_pstrb(pstrb_5), .s5_pprot(pprot_5), .s5_pready(pready_5), .s5_prdata(prdata_5), .s5_pslverr(pslverr_5),
         .s6_paddr(paddr_6), .s6_psel(psel_6), .s6_penable(penable_6), .s6_pwrite(pwrite_6), .s6_pwdata(pwdata_6), .s6_pstrb(pstrb_6), .s6_pprot(pprot_6), .s6_pready(pready_6), .s6_prdata(prdata_6), .s6_pslverr(pslverr_6),
         .s7_paddr(paddr_7), .s7_psel(psel_7), .s7_penable(penable_7), .s7_pwrite(pwrite_7), .s7_pwdata(pwdata_7), .s7_pstrb(pstrb_7), .s7_pprot(pprot_7), .s7_pready(pready_7), .s7_prdata(prdata_7), .s7_pslverr(pslverr_7),
-        .s8_paddr(paddr_8), .s8_psel(psel_8), .s8_penable(penable_8), .s8_pwrite(pwrite_8), .s8_pwdata(pwdata_8), .s8_pready(pready_8), .s8_prdata(prdata_8), .s8_pslverr(pslverr_8),
+        .s8_paddr(paddr_8), .s8_psel(psel_8), .s8_penable(penable_8), .s8_pwrite(pwrite_8), .s8_pwdata(pwdata_8), .s8_pstrb(pstrb_8), .s8_pready(pready_8), .s8_prdata(prdata_8), .s8_pslverr(pslverr_8),
         .s9_paddr(paddr_9), .s9_psel(psel_9), .s9_penable(penable_9), .s9_pwrite(pwrite_9), .s9_pwdata(pwdata_9), .s9_pready(pready_9), .s9_prdata(prdata_9), .s9_pslverr(pslverr_9),
-        .s10_paddr(paddr_10), .s10_psel(psel_10), .s10_penable(penable_10), .s10_pwrite(pwrite_10), .s10_pwdata(pwdata_10), .s10_pready(pready_10), .s10_prdata(prdata_10), .s10_pslverr(pslverr_10)
+        .s10_paddr(paddr_10), .s10_psel(psel_10), .s10_penable(penable_10), .s10_pwrite(pwrite_10), .s10_pwdata(pwdata_10), .s10_pready(pready_10), .s10_prdata(prdata_10), .s10_pslverr(pslverr_10),
+        .s11_paddr(paddr_11), .s11_psel(psel_11), .s11_penable(penable_11), .s11_pwrite(pwrite_11), .s11_pwdata(pwdata_11), .s11_pstrb(pstrb_11), .s11_pready(pready_11), .s11_prdata(prdata_11), .s11_pslverr(pslverr_11),
+        .s12_paddr(paddr_12), .s12_psel(psel_12), .s12_penable(penable_12), .s12_pwrite(pwrite_12), .s12_pwdata(pwdata_12), .s12_pstrb(pstrb_12), .s12_pready(pready_12), .s12_prdata(prdata_12), .s12_pslverr(pslverr_12),
+        .s13_paddr(paddr_13), .s13_psel(psel_13), .s13_penable(penable_13), .s13_pwrite(pwrite_13), .s13_pwdata(pwdata_13), .s13_pstrb(pstrb_13), .s13_pready(pready_13), .s13_prdata(prdata_13), .s13_pslverr(pslverr_13),
+        .s14_paddr(paddr_14), .s14_psel(psel_14), .s14_penable(penable_14), .s14_pwrite(pwrite_14), .s14_pwdata(pwdata_14), .s14_pstrb(pstrb_14), .s14_pready(pready_14), .s14_prdata(prdata_14), .s14_pslverr(pslverr_14)
     );
 
     // -------------------------------------------------------------------------
@@ -1312,6 +1448,7 @@ module top_soc (
     // -------------------------------------------------------------------------
     reg [1:0] psel_gpio_ext, psel_pwm_ext, psel_cordic_ext, psel_ascon_ext;
     reg [1:0] psel_uart_ext, psel_spi_ext, psel_i2c_ext;
+    reg [1:0] psel_uart1_ext, psel_tim0_ext, psel_tim1_ext;
     always @(posedge clk or negedge reset_sys_n) begin
         if (!reset_sys_n) begin
             psel_gpio_ext   <= 2'b00;
@@ -1321,6 +1458,9 @@ module top_soc (
             psel_uart_ext   <= 2'b00;
             psel_spi_ext    <= 2'b00;
             psel_i2c_ext    <= 2'b00;
+            psel_uart1_ext  <= 2'b00;
+            psel_tim0_ext   <= 2'b00;
+            psel_tim1_ext   <= 2'b00;
         end else begin
             psel_gpio_ext   <= {psel_gpio_ext[0],   psel_1};
             psel_pwm_ext    <= {psel_pwm_ext[0],    psel_2};
@@ -1329,8 +1469,14 @@ module top_soc (
             psel_uart_ext   <= {psel_uart_ext[0],   psel_0};
             psel_spi_ext    <= {psel_spi_ext[0],    psel_3};
             psel_i2c_ext    <= {psel_i2c_ext[0],    psel_4};
+            psel_uart1_ext  <= {psel_uart1_ext[0],  psel_11};
+            psel_tim0_ext   <= {psel_tim0_ext[0],   psel_12};
+            psel_tim1_ext   <= {psel_tim1_ext[0],   psel_13};
         end
     end
+    assign uart1_clk_req  = psel_11 | (|psel_uart1_ext);
+    assign tim0_clk_req   = psel_12 | (|psel_tim0_ext);
+    assign tim1_clk_req   = psel_13 | (|psel_tim1_ext);
     assign gpio_clk_req   = psel_1 | (|psel_gpio_ext);
     assign pwm_clk_req    = psel_2 | (|psel_pwm_ext);
     // UART / SPI / I2C: chi psel, KHONG co "core active" nhu CORDIC. Dung nghia
@@ -1396,10 +1542,14 @@ module top_soc (
     );
 
     // S5: Watchdog - dem theo rtc_tick (muc 1), chay bang clk KHONG gate.
+    // DBGCTRL.DBG_WDT_STOP (DM) dung bo dem khi core dang halt, nhu
+    // DBGMCU_APB1_FZ.DBG_IWDG_STOP: neu khong, dung o breakpoint vai giay la
+    // watchdog reset ca chip giua phien debug.
+    wire wdt_tick = rtc_tick & ~(dbg_wdt_stop & dbg_halted_raw);
     apb_watchdog u_apb_watchdog (
         .pclk(clk), .presetn(reset_sys_n),
         .psel(psel_5), .penable(penable_5), .pwrite(pwrite_5), .paddr(paddr_5[11:0]), .pwdata(pwdata_5), .pstrb(pstrb_5), .prdata(prdata_5), .pready(pready_5), .pslverr(pslverr_5),
-        .rtc_tick(rtc_tick),
+        .rtc_tick(wdt_tick),
         .wdt_irq(wdt_irq), .wdt_rst(wdt_rst)
     );
 
@@ -1410,27 +1560,103 @@ module top_soc (
         .o_active(cordic_active)
     );
 
-    // S7: Syscon
+    // S7: Syscon - xem register map va hai mien reset trong apb_syscon.v
     apb_syscon u_apb_syscon (
-        .pclk(clk), .presetn(reset_sys_n),
+        .pclk(clk), .presetn(reset_sys_n), .porn(reset_por_n),
         .psel(psel_7), .penable(penable_7), .pwrite(pwrite_7), .paddr(paddr_7[11:0]), .pwdata(pwdata_7), .prdata(prdata_7), .pready(pready_7), .pslverr(pslverr_7),
         .o_reset_vector(syscon_reset_vector), .i_wfi_sleep(wfi_sleep_q), .i_ext_irq(cpu_irq_wake),
-        .o_cpu_clk_en  (clk_en_cpu), 
-        .o_dbg_clk_en  (clk_en_dbg),
+        // haltreq cua debugger danh thuc CPU dang WFI (muc 4 cua review):
+        // haltreq vao core qua clk_cpu, nen neu clock khong mo lai thi core
+        // khong bao gio thay no.
+        .i_dbg_halt_req(dbg_halt_req_raw),
+        .i_dbg_keep_clk(dbg_sleep),
+        .i_wdt_rst     (wdt_rst),
+        .i_ndm_rst     (ndmreset_req),
+        .o_sw_rst_req  (sw_rst_req),
+        .i_dbg_clk_on  (clk_en_dbg),
+        .o_dbg_allow   (dbg_allow),
+        .o_cpu_clk_en  (clk_en_cpu),
         .o_pwm_clk_en  (clk_en_pwm),
         .o_urt_clk_en  (clk_en_uart),
         .o_spi_clk_en  (clk_en_spi),
         .o_i2c_clk_en  (clk_en_i2c),
         .o_gpo_clk_en  (clk_en_gpio),
         .o_acc_clk_en  (clk_en_acc),
-        .o_asc_clk_en  (clk_en_asc)
+        .o_asc_clk_en  (clk_en_asc),
+        .o_ur1_clk_en  (clk_en_uart1),
+        .o_tm0_clk_en  (clk_en_tim0),
+        .o_tm1_clk_en  (clk_en_tim1)
     );
 
-    // S8: PLIC
-    apb_plic #(.ALGORITHM("BINARY_TREE")) u_apb_plic (
-        .clk_i(clk), .rst_ni(reset_sys_n),
-        .paddr(paddr_8), .psel(psel_8), .penable(penable_8), .pwrite(pwrite_8), .pwdata(pwdata_8), .pready(pready_8), .prdata(prdata_8), .pslverr(pslverr_8),
-        .irq_src_i(plic_irq_src), .irq_o(cpu_meip_raw)
+    // -------------------------------------------------------------------------
+    // S8: CLIC (thay PLIC, 2026-09-11). Chay clk KHONG gate: phai thay moi canh
+    // cua nguon ngat ke ca khi CPU dang ngu, va chinh no danh thuc CPU qua
+    // cpu_irq_wake. Dau ra {valid, id, level, shv} di thang vao core - xem
+    // interrupt/clic/clic.v de biet vi sao khong con claim/complete.
+    // -------------------------------------------------------------------------
+    clic #(
+        .NUM_IRQ       (32),
+        .CTLBITS       (3),
+        .TRIG_EDGE_RST (32'h0400_0000)      // nguon 26 (loi store buffer) canh len
+    ) u_clic (
+        .clk        (clk),
+        .rst_n      (reset_sys_n),
+        .paddr      (paddr_8[25:0]),
+        .psel       (psel_8),
+        .penable    (penable_8),
+        .pwrite     (pwrite_8),
+        .pwdata     (pwdata_8),
+        .pstrb      (pstrb_8),
+        .pready     (pready_8),
+        .prdata     (prdata_8),
+        .pslverr    (pslverr_8),
+        .irq_src    (clic_irq_src),
+        .irq_valid  (clic_irq_valid),
+        .irq_id     (clic_irq_id),
+        .irq_level  (clic_irq_level),
+        .irq_shv    (clic_irq_shv),
+        .irq_ack    (clic_ack),
+        .irq_ack_id (clic_ack_id)
+    );
+
+    // S11: UART1 - cung module voi UART0, clock gate rieng (CLK_GATE_CTRL[8]).
+    apb_uart u_apb_uart1 (
+        .pclk(clk_uart1), .presetn(reset_sys_n),
+        .psel(psel_11), .penable(penable_11), .pwrite(pwrite_11), .paddr(paddr_11[11:0]), .pwdata(pwdata_11), .prdata(prdata_11), .pready(pready_11), .pslverr(pslverr_11),
+        .rxd(uart1_rx), .txd(uart1_tx),
+        .uart_irq(uart1_irq), .dma_tx_req(uart1_dma_tx), .dma_rx_req(uart1_dma_rx)
+    );
+
+    // S12 / S13: timer da nang 4 kenh capture/compare (peripheral/apb_timer.v).
+    apb_timer u_tim0 (
+        .pclk(clk_tim0), .presetn(reset_sys_n),
+        .paddr(paddr_12[11:0]), .psel(psel_12), .penable(penable_12), .pwrite(pwrite_12), .pwdata(pwdata_12), .pstrb(pstrb_12), .pready(pready_12), .prdata(prdata_12), .pslverr(pslverr_12),
+        .ch_i(tim0_ch_i), .ch_o(tim0_ch_o), .ch_oe(tim0_ch_oe),
+        .irq(tim0_irq)
+    );
+
+    apb_timer u_tim1 (
+        .pclk(clk_tim1), .presetn(reset_sys_n),
+        .paddr(paddr_13[11:0]), .psel(psel_13), .penable(penable_13), .pwrite(pwrite_13), .pwdata(pwdata_13), .pstrb(pstrb_13), .pready(pready_13), .prdata(prdata_13), .pslverr(pslverr_13),
+        .ch_i(tim1_ch_i), .ch_o(tim1_ch_o), .ch_oe(tim1_ch_oe),
+        .irq(tim1_irq)
+    );
+
+    // S14: PINMUX - 32 pad, bang AF co dinh (peripheral/apb_pinmux.v). Clock
+    // KHONG gate: phan mux la to hop, chi thanh ghi AFSEL can clock.
+    apb_pinmux u_pinmux (
+        .pclk(clk), .presetn(reset_sys_n),
+        .paddr(paddr_14[11:0]), .psel(psel_14), .penable(penable_14), .pwrite(pwrite_14), .pwdata(pwdata_14), .pready(pready_14), .prdata(prdata_14), .pslverr(pslverr_14),
+        .pad_in(pad_in), .pad_out(pad_out), .pad_oe(pad_oe),
+        .gpio_out(gpio_out), .gpio_oe(gpio_oe), .gpio_in(gpio_in),
+        .uart0_tx(uart_tx),  .uart0_rx(uart_rx),
+        .uart1_tx(uart1_tx), .uart1_rx(uart1_rx),
+        .spi_sck(spi_sck), .spi_mosi(spi_mosi), .spi_ss(spi_ss), .spi_miso(spi_miso),
+        .i2c_scl_o(i2c_scl_o), .i2c_scl_oe(i2c_scl_oe), .i2c_scl_i(i2c_scl_i),
+        .i2c_sda_o(i2c_sda_o), .i2c_sda_oe(i2c_sda_oe), .i2c_sda_i(i2c_sda_i),
+        .pwm_out(pwm_out),
+        .tim0_o(tim0_ch_o), .tim0_oe(tim0_ch_oe), .tim0_i(tim0_ch_i),
+        .tim1_o(tim1_ch_o), .tim1_oe(tim1_ch_oe), .tim1_i(tim1_ch_i)
     );
 
     // S10: ASCON-128 AEAD / ASCON-HASH + TRNG 128-bit  (0x4000_C000, 4 KB)

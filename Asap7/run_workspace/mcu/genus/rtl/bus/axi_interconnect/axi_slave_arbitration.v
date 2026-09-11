@@ -1247,9 +1247,7 @@ module ai_slave_arbitration
     parameter                       DATA_WIDTH          = 32,
     parameter                       ADDR_WIDTH          = 32,
     parameter                       TRANS_MST_ID_W      = 5,                                // Bus width of original master transaction ID
-    parameter                       ROB_TAG_W           = $clog2(OUTSTANDING_AMT),
-    parameter                       ROB_ID_WIDTH        = ROB_TAG_W + TRANS_MST_ID_W,
-    parameter                       TRANS_SLV_ID_W      = ROB_ID_WIDTH + MST_ID_W,          // {master_id, rob_tag, original_id}
+    parameter                       TRANS_SLV_ID_W      = TRANS_MST_ID_W + MST_ID_W,        // {master_id, original_id}
     parameter                       TRANS_BURST_W       = 2,                                // Width of xBURST 
     parameter                       TRANS_DATA_LEN_W    = 8,                                // Bus width of xLEN (AXI4: 8-bit, burst 1-256)
     parameter                       TRANS_DATA_SIZE_W   = 3,                                // Bus width of xSIZE
@@ -1295,7 +1293,7 @@ module ai_slave_arbitration
     // Write response channel
     input   [MST_AMT-1:0]                   dsp_BREADY_i,
     // Read address channel
-    input   [ROB_ID_WIDTH*MST_AMT-1:0]      dsp_ARID_i,
+    input   [TRANS_MST_ID_W*MST_AMT-1:0]    dsp_ARID_i,
     input   [ADDR_WIDTH*MST_AMT-1:0]        dsp_ARADDR_i,
     input   [TRANS_BURST_W*MST_AMT-1:0]     dsp_ARBURST_i,
     input   [TRANS_DATA_LEN_W*MST_AMT-1:0]  dsp_ARLEN_i,
@@ -1340,7 +1338,7 @@ module ai_slave_arbitration
     // Read address channel (master)
     output  [MST_AMT-1:0]                   dsp_ARREADY_o,
     // Read data channel (master)
-    output  [ROB_ID_WIDTH*MST_AMT-1:0]      dsp_RID_o,
+    output  [TRANS_MST_ID_W*MST_AMT-1:0]    dsp_RID_o,
     output  [DATA_WIDTH*MST_AMT-1:0]        dsp_RDATA_o,
     output  [TRANS_WR_RESP_W*MST_AMT-1:0]   dsp_RRESP_o,
     output  [MST_AMT-1:0]                   dsp_RLAST_o,
@@ -1534,7 +1532,7 @@ module ai_slave_arbitration
         .DATA_WIDTH(DATA_WIDTH),
         .ADDR_WIDTH(ADDR_WIDTH),
         .TRANS_MST_ID_W(TRANS_MST_ID_W),
-        .DSP_ID_W(ROB_ID_WIDTH),
+        .DSP_ID_W(TRANS_MST_ID_W),
         .TRANS_SLV_ID_W(TRANS_SLV_ID_W),
         .TRANS_BURST_W(TRANS_BURST_W),
         .TRANS_DATA_LEN_W(TRANS_DATA_LEN_W),
@@ -1588,7 +1586,7 @@ module ai_slave_arbitration
         .ADDR_WIDTH(ADDR_WIDTH),
         .TRANS_MST_ID_W(TRANS_MST_ID_W),
         .TRANS_SLV_ID_W(TRANS_SLV_ID_W),
-        .DSP_RID_W(ROB_ID_WIDTH)
+        .DSP_RID_W(TRANS_MST_ID_W)
     ) R_channel (
         .ACLK_i(ACLK_i),
         .ARESETn_i(ARESETn_i),

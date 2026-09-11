@@ -208,6 +208,45 @@ module dma_channel #(
         ? {LEN_W{1'b0}}
         : wr_burst_bytes[BURST_W-1:BEAT_BITS] - 1'b1;
 
+    // -------------------------------------------------------------------------
+    // Dia chi / so byte con lai KE TIEP - tinh theo ung vien, chon sau.
+    //
+    // Ban cu viet `rd_addr + rd_burst_bytes`: bo cong 32 bit phai CHO ca chuoi
+    // chon burst (kep ch_bmax -> min(remain, cap) -> min(4K room, ...)) xong
+    // moi bat dau. Genus 2026-09-11 o 4 ns: ch_bmax -> rd_addr[31] la duong
+    // gang nhat chip (3761 ps, slack 3 ps SS), va RTLOPT-55 khien bo cong
+    // khong duoc tong hop lai thanh bo cong nhanh.
+    //
+    // rd_burst_bytes luon la MOT trong ba gia tri - 4K room, remain, cap - va
+    // ca ba deu < 2^BURST_W khi duoc chon (room/remain chi thang khi nho hon
+    // cap). Nen cong CA BA song song voi chuoi so sanh, roi dung chinh ket qua
+    // so sanh de chon: bo cong ra khoi duong noi tiep. Ket qua giong het ban
+    // cu o moi chu ky. Truong hop 4K: addr + (4096 - addr[11:0]) chinh la
+    // {addr[31:12] + 1, 12'h000} - chi mot bo tang 20 bit.
+    // -------------------------------------------------------------------------
+    wire rd_sel_4k  = (rd_4k_room_ext < rd_burst_rem_cap);
+    wire rd_sel_rem = (rd_remain_ext  < burst_cap_ext);
+    wire wr_sel_4k  = (wr_4k_room_ext < wr_burst_rem_cap);
+    wire wr_sel_rem = (wr_remain_ext  < burst_cap_ext);
+
+    wire [ADDR_W-1:0] rd_addr_nxt =
+        rd_sel_4k  ? {rd_addr[ADDR_W-1:12] + 1'b1, 12'h000} :
+        rd_sel_rem ? rd_addr + {{(ADDR_W-BURST_W){1'b0}}, rd_remain[BURST_W-1:0]} :
+                     rd_addr + {{(ADDR_W-BURST_W){1'b0}}, burst_cap_bytes};
+    wire [ADDR_W-1:0] wr_addr_nxt =
+        wr_sel_4k  ? {wr_addr[ADDR_W-1:12] + 1'b1, 12'h000} :
+        wr_sel_rem ? wr_addr + {{(ADDR_W-BURST_W){1'b0}}, wr_remain[BURST_W-1:0]} :
+                     wr_addr + {{(ADDR_W-BURST_W){1'b0}}, burst_cap_bytes};
+
+    wire [LEN_FIELD_W-1:0] rd_remain_nxt =
+        rd_sel_4k  ? rd_remain - {{(LEN_FIELD_W-BURST_W){1'b0}}, rd_4k_room_ext[BURST_W-1:0]} :
+        rd_sel_rem ? {LEN_FIELD_W{1'b0}} :
+                     rd_remain - {{(LEN_FIELD_W-BURST_W){1'b0}}, burst_cap_bytes};
+    wire [LEN_FIELD_W-1:0] wr_remain_nxt =
+        wr_sel_4k  ? wr_remain - {{(LEN_FIELD_W-BURST_W){1'b0}}, wr_4k_room_ext[BURST_W-1:0]} :
+        wr_sel_rem ? {LEN_FIELD_W{1'b0}} :
+                     wr_remain - {{(LEN_FIELD_W-BURST_W){1'b0}}, burst_cap_bytes};
+
    // Outstanding command counters
    reg [OUT_W-1:0] rd_outs, wr_outs;
 
@@ -322,7 +361,33 @@ module dma_channel #(
         rd_burst_len_ext + {{(CMP_W-1){1'b0}}, 1'b1};
     wire [CMP_W-1:0] wr_beats_needed =
         wr_burst_len_ext + {{(CMP_W-1){1'b0}}, 1'b1};
-    wire fifo_has_room   = (fifo_free_ext >= rd_beats_needed);
+    // -------------------------------------------------------------------------
+    // Giu cho FIFO cho moi burst doc DA PHAT nhung chua ve.
+    //
+    // Ban cu: fifo_has_room = (fifo_free >= rd_beats_needed) - chi nhin so o
+    // trong LUC NAY, bo qua cac burst dang bay. Voi cfg_tokens = 4 va burst 16
+    // beat, kenh co the phat 4 x 16 = 64 beat vao FIFO 16 o. Beat thua lam
+    // rd_dat_ready (= ~fifo_full) ha giua burst, tuc DMA ep nguoc RREADY len
+    // slave. Truoc 2026-09-11 ROB trong axi_interconnect hut het so beat do nen
+    // khong ai thay; nay kenh doc khong con ROB, RREADY ha se giu slave va chan
+    // moi master khac doc cung slave (dieu kien 3 o dsp_read_channel).
+    //
+    // rd_inflight = so beat da giu cho ma chua ghi vao FIFO: +len+1 khi phat
+    // AR, -1 moi beat vao FIFO. Nho vay count + rd_inflight <= FIFO_DEPTH, va
+    // FIFO KHONG BAO GIO day khi beat toi.
+    // -------------------------------------------------------------------------
+    reg  [CMP_W-1:0] rd_inflight;
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n)
+            rd_inflight <= {CMP_W{1'b0}};
+        else if (state == ST_IDLE)
+            rd_inflight <= {CMP_W{1'b0}};
+        else
+            rd_inflight <= rd_inflight
+                         + (rd_cmd_fire ? rd_beats_needed : {CMP_W{1'b0}})
+                         - {{(CMP_W-1){1'b0}}, (fifo_wr_en & (rd_inflight != {CMP_W{1'b0}}))};
+    end
+    wire fifo_has_room   = ({1'b0, fifo_free_ext} >= ({1'b0, rd_inflight} + {1'b0, rd_beats_needed}));
     wire fifo_has_enough = (fifo_count_ext >= wr_beats_needed);
     wire rd_rsp_error = rd_rsp_valid & (rd_rsp_err != `AXI_RESP_OKAY);
     wire wr_rsp_error = wr_rsp_valid & (wr_rsp_err != `AXI_RESP_OKAY);
@@ -356,13 +421,13 @@ module dma_channel #(
                     // Cập nhật address / remaining
                     if (rd_cmd_fire) begin
                         if (cfg_src_incr)
-                            rd_addr <= rd_addr + {{(ADDR_W-BURST_W){1'b0}}, rd_burst_bytes};
-                        rd_remain <= rd_remain - {{(LEN_FIELD_W-BURST_W){1'b0}}, rd_burst_bytes};
+                            rd_addr <= rd_addr_nxt;
+                        rd_remain <= rd_remain_nxt;
                     end
                     if (wr_cmd_fire) begin
                         if (cfg_dst_incr)
-                            wr_addr <= wr_addr + {{(ADDR_W-BURST_W){1'b0}}, wr_burst_bytes};
-                        wr_remain <= wr_remain - {{(LEN_FIELD_W-BURST_W){1'b0}}, wr_burst_bytes};
+                            wr_addr <= wr_addr_nxt;
+                        wr_remain <= wr_remain_nxt;
                     end
 
                     // Thu thập lỗi
@@ -387,8 +452,8 @@ module dma_channel #(
                 ST_DRAIN: begin
                     if (wr_cmd_fire) begin
                         if (cfg_dst_incr)
-                            wr_addr <= wr_addr + {{(ADDR_W-BURST_W){1'b0}}, wr_burst_bytes};
-                        wr_remain <= wr_remain - {{(LEN_FIELD_W-BURST_W){1'b0}}, wr_burst_bytes};
+                            wr_addr <= wr_addr_nxt;
+                        wr_remain <= wr_remain_nxt;
                     end
                     if (rd_rsp_error)
                         err <= (rd_rsp_err == `AXI_RESP_SLVERR)

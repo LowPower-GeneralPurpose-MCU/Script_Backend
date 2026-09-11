@@ -9,7 +9,7 @@
 ##
 ## Clock con lai:
 ##   CLK_SYS        clk, 4000 ps                    - clock goc duy nhat
-##   CLK_CPU..I2C   9 clock sinh tai dau ra clock_gate (-divide_by 1), DONG BO
+##   CLK_CPU..TIM1  12 clock sinh tai dau ra clock_gate (-divide_by 1), DONG BO
 ##                  voi CLK_SYS; tach ra chi de co uncertainty + dong QoR rieng
 ##   CLK_SDRAM_OUT  sdram_clk = ~clk, forward ra chan
 ##   CLK_TCK        tck tu debugger - bat dong bo that. Duong TCK <-> DM duoc
@@ -120,13 +120,19 @@ make_gated_clock CLK_ASCON  clk cg_ascon/clk_out  $P_SYS
 make_gated_clock CLK_UART   clk cg_uart/clk_out   $P_SYS
 make_gated_clock CLK_SPI    clk cg_spi/clk_out    $P_SYS
 make_gated_clock CLK_I2C    clk cg_i2c/clk_out    $P_SYS
+# 2026-09-11 - UART1, TIM0, TIM1 (muc 8). Cung mien CLK_SYS nhu 9 nhanh tren;
+# chi la them doi tuong clock cho uncertainty va nhom QoR rieng.
+make_gated_clock CLK_UART1  clk cg_uart1/clk_out  $P_SYS
+make_gated_clock CLK_TIM0   clk cg_tim0/clk_out   $P_SYS
+make_gated_clock CLK_TIM1   clk cg_tim1/clk_out   $P_SYS
 
 set SYS_FAMILY [get_clocks {CLK_SYS CLK_CPU CLK_DBG CLK_PWM CLK_GPIO \
-    CLK_CORDIC CLK_ASCON CLK_UART CLK_SPI CLK_I2C}]
+    CLK_CORDIC CLK_ASCON CLK_UART CLK_SPI CLK_I2C \
+    CLK_UART1 CLK_TIM0 CLK_TIM1}]
 
 set_clock_gating_check -setup 50.0 -hold 50.0 \
     [get_clocks {CLK_CPU CLK_DBG CLK_PWM CLK_GPIO CLK_CORDIC CLK_ASCON \
-        CLK_UART CLK_SPI CLK_I2C}]
+        CLK_UART CLK_SPI CLK_I2C CLK_UART1 CLK_TIM0 CLK_TIM1}]
 
 ############################################################
 ## CDC duy nhat: JTAG DMI (CLK_TCK <-> CLK_DBG)
@@ -215,18 +221,13 @@ proc constrain_output_ports {patterns clock_name period} {
 constrain_input_ports  {tms tdi}                         CLK_TCK  $P_TCK
 constrain_output_ports {tdo}                             CLK_TCK  $P_TCK
 
-# Moi giao dien ngoai vi gio duoc sinh/lay mau bang CLK_SYS. uart_rx, spi_miso,
-# i2c_*_i va rtc_clk van qua 2FF trong RTL (dong bo chan vao); input delay o
-# day chi de STA co diem bat dau cho tang flop dau tien.
-constrain_input_ports  {uart_rx}                         CLK_SYS  $P_SYS
-constrain_output_ports {uart_tx}                         CLK_SYS  $P_SYS
-constrain_input_ports  {spi_miso}                        CLK_SYS  $P_SYS
-constrain_output_ports {spi_sck spi_mosi spi_ss}         CLK_SYS  $P_SYS
-constrain_input_ports  {i2c_scl_i i2c_sda_i}             CLK_SYS  $P_SYS
-constrain_output_ports {i2c_scl_o i2c_scl_oe \
-    i2c_sda_o i2c_sda_oe}                                CLK_SYS  $P_SYS
-constrain_input_ports  {gpio_in*}                        CLK_SYS  $P_SYS
-constrain_output_ports {gpio_out* gpio_oe* pwm_out}      CLK_SYS  $P_SYS
+# 2026-09-11: UART/SPI/I2C/PWM/GPIO khong con chan rieng - tat ca di qua 32
+# pad cua apb_pinmux (pad_in/pad_out/pad_oe). Duong pad -> ngoai vi van la dau
+# vao bat dong bo qua 2FF trong RTL (uart_rx, spi miso, i2c, capture timer,
+# GPIO); input delay chi cho STA diem bat dau. Duong ra di qua mux AF to hop
+# tu flop cua ngoai vi.
+constrain_input_ports  {pad_in*}                         CLK_SYS  $P_SYS
+constrain_output_ports {pad_out* pad_oe*}                CLK_SYS  $P_SYS
 constrain_input_ports  {flash_io_i*}                     CLK_SYS  $P_SYS
 constrain_output_ports {flash_sck flash_cs_n flash_io_o* \
     flash_io_oe*}                                        CLK_SYS  $P_SYS
@@ -294,4 +295,4 @@ set_max_transition $MAX_TRAN_CEIL_PS [current_design]
 set_max_transition $MAX_TRAN_SYS_PS  [add_to_collection $SYS_FAMILY [get_clocks CLK_SDRAM_OUT]]
 set_max_transition $MAX_TRAN_SLOW_PS [get_clocks CLK_TCK]
 
-puts "INFO: MCU SDC loaded with 2 primary, 1 forwarded and 9 gated clocks (single 250 MHz system clock)"
+puts "INFO: MCU SDC loaded with 2 primary, 1 forwarded and 12 gated clocks (single 250 MHz system clock)"

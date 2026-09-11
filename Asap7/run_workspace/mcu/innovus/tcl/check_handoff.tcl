@@ -53,9 +53,12 @@ proc check_top_io_handoff {netlist sdc} {
     set netlist_text [read_binary_file $netlist "Genus netlist"]
     set sdc_text     [read_binary_file $sdc "Genus SDC"]
 
+    # 2026-09-11: I2C/UART/SPI/PWM/GPIO di qua 32 pad cua apb_pinmux, nen
+    # bo ba chan chia se duy nhat cua nhom do la pad_in/pad_out/pad_oe.
+    # (Khong them uart_tx, i2c_scl_i... vao obsolete: ten do van con la net
+    # noi bo cua top_soc trong netlist phang.)
     set required_ports {
-        i2c_scl_i i2c_scl_o i2c_scl_oe
-        i2c_sda_i i2c_sda_o i2c_sda_oe
+        pad_in pad_out pad_oe
         flash_io_i flash_io_o flash_io_oe
         sdram_dq_i sdram_dq_o sdram_dq_oe
     }

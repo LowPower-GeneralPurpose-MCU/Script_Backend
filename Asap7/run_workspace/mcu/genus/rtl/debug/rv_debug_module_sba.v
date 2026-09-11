@@ -32,7 +32,26 @@ module rv_debug_module_sba (
     output reg [15:0]  cpu_reg_write_addr,
     output reg [31:0]  cpu_reg_write_data,
 
-    output wire        ndmreset_req
+    output wire        ndmreset_req,
+
+    // -------------------------------------------------------------------------
+    // Cho top_soc.v (2026-09-11).
+    //
+    // dmactive_o / busy_o: top_soc tu mo clock DM khi debugger can (dmactive,
+    // mot lenh DMI dang cho, hoac DM con do dang), va tat khi khong. Truoc day
+    // clock DM la bit CLK_GATE_CTRL[6] do FIRMWARE dieu khien, tuc firmware tu
+    // khoa duoc JTAG.
+    //
+    // DBGCTRL (DMI 0x70, custom0 trong dac ta RISC-V Debug 1.0) - thay cho
+    // DBGMCU_CR cua STM32, chi debugger ghi duoc:
+    //   [0] DBG_SLEEP    giu clk_cpu chay khi core WFI (dbg_sleep_o)
+    //   [1] DBG_WDT_STOP dung watchdog khi core dang halt (dbg_wdt_stop_o)
+    // OpenOCD: `riscv dmi_write 0x70 3`.
+    // -------------------------------------------------------------------------
+    output wire        dmactive_o,
+    output wire        busy_o,
+    output wire        dbg_sleep_o,
+    output wire        dbg_wdt_stop_o
 );
     localparam DATA0      = 7'h04;
     localparam DMCONTROL  = 7'h10;
@@ -42,6 +61,7 @@ module rv_debug_module_sba (
     localparam SBCS       = 7'h38;
     localparam SBADDRESS0 = 7'h39;
     localparam SBDATA0    = 7'h3C;
+    localparam DBGCTRL    = 7'h70;
 
     reg [31:0] sbaddress0;
     reg [31:0] sbdata0;
@@ -56,6 +76,7 @@ module rv_debug_module_sba (
     reg [31:0] dmcontrol_reg;
     reg        dmactive;
     reg        havereset;
+    reg [1:0]  dbgctrl_reg;
     
     reg trigger_axi_read;
     reg trigger_axi_write;
@@ -74,9 +95,16 @@ module rv_debug_module_sba (
     wire req_valid_sys = req_valid_sync[2];
 
     assign ndmreset_req = dmcontrol_reg[1];
+    assign dmactive_o     = dmactive;
+    assign dbg_sleep_o    = dbgctrl_reg[0];
+    assign dbg_wdt_stop_o = dbgctrl_reg[1];
 
     reg [1:0] state;
     localparam IDLE=0, RESP=1, WAIT_AXI=2;
+
+    // DM con viec do dang: dang tra loi DMI, dang cho SBA, hoac resp_valid chua
+    // ha. top_soc giu clock DM tren muc nay (xem busy_o).
+    assign busy_o = (state != IDLE) | dmi_resp_valid | axi_req;
     
     always @(posedge clk_sys or negedge rst_sys_n) begin
         if (!rst_sys_n) begin
@@ -86,6 +114,7 @@ module rv_debug_module_sba (
             axi_req <= 1'b0;
             cpu_halt_req <= 1'b0; cpu_resume_req <= 1'b0;
             cpu_reg_write_en <= 1'b0; dmcontrol_reg <= 32'b0; dmactive <= 1'b0;
+            dbgctrl_reg <= 2'b00;
             sbaccess <= 3'd2; sbautoincrement <= 1'b0; sbreadondata <= 1'b0; sbreadonaddr <= 1'b0;
             sberror <= 3'd0;
             data0_reg <= 32'b0;
@@ -101,14 +130,24 @@ module rv_debug_module_sba (
                         if (dmi_req_op == 2'd2) begin // WRITE
                             case (dmi_req_addr)
                                 DMCONTROL: begin
-                                    dmcontrol_reg <= dmi_req_data; dmactive <= dmi_req_data[0];
-                                    cpu_halt_req <= dmi_req_data[31];
+                                    // dmactive = 0 dua DM ve trang thai reset (dac ta
+                                    // RISC-V Debug): ha haltreq, ndmreset va DBGCTRL.
+                                    // Can cho clock gating: top_soc tat clock DM khi
+                                    // dmactive = 0, va moi thu DM dang giu se dong bang.
+                                    dmcontrol_reg <= dmi_req_data[0] ? dmi_req_data : 32'b0;
+                                    dmactive <= dmi_req_data[0];
+                                    cpu_halt_req <= dmi_req_data[31] & dmi_req_data[0];
+                                    if (!dmi_req_data[0]) dbgctrl_reg <= 2'b00;
                                     if (dmi_req_data[1]) havereset <= 1'b1;
                                     if (dmi_req_data[28]) havereset <= 1'b0;
                                     if (dmi_req_data[30]) cpu_resume_req <= 1'b1; // Chỉ kích hoạt Resume
                                     state <= RESP;
                                 end
                                 DATA0: begin data0_reg <= dmi_req_data; state <= RESP; end
+                                DBGCTRL: begin
+                                    if (dmactive) dbgctrl_reg <= dmi_req_data[1:0];
+                                    state <= RESP;
+                                end
                                 COMMAND: begin
                                     if (dmi_req_data[31:24] == 8'h00) begin
                                         if (dmi_req_data[16]) begin 
@@ -162,6 +201,7 @@ module rv_debug_module_sba (
                                     state <= RESP; 
                                 end
                                 ABSTRACTCS: begin dmi_resp_data <= 32'h00000001; state <= RESP; end
+                                DBGCTRL:    begin dmi_resp_data <= {30'b0, dbgctrl_reg}; state <= RESP; end
                                 DATA0:      begin dmi_resp_data <= cpu_reg_read_data; state <= RESP; end
                                 SBCS:       begin dmi_resp_data <= sbcs_val; state <= RESP; end
                                 SBADDRESS0: begin dmi_resp_data <= sbaddress0; state <= RESP; end

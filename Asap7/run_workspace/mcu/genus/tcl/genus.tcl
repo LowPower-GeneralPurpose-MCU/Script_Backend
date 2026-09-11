@@ -24,8 +24,8 @@ set SYN_EFFORT        high   ;# low | medium | high
 set MULTI_CORNER      1      ;# 0 = chi phan tich goc TT
 set MULTI_VT          1      ;# 1 = cam LVT o syn_generic/syn_map, mo lai o syn_opt
 set GENUS_PHYSICAL    1      ;# 1 = LEF + QRC + PLE (co tre day uoc luong)
-set EXPECTED_RTL      54     ;# 2026-09-11: bo 4 file CDC (xem rtl_filelist.tcl)
-set EXPECTED_CLOCKS   12     ;# 2 goc (CLK_SYS, CLK_TCK) + 1 forwarded + 9 gated
+set EXPECTED_RTL      54     ;# 2026-09-11: -PLIC(3) +pmp/clic/timer/pinmux (xem rtl_filelist.tcl)
+set EXPECTED_CLOCKS   15     ;# 2 goc (CLK_SYS, CLK_TCK) + 1 forwarded + 12 gated
 set RO_EXPECTED_CELLS 7      ;# RingOscillator: 6 INVx1 + 1 NAND2x1
 
 # Phai khop CLOCK_PORTS / RESET_PORTS trong constraint.sdc. rtc_clk KHONG con
@@ -476,8 +476,16 @@ write_sdc -view view_tt > $MAPPED_SDC
 # Power chi co nghia khi co SAIF (MCU_SAIF=<file>); khong co thi SRAM ("bbox")
 # dung toggle rate mac dinh. Hold khong bao cao o Genus (TUI-745): dong o Innovus.
 
+# -instance la duong dan TRONG FILE SAIF toi top_soc, khong phai ten design.
+# XSim (run_soc_sim.sh SAIF=1) ghi tu testbench xuong: tb_top_soc/uut. Dung
+# `-instance top_soc` thi khong khop gi ca. Ghi de bang MCU_SAIF_INST neu SAIF
+# den tu testbench khac.
+set SAIF_INST "tb_top_soc/uut"
+if {[info exists ::env(MCU_SAIF_INST)] && $::env(MCU_SAIF_INST) ne ""} {
+    set SAIF_INST $::env(MCU_SAIF_INST)
+}
 if {[info exists ::env(MCU_SAIF)] && [file isfile $::env(MCU_SAIF)]} {
-    if {[catch {read_saif -instance $TOP $::env(MCU_SAIF)} saif_err]} {
+    if {[catch {read_saif -instance $SAIF_INST $::env(MCU_SAIF)} saif_err]} {
         puts "WARNING: read_saif that bai, power KHONG duoc annotate: $saif_err"
     } else {
         puts "Power: annotate activity tu $::env(MCU_SAIF)"

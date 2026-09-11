@@ -193,8 +193,25 @@ module csr_register_file (
     input csr_write_en,
     input count_en,
     input instret_en,
+    // -------------------------------------------------------------------------
+    // TRAP: "ENTER" va "COMMIT" la HAI tin hieu khac nhau (2026-09-11).
+    //
+    // trap_enter  : co trap o tang MEM trong chu ky nay. Dung de CHAN lenh CSR
+    //               dang o MEM (no se bi huy) - y nghia nhu truoc.
+    // trap_commit : trap_enter & ~mem_freeze - chu ky PC THAT SU doi huong.
+    //               mepc/mcause/mtval/mstatus chi duoc cap nhat o day.
+    //
+    // Truoc day mot trap_enter o giua luc D-cache stall (vi du ngat toi dung chu
+    // ky LOOKUP cua mot lenh load) GHI CSR ngay: MIE <- 0. PC chi doi huong khi
+    // stall ha, nhung toi luc do irq_ok = 0 (MIE da bang 0) nen trap_enter da
+    // tat - ngat bi NUOT, handler khong bao gio chay va MIE ket o 0. Ghi lap
+    // nhieu chu ky con lam hong MPIE (lan ghi thu hai chep MIE = 0 vao MPIE).
+    // mret cung ly do: mret_commit.
+    // -------------------------------------------------------------------------
     input trap_enter,
+    input trap_commit,
     input mret_exec,
+    input mret_commit,
     input [31:0] trap_cause,
     input [31:0] trap_pc,
     input [31:0] trap_val,
@@ -202,6 +219,13 @@ module csr_register_file (
     output [31:0] mepc_out,
     output [31:0] mie_out,
     output mstatus_mie,
+
+    // --- CLIC (Smclic, che do mtvec.mode = 11) ---
+    input         trap_clic_irq,   // trap dang commit la mot ngat CLIC
+    input  [7:0]  clic_level,      // muc cua ngat do
+    output        clic_mode,       // mtvec.mode == 11
+    output [7:0]  mil_out,         // mintstatus.mil - muc ngat dang phuc vu
+    output [7:0]  mintthresh_out,
 
     // --- CỔNG GIAO TIẾP DEBUG ---
     input         dbg_halt_req,
@@ -279,7 +303,41 @@ module csr_register_file (
     reg [31:0] dpc;
     reg [31:0] dscratch0;
 
-    wire [31:0] mip_val = {20'd0, meip_i, 3'd0, mtip_i, 3'd0, msip_i, 3'd0};
+    // =====================================================================
+    // CLIC (2026-09-11) - thay PLIC. Xem interrupt/clic/clic.v.
+    //
+    // Che do CLIC bat khi mtvec.mode = 11 (base can le 64 byte). Khi do:
+    //   mintthresh (0x347)  RW [7:0]  nguong: chi ngat co muc > nguong moi vao
+    //   mintstatus (0xFB1)  RO [31:24] mil = muc ngat dang chay (0 = code thuong)
+    //   mcause              them truong CLIC: [30] minhv=0, [29:28] mpp=11,
+    //                       [27] mpie (bi danh cua mstatus.MPIE),
+    //                       [23:16] mpil = mil truoc trap
+    //   mie / mip           doc ra 0 (dac ta: enable/pending nam trong CLIC)
+    // Vao trap: mpil <- mil; neu la ngat CLIC thi mil <- muc cua no. mret:
+    // mil <- mpil. Nho vay ISR muc thap bat lai MIE thi mot ngat muc CAO HON
+    // preempt duoc no, con ngat muc bang/thap hon phai cho - LONG NHAU CO UU
+    // TIEN bang phan cung. Handler long nhau chi can luu mepc/mcause len stack
+    // (mcause mang theo mpil) truoc khi bat MIE.
+    //
+    // Che do CLINT (mode 0x) giu nguyen: msip/mtip qua mie/mip, mil = 0.
+    // =====================================================================
+    reg [7:0]  mil;
+    reg [7:0]  mpil;
+    reg [7:0]  mintthresh;
+
+    wire       clic_mode_w = (mtvec[1:0] == 2'b11);
+
+    wire [31:0] mip_val = clic_mode_w ? 32'd0 :
+                          {20'd0, meip_i, 3'd0, mtip_i, 3'd0, msip_i, 3'd0};
+    wire [31:0] mie_rd  = clic_mode_w ? 32'd0 : mie;
+    wire [31:0] mcause_rd = clic_mode_w ?
+                            {mcause[31], 1'b0, 2'b11, mstatus[7], 3'b000,
+                             mpil, 4'b0000, mcause[11:0]} :
+                            mcause;
+
+    assign clic_mode      = clic_mode_w;
+    assign mil_out        = mil;
+    assign mintthresh_out = mintthresh;
 
     reg [63:0] mcycle;
     reg [63:0] minstret;
@@ -304,13 +362,18 @@ module csr_register_file (
                 12'hF14: csr_read_value = MHARTID;
                 12'h301: csr_read_value = MISA;
                 12'h300: csr_read_value = mstatus;
-                12'h304: csr_read_value = mie;
+                12'h304: csr_read_value = mie_rd;
                 12'h305: csr_read_value = mtvec;
                 12'h340: csr_read_value = mscratch;
                 12'h341: csr_read_value = mepc;
-                12'h342: csr_read_value = mcause;
+                12'h342: csr_read_value = mcause_rd;
                 12'h343: csr_read_value = mtval;
                 12'h344: csr_read_value = mip_val;
+                12'h347: csr_read_value = {24'd0, mintthresh};
+                12'hFB1: csr_read_value = {mil, 24'd0};
+                // pmpcfg0-3 / pmpaddr0-15 (0x3A0-0x3A3, 0x3B0-0x3BF): gia tri
+                // nam trong pmp_unit, riscv_pipeline.v mux vao sau. O day chi
+                // can csr_exists biet chung ton tai.
                 // C4 - `time` (0xC01) / `timeh` (0xC81) DA BI BO khoi bang nay.
                 //
                 // Truoc day chung duoc alias vao mcycle. Nhung `time` theo dac ta
@@ -372,6 +435,12 @@ module csr_register_file (
                 12'hF11, 12'hF12, 12'hF13, 12'hF14,          // mvendorid..mhartid
                 12'h300, 12'h301, 12'h304, 12'h305,          // mstatus misa mie mtvec
                 12'h340, 12'h341, 12'h342, 12'h343, 12'h344, // mscratch..mip
+                12'h347, 12'hFB1,                            // mintthresh mintstatus
+                12'h3A0, 12'h3A1, 12'h3A2, 12'h3A3,          // pmpcfg0-3
+                12'h3B0, 12'h3B1, 12'h3B2, 12'h3B3,          // pmpaddr0-15
+                12'h3B4, 12'h3B5, 12'h3B6, 12'h3B7,
+                12'h3B8, 12'h3B9, 12'h3BA, 12'h3BB,
+                12'h3BC, 12'h3BD, 12'h3BE, 12'h3BF,
                 12'hB00, 12'hB80, 12'hB02, 12'hB82,          // mcycle(h) minstret(h)
                 12'hC00, 12'hC80, 12'hC02, 12'hC82:          // cycle(h) instret(h)
                     csr_exists = 1'b1;
@@ -433,8 +502,9 @@ module csr_register_file (
     // danh sach duoi day. Quen dong thu hai = CSR do doc ra gia tri cu, im lang.
     // =====================================================================
     always @(csr_addr  or csr_addr_lane1 or dbg_reg_read_addr or
-             mstatus   or mie            or mtvec     or mscratch or
-             mepc      or mcause         or mtval     or mip_val  or
+             mstatus   or mie_rd         or mtvec     or mscratch or
+             mepc      or mcause_rd      or mtval     or mip_val  or
+             mintthresh or mil           or
              mcycle    or minstret       or
              dcsr      or dpc            or dscratch0) begin
         csr_read_data = csr_read_value(csr_addr);
@@ -451,6 +521,9 @@ module csr_register_file (
             mepc      <= 32'b0;
             mcause    <= 32'b0;
             mtval     <= 32'b0;
+            mil        <= 8'd0;
+            mpil       <= 8'd0;
+            mintthresh <= 8'd0;
             mcycle    <= 64'b0;
             minstret  <= 64'b0;
             dcsr      <= 32'h00000003; // Privilege mode M
@@ -499,18 +572,26 @@ module csr_register_file (
                 minstret <= minstret + 64'd1;
             end
             
-            if (trap_enter) begin
+            if (trap_commit) begin
                 mepc <= trap_pc;
                 mcause <= trap_cause;
                 mtval <= trap_val;
                 mstatus[7] <= mstatus[3];
                 mstatus[3] <= 1'b0;
                 mstatus[12:11] <= 2'b11;
-            end else if (mret_exec) begin
+                // CLIC: moi trap luu muc hien tai; chi NGAT moi doi muc.
+                mpil <= mil;
+                if (trap_clic_irq)
+                    mil <= clic_level;
+            end else if (mret_commit) begin
                 mstatus[3] <= mstatus[7];
                 mstatus[7] <= 1'b1;
                 mstatus[12:11] <= 2'b11;
-            end else if (csr_write_en && (csr_op != 2'b00)) begin
+                mil <= clic_mode_w ? mpil : 8'd0;
+            end else if (csr_write_en && (csr_op != 2'b00) &&
+                         !trap_enter && !mret_exec) begin
+                // !trap_enter / !mret_exec: lenh CSR o MEM bi huy boi trap dang
+                // cho commit (xem ghi chu o cong trap_commit).
                 case (csr_write_addr)
                     12'h300: begin
                         mstatus[3] <= csr_write_data[3];
@@ -518,6 +599,7 @@ module csr_register_file (
                         mstatus[12:11] <= csr_write_data[12:11];
                     end
                     12'h304: mie <= csr_write_data & 32'h00000888;
+                    12'h347: mintthresh <= csr_write_data[7:0];
                     // C3 - mtvec la WARL, hai bit thap la truong MODE.
                     //
                     // Truoc day ghi nguyen si, va instruction_fetch dung
@@ -525,13 +607,26 @@ module csr_register_file (
                     // (che do VECTORED - FreeRTOS va nhieu BSP lam the) se nhay
                     // vao base+1, tuc mot dia chi le -> lay lenh sai hoan toan.
                     //
-                    // Chi MODE 0 (direct) va 1 (vectored) ton tai; 2-3 la reserved
-                    // nen WARL ep ve 0. Bit [1] luon 0 sau khi ghi.
-                    // Dia chi vector duoc tinh o riscv_pipeline.v (trap_vector).
-                    12'h305: mtvec <= {csr_write_data[31:2], 1'b0, csr_write_data[0]};
+                    // MODE 0 (direct), 1 (vectored CLINT) va 3 (CLIC, 2026-09-11,
+                    // base can le 64 byte theo Smclic). MODE 2 reserved -> WARL
+                    // ep ve 0. Dia chi vector tinh o riscv_pipeline.v (trap_vector).
+                    12'h305: mtvec <= (csr_write_data[1:0] == 2'b11) ?
+                                      {csr_write_data[31:6], 4'b0000, 2'b11} :
+                                      {csr_write_data[31:2], 1'b0, csr_write_data[0]};
                     12'h340: mscratch <= csr_write_data;
                     12'h341: mepc <= csr_write_data;
-                    12'h342: mcause <= csr_write_data;
+                    // CLIC: mcause.mpil va mcause.mpie ghi duoc (handler long nhau
+                    // khoi phuc chung tu stack truoc mret); mpie la bi danh cua
+                    // mstatus.MPIE.
+                    12'h342: begin
+                        if (clic_mode_w) begin
+                            mcause     <= {csr_write_data[31], 19'd0, csr_write_data[11:0]};
+                            mpil       <= csr_write_data[23:16];
+                            mstatus[7] <= csr_write_data[27];
+                        end else begin
+                            mcause <= csr_write_data;
+                        end
+                    end
                     12'h343: mtval <= csr_write_data;
                     12'hB00: mcycle[31:0] <= csr_write_data;
                     12'hB80: mcycle[63:32] <= csr_write_data;
