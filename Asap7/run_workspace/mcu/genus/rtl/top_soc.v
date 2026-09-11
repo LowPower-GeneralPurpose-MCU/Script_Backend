@@ -1,15 +1,34 @@
 `timescale 1ns / 1ps
 
+// =============================================================================
+// MOT CLOCK DUY NHAT (2026-09-11)
+//
+// Toan bo SoC - CPU, cache, AXI, APB, DMA, ngoai vi - chay bang `clk` 250 MHz.
+// Truoc day chip co 8 clock vao (clk_core 400, clk_axi 200, clk_apb 100,
+// clk_sdram_ext, uart_clk, spi_clk, i2c_clk, rtc_clk) va SDC xu ly moi duong
+// giua chung bang `set_clock_groups -asynchronous`, tuc BO timing ca nhung
+// duong van can rang buoc (con tro Gray cua async FIFO, bus debug tua-tinh).
+// Nay khong con CDC noi bo nao: hai axi_async_bridge, apb_async_bridge, cac
+// async_fifo trong UART/SPI/I2C, ~30 cdc_sync_bit va 8 reset_sync theo mien
+// deu da bo.
+//
+// Nhung gi CON dung bo dong bo, va vi sao:
+//   * TCK (JTAG) - clock ngoai tu debugger, ban chat bat dong bo. Handshake DMI
+//     trong rv_jtag_dtm / rv_debug_module_sba (req/resp qua 3FF) la CDC duy
+//     nhat con lai; constraint.sdc rang buoc no bang false_path o tang sync dau
+//     + max_delay tren bus du lieu DMI, KHONG dung -asynchronous.
+//   * rtc_clk - khong con la clock: la chan vao duoc lay mau 2FF roi bat canh,
+//     thanh `rtc_tick` cho CLINT va watchdog (xem muc 1).
+//   * Cac chan vao ngoai (uart_rx, spi_miso, i2c sda, rst_n) - dong bo chan vao
+//     nhu cu. Do khong phai CDC giua hai mien clock.
+//
+// Clock gating van giu (cg_*), vi ICG tren cung mot clock goc la DONG BO: STA
+// tinh xuyen qua cong, khong can clock group.
+// =============================================================================
 module top_soc (
-    // --- Các Nguồn Xung Nhịp ---
-    input  wire        clk_core,   // 400 MHz
-    input  wire        clk_axi,    // 200 MHz
-    input  wire        clk_apb,    // 100 MHz
-    input  wire        clk_sdram_ext,  // 200 MHz (LỆCH PHA - cấp riêng cho chip RAM ngoài)
-    input  wire        uart_clk,   
-    input  wire        spi_clk,    
-    input  wire        i2c_clk,    
-    input  wire        rtc_clk,    // 32.768 kHz
+    // --- Xung nhip ---
+    input  wire        clk,        // 250 MHz - clock he thong duy nhat
+    input  wire        rtc_clk,    // 32.768 kHz - chan vao, lay mau bang clk
 
     input  wire        rst_n,
 
@@ -60,10 +79,25 @@ module top_soc (
     output wire        sdram_dq_oe,
     output wire [1:0]  sdram_dqm
 );
-    assign sdram_clk = clk_sdram_ext;
+    // -------------------------------------------------------------------------
+    // Clock SDRAM: `clk` DAO PHA, xuat ra chan.
+    //
+    // Controller doi lenh/dia chi/du lieu o canh LEN cua clk; chip SDRAM chot o
+    // canh len cua sdram_clk = canh XUONG cua clk, tuc giua chu ky - nua chu ky
+    // (2 ns) cho setup va nua chu ky cho hold. Truoc day vai tro nay do
+    // clk_sdram_ext lech pha 180 do tu ben ngoai dam nhan; nay no la clock SINH
+    // RA tu clk (create_generated_clock -invert trong constraint.sdc), cung goc
+    // nen dong bo.
+    //
+    // CANH BAO: SDR SDRAM thong dung toi da 166-200 MHz. Chay 250 MHz can chip
+    // co speed grade du, hoac mot buoc sau lam half-rate (controller chay bang
+    // clock-enable, sdram_clk = clk/2). Tham so thoi gian cua controller da doi
+    // sang so chu ky dung o 4 ns - xem u_axi_sdram.
+    // -------------------------------------------------------------------------
+    assign sdram_clk = ~clk;
 
     // =========================================================================
-    // 1. RESET SYNCHRONIZERS
+    // 1. RESET
     // =========================================================================
     wire wdt_rst;
     wire ndmreset_req;
@@ -83,29 +117,23 @@ module top_soc (
     //    dinh y het: no reset chinh Debug Module da phat ra no, nen lenh
     //    `reset halt` cua OpenOCD tu huy giua chung.
     //
-    // 2. HAI TIN HIEU O HAI MIEN CLOCK KHAC NHAU (rtc_clk 32.768 kHz va clk_dbg
-    //    200 MHz) duoc AND to hop roi dua thang vao chan reset BAT DONG BO toan
-    //    chip. Mot xung glitch tren duong do reset ca chip.
+    // 2. HAI TIN HIEU duoc AND to hop roi dua thang vao chan reset BAT DONG BO
+    //    toan chip. Mot xung glitch tren duong do reset ca chip.
     //
-    // Cach sua: mot bo keo dai chay bang clk_apb va CHI reset boi chan rst_n
-    // NGOAI - no khong nam trong mien ma no reset, nen khong the tu xoa minh.
-    // Hai nguon deu duoc dong bo 2FF vao clk_apb truoc khi dung.
+    // Cach sua: mot bo keo dai chay bang clk va CHI reset boi chan rst_n NGOAI -
+    // no khong nam trong mien ma no reset, nen khong the tu xoa minh.
     //
     // Hai duong ra rieng biet:
     //   sysrst_n_q : co ndmreset    -> reset lo, bus, ngoai vi (tat ca tru DM)
     //   dmrst_n_q  : KHONG ndmreset -> reset Debug Module
     // Dac ta RISC-V Debug noi ro: ndmreset reset "moi thu TRU Debug Module".
     // Neu DM tu reset minh thi thanh ghi dmcontrol bi xoa ngay giua lenh reset.
+    //
+    // wdt_rst va ndmreset_req deu la flop chay bang clk (watchdog va DM gio
+    // cung mien), nen doc thang - hai bo cdc_sync_bit truoc day da bo.
     // -------------------------------------------------------------------------
-    wire wdt_rst_apb;
-    wire ndmreset_apb;
-    cdc_sync_bit u_sync_wdt_rst (.clk_dst(clk_apb), .rst_dst_n(rst_n),
-                                 .d_in(wdt_rst),      .q_out(wdt_rst_apb));
-    cdc_sync_bit u_sync_ndmrst  (.clk_dst(clk_apb), .rst_dst_n(rst_n),
-                                 .d_in(ndmreset_req), .q_out(ndmreset_apb));
 
-    // 64 chu ky clk_apb = 640 ns = 256 chu ky clk_core. Du de reset dut diem moi
-    // mien, ke ca rtc_clk 32.768 kHz (mien nay bat reset bang duong bat dong bo).
+    // 64 chu ky clk = 256 ns. Khong con mien clock cham nao phai cho bat reset.
     localparam [5:0] RST_STRETCH = 6'd63;
 
     reg [5:0] sysrst_cnt;
@@ -113,7 +141,7 @@ module top_soc (
     reg [5:0] dmrst_cnt;
     reg       dmrst_n_q;
 
-    always @(posedge clk_apb or negedge rst_n) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             sysrst_cnt <= RST_STRETCH;
             sysrst_n_q <= 1'b0;
@@ -121,7 +149,7 @@ module top_soc (
             dmrst_n_q  <= 1'b0;
         end else begin
             // --- reset he thong: watchdog HOAC ndmreset ---
-            if (wdt_rst_apb | ndmreset_apb) begin
+            if (wdt_rst | ndmreset_req) begin
                 sysrst_cnt <= RST_STRETCH;
                 sysrst_n_q <= 1'b0;
             end else if (sysrst_cnt != 6'd0) begin
@@ -132,7 +160,7 @@ module top_soc (
             end
 
             // --- reset Debug Module: CHI watchdog, khong co ndmreset ---
-            if (wdt_rst_apb) begin
+            if (wdt_rst) begin
                 dmrst_cnt <= RST_STRETCH;
                 dmrst_n_q <= 1'b0;
             end else if (dmrst_cnt != 6'd0) begin
@@ -147,80 +175,59 @@ module top_soc (
     wire reset_sys_n_raw = rst_n & sysrst_n_q;
     wire reset_dm_n_raw  = rst_n & dmrst_n_q;
 
-    wire reset_core_n_sync;
-    wire reset_axi_n_sync;
-    wire reset_apb_n_sync;
-    wire reset_dbg_n_sync;
-
-    reset_sync u_core_rst_sync (.clk(clk_core), .rst_in_n(reset_sys_n_raw), .rst_out_n(reset_core_n_sync));
-    reset_sync u_axi_rst_sync  (.clk(clk_axi),  .rst_in_n(reset_sys_n_raw), .rst_out_n(reset_axi_n_sync));
-    reset_sync u_apb_rst_sync  (.clk(clk_apb),  .rst_in_n(reset_sys_n_raw), .rst_out_n(reset_apb_n_sync));
-    // Debug Module: song sot qua ndmreset (xem ghi chu tren).
-    reset_sync u_dbg_rst_sync  (.clk(clk_axi),  .rst_in_n(reset_dm_n_raw),  .rst_out_n(reset_dbg_n_sync));
+    // Hai reset_sync, cung mot clock: mot cho he thong, mot cho Debug Module
+    // (song sot qua ndmreset - xem ghi chu tren). Truoc day co 8 bo, moi mien
+    // clock mot bo.
+    wire reset_sys_n;
+    wire reset_dbg_n;
+    reset_sync u_sys_rst_sync (.clk(clk), .rst_in_n(reset_sys_n_raw), .rst_out_n(reset_sys_n));
+    reset_sync u_dbg_rst_sync (.clk(clk), .rst_in_n(reset_dm_n_raw),  .rst_out_n(reset_dbg_n));
 
     // -------------------------------------------------------------------------
-    // Reset RIENG cho tung mien clock ngoai vi.
+    // RTC TICK: chan rtc_clk -> xung mot chu ky clk moi chu ky RTC.
     //
-    // Truoc day uart_clk / spi_clk / i2c_clk / rtc_clk deu nhan
-    // `reset_apb_n_sync` - mot tin hieu duoc DONG BO THEO clk_apb. Canh NHA cua
-    // no khong co quan he pha nao voi cac clock kia, nen moi flop trong nhung
-    // mien do deu vi pham recovery/removal khi thoat reset. Day la lop loi chi
-    // hien ra thanh "thinh thoang boot hong" tren silicon.
+    // rtc_clk khong con clock bat ky flop nao. No duoc lay mau nhu mot chan vao
+    // bat dong bo (2FF - dong bo CHAN VAO, khong phai CDC giua hai mien) roi
+    // bat canh len. CLINT tang mtime va watchdog giam bo dem theo xung nay, nen
+    // tan so cua chung van la 32.768 kHz dung nhu RTC_CLOCK_HZ trong firmware.
+    // 250 MHz / 32.768 kHz ~ 7629 mau moi chu ky RTC: khong the bo sot canh.
     // -------------------------------------------------------------------------
-    wire reset_uart_n_sync;
-    wire reset_spi_n_sync;
-    wire reset_i2c_n_sync;
-    wire reset_rtc_n_sync;
-
-    reset_sync u_uart_rst_sync (.clk(uart_clk), .rst_in_n(reset_sys_n_raw), .rst_out_n(reset_uart_n_sync));
-    reset_sync u_spi_rst_sync  (.clk(spi_clk),  .rst_in_n(reset_sys_n_raw), .rst_out_n(reset_spi_n_sync));
-    reset_sync u_i2c_rst_sync  (.clk(i2c_clk),  .rst_in_n(reset_sys_n_raw), .rst_out_n(reset_i2c_n_sync));
-    reset_sync u_rtc_rst_sync  (.clk(rtc_clk),  .rst_in_n(reset_sys_n_raw), .rst_out_n(reset_rtc_n_sync));
+    wire rtc_in_s;
+    reg  rtc_in_d;
+    cdc_sync_bit u_sync_rtc_pin (.clk_dst(clk), .rst_dst_n(reset_sys_n),
+                                 .d_in(rtc_clk), .q_out(rtc_in_s));
+    always @(posedge clk or negedge reset_sys_n) begin
+        if (!reset_sys_n) rtc_in_d <= 1'b0;
+        else              rtc_in_d <= rtc_in_s;
+    end
+    wire rtc_tick = rtc_in_s & ~rtc_in_d;
 
     // =========================================================================
-    // 2. CLOCK GATING NETWORK (ĐÃ PHỤC HỒI 100%)
+    // 2. CLOCK GATING NETWORK
     // =========================================================================
     wire clk_en_cpu, clk_en_dbg, clk_en_pwm, clk_en_uart;
     wire clk_en_spi, clk_en_i2c, clk_en_gpio, clk_en_acc, clk_en_asc;
 
     wire clk_cpu, clk_dbg, clk_pwm, clk_gpio, clk_cordic, clk_ascon;
-    wire clk_uart_gated, clk_spi_gated, clk_i2c_gated;
+    wire clk_uart, clk_spi, clk_i2c;
 
     // -------------------------------------------------------------------------
-    // CDC cho tin hieu ENABLE cua clock gate.
+    // ENABLE cua clock gate: noi THANG, khong dong bo.
     //
-    // Moi `clk_en_*` deu sinh ra tu thanh ghi CLK_GATE_CTRL trong apb_syscon -
-    // tuc mien clk_apb 100 MHz. Truoc day chung duoc noi THANG vao chan `en` cua
-    // cac ICG dang gate clk_core 400 MHz, clk_axi 200 MHz, uart_clk, spi_clk,
-    // i2c_clk.
-    //
-    // clock_gate la latch trong suot khi clock THAP. Mot `en` thay doi bat dong
-    // bo ngay gan canh len cua clock dich se vi pham setup/hold cua latch do ->
-    // XEN DOI mot xung clock, hoac cho ra gia tri a. Voi clk_cpu 400 MHz day la
-    // nguyen nhan "chip treo ngau nhien" dien hinh, va no khong the hien ra
-    // trong mo phong RTL (latch ly tuong).
-    //
-    // Dong bo 2FF vao mien dich (ban CHUA gate cua chinh clock do) truoc khi vao
-    // ICG. Gia: 2 flop moi duong.
+    // Moi `clk_en_*` la flop trong apb_syscon, chay bang clk - chinh clock goc
+    // cua moi cong. Latch cua clock_gate trong suot khi clk THAP, nen enable
+    // doi o canh len duoc chot on dinh truoc canh len ke tiep; STA kiem duong
+    // nay bang clock-gating check. Truoc day enable den tu clk_apb 100 MHz va
+    // phai qua 2FF vao tung mien dich; cung mot clock thi 2FF do chi con la tre.
     // -------------------------------------------------------------------------
-    wire clk_en_cpu_s, clk_en_dbg_s, clk_en_uart_s, clk_en_spi_s, clk_en_i2c_s;
-    cdc_sync_bit u_sync_cg_cpu  (.clk_dst(clk_core), .rst_dst_n(reset_core_n_sync),
-                                 .d_in(clk_en_cpu),  .q_out(clk_en_cpu_s));
-    cdc_sync_bit u_sync_cg_dbg  (.clk_dst(clk_axi),  .rst_dst_n(reset_axi_n_sync),
-                                 .d_in(clk_en_dbg),  .q_out(clk_en_dbg_s));
-    cdc_sync_bit u_sync_cg_uart (.clk_dst(uart_clk), .rst_dst_n(reset_uart_n_sync),
-                                 .d_in(clk_en_uart), .q_out(clk_en_uart_s));
-    cdc_sync_bit u_sync_cg_spi  (.clk_dst(spi_clk),  .rst_dst_n(reset_spi_n_sync),
-                                 .d_in(clk_en_spi),  .q_out(clk_en_spi_s));
-    cdc_sync_bit u_sync_cg_i2c  (.clk_dst(i2c_clk),  .rst_dst_n(reset_i2c_n_sync),
-                                 .d_in(clk_en_i2c),  .q_out(clk_en_i2c_s));
 
     // -------------------------------------------------------------------------
     // GIU CLOCK MO KHI NGOAI VI DANG BI TRUY CAP.
     //
-    // apb_gpio / apb_pwm / apb_cordic dat CA giao dien thanh ghi APB len clock DA
-    // GATE (.pclk(clk_gpio) ...), va CLK_GATE_CTRL reset ve 7'b1000011 - tuc GPIO
-    // (bit 4) va CORDIC (bit 5) TAT ngay sau reset.
+    // apb_gpio / apb_pwm / apb_cordic / apb_ascon, va tu 2026-09-11 ca
+    // apb_uart / apb_spi / apb_i2c, dat CA giao dien thanh ghi APB len clock DA
+    // GATE (.pclk(clk_gpio) ...), va CLK_GATE_CTRL reset ve 8'b0100_0011 - tuc
+    // SPI, I2C, GPIO, CORDIC, ASCON TAT ngay sau reset.
     //
     // Hau qua: `pready` cua chung la flop tren clock da dung -> khong bao gio len
     // 1. apb_interconnect chon slave theo dia chi roi CHO VO HAN (default-slave
@@ -233,10 +240,13 @@ module top_soc (
     // flop - neu cat clock ngay khi PSEL ha thi pready DONG BANG o 1, va giao
     // dich KE TIEP se bi interconnect coi la xong ngay o pha SETUP.
     //
-    // Khong can CDC o day: nguon (psel) va dich (clk_apb) cung mot mien.
+    // Khong can dong bo o day: nguon (psel) va dich (clk) cung mot mien.
     //
-    // UART / SPI / I2C KHONG can cach nay vi chung da lam dung: .pclk(clk_apb)
-    // luon song, chi loi ngoai vi chay tren clock da gate.
+    // UART / SPI / I2C: truoc day chi LOI ngoai vi (tren uart_clk/spi_clk/
+    // i2c_clk rieng) bi gate, con giao dien APB chay clk_apb luon song. Nay ca
+    // module mot clock, nen gate ca module va dung cung co che psel nay de APB
+    // khong bao gio treo. Nghia cua bit CLK_GATE_CTRL giu nguyen: bit tat thi
+    // loi ngung chay (TX/RX/SPI/I2C dung), truy cap thanh ghi van duoc.
     // -------------------------------------------------------------------------
     wire gpio_clk_req;
     wire pwm_clk_req;
@@ -244,63 +254,39 @@ module top_soc (
     wire cordic_active;   // loi CORDIC dang chay - phai giu clock cho no
     wire ascon_clk_req;
     wire ascon_active;    // ASCON/TRNG dang chay - cung phai giu clock
+    wire uart_clk_req;
+    wire spi_clk_req;
+    wire i2c_clk_req;
 
-    // Gating cho Core (từ clk_core)
-    clock_gate cg_cpu   (.clk_in(clk_core), .en(clk_en_cpu_s),  .test_en(1'b0), .clk_out(clk_cpu));
-    // Gating cho Debug (từ clk_axi)
-    clock_gate cg_dbg   (.clk_in(clk_axi),  .en(clk_en_dbg_s),  .test_en(1'b0), .clk_out(clk_dbg));
-    // Gating cho APB Peripherals (từ clk_apb) - mo cong khi dang bi truy cap
-    clock_gate cg_pwm   (.clk_in(clk_apb),  .en(clk_en_pwm  | pwm_clk_req),    .test_en(1'b0), .clk_out(clk_pwm));
-    clock_gate cg_gpio  (.clk_in(clk_apb),  .en(clk_en_gpio | gpio_clk_req),   .test_en(1'b0), .clk_out(clk_gpio));
-    clock_gate cg_cordic(.clk_in(clk_apb),  .en(clk_en_acc  | cordic_clk_req), .test_en(1'b0), .clk_out(clk_cordic));
-    clock_gate cg_ascon (.clk_in(clk_apb),  .en(clk_en_asc  | ascon_clk_req),  .test_en(1'b0), .clk_out(clk_ascon));
-    // Gating cho Lõi ngoại vi độc lập (Dual-Clock Cores)
-    clock_gate cg_uart  (.clk_in(uart_clk), .en(clk_en_uart_s), .test_en(1'b0), .clk_out(clk_uart_gated));
-    clock_gate cg_spi   (.clk_in(spi_clk),  .en(clk_en_spi_s),  .test_en(1'b0), .clk_out(clk_spi_gated));
-    clock_gate cg_i2c   (.clk_in(i2c_clk),  .en(clk_en_i2c_s),  .test_en(1'b0), .clk_out(clk_i2c_gated));
+    // CPU: tat khi WFI (xem wfi_sleep_q)
+    clock_gate cg_cpu   (.clk_in(clk), .en(clk_en_cpu),                   .test_en(1'b0), .clk_out(clk_cpu));
+    // Debug Module
+    clock_gate cg_dbg   (.clk_in(clk), .en(clk_en_dbg),                   .test_en(1'b0), .clk_out(clk_dbg));
+    // Ngoai vi APB - mo cong khi dang bi truy cap
+    clock_gate cg_pwm   (.clk_in(clk), .en(clk_en_pwm  | pwm_clk_req),    .test_en(1'b0), .clk_out(clk_pwm));
+    clock_gate cg_gpio  (.clk_in(clk), .en(clk_en_gpio | gpio_clk_req),   .test_en(1'b0), .clk_out(clk_gpio));
+    clock_gate cg_cordic(.clk_in(clk), .en(clk_en_acc  | cordic_clk_req), .test_en(1'b0), .clk_out(clk_cordic));
+    clock_gate cg_ascon (.clk_in(clk), .en(clk_en_asc  | ascon_clk_req),  .test_en(1'b0), .clk_out(clk_ascon));
+    clock_gate cg_uart  (.clk_in(clk), .en(clk_en_uart | uart_clk_req),   .test_en(1'b0), .clk_out(clk_uart));
+    clock_gate cg_spi   (.clk_in(clk), .en(clk_en_spi  | spi_clk_req),    .test_en(1'b0), .clk_out(clk_spi));
+    clock_gate cg_i2c   (.clk_in(clk), .en(clk_en_i2c  | i2c_clk_req),    .test_en(1'b0), .clk_out(clk_i2c));
 
     // =========================================================================
-    // 3. TÍN HIỆU NGẮT VÀ CDC
+    // 3. TÍN HIỆU NGẮT
+    //
+    // Tat ca nguon ngat va yeu cau DMA gio cung mien clk voi noi nhan (CPU,
+    // PLIC, DMA), nen noi thang. Truoc day moi duong co mot cdc_sync_bit 2FF.
     // =========================================================================
     wire [0:0] cpu_msip_raw;
     wire [0:0] cpu_mtip_raw;
     wire       cpu_meip_raw;
 
-    // Đồng bộ Ngắt vào CPU (vào clk_cpu)
-    wire cpu_meip_sync, cpu_mtip_sync, cpu_msip_sync;
-    cdc_sync_bit u_sync_meip (.clk_dst(clk_cpu), .rst_dst_n(reset_core_n_sync), .d_in(cpu_meip_raw),   .q_out(cpu_meip_sync));
-    cdc_sync_bit u_sync_mtip (.clk_dst(clk_cpu), .rst_dst_n(reset_core_n_sync), .d_in(cpu_mtip_raw[0]),.q_out(cpu_mtip_sync));
-    cdc_sync_bit u_sync_msip (.clk_dst(clk_cpu), .rst_dst_n(reset_core_n_sync), .d_in(cpu_msip_raw[0]),.q_out(cpu_msip_sync));
+    wire cpu_irq_wake = cpu_meip_raw | cpu_mtip_raw[0] | cpu_msip_raw[0];
 
-    wire cpu_mtip_apb_sync, cpu_msip_apb_sync;
-    cdc_sync_bit u_sync_mtip_wake (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(cpu_mtip_raw[0]), .q_out(cpu_mtip_apb_sync));
-    cdc_sync_bit u_sync_msip_wake (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(cpu_msip_raw[0]), .q_out(cpu_msip_apb_sync));
-    wire cpu_irq_wake_apb = cpu_meip_raw | cpu_mtip_apb_sync | cpu_msip_apb_sync;
-
-    wire uart_irq_raw, gpio_irq_raw, spi_irq_raw, i2c_irq_raw, wdt_irq_raw, ascon_irq_raw;
-    wire uart_dma_tx_raw, uart_dma_rx_raw, spi_dma_tx_raw, spi_dma_rx_raw, i2c_dma_tx_raw, i2c_dma_rx_raw;
-
-    // Đồng bộ Ngắt ngoại vi về clk_apb (cho PLIC)
     wire uart_irq, gpio_irq, spi_irq, i2c_irq, wdt_irq, ascon_irq;
-    cdc_sync_bit u_sync_uart_irq (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(uart_irq_raw), .q_out(uart_irq));
-    cdc_sync_bit u_sync_gpio_irq (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(gpio_irq_raw), .q_out(gpio_irq));
-    cdc_sync_bit u_sync_spi_irq  (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(spi_irq_raw),  .q_out(spi_irq));
-    cdc_sync_bit u_sync_i2c_irq  (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(i2c_irq_raw),  .q_out(i2c_irq));
-    cdc_sync_bit u_sync_wdt_irq  (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(wdt_irq_raw),  .q_out(wdt_irq));
-    cdc_sync_bit u_sync_asc_irq  (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(ascon_irq_raw),.q_out(ascon_irq));
-
-    // Đồng bộ DMA Req về clk_axi (cho DMA Controller)
     wire uart_dma_tx, uart_dma_rx, spi_dma_tx, spi_dma_rx, i2c_dma_tx, i2c_dma_rx;
-    cdc_sync_bit u_sync_utx (.clk_dst(clk_axi), .rst_dst_n(reset_axi_n_sync), .d_in(uart_dma_tx_raw), .q_out(uart_dma_tx));
-    cdc_sync_bit u_sync_urx (.clk_dst(clk_axi), .rst_dst_n(reset_axi_n_sync), .d_in(uart_dma_rx_raw), .q_out(uart_dma_rx));
-    cdc_sync_bit u_sync_stx (.clk_dst(clk_axi), .rst_dst_n(reset_axi_n_sync), .d_in(spi_dma_tx_raw),  .q_out(spi_dma_tx));
-    cdc_sync_bit u_sync_srx (.clk_dst(clk_axi), .rst_dst_n(reset_axi_n_sync), .d_in(spi_dma_rx_raw),  .q_out(spi_dma_rx));
-    cdc_sync_bit u_sync_itx (.clk_dst(clk_axi), .rst_dst_n(reset_axi_n_sync), .d_in(i2c_dma_tx_raw),  .q_out(i2c_dma_tx));
-    cdc_sync_bit u_sync_irx (.clk_dst(clk_axi), .rst_dst_n(reset_axi_n_sync), .d_in(i2c_dma_rx_raw),  .q_out(i2c_dma_rx));
 
-    wire [3:0] dma_irq; 
-    wire dma_irq_sync;
-    cdc_sync_bit u_sync_dma_irq (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(|dma_irq), .q_out(dma_irq_sync));
+    wire [3:0] dma_irq;
 
     // PLIC source 7 - bus fault on a BUFFERED D-cache store.
     //
@@ -311,17 +297,14 @@ module top_soc (
     // stores (MMIO, CLINT, the DMA pool) are never buffered and keep the
     // precise mcause-7 path through `dcache_error`.
     //
-    // Raised in clk_cpu, consumed by the PLIC in clk_apb, so it crosses the
-    // same way the DMA interrupt does.  dcache.v stretches the pulse to 256
-    // clk_cpu cycles precisely so this sampler cannot miss it.
+    // Raised in clk_cpu, consumed by the PLIC in clk - the same clock tree, so
+    // it is wired straight through.  dcache.v still stretches the pulse to 256
+    // cycles; that was sized for the old clk_apb sampler and is harmless now.
     wire dc_sb_error;
-    wire dc_sb_error_sync;
-    cdc_sync_bit u_sync_dc_sb_err (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync),
-                                   .d_in(dc_sb_error), .q_out(dc_sb_error_sync));
 
     wire [31:1] periph_dma_req = { 25'd0, i2c_dma_rx, i2c_dma_tx, spi_dma_rx, spi_dma_tx, uart_dma_rx, uart_dma_tx };
     wire [31:1] periph_dma_clr;
-    wire [31:0] plic_irq_src = { 23'd0, ascon_irq, dc_sb_error_sync, dma_irq_sync, wdt_irq, i2c_irq, spi_irq, gpio_irq, uart_irq, 1'b0 };
+    wire [31:0] plic_irq_src = { 23'd0, ascon_irq, dc_sb_error, |dma_irq, wdt_irq, i2c_irq, spi_irq, gpio_irq, uart_irq, 1'b0 };
 
     wire [31:0] syscon_reset_vector;
     // -------------------------------------------------------------------------
@@ -343,12 +326,10 @@ module top_soc (
     // tat, va cap nhat lai ngay khi clock quay lai luc thuc day).
     // -------------------------------------------------------------------------
     wire        wfi_sleep_state;
-    wire        wfi_sleep_apb_sync;
 
     // Khoi always dat o muc 4, sau khi cpu_inst_stall / cpu_data_stall duoc khai bao.
+    // Di thang toi apb_syscon (cung mien clk).
     reg  wfi_sleep_q;
-
-    cdc_sync_bit u_sync_wfi_sleep (.clk_dst(clk_apb), .rst_dst_n(reset_apb_n_sync), .d_in(wfi_sleep_q), .q_out(wfi_sleep_apb_sync));
 
     // =========================================================================
     // 4. LÕI CPU VÀ CACHES (Chạy bằng clk_cpu đã qua Gating)
@@ -369,97 +350,47 @@ module top_soc (
 
     // WFI chi duoc phep tat clock khi ca hai cache da rong - xem ghi chu day du
     // o cho khai bao wfi_sleep_q (muc 3).
-    always @(posedge clk_cpu or negedge reset_core_n_sync) begin
-        if (!reset_core_n_sync) wfi_sleep_q <= 1'b0;
+    always @(posedge clk_cpu or negedge reset_sys_n) begin
+        if (!reset_sys_n) wfi_sleep_q <= 1'b0;
         else wfi_sleep_q <= wfi_sleep_state & ~cpu_inst_stall & ~cpu_data_stall;
     end
 
-    // --- Kênh từ Debug Module (200MHz) sang CPU (400MHz) ---
+    // --- Debug Module <-> CPU: halt / resume / halted ---
+    // clk_dbg va clk_cpu la hai nhanh DA GATE cua cung clk, nen noi thang.
+    // Truoc day moi duong qua 2FF vi DM chay 200 MHz con CPU 400 MHz.
     wire dbg_halt_req_raw, dbg_resume_req_raw;
-    wire dbg_halt_req_sync, dbg_resume_req_sync;
-
-    cdc_sync_bit u_sync_halt (
-        .clk_dst    (clk_cpu),           // Miền đích CPU
-        .rst_dst_n  (reset_core_n_sync),
-        .d_in       (dbg_halt_req_raw),  // Xuất phát từ DM
-        .q_out      (dbg_halt_req_sync)  // Đã sync để đưa vào CPU
-    );
-
-    cdc_sync_bit u_sync_resume (
-        .clk_dst    (clk_cpu),
-        .rst_dst_n  (reset_core_n_sync),
-        .d_in       (dbg_resume_req_raw),
-        .q_out      (dbg_resume_req_sync)
-    );
-
-    // --- Kênh báo trạng thái từ CPU (400MHz) ngược về DM (200MHz) ---
     wire dbg_halted_raw;
-    wire dbg_halted_sync;
-
-    cdc_sync_bit u_sync_halted (
-        .clk_dst    (clk_dbg),           // Miền đích DM
-        .rst_dst_n  (reset_axi_n_sync),
-        .d_in       (dbg_halted_raw),    // Xuất phát từ CPU
-        .q_out      (dbg_halted_sync)    // Đã sync để đưa về DM
-    );
 
     // -------------------------------------------------------------------------
-    // CDC cho duong GHI thanh ghi qua Debug Module.
+    // Duong GHI thanh ghi qua Debug Module.
     //
-    // halt / resume / halted da duoc dong bo can than, nhung duong TRUY CAP
-    // THANH GHI thi khong: {dbg_reg_write_en, dbg_reg_write_addr[15:0],
-    // dbg_reg_write_data[31:0]} di THANG tu clk_dbg (200 MHz) sang clk_cpu
-    // (400 MHz).
+    // Bus addr/data (dbg_reg_write_addr/data) va write_en gio cung mot clock
+    // goc, nen STA kiem day du ca ba - het cai gia dinh "tua-tinh" khong ai
+    // rang buoc cua ban cu.
     //
-    // `dbg_reg_write_en` la nguy hiem nhat. Vi clk_cpu nhanh gap doi, mot xung
-    // enable rong mot chu ky clk_dbg se duoc lay mau HAI LAN o mien CPU -> GHI
-    // DOI. Voi mot thanh ghi thuong thi vo hai, nhung voi CSR co tac dung phu
-    // (hoac voi bo dem) thi sai. Va bat ky lan lay mau nao cung co the roi dung
-    // vao thoi diem chuyen muc -> a chay vao logic dieu khien.
-    //
-    // Sua: dong bo 2FF roi BAT CANH LEN -> dung mot xung 1 chu ky clk_cpu.
-    //
-    // Hai bus addr/data KHONG duoc dong bo, va do la CO CHU DICH: chung la
-    // TUA-TINH. Debug Module dat dia chi + du lieu roi moi keo write_en len o
-    // chu ky sau, va giu ca ba on dinh cho toi khi giao dich abstract-command
-    // ket thuc - tuc nhieu chu ky clk_dbg. Xung enable da dong bo den SAU khi
-    // hai bus da on dinh it nhat 2 chu ky clk_cpu, nen day la mau chuan
-    // "bus du lieu + tin hieu chot da dong bo".
-    //
-    // RANG BUOC PHAI GIU: neu sau nay doi rv_debug_module_sba de no thay doi
-    // addr/data TRONG CUNG chu ky voi write_en, mau nay hong. Khi do phai
-    // chuyen sang cdc_handshake (da co san trong utils/cdc_bridge.v).
-    //
-    // Duong DOC (dbg_reg_read_data) cung dua vao tinh tua-tinh: CPU dang halt
-    // nen tep thanh ghi khong doi, va DM cho vai chu ky sau khi dat dia chi moi
-    // lay mau.
+    // Van giu bo BAT CANH LEN: DM giu write_en suot giao dich abstract-command
+    // (nhieu chu ky), con CPU phai thay DUNG MOT xung - CSR co tac dung phu
+    // hoac bo dem se sai neu bi ghi hai lan. Flop bat canh chay bang clk_cpu:
+    // neu CPU dang tat clock (WFI) thi no dong bang cung CPU.
     // -------------------------------------------------------------------------
     wire dbg_reg_write_en_raw;
-    wire dbg_reg_write_en_lvl;
     reg  dbg_reg_write_en_d;
 
-    cdc_sync_bit u_sync_dbg_we (
-        .clk_dst    (clk_cpu),
-        .rst_dst_n  (reset_core_n_sync),
-        .d_in       (dbg_reg_write_en_raw),
-        .q_out      (dbg_reg_write_en_lvl)
-    );
-
-    always @(posedge clk_cpu or negedge reset_core_n_sync) begin
-        if (!reset_core_n_sync) dbg_reg_write_en_d <= 1'b0;
-        else                    dbg_reg_write_en_d <= dbg_reg_write_en_lvl;
+    always @(posedge clk_cpu or negedge reset_sys_n) begin
+        if (!reset_sys_n) dbg_reg_write_en_d <= 1'b0;
+        else              dbg_reg_write_en_d <= dbg_reg_write_en_raw;
     end
 
     // Xung dung MOT chu ky clk_cpu tren canh len.
-    assign dbg_reg_write_en = dbg_reg_write_en_lvl & ~dbg_reg_write_en_d;
+    assign dbg_reg_write_en = dbg_reg_write_en_raw & ~dbg_reg_write_en_d;
 
     riscv_pipeline u_core (
         .clk                (clk_cpu),
-        .reset_n            (reset_core_n_sync),
+        .reset_n            (reset_sys_n),
         .riscv_start        (1'b1),
-        .meip_i             (cpu_meip_sync),
-        .msip_i             (cpu_msip_sync),
-        .mtip_i             (cpu_mtip_sync),
+        .meip_i             (cpu_meip_raw),
+        .msip_i             (cpu_msip_raw[0]),
+        .mtip_i             (cpu_mtip_raw[0]),
         .reset_vector_in    (syscon_reset_vector),
         .riscv_done         (),
         .icache_read_req    (cpu_inst_req),
@@ -488,9 +419,9 @@ module top_soc (
         .mem_size_top       (cpu_data_size),
         .mem_unsigned_top   (cpu_data_unsigned),
         .wfi_sleep_out      (wfi_sleep_state),
-        .dbg_halt_req       (dbg_halt_req_sync), // Dùng tín hiệu đã qua CDC
-        .dbg_resume_req     (dbg_resume_req_sync),
-        .dbg_halted         (dbg_halted_raw),    // Đưa tín hiệu thô ra để vào CDC
+        .dbg_halt_req       (dbg_halt_req_raw),
+        .dbg_resume_req     (dbg_resume_req_raw),
+        .dbg_halted         (dbg_halted_raw),
         .dbg_reg_read_addr  (dbg_reg_read_addr),
         .dbg_reg_read_data  (dbg_reg_read_data),
         .dbg_reg_write_en   (dbg_reg_write_en),
@@ -716,7 +647,7 @@ module top_soc (
     // =========================================================================
     // 6. INSTANTIATE CÁC MASTER MODULES
     // =========================================================================    
-// --- KHAI BÁO DÂY LÕI (CHẠY clk_cpu 400MHz) ---
+// --- KHAI BÁO DÂY LÕI ICACHE (clk_cpu) ---
     wire [4:0]  ic_arid;    wire [31:0] ic_araddr;  wire [7:0]  ic_arlen;   
     wire [2:0]  ic_arsize;  wire [1:0]  ic_arburst; wire [2:0]  ic_arprot;  
     wire        ic_arvalid; wire        ic_arready; wire [4:0]  ic_rid;     
@@ -836,8 +767,8 @@ module top_soc (
         .C_BLOCK_SIZE (16),      // rtl/flow/project_config.tcl
         .C_WAYS       (2)
     ) u_icache (
-        .clk             (clk_cpu),              // clk_cpu (400MHz)
-        .rst_n           (reset_core_n_sync),
+        .clk             (clk_cpu),              // clk da gate (cg_cpu)
+        .rst_n           (reset_sys_n),
         .cpu_read_req    (cpu_inst_req & ~if_sel_itcm),
         .cpu_addr        (cpu_inst_addr),
         .uncache_en_i    (ic_uncache_en),
@@ -846,7 +777,7 @@ module top_soc (
         .icache_stall    (ic_cpu_stall),
         .icache_error    (ic_cpu_error),
         
-        // Nối vào dây lõi ICache (400MHz)
+        // Nối vào dây lõi ICache
         .m_axi_awready   (1'b0),      .m_axi_wready  (1'b0),
         .m_axi_bid       (5'b0),      .m_axi_bresp   (2'b00),     .m_axi_bvalid  (1'b0),
         .m_axi_arid      (ic_arid),   .m_axi_araddr  (ic_araddr), .m_axi_arlen   (ic_arlen),
@@ -855,39 +786,26 @@ module top_soc (
         .m_axi_rid       (ic_rid),    .m_axi_rlast   (ic_rlast),  .m_axi_rvalid  (ic_rvalid), .m_axi_rready  (ic_rready)
     );
 
-    // --- CẦU NỐI ICACHE (400MHz) -> AXI INTERCONNECT M0 (200MHz) ---
-    // R3 - do sau FIFO CDC dat theo nhu cau THAT, khong dung mac dinh 16.
-    // I-cache chi doc va chi 1 outstanding: AW/W/B khong bao gio duoc dung (bi
-    // noi cung 0 ngay ben duoi), AR chi can giu 1 yeu cau, R chi phai nuot mot
-    // burst 4 beat tu 200 MHz trong khi phia doc chay 400 MHz.
-    axi_async_bridge #(
-        .AW_DEPTH_LOG2 (2),   // 4 slot - kenh tied-off, giu toi thieu
-        .W_DEPTH_LOG2  (2),   // 4 slot - kenh tied-off
-        .B_DEPTH_LOG2  (2),   // 4 slot - kenh tied-off
-        .AR_DEPTH_LOG2 (2),   // 4 slot - 1 outstanding read
-        .R_DEPTH_LOG2  (3)    // 8 slot - gap doi mot burst refill 4 beat
-    ) u_ic_axi_bridge (
-        .s_clk(clk_cpu), .s_rst_n(reset_core_n_sync),
-        
-        // Kênh Write Slave: Ép cứng bằng 0 vì ICache không bao giờ ghi
-        .s_axi_awid(5'b0), .s_axi_awaddr(32'b0), .s_axi_awlen(8'b0), .s_axi_awsize(3'b0), .s_axi_awburst(2'b0), .s_axi_awprot(3'b0), .s_axi_awvalid(1'b0), .s_axi_awready(),
-        .s_axi_wdata(32'b0), .s_axi_wstrb(4'b0), .s_axi_wlast(1'b0), .s_axi_wvalid(1'b0), .s_axi_wready(),
-        .s_axi_bid(), .s_axi_bresp(), .s_axi_bvalid(), .s_axi_bready(1'b1),
-        
-        // Kênh Read Slave: Nhận từ ICache
-        .s_axi_arid(ic_arid), .s_axi_araddr(ic_araddr), .s_axi_arlen(ic_arlen), .s_axi_arsize(ic_arsize), .s_axi_arburst(ic_arburst), .s_axi_arprot(ic_arprot), .s_axi_arvalid(ic_arvalid), .s_axi_arready(ic_arready),
-        .s_axi_rid(ic_rid), .s_axi_rdata(ic_rdata), .s_axi_rresp(ic_rresp), .s_axi_rlast(ic_rlast), .s_axi_rvalid(ic_rvalid), .s_axi_rready(ic_rready),
-        
-        .m_clk(clk_axi), .m_rst_n(reset_axi_n_sync),
-        // Nối ra dây m0* (200MHz) đi vào AXI Interconnect
-        .m_axi_awid(m0_awid), .m_axi_awaddr(m0_awaddr), .m_axi_awlen(m0_awlen), .m_axi_awsize(m0_awsize), .m_axi_awburst(m0_awburst), .m_axi_awprot(m0_awprot), .m_axi_awvalid(m0_awvalid), .m_axi_awready(m0_awready),
-        .m_axi_wdata(m0_wdata), .m_axi_wstrb(m0_wstrb), .m_axi_wlast(m0_wlast), .m_axi_wvalid(m0_wvalid), .m_axi_wready(m0_wready),
-        .m_axi_bid(m0_bid), .m_axi_bresp(m0_bresp), .m_axi_bvalid(m0_bvalid), .m_axi_bready(m0_bready),
-        .m_axi_arid(m0_arid), .m_axi_araddr(m0_araddr), .m_axi_arlen(m0_arlen), .m_axi_arsize(m0_arsize), .m_axi_arburst(m0_arburst), .m_axi_arprot(m0_arprot), .m_axi_arvalid(m0_arvalid), .m_axi_arready(m0_arready),
-        .m_axi_rid(m0_rid), .m_axi_rdata(m0_rdata), .m_axi_rresp(m0_rresp), .m_axi_rlast(m0_rlast), .m_axi_rvalid(m0_rvalid), .m_axi_rready(m0_rready)
-    );
+    // --- ICACHE -> AXI INTERCONNECT M0: noi thang ---
+    // Truoc day la axi_async_bridge (clk_cpu 400 -> clk_axi 200 MHz). Cung mot
+    // clock thi cau do chi con them tre + dien tich FIFO, nen bo. I-cache chi
+    // doc: AW/W bi noi cung 0, B luon san sang.
+    assign m0_awid    = 5'b0;  assign m0_awaddr = 32'b0; assign m0_awlen  = 8'b0;
+    assign m0_awsize  = 3'b0;  assign m0_awburst = 2'b0; assign m0_awprot = 3'b0;
+    assign m0_awvalid = 1'b0;
+    assign m0_wdata   = 32'b0; assign m0_wstrb  = 4'b0;  assign m0_wlast  = 1'b0;
+    assign m0_wvalid  = 1'b0;
+    assign m0_bready  = 1'b1;
 
-    // --- KHAI BÁO DÂY LÕI DCACHE (CHẠY clk_cpu 400MHz) ---
+    assign m0_arid    = ic_arid;    assign m0_araddr  = ic_araddr;
+    assign m0_arlen   = ic_arlen;   assign m0_arsize  = ic_arsize;
+    assign m0_arburst = ic_arburst; assign m0_arprot  = ic_arprot;
+    assign m0_arvalid = ic_arvalid; assign ic_arready = m0_arready;
+    assign ic_rid     = m0_rid;     assign ic_rdata   = m0_rdata;
+    assign ic_rresp   = m0_rresp;   assign ic_rlast   = m0_rlast;
+    assign ic_rvalid  = m0_rvalid;  assign m0_rready  = ic_rready;
+
+    // --- KHAI BÁO DÂY LÕI DCACHE ---
     wire [4:0]  dc_awid;    wire [31:0] dc_awaddr;  wire [7:0]  dc_awlen;   wire [2:0]  dc_awsize;  wire [1:0]  dc_awburst; wire [2:0]  dc_awprot;  wire dc_awvalid; wire dc_awready;
     wire [31:0] dc_wdata;   wire [3:0]  dc_wstrb;   wire        dc_wlast;   wire        dc_wvalid;  wire dc_wready;
     wire [4:0]  dc_bid;     wire [1:0]  dc_bresp;   wire        dc_bvalid;  wire        dc_bready;
@@ -908,8 +826,8 @@ module top_soc (
         .C_WAYS          (2),
         .STORE_BUF_DEPTH (4)
     ) u_dcache (
-        .clk             (clk_cpu),              // clk_cpu (400MHz)
-        .rst_n           (reset_core_n_sync),
+        .clk             (clk_cpu),              // clk da gate (cg_cpu)
+        .rst_n           (reset_sys_n),
         .cpu_read_req    (cpu_data_rd_req & ~ls_sel_tcm),
         .cpu_write_req   (cpu_data_wr_req & ~ls_sel_tcm),
         // KHONG gate bang ~ls_sel_tcm: xem ghi chu ls_sel_*_rsp ben tren.
@@ -927,7 +845,7 @@ module top_soc (
         .dcache_error    (dc_cpu_error),
         .dcache_sb_error (dc_sb_error),
         
-        // Nối vào dây lõi DCache (400MHz)
+        // Nối vào dây lõi DCache
         .m_axi_awid      (dc_awid),   .m_axi_awaddr  (dc_awaddr), .m_axi_awlen   (dc_awlen),
         .m_axi_awsize    (dc_awsize), .m_axi_awburst (dc_awburst),.m_axi_awprot  (dc_awprot),
         .m_axi_awvalid   (dc_awvalid), .m_axi_awready (dc_awready),
@@ -939,34 +857,26 @@ module top_soc (
         .m_axi_rid       (dc_rid),    .m_axi_rdata   (dc_rdata),  .m_axi_rresp   (dc_rresp),  .m_axi_rlast   (dc_rlast),  .m_axi_rvalid  (dc_rvalid), .m_axi_rready (dc_rready)
     );
 
-    // --- CẦU NỐI DCACHE (400MHz) -> AXI INTERCONNECT M1 (200MHz) ---
-    // R3 - xem ghi chu o u_ic_axi_bridge.
-    // D-cache: FSM chinh phat 1 giao dich mot luc, store buffer xa tuan tu
-    // SB_AW -> SB_W -> SB_B nen cung 1 outstanding. Kenh W duoc de rong hon vi
-    // no la noi CPU 400 MHz do store vao bus 200 MHz - 8 slot cho phep hap thu
-    // mot chum store ngan ma khong stall nguoc vao pipeline.
-    axi_async_bridge #(
-        .AW_DEPTH_LOG2 (2),   // 4 slot
-        .W_DEPTH_LOG2  (3),   // 8 slot - dem chum store 400 -> 200 MHz
-        .B_DEPTH_LOG2  (2),   // 4 slot
-        .AR_DEPTH_LOG2 (2),   // 4 slot - 1 outstanding read
-        .R_DEPTH_LOG2  (3)    // 8 slot - gap doi mot burst refill 4 beat
-    ) u_dc_axi_bridge (
-        .s_clk(clk_cpu), .s_rst_n(reset_core_n_sync),
-        .s_axi_awid(dc_awid), .s_axi_awaddr(dc_awaddr), .s_axi_awlen(dc_awlen), .s_axi_awsize(dc_awsize), .s_axi_awburst(dc_awburst), .s_axi_awprot(dc_awprot), .s_axi_awvalid(dc_awvalid), .s_axi_awready(dc_awready),
-        .s_axi_wdata(dc_wdata), .s_axi_wstrb(dc_wstrb), .s_axi_wlast(dc_wlast), .s_axi_wvalid(dc_wvalid), .s_axi_wready(dc_wready),
-        .s_axi_bid(dc_bid), .s_axi_bresp(dc_bresp), .s_axi_bvalid(dc_bvalid), .s_axi_bready(dc_bready),
-        .s_axi_arid(dc_arid), .s_axi_araddr(dc_araddr), .s_axi_arlen(dc_arlen), .s_axi_arsize(dc_arsize), .s_axi_arburst(dc_arburst), .s_axi_arprot(dc_arprot), .s_axi_arvalid(dc_arvalid), .s_axi_arready(dc_arready),
-        .s_axi_rid(dc_rid), .s_axi_rdata(dc_rdata), .s_axi_rresp(dc_rresp), .s_axi_rlast(dc_rlast), .s_axi_rvalid(dc_rvalid), .s_axi_rready(dc_rready),
-        
-        .m_clk(clk_axi), .m_rst_n(reset_axi_n_sync),
-        // Nối ra dây m1_* (200MHz) đi vào AXI Interconnect
-        .m_axi_awid(m1_awid), .m_axi_awaddr(m1_awaddr), .m_axi_awlen(m1_awlen), .m_axi_awsize(m1_awsize), .m_axi_awburst(m1_awburst), .m_axi_awprot(m1_awprot), .m_axi_awvalid(m1_awvalid), .m_axi_awready(m1_awready),
-        .m_axi_wdata(m1_wdata), .m_axi_wstrb(m1_wstrb), .m_axi_wlast(m1_wlast), .m_axi_wvalid(m1_wvalid), .m_axi_wready(m1_wready),
-        .m_axi_bid(m1_bid), .m_axi_bresp(m1_bresp), .m_axi_bvalid(m1_bvalid), .m_axi_bready(m1_bready),
-        .m_axi_arid(m1_arid), .m_axi_araddr(m1_araddr), .m_axi_arlen(m1_arlen), .m_axi_arsize(m1_arsize), .m_axi_arburst(m1_arburst), .m_axi_arprot(m1_arprot), .m_axi_arvalid(m1_arvalid), .m_axi_arready(m1_arready),
-        .m_axi_rid(m1_rid), .m_axi_rdata(m1_rdata), .m_axi_rresp(m1_rresp), .m_axi_rlast(m1_rlast), .m_axi_rvalid(m1_rvalid), .m_axi_rready(m1_rready)
-    );
+    // --- DCACHE -> AXI INTERCONNECT M1: noi thang ---
+    // Truoc day la axi_async_bridge voi kenh W 8 slot de hap thu chum store
+    // 400 -> 200 MHz. Cung mot clock thi khong con chenh bang thong can dem;
+    // store buffer 4 muc trong dcache.v da la bo dem do.
+    assign m1_awid    = dc_awid;    assign m1_awaddr  = dc_awaddr;
+    assign m1_awlen   = dc_awlen;   assign m1_awsize  = dc_awsize;
+    assign m1_awburst = dc_awburst; assign m1_awprot  = dc_awprot;
+    assign m1_awvalid = dc_awvalid; assign dc_awready = m1_awready;
+    assign m1_wdata   = dc_wdata;   assign m1_wstrb   = dc_wstrb;
+    assign m1_wlast   = dc_wlast;   assign m1_wvalid  = dc_wvalid;
+    assign dc_wready  = m1_wready;
+    assign dc_bid     = m1_bid;     assign dc_bresp   = m1_bresp;
+    assign dc_bvalid  = m1_bvalid;  assign m1_bready  = dc_bready;
+    assign m1_arid    = dc_arid;    assign m1_araddr  = dc_araddr;
+    assign m1_arlen   = dc_arlen;   assign m1_arsize  = dc_arsize;
+    assign m1_arburst = dc_arburst; assign m1_arprot  = dc_arprot;
+    assign m1_arvalid = dc_arvalid; assign dc_arready = m1_arready;
+    assign dc_rid     = m1_rid;     assign dc_rdata   = m1_rdata;
+    assign dc_rresp   = m1_rresp;   assign dc_rlast   = m1_rlast;
+    assign dc_rvalid  = m1_rvalid;  assign m1_rready  = dc_rready;
 
     // M2: Debug Module (JTAG + DTM AXI Master)
     wire dmi_req_valid, dmi_resp_valid, dmi_resp_ready;
@@ -982,29 +892,32 @@ module top_soc (
     wire [1:0] sba_op, sba_size, sba_resp;
     wire [31:0] sba_addr, sba_wdata, sba_rdata;
 
+    // DMI giua u_jtag_dtm (tck) va u_debug_module (clk_dbg): CDC DUY NHAT con
+    // lai trong chip - handshake req/resp qua 3FF o moi ben, bus du lieu giu
+    // on dinh trong suot handshake. constraint.sdc rang buoc no tuong minh.
     rv_debug_module_sba u_debug_module (
-        .clk_sys            (clk_dbg), // Dùng clk_dbg (gated clk_axi)
-        // Dac ta RISC-V Debug: ndmreset reset "moi thu TRU Debug Module". Truoc
-        // day DM dung reset_axi_n_sync - tuc chinh no bi reset boi ndmreset ma no
-        // phat ra, nen dmcontrol tu xoa giua chung va `reset halt` cua OpenOCD
-        // khong bao gio hoan tat. reset_dbg_n_sync chi chua rst_n va watchdog.
+        .clk_sys            (clk_dbg), // clk da gate (cg_dbg)
+        // Dac ta RISC-V Debug: ndmreset reset "moi thu TRU Debug Module". Neu DM
+        // dung reset he thong thi chinh no bi reset boi ndmreset ma no phat ra,
+        // nen dmcontrol tu xoa giua chung va `reset halt` cua OpenOCD khong bao
+        // gio hoan tat. reset_dbg_n chi chua rst_n va watchdog.
         //
-        // Luu y: dtm_axi_master ben duoi VAN dung reset_axi_n_sync - no la mot AXI
+        // Luu y: dtm_axi_master ben duoi VAN dung reset_sys_n - no la mot AXI
         // master, phai reset cung bus de khong bo lai giao dich do dang. An toan
         // vi OpenOCD phat ndmreset bang mot lenh DMI rieng, khong nam giua mot
         // burst SBA.
-        .rst_sys_n          (reset_dbg_n_sync),
+        .rst_sys_n          (reset_dbg_n),
         .dmi_req_valid      (dmi_req_valid), .dmi_req_addr(dmi_req_addr), .dmi_req_data(dmi_req_data), .dmi_req_op(dmi_req_op),
         .dmi_resp_ready     (dmi_resp_ready), .dmi_resp_valid(dmi_resp_valid), .dmi_resp_data(dmi_resp_data), .dmi_resp_op(dmi_resp_op),
         .axi_req            (sba_req), .axi_op(sba_op), .axi_size(sba_size), .axi_addr(sba_addr), .axi_wdata(sba_wdata), .axi_ack(sba_ack), .axi_rdata(sba_rdata), .axi_resp(sba_resp),
-        .cpu_halt_req       (dbg_halt_req_raw), .cpu_resume_req (dbg_resume_req_raw), .cpu_halted (dbg_halted_sync),
+        .cpu_halt_req       (dbg_halt_req_raw), .cpu_resume_req (dbg_resume_req_raw), .cpu_halted (dbg_halted_raw),
         .cpu_reg_read_addr  (dbg_reg_read_addr), .cpu_reg_read_data(dbg_reg_read_data), .cpu_reg_write_en(dbg_reg_write_en_raw), .cpu_reg_write_addr(dbg_reg_write_addr), .cpu_reg_write_data(dbg_reg_write_data),
         .ndmreset_req       (ndmreset_req)
     );
 
     dtm_axi_master u_dtm_axi (
         .clk_sys         (clk_dbg), // Dùng clk_dbg
-        .rst_sys_n       (reset_axi_n_sync),
+        .rst_sys_n       (reset_sys_n),
         .i_req           (sba_req), .i_op(sba_op), .i_size(sba_size), .i_addr(sba_addr), .i_wdata(sba_wdata), .o_ack(sba_ack), .o_resp(sba_resp), .o_rdata(sba_rdata),
         .m_axi_awid      (m2_awid), .m_axi_awaddr(m2_awaddr), .m_axi_awlen(m2_awlen), .m_axi_awsize(m2_awsize), .m_axi_awburst(m2_awburst), .m_axi_awlock(m2_awlock_unused), .m_axi_awcache(m2_awcache_unused), .m_axi_awprot(m2_awprot), .m_axi_awqos(m2_awqos_unused), .m_axi_awregion(m2_awregion_unused), .m_axi_awvalid(m2_awvalid), .m_axi_awready(m2_awready),
         .m_axi_wdata     (m2_wdata), .m_axi_wstrb(m2_wstrb), .m_axi_wlast(m2_wlast), .m_axi_wvalid(m2_wvalid), .m_axi_wready(m2_wready),
@@ -1022,7 +935,7 @@ module top_soc (
         .HAS_FETCH_PORT (1)
     ) u_itcm (
         .clk        (clk_cpu),
-        .rst_n      (reset_core_n_sync),
+        .rst_n      (reset_sys_n),
         .f_req      (cpu_inst_req & if_sel_itcm),
         .f_addr     (cpu_inst_addr),
         .f_rdata    (itcm_f_rdata),
@@ -1046,7 +959,7 @@ module top_soc (
         .HAS_FETCH_PORT (0)
     ) u_dtcm (
         .clk        (clk_cpu),
-        .rst_n      (reset_core_n_sync),
+        .rst_n      (reset_sys_n),
         .f_req      (1'b0),
         .f_addr     (32'b0),
         .f_rdata    (),
@@ -1128,8 +1041,8 @@ module top_soc (
         .AXI_QOS_CONST    (4'b0000),
         .AXI_REGION_CONST (4'b0000)
     ) u_axi_interconnect (
-        .ACLK_i          (clk_axi), // AXI Bus chạy clk_axi (luôn sống)
-        .ARESETn_i       (reset_axi_n_sync),
+        .ACLK_i          (clk),     // AXI bus chay clk (khong gate)
+        .ARESETn_i       (reset_sys_n),
         .m_AWID_i(m_axi_awid), .m_AWADDR_i(m_axi_awaddr), .m_AWBURST_i(m_axi_awburst), .m_AWLEN_i(m_axi_awlen), .m_AWSIZE_i(m_axi_awsize), .m_AWLOCK_i({MST_AMT{1'b0}}), .m_AWCACHE_i({MST_AMT{4'b0011}}), .m_AWPROT_i(m_axi_awprot), .m_AWQOS_i({MST_AMT{4'b0000}}), .m_AWREGION_i({MST_AMT{4'b0000}}), .m_AWVALID_i(m_axi_awvalid), .m_AWREADY_o(m_axi_awready),
         .m_WDATA_i(m_axi_wdata), .m_WSTRB_i(m_axi_wstrb), .m_WLAST_i(m_axi_wlast), .m_WVALID_i(m_axi_wvalid), .m_WREADY_o(m_axi_wready),
         .m_BID_o(m_axi_bid), .m_BRESP_o(m_axi_bresp), .m_BVALID_o(m_axi_bvalid), .m_BREADY_i(m_axi_bready),
@@ -1161,7 +1074,7 @@ module top_soc (
         // genus.tcl always changes directory to mcu/genus before elaborate.
         .INIT_FILE("rtl/memory/boot.mem")
     ) u_axi_rom (
-        .clk(clk_axi), .rst_n(reset_axi_n_sync),
+        .clk(clk), .rst_n(reset_sys_n),
         .s_axi_awid(s0_awid), .s_axi_awaddr(s0_awaddr), .s_axi_awlen(s0_awlen), .s_axi_awsize(s0_awsize), .s_axi_awburst(s0_awburst), .s_axi_awlock(s0_awlock), .s_axi_awcache(s0_awcache), .s_axi_awprot(s0_awprot), .s_axi_awqos(s0_awqos), .s_axi_awregion(s0_awregion), .s_axi_awvalid(s0_awvalid), .s_axi_awready(s0_awready),
         .s_axi_wdata(s0_wdata), .s_axi_wstrb(s0_wstrb), .s_axi_wlast(s0_wlast), .s_axi_wvalid(s0_wvalid), .s_axi_wready(s0_wready),
         .s_axi_bid(s0_bid), .s_axi_bresp(s0_bresp), .s_axi_bvalid(s0_bvalid), .s_axi_bready(s0_bready),
@@ -1186,7 +1099,7 @@ module top_soc (
         .ADDR_MASK(32'h0001_FFFF),
         .MEM_DEPTH(32768)
     ) u_axi_ram_lo (
-        .clk(clk_axi), .rst_n(reset_axi_n_sync),
+        .clk(clk), .rst_n(reset_sys_n),
         .s_axi_awid(s1_awid), .s_axi_awaddr(s1_awaddr), .s_axi_awlen(s1_awlen), .s_axi_awsize(s1_awsize), .s_axi_awburst(s1_awburst), .s_axi_awlock(s1_awlock), .s_axi_awcache(s1_awcache), .s_axi_awprot(s1_awprot), .s_axi_awqos(s1_awqos), .s_axi_awregion(s1_awregion), .s_axi_awvalid(s1_awvalid), .s_axi_awready(s1_awready),
         .s_axi_wdata(s1_wdata), .s_axi_wstrb(s1_wstrb), .s_axi_wlast(s1_wlast), .s_axi_wvalid(s1_wvalid), .s_axi_wready(s1_wready),
         .s_axi_bid(s1_bid), .s_axi_bresp(s1_bresp), .s_axi_bvalid(s1_bvalid), .s_axi_bready(s1_bready),
@@ -1200,7 +1113,7 @@ module top_soc (
         .ADDR_MASK(32'h0001_FFFF),
         .MEM_DEPTH(32768)
     ) u_axi_ram_hi (
-        .clk(clk_axi), .rst_n(reset_axi_n_sync),
+        .clk(clk), .rst_n(reset_sys_n),
         .s_axi_awid(s6_awid), .s_axi_awaddr(s6_awaddr), .s_axi_awlen(s6_awlen), .s_axi_awsize(s6_awsize), .s_axi_awburst(s6_awburst), .s_axi_awlock(s6_awlock), .s_axi_awcache(s6_awcache), .s_axi_awprot(s6_awprot), .s_axi_awqos(s6_awqos), .s_axi_awregion(s6_awregion), .s_axi_awvalid(s6_awvalid), .s_axi_awready(s6_awready),
         .s_axi_wdata(s6_wdata), .s_axi_wstrb(s6_wstrb), .s_axi_wlast(s6_wlast), .s_axi_wvalid(s6_wvalid), .s_axi_wready(s6_wready),
         .s_axi_bid(s6_bid), .s_axi_bresp(s6_bresp), .s_axi_bvalid(s6_bvalid), .s_axi_bready(s6_bready),
@@ -1211,7 +1124,7 @@ module top_soc (
     axi_spi_flash #(
         .ID_WIDTH(SLV_ID_WIDTH)
     ) u_axi_flash (
-        .clk(clk_axi), .rst_n(reset_axi_n_sync),
+        .clk(clk), .rst_n(reset_sys_n),
         
         // Giao diện Quad SPI vật lý
         .spi_clk_o  (flash_sck), 
@@ -1236,11 +1149,24 @@ module top_soc (
         .s_axi_bid(s2_bid), .s_axi_bresp(s2_bresp), .s_axi_bvalid(s2_bvalid), .s_axi_bready(s2_bready)
     );
 
+    // Tham so thoi gian tinh lai cho chu ky 4 ns (250 MHz). Mac dinh cua
+    // module la cho 5 ns; giu nguyen so chu ky thi tRP/tRCD con 16 ns va tRFC
+    // 56 ns - vi pham chip SDRAM. Moi gia tri duoi day >= gia tri ns cu:
+    //   tRP/tRCD/tWR 20 ns -> 5, tRFC 70 ns -> 18, init 200 us -> 50000,
+    //   refresh 7.8 us -> 1950. CL van la 3 (don vi la chu ky SDRAM, khong
+    //   phai ns) - chip phai ho tro CL3 o 250 MHz, xem ghi chu o sdram_clk.
     axi_sdram_controller #(
         .ID_WIDTH(SLV_ID_WIDTH),
-        .SDRAM_DATA_WIDTH(16)
+        .SDRAM_DATA_WIDTH(16),
+        .INIT_DELAY_CYCLES     (50000),
+        .TRP_CYCLES            (5),
+        .TRCD_CYCLES           (5),
+        .TCAS_CYCLES           (3),
+        .TRFC_CYCLES           (18),
+        .TWR_CYCLES            (5),
+        .REFRESH_PERIOD_CYCLES (1950)
     ) u_axi_sdram (
-        .clk(clk_axi), .rst_n(reset_axi_n_sync),
+        .clk(clk), .rst_n(reset_sys_n),
         .sdram_clk(), .sdram_cke(sdram_cke), .sdram_cs_n(sdram_cs_n), .sdram_ras_n(sdram_ras_n),
         .sdram_cas_n(sdram_cas_n), .sdram_we_n(sdram_we_n), .sdram_ba(sdram_ba), .sdram_addr(sdram_addr),
         .sdram_dqm(sdram_dqm), .sdram_dq_i(sdram_dq_i), .sdram_dq_o(sdram_dq_o), .sdram_dq_oe(sdram_dq_oe),
@@ -1256,7 +1182,7 @@ module top_soc (
     axi_to_apb_bridge #(
         .ID_WIDTH(SLV_ID_WIDTH)
     ) u_axi_to_apb (
-        .clk_axi(clk_axi), .clk_apb(clk_apb), .rst_axi_n(reset_axi_n_sync), .rst_apb_n(reset_apb_n_sync),
+        .clk(clk), .rst_n(reset_sys_n),
         .s_axi_awid(s4_awid), .s_axi_awaddr(s4_awaddr), .s_axi_awlen(s4_awlen), .s_axi_awsize(s4_awsize), .s_axi_awburst(s4_awburst), .s_axi_awprot(s4_awprot), .s_axi_awvalid(s4_awvalid), .s_axi_awready(s4_awready),
         .s_axi_wdata(s4_wdata), .s_axi_wstrb(s4_wstrb), .s_axi_wlast(s4_wlast), .s_axi_wvalid(s4_wvalid), .s_axi_wready(s4_wready),
         .s_axi_bid(s4_bid), .s_axi_bresp(s4_bresp), .s_axi_bvalid(s4_bvalid), .s_axi_bready(s4_bready),
@@ -1275,9 +1201,9 @@ module top_soc (
         .PIPELINE_IRQ   (1)
     ) u_clint (
         // Clocks & Reset
-        .clk_i          (clk_axi),
-        .rst_ni         (reset_axi_n_sync),
-        .rtc_clk_i      (rtc_clk),
+        .clk_i          (clk),
+        .rst_ni         (reset_sys_n),
+        .rtc_tick_i     (rtc_tick),         // mtime tang 32.768 kHz (muc 1)
         
         // AXI Write Address Channel
         .s_axi_awid     (s5_awid), 
@@ -1362,7 +1288,7 @@ module top_soc (
     wire pslverr_0, pslverr_1, pslverr_2, pslverr_3, pslverr_4, pslverr_5, pslverr_6, pslverr_7, pslverr_8, pslverr_9, pslverr_10;
 
     apb_interconnect u_apb_interconnect (
-        .clk(clk_apb), .rst_n(reset_apb_n_sync),
+        .clk(clk), .rst_n(reset_sys_n),
         .m_paddr(apb_paddr), .m_psel(apb_psel), .m_penable(apb_penable), .m_pwrite(apb_pwrite), .m_pwdata(apb_pwdata), .m_pstrb(apb_pstrb), .m_pprot(apb_pprot), .m_pready(apb_pready), .m_prdata(apb_prdata), .m_pslverr(apb_pslverr),
         .s0_paddr(paddr_0), .s0_psel(psel_0), .s0_penable(penable_0), .s0_pwrite(pwrite_0), .s0_pwdata(pwdata_0), .s0_pstrb(pstrb_0), .s0_pprot(pprot_0), .s0_pready(pready_0), .s0_prdata(prdata_0), .s0_pslverr(pslverr_0),
         .s1_paddr(paddr_1), .s1_psel(psel_1), .s1_penable(penable_1), .s1_pwrite(pwrite_1), .s1_pwdata(pwdata_1), .s1_pstrb(pstrb_1), .s1_pprot(pprot_1), .s1_pready(pready_1), .s1_prdata(prdata_1), .s1_pslverr(pslverr_1),
@@ -1385,21 +1311,33 @@ module top_soc (
     // nen no can DUNG mot canh sau khi psel ha de tro ve 0.
     // -------------------------------------------------------------------------
     reg [1:0] psel_gpio_ext, psel_pwm_ext, psel_cordic_ext, psel_ascon_ext;
-    always @(posedge clk_apb or negedge reset_apb_n_sync) begin
-        if (!reset_apb_n_sync) begin
+    reg [1:0] psel_uart_ext, psel_spi_ext, psel_i2c_ext;
+    always @(posedge clk or negedge reset_sys_n) begin
+        if (!reset_sys_n) begin
             psel_gpio_ext   <= 2'b00;
             psel_pwm_ext    <= 2'b00;
             psel_cordic_ext <= 2'b00;
             psel_ascon_ext  <= 2'b00;
+            psel_uart_ext   <= 2'b00;
+            psel_spi_ext    <= 2'b00;
+            psel_i2c_ext    <= 2'b00;
         end else begin
             psel_gpio_ext   <= {psel_gpio_ext[0],   psel_1};
             psel_pwm_ext    <= {psel_pwm_ext[0],    psel_2};
             psel_cordic_ext <= {psel_cordic_ext[0], psel_6};
             psel_ascon_ext  <= {psel_ascon_ext[0],  psel_10};
+            psel_uart_ext   <= {psel_uart_ext[0],   psel_0};
+            psel_spi_ext    <= {psel_spi_ext[0],    psel_3};
+            psel_i2c_ext    <= {psel_i2c_ext[0],    psel_4};
         end
     end
     assign gpio_clk_req   = psel_1 | (|psel_gpio_ext);
     assign pwm_clk_req    = psel_2 | (|psel_pwm_ext);
+    // UART / SPI / I2C: chi psel, KHONG co "core active" nhu CORDIC. Dung nghia
+    // cu cua CLK_GATE_CTRL: bit tat thi loi ngung, ke ca giua mot byte.
+    assign uart_clk_req   = psel_0 | (|psel_uart_ext);
+    assign spi_clk_req    = psel_3 | (|psel_spi_ext);
+    assign i2c_clk_req    = psel_4 | (|psel_i2c_ext);
     // CORDIC khac GPIO/PWM: no khong chi la mot dong thanh ghi, ma la mot LOI
     // TINH TOAN nhieu chu ky.  Neu chi keo dai theo PSEL thi lenh START se mat
     // clock ngay sau chu ky ghi va FSM ket o CALC vinh vien (STATUS ket BUSY,
@@ -1411,37 +1349,36 @@ module top_soc (
     assign ascon_clk_req  = psel_10 | (|psel_ascon_ext) | ascon_active;
 
     // S0: UART
+    // Baud = f_clk / CLK_DIV: o 250 MHz, 115200 baud can TX_DIV = 2170,
+    // RX_DIV = 135 (Driver/src/main.c: UART_CLK).
     apb_uart u_apb_uart (
-        .pclk(clk_apb), .presetn(reset_apb_n_sync),
+        .pclk(clk_uart), .presetn(reset_sys_n),
         .psel(psel_0), .penable(penable_0), .pwrite(pwrite_0), .paddr(paddr_0[11:0]), .pwdata(pwdata_0), .prdata(prdata_0), .pready(pready_0), .pslverr(pslverr_0),
-        // Reset RIENG cua mien uart_clk - khong dung reset dong bo theo clk_apb.
-        .uart_clk(clk_uart_gated), .uart_rst_n(reset_uart_n_sync),
         .rxd(uart_rx), .txd(uart_tx),
-        .uart_irq(uart_irq_raw), .dma_tx_req(uart_dma_tx_raw), .dma_rx_req(uart_dma_rx_raw)
+        .uart_irq(uart_irq), .dma_tx_req(uart_dma_tx), .dma_rx_req(uart_dma_rx)
     );
 
     // S1: GPIO (Dùng nguyên bản gốc)
     apb_gpio u_apb_gpio (
-        .pclk(clk_gpio), .presetn(reset_apb_n_sync),
+        .pclk(clk_gpio), .presetn(reset_sys_n),
         .psel(psel_1), .penable(penable_1), .pwrite(pwrite_1), .paddr(paddr_1[11:0]), .pwdata(pwdata_1), .prdata(prdata_1), .pready(pready_1), .pslverr(pslverr_1),
-        .gpio_in(gpio_in), .gpio_out(gpio_out), .gpio_dir(gpio_oe), 
-        .gpio_irq(gpio_irq_raw)
+        .gpio_in(gpio_in), .gpio_out(gpio_out), .gpio_dir(gpio_oe),
+        .gpio_irq(gpio_irq)
     );
 
     // S2: PWM
     apb_pwm u_apb_pwm (
-        .pclk(clk_pwm), .presetn(reset_apb_n_sync),
+        .pclk(clk_pwm), .presetn(reset_sys_n),
         .psel(psel_2), .penable(penable_2), .pwrite(pwrite_2), .paddr(paddr_2[11:0]), .pwdata(pwdata_2), .pstrb(pstrb_2), .prdata(prdata_2), .pready(pready_2), .pslverr(pslverr_2),
         .pwm_out(pwm_out)
     );
 
     // S3: SPI
     apb_spi u_apb_spi (
-        .pclk(clk_apb), .presetn(reset_apb_n_sync),
+        .pclk(clk_spi), .presetn(reset_sys_n),
         .psel(psel_3), .penable(penable_3), .pwrite(pwrite_3), .paddr(paddr_3[11:0]), .pwdata(pwdata_3), .pstrb(pstrb_3), .prdata(prdata_3), .pready(pready_3), .pslverr(pslverr_3),
-        .spi_clk(clk_spi_gated), .spi_rst_n(reset_spi_n_sync), // reset rieng mien spi_clk
         .sclk(spi_sck), .mosi(spi_mosi), .miso(spi_miso), .cs_n(spi_ss),
-        .spi_irq(spi_irq_raw), .dma_tx_req(spi_dma_tx_raw), .dma_rx_req(spi_dma_rx_raw)
+        .spi_irq(spi_irq), .dma_tx_req(spi_dma_tx), .dma_rx_req(spi_dma_rx)
     );
 
     // S4: I2C
@@ -1452,35 +1389,32 @@ module top_soc (
     assign i2c_scl_oe = ~i2c_scl_oen;
     assign i2c_sda_oe = ~i2c_sda_oen;
     apb_i2c u_apb_i2c (
-        .pclk(clk_apb), .presetn(reset_apb_n_sync),
+        .pclk(clk_i2c), .presetn(reset_sys_n),
         .psel(psel_4), .penable(penable_4), .pwrite(pwrite_4), .paddr(paddr_4[11:0]), .pwdata(pwdata_4), .pstrb(pstrb_4), .prdata(prdata_4), .pready(pready_4), .pslverr(pslverr_4),
-        .i2c_clk(clk_i2c_gated), .i2c_rst_n(reset_i2c_n_sync), // reset rieng mien i2c_clk
         .scl_o(i2c_scl_o), .scl_oen(i2c_scl_oen), .scl_i(i2c_scl_i), .sda_o(i2c_sda_o), .sda_oen(i2c_sda_oen), .sda_i(i2c_sda_i),
-        .i2c_irq(i2c_irq_raw), .dma_tx_req(i2c_dma_tx_raw), .dma_rx_req(i2c_dma_rx_raw)
+        .i2c_irq(i2c_irq), .dma_tx_req(i2c_dma_tx), .dma_rx_req(i2c_dma_rx)
     );
 
-    // S5: Watchdog (Đã hỗ trợ rtc_clk)
+    // S5: Watchdog - dem theo rtc_tick (muc 1), chay bang clk KHONG gate.
     apb_watchdog u_apb_watchdog (
-        .pclk(clk_apb), .presetn(reset_apb_n_sync),
+        .pclk(clk), .presetn(reset_sys_n),
         .psel(psel_5), .penable(penable_5), .pwrite(pwrite_5), .paddr(paddr_5[11:0]), .pwdata(pwdata_5), .pstrb(pstrb_5), .prdata(prdata_5), .pready(pready_5), .pslverr(pslverr_5),
-        // Reset RIENG cua mien rtc_clk. Truoc day dung reset dong bo theo clk_apb,
-        // vi pham recovery/removal cho moi flop chay bang rtc_clk 32.768 kHz.
-        .rtc_clk(rtc_clk), .rtc_rst_n(reset_rtc_n_sync),
-        .wdt_irq(wdt_irq_raw), .wdt_rst(wdt_rst)
+        .rtc_tick(rtc_tick),
+        .wdt_irq(wdt_irq), .wdt_rst(wdt_rst)
     );
 
     // S6: CORDIC
     apb_cordic u_apb_cordic (
-        .pclk(clk_cordic), .presetn(reset_apb_n_sync),
+        .pclk(clk_cordic), .presetn(reset_sys_n),
         .psel(psel_6), .penable(penable_6), .pwrite(pwrite_6), .paddr(paddr_6[11:0]), .pwdata(pwdata_6), .pstrb(pstrb_6), .prdata(prdata_6), .pready(pready_6), .pslverr(pslverr_6),
         .o_active(cordic_active)
     );
 
     // S7: Syscon
     apb_syscon u_apb_syscon (
-        .pclk(clk_apb), .presetn(reset_apb_n_sync),
+        .pclk(clk), .presetn(reset_sys_n),
         .psel(psel_7), .penable(penable_7), .pwrite(pwrite_7), .paddr(paddr_7[11:0]), .pwdata(pwdata_7), .prdata(prdata_7), .pready(pready_7), .pslverr(pslverr_7),
-        .o_reset_vector(syscon_reset_vector), .i_wfi_sleep(wfi_sleep_apb_sync), .i_ext_irq(cpu_irq_wake_apb),
+        .o_reset_vector(syscon_reset_vector), .i_wfi_sleep(wfi_sleep_q), .i_ext_irq(cpu_irq_wake),
         .o_cpu_clk_en  (clk_en_cpu), 
         .o_dbg_clk_en  (clk_en_dbg),
         .o_pwm_clk_en  (clk_en_pwm),
@@ -1494,7 +1428,7 @@ module top_soc (
 
     // S8: PLIC
     apb_plic #(.ALGORITHM("BINARY_TREE")) u_apb_plic (
-        .clk_i(clk_apb), .rst_ni(reset_apb_n_sync),
+        .clk_i(clk), .rst_ni(reset_sys_n),
         .paddr(paddr_8), .psel(psel_8), .penable(penable_8), .pwrite(pwrite_8), .pwdata(pwdata_8), .pready(pready_8), .prdata(prdata_8), .pslverr(pslverr_8),
         .irq_src_i(plic_irq_src), .irq_o(cpu_meip_raw)
     );
@@ -1503,48 +1437,30 @@ module top_soc (
     // Chay tren clock DA GATE nhu CORDIC, nen `o_active` bat buoc phai vong ve
     // `ascon_clk_req` - neu khong FSM se dong bang giua 12 vong hoan vi.
     apb_ascon u_apb_ascon (
-        .PCLK(clk_ascon), .PRESETn(reset_apb_n_sync),
+        .PCLK(clk_ascon), .PRESETn(reset_sys_n),
         .PSEL(psel_10), .PENABLE(penable_10), .PWRITE(pwrite_10), .PADDR(paddr_10[11:0]),
         .PWDATA(pwdata_10), .PRDATA(prdata_10), .PREADY(pready_10), .PSLVERR(pslverr_10),
-        .ascon_irq(ascon_irq_raw),
+        .ascon_irq(ascon_irq),
         .o_active(ascon_active)
     );
 
     // =========================================================================
-    // 10. DMA CONTROLLER VÀ APB ASYNC BRIDGE
+    // 10. DMA CONTROLLER
+    //
+    // Cong cau hinh APB cua DMA noi THANG vao slave S9 cua apb_interconnect.
+    // Truoc day giua hai ben co apb_async_bridge (clk_apb 100 -> clk_axi 200
+    // MHz) voi hai async FIFO; cung mot clock thi cau do da bo.
     // =========================================================================
-    // Các dây nối chạy ở tần số clk_axi (200MHz)
-    wire [13:0] dma_paddr;
-    wire [31:0] dma_pwdata, dma_prdata; 
-    wire        dma_psel, dma_penable, dma_pwrite, dma_pready, dma_pslverr;
-
-    // Cầu CDC: Chuyển lệnh cấu hình từ clk_apb (100MHz) sang clk_axi (200MHz)
-    apb_async_bridge #(
-        .ADDR_WIDTH(14),
-        .DATA_WIDTH(32)
-    ) u_apb_cdc_dma (
-        .s_clk          (clk_apb),            // Nguồn 100MHz
-        .s_rst_n        (reset_apb_n_sync),
-        .s_apb_psel     (psel_9), 
-        .s_apb_penable  (penable_9), 
-        .s_apb_pwrite   (pwrite_9), 
-        .s_apb_paddr    (paddr_9[13:0]), 
-        .s_apb_pwdata   (pwdata_9), 
-        .s_apb_prdata   (prdata_9), 
-        .s_apb_pslverr  (pslverr_9), 
-        .s_apb_pready   (pready_9),
-
-        .m_clk          (clk_axi),            // Đích 200MHz
-        .m_rst_n        (reset_axi_n_sync),
-        .m_apb_psel     (dma_psel), 
-        .m_apb_penable  (dma_penable), 
-        .m_apb_pwrite   (dma_pwrite), 
-        .m_apb_paddr    (dma_paddr), 
-        .m_apb_pwdata   (dma_pwdata), 
-        .m_apb_prdata   (dma_prdata), 
-        .m_apb_pslverr  (dma_pslverr), 
-        .m_apb_pready   (dma_pready)
-    );
+    wire [13:0] dma_paddr   = paddr_9[13:0];
+    wire [31:0] dma_pwdata  = pwdata_9;
+    wire [31:0] dma_prdata;
+    wire        dma_psel    = psel_9;
+    wire        dma_penable = penable_9;
+    wire        dma_pwrite  = pwrite_9;
+    wire        dma_pready, dma_pslverr;
+    assign prdata_9  = dma_prdata;
+    assign pready_9  = dma_pready;
+    assign pslverr_9 = dma_pslverr;
 
     wire [3:0] dma_axi_awid, dma_axi_awlen, dma_axi_bid;
     wire [3:0] dma_axi_arid, dma_axi_arlen, dma_axi_rid;
@@ -1558,12 +1474,11 @@ module top_soc (
     assign m3_awprot   = 3'b000;
     assign m3_arprot   = 3'b000;
 
-    // Module DMA giữ nguyên ruột, chạy hoàn toàn bằng clk_axi
     axi_apb_dma u_axi_apb_dma (
-        .clk_bus        (clk_axi),          // Toàn bộ logic DMA chạy 200MHz
-        .rst_bus_n      (reset_axi_n_sync),
-        
-        // Giao tiếp APB Slave (Nối vào đầu ra của cầu CDC)
+        .clk_bus        (clk),
+        .rst_bus_n      (reset_sys_n),
+
+        // Giao tiếp APB Slave (S9 cua apb_interconnect)
         .s_apb_psel     (dma_psel), 
         .s_apb_penable  (dma_penable), 
         .s_apb_pwrite   (dma_pwrite), 
@@ -1573,7 +1488,7 @@ module top_soc (
         .s_apb_pslverr  (dma_pslverr), 
         .s_apb_pready   (dma_pready),
 
-        // Ngắt và DMA Request từ ngoại vi (đã được đồng bộ clk_axi ở các bước trước)
+        // Ngắt và DMA Request từ ngoại vi (cùng miền clk, nối thẳng)
         .dma_irq        (dma_irq), 
         .periph_dma_req (periph_dma_req), 
         .periph_dma_clr (periph_dma_clr),

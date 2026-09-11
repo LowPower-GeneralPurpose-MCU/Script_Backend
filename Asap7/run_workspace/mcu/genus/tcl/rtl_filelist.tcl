@@ -8,18 +8,17 @@ set RTL_INCLUDE_DIRS [list \
     [file join $RTL_ROOT interrupt dma] \
     [file join $RTL_ROOT interrupt plic]]
 
+# 2026-09-11: SoC chuyen sang MOT clock. bin_gray_convert.v, fifo_async.v,
+# apb_async_bridge.v va axi_async_bridge.v khong con duoc instantiate o dau
+# nen da rut khoi danh sach (58 -> 54 file). File van nam tren dia.
 set RTL_FILES [list \
-    [file join $RTL_ROOT utils bin_gray_convert.v] \
     [file join $RTL_ROOT utils cdc_bridge.v] \
     [file join $RTL_ROOT utils clock_gate.v] \
-    [file join $RTL_ROOT utils fifo_async.v] \
     [file join $RTL_ROOT utils fifo_sync.v] \
     [file join $RTL_ROOT utils ROB.v] \
     [file join $RTL_ROOT utils utils_axi_interconnect.v] \
     [file join $RTL_ROOT utils utils_dma.v] \
-    [file join $RTL_ROOT bus apb_interconnect apb_async_bridge.v] \
     [file join $RTL_ROOT bus apb_interconnect apb_interconnect.v] \
-    [file join $RTL_ROOT bus axi_interconnect axi_async_bridge.v] \
     [file join $RTL_ROOT bus axi_interconnect axi_dispatcher_channel.v] \
     [file join $RTL_ROOT bus axi_interconnect axi_slave_arbitration.v] \
     [file join $RTL_ROOT bus axi_interconnect axi_interconnect.v] \

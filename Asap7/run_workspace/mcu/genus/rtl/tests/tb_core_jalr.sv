@@ -44,12 +44,10 @@ module tb_core_jalr;
     endtask
 
     // ---- clock / reset (giong tb_mem_paths.sv) -----------------------------
-    reg clk_400m, clk_200m, clk_100m, rtc_clk;
+    reg clk, rtc_clk;   // SoC mot clock tu 2026-09-11: clk 250 MHz
     reg rst_n;
 
-    initial begin clk_400m = 0; forever #1.25  clk_400m = ~clk_400m; end
-    initial begin clk_200m = 0; forever #2.5   clk_200m = ~clk_200m; end
-    initial begin clk_100m = 0; forever #5.0   clk_100m = ~clk_100m; end
+    initial begin clk      = 0; forever #2.0   clk      = ~clk;      end // 250 MHz
     initial begin rtc_clk  = 0; forever #15258 rtc_clk  = ~rtc_clk;  end
 
     // ---- chan ngoai vi -----------------------------------------------------
@@ -87,13 +85,7 @@ module tb_core_jalr;
     pullup(i2c_sda);
 
     top_soc uut (
-        .clk_core      (clk_400m),
-        .clk_axi       (clk_200m),
-        .clk_apb       (clk_100m),
-        .clk_sdram_ext (clk_200m),
-        .uart_clk      (clk_100m),
-        .spi_clk       (clk_100m),
-        .i2c_clk       (clk_100m),
+        .clk           (clk),
         .rtc_clk       (rtc_clk),
         .rst_n         (rst_n),
         .tck(tck), .trst_n(trst_n), .tms(tms), .tdi(tdi), .tdo(tdo),
@@ -123,7 +115,7 @@ module tb_core_jalr;
         gpio_in = 32'h0;
         tck = 0; trst_n = 0; tms = 0; tdi = 0;
         rst_n = 1'b0;
-        repeat (40) @(posedge clk_100m);
+        repeat (100) @(posedge clk);   // = 400 ns, nhu 40 chu ky clk_100m cu
         rst_n  = 1'b1;
         trst_n = 1'b1;
 

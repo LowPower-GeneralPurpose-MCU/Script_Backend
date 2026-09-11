@@ -1,11 +1,16 @@
 `timescale 1ns / 1ps
 
+// MOT MIEN CLOCK DUY NHAT (2026-09-11): FSM I2C chay cung pclk voi giao dien
+// APB. Truoc day no nam o i2c_clk rieng, noi qua async_fifo, cdc_pulse (lenh
+// START) va cdc_sync_bit (busy/done/ack). Mot clock thi cac duong do noi thang.
+// Thoi gian mot pha SCL = (PRER + 1) chu ky pclk. SDA van qua 2FF - dong bo
+// chan vao.
 module apb_i2c #(
     parameter ADDR_WIDTH = 12,
     parameter DATA_WIDTH = 32,
     parameter FIFO_DEPTH = 16
 )(
-    // --- Miền xung nhịp APB (pclk) ---
+    // --- Giao dien APB ---
     input wire                   pclk,
     input wire                   presetn,
     input wire                   psel,
@@ -18,10 +23,6 @@ module apb_i2c #(
     output reg                   pready,
     output reg                   pslverr,
 
-    // --- Miền xung nhịp Core (i2c_clk) ---
-    input wire                   i2c_clk,
-    input wire                   i2c_rst_n,
-    
     // Giao diện vật lý I2C
     output wire                  scl_o, 
     output wire                  scl_oen,
@@ -52,22 +53,20 @@ module apb_i2c #(
     reg  tx_fifo_wr, rx_fifo_rd;
     reg  cmd_trigger_pclk;
 
-    // --- Tín hiệu miền I2C Core ---
+    // --- Tín hiệu I2C Core ---
     wire tx_fifo_empty, rx_fifo_full;
     wire [7:0] tx_fifo_rdata_core;
     reg  tx_fifo_rd_core, rx_fifo_wr_core;
-    
-    wire cmd_trigger_core;
+
     reg  core_done;
     reg  core_rx_ack;
     reg [7:0] core_rx_data;
 
     reg [4:0]  state;
-    wire core_busy_sync, core_done_sync, core_rx_ack_sync;
     wire core_busy = (state != S_IDLE);
 
     // ============================================================
-    // 1. APB INTERFACE & REGISTER LOGIC (Miền pclk)
+    // 1. APB INTERFACE & REGISTER LOGIC
     // ============================================================
     always @(posedge pclk or negedge presetn) begin
         if (!presetn) begin
@@ -104,82 +103,67 @@ module apb_i2c #(
                         if (!rx_fifo_empty) rx_fifo_rd <= 1;
                     end
                     12'h00C: prdata <= {24'b0, reg_cmd};
-                    12'h010: prdata <= {24'b0, reg_stat[7], core_busy_sync, 2'b0, rx_fifo_empty, tx_fifo_full, reg_stat[1:0]};
+                    12'h010: prdata <= {24'b0, reg_stat[7], core_busy, 2'b0, rx_fifo_empty, tx_fifo_full, reg_stat[1:0]};
                     12'h014: prdata <= {28'b0, reg_dma_int};
                     default: prdata <= 0;
                 endcase
             end
 
             // Cập nhật trạng thái khi Core báo xong
-            if (core_done_sync) begin
+            if (core_done) begin
                 reg_stat[1] <= 1'b0; // Clear Transferring
                 reg_stat[0] <= 1'b1; // Set IRQ
-                reg_stat[7] <= core_rx_ack_sync;
+                reg_stat[7] <= core_rx_ack;
                 reg_cmd     <= 8'b0;
             end
         end
     end
 
     // ============================================================
-    // 2. CDC BRIDGE (Truyền tín hiệu giữa pclk và i2c_clk)
+    // 2. NỐI APB <-> CORE (cùng pclk)
     // ============================================================
-    
-    // Đưa Config tĩnh (PRER, CMD) sang miền Core để Core tính toán an toàn
-    reg [15:0] reg_prer_core;
-    reg [7:0]  reg_cmd_core;
-    always @(posedge i2c_clk or negedge i2c_rst_n) begin
-        if (!i2c_rst_n) begin
-            reg_prer_core <= 16'hFFFF;
-            reg_cmd_core <= 8'h00;
-        end else begin
-            reg_prer_core <= reg_prer;
-            reg_cmd_core  <= reg_cmd;
-        end
-    end
-
-    // Pulse lệnh START từ APB sang Core
-    cdc_pulse u_cmd_pulse (
-        .clk_src(pclk), .rst_src_n(presetn), .pulse_src(cmd_trigger_pclk),
-        .clk_dst(i2c_clk), .rst_dst_n(i2c_rst_n), .pulse_dst(cmd_trigger_core)
-    );
-
-    // Đồng bộ các Cờ Trạng thái từ Core về APB    
-    cdc_sync_bit u_sync_busy (.clk_dst(pclk), .rst_dst_n(presetn), .d_in(core_busy), .q_out(core_busy_sync));
-    cdc_sync_bit u_sync_done (.clk_dst(pclk), .rst_dst_n(presetn), .d_in(core_done), .q_out(core_done_sync));
-    cdc_sync_bit u_sync_ack  (.clk_dst(pclk), .rst_dst_n(presetn), .d_in(core_rx_ack), .q_out(core_rx_ack_sync));
+    // PRER / CMD được FSM đọc thẳng, và xung START cũng đi thẳng.
+    //
+    // HAI THỨ NÀY PHẢI BỎ CÙNG NHAU. Bản cũ chép reg_cmd sang miền i2c_clk trễ
+    // một chu kỳ, còn xung START đi qua cdc_pulse chậm 2-3 chu kỳ, nên khi xung
+    // tới thì bản sao đã có lệnh MỚI. Nếu chỉ bỏ cdc_pulse mà giữ bản sao,
+    // xung sẽ tới TRƯỚC và FSM chạy theo lệnh CŨ. cmd_trigger_pclk và reg_cmd
+    // được ghi ở cùng một cạnh clock, nên đọc thẳng cả hai là nhất quán.
+    wire [15:0] reg_prer_core    = reg_prer;
+    wire [7:0]  reg_cmd_core     = reg_cmd;
+    wire        cmd_trigger_core = cmd_trigger_pclk;
 
     assign dma_tx_req = (!tx_fifo_full)  & reg_dma_int[2];
     assign dma_rx_req = (!rx_fifo_empty) & reg_dma_int[3];
     assign i2c_irq    = (reg_stat[0] & reg_dma_int[0]) | (!rx_fifo_empty & reg_dma_int[1]);
 
-    // Async FIFOs cho Dữ liệu
-    async_fifo #(.DATA_WIDTH(8), .FIFO_DEPTH(16)) u_tx_fifo (
-        .clk_wr_domain(pclk),       .clk_rd_domain(i2c_clk),
+    sync_fifo #(.DATA_WIDTH(8), .FIFO_DEPTH(FIFO_DEPTH)) u_tx_fifo (
+        .clk(pclk),                 .rst_n(presetn),
         .data_i(pwdata[7:0]),       .data_o(tx_fifo_rdata_core),
         .wr_valid_i(tx_fifo_wr),    .rd_valid_i(tx_fifo_rd_core),
         .full_o(tx_fifo_full),      .empty_o(tx_fifo_empty),
-        .wrst_n(presetn),           .rrst_n(i2c_rst_n),
-        .wr_ready_o(), .rd_ready_o(), .almost_empty_o(), .almost_full_o()
+        .wr_ready_o(), .rd_ready_o(), .almost_empty_o(), .almost_full_o(),
+        .counter()
     );
 
-    async_fifo #(.DATA_WIDTH(8), .FIFO_DEPTH(16)) u_rx_fifo (
-        .clk_wr_domain(i2c_clk),    .clk_rd_domain(pclk),
+    sync_fifo #(.DATA_WIDTH(8), .FIFO_DEPTH(FIFO_DEPTH)) u_rx_fifo (
+        .clk(pclk),                 .rst_n(presetn),
         .data_i(core_rx_data),      .data_o(rx_fifo_rdata),
         .wr_valid_i(rx_fifo_wr_core),.rd_valid_i(rx_fifo_rd),
         .full_o(rx_fifo_full),      .empty_o(rx_fifo_empty),
-        .wrst_n(i2c_rst_n),         .rrst_n(presetn),
-        .wr_ready_o(), .rd_ready_o(), .almost_empty_o(), .almost_full_o()
+        .wr_ready_o(), .rd_ready_o(), .almost_empty_o(), .almost_full_o(),
+        .counter()
     );
 
     // ============================================================
-    // 3. I2C CORE FSM (Miền i2c_clk)
+    // 3. I2C CORE FSM
     // ============================================================
-    
+
     // Lọc và lấy mẫu chân tín hiệu vào SDA
     reg sda_s1, sda_s2;
-    always @(posedge i2c_clk or negedge i2c_rst_n) begin
-        if (!i2c_rst_n) {sda_s2, sda_s1} <= 2'b11;
-        else            {sda_s2, sda_s1} <= {sda_s1, sda_i};
+    always @(posedge pclk or negedge presetn) begin
+        if (!presetn) {sda_s2, sda_s1} <= 2'b11;
+        else          {sda_s2, sda_s1} <= {sda_s1, sda_i};
     end
 
     reg scl_out, sda_out;
@@ -194,8 +178,8 @@ module apb_i2c #(
     
     wire tick = (tick_cnt == 0);
 
-    always @(posedge i2c_clk or negedge i2c_rst_n) begin
-        if (!i2c_rst_n) begin
+    always @(posedge pclk or negedge presetn) begin
+        if (!presetn) begin
             state <= S_IDLE; tick_cnt <= 0; bit_cnt <= 0;
             scl_out <= 1; sda_out <= 1;
             core_done <= 0; shift_reg <= 0;

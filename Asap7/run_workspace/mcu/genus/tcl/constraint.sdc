@@ -1,5 +1,19 @@
 ############################################################
 ## MCU functional timing constraints
+##
+## MOT CLOCK (2026-09-11). SoC chay hoan toan bang `clk` 250 MHz. Ban truoc co
+## 9 clock goc va xu ly moi duong giua chung bang mot `set_clock_groups
+## -asynchronous` - tuc BO timing ca nhung duong van can rang buoc (con tro
+## Gray cua async FIFO, bus debug tua-tinh dbg_reg_write_addr/data). RTL gio
+## khong con CDC noi bo nao, nen file nay khong con clock group nao.
+##
+## Clock con lai:
+##   CLK_SYS        clk, 4000 ps                    - clock goc duy nhat
+##   CLK_CPU..I2C   9 clock sinh tai dau ra clock_gate (-divide_by 1), DONG BO
+##                  voi CLK_SYS; tach ra chi de co uncertainty + dong QoR rieng
+##   CLK_SDRAM_OUT  sdram_clk = ~clk, forward ra chan
+##   CLK_TCK        tck tu debugger - bat dong bo that. Duong TCK <-> DM duoc
+##                  rang buoc TUONG MINH o muc "CDC duy nhat" ben duoi.
 ############################################################
 
 puts "INFO: BEGIN MCU SDC"
@@ -12,17 +26,6 @@ proc sdc_env_number {name default_value} {
     if {![string is double -strict $::env($name)] ||
         $::env($name) <= 0.0} {
         error "SDC environment variable $name must be positive"
-    }
-    return [expr {double($::env($name))}]
-}
-
-proc sdc_env_number_nonneg {name default_value} {
-    if {![info exists ::env($name)] || $::env($name) eq ""} {
-        return $default_value
-    }
-    if {![string is double -strict $::env($name)] ||
-        $::env($name) < 0.0} {
-        error "SDC environment variable $name must not be negative"
     }
     return [expr {double($::env($name))}]
 }
@@ -53,12 +56,12 @@ proc apply_clock_uncertainty {clk_obj period} {
     set_clock_uncertainty -hold  $UNC_HOLD_PS $clk_obj
 }
 
-proc make_primary_clock {name port period {phase 0.0}} {
+proc make_primary_clock {name port period} {
     set port_obj [require_scalar_port $port]
     create_clock \
         -name $name \
         -period $period \
-        -waveform [list $phase [expr {$phase + $period / 2.0}]] \
+        -waveform [list 0.0 [expr {$period / 2.0}]] \
         $port_obj
     set clk_obj [get_clocks $name]
     set_clock_transition -min 10.0 $clk_obj
@@ -85,86 +88,71 @@ proc make_gated_clock {name source_port output_pin period} {
     apply_clock_uncertainty [get_clocks $name] $period
 }
 
-# Source-synchronous forwarded clock: the chip only re-drives an externally
-# supplied clock onto an output pad, it clocks no flop of its own.
-proc make_forwarded_clock {name source_port output_port period} {
-    set source_obj [require_scalar_port $source_port]
-    set out_obj    [require_scalar_port $output_port]
-    create_generated_clock \
-        -name $name \
-        -source $source_obj \
-        -divide_by 1 \
-        $out_obj
-    apply_clock_uncertainty [get_clocks $name] $period
-}
-
 ############################################################
 ## Clock definitions
 ############################################################
 
-# Defaults follow the frequency comments on top_soc. Override from the shell
-# without editing this file, for example MCU_CLK_CORE_PS=3000.
-set P_CORE  [sdc_env_number MCU_CLK_CORE_PS       2500.0]
-set P_AXI   [sdc_env_number MCU_CLK_AXI_PS        5000.0]
-set P_APB   [sdc_env_number MCU_CLK_APB_PS       10000.0]
-set P_SDRAM [sdc_env_number MCU_CLK_SDRAM_PS      5000.0]
-set P_UART  [sdc_env_number MCU_CLK_UART_PS      20000.0]
-set P_SPI   [sdc_env_number MCU_CLK_SPI_PS       20000.0]
-set P_I2C   [sdc_env_number MCU_CLK_I2C_PS      100000.0]
-set P_RTC   [sdc_env_number MCU_CLK_RTC_PS    30517578.0]
-set P_TCK   [sdc_env_number MCU_CLK_TCK_PS      100000.0]
+# Override tu shell khong can sua file, vi du MCU_CLK_SYS_PS=4500.
+set P_SYS [sdc_env_number MCU_CLK_SYS_PS    4000.0]
+set P_TCK [sdc_env_number MCU_CLK_TCK_PS  100000.0]
 
-set SDRAM_PHASE [sdc_env_number_nonneg MCU_CLK_SDRAM_PHASE_PS \
-    [expr {$P_SDRAM / 2.0}]]
+make_primary_clock CLK_SYS clk $P_SYS
+make_primary_clock CLK_TCK tck $P_TCK
 
-make_primary_clock CLK_CORE  clk_core      $P_CORE
-make_primary_clock CLK_AXI   clk_axi       $P_AXI
-make_primary_clock CLK_APB   clk_apb       $P_APB
-make_primary_clock CLK_SDRAM clk_sdram_ext $P_SDRAM $SDRAM_PHASE
-make_primary_clock CLK_UART  uart_clk      $P_UART
-make_primary_clock CLK_SPI   spi_clk       $P_SPI
-make_primary_clock CLK_I2C   i2c_clk       $P_I2C
-make_primary_clock CLK_RTC   rtc_clk       $P_RTC
-make_primary_clock CLK_TCK   tck           $P_TCK
+# sdram_clk = ~clk (top_soc.v): chip SDRAM chot o canh XUONG cua clk, tuc giua
+# chu ky controller. Thay cho clk_sdram_ext lech pha 180 do cua ban cu.
+create_generated_clock \
+    -name CLK_SDRAM_OUT \
+    -source [require_scalar_port clk] \
+    -divide_by 1 \
+    -invert \
+    [require_scalar_port sdram_clk]
+apply_clock_uncertainty [get_clocks CLK_SDRAM_OUT] $P_SYS
 
-make_forwarded_clock CLK_SDRAM_OUT clk_sdram_ext sdram_clk $P_SDRAM
+# 9 nhanh da gate cua CLK_SYS. Khong nam trong clock group nao: moi duong giua
+# chung va CLK_SYS deu duoc tinh timing day du.
+make_gated_clock CLK_CPU    clk cg_cpu/clk_out    $P_SYS
+make_gated_clock CLK_DBG    clk cg_dbg/clk_out    $P_SYS
+make_gated_clock CLK_PWM    clk cg_pwm/clk_out    $P_SYS
+make_gated_clock CLK_GPIO   clk cg_gpio/clk_out   $P_SYS
+make_gated_clock CLK_CORDIC clk cg_cordic/clk_out $P_SYS
+make_gated_clock CLK_ASCON  clk cg_ascon/clk_out  $P_SYS
+make_gated_clock CLK_UART   clk cg_uart/clk_out   $P_SYS
+make_gated_clock CLK_SPI    clk cg_spi/clk_out    $P_SYS
+make_gated_clock CLK_I2C    clk cg_i2c/clk_out    $P_SYS
 
-make_gated_clock CLK_CPU    clk_core cg_cpu/clk_out    $P_CORE
-make_gated_clock CLK_DBG    clk_axi  cg_dbg/clk_out    $P_AXI
-make_gated_clock CLK_PWM    clk_apb  cg_pwm/clk_out    $P_APB
-make_gated_clock CLK_GPIO   clk_apb  cg_gpio/clk_out   $P_APB
-make_gated_clock CLK_CORDIC clk_apb  cg_cordic/clk_out $P_APB
-# ASCON + TRNG (APB S10, 2026-09-10) - cung mau voi CORDIC: clock gate rieng tu
-# clk_apb, giu mo bang `ascon_clk_req` (xem top_soc.v).  Khong co dong nay thi
-# flop cua u_apb_ascon van duoc tinh theo CLK_APB xuyen qua cong AND, nhung
-# cg_ascon khong co clock-gating check.
-make_gated_clock CLK_ASCON  clk_apb  cg_ascon/clk_out  $P_APB
-make_gated_clock CLK_UART_G uart_clk cg_uart/clk_out   $P_UART
-make_gated_clock CLK_SPI_G  spi_clk  cg_spi/clk_out    $P_SPI
-make_gated_clock CLK_I2C_G  i2c_clk  cg_i2c/clk_out    $P_I2C
+set SYS_FAMILY [get_clocks {CLK_SYS CLK_CPU CLK_DBG CLK_PWM CLK_GPIO \
+    CLK_CORDIC CLK_ASCON CLK_UART CLK_SPI CLK_I2C}]
 
 set_clock_gating_check -setup 50.0 -hold 50.0 \
     [get_clocks {CLK_CPU CLK_DBG CLK_PWM CLK_GPIO CLK_CORDIC CLK_ASCON \
-        CLK_UART_G CLK_SPI_G CLK_I2C_G}]
+        CLK_UART CLK_SPI CLK_I2C}]
 
-set_clock_groups -asynchronous \
-    -group [get_clocks {CLK_CORE CLK_CPU}] \
-    -group [get_clocks {CLK_AXI CLK_DBG CLK_SDRAM CLK_SDRAM_OUT}] \
-    -group [get_clocks {CLK_APB CLK_PWM CLK_GPIO CLK_CORDIC CLK_ASCON}] \
-    -group [get_clocks {CLK_UART CLK_UART_G}] \
-    -group [get_clocks {CLK_SPI CLK_SPI_G}] \
-    -group [get_clocks {CLK_I2C CLK_I2C_G}] \
-    -group [get_clocks {CLK_RTC}] \
-    -group [get_clocks {CLK_TCK}]
+############################################################
+## CDC duy nhat: JTAG DMI (CLK_TCK <-> CLK_DBG)
+##
+## rv_jtag_dtm (tck) va rv_debug_module_sba (clk_dbg) bat tay qua dmi_req_valid
+## / dmi_resp_valid, moi ben 3FF; bus dmi_req_addr/data/op va dmi_resp_data/op
+## giu on dinh suot handshake. Rang buoc:
+##   setup: max_delay = 1 chu ky CLK_SYS tren MOI duong giua hai mien, ca bus
+##          du lieu lan tang sync dau. Bus toi dich truoc khi tin hieu valid qua
+##          xong 3FF (>= 2 chu ky dich) -> tinh on dinh cua bus duoc STA dam bao
+##          sau P&R, khong con la gia dinh.
+##   hold:  khong co quan he pha giua hai clock -> tat kiem hold.
+## KHONG dung set_clock_groups -asynchronous (no se bo luon max_delay).
+############################################################
+
+set DM_CLOCKS [get_clocks {CLK_SYS CLK_DBG}]
+set_max_delay $P_SYS -from [get_clocks CLK_TCK] -to $DM_CLOCKS
+set_max_delay $P_SYS -from $DM_CLOCKS -to [get_clocks CLK_TCK]
+set_false_path -hold -from [get_clocks CLK_TCK] -to $DM_CLOCKS
+set_false_path -hold -from $DM_CLOCKS -to [get_clocks CLK_TCK]
 
 ############################################################
 ## Port environment
 ############################################################
 
-set CLOCK_PORTS [get_ports {
-    clk_core clk_axi clk_apb clk_sdram_ext
-    uart_clk spi_clk i2c_clk rtc_clk tck
-}]
+set CLOCK_PORTS [get_ports {clk tck}]
 set RESET_PORTS [get_ports {rst_n trst_n}]
 set NON_DATA_INPUTS [add_to_collection $CLOCK_PORTS $RESET_PORTS]
 set DATA_INPUTS [remove_from_collection [all_inputs] $NON_DATA_INPUTS]
@@ -226,23 +214,28 @@ proc constrain_output_ports {patterns clock_name period} {
 
 constrain_input_ports  {tms tdi}                         CLK_TCK  $P_TCK
 constrain_output_ports {tdo}                             CLK_TCK  $P_TCK
-constrain_input_ports  {uart_rx}                         CLK_UART $P_UART
-constrain_output_ports {uart_tx}                         CLK_UART $P_UART
-constrain_input_ports  {spi_miso}                        CLK_SPI  $P_SPI
-constrain_output_ports {spi_sck spi_mosi spi_ss}         CLK_SPI  $P_SPI
-constrain_input_ports  {i2c_scl_i i2c_sda_i}             CLK_I2C  $P_I2C
+
+# Moi giao dien ngoai vi gio duoc sinh/lay mau bang CLK_SYS. uart_rx, spi_miso,
+# i2c_*_i va rtc_clk van qua 2FF trong RTL (dong bo chan vao); input delay o
+# day chi de STA co diem bat dau cho tang flop dau tien.
+constrain_input_ports  {uart_rx}                         CLK_SYS  $P_SYS
+constrain_output_ports {uart_tx}                         CLK_SYS  $P_SYS
+constrain_input_ports  {spi_miso}                        CLK_SYS  $P_SYS
+constrain_output_ports {spi_sck spi_mosi spi_ss}         CLK_SYS  $P_SYS
+constrain_input_ports  {i2c_scl_i i2c_sda_i}             CLK_SYS  $P_SYS
 constrain_output_ports {i2c_scl_o i2c_scl_oe \
-    i2c_sda_o i2c_sda_oe}                                CLK_I2C  $P_I2C
-constrain_input_ports  {gpio_in*}                        CLK_APB  $P_APB
-constrain_output_ports {gpio_out* gpio_oe* pwm_out}      CLK_APB  $P_APB
-constrain_input_ports  {flash_io_i*}                     CLK_AXI  $P_AXI
+    i2c_sda_o i2c_sda_oe}                                CLK_SYS  $P_SYS
+constrain_input_ports  {gpio_in*}                        CLK_SYS  $P_SYS
+constrain_output_ports {gpio_out* gpio_oe* pwm_out}      CLK_SYS  $P_SYS
+constrain_input_ports  {flash_io_i*}                     CLK_SYS  $P_SYS
 constrain_output_ports {flash_sck flash_cs_n flash_io_o* \
-    flash_io_oe*}                                        CLK_AXI  $P_AXI
+    flash_io_oe*}                                        CLK_SYS  $P_SYS
+constrain_input_ports  {rtc_clk}                         CLK_SYS  $P_SYS
 
 constrain_output_ports {sdram_cke sdram_cs_n sdram_ras_n \
     sdram_cas_n sdram_we_n sdram_ba* sdram_addr* \
-    sdram_dq_o* sdram_dq_oe sdram_dqm*}                  CLK_SDRAM_OUT $P_SDRAM
-constrain_input_ports  {sdram_dq_i*}                     CLK_SDRAM_OUT $P_SDRAM
+    sdram_dq_o* sdram_dq_oe sdram_dqm*}                  CLK_SDRAM_OUT $P_SYS
+constrain_input_ports  {sdram_dq_i*}                     CLK_SDRAM_OUT $P_SYS
 
 ############################################################
 ## Kiem tra phu kin I/O
@@ -289,22 +282,16 @@ if {[sizeof_collection [all_outputs]] > 0} {
 ############################################################
 
 set MAX_TRAN_CEIL_PS [sdc_env_number MCU_MAX_TRAN_CEIL_PS 300.0]
-set MAX_TRAN_FAST_PS [sdc_env_number MCU_MAX_TRAN_FAST_PS 100.0]
-set MAX_TRAN_MED_PS  [sdc_env_number MCU_MAX_TRAN_MED_PS  150.0]
+set MAX_TRAN_SYS_PS  [sdc_env_number MCU_MAX_TRAN_SYS_PS  150.0]
 set MAX_TRAN_SLOW_PS [sdc_env_number MCU_MAX_TRAN_SLOW_PS 250.0]
 
 set_max_fanout 20 [current_design]
 set_max_transition $MAX_TRAN_CEIL_PS [current_design]
 
-# Per-domain tightening. If this Genus version rejects set_max_transition on
-# clock objects it lands in reports/failed_sdc_commands.rpt; the fallback is a
-# single tighter value on [current_design].
-set_max_transition $MAX_TRAN_FAST_PS [get_clocks {CLK_CORE CLK_CPU}]
-set_max_transition $MAX_TRAN_MED_PS \
-    [get_clocks {CLK_AXI CLK_DBG CLK_SDRAM CLK_SDRAM_OUT}]
-set_max_transition $MAX_TRAN_SLOW_PS \
-    [get_clocks {CLK_APB CLK_PWM CLK_GPIO CLK_CORDIC CLK_ASCON \
-        CLK_UART CLK_UART_G CLK_SPI CLK_SPI_G \
-        CLK_I2C CLK_I2C_G CLK_RTC CLK_TCK}]
+# Mot tan so cho ca ho CLK_SYS nen mot gia tri; truoc day CPU 100 ps (400 MHz),
+# AXI 150 ps (200 MHz), APB 250 ps (100 MHz). Neu Genus tu choi
+# set_max_transition tren clock thi lenh roi vao failed_sdc_commands.rpt.
+set_max_transition $MAX_TRAN_SYS_PS  [add_to_collection $SYS_FAMILY [get_clocks CLK_SDRAM_OUT]]
+set_max_transition $MAX_TRAN_SLOW_PS [get_clocks CLK_TCK]
 
-puts "INFO: MCU SDC loaded with 9 primary, 1 forwarded and 9 gated clocks"
+puts "INFO: MCU SDC loaded with 2 primary, 1 forwarded and 9 gated clocks (single 250 MHz system clock)"

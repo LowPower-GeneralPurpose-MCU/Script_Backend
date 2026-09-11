@@ -188,49 +188,6 @@ module cdc_handshake #(
     );
 endmodule
 
-// =========================================================================
-// 5. MODULE: cdc_async_fifo_wrapper (Tuỳ chọn)
-// Chức năng: Bọc lại fifo_async.v để tên module thống nhất trong cdc_bridge
-// Vị trí dùng: AXI-to-APB Bridge, UART Core to APB.
-// =========================================================================
-module cdc_async_fifo_wrapper #(
-    parameter DATA_WIDTH = 32,
-    parameter DEPTH_LOG2 = 4
-)(
-    input  wire wclk,
-    input  wire wrst_n,
-    input  wire wen,
-    input  wire [DATA_WIDTH-1:0] wdata,
-    output wire wfull,
-    
-    input  wire rclk,
-    input  wire rrst_n,
-    input  wire ren,
-    output wire [DATA_WIDTH-1:0] rdata,
-    output wire rempty
-);
-    // Tính toán Depth từ số bit địa chỉ
-    localparam FIFO_DEPTH_VAL = (1 << DEPTH_LOG2);
-
-    // Sử dụng module async_fifo phiên bản mới
-    async_fifo #(
-        .ASFIFO_TYPE(0),         // 0: Normal FIFO
-        .DATA_WIDTH(DATA_WIDTH),
-        .FIFO_DEPTH(FIFO_DEPTH_VAL)
-    ) u_async_fifo (
-        .clk_wr_domain (wclk),
-        .clk_rd_domain (rclk),
-        .data_i        (wdata),
-        .data_o        (rdata),
-        .wr_valid_i    (wen),
-        .rd_valid_i    (ren),
-        .empty_o       (rempty),
-        .full_o        (wfull),
-        .wr_ready_o    (),
-        .rd_ready_o    (),
-        .almost_empty_o(),
-        .almost_full_o (),
-        .wrst_n        (wrst_n), // Write-domain reset
-        .rrst_n        (rrst_n)  // Read-domain reset (separate domain)
-    );
-endmodule
+// cdc_async_fifo_wrapper (bọc fifo_async.v) đã bị gỡ ngày 2026-09-11 cùng với
+// mọi async FIFO: SoC chỉ còn một clock. Trong chip hiện tại chỉ còn
+// reset_sync và cdc_sync_bit (đồng bộ chân rtc_clk) được dùng từ file này.
