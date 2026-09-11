@@ -81,7 +81,7 @@ set SRAM_MASTERS [list $SRAM_MASTER $SRAM_EXPECTED_COUNT $SRAM_TAG_MASTER $SRAM_
 # RTL phai khop macro budget o tren; tung lech am tham giua RTL va floorplan.
 set RTL_INVARIANTS [list \
     top_soc.v "boot ROM INIT_FILE"   {\.INIT_FILE\s*\(\s*"rtl/memory/boot\.mem"\s*\)} \
-    top_soc.v "boot ROM 8 KiB"       {axi_rom\s+#\(.*?\.MEM_DEPTH\s*\(\s*2048\s*\)} \
+    top_soc.v "boot ROM 32 KiB"      {axi_rom\s+#\(.*?\.MEM_DEPTH\s*\(\s*8192\s*\)} \
     top_soc.v "RAM 2 x 32768 word"   {\.MEM_DEPTH\s*\(\s*32768\s*\)} \
     top_soc.v "RAM lo"               {u_axi_ram_lo} \
     top_soc.v "RAM hi"               {u_axi_ram_hi} \
@@ -116,10 +116,10 @@ foreach {rel label pattern} $RTL_INVARIANTS {
 # Boot ROM: sinh bang case tu boot.mem cho axi_rom.v (`include boot_rom_image.vh).
 # Day la MASK ROM that (logic chuan, noi dung chot luc tong hop - ASAP7 khong co
 # ROM compiler): boot.mem la ma boot tang 1, xem MEMORY_ARCHITECTURE.md muc 6.
-# 2048 word = cua so 8 KiB cua slave 0; phai khop MEM_DEPTH trong top_soc.v.
+# 8192 word = cua so 32 KiB cua slave 0; phai khop MEM_DEPTH trong top_soc.v.
 set BOOT_MEM     [file join $RTL_ROOT memory boot.mem]
 set BOOT_INCLUDE [file join $RTL_ROOT memory boot_rom_image.vh]
-set BOOT_DEPTH   2048
+set BOOT_DEPTH   8192
 set fp [open $BOOT_MEM r]
 set boot_text [read $fp]
 close $fp

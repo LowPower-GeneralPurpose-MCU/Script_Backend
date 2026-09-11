@@ -169,13 +169,24 @@ Lệnh nguyên tử (RV32A) đi qua D-cache bằng bắt tay hai chu kỳ
 (`dcache_amo_req` / `dcache_amo_capture`, R1b). AMO vào vùng **uncached** hiện bị
 bỏ âm thầm (R12, chưa sửa) — không đặt spinlock/refcount trong `.dmabuf`.
 
-## 6. Boot ROM: mask ROM 8 KiB + XIP từ QSPI flash
+## 6. Boot ROM: mask ROM 32 KiB + XIP từ QSPI flash
 
 ```
-0x0001_0000 - 0x0001_1FFF   boot ROM 8 KiB   mask ROM (logic), slave 0
-0x0001_2000 - 0x0001_FFFF   không map        DECERR (trước đây: alias của ROM)
+0x0001_0000 - 0x0001_7FFF   boot ROM 32 KiB  mask ROM (logic), slave 0
+0x0001_8000 - 0x0001_FFFF   không map        DECERR (trước đây: alias của ROM)
 0x3000_0000 - 0x30FF_FFFF   QSPI flash       XIP, cacheable, slave 2
 ```
+
+**Vì sao 32 KiB.** Đó là cỡ ROM của các MCU IoT phổ biến: RP2040 có 16 KB,
+vùng "system memory" chứa bootloader của STM32F4 khoảng 30 KB, còn chip có
+Wi-Fi/BLE như ESP32-C3 thì lên tới hàng trăm KB. 32 KiB đủ chỗ cho những gì một
+bootloader tầng 1 công nghiệp thường có ngoài phần đang làm: nạp qua UART khi
+flash hỏng, kiểm ảnh bằng ASCON-Hash, chọn giữa hai ảnh A/B.
+Với ROM logic, **diện tích tỉ lệ với số word thật sự dùng, không phải với cửa sổ**:
+word không có trong `boot.mem` rơi vào nhánh `default` của bảng `case` và bị tổng
+hợp thành hằng 0. Hiện tại 26 word gần như không tốn gì. Còn nếu lấp đầy 32 KiB
+thì đó là ~262 kbit logic ngẫu nhiên, phải xem `area_syn.rpt` (`axi_rom` được giữ
+hierarchy riêng để tách được con số này).
 
 **Vì sao không dùng macro SRAM cho boot ROM.** Macro của `asap7_sram_0p0` là X
 lúc cấp nguồn, và ASAP7 không có ROM compiler. Mã đầu tiên CPU chạy vì vậy phải
@@ -192,7 +203,7 @@ MCU thật ở ba điểm:
 MCU thương mại (RP2040, ESP32, i.MX RT, SiFive FE310) đều dùng **mask ROM nhỏ
 chứa bootloader tầng 1 + firmware trong flash**. Ở đây làm đúng như vậy.
 `axi_rom.v` vẫn là bảng `case` do `genus.tcl` sinh từ `rtl/memory/boot.mem`, cửa sổ
-thu từ 64 KiB về 8 KiB. Macro budget giữ nguyên 80 + 4.
+thu từ 64 KiB về 32 KiB. Macro budget giữ nguyên 80 + 4.
 
 **Mã boot tầng 1** (`boot.mem`, 26 lệnh, viết tay vì máy build không có toolchain
 RISC-V; mã hoá và bốn kịch bản bên dưới đã chạy trên một ISS Python):
@@ -226,10 +237,10 @@ của core (ghi ở MEMORY_FIX_PLAN.md mục 8); ROM chỉ né nó.
 **Hệ quả với firmware và mô phỏng.**
 
 * Suite `fw` vẫn bake **toàn bộ** firmware vào ROM thay cho `boot.mem`, nên ảnh
-  phải ≤ 8 KiB. `gen_boot_rom.py` dừng hẳn nếu vượt, thay vì cắt bớt. Firmware
+  phải ≤ 32 KiB. `gen_boot_rom.py` dừng hẳn nếu vượt, thay vì cắt bớt. Firmware
   lớn hơn phải link chạy XIP ở `0x3000_0000` với header trên, và `tb_top_soc` phải
   có model SPI flash. `Driver/ld/soc.ld` (ngoài repo) phải sửa `ROM LENGTH` 64K →
-  8K.
+  32K.
 * Testbench không có model flash thì chân MISO thả nổi. `axi_spi_flash.v` có một
   nhánh `ifndef SYNTHESIS` coi Z/X là 1 (điện trở kéo lên của board), nên ROM đọc
   ra `0xFFFF_FFFF` và vào `park` một cách tất định.
@@ -245,8 +256,8 @@ Khối pre-check đầu `genus/tcl/genus.tcl` sẽ dừng flow nếu:
 * số file RTL trong filelist khác `EXPECTED_RTL` = **58**;
 * `top_soc.v` không instantiate I-cache/D-cache 16 KiB, D-cache khác 2-way hoặc
   store buffer khác 4 entry, hoặc thiếu một trong hai nửa RAM;
-* boot ROM trong `top_soc.v` khác `MEM_DEPTH(2048)` (8 KiB), hoặc `boot.mem` có
-  word nào nằm ngoài 2048 word đó;
+* boot ROM trong `top_soc.v` khác `MEM_DEPTH(8192)` (32 KiB), hoặc `boot.mem` có
+  word nào nằm ngoài 8192 word đó;
 * `SLV_AMT` không phải 7;
 * thiếu `u_itcm` / `u_dtcm` hoặc macro decode `SOC_IS_ITCM` / `SOC_IS_DTCM`;
 * macro budget trong `project_config.tcl` không còn là 64 RAM + 4 + 4 cache data
