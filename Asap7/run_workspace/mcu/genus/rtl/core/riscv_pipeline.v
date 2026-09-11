@@ -546,29 +546,42 @@ module riscv_pipeline #(
     wire if_fetch_bubble = ~fetch_enable | icache_stall;
 
     // -------------------------------------------------------------------------
-    // R2 - `flush_jalr` di kem `flush_branch` o IF/ID va ID/EX, nhung KHONG o
-    // EX/MEM.
+    // R2 / R13 - `flush_jalr` phai co o CA BA tang, giong het `flush_branch`.
     //
-    // Khi JALR nam o EX/MEM va doi huong: IF/ID giu lenh JALR+4 va ID/EX giu
-    // lenh JALR+8, ca hai deu la duong sai -> phai xoa. Nhung EX/MEM giu CHINH
-    // LENH JALR, no con phai ghi `ra`; xoa no o day la thua.
+    // Flush la DONG BO. O canh clock ma `ex_mem_jalr` = 1, JALR tu no di tiep
+    // sang MEM/WB (stall_mem_wb = 0) va ghi `rd` o do; thu `flush_ex_mem` chan
+    // lai la lenh DANG O ID/EX di vao EX/MEM - lenh K ngay sau JALR trong bo
+    // nho (JALR+4, hoac +2 neu nen). BTB khong bao gio du doan JALR, nen K luon
+    // la duong sai. Ban R2 cu bo term nay vi tuong "EX/MEM giu chinh JALR" - sai.
     //
-    // Do bang tb firmware that (`rtl/tests/run_soc_sim.sh fw`, cung anh ROM):
+    // K KHONG phai luc nao cung la bong bong. I-cache tra 1 lenh / 2 chu ky nen
+    // binh thuong co bong bong xen giua JALR va K, nhung moi lan pipeline dong
+    // bang trong luc JALR con o IF/ID thi I-cache van chay tiep va bong bong do
+    // bi NUOT. Truong hop tat dinh, gap o moi ham getter/setter:
+    //
+    //     lw   a0, 4(a5)      <- D-cache hit: dcache_stall dung 1 chu ky
+    //     ret                 <- dang o IF/ID trong chu ky dong bang do
+    //     K                   <- I-cache tra K ngay chu ky nha stall
+    //
+    //   ID/EX <- ret va IF/ID <- K cung mot canh -> ret, K lien nhau -> khi
+    //   ret o EX/MEM thi K o ID/EX (id_ex_valid = 1) -> K vao EX/MEM va CHAY:
+    //   ghi rd, ghi bo nho, nhan trap/ngat voi mepc = K (mret quay ve K, tuc la
+    //   JALR coi nhu chua tung xay ra).
+    // Store cacheable (store buffer) cung dong bang 1 chu ky -> y het. Dong bang
+    // dai (miss, MMIO) thi xay ra theo chan/le cua do dai.
+    //
+    // So do bang tb firmware (`run_soc_sim.sh fw`, cung anh ROM):
     //     baseline (JALR o ID/EX)                     t = 1 528 046 000
     //     R2 co flush_jalr trong flush_ex_mem         t = 2 830 376 000  (+85 %)
     //     R2 bo flush_jalr khoi flush_ex_mem          t = 1 701 796 000  (+11.4 %)
-    // Term thua do mot minh dat 74 diem phan tram. Dung them lai.
-    //
-    // +11.4 % con lai la gia THAT cua viec JALR chuyen tu 1 bong bong sang 2,
-    // doi lay ~315 ps tren duong toi han (bo mux next-PC ra khoi duong cua bo
-    // cong JALR). Firmware nay goi ham rat day nen day la can tren, khong phai
-    // con so trung binh.
-    //
-    // R13 - CHUA CHUNG MINH (2026-09-11).  Flush la dong bo: o canh clock do
-    // JALR da sang MEM/WB, cai flush_ex_mem xoa la lenh dang o ID/EX - lenh
-    // NGAY SAU JALR (JALR+4/+2, duong sai), khong phai JALR.  flush_branch
-    // phan giai cung tang va CO trong flush_ex_mem vi dung ly do do.  Neu lenh
-    // do khong phai bong bong thi no chay.  Xem CORE_FIX_PLAN.md §10.
+    // KHONG duoc doc la "term nay ton 74 diem phan tram". Voi CUNG mot chuoi
+    // lenh dong, term nay chi bien K thanh bong bong o dung chu ky PC da doi
+    // huong - thoi diem doi huong khong doi, con tac dung phu cua K (truy cap
+    // D-cache, fence, trap) chi co the THEM chu ky. Nen chu ky(co term) <=
+    // chu ky(khong term). Cham hon 85 % nghia la HAI CHUOI LENH KHAC NHAU: ban
+    // 1 701 796 000 chay mot duong khac vi K da sua thanh ghi / bo nho. Con so
+    // do va "+11.4 %" suy ra tu no la phep do tren mot lan chay SAI.
+    // Xem CORE_FIX_PLAN.md §10.
     // -------------------------------------------------------------------------
     wire flush_if_id  = ~mem_freeze &
                         (flush_trap | flush_branch | flush_jalr | flush_jal |
@@ -579,9 +592,39 @@ module riscv_pipeline #(
                         (flush_trap | flush_branch | flush_jalr | load_use_stall |
                          (flush_jal & !stall_id_ex));
     wire stall_ex_mem = dcache_stall | stall_MEM;
-    wire flush_ex_mem = ~mem_freeze & (flush_trap | flush_branch | mf_alu_stall);
+    wire flush_ex_mem = ~mem_freeze &
+                        (flush_trap | flush_branch | flush_jalr | mf_alu_stall);
     wire stall_mem_wb = dcache_stall | stall_WB;
     wire flush_mem_wb = ~mem_freeze & flush_trap;
+
+`ifndef SYNTHESIS
+    // -------------------------------------------------------------------------
+    // R13 - monitor CHI DE MO PHONG (genus.tcl doc RTL voi -define SYNTHESIS).
+    //
+    // In moi lan co mot lenh THAT o ID/EX dung chu ky JALR doi huong, tuc la
+    // dung nhung lenh K ma ban R2 cu da de lot vao EX/MEM. Doi chieu PC/ma lenh
+    // in ra voi disassembly cua firmware: K nao ghi a0/a1/sp/s*, hay la load/
+    // store, la K da doi hanh vi cua lan chay 1 701 796 000.
+    //
+    // Dong [R13][FAIL] la bat bien: trong chu ky do EX/MEM PHAI nhan bong bong.
+    // -------------------------------------------------------------------------
+    integer r13_wrong_path_cnt;
+    initial r13_wrong_path_cnt = 0;
+    always @(posedge clk) begin
+        if (reset_n && riscv_start && !riscv_done &&
+            flush_jalr && !mem_freeze && id_ex_valid) begin
+            r13_wrong_path_cnt = r13_wrong_path_cnt + 1;
+            // 32 lan dau, sau do chi o luy thua cua 2 de dong cuoi mang so dem.
+            if (r13_wrong_path_cnt <= 32 ||
+                (r13_wrong_path_cnt & (r13_wrong_path_cnt - 1)) == 0)
+                $display("[R13] t=%0t #%0d JALR pc=%08h -> %08h, chan lenh duong sai pc=%08h inst=%08h",
+                         $time, r13_wrong_path_cnt, ex_mem_pc_in, ex_mem_jalr_target,
+                         id_ex_pc_in, id_ex_instr);
+            if (!flush_ex_mem)
+                $display("[R13][FAIL] t=%0t lenh duong sai pc=%08h vao EX/MEM", $time, id_ex_pc_in);
+        end
+    end
+`endif
 
     // -------------------------------------------------------------------------
     // KHOAN NO I - minstret phai dem LENH RETIRE, khong dem chu ky.
@@ -1178,7 +1221,16 @@ module riscv_pipeline #(
         .ex_mem_pc_plus_4(ex_mem_pc_plus_4),
         .ex_mem_mem_to_reg(ex_mem_mem_to_reg),
         .ex_mem_reg_write(ex_mem_reg_write),
-        .ex_mem_jal(ex_mem_jal),
+        // R14 - `mem_wb_jal` la "rd nhan dia chi tra ve (pc_plus_4)", nen JALR
+        // cung phai bat no. Truoc day chi JAL bat: decoder khong dat `jal` cho
+        // JALR, nen `jalr ra, 0(t0)` / `c.jalr` ghi ra = t0 + imm - chinh DICH
+        // NHAY - va ham duoc goi `ret` ve dau chinh no. `ret` (rd = x0) va JAL
+        // khong bi anh huong. Khong the dat `jal` = 1 cho JALR o decoder vi bit
+        // do con dieu khien flush_jal / id_ex_jal_target o tang ID/EX.
+        // Chuyen tiep tu EX/MEM (ex_mem_alu_result) van mang dich nhay, nhung
+        // khong lenh nao doc duoc no: lenh ke sau JALR tren duong DUNG chi toi
+        // ID/EX sau khi JALR da qua MEM/WB (xem R13 o tren).
+        .ex_mem_jal(ex_mem_jal | ex_mem_jalr),
         .ex_mem_alu_result(ex_mem_alu_result),
         .ex_mem_rd(ex_mem_rd),
         .ex_mem_ecall(ex_mem_ecall),

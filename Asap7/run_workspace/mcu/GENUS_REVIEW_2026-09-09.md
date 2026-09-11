@@ -11,8 +11,9 @@
 >   apb 256/256, fw PASS `t=1701796000`, mem 121/121, ascon 31/31.
 > - **Để lại theo thoả thuận:** R5. **Chưa làm:** F3 (vẫn 1 thread), F4, F5, F6–F8,
 >   R9. (R10 là danh sách những thứ *không* phải lỗi.)
-> - **Mở:** **R12** (AMO uncached bị bỏ, §15.4), **R13** (`flush_jalr` thiếu trong
->   `flush_ex_mem`, §17.4), ASCON A6.x (§16.7).
+> - **Mở:** **R12** (AMO uncached bị bỏ, §15.4), ASCON A6.x (§16.7).
+> - **Sửa ở RTL 2026-09-11, chờ sim:** **R13** (`flush_jalr` thiếu trong
+>   `flush_ex_mem` — lỗi thật, §17.4) và **R14** (JALR ghi `rd` sai).
 > - **Mới sau review:** P2c `fence` merge vào RTL — mem mong đợi 128, **chưa chạy**;
 >   `CLK_ASCON` thêm vào SDC (19 clock).
 > - **Tổng hợp:** lần chạy đang commit là 2026-09-10 18:47, **trước** khi tag chuyển
@@ -842,8 +843,16 @@ năng**, chỉ có so sánh mốc thời gian mới thấy.
 > vô hại — nhưng khi đó thêm nó cũng phải gần như miễn phí, mâu thuẫn với +85 %.
 > Chưa sửa RTL; cách kiểm và sửa ở CORE_FIX_PLAN.md §10.
 
-+11.4 % còn lại là giá thật của việc JALR đi từ 1 bong bóng lên 2. Firmware này gọi hàm
-rất dày nên đây là **cận trên**, không phải số trung bình.
+> ✅ **Giải quyết 2026-09-11 — term KHÔNG thừa, và +85 % không phải giá của nó.**
+> Mọi load/store đóng băng pipeline ≥ 1 chu kỳ, và trong lúc đó I-cache vẫn lấy lệnh,
+> nên `lw …; ret` (thân mọi hàm getter) luôn đặt lệnh đường sai K sát sau `ret` —
+> bảng từng chu kỳ ở CORE_FIX_PLAN.md §10. Với cùng một chuỗi lệnh, term này chỉ biến
+> K thành bong bóng ở chu kỳ PC đã đổi hướng, nên không thể thêm chu kỳ nào. +85 %
+> nghĩa là hai lần chạy khác chuỗi lệnh: bản 1 701 796 000 chạy sai kiến trúc.
+> **Đã sửa RTL** (R13), cùng lỗi link của JALR tìm ra khi lần lỗi này (R14).
+
+~~+11.4 % còn lại là giá thật của việc JALR đi từ 1 bong bóng lên 2.~~ Đo trên lần chạy
+sai kiến trúc ở trên nên bỏ; giá thật của R2 cần đo lại sau R13.
 
 ### 12.2 R7 — chỉ DTCM, không phải cả hai TCM
 
@@ -1296,10 +1305,9 @@ top-100. Nếu CLK_CPU ở SS thành âm, xem hai chỗ này trước.
 
 ### 17.4 R13 — `flush_jalr` không có trong `flush_ex_mem`
 
-Rủi ro đúng đắn mở, liên quan trực tiếp tới R2. Đính chính ở §12.1, phân tích và cách
-kiểm ở CORE_FIX_PLAN.md §10. Tóm tắt: `flush_branch` phân giải cùng tầng và **có** trong
-`flush_ex_mem`; `flush_jalr` thì không, nên lệnh ngay sau JALR (đường sai) có thể chạy
-nếu nó không phải bong bóng.
+**Đã sửa ở RTL 2026-09-11, chờ sim** (kèm R14, link của JALR). Lỗi là thật và tất
+định trên mẫu `lw …; ret`. Phân tích từng chu kỳ, lời giải cho +85 %, monitor `[R13]`
+và testbench `core` ở CORE_FIX_PLAN.md §10.
 
 ### 17.5 Checklist cho lần chạy tới
 
@@ -1315,6 +1323,7 @@ nếu nó không phải bong bóng.
 **XSim** (`run_soc_sim.sh all`):
 
 - [ ] `mem` **128/128**, gồm 3 dòng `[PASS]` của TF về chờ/không chờ
-- [ ] `fw` PASS; `t` chỉ được đổi nếu firmware có lệnh `fence`
+- [ ] `fw` PASS; `t` **sẽ đổi** vì R13 (mốc cũ là lần chạy sai), ghi mốc mới và các dòng `[R13]`
+- [ ] `core` PASS (R13/R14, monitor đếm ≥ 1)
 - [ ] `apb` 256/256, `ascon` 31/31
 - [ ] Assertion R13 (CORE_FIX_PLAN.md §10) — không lần nào bắn

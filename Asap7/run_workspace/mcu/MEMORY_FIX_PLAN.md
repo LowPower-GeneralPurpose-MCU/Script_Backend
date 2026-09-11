@@ -5,8 +5,9 @@
 **Trạng thái:** Phase 0 xong · P6 xong · Phase 1 (store buffer) xong · P2b
 (D-cache 2-way, tag sang macro hẹp) xong · **P2c (`fence` xả buffer) xong ở RTL,
 chưa chạy lại sim** · R11 (AMO trượt cache) xong · **R12 (AMO uncached bị bỏ) mở**
-· Phase 2–4 chưa làm. Genus đã chạy lại (2026-09-09, 2026-09-10), xem
-[GENUS_REVIEW_2026-09-09.md](GENUS_REVIEW_2026-09-09.md).
+· Phase 2–4 chưa làm · **Boot ROM 8 KiB mask ROM + mã boot tầng 1 xong ở RTL
+(B1), rà soát vùng nhớ toàn SoC ở mục 8**. Genus đã chạy lại (2026-09-09,
+2026-09-10), xem [GENUS_REVIEW_2026-09-09.md](GENUS_REVIEW_2026-09-09.md).
 
 Tài liệu chị em với [MEMORY_ARCHITECTURE.md](MEMORY_ARCHITECTURE.md). File đó ghi
 **lý do của các quyết định đã chốt**; file này ghi **những gì còn sai hoặc còn
@@ -21,7 +22,8 @@ thực thi khi có công cụ synthesis.
 
 | Vùng | Địa chỉ | Kích thước | Đường đi | Thuộc tính |
 |---|---|---|---|---|
-| Boot ROM (s0) | `0x0001_0000` | 64 KiB | AXI | cacheable |
+| Boot ROM (s0) | `0x0001_0000` | **8 KiB** mask ROM (logic) ← mục 8 | AXI | cacheable |
+| *(không map)* | `0x0001_2000` | 56 KiB | — | DECERR, trước đây là alias của ROM |
 | ITCM | `0x0002_0000` | 16 KiB | **thẳng vào core** | ngoài cache & ngoài AXI |
 | DTCM | `0x0002_4000` | 16 KiB | **thẳng vào core** | ngoài cache & ngoài AXI |
 | CLINT (s5) | `0x0200_0000` | 64 KiB | AXI | **uncached** |
@@ -148,6 +150,9 @@ kèm ba section mới: `.dmabuf` (NOLOAD, vào DMAPOOL), `.itcm_text` (lưu ở 
 
 Cũng sửa `ROM LENGTH` từ 16K lên **64K** cho khớp cửa sổ decode thật
 (`axi_rom MEM_DEPTH = 16384` words = 64 KiB, mask `0xFFFF_0000`).
+
+> **2026-09-11: cửa sổ ROM nay chỉ còn 8 KiB** (mask `0xFFFF_E000`, mục 8). Phải
+> sửa lại `ROM LENGTH = 8K` trong `Driver/ld/soc.ld` (ngoài repo này).
 
 Cách dùng trong C:
 
@@ -590,3 +595,69 @@ Phase 4  --- ECC ------------------------------------  chỉ nếu hướng sả
 | — | Chạy `verilator` lint | — | Chưa chạy được — máy không có verilator | máy có verilator |
 | — | Chạy Genus | GATE | **Đã chạy 2026-09-09, 2026-09-10** (cả hai với tag trên `256x4x32`). **Đang chạy lại** cho tag `128x4x20`. Lần sau cần thêm P2c + `CLK_ASCON` (19 clock) | máy có license |
 | — | Innovus đến floorplan | GATE | Chưa chạy trên netlist mới | máy có license |
+| B1 | Boot ROM 8 KiB mask ROM + mã boot tầng 1 | 8 | **Xong ở RTL (2026-09-11)** — mã ROM kiểm trên ISS Python, chưa chạy XSim | `memory/axi_rom.v`, `memory/boot.mem`, `top_soc.v`, `tcl/genus.tcl`, `memory/axi_spi_flash.v` |
+| B2 | Firmware `fw` ≤ 8 KiB, hoặc link lại để XIP | 8 | **Chưa biết kích thước ảnh** — `gen_boot_rom.py` sẽ báo nếu vượt | `Driver/ld/soc.ld`, `Driver/tb_top_soc.v` |
+| B3 | QSPI quad I/O + continuous read cho XIP | 8 | Chưa | `memory/axi_spi_flash.v` |
+| B4 | Đường ghi/xoá flash (cập nhật firmware) | 8 | Chưa | `memory/axi_spi_flash.v` |
+| B5 | Secure boot: ASCON-Hash ảnh + khoá/hash bất biến | 8 | Chưa — cần vùng "fuse" | `memory/boot.mem`, mới |
+| R15 | Debug resume không đánh thức core đang ngủ WFI | 8 | Mở — ROM né bằng `j .` | `core/block_unit/pipeline_control_unit.v` |
+| C10 | I-cache không invalidate được (`fence.i` illegal) | 8 | Mở | `memory/icache.v`, core |
+| M1 | Bit valid của cache vào bit thừa của macro tag | 8 | Tuỳ chọn (~3 k flop) | `memory/icache.v`, `memory/dcache.v` |
+
+---
+
+## 8. Rà soát vùng nhớ toàn SoC (2026-09-11)
+
+Câu hỏi: ngoài boot ROM, SoC còn chỗ nào **thiếu vùng nhớ**, hoặc có bộ nhớ nên
+chuyển sang macro? Kết luận ngắn: **không còn khối nào nên thêm macro SRAM**. Thứ
+còn thiếu là vài vùng *chức năng* mà một MCU thật có còn SoC này chưa có.
+
+### 8.1 Boot ROM — đã sửa (B1)
+
+Trước đây ROM là cửa sổ 64 KiB chỉ có 4 lệnh NOP. Sau đó CPU chạy vào `0x0000_0000`
+(lệnh illegal), trap về `mtvec = 0`, rồi lặp access fault mãi, nên chip không tự boot
+được. 56 KiB còn lại của cửa sổ alias lại ảnh ROM. Nay ROM là mask ROM 8 KiB chứa
+mã boot tầng 1, phần còn lại của cửa sổ trả DECERR. Thiết kế, định dạng header
+flash và lý do không dùng macro SRAM ở MEMORY_ARCHITECTURE.md mục 6.
+
+### 8.2 Bộ nhớ đang là flop — có nên thành macro không?
+
+Macro nhỏ nhất của generator là 64 hàng × 4 = 256 word, đều **1RW**, không reset
+được, không có byte mask. Duyệt mọi mảng `reg [..] x [..]` trong RTL:
+
+| Khối | Kích thước | Macro được không | Lý do |
+|---|---|---|---|
+| Register file | 32 × 32, 2R1W | Không | cần 2 cổng đọc + 1 ghi mỗi chu kỳ |
+| FIFO CDC, FIFO W/ROB của interconnect | sâu 2–16 | Không | cần đọc + ghi cùng chu kỳ; dùng < 10 % macro nhỏ nhất |
+| FIFO UART/SPI/I2C/DMA | 16 × ≤ 32 | Không | như trên |
+| BTB/BHT | 16 entry | Không | đọc tổ hợp ngay trong chu kỳ fetch |
+| Store buffer D-cache | 4 entry | Không | so địa chỉ song song trên mọi entry |
+| **Valid + `rr_ptr` của hai cache** | 2 × (512×2 + 512) = **3 072 flop** | **Một phần (M1)** | xem dưới |
+
+**M1.** Tag dài 19 bit nằm trong macro 20 bit, nên mỗi way còn đúng **1 bit thừa**,
+đủ chứa bit valid. Đổi lại cần một vòng quét xoá 512 set sau reset (1.3 µs ở
+400 MHz, cache stall trong lúc đó), vì macro không reset được. `rr_ptr` là trạng
+thái chung của cả set nên không có chỗ; phải thay round-robin theo set bằng một
+bộ đếm/LFSR toàn cục. Lợi: bớt tới ~3 000 flop (2 048 valid + 1 024 `rr_ptr`, ~7–8 %
+số flop của netlist), có ích cho DFT và power. Không bắt buộc, chỉ nên làm cùng Phase G khi đằng nào cũng mở FSM cache.
+
+### 8.3 Vùng chức năng còn thiếu
+
+| ID | Thiếu | Hậu quả | Hướng |
+|---|---|---|---|
+| B2 | Firmware `fw` phải ≤ 8 KiB | Suite `fw` bake cả firmware vào ROM; ảnh lớn hơn thì `gen_boot_rom.py` dừng | Link firmware để XIP ở `0x3000_0000` với header mục 6; thêm model SPI flash vào `tb_top_soc` |
+| B3 | XIP nhanh | Fast Read `0x0B` 1 bit ở 50 MHz: I-cache miss 16 B tốn cỡ 700 chu kỳ `clk_axi` | Quad I/O `0xEB` + continuous read; cân nhắc SPI 100 MHz |
+| B4 | Ghi/xoá flash | Kênh ghi của `axi_spi_flash` chỉ trả SLVERR, APB SPI dùng chân riêng. Không cập nhật firmware được khi đã ra board | Thêm chế độ lệnh trực tiếp (thanh ghi APB) cho `axi_spi_flash`, như SSI direct mode của RP2040 |
+| B5 | Vùng bất biến cho root of trust | Không có chỗ lưu khoá/hash để ROM kiểm ảnh (ASCON-Hash có sẵn). ASAP7 không có OTP/eFuse | Một khối "fuse" mask-programmed như ROM (hash công khai của khoá ký), đọc được qua APB |
+| C10 | Invalidate I-cache | `fence.i` illegal. Chép code vào RAM **lần thứ hai** (overlay, OTA vào RAM) rồi chạy thì I-cache có thể trả code cũ. Lần chép đầu của ROM an toàn vì I-cache còn lạnh | Cổng invalidate toàn bộ I-cache + hiện thực `fence.i` |
+| — | RAM giữ dữ liệu khi ngủ sâu | Chưa có power domain (UPF). Nếu sau này tắt nguồn SRAM khi ngủ thì không còn gì giữ lại | Vài trăm byte flop trong miền RTC/AON (backup registers kiểu STM32), chỉ có nghĩa khi đã có power intent |
+| P3 | DMA/debugger vào TCM | Đã có ở Phase 2 | — |
+
+### 8.4 Ghi chú phụ tìm được khi rà (không phải vùng nhớ)
+
+**R15 — debug resume không đánh thức core đang ngủ WFI.** `sleeping_reg` trong
+`pipeline_control_unit.v` chỉ xoá bằng ngắt đã bật (`wake_interrupt`). OpenOCD
+`halt` một core đang ngủ, nạp chương trình, rồi `resume`, thì core vẫn ngủ
+(`fetch_enable = 0`) và không chạy code ở `dpc`. Firmware `fw` kết thúc bằng WFI nên
+gặp đúng trường hợp này. Sửa đề xuất: xoá `sleeping_reg` khi `dbg_halted_reg`
+(đặc tả cho phép WFI kết thúc sớm vì bất kỳ lý do gì). Chưa sửa, chưa có test.

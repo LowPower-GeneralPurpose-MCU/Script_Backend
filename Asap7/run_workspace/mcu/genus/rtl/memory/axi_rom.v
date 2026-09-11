@@ -1,11 +1,16 @@
 `timescale 1ns / 1ps
 
+// Boot ROM = MASK ROM that: bang case tong hop thanh logic chuan, noi dung chot
+// luc tong hop tu boot.mem (genus.tcl sinh memory/boot_rom_image.vh).  Khong
+// dung macro SRAM: ASAP7 khong co ROM compiler va macro SRAM la X luc cap
+// nguon, nen ma dau tien CPU chay phai nam trong logic.  Xem
+// MEMORY_ARCHITECTURE.md muc 6 cho luong boot va dinh dang header anh flash.
 module axi_rom #(
     parameter ADDR_WIDTH        = 32,
     parameter DATA_WIDTH        = 32,
     parameter ID_WIDTH          = 7,
-    parameter ADDR_MASK         = 32'h0000_3FFF, // Mask 16KB
-    parameter MEM_DEPTH         = 4096,          // 16KB / 4 = 4096 Words
+    parameter ADDR_MASK         = 32'h0000_1FFF, // Mask 8KB
+    parameter MEM_DEPTH         = 2048,          // 8KB / 4 = 2048 Words
     parameter INIT_FILE         = "boot.mem"     // File chứa mã máy
 )(
     input  wire                     clk,

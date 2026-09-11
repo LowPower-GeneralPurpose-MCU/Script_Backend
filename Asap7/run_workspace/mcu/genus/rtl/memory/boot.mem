@@ -1,4 +1,37 @@
-00000013
-00000013
-00000013
-00000013
+// Boot ROM tang 1 (mask ROM, 0x0001_0000).  Viet tay - may build khong co toolchain
+// RISC-V.  Nguon + kiem tra: xem MEMORY_ARCHITECTURE.md muc 6.
+// 
+// Header anh o dau QSPI flash (0x3000_0000), little-endian:
+//   +0x00 magic  0x4255434D ('MCUB')
+//   +0x04 entry  dia chi nhay toi
+//   +0x08 load   dich chep (bo qua khi length = 0)
+//   +0x0C length so byte chep, boi so cua 4; 0 = chay XIP tai cho
+//   +0x10 payload
+// Khong co magic -> `park` (vong j ., cho debugger).  Moi trap truoc khi
+// firmware dat mtvec -> `trap`: t4 = mcause, t5 = mepc, t6 = mtval.
+00000297  // 00010000  auipc t0, 0x0
+05828293  // 00010004  addi t0, t0, %lo(trap-_start)
+30529073  // 00010008  csrw mtvec, t0
+30000437  // 0001000c  lui s0, 0x30000
+00042303  // 00010010  lw t1, 0(s0)
+425543b7  // 00010014  lui t2, 0x42554
+34d38393  // 00010018  addi t2, t2, 845
+02731c63  // 0001001c  bne t1, t2, park
+00442503  // 00010020  lw a0, 4(s0)
+00842583  // 00010024  lw a1, 8(s0)
+00c42603  // 00010028  lw a2, 12(s0)
+01040693  // 0001002c  addi a3, s0, 16
+00060e63  // 00010030  beq a2, zero, done
+0006ae03  // 00010034  lw t3, 0(a3)
+01c5a023  // 00010038  sw t3, 0(a1)
+00468693  // 0001003c  addi a3, a3, 4
+00458593  // 00010040  addi a1, a1, 4
+ffc60613  // 00010044  addi a2, a2, -4
+fec046e3  // 00010048  blt zero, a2, copy
+0ff0000f  // 0001004c  fence
+00050067  // 00010050  jalr zero, 0(a0)
+0000006f  // 00010054  jal zero, park
+34202ef3  // 00010058  csrr t4, mcause
+34102f73  // 0001005c  csrr t5, mepc
+34302ff3  // 00010060  csrr t6, mtval
+0000006f  // 00010064  jal zero, trap_spin

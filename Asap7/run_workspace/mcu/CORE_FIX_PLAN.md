@@ -23,9 +23,15 @@ bash genus/rtl/tests/run_soc_sim.sh all
 | `fw` — `Driver/tb_top_soc.v` | **PASS** — UART in `HELLO RISC-V UART TEST!`, CPU tới WFI | PASS **t = 1 701 796 000 ns** (2026-09-10, sau R2). Mốc trước: 2 831 456 000 → 1 528 046 000 (Phase F) → 1 701 796 000 (R2, +11.4 %) |
 | `mem` — `genus/rtl/tests/tb_mem_paths.sv` | **PASS 99 / FAIL 0 / TIMEOUT 0** | 121/121 (2026-09-10); **mong đợi 128** sau P2c — chưa chạy lại |
 | `ascon` — `genus/rtl/tests/tb_ascon_apb.sv` | — | 31/31 (2026-09-10) |
+| `core` — `genus/rtl/tests/tb_core_jalr.sv` | — | **mới (2026-09-11), chưa chạy** — R13/R14 trên CPU thật |
 
 Mốc `t` của `fw` chỉ so được **trên cùng một file `.mem`** — xem đính chính ở
 §6. R1a, R1b và R11 không đổi `t` một pico giây vì firmware không có atomics.
+
+> **Mốc 1 701 796 000 hết hiệu lực sau R13 (2026-09-11).** Nó là một lần chạy
+> sai kiến trúc: lệnh đường sai sau JALR đã chạy và đổi đường đi của firmware
+> (§10). Lần đo đúng term `flush_jalr` trước đây cho 2 830 376 000; chạy lại `fw`
+> để lấy mốc mới, và xem các dòng `[R13]` trong log.
 
 Các bộ này **không** phủ được exception, CSR conformance hay dự đoán nhánh. Mỗi
 phase dưới đây vì vậy phải kèm testcase riêng, nếu không thì "không có gì bắt
@@ -558,51 +564,96 @@ Thiết kế và số đo đầy đủ ở [GENUS_REVIEW_2026-09-09.md](GENUS_RE
 
 | ID | Thay đổi | Hệ quả cho core |
 |---|---|---|
-| **R2** | JALR tính đích ở EX, chốt vào EX/MEM, phân giải cùng tầng với nhánh điều kiện | Bỏ mux next-PC (~315 ps) khỏi đường bộ cộng JALR. Giá: **+11.4 %** `fw` (2 bong bóng mỗi JALR). |
+| **R2** | JALR tính đích ở EX, chốt vào EX/MEM, phân giải cùng tầng với nhánh điều kiện | Bỏ mux next-PC (~315 ps) khỏi đường bộ cộng JALR. ~~Giá: **+11.4 %** `fw`~~ — con số đo trên lần chạy sai kiến trúc (R13), bỏ. |
 | **R1b** | AMO đọc-sửa-ghi thành bắt tay 2 chu kỳ; AMO ALU ăn `amo_read_q` (flop) | Chỉ AMO thật tốn thêm 1 chu kỳ; LR.W/SC.W không đổi. |
 | **R11** | AMO trượt cache chạy lại vòng tra cứu thay vì retire không ghi | Lỗi đúng đắn có từ trước — spinlock/refcount. |
 | **P2c** | `fence` xả store buffer | Xem §8. |
 
-### ⚠️ R13 — `flush_jalr` không có trong `flush_ex_mem` (rủi ro mở, chưa sửa)
+### R13 — `flush_jalr` thiếu trong `flush_ex_mem` (ĐÃ SỬA 2026-09-11, chờ sim)
 
-`riscv_pipeline.v`:
+Bản R2 cũ:
 
 ```verilog
 wire flush_id_ex  = ~mem_freeze & (flush_trap | flush_branch | flush_jalr | ...);
 wire flush_ex_mem = ~mem_freeze & (flush_trap | flush_branch | mf_alu_stall);   // khong co flush_jalr
 ```
 
-Lý do ghi trong comment và trong GENUS_REVIEW §12.1 là *"EX/MEM giữ chính lệnh
-JALR, xoá nó là thừa"*. Lập luận đó **mâu thuẫn với chính `flush_branch`**: nhánh
-điều kiện cũng phân giải khi đang ở EX/MEM, nhưng `flush_branch` **có** trong
-`flush_ex_mem`. Flush là **đồng bộ**: ở cạnh clock đó JALR đã sang MEM/WB, còn
-thứ bị xoá là lệnh đang ở ID/EX (lệnh ngay sau JALR) — không phải JALR.
+Lý do ghi trong comment cũ và trong GENUS_REVIEW §12.1 là *"EX/MEM giữ chính lệnh
+JALR, xoá nó là thừa"*. Sai: flush là **đồng bộ**. Ở cạnh clock mà
+`ex_mem_jalr = 1`, JALR tự nó đi sang MEM/WB và ghi `rd` ở đó. Thứ `flush_ex_mem`
+chặn là lệnh **K đang ở ID/EX**, tức lệnh ngay sau JALR trong bộ nhớ (JALR+4,
+hoặc +2 nếu nén). BTB không bao giờ dự đoán JALR, nên K luôn là đường sai.
+`flush_branch` phân giải cùng tầng và **có** trong `flush_ex_mem` vì đúng lý do đó.
 
-Khi `ex_mem_jalr = 1`, ID/EX giữ lệnh tuần tự ngay sau JALR (JALR+4, hoặc +2
-nếu nén), chứ không phải JALR+8 như comment viết. BTB chỉ cập nhật cho nhánh
-điều kiện (`ex_mem_branch`), nên không có dự đoán nào cho JALR — lệnh sau nó
-luôn là đường sai. Không có `flush_jalr` trong `flush_ex_mem` thì lệnh đó, nếu
-hợp lệ, **đi tiếp vào EX/MEM và chạy**, còn PC vẫn nhảy tới `ex_mem_jalr_target`.
+**K không phải lúc nào cũng là bong bóng — và trường hợp nguy hiểm là tất
+định.** I-cache trả 1 lệnh / 2 chu kỳ, nên bình thường có một bong bóng xen giữa
+JALR và K. Nhưng mỗi lần pipeline đóng băng trong lúc JALR còn ở IF/ID, I-cache
+vẫn chạy tiếp (IDLE → LOOKUP không phụ thuộc `dcache_stall`) và bong bóng đó bị
+nuốt. Mọi load/store đều đóng băng pipeline ít nhất 1 chu kỳ (IDLE của D-cache),
+kể cả khi hit. Truy từng chu kỳ cho `lw a0, 4(a5); ret; K`, tất cả đều hit:
 
-Vì sao `fw` vẫn PASS: cache 2 chu kỳ/lệnh (P5, IPC ≤ 0.5) nên thường có một bong
-bóng ngay sau JALR, và bong bóng thì chạy vô hại. Nhưng không có gì **bảo đảm**
-điều đó — hai lệnh nén trong cùng một word (`c.jr ra` + lệnh sau), hay lệnh đã
-lấy sẵn trong lúc pipeline stall, đều có thể xếp sát nhau.
+| Cạnh clock | IF/ID | ID/EX | EX/MEM | Ghi chú |
+|---|---|---|---|---|
+| E | `ret` | bong bóng | `lw` | `lw` và `ret` vào tầng cùng một cạnh (nhịp 2 chu kỳ) |
+| E+1 | `ret` (giữ) | bong bóng | `lw` (giữ) | `dcache_stall` = 1; I-cache ở IDLE cho K |
+| E+2 | **K** | `ret` | bong bóng | D-cache LOOKUP hit → nhả stall; I-cache LOOKUP → K hợp lệ |
+| E+3 | bong bóng | **K** | `ret` | `flush_jalr` = 1, `id_ex_valid` = 1 |
+| E+4 | — | — | **K** (bản cũ) | K ghi `rd`, ghi bộ nhớ, nhận trap/ngắt với `mepc` = K |
 
-**Điểm chưa giải thích được:** nếu ID/EX gần như luôn là bong bóng thì thêm
-`flush_jalr` vào `flush_ex_mem` phải gần như **không tốn gì**, vậy mà đo ra
-+85 %. Hoặc ID/EX thường xuyên giữ lệnh hợp lệ (tức lỗi xảy ra thường xuyên và
-`fw` PASS là do may), hoặc có một tương tác khác (ví dụ `flush` thắng `stall`
-trong `ex_mem_register` khi `stall_MEM` bật) mà chưa ai lần ra.
+Đó là thân của mọi hàm getter/setter (`lw …; ret`, `sw …; ret`). Đóng băng dài
+hơn (miss, MMIO) thì xảy ra hay không tùy chẵn/lẻ độ dài đóng băng. Một ngắt rơi
+đúng vào chu kỳ K ở EX/MEM còn tệ hơn: `mepc` = K, nên `mret` quay về K và JALR
+coi như chưa từng xảy ra.
 
-**Chưa sửa RTL**, vì chưa giải thích được +85 % và máy này không có XSim. Việc
-cần làm theo thứ tự:
+**Lời giải cho con số +85 %.** Với **cùng một chuỗi lệnh động**, thêm
+`flush_jalr` vào `flush_ex_mem` chỉ biến K thành bong bóng ở đúng chu kỳ PC đã
+đổi hướng. Thời điểm đổi hướng không đổi. Tác dụng phụ của K (truy cập D-cache,
+xả store buffer bằng `fence`, trap) chỉ có thể **thêm** chu kỳ. Vậy chu kỳ(có
+term) ≤ chu kỳ(không term). Chậm hơn 85 % nghĩa là hai lần chạy **không cùng
+chuỗi lệnh**: bản `t = 1 701 796 000` đi một đường khác vì K đã sửa thanh ghi
+hoặc bộ nhớ, ví dụ ghi đè giá trị trả về `a0` của một hàm đọc trạng thái UART
+khiến vòng chờ thoát sớm. Hệ quả:
 
-1. Thêm assertion mô phỏng trong `riscv_pipeline.v`: báo lỗi khi
-   `ex_mem_jalr && id_ex_valid && !stall_ex_mem`, rồi chạy `fw`. Không có lần
-   nào ⇒ rủi ro chỉ còn trên lý thuyết; có ⇒ lỗi thật.
-2. Nếu có: sửa `flush_ex_mem |= flush_jalr`, rồi lần ra vì sao nó làm `fw` chậm
-   85 % trước khi chấp nhận con số đó.
+* Bản `fw` đang ship PASS **trên một lần chạy sai kiến trúc**. PASS không chứng
+  minh được gì về R2.
+* "+11.4 % là giá thật của R2" cũng đo trên lần chạy sai đó, nên **không còn giá
+  trị**. Mốc mới của `fw` sau sửa dự kiến quanh 2.83e9 (đã đo một lần với đúng
+  term này), và đó mới là mốc đúng.
+* Nên thêm `minstret` vào log `fw`. Hai bản khác số lệnh retire là bằng chứng
+  trực tiếp cho kết luận trên.
+
+**Đã sửa:**
+
+* `riscv_pipeline.v`: `flush_ex_mem = ~mem_freeze & (flush_trap | flush_branch
+  | flush_jalr | mf_alu_stall)`. Comment R2 viết lại theo phân tích trên.
+* Monitor `ifndef SYNTHESIS` ngay dưới các dây flush: in `[R13]` (PC/mã lệnh của
+  JALR và của K) mỗi khi có lệnh thật ở ID/EX lúc JALR đổi hướng, và
+  `[R13][FAIL]` nếu K lọt vào EX/MEM. `genus.tcl` đọc RTL với `-define SYNTHESIS`.
+  `run_soc_sim.sh fw` in các dòng `[R13]`. Đối chiếu chúng với disassembly firmware
+  sẽ cho biết chính xác những K nào bản cũ đã chạy.
+* Testbench mới `tests/tb_core_jalr.sv` (suite `core`) chạy trên CPU thật đúng
+  mẫu `lw; ret; K` ở trên, hai lần gọi (lần 1 nạp line D-cache, lần 2 hit), và
+  đòi hỏi monitor đếm ≥ 1 để chắc mẫu thực sự xảy ra. Chương trình
+  `tests/core_jalr.mem` viết tay, đã chạy thử trên ISS Python để kiểm mã hoá và
+  kết quả mong đợi.
+
+### R14 — JALR ghi `rd` bằng đích nhảy thay vì địa chỉ trả về (ĐÃ SỬA 2026-09-11, chờ sim)
+
+Tìm ra khi lần R13. `write_back` chỉ chọn `pc_plus_4` khi `mem_wb_jal`. Decoder
+không đặt `jal` cho JALR (và không thể đặt, vì bit đó còn điều khiển `flush_jal` /
+`id_ex_jal_target` ở ID/EX), nên JALR ghi `rd = alu_result = rs1 + imm`, tức chính
+đích nhảy. Lỗi có từ bản gốc, không phải do R2.
+
+* `ret` (`jalr x0, 0(ra)`) không bị ảnh hưởng vì `rd` = x0. Vì vậy `fw` không bắt được.
+* Mọi **lời gọi gián tiếp** đều hỏng: con trỏ hàm, bảng handler ngắt, `c.jalr`,
+  và `call` khi linker không relax được thành `jal` (`auipc ra` + `jalr ra`). Hàm được
+  gọi sẽ `ret` về chính đầu của nó.
+
+**Sửa** (`riscv_pipeline.v`, instance `MEM_WB`): `.ex_mem_jal(ex_mem_jal |
+ex_mem_jalr)`. Forwarding từ EX/MEM vẫn mang đích nhảy, nhưng không lệnh nào đọc
+được nó: lệnh kế tiếp trên đường đúng chỉ tới ID/EX sau khi JALR đã qua MEM/WB,
+và ở đó bypass `wb_write_data` đã đúng. `tb_core_jalr.sv` kiểm `ra` sau
+`jalr ra, 0(t0)`; RTL cũ thì treo ở `func2` và testbench báo timeout.
 
 ## 11. Bảng theo dõi
 
@@ -623,7 +674,8 @@ cần làm theo thứ tự:
 | P4 | Store buffer | F | **Xong (2026-09-08), 35 → 1 chu kỳ, fw 1.85×** | `memory/dcache.v`, `top_soc.v` |
 | P2c | `fence` xả store buffer | F | **Xong ở RTL (2026-09-11), chờ sim** | `core/block_unit/control_unit.v`, `core/pipeline_register/`, `core/pipeline_stage/`, `core/riscv_pipeline.v`, `memory/dcache.v`, `top_soc.v` |
 | R2 | JALR phân giải ở EX/MEM | — | Xong (2026-09-09), +11.4 % `fw` | `core/pipeline_stage/`, `core/pipeline_register/`, `core/block_unit/pipeline_control_unit.v`, `core/riscv_pipeline.v` |
-| R13 | `flush_jalr` thiếu trong `flush_ex_mem` | — | **Rủi ro mở — cần sim** (§10) | `core/riscv_pipeline.v` |
+| R13 | `flush_jalr` thiếu trong `flush_ex_mem` | — | **Sửa ở RTL (2026-09-11), chờ sim** — mẫu `lw; ret` tất định; +85 % là hai chuỗi lệnh khác nhau (§10) | `core/riscv_pipeline.v`, `tests/tb_core_jalr.sv` |
+| R14 | JALR `rd≠x0` ghi đích nhảy thay vì `pc+4` | — | **Sửa ở RTL (2026-09-11), chờ sim** (§10) | `core/riscv_pipeline.v`, `tests/tb_core_jalr.sv` |
 | R1b / R11 | AMO 2 chu kỳ / AMO trượt cache | — | Xong, verify bằng T10 | `core/pipeline_stage/pipeline_stage.v`, `memory/dcache.v` |
 | P5 | Pipeline hoá cache | G | Chưa — Genus đã chạy, nhưng góc SS còn +1.3 ps | `memory/icache.v`, `memory/dcache.v` |
 | V | `tb_core_traps.sv` — test exception/CSR | A+B | | `genus/rtl/tests/` |
