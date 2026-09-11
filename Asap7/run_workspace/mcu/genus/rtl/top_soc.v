@@ -1101,9 +1101,11 @@ module top_soc (
         //   3: 0x8000_0000 SDRAM   64 MB    mask FC00_0000
         //   2: 0x3000_0000 QSPI    16 MB    mask FF00_0000
         //   1: 0x2000_0000 RAM lo  128 KB   mask FFFE_0000
-        //   0: 0x0001_0000 ROM     64 KB    mask FFFF_0000
+        //   0: 0x0001_0000 ROM     8 KB     mask FFFF_E000
+        // ROM tung chiem cua so 64 KB; nay chi 8 KB, nen 0x0001_2000-0x0001_FFFF
+        // KHONG thuoc slave nao va tra DECERR thay vi lap lai (alias) anh ROM.
         .SLV_BASE_ADDR (224'h2002_0000_0200_0000_4000_0000_8000_0000_3000_0000_2000_0000_0001_0000),
-        .SLV_ADDR_MASK (224'hFFFE_0000_FFFF_0000_F800_0000_FC00_0000_FF00_0000_FFFE_0000_FFFF_0000),
+        .SLV_ADDR_MASK (224'hFFFE_0000_FFFF_0000_F800_0000_FC00_0000_FF00_0000_FFFE_0000_FFFF_E000),
         // T3 - do sau FIFO write-data theo tung slave, cung thu tu 6..0 nhu tren.
         // Mot bo cho moi master (MST_AMT=4), moi o rong 36 bit; 32 -> 8 tiet kiem
         // 4*24*36 = 3456 flop moi slave, 32 -> 2 tiet kiem 4320.
@@ -1143,10 +1145,17 @@ module top_soc (
     // =========================================================================
     // 8. KHỞI TẠO CÁC AXI SLAVES
     // =========================================================================
+    // =========================================================================
+    // Boot ROM 8 KiB @ 0x0001_0000 - MASK ROM that, tong hop thanh logic chuan
+    // (ASAP7 khong co ROM compiler; macro SRAM thi X luc cap nguon).  Noi dung
+    // la ma boot tang 1 trong rtl/memory/boot.mem: dat mtvec, kiem header anh o
+    // dau QSPI flash, chep (tuy chon) roi nhay vao firmware - chay XIP tu
+    // 0x3000_0000 hoac tu ITCM/RAM.  Xem MEMORY_ARCHITECTURE.md muc 6.
+    // =========================================================================
     axi_rom #(
         .ID_WIDTH(SLV_ID_WIDTH),
-        .ADDR_MASK(32'h0000_FFFF),
-        .MEM_DEPTH(16384),
+        .ADDR_MASK(32'h0000_1FFF),
+        .MEM_DEPTH(2048),
         // genus.tcl always changes directory to mcu/genus before elaborate.
         .INIT_FILE("rtl/memory/boot.mem")
     ) u_axi_rom (

@@ -5,7 +5,9 @@
 #   ./run_soc_sim.sh fw     - tb_top_soc.v     : chay firmware that qua CPU
 #   ./run_soc_sim.sh mem    - tb_mem_paths.sv  : RAM hi / TCM / DMA / store MMIO
 #   ./run_soc_sim.sh ascon  - tb_ascon_apb.sv  : KAT ASCON-128 / ASCON-Hash qua APB
-#   ./run_soc_sim.sh all    - ca ba (mac dinh)
+#   ./run_soc_sim.sh core   - tb_core_jalr.sv  : R13/R14 bang CPU that (anh ROM
+#                             tests/core_jalr.mem, viet tay)
+#   ./run_soc_sim.sh all    - tat ca (mac dinh)
 #
 # Bien moi truong ghi de duoc:
 #   XSIM_BIN   thu muc bin cua Vivado  (mac dinh: /d/Xilinx/Vivado/2024.1/bin)
@@ -90,6 +92,11 @@ run_fw() {
         fi
     fi
     grep -E '\[TB\]\[PASS\]|\[TB\]\[FAIL\]|SIMULATION' xsim_fw.log || true
+    # R13 - monitor trong core/riscv_pipeline.v: moi lenh duong sai sau JALR ma
+    # ban R2 cu da de chay. [R13][FAIL] nghia la flush_ex_mem lai thieu term.
+    # Monitor in 32 lan dau roi chi in o #64, #128, ... nen dong cuoi mang so dem.
+    { grep -E '^\[R13\]' xsim_fw.log || true; } | head -n 8
+    printf 'R13 (dong cuoi): '; { grep -E '^\[R13\]' xsim_fw.log || echo 'khong co'; } | tail -n 1
     # `|| true` la BAT BUOC: voi set -euo pipefail, mot lan chay khong in duoc
     # ky tu UART nao lam grep tra 1 -> ca script THOAT, va run_mem khong bao gio
     # chay. Tuc la mot regression o fw se GIAU luon ket qua cua mem.
@@ -105,6 +112,18 @@ quit
 ' > run.tcl
     xsim.bat mem_sim -tclbatch run.tcl > xsim_mem.log
     grep -E '^\[FAIL\]|^\[INFO\]|PASS COUNT|FAIL COUNT|TIMEOUTS|RESULT' xsim_mem.log || true
+}
+
+run_core() {
+    echo "=== core testbench: R13 / R14 (ROM = tests/core_jalr.mem) ==="
+    # Cung co che voi run_fw: anh ROM la bang case, bake truoc vao mot thu muc
+    # include rieng dat TRUOC rtl/.
+    python "$HERE/gen_boot_rom.py" "$HERE/core_jalr.mem" "$OUT_DIR/core_inc"
+    xvlog.bat -sv -work core -i "$OUT_DIR/core_inc" "${INC[@]}" -f rtl_files.f "$HERE/tb_core_jalr.sv" > xvlog_core.log
+    xelab.bat -relax -s core_sim -timescale 1ns/1ps core.tb_core_jalr -L core > xelab_core.log
+    printf 'run all\nquit\n' > run.tcl
+    xsim.bat core_sim -tclbatch run.tcl > xsim_core.log
+    grep -E '\[TB\]|^\[R13\]|PASS COUNT|RESULT' xsim_core.log || true
 }
 
 run_ascon() {
@@ -123,6 +142,7 @@ case "$MODE" in
     fw)    run_fw ;;
     mem)   run_mem ;;
     ascon) run_ascon ;;
-    all)   run_apb; run_fw; run_mem; run_ascon ;;
-    *)     echo "cach dung: $0 [apb|fw|mem|ascon|all]"; exit 1 ;;
+    core)  run_core ;;
+    all)   run_apb; run_fw; run_mem; run_ascon; run_core ;;
+    *)     echo "cach dung: $0 [apb|fw|mem|ascon|core|all]"; exit 1 ;;
 esac

@@ -1,0 +1,23 @@
+// tb_core_jalr.sv - chuong trinh kiem R13 (lenh duong sai sau JALR) va R14 (link
+// cua JALR).  run_soc_sim.sh core bake file nay vao ROM thay cho boot.mem.
+// Mong doi: a2 (x12) = 12345000, a1 (x11) = 00010024, t2 (x7) = 1.
+20000437  // 00010000  lui s0, 0x20000
+12345337  // 00010004  lui t1, 0x12345
+00642023  // 00010008  sw t1, 0(s0)
+024000ef  // 0001000c  jal ra, getter
+020000ef  // 00010010  jal ra, getter
+00050613  // 00010014  addi a2, a0, 0
+00000297  // 00010018  auipc t0, 0x0
+02828293  // 0001001c  addi t0, t0, %lo(func2-here)
+000280e7  // 00010020  jalr ra, 0(t0)
+00008593  // 00010024  addi a1, ra, 0
+00100393  // 00010028  addi t2, zero, 1
+0000006f  // 0001002c  jal zero, done
+00042503  // 00010030  lw a0, 0(s0)
+00008067  // 00010034  jalr zero, 0(ra)
+00150513  // 00010038  addi a0, a0, 1
+00000013  // 0001003c  addi x0, x0, 0
+00008067  // 00010040  jalr zero, 0(ra)
+10060613  // 00010044  addi a2, a2, 256
+00000013  // 00010048  addi x0, x0, 0
+00000013  // 0001004c  addi x0, x0, 0

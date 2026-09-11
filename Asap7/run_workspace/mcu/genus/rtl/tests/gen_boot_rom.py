@@ -7,10 +7,15 @@ den ban ROM vang, script nay ghi mot ban sao vao mot thu muc include rieng; chi
 can dat thu muc do TRUOC rtl/ tren duong dan -i cua trinh bien dich la ban sim
 se thang.
 
-    python gen_boot_rom.py <input.mem> <sim_include_dir> [--depth 16384]
+    python gen_boot_rom.py <input.mem> <sim_include_dir> [--depth 2048]
 
 Thuat toan doc file .mem giu DUNG y het phan sinh trong tcl/genus.tcl: bo comment
 `//` va `#`, `@xxxx` dat lai dia chi, moi token con lai la mot tu 32-bit.
+
+Boot ROM chi con 8 KiB (2048 word, cua so 0x0001_0000-0x0001_1FFF).  Anh lon hon
+thi script DUNG han thay vi cat bot: phan vuot qua 8 KiB se roi vao vung DECERR.
+Firmware lon hon phai link de chay XIP tu QSPI (0x3000_0000) sau boot ROM - xem
+MEMORY_ARCHITECTURE.md muc 6.
 """
 import argparse
 import os
@@ -49,7 +54,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("mem")
     ap.add_argument("out_dir", help="thu muc include cho sim; file se nam o <out_dir>/memory/")
-    ap.add_argument("--depth", type=int, default=16384, help="MEM_DEPTH cua axi_rom (mac dinh 16384)")
+    ap.add_argument("--depth", type=int, default=2048, help="MEM_DEPTH cua axi_rom (mac dinh 2048 = 8 KiB)")
     args = ap.parse_args()
 
     entries = parse_mem(args.mem, args.depth)

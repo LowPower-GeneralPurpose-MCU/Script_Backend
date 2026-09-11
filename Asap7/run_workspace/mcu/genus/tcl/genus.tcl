@@ -81,6 +81,7 @@ set SRAM_MASTERS [list $SRAM_MASTER $SRAM_EXPECTED_COUNT $SRAM_TAG_MASTER $SRAM_
 # RTL phai khop macro budget o tren; tung lech am tham giua RTL va floorplan.
 set RTL_INVARIANTS [list \
     top_soc.v "boot ROM INIT_FILE"   {\.INIT_FILE\s*\(\s*"rtl/memory/boot\.mem"\s*\)} \
+    top_soc.v "boot ROM 8 KiB"       {axi_rom\s+#\(.*?\.MEM_DEPTH\s*\(\s*2048\s*\)} \
     top_soc.v "RAM 2 x 32768 word"   {\.MEM_DEPTH\s*\(\s*32768\s*\)} \
     top_soc.v "RAM lo"               {u_axi_ram_lo} \
     top_soc.v "RAM hi"               {u_axi_ram_hi} \
@@ -113,9 +114,12 @@ foreach {rel label pattern} $RTL_INVARIANTS {
 }
 
 # Boot ROM: sinh bang case tu boot.mem cho axi_rom.v (`include boot_rom_image.vh).
+# Day la MASK ROM that (logic chuan, noi dung chot luc tong hop - ASAP7 khong co
+# ROM compiler): boot.mem la ma boot tang 1, xem MEMORY_ARCHITECTURE.md muc 6.
+# 2048 word = cua so 8 KiB cua slave 0; phai khop MEM_DEPTH trong top_soc.v.
 set BOOT_MEM     [file join $RTL_ROOT memory boot.mem]
 set BOOT_INCLUDE [file join $RTL_ROOT memory boot_rom_image.vh]
-set BOOT_DEPTH   16384
+set BOOT_DEPTH   2048
 set fp [open $BOOT_MEM r]
 set boot_text [read $fp]
 close $fp
@@ -263,10 +267,12 @@ if {$MULTI_VT} {
 # ------------------------------------------------------------------------
 # `ASAP7` bat nhanh instantiate THANG cell chuan cua ring oscillator
 # trong rtl/apb_ascon/trng_128b.v.
+# `SYNTHESIS` loai cac khoi `ifndef SYNTHESIS` chi de mo phong (monitor R13 trong
+# core/riscv_pipeline.v). Dat tuong minh thay vi dua vao macro mac dinh cua tool.
 
 foreach rtl $RTL_FILES {
     puts "Reading RTL: [file normalize $rtl]"
-    read_hdl -define {ASAP7} $rtl
+    read_hdl -define {ASAP7 SYNTHESIS} $rtl
 }
 
 elaborate $TOP
@@ -279,8 +285,9 @@ check_design -unresolved > ./reports/check_design_unresolved.rpt
 # Khop ten sau uniquify (vd axi_ram_ID_WIDTH9_...) bang string match; get_db
 # modules <pattern> tung khong khop gi va am tham bo qua 6/7 module.
 
+# axi_rom giu rieng de area_syn.rpt tach duoc gia cua mask ROM logic.
 set PRESERVE_MODULES {
-    axi_ram asap7_sram_1rw asap7_sram_tag_512x20 tcm riscv_pipeline
+    axi_ram axi_rom asap7_sram_1rw asap7_sram_tag_512x20 tcm riscv_pipeline
     instruction_cache data_cache axi_interconnect
     RingOscillator xilinx_not xilinx_nand
     xilinx_primitive_not xilinx_primitive_nand

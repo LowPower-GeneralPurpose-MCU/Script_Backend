@@ -169,6 +169,75 @@ Lệnh nguyên tử (RV32A) đi qua D-cache bằng bắt tay hai chu kỳ
 (`dcache_amo_req` / `dcache_amo_capture`, R1b). AMO vào vùng **uncached** hiện bị
 bỏ âm thầm (R12, chưa sửa) — không đặt spinlock/refcount trong `.dmabuf`.
 
+## 6. Boot ROM: mask ROM 8 KiB + XIP từ QSPI flash
+
+```
+0x0001_0000 - 0x0001_1FFF   boot ROM 8 KiB   mask ROM (logic), slave 0
+0x0001_2000 - 0x0001_FFFF   không map        DECERR (trước đây: alias của ROM)
+0x3000_0000 - 0x30FF_FFFF   QSPI flash       XIP, cacheable, slave 2
+```
+
+**Vì sao không dùng macro SRAM cho boot ROM.** Macro của `asap7_sram_0p0` là X
+lúc cấp nguồn, và ASAP7 không có ROM compiler. Mã đầu tiên CPU chạy vì vậy phải
+nằm trong logic. Ngày 2026-09-11 đã thử phương án "shadow ROM": 2 ×
+`srambank_256x4x32` và một FSM phần cứng chép 8 KiB đầu flash vào đó rồi mới nhả
+reset core. Phương án đó đã được **hoàn tác trước khi merge**, vì nó không giống
+MCU thật ở ba điểm:
+
+1. **Không có root of trust.** Lệnh đầu tiên đến từ flash ngoài, chưa được kiểm
+   tra, nên không thể làm secure boot, dù chip có sẵn ASCON-Hash.
+2. **Không có đường cứu.** Flash trống hoặc hỏng thì chỉ còn JTAG.
+3. **Tốn 2 macro và một loader** để chép thứ mà I-cache vốn đã XIP được.
+
+MCU thương mại (RP2040, ESP32, i.MX RT, SiFive FE310) đều dùng **mask ROM nhỏ
+chứa bootloader tầng 1 + firmware trong flash**. Ở đây làm đúng như vậy.
+`axi_rom.v` vẫn là bảng `case` do `genus.tcl` sinh từ `rtl/memory/boot.mem`, cửa sổ
+thu từ 64 KiB về 8 KiB. Macro budget giữ nguyên 80 + 4.
+
+**Mã boot tầng 1** (`boot.mem`, 26 lệnh, viết tay vì máy build không có toolchain
+RISC-V; mã hoá và bốn kịch bản bên dưới đã chạy trên một ISS Python):
+
+1. `mtvec` ← handler trong ROM. Trước đây `mtvec` reset về 0, mà địa chỉ 0 không
+   thuộc slave nào. Một trap trước khi firmware đặt `mtvec` sẽ fetch 0 → DECERR →
+   access fault → lại trap về 0, lặp mãi không để lại dấu vết. Nay handler ROM
+   dừng ở vòng `j .` với `t4 = mcause`, `t5 = mepc`, `t6 = mtval` cho debugger.
+2. Đọc header ở `0x3000_0000`. Không có magic → vòng `park` (`j .`), chờ debugger.
+3. `length ≠ 0` → chép payload tới `load` (ITCM, RAM lo…) rồi `fence` để xả store
+   buffer trước khi I-cache đọc vùng vừa chép. `length = 0` → chạy XIP tại chỗ.
+4. Nhảy tới `entry`.
+
+| Offset | Trường | Ý nghĩa |
+|---|---|---|
+| `+0x00` | magic | `0x4255434D` (`"MCUB"`, little-endian) |
+| `+0x04` | entry | địa chỉ nhảy tới |
+| `+0x08` | load | đích chép, bỏ qua khi `length = 0` |
+| `+0x0C` | length | số byte chép, bội số của 4; `0` = XIP |
+| `+0x10` | payload | |
+
+Kịch bản đã kiểm trên ISS: flash trống → `park`; ảnh XIP → nhảy vào flash; ảnh
+chép vào ITCM → ITCM khớp payload rồi chạy ở đó; `entry` không map → trap handler
+ROM với `mcause = 1`.
+
+**Vòng chờ dùng `j .`, cố ý không dùng `wfi`.** `sleeping_reg` trong
+`pipeline_control_unit.v` chỉ được xoá bằng ngắt đã bật. Debugger halt rồi resume
+một core đang ngủ WFI thì core vẫn ngủ và không chạy code ở `dpc`. Đó là lỗi riêng
+của core (ghi ở MEMORY_FIX_PLAN.md mục 8); ROM chỉ né nó.
+
+**Hệ quả với firmware và mô phỏng.**
+
+* Suite `fw` vẫn bake **toàn bộ** firmware vào ROM thay cho `boot.mem`, nên ảnh
+  phải ≤ 8 KiB. `gen_boot_rom.py` dừng hẳn nếu vượt, thay vì cắt bớt. Firmware
+  lớn hơn phải link chạy XIP ở `0x3000_0000` với header trên, và `tb_top_soc` phải
+  có model SPI flash. `Driver/ld/soc.ld` (ngoài repo) phải sửa `ROM LENGTH` 64K →
+  8K.
+* Testbench không có model flash thì chân MISO thả nổi. `axi_spi_flash.v` có một
+  nhánh `ifndef SYNTHESIS` coi Z/X là 1 (điện trở kéo lên của board), nên ROM đọc
+  ra `0xFFFF_FFFF` và vào `park` một cách tất định.
+* **XIP hiện rất chậm:** `axi_spi_flash` chỉ có Fast Read `0x0B` một bit ở
+  SPI 50 MHz. Mỗi lần I-cache miss 16 B tốn cỡ 600–700 chu kỳ `clk_axi`. Muốn
+  firmware chạy XIP được thì cần quad I/O (`0xEB`) + continuous read. Đó là việc
+  tiếp theo đáng làm cho đường boot này.
+
 ## Bất biến mà flow tự kiểm tra
 
 Khối pre-check đầu `genus/tcl/genus.tcl` sẽ dừng flow nếu:
@@ -176,6 +245,8 @@ Khối pre-check đầu `genus/tcl/genus.tcl` sẽ dừng flow nếu:
 * số file RTL trong filelist khác `EXPECTED_RTL` = **58**;
 * `top_soc.v` không instantiate I-cache/D-cache 16 KiB, D-cache khác 2-way hoặc
   store buffer khác 4 entry, hoặc thiếu một trong hai nửa RAM;
+* boot ROM trong `top_soc.v` khác `MEM_DEPTH(2048)` (8 KiB), hoặc `boot.mem` có
+  word nào nằm ngoài 2048 word đó;
 * `SLV_AMT` không phải 7;
 * thiếu `u_itcm` / `u_dtcm` hoặc macro decode `SOC_IS_ITCM` / `SOC_IS_DTCM`;
 * macro budget trong `project_config.tcl` không còn là 64 RAM + 4 + 4 cache data
