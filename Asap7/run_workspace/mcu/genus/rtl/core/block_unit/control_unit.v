@@ -40,6 +40,11 @@ module main_control_unit #(
     output reg f_to_x,
     output reg x_to_f,
     output reg [4:0] fpu_operation,
+    // P2c - `fence` (opcode 0001111, funct3 000) khong con la NOP thuan.
+    // Bit nay chay xuyen ID/EX -> EX/MEM roi ra chan `dcache_fence`, noi no bat
+    // D-cache giu core lai cho toi khi store buffer xa het (`sb_drained`).
+    // Xem ghi chu o nhanh 7'b0001111 ben duoi.
+    output reg fence_op,
     // V5 - ma lenh khong ton tai -> illegal-instruction (mcause = 2, mtval = ma lenh).
     // Quy tac fail-safe: khoi tao bang 1, MOI nhanh hop le phai tu ha xuong 0.
     // Nhanh `default` rong cua case cu khien moi opcode la chay im lang nhu NOP.
@@ -68,6 +73,7 @@ module main_control_unit #(
         f_to_x = 1'b0;
         x_to_f = 1'b0;
         fpu_operation = 5'b00000;
+        fence_op = 1'b0;
         illegal_instr = 1'b1;      // fail-safe: nhanh hop le phai tu ha xuong
 
         case (opcode)
@@ -181,7 +187,7 @@ module main_control_unit #(
             // funct3 = 001 la FENCE.I (Zifencei): CHUA hien thuc duong invalidate
             // I-cache o SoC nay, nen bao illegal thay vi chay im lang nhu NOP.
             //
-            // funct3 = 000 (FENCE) hien van la NOP, nhung ly do CU cho dieu do -
+            // P2c - funct3 = 000 (FENCE) KHONG con la NOP.  Ly do cu cho dieu do -
             // "mot hart, bo nho hop nhat khong dat lai thu tu" - DA KHONG CON
             // DUNG tu khi D-cache co store buffer (MEMORY_FIX_PLAN.md Phase 1):
             // mot store cacheable retire truoc khi no toi RAM, nen no CO the bi
@@ -189,11 +195,19 @@ module main_control_unit #(
             //
             // Thu tu voi DMA van an toan theo cau truc: khoi dong DMA la mot ghi
             // MMIO, ma moi truy cap uncached deu ep D-cache xa het store buffer
-            // truoc.  Cho ho duy nhat la debugger ghi bo nho luc core dang chay.
+            // truoc.  Cho ho duy nhat la debugger ghi bo nho luc core dang chay -
+            // va do la cho ho ma `fence_op` bit nay bit lai.
             //
-            // De `fence` xa buffer that su can dan mot bit dieu khien tu day
-            // xuyen id_ex/ex_mem toi cong `cpu_fence` cua data_cache.  Chua lam.
+            // Bit chay: fence_op -> id_ex_fence_op -> ex_mem_fence_op ->
+            // dcache_fence -> cpu_fence cua data_cache, noi no giu dcache_stall
+            // cao cho toi khi `sb_drained`.
+            //
+            // pred/succ (instr[27:20]) bi BO QUA co y: xa TAT CA manh hon dac ta
+            // yeu cau, va SoC nay chi co dung mot diem dat lai thu tu de xa.
+            // `fence` cua rs1/rd khac 0 cung khong bi bat loi - dac ta danh dau
+            // chung la HINT phai chay nhu fence thuong.
             7'b0001111: begin
+                fence_op      = (funct3 == 3'b000);
                 illegal_instr = (funct3 != 3'b000);
             end
 

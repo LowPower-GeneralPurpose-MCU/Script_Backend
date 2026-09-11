@@ -43,6 +43,11 @@ module riscv_pipeline #(
     // DCache interface
     output wire        dcache_read_req,
     output wire        dcache_write_req,
+    // P2c - `fence`.  Khong mang dia chi, khong mang du lieu: no chi bao
+    // D-cache giu core lai cho toi khi store buffer xa het (`sb_drained`).
+    // Xem MEMORY_FIX_PLAN.md Phase 1 / P2 va nhanh 7'b0001111 trong
+    // block_unit/control_unit.v.
+    output wire        dcache_fence,
     output wire [31:0] dcache_addr,
     output wire [31:0] dcache_write_data,
     input  wire [31:0] dcache_read_data,
@@ -134,6 +139,7 @@ module riscv_pipeline #(
     wire        ecall;
     wire        ebreak;
     wire        mret;
+    wire        fence_op;          // P2c
     wire [11:0] csr_addr;
     wire [1:0]  csr_op;
     wire        csr_we;
@@ -181,6 +187,7 @@ module riscv_pipeline #(
     wire        id_ex_ecall;
     wire        id_ex_ebreak;
     wire        id_ex_mret;
+    wire        id_ex_fence_op;    // P2c
     wire [11:0] id_ex_csr_addr;
     wire [1:0]  id_ex_csr_op;
     wire        id_ex_csr_we;
@@ -236,6 +243,7 @@ module riscv_pipeline #(
     wire        ex_mem_ecall;
     wire        ex_mem_ebreak;
     wire        ex_mem_mret;
+    wire        ex_mem_fence_op;   // P2c
     wire [11:0] ex_mem_csr_addr;
     wire [1:0]  ex_mem_csr_op;
     wire        ex_mem_csr_we;
@@ -555,6 +563,12 @@ module riscv_pipeline #(
     // doi lay ~315 ps tren duong toi han (bo mux next-PC ra khoi duong cua bo
     // cong JALR). Firmware nay goi ham rat day nen day la can tren, khong phai
     // con so trung binh.
+    //
+    // R13 - CHUA CHUNG MINH (2026-09-11).  Flush la dong bo: o canh clock do
+    // JALR da sang MEM/WB, cai flush_ex_mem xoa la lenh dang o ID/EX - lenh
+    // NGAY SAU JALR (JALR+4/+2, duong sai), khong phai JALR.  flush_branch
+    // phan giai cung tang va CO trong flush_ex_mem vi dung ly do do.  Neu lenh
+    // do khong phai bong bong thi no chay.  Xem CORE_FIX_PLAN.md §10.
     // -------------------------------------------------------------------------
     wire flush_if_id  = ~mem_freeze &
                         (flush_trap | flush_branch | flush_jalr | flush_jal |
@@ -753,6 +767,7 @@ module riscv_pipeline #(
         .csr_op(csr_op),
         .csr_we(csr_we),
         .wfi_req(wfi_req_internal),
+        .fence_op(fence_op),
         .illegal_instr(illegal_instr),
         .fpu_en(fpu_en),
         .f_reg_write(f_reg_write),
@@ -897,6 +912,7 @@ module riscv_pipeline #(
         .ecall(ecall),
         .ebreak(ebreak),
         .mret(mret),
+        .fence_op(fence_op),
         .csr_addr(csr_addr),
         .csr_op(csr_op),
         .csr_we(csr_we),
@@ -941,6 +957,7 @@ module riscv_pipeline #(
         .id_ex_ecall(id_ex_ecall),
         .id_ex_ebreak(id_ex_ebreak),
         .id_ex_mret(id_ex_mret),
+        .id_ex_fence_op(id_ex_fence_op),
         .id_ex_csr_addr(id_ex_csr_addr),
         .id_ex_csr_op(id_ex_csr_op),
         .id_ex_csr_we(id_ex_csr_we),
@@ -1067,6 +1084,7 @@ module riscv_pipeline #(
         .id_ex_ecall(id_ex_ecall),
         .id_ex_ebreak(id_ex_ebreak),
         .id_ex_mret(id_ex_mret),
+        .id_ex_fence_op(id_ex_fence_op),
         .id_ex_csr_addr(id_ex_csr_addr),
         .id_ex_csr_op(id_ex_csr_op),
         .id_ex_csr_we(id_ex_csr_we),
@@ -1099,6 +1117,7 @@ module riscv_pipeline #(
         .ex_mem_ecall(ex_mem_ecall),
         .ex_mem_ebreak(ex_mem_ebreak),
         .ex_mem_mret(ex_mem_mret),
+        .ex_mem_fence_op(ex_mem_fence_op),
         .ex_mem_csr_addr(ex_mem_csr_addr),
         .ex_mem_csr_op(ex_mem_csr_op),
         .ex_mem_csr_we(ex_mem_csr_we),
@@ -1130,6 +1149,7 @@ module riscv_pipeline #(
         .ex_mem_instr(ex_mem_instr),
         .ex_mem_mem_write(ex_mem_mem_write | ex_mem_f_mem_write),
         .ex_mem_mem_read(ex_mem_mem_read),
+        .ex_mem_fence_op(ex_mem_fence_op),
         // KHOAN NO C - chan GHI to hop ngay trong chu ky nhan trap. flush_ex_mem
         // chi co hieu luc o suon xung ke tiep, nen khong co day nay thi mot `sw`
         // van GHI THAT roi chay lai sau mret -> ghi hai lan.
@@ -1137,6 +1157,7 @@ module riscv_pipeline #(
         .mem_read_data(mem_read_data),
         .dcache_read_req(dcache_read_req),
         .dcache_write_req(dcache_write_req),
+        .dcache_fence(dcache_fence),
         .dcache_addr(dcache_addr),
         .dcache_write_data(dcache_write_data),
         .dcache_read_data(dcache_read_data),

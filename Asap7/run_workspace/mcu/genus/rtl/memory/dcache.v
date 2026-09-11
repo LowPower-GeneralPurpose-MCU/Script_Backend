@@ -41,6 +41,20 @@ module data_cache #(
 
     input  wire                          cpu_read_req,
     input  wire                          cpu_write_req,
+    // -------------------------------------------------------------------------
+    // P2c - `fence` (opcode 0001111, funct3 000) tu tang MEM cua core.
+    //
+    // Khong mang dia chi, khong mang du lieu, khong bao gio bat cung luc voi
+    // cpu_read_req / cpu_write_req: mot lenh o MEM chi la mot trong ba thu.
+    // Tac dung duy nhat: giu `dcache_stall` cao cho toi khi `sb_drained`, tuc
+    // toi khi BRESP cua entry cuoi cung trong store buffer da ve.
+    //
+    // Vi sao can: quy tac 2 cua store buffer chi ep xa khi CHINH CORE dung toi
+    // bus.  Mot master khac - debugger qua System Bus Access - vao thang AXI ma
+    // khong qua CPU, nen khong co gi ep xa cho no.  Truoc P2c, testbench phai
+    // gia lam fence bang mot lenh doc uncached bat ky (xem T9 cu).
+    // -------------------------------------------------------------------------
+    input  wire                          cpu_fence,
     input  wire [C_M_AXI_ADDR_W-1:0]     cpu_addr,
     input  wire [C_M_AXI_DATA_W-1:0]     cpu_write_data,
     input  wire                          mem_unsigned,
@@ -294,10 +308,15 @@ module data_cache #(
     //     load to it misses and rule 2 drains the buffer before the refill.
     //  4. A store whose slot is unavailable (`sb_full`) simply keeps stalling
     //     in LOOKUP, which degrades to the old behaviour instead of dropping.
+    //  5. P2c - `cpu_fence` waits for `sb_drained` explicitly.  Rules 1 and 2
+    //     only drain when the CORE itself needs the bus; nothing forces a drain
+    //     for another master reaching AXI directly (the debugger through SBA).
+    //     `fence` is that force.
     //
     // Rules 1 and 2 together mean the buffer can only ever be non-empty while
     // the main FSM is in IDLE or LOOKUP, so the two never drive AW/W/B at the
-    // same time and no arbiter is needed.
+    // same time and no arbiter is needed.  Rule 5 does not change that: a fence
+    // waits in IDLE and touches no channel at all.
     //
     // Test T7 in tests/tb_mem_paths.sv exists specifically to catch a violation
     // of rule 1.
@@ -673,9 +692,25 @@ module data_cache #(
         fsm_awvalid = 0; fsm_wvalid = 0; fsm_bready = 0; m_axi_arvalid = 0; m_axi_rready = 0;
         case (state)
             IDLE: begin
+                // P2c - FENCE.  Giu core lai cho toi khi entry cuoi cung cua
+                // store buffer nhan xong BRESP.  Khong dung toi mang SRAM,
+                // khong dung toi kenh AXI nao, nen no o nguyen IDLE va khong
+                // bao gio tranh chap voi FSM xa.
+                //
+                // `dcache_hit` van phai xung dung mot chu ky: giao thuc core-side
+                // (`stall` cao suot, `hit` la xung ket thuc) la CHUNG cho ca ba
+                // duong dcache/icache/tcm, va testbench cung cho tren no.  Fence
+                // khong tra du lieu, nen `cpu_read_data` giu 0 - dung roi, tang
+                // MEM khong lay gi tu duong nay cho mot fence.
+                //
+                // Khong be tac: FSM xa chay doc lap voi tin hieu nay.
+                if (cpu_fence && !cpu_read_req && !cpu_write_req) begin
+                    dcache_stall = !sb_drained;
+                    dcache_hit   =  sb_drained;
+                end
                 // Address phase: the SRAM read is issued here and resolved in
                 // LOOKUP, so even a hit costs one stall cycle.
-                if (cpu_read_req || cpu_write_req) begin
+                else if (cpu_read_req || cpu_write_req) begin
                     dcache_stall = 1'b1;
                     if (uncache_en) begin
                         // Rule 2.  A device access must not pass a buffered

@@ -1,7 +1,12 @@
 # Kế hoạch sửa memory subsystem
 
-**Ngày:** 2026-09-05 · **Trạng thái:** Phase 0 xong · nợ verification đã trả ·
-P6 (mã hoá store dưới 32 bit trên AXI) tìm ra và sửa · Phase 1–4 vẫn chờ Genus
+**Ngày:** 2026-09-05 · **Cập nhật:** 2026-09-11 (sau merge P2c + R1/R2/ASCON)
+
+**Trạng thái:** Phase 0 xong · P6 xong · Phase 1 (store buffer) xong · P2b
+(D-cache 2-way, tag sang macro hẹp) xong · **P2c (`fence` xả buffer) xong ở RTL,
+chưa chạy lại sim** · R11 (AMO trượt cache) xong · **R12 (AMO uncached bị bỏ) mở**
+· Phase 2–4 chưa làm. Genus đã chạy lại (2026-09-09, 2026-09-10), xem
+[GENUS_REVIEW_2026-09-09.md](GENUS_REVIEW_2026-09-09.md).
 
 Tài liệu chị em với [MEMORY_ARCHITECTURE.md](MEMORY_ARCHITECTURE.md). File đó ghi
 **lý do của các quyết định đã chốt**; file này ghi **những gì còn sai hoặc còn
@@ -31,31 +36,41 @@ Slave: 7. Domain: `clk_cpu` 400 MHz (gated) / `clk_axi` 200 MHz / `clk_apb` 100 
 
 ### 1.2 Ngân sách SRAM macro
 
-| Khối | Macro | Dung lượng |
-|---|---|---|
-| System RAM (2 x 128 KiB) | 64 | 256 KiB |
-| I-cache 16 KiB, 2-way | 6 | 24 KiB |
-| D-cache 16 KiB, 2-way | 6 | 24 KiB |
-| ITCM | 4 | 16 KiB |
-| DTCM | 4 | 16 KiB |
-| **Tổng** | **84** | **336 KiB** |
+| Khối | 256x4x32 (4 KiB) | 128x4x20 (tag) | Silicon SRAM |
+|---|---|---|---|
+| System RAM (2 x 128 KiB) | 64 | — | 256 KiB |
+| I-cache 16 KiB, 2-way | 4 | 2 | 16 KiB + 2.5 KiB |
+| D-cache 16 KiB, 2-way | 4 | 2 | 16 KiB + 2.5 KiB |
+| ITCM | 4 | — | 16 KiB |
+| DTCM | 4 | — | 16 KiB |
+| **Tổng** | **80** | **4** | **≈ 325 KiB** |
 
-System RAM chiếm **76%** số macro. Đây là khối chi phối diện tích die.
+System RAM chiếm **76 %** số macro. Ở lần tổng hợp 2026-09-10 — khi tag còn
+nằm trên 84 × `256x4x32` — SRAM chiếm **83 %** cell area; con số cho cấu hình
+80 + 4 chờ lần chạy Genus đang làm. Đây là khối chi phối diện tích die.
 
 D-cache từng là 4-way / 8 macro. Macro `1024 x 32` giữ trọn **một** way, nên
 4-way cần 4 macro tag mà mỗi macro chỉ dùng `256 x 20` bit — 16 KiB silicon cho
 640 byte tag thật. Hạ xuống 2-way gấp đôi số set, tag vừa 2 macro thay vì 4; số
 macro data không đổi. Giá phải trả là chênh lệch conflict miss giữa 2-way và
-4-way ở 16 KiB, cỡ 1–3 % trên workload nhúng.
+4-way ở 16 KiB, cỡ 1–3 % trên workload nhúng. Sau đó cả 4 macro tag chuyển sang
+`srambank_128x4x20_6t122` (512 × 20 bit, dùng 95 % thay vì 29.7 %), bớt khoảng
+52 900 µm².
 
 ### 1.3 Đặc tính cache
 
 - **D-cache**: 16 KiB, 2-way, block 16 B, **write-through, no write-allocate**,
   không dirty bit, **store buffer 4 entry** (Phase 1, xong), **không có cổng
-  invalidate/flush/CMO**.
+  invalidate/flush/CMO**. `fence` chờ tới khi buffer rỗng (P2c). Payload W của
+  đường uncached được chốt vào `fsm_wdata_q`/`fsm_wstrb_q` (R1a).
+- **Lệnh nguyên tử** qua D-cache: bắt tay hai chu kỳ `dcache_amo_req` /
+  `dcache_amo_capture` (R1b) — AMO hit tốn 3 chu kỳ thay vì 2; AMO trượt chạy
+  lại vòng tra cứu sau refill (R11). **AMO vào vùng uncached bị bỏ âm thầm (R12,
+  chưa sửa)** — chỉ phần đọc chạy, bộ nhớ không được ghi.
 - **I-cache**: 16 KiB, 2-way, block 16 B.
 - **TCM**: đọc 2 chu kỳ · ghi word 2 chu kỳ · ghi byte/halfword **3 chu kỳ**
-  (read-modify-write, vì macro không có byte-write mask). Ưu tiên cố định D > F.
+  (read-modify-write, vì macro không có byte-write mask). Port D thắng, **trừ khi**
+  fetch đã thua ở chu kỳ trước (`f_starved`, chỉ ITCM có — DTCM không có port F).
 
 ---
 
@@ -64,12 +79,14 @@ macro data không đổi. Giá phải trả là chênh lệch conflict miss gi�
 | ID | Vấn đề | Mức | Phase |
 |---|---|---|---|
 | **P0** | DMA ghi thì CPU đọc ra dữ liệu cũ (không có coherency, không có vùng uncached cho RAM) | Chặn chức năng | **0 — xong** |
-| **P1** | Nửa RAM `hi` và cả ITCM/DTCM không có trong linker, 40/86 macro là silicon chết | Lãng phí | **0 — xong (cơ chế)** |
+| **P1** | Nửa RAM `hi` và cả ITCM/DTCM không có trong linker, 40/86 macro (ngân sách lúc đó) là silicon chết | Lãng phí | **0 — xong (cơ chế)** |
 | **P2** | D-cache không có store buffer, mỗi store stall core trọn một vòng AXI qua CDC 400 sang 200 | Hiệu năng | **1 — xong (35 → 1 chu kỳ)** |
+| **P2c** | `fence` là NOP nên không gì ép store buffer xả cho debugger | Đúng đắn (debug) | **1 — xong ở RTL, chờ sim** |
 | **P3** | DMA và debugger không với tới được TCM | Giới hạn kiến trúc | 2 |
 | **P4** | Không có clock gating riêng cho RAM `hi`; 64 macro toggle clock vô điều kiện | Ngược mục tiêu LowPower | 3 |
-| **P5** | Không có ECC/parity trên 344 KiB SRAM | Chấp nhận có ý thức | 4 |
+| **P5** | Không có ECC/parity trên ≈ 325 KiB SRAM | Chấp nhận có ý thức | 4 |
 | **P6** | `sb`/`sh` và `lb`/`lh` uncached bị slave từ chối im lặng — dữ liệu mất | Chặn chức năng | **0 — xong** |
+| **R12** | AMO vào vùng uncached (DMAPOOL, MMIO) chỉ đọc, không ghi — im lặng | Chặn chức năng (atomics) | **Mở** — GENUS_REVIEW §15.4, khuyến nghị trap |
 
 ---
 
@@ -158,6 +175,9 @@ __attribute__((section(".dtcm_data")))           static int32_t fir_taps[64];
 
 Chạy lại bằng: `genus/rtl/tests/run_soc_sim.sh all`
 
+> Đây là kết quả **lúc đóng Phase 0** (2026-09-05), giữ lại làm mốc. Kết quả
+> hiện hành nằm ở mục 5 và bảng theo dõi mục 7.
+
 Lỗ hổng verify nêu ở đây trước đây — *chưa testcase nào thực sự đọc/ghi nửa
 `hi` hay TCM* — nay đã đóng bằng `tests/tb_mem_paths.sv`. Xem mục 5.
 
@@ -208,14 +228,17 @@ không phải của hệ thống bộ nhớ, và sửa nó cần một testcase 
 
 ---
 
-## 4. Phase 1–4 — CHƯA SỬA, kèm thiết kế
+## 4. Phase 1 — XONG · Phase 2–4 — CHƯA SỬA, kèm thiết kế
 
-> **Điều kiện tiên quyết chung: phải chạy lại Genus.**
-> Netlist hiện tại (`genus/outputs/top_soc_syn.v`) có trước cả đợt rework
-> cache/SRAM, và slack `CLK_CPU` lần đo cuối chỉ **+5.5 ps** ở 400 MHz — tức bằng
-> không. Mọi thay đổi dưới đây đều đụng vào đường tới hạn hoặc vào crossbar. Sửa
-> mù mà không biết còn bao nhiêu slack là đánh bạc với tape-out. Máy đang dùng
-> **không có Cadence Genus**, nên các phase này phải làm trên máy có license.
+> **Điều kiện tiên quyết: Genus — đã đáp ứng một phần.**
+> Genus đã chạy lại trên RTL sau rework (2026-09-09 và 2026-09-10, máy Linux có
+> license; máy Windows vẫn không có). Lần chạy 2026-09-10 (tag còn ở
+> `256x4x32`, chưa có P2c) là đa góc: CLK_CPU
+> **+812.6 ps ở TT nhưng +1.3 ps ở SS**, CLK_AXI **+1.1 ps ở SS** — tức vẫn
+> **không còn dư địa ở góc chậm** cho cả miền CPU lẫn miền AXI, và đó vẫn là con
+> số trước CTS. Phase 2 (thêm cổng crossbar) và 3b (ICG trong clock tree) đụng
+> đúng hai miền đó, nên vẫn phải có Genus + CTS/STA xác nhận trước khi làm.
+> Chi tiết: GENUS_REVIEW_2026-09-09.md §17.
 
 ### Phase 1 — Store buffer cho D-cache (P2) — ĐÃ SỬA VÀ VERIFY
 
@@ -241,13 +264,46 @@ retire trước khi BRESP về, nên `mepc` không còn trỏ vào nó được.
 bằng **PLIC nguồn 7** (`dcache_sb_error`, xem `top_soc.v`) thay vì exception
 đồng bộ. Store uncached — MMIO, CLINT, DMA pool — không đổi: vẫn precise.
 
-**Còn thiếu: `FENCE` chưa xả buffer.** `control_unit.v` decode `fence` thành NOP
-với lý do "một hart, bộ nhớ không đặt lại thứ tự" — lý do đó bây giờ SAI đối với
+**`FENCE` đã xả buffer — P2c, xong.** Trước đó `control_unit.v` decode `fence`
+thành NOP với lý do "một hart, bộ nhớ không đặt lại thứ tự" — lý do đó SAI đối với
 master ngoài. Thứ tự với DMA vẫn an toàn theo cấu trúc (khởi động DMA là ghi
-MMIO ⇒ uncached ⇒ ép xả buffer trước). Chỗ hở duy nhất là **debugger ghi bộ nhớ
-trong lúc core đang chạy**; hiện phải xả bằng một truy cập uncached bất kỳ
-(xem T9). Nối `fence` thật cần thêm một bit điều khiển xuyên pipeline — việc của
-core, không nằm trong phase này.
+MMIO ⇒ uncached ⇒ ép xả buffer trước); chỗ hở là **debugger ghi bộ nhớ trong lúc
+core đang chạy**, master duy nhất vào thẳng AXI mà không qua CPU.
+
+Bit điều khiển chạy suốt: `fence_op` (control_unit) → `id_ex_fence_op` →
+`ex_mem_fence_op` → `dcache_fence` (chặn bằng `commit_kill` như
+`dcache_write_req`) → `cpu_fence` của `data_cache`, nơi nó giữ `dcache_stall` cao
+cho tới khi `sb_drained`. Đây là **quy tắc 5** trong khối chú thích store buffer
+của `dcache.v`.
+
+Ba điểm cần biết:
+
+- **`fence` không có địa chỉ.** `cpu_data_addr` lúc đó là kết quả ALU rác. Nếu nó
+  rơi vào dải TCM thì mux trả lời cũ sẽ lấy `hit` của TCM và fence thành NOP —
+  ngẫu nhiên. `top_soc.v` vì vậy có `ls_sel_*_rsp = ls_sel_* & ~cpu_data_fence`:
+  khi fence bật, câu trả lời luôn đến từ D-cache. TCM không cần xả (SRAM nối
+  thẳng core, không store buffer, không qua bus).
+- **Trap trong lúc fence đang chờ là an toàn.** `commit_kill` hạ `dcache_fence`
+  tổ hợp ngay trong chu kỳ nhận trap, nên trap không bị trễ thêm; fence chưa
+  retire nên `mepc` trỏ vào chính nó và `mret` chạy lại.
+- **`FENCE.I` (funct3 = 001) vẫn là illegal-instruction** — SoC này chưa có
+  đường invalidate I-cache. `pred/succ` bị bỏ qua có ý: xả tất cả mạnh hơn đặc
+  tả yêu cầu.
+
+Nhóm test `TF` trong `tb_mem_paths.sv` đo trực tiếp hai chiều (buffer đầy → fence
+phải chờ và sau đó buffer rỗng; buffer rỗng → fence không được chờ), và T9 thay
+đoạn "fence thủ công" `lw(ADDR_SYSCON + 0)` bằng `fence_()` thật. T10b (AMO trượt
+cache rồi đọc lại bằng SBA) cũng đổi từ chờ cứng `repeat (200)` sang `fence_()`.
+TF thêm 7 check → `mem` mong đợi **128**. **Chưa chạy lại sau merge** — máy
+Windows không có XSim; chạy `run_soc_sim.sh mem` hoặc `vivado_sim_mem.tcl`.
+
+Nhóm `TS` vẫn cố ý xả buffer bằng `lw(ADDR_SYSCON + 0)` (quy tắc 2) trước khi
+đo, chứ không dùng `fence`: TS chạy trước TF, nên nó không được phụ thuộc vào
+tính năng mà TF chưa kiểm.
+
+**Nợ ngoài repo:** `pipeline_stage.v`, `pipeline_register.v`, `control_unit.v`,
+`riscv_pipeline.v` dùng chung với `integrated-matrix-extension/core/`. P2c (cùng
+R2) phải vá song song sang cây đó, nếu không hai bản core lệch nhau.
 
 **Vấn đề (ghi lại nguyên văn thiết kế gốc).** FSM hiện tại: `IDLE -> LOOKUP -> AW_REQ -> W -> B_WAIT -> IDLE`, và
 `dcache_stall = 1` suốt đoạn đó. Mỗi lệnh `sw` đều stall core trọn một vòng AXI
@@ -346,9 +402,13 @@ clock_gate cg_ram_hi (.clk_in(clk_axi),
                       .en(clk_en_ram_hi | ram_hi_clk_req), ...);
 ```
 
-`clk_gate_reg` trong `apb_syscon` hiện dùng **hết cả 7 bit** `[6:0]`
-(0 pwm, 1 uart, 2 spi, 3 i2c, 4 gpio, 5 acc, 6 dbg) nên phải nới lên 8 bit và cập
-nhật cả tài liệu thanh ghi lẫn driver.
+`clk_gate_reg` trong `apb_syscon` hiện dùng **hết cả 8 bit** `[7:0]`
+(0 pwm, 1 uart, 2 spi, 3 i2c, 4 gpio, 5 acc, 6 dbg, **7 ascon** — thêm
+2026-09-10, reset vẫn `0x43`). RAM `hi` sẽ cần bit 8: nới thanh ghi lên 9 bit,
+giữ reset value, và cập nhật cả tài liệu thanh ghi lẫn `Driver/inc/syscon.h`.
+Thêm clock gate mới cũng phải thêm một `make_gated_clock` trong
+`tcl/constraint.sdc` và tăng `EXPECTED_CLOCKS` trong `tcl/genus.tcl` — ASCON
+từng quên bước này (đã sửa 2026-09-11).
 
 **3b. ICG per-bank trong `asap7_sram_1rw`.**
 
@@ -374,7 +434,14 @@ thuật/IoT thì đây là đánh đổi chấp nhận được, **nhưng phải
 ## 5. Nợ verification — ĐÃ TRẢ
 
 `genus/rtl/tests/tb_mem_paths.sv` (chạy bằng `run_soc_sim.sh mem`) phủ toàn bộ
-danh sách nợ. 99 check, tất cả PASS.
+danh sách nợ. Số check tăng theo từng phase:
+
+| Mốc | Check | Thêm gì |
+|---|---|---|
+| Đóng Phase 0 (2026-09-05) | 99 / 99 | T0–T9, TP |
+| Phase 1 store buffer (2026-09-08) | 109 / 109 | TS |
+| R1b/R11 AMO (2026-09-10) | 121 / 121 | T10a–d |
+| P2c `fence` (2026-09-11) | **128 mong đợi — chưa chạy** | TF |
 
 | Cần thêm | Nhóm | Trạng thái |
 |---|---|---|
@@ -386,6 +453,10 @@ danh sách nợ. 99 check, tất cả PASS.
 | Trọng tài port F/D của TCM (`f_starved`) | T5 | Xong |
 | Đường ghi/đọc của debugger (DTM/SBA) | T9 | Xong |
 | D-cache có thật sự hit không (đo độ trễ) | TP | Xong |
+| Store buffer: retire 1 chu kỳ, không mất entry, dữ liệu tới RAM | TS | Xong |
+| `fence` chờ khi buffer có dữ liệu, không chờ khi rỗng | TF | Viết xong, chờ sim |
+| AMO hit / miss (R1b, R11), bằng chứng qua SBA | T10a–d | Xong (có negative control) |
+| AMO vào vùng uncached | T10e | Chỉ quan sát — lộ ra R12 |
 
 ### 5.1 Testbench này làm việc thế nào
 
@@ -395,6 +466,8 @@ Không cần firmware, nên không cần toolchain RISC-V (máy này không có)
 ```
 cpu_inst_req / cpu_inst_addr             -> port fetch
 cpu_data_rd_req / cpu_data_wr_req / ...  -> port load/store
+cpu_data_fence                           -> fence (P2c)
+cpu_data_amo_req + mux wdata             -> tầng MEM của lệnh nguyên tử (R1b)
 sba_req / sba_op / sba_size / sba_addr   -> System Bus Access của Debug Module
 ```
 
@@ -440,9 +513,10 @@ và là lý do `.dmabuf` bắt buộc nằm ở DMAPOOL uncached.
   firmware. `tb_mem_paths.sv` đã chạy hai đường đó ở mức RTL, nhưng chuỗi
   crt0 → copy ITCM → nhảy vào ITCM thì chưa từng chạy thật.
 - **Lint chưa chạy được:** máy không có `verilator`. Đã sửa `run_rtl_lint.sh`:
-  nó đếm `**/*.v` gồm cả model hành vi trong `tests/models/` nên bất biến "55
-  file" **không bao giờ khớp** (đếm ra 56) và model sẽ bị nạp hai lần. Nay
-  `tests/` bị loại, khớp đúng với filelist mà `run_soc_sim.sh` và Genus dùng.
+  nó đếm `**/*.v` gồm cả model hành vi trong `tests/models/` nên bất biến số
+  file **không bao giờ khớp** và model sẽ bị nạp hai lần. Nay `tests/` bị loại,
+  khớp đúng với filelist mà `run_soc_sim.sh` và Genus dùng. Con số là **58** từ
+  khi thêm 3 file `apb_ascon/` (lint từng bị bỏ quên ở 55 — sửa 2026-09-11).
 
 ---
 
@@ -458,13 +532,16 @@ P6       --- XONG -----------------------------------  không cần Genus
 V1       --- XONG -----------------------------------  không cần Genus
    |         tb_mem_paths.sv, 99 check. Chính nó tìm ra P6.
    v
-[GATE] Chạy lại Genus. Ghi lại slack CLK_CPU và số macro.
-   |    Nếu slack đã âm thì DỪNG, xử lý timing trước, đừng thêm tính năng.
+Phase 1  --- XONG (store buffer, P2b, P2c) ----------  lợi ích lớn nhất
+   |         35 -> 1 chu kỳ/store, fw nhanh 1.85x. P2c chờ chạy lại sim.
    v
-Phase 1  --- Store buffer ---------------------------  lợi ích lớn nhất
-   |         Viết test store-ordering TRƯỚC khi sửa RTL.
+[GATE] Genus — ĐÃ CHẠY 2026-09-09 / 09-10 (tag cũ); đang chạy lại cho tag 128x4x20.
+   |    TT dư +812 ps nhưng SS chỉ +1.3 ps (CPU) / +1.1 ps (AXI), trước CTS.
+   |    Góc chậm vẫn bằng 0 -> xử lý timing trước khi thêm logic vào CPU/AXI.
    v
-Phase 3a --- Gate clock RAM hi ----------------------  dùng pattern CORDIC
+R12      --- AMO uncached -> trap -------------------  chặn chức năng, rẻ
+   v
+Phase 3a --- Gate clock RAM hi ----------------------  dùng pattern CORDIC/ASCON
    |         Cần test DMA vào RAM hi để chứng minh không treo bus.
    v
 [QUYẾT ĐỊNH] Phase 2: chọn A / B / C.
@@ -478,8 +555,8 @@ Phase 4  --- ECC ------------------------------------  chỉ nếu hướng sả
 
 **Nguyên tắc xuyên suốt:**
 
-1. **Không sửa RTL mà không chạy lại được synthesis.** Slack +5.5 ps nghĩa là
-   không còn dư địa cho thay đổi mù.
+1. **Không sửa RTL mà không chạy lại được synthesis.** Slack ở góc SS còn
+   +1.3 ps (CPU) / +1.1 ps (AXI) nghĩa là không còn dư địa cho thay đổi mù.
 2. **Test trước, sửa sau** với Phase 1 — vì đường store hiện đang đúng, và không có
    gì bắt được nếu nó thành sai.
 3. **Mọi thay đổi clock gating phải dùng pattern `*_clk_req` đã kiểm chứng.** Dự án
@@ -500,12 +577,16 @@ Phase 4  --- ECC ------------------------------------  chỉ nếu hướng sả
 | P6 | AWSIZE / căn địa chỉ / lane WDATA cho store dưới 32 bit | 0 | Xong, đã verify (T2/T6/T9) | `memory/dcache.v`, `debug/dtm_axi_master.v` |
 | P2 | Store buffer D-cache | 1 | **Xong, đã verify (TS/T7/T9)** | `genus/rtl/memory/dcache.v`, `top_soc.v` |
 | P2b | D-cache 4-way → 2-way, thu hồi 2 macro tag | 1 | **Xong, đã verify (TP)** | `top_soc.v`, `flow/project_config.tcl`, `tcl/genus.tcl` |
-| P2c | `FENCE` xả store buffer | — | **Chưa** — cần bit điều khiển xuyên pipeline | `core/block_unit/control_unit.v`, `core/pipeline_register/`, `core/riscv_pipeline.v` |
+| P2c | `FENCE` xả store buffer | 1 | **Xong ở RTL (TF/T9/T10b viết xong) — chờ chạy lại `mem`, mong đợi 128/128** | `core/block_unit/control_unit.v`, `core/pipeline_register/`, `core/pipeline_stage/`, `core/riscv_pipeline.v`, `top_soc.v`, `memory/dcache.v` |
+| R1a | Chốt payload W đường uncached | 1 | Xong, đã verify (T2/T6) | `memory/dcache.v` |
+| R11 | AMO trượt cache retire mà không ghi | 1 | Xong, đã verify (T10b + negative control) | `memory/dcache.v` |
+| R12 | AMO vào vùng uncached bị bỏ âm thầm | 1 | **Mở — cần quyết định A/B/C**, khuyến nghị B (trap) | `memory/dcache.v` |
 | P3 | Đường DMA/debug vào TCM | 2 | Chờ quyết định A/B/C | `genus/rtl/memory/tcm.v`, `top_soc.v` |
-| P4a | Gate clock RAM hi | 3 | Chưa | `top_soc.v`, `peripheral/apb_syscon.v` |
+| P4a | Gate clock RAM hi | 3 | Chưa — cần bit 8 của `CLK_GATE_CTRL` + clock SDC mới | `top_soc.v`, `peripheral/apb_syscon.v`, `tcl/constraint.sdc` |
 | P4b | ICG per-bank | 3 | Chưa | `genus/rtl/memory/asap7_sram_1rw.v` |
 | P5 | ECC/parity | 4 | Quyết định có ý thức: bỏ qua | — |
-| V1 | Test RAM hi / TCM / DMA coherency / store ordering | mọi phase | **Xong, 109/109 PASS** | `genus/rtl/tests/tb_mem_paths.sv` |
-| V2 | Đếm file trong lint khớp filelist tổng hợp | — | Xong | `genus/rtl/tests/run_rtl_lint.sh` |
+| V1 | Test RAM hi / TCM / DMA coherency / store ordering / AMO | mọi phase | **121/121 PASS (2026-09-10)**; +TF = 128 chờ chạy | `genus/rtl/tests/tb_mem_paths.sv` |
+| V2 | Đếm file trong lint khớp filelist tổng hợp | — | Xong — **58** (sửa 2026-09-11) | `genus/rtl/tests/run_rtl_lint.sh` |
 | — | Chạy `verilator` lint | — | Chưa chạy được — máy không có verilator | máy có verilator |
-| — | **Chạy lại Genus** | GATE | **Chặn mọi phase sau** | máy có license |
+| — | Chạy Genus | GATE | **Đã chạy 2026-09-09, 2026-09-10** (cả hai với tag trên `256x4x32`). **Đang chạy lại** cho tag `128x4x20`. Lần sau cần thêm P2c + `CLK_ASCON` (19 clock) | máy có license |
+| — | Innovus đến floorplan | GATE | Chưa chạy trên netlist mới | máy có license |

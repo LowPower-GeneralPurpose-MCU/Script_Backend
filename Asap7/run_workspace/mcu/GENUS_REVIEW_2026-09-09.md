@@ -4,11 +4,21 @@
 (15.6 MB, thoát `Normal exit`), `genus/outputs/top_soc_syn.v` (23.7 MB),
 `genus/tcl/genus.tcl`, `genus/tcl/constraint.sdc`, và cây RTL `genus/rtl/`.
 
-> **Trạng thái 2026-09-09 (cập nhật sau khi sửa):** F1, F2, R1, R2, R3, R4, R6, R7, R8
-> **đã áp và verify** (XSim: apb 256/256, fw PASS, mem 109/109). R5 để lại theo thoả
-> thuận. Trong lúc làm R1 phát hiện thêm **R11 — một lỗi đúng đắn có sẵn từ trước**
-> (AMO trượt cache retire mà không ghi), đã sửa. Năm con số trong bản gốc đã được
-> **đính chính bằng đo đạc thật** — §12.
+> **Trạng thái 2026-09-11 (sau merge P2c):**
+>
+> - **Đã áp và verify:** F1, F2 (setup SS+TT, hold view FF khai báo nhưng đóng ở
+>   Innovus), R1a, R1b, R2, R3, R4, R6, R7, R8, R11, ASCON A1–A5. XSim 2026-09-10:
+>   apb 256/256, fw PASS `t=1701796000`, mem 121/121, ascon 31/31.
+> - **Để lại theo thoả thuận:** R5. **Chưa làm:** F3 (vẫn 1 thread), F4, F5, F6–F8,
+>   R9. (R10 là danh sách những thứ *không* phải lỗi.)
+> - **Mở:** **R12** (AMO uncached bị bỏ, §15.4), **R13** (`flush_jalr` thiếu trong
+>   `flush_ex_mem`, §17.4), ASCON A6.x (§16.7).
+> - **Mới sau review:** P2c `fence` merge vào RTL — mem mong đợi 128, **chưa chạy**;
+>   `CLK_ASCON` thêm vào SDC (19 clock).
+> - **Tổng hợp:** lần chạy đang commit là 2026-09-10 18:47, **trước** khi tag chuyển
+>   sang `128x4x20` — đang chạy lại. Xem §17.
+>
+> Năm con số trong bản gốc đã được **đính chính bằng đo đạc thật** — §12.
 
 **Kết luận một dòng:** run **chạy sạch về mặt công cụ** (0 Error, 0 violating path,
 84/84 macro SRAM khớp), nhưng **không đủ điều kiện để coi là đóng timing 400 MHz** —
@@ -573,7 +583,9 @@ thật của từng master** (`.m_AWPROT_i(m_axi_awprot)`) và phải giữ nguy
 khỏi `ADDR_INFO_W` / `AX_INFO_W` và tái tạo ở đầu ra slave. Không đổi diện tích cuối
 (Genus đã dọn) nhưng cắt phần lớn thời gian elaborate/generic và giảm peak memory.
 
-**⏳ CHƯA LÀM** — cùng R1 là hai mục còn lại của nhóm đã duyệt.
+**✅ ĐÃ ÁP 2026-09-09** (xem §13, "Bổ sung sau khi làm tiếp R1 và R4"):
+`AXI_SIDEBAND_EN = 0` cùng bốn hằng `AXI_*_CONST` tại `u_axi_interconnect` trong
+`top_soc.v`.
 
 ### 🟠 R5 — Crossbar 4×7 đầy đủ trong khi ma trận kết nối thật rất thưa
 
@@ -601,6 +613,8 @@ khai báo và gán ngoài `generate`. Với mảng tag `ADDR_W = 9` → 1 bank �
 nhưng gây warning ở mọi lần chạy.
 
 **Sửa:** đưa `reg read_bank_q` và `always` block vào trong `generate ... if (NUM_BANKS > 1)`.
+
+**✅ ĐÃ ÁP 2026-09-09** (§13).
 
 ### 🟡 R7 — `f_starved` chết vì `HAS_FETCH_PORT = 0`
 
@@ -634,6 +648,9 @@ Không sai — đó là kiểu viết phòng thủ. Nhưng với FSM mã hoá đ
 được nghĩa là **không có đường phục hồi thật nếu state bị lỗi mềm**. Nếu muốn giữ ý nghĩa
 phòng thủ thì phải dùng one-hot + phát hiện state bất hợp lệ; nếu không, có thể bỏ để hết
 warning.
+
+**✅ ĐÃ ÁP 2026-09-09** — bỏ cả hai `default`, comment ghi lý do ngay tại chỗ. Mọi ngõ ra
+của khối tổ hợp đã có gán mặc định ở đầu `always @(*)` nên không sinh latch.
 
 ### 🟡 R9 — Clock gate tự dựng chưa được khai báo cho CTS
 
@@ -713,18 +730,18 @@ Ba lý do con số này chỉ dùng để **so sánh giữa các bản tổng h�
 
 ## 9. Bảng ưu tiên hành động
 
-| # | Hạng mục | Loại | Công | Lợi |
-|---|---|---|---|---|
-| 1 | **F1** — sửa vòng `ungroup_ok` + thêm `error` khi không khớp | flow | 15 phút | Lấy lại hierarchy cache/TCM/SRAM cho Innovus + report |
-| 2 | **R3** — tham số hoá depth FIFO CDC (16 → 4) | RTL | 1–2 h | ~25–30 k µm², ~7 % area logic |
-| 3 | **R2** — đăng ký `jalr_target` ở EX | RTL | nửa ngày + verify | ~1 300 ps trên đường tới hạn #1 |
-| 4 | **R1** — thêm 1 chu kỳ cho AMO | RTL | nửa ngày + verify | Cắt cả họ 99 đường tới hạn |
-| 5 | **F2** — thêm corner SS/FF, tách hold view | flow | 1 h | Điều kiện cần để tin bất kỳ con số nào |
-| 6 | **T5** — chạy lại với `MCU_SAIF` | flow | 30 phút (đã có script) | Power lần đầu có nghĩa |
-| 7 | **F3** — bật 8 thread | flow | 2 phút | Runtime 65 → ~20 phút |
-| 8 | **F4** — bật clock gating tự động | flow+RTL | 2–4 h | Giảm phần lớn 12.5 mW internal của register |
-| 9 | **R4 / R5** — cắt sideband + ma trận kết nối thưa | RTL | 1 ngày | Runtime/memory elaborate, dọn đường cho DFT |
-| 10 | **F5–F7, R6–R8** — dọn warning, thêm `report_design_rules`, kiểm đơn vị `.lib` | flow+RTL | 2 h | Sạch log, loại rủi ro F7 |
+| # | Hạng mục | Loại | Công | Lợi | Trạng thái 2026-09-11 |
+|---|---|---|---|---|---|
+| 1 | **F1** — sửa vòng `ungroup_ok` + thêm `error` khi không khớp | flow | 15 phút | Lấy lại hierarchy cache/TCM/SRAM cho Innovus + report | ✅ có hiệu lực trong run 09-10 |
+| 2 | **R3** — tham số hoá depth FIFO CDC (16 → 4) | RTL | 1–2 h | ~~~25–30 k µm²~~ ~10–14 k µm² (§12.3) | ✅ |
+| 3 | **R2** — đăng ký `jalr_target` ở EX | RTL | nửa ngày + verify | ~~~1 300 ps~~ ~315 ps (§12.1) | ✅, +11.4 % fw; rủi ro R13 |
+| 4 | **R1** — thêm 1 chu kỳ cho AMO | RTL | nửa ngày + verify | Cắt cả họ 99 đường tới hạn | ✅ R1a/R1b + R11 |
+| 5 | **F2** — thêm corner SS/FF, tách hold view | flow | 1 h | Điều kiện cần để tin bất kỳ con số nào | ✅ setup SS+TT; hold ở Innovus |
+| 6 | **T5** — chạy lại với `MCU_SAIF` | flow | 30 phút (đã có script) | Power lần đầu có nghĩa | ⏳ chưa |
+| 7 | **F3** — bật 8 thread | flow | 2 phút | Runtime 65 → ~20 phút | ⏳ chưa (run 09-10 vẫn 1 thread, 76 phút) |
+| 8 | **F4** — bật clock gating tự động | flow+RTL | 2–4 h | Giảm phần lớn 12.5 mW internal của register | ⏳ chưa |
+| 9 | **R4 / R5** — cắt sideband + ma trận kết nối thưa | RTL | 1 ngày | Runtime/memory elaborate, dọn đường cho DFT | R4 ✅ · R5 để lại |
+| 10 | **F5–F7, R6–R8** — dọn warning, thêm `report_design_rules`, kiểm đơn vị `.lib` | flow+RTL | 2 h | Sạch log, loại rủi ro F7 | R6–R8 ✅ · F5–F7 ⏳ |
 
 ---
 
@@ -817,6 +834,14 @@ phần trăm. Nếu chỉ sao chép mù `flush_branch` sang `flush_jalr` ở c�
 đã ship một hồi quy 85 % mà testbench vẫn PASS — **PASS không phát hiện được hồi quy hiệu
 năng**, chỉ có so sánh mốc thời gian mới thấy.
 
+> ⚠️ **Đính chính 2026-09-11 — lập luận "thừa về mặt logic" chưa đứng vững (R13).**
+> Flush là đồng bộ: ở cạnh clock đó JALR đã sang MEM/WB, còn thứ `flush_ex_mem` xoá
+> là lệnh đang ở ID/EX — lệnh ngay sau JALR, luôn là đường sai vì BTB không dự đoán
+> JALR. `flush_branch` phân giải cùng tầng và **có** trong `flush_ex_mem` đúng vì lý
+> do này. Nếu ID/EX gần như luôn là bong bóng (cache 2 chu kỳ/lệnh) thì bỏ term này
+> vô hại — nhưng khi đó thêm nó cũng phải gần như miễn phí, mâu thuẫn với +85 %.
+> Chưa sửa RTL; cách kiểm và sửa ở CORE_FIX_PLAN.md §10.
+
 +11.4 % còn lại là giá thật của việc JALR đi từ 1 bong bóng lên 2. Firmware này gọi hàm
 rất dày nên đây là **cận trên**, không phải số trung bình.
 
@@ -871,7 +896,7 @@ khỏi danh sách `dont_use` trước, nếu không bật `lp_insert_clock_gatin
 | Mục | File | Verify |
 |---|---|---|
 | **F1** | `genus/tcl/genus.tcl` — khớp tên đã uniquify bằng `string match`, `error` khi không khớp | unit-test tclsh với stub: 7/7 mẫu khớp, negative test raise |
-| **F2** | `genus/rtl/flow/project_config.tcl`, `genus/tcl/genus.tcl`, `innovus/tcl/viewDefinition.tcl` — thêm goc SS/FF, tách hold view, fallback khi thiếu thư viện, `timing_hold_syn.rpt` | unit-test tclsh 3 case: đủ thư viện / thiếu FF / tắt bằng env |
+| **F2** | `genus/rtl/flow/project_config.tcl`, `genus/tcl/genus.tcl`, `innovus/tcl/viewDefinition.tcl` — thêm goc SS/FF, tách hold view, fallback khi thiếu thư viện. *(Bản đầu có `timing_hold_syn.rpt`; bản `genus.tcl` hiện hành bỏ nó — hold không báo cáo ở Genus, TUI-745, đóng ở Innovus. Công tắc giờ là biến Tcl `MULTI_CORNER`, không còn biến môi trường.)* | unit-test tclsh 3 case: đủ thư viện / thiếu FF / tắt |
 | **R2** | `core/pipeline_stage/pipeline_stage.v`, `core/pipeline_register/pipeline_register.v`, `core/block_unit/pipeline_control_unit.v`, `core/riscv_pipeline.v` | XSim fw PASS; đo hồi quy +11.4 % (xem §12.1) |
 | **R3** | `bus/axi_interconnect/axi_async_bridge.v`, `top_soc.v` | XSim mem 109/109, apb 256/256 |
 | **R6** | `memory/asap7_sram_1rw.v` | XSim mem 109/109 |
@@ -907,8 +932,9 @@ Bản gốc đề xuất R1 là "thêm một chu kỳ cho AMO". Khi lần theo n
 - Và trong lúc lần đường đi mới lộ ra **R11**, một lỗi đúng đắn có sẵn (§14).
 
 **Chưa làm và cần nhớ:** `pipeline_stage.v` được chia sẻ với
-`D:/GITHUB_PROJECT/integrated-matrix-extension/core/` — thay đổi R2 phải vá song song
-sang cây đó (kèm `pipeline_register.v`, `pipeline_control_unit.v`, `riscv_pipeline.v`).
+`D:/GITHUB_PROJECT/integrated-matrix-extension/core/` — thay đổi R2 **và P2c** phải vá
+song song sang cây đó (kèm `pipeline_register.v`, `pipeline_control_unit.v`,
+`control_unit.v`, `riscv_pipeline.v`).
 
 ---
 
@@ -957,8 +983,8 @@ sẽ trượt tiếp → **lặp vô hạn**. Trường hợp đó phải nhả 
   Bằng chứng: `t=1701796000` **không đổi một pico giây nào** qua cả R1a, R1b và R11.
 - `mem` (`tb_mem_paths.sv`) `force` thẳng các cổng core-side của `top_soc` và tự đóng vai
   CPU — nó **bypass** `memory_access`, tức bypass toàn bộ AMO ALU.
-- Không có toolchain RISC-V trên máy (xem `[[mcu-sim-setup]]`), nên không build được
-  firmware mới có atomics.
+- Không có toolchain RISC-V trên máy Windows (`riscv-none-elf-gcc`, xem
+  `Driver/BUILD.md`), nên không build được firmware mới có atomics.
 
 Nghĩa là: **R1a được verify thật** (nó đổi đường uncached store, đúng thứ nhóm T2/T6 của
 `tb_mem_paths` kiểm), còn **R1b và R11 mới chỉ được kiểm bằng đọc code và bằng việc chúng
@@ -1173,8 +1199,10 @@ Cả ba khối đều dùng `error` khi không khớp tên object, theo đúng n
 | `o_active` = `busy` hoặc START hoặc DATA_VALID hoặc TRNG_EN; thêm output `busy` cho `ascon_core` | `apb_ascon.v`, `ascon_core.v` |
 | `CLK_GATE_CTRL` mở rộng 7→8 bit, **bit 7 = ASCON**, reset `8'b0100_0011` (giá trị số vẫn là `0x43` nên `Driver/inc/syscon.h` và firmware cũ **không hỏng**) | `peripheral/apb_syscon.v` |
 | IRQ vào **PLIC nguồn 8**, qua `cdc_sync_bit` theo đúng lệ của các ngoại vi khác | `top_soc.v` |
-| 3 file RTL vào filelist Genus | `tcl/rtl_filelist.tcl` |
+| 3 file RTL vào filelist Genus (`EXPECTED_RTL` 55 → 58) | `tcl/rtl_filelist.tcl`, `tcl/genus.tcl` |
 | Suite mới `run_soc_sim.sh ascon` | `rtl/tests/run_soc_sim.sh` |
+| *(bổ sung 2026-09-11)* Gated clock `CLK_ASCON` từ `cg_ascon/clk_out`, vào nhóm APB, có clock-gating check; `EXPECTED_CLOCKS` 18 → 19 | `tcl/constraint.sdc`, `tcl/genus.tcl` |
+| *(bổ sung 2026-09-11)* Lint đếm 58 file thay vì 55 | `rtl/tests/run_rtl_lint.sh` |
 
 `Driver/inc/` **chưa** có header cho ASCON — cần thêm nếu firmware sẽ dùng.
 
@@ -1188,3 +1216,105 @@ Cả ba khối đều dùng `error` khi không khớp tên object, theo đúng n
 | `fw` | PASS `t=1701796000` | **PASS `t=1701796000`** (không đổi 1 pico giây) |
 | `mem` | 109/109 | **121/121 PASS** (+12 check AMO) |
 | `ascon` | — | **31/31 PASS** |
+
+---
+
+## 17. Lần tổng hợp 2026-09-10 và đồng bộ sau merge P2c (2026-09-11)
+
+### 17.1 Lần chạy 2026-09-10 18:47 — đang nằm trong `genus/outputs` và `genus/reports`
+
+**Cấu hình của lần chạy này** — phải biết trước khi đọc số:
+
+| | Có trong run | Ghi chú |
+|---|---|---|
+| R1a, R1b, R2, R3, R4, R6–R8, R11, ASCON | ✅ | |
+| F1 (giữ hierarchy) | ✅ | log in đủ `ungroup_ok = false` cho cache/TCM/SRAM/interconnect/RO |
+| F2 (đa góc) | ✅ | setup `view_ss` (0.63 V, 100 °C) + `view_tt`; hold `view_ff` khai báo, không báo cáo ở Genus |
+| Ring oscillator TRNG (A5) | ✅ | `Ring oscillator: khop 7 cell theo base cell`, cả 7 được `preserve` |
+| Tag cache trên `srambank_128x4x20` | ❌ | netlist có **84 × `256x4x32`**, 0 × `128x4x20` — thay đổi vào ở commit `12ce85de`, *sau* run. **Đang chạy lại.** |
+| `genus.tcl` hiện hành | ❌ | `12ce85de` viết lại `genus.tcl` sau run; số dòng trong log không khớp file hiện tại |
+| P2c `fence` | ❌ | merge 2026-09-11 |
+| `CLK_ASCON` trong SDC | ❌ | netlist có **9** `DLLx1` clock gate nhưng SDC chỉ **18** clock — `cg_ascon` không có clock-gating check |
+
+**Kết quả** (`qor_syn.rpt`):
+
+| Clock | Chu kỳ (ps) | WNS `view_tt` | WNS `view_ss` |
+|---|---:|---:|---:|
+| **CLK_CPU** | 2500 | **+812.6** | **+1.3** |
+| **CLK_AXI** | 5000 | +1138.6 | **+1.1** |
+| CLK_CORE | 2500 | +1016.6 | +990.3 |
+| CLK_DBG | 5000 | +2324.5 | +930.7 |
+| CLK_SDRAM_OUT | 5000 | +581.9 | +522.4 |
+| CLK_APB | 10000 | +4324.7 | +4043.5 |
+| Mọi clock khác | ≥ 10000 | ≥ +5650 | ≥ +3262 |
+
+| | 2026-09-09 | 2026-09-10 |
+|---|---:|---:|
+| Leaf instance | 146 753 | 154 929 |
+| Sequential | 39 417 | 38 740 |
+| Cell area (µm²) | 2 113 150 | 2 124 233 |
+| Runtime | 3 930 s | 4 552 s, vẫn 1 thread (F3 chưa làm) |
+
+### 17.2 Đọc số liệu này thế nào
+
+1. **R1 + R2 có tác dụng thật ở TT:** CLK_CPU từ +0.5 ps lên **+812.6 ps**. Họ 99 đường
+   AMO → FIFO CDC (§3.3) biến mất khỏi top-100.
+2. **Nhưng góc SS lại về bằng 0:** +1.3 ps (CPU) và +1.1 ps (AXI), vẫn trước CTS. Hai
+   con số này là chuẩn để so từ giờ, **không phải** +812 ps. Và vì `.lib` SRAM chỉ có
+   góc TT (§6 F2), trễ macro **không** bị derate ở SS — con số SS thật còn tệ hơn trên
+   các đường chạm macro.
+3. **Đường tới hạn ở SS đã phân tán**, không còn một thủ phạm: 100 đường xấu nhất kết
+   thúc ở `EX_gen_muldiv.DIV_quotient_reg`, dữ liệu ghi SRAM của D-cache
+   (`u_dcache/DATA_RAM.../wd`), `pc_reg`, `MEM_WB_mem_read_data_reg`,
+   `EX_MEM_ex_mem_csr_write_data_reg`, `IF_ID_if_id_instr_reg`, và — ở miền AXI —
+   bộ đếm địa chỉ của DMA (`u_dma_engine_gen_ch[*].u_ch_rd_addr_reg`). Miền AXI là
+   **mới**: bản 09-09 nó còn +529.8 ps ở TT.
+4. Diện tích/số macro của run này **không** đại diện cho cấu hình 80 + 4. So sánh
+   diện tích chỉ có nghĩa sau lần chạy đang làm.
+
+### 17.3 Đồng bộ sau merge P2c (2026-09-11, chưa tổng hợp, chưa mô phỏng)
+
+| Thay đổi | File | Lý do |
+|---|---|---|
+| P2c `fence` xả store buffer | `core/*`, `memory/dcache.v`, `top_soc.v` | MEMORY_FIX_PLAN.md § Phase 1 |
+| TF (7 check) + T9 dùng `fence_()`; T10b đổi `repeat (200)` → `fence_()`; header liệt kê đủ nhóm | `rtl/tests/tb_mem_paths.sv` | chờ cứng 200 chu kỳ là đoán, fence thì tất định |
+| `CLK_ASCON` + `EXPECTED_CLOCKS` 19 | `tcl/constraint.sdc`, `tcl/genus.tcl` | §17.1 — ASCON thiếu clock trong SDC |
+| Innovus giữ cận dưới 18 clock | `innovus/tcl/innovus.tcl` | để netlist 18 clock đang commit vẫn chạy được floorplan |
+| Lint 55 → 58 | `rtl/tests/run_rtl_lint.sh` | lint sẽ fail ngay bước đếm file |
+| Nạp thêm model `srambank_128x4x20` | `rtl/tests/vivado_sim_mem.tcl` (local, chưa commit) | thiếu thì elaborate lỗi |
+
+**Rủi ro timing của P2c — phải xem trong lần chạy tới.** P2c thêm hai thứ vào đúng
+miền CLK_CPU đang còn +1.3 ps ở SS:
+
+- `dcache_stall = !sb_drained` khi `cpu_fence` ở IDLE — `dcache_stall` là
+  `mem_freeze`, fan-out tới mọi stall/flush của pipeline;
+- `ls_sel_*_rsp = ls_sel_* & ~cpu_data_fence` trên select của mux trả lời
+  `cpu_data_hit` / `cpu_data_stall` trong `top_soc.v`.
+
+Cả hai đều một tầng cổng, nhưng nằm trên đường mà trước đây chưa từng có trong
+top-100. Nếu CLK_CPU ở SS thành âm, xem hai chỗ này trước.
+
+### 17.4 R13 — `flush_jalr` không có trong `flush_ex_mem`
+
+Rủi ro đúng đắn mở, liên quan trực tiếp tới R2. Đính chính ở §12.1, phân tích và cách
+kiểm ở CORE_FIX_PLAN.md §10. Tóm tắt: `flush_branch` phân giải cùng tầng và **có** trong
+`flush_ex_mem`; `flush_jalr` thì không, nên lệnh ngay sau JALR (đường sai) có thể chạy
+nếu nó không phải bong bóng.
+
+### 17.5 Checklist cho lần chạy tới
+
+**Genus** (sau khi lần chạy 128x4x20 đang làm xong, chạy thêm một lần với P2c + SDC mới):
+
+- [ ] `Pre-checks passed: 58 RTL files, macro budget 80 + 4`
+- [ ] `gates_syn.rpt`: 80 × `srambank_256x4x32_6t122` **và** 4 × `srambank_128x4x20_6t122`
+- [ ] 19 clock, có `CLK_ASCON`; không có dòng nào trong `failed_sdc_commands.rpt`
+- [ ] `Ring oscillator: khop 7 cell`
+- [ ] WNS CLK_CPU và CLK_AXI ở **`view_ss`**, so với +1.3 / +1.1 ps
+- [ ] Nếu CLK_CPU âm: xem đường qua `dcache_stall` / `ls_sel_*_rsp` (§17.3)
+
+**XSim** (`run_soc_sim.sh all`):
+
+- [ ] `mem` **128/128**, gồm 3 dòng `[PASS]` của TF về chờ/không chờ
+- [ ] `fw` PASS; `t` chỉ được đổi nếu firmware có lệnh `fence`
+- [ ] `apb` 256/256, `ascon` 31/31
+- [ ] Assertion R13 (CORE_FIX_PLAN.md §10) — không lần nào bắn

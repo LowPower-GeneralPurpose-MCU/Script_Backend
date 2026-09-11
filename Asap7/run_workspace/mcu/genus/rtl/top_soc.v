@@ -358,6 +358,9 @@ module top_soc (
     wire        cpu_data_amo_req;
     wire        cpu_data_amo_capture;
     wire cpu_inst_req, cpu_inst_hit, cpu_inst_stall, cpu_data_rd_req, cpu_data_wr_req, cpu_data_hit, cpu_data_stall, cpu_data_unsigned;
+    // P2c - `fence` tu tang MEM cua core toi D-cache.  Xem cpu_fence trong
+    // memory/dcache.v va nhanh 7'b0001111 trong core/block_unit/control_unit.v.
+    wire cpu_data_fence;
     wire cpu_inst_error, cpu_data_error;   // C1 - loi bus tu cache ve core
     wire [1:0] cpu_data_size;
     wire dbg_halt_req, dbg_resume_req, dbg_halted, dbg_reg_write_en;
@@ -472,6 +475,7 @@ module top_soc (
         .icache_stall_lane1 (1'b0),
         .dcache_read_req    (cpu_data_rd_req),
         .dcache_write_req   (cpu_data_wr_req),
+        .dcache_fence       (cpu_data_fence),
         .dcache_addr        (cpu_data_addr),
         .dcache_write_data  (cpu_data_wdata),
         .dcache_read_data   (cpu_data_rdata),
@@ -745,6 +749,25 @@ module top_soc (
     wire ls_sel_dtcm = `SOC_IS_DTCM(cpu_data_addr);
     wire ls_sel_tcm  = ls_sel_itcm | ls_sel_dtcm;
 
+    // -------------------------------------------------------------------------
+    // P2c - mot `fence` KHONG CO DIA CHI.  `cpu_data_addr` luc do la ket qua ALU
+    // cua chinh lenh fence (rs1 + imm cua mot lenh khong dung toan hang nao),
+    // tuc rac.  Neu no tinh co roi vao dai TCM thi mux tra loi ben duoi se lay
+    // hit/stall cua TCM - va TCM tra hit ngay - nen fence tro thanh NOP, dung
+    // lai loi ma P2c ton tai de sua, chi khac la bay gio no ngau nhien.
+    //
+    // Vi vay duong TRA LOI dung ban `_rsp`: khi fence dang bat, cau tra loi luon
+    // den tu D-cache.  Duong YEU CAU (`& ~ls_sel_tcm` o cac cong cpu_read_req /
+    // cpu_write_req) van dung ban goc - vo hai, vi ca hai deu bang 0 trong mot
+    // fence.
+    //
+    // TCM khong can xa gi: no la SRAM noi thang core, khong co store buffer,
+    // khong qua bus.  Mot ghi vao TCM da nhin thay duoc ngay khi no retire.
+    // -------------------------------------------------------------------------
+    wire ls_sel_itcm_rsp = ls_sel_itcm & ~cpu_data_fence;
+    wire ls_sel_dtcm_rsp = ls_sel_dtcm & ~cpu_data_fence;
+    wire ls_sel_tcm_rsp  = ls_sel_tcm  & ~cpu_data_fence;
+
     // Cache-side responses, muxed onto the core ports further down.
     wire [31:0] ic_cpu_rdata; wire ic_cpu_hit; wire ic_cpu_stall; wire ic_cpu_error;
     wire [31:0] dc_cpu_rdata; wire dc_cpu_hit; wire dc_cpu_stall; wire dc_cpu_error;
@@ -889,6 +912,8 @@ module top_soc (
         .rst_n           (reset_core_n_sync),
         .cpu_read_req    (cpu_data_rd_req & ~ls_sel_tcm),
         .cpu_write_req   (cpu_data_wr_req & ~ls_sel_tcm),
+        // KHONG gate bang ~ls_sel_tcm: xem ghi chu ls_sel_*_rsp ben tren.
+        .cpu_fence       (cpu_data_fence),
         .cpu_addr        (cpu_data_addr),
         .cpu_write_data  (cpu_data_wdata),
         .mem_unsigned    (cpu_data_unsigned),
@@ -1044,12 +1069,12 @@ module top_soc (
     assign cpu_inst_hit   = if_sel_itcm ? itcm_f_hit   : ic_cpu_hit;
     assign cpu_inst_stall = if_sel_itcm ? itcm_f_stall : ic_cpu_stall;
 
-    assign cpu_data_rdata = ls_sel_dtcm ? dtcm_d_rdata :
-                            ls_sel_itcm ? itcm_d_rdata : dc_cpu_rdata;
-    assign cpu_data_hit   = ls_sel_dtcm ? dtcm_d_hit   :
-                            ls_sel_itcm ? itcm_d_hit   : dc_cpu_hit;
-    assign cpu_data_stall = ls_sel_dtcm ? dtcm_d_stall :
-                            ls_sel_itcm ? itcm_d_stall : dc_cpu_stall;
+    assign cpu_data_rdata = ls_sel_dtcm_rsp ? dtcm_d_rdata :
+                            ls_sel_itcm_rsp ? itcm_d_rdata : dc_cpu_rdata;
+    assign cpu_data_hit   = ls_sel_dtcm_rsp ? dtcm_d_hit   :
+                            ls_sel_itcm_rsp ? itcm_d_hit   : dc_cpu_hit;
+    assign cpu_data_stall = ls_sel_dtcm_rsp ? dtcm_d_stall :
+                            ls_sel_itcm_rsp ? itcm_d_stall : dc_cpu_stall;
 
     // -------------------------------------------------------------------------
     // C1 - duong bao loi bus ve CPU.
@@ -1059,7 +1084,7 @@ module top_soc (
     // ep 0 - dung mau mux voi ba duong con lai o tren.
     // -------------------------------------------------------------------------
     assign cpu_inst_error = if_sel_itcm ? 1'b0 : ic_cpu_error;
-    assign cpu_data_error = ls_sel_tcm  ? 1'b0 : dc_cpu_error;
+    assign cpu_data_error = ls_sel_tcm_rsp ? 1'b0 : dc_cpu_error;
 
     // =========================================================================
     // 7. AXI INTERCONNECT
