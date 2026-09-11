@@ -115,6 +115,7 @@ module tb_mem_paths;
     assign flash_io[2] = dut_flash_io_oe[2] ? dut_flash_io_o[2] : 1'bz;
     assign flash_io[3] = dut_flash_io_oe[3] ? dut_flash_io_o[3] : 1'bz;
     assign sdram_dq    = dut_sdram_dq_oe    ? dut_sdram_dq_o    : 16'hzzzz;
+    assign uart_tx     = gpio_out[0];     // PA0 = UART0_TX sau reset
     assign uart_rx     = uart_tx;
     assign spi_miso    = spi_mosi;
     pullup(i2c_scl);
@@ -125,12 +126,8 @@ module tb_mem_paths;
         .rtc_clk       (rtc_clk),
         .rst_n         (rst_n),
         .tck(tck), .trst_n(trst_n), .tms(tms), .tdi(tdi), .tdo(tdo),
-        .uart_rx(uart_rx), .uart_tx(uart_tx),
-        .gpio_in(gpio_in), .gpio_out(gpio_out), .gpio_oe(gpio_oe),
-        .pwm_out(pwm_out),
-        .spi_sck(spi_sck), .spi_mosi(spi_mosi), .spi_miso(spi_miso), .spi_ss(spi_ss),
-        .i2c_scl_i(i2c_scl), .i2c_scl_o(dut_i2c_scl_o), .i2c_scl_oe(dut_i2c_scl_oe),
-        .i2c_sda_i(i2c_sda), .i2c_sda_o(dut_i2c_sda_o), .i2c_sda_oe(dut_i2c_sda_oe),
+        // 2026-09-11: 32 pad qua pinmux; mac dinh PA0 = UART0_TX, PA1 = RX.
+        .pad_in({gpio_in[31:2], uart_rx, gpio_in[0]}), .pad_out(gpio_out), .pad_oe(gpio_oe),
         .flash_sck(flash_sck), .flash_cs_n(flash_cs_n),
         .flash_io_i(flash_io), .flash_io_o(dut_flash_io_o), .flash_io_oe(dut_flash_io_oe),
         .sdram_clk(sdram_clk), .sdram_cke(sdram_cke), .sdram_cs_n(sdram_cs_n),

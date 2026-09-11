@@ -11,8 +11,6 @@ module dsp_Ax_channel
     parameter TRANS_BURST_W     = 2,    // Width of xBURST 
     parameter TRANS_DATA_LEN_W  = 8,    // Bus width of xLEN (AXI4: 8-bit, burst 1-256)
     parameter TRANS_DATA_SIZE_W = 3,    // Bus width of xSIZE
-    parameter AX_OUT_ID_W       = TRANS_MST_ID_W,
-    parameter ROB_TAG_W         = 1,
     // Slave configuration
     parameter SLV_ID_W          = $clog2(SLV_AMT),
     parameter SLV_ID_MSB_IDX    = 30,
@@ -20,9 +18,7 @@ module dsp_Ax_channel
     parameter [SLV_AMT*ADDR_WIDTH-1:0] SLV_BASE_ADDR = {SLV_AMT*ADDR_WIDTH{1'b0}},
     parameter [SLV_AMT*ADDR_WIDTH-1:0] SLV_ADDR_MASK = {SLV_AMT*ADDR_WIDTH{1'b1}},
     // Timeout configuration
-    parameter TIMEOUT_W         = 10,   // Address-phase timeout width (2^W-1 cycles), 0 = disabled
-    // Read reorder configuration
-    parameter USE_REORDER_BUFFER = 0
+    parameter TIMEOUT_W         = 10    // Address-phase timeout width (2^W-1 cycles), 0 = disabled
 )
 (
     // Input declaration
@@ -45,9 +41,6 @@ module dsp_Ax_channel
     // To xDATA channel Dispatcher
     input                                   m_xVALID_i,
     input                                   m_xREADY_i,
-    // To optional read reorder buffer
-    input                                   rob_alloc_ready_i,
-    input   [ROB_TAG_W-1:0]                 rob_alloc_tag_i,
     // To Slave Arbitration
     // Write/Read address channel (master)
     input   [SLV_AMT-1:0]                   sa_AxREADY_i,
@@ -57,7 +50,7 @@ module dsp_Ax_channel
     output                                  m_AxREADY_o,
     // To Slave Arbitration
     // Write/Read address channel
-    output  [AX_OUT_ID_W*SLV_AMT-1:0]       sa_AxID_o,
+    output  [TRANS_MST_ID_W*SLV_AMT-1:0]    sa_AxID_o,
     output  [ADDR_WIDTH*SLV_AMT-1:0]        sa_AxADDR_o,
     output  [TRANS_BURST_W*SLV_AMT-1:0]     sa_AxBURST_o,
     output  [TRANS_DATA_LEN_W*SLV_AMT-1:0]  sa_AxLEN_o,
@@ -69,12 +62,6 @@ module dsp_Ax_channel
     output  [4*SLV_AMT-1:0]                 sa_AxREGION_o,
     output  [SLV_AMT-1:0]                   sa_AxVALID_o,
     output  [OUTST_CTN_W-1:0]               sa_Ax_outst_ctn_o,
-    // To optional read reorder buffer
-    output                                  rob_alloc_valid_o,
-    output  [SLV_ID_W-1:0]                  rob_alloc_slv_id_o,
-    output  [TRANS_MST_ID_W-1:0]            rob_alloc_id_o,
-    output  [TRANS_DATA_LEN_W-1:0]          rob_alloc_len_o,
-    output                                  rob_alloc_err_o,
     // To xDATA channel Dispatcher
     output  [SLV_ID_W-1:0]                  dsp_xDATA_slv_id_o,
     output                                  dsp_xDATA_disable_o,
@@ -121,11 +108,6 @@ module dsp_Ax_channel
     wire                            normal_accept;
     wire                            err_accept;
     wire                            timeout_expire;
-    wire                            order_fifo_full_block;
-    wire                            rob_accept_ready;
-    wire                            rob_tag_capture;
-    wire                            timeout_allowed;
-    wire    [ROB_TAG_W-1:0]         rob_tag_out;
     // Transfer counter
     wire    [TRANS_DATA_LEN_W-1:0]  transfer_ctn_nxt;
     wire    [TRANS_DATA_LEN_W-1:0]  transfer_ctn_incr;
@@ -150,9 +132,7 @@ module dsp_Ax_channel
     
     // Reg declaration
     reg     [TRANS_DATA_LEN_W-1:0]  transfer_ctn_r;
-    wire                            rob_tag_valid_r;
-    wire    [ROB_TAG_W-1:0]         rob_tag_r;
-    
+
     // Module
     // xADDR order FIFO 
     sync_fifo #(
@@ -215,18 +195,17 @@ module dsp_Ax_channel
     assign addr_slv_mapping = addr_slv_mapping_r;
     assign addr_info = {addr_err, msb_fwd_AxID, addr_slv_mapping, msb_fwd_AxLEN};
     assign {addr_err_valid, AxID_valid, slv_id, AxLEN_valid} = addr_info_valid;
-    assign fifo_xa_order_wr_en = USE_REORDER_BUFFER ? 1'b0 : Ax_handshake_occur;
-    assign fifo_xa_order_rd_en = USE_REORDER_BUFFER ? 1'b0 : (transfer_ctn_match & xDATA_handshake_occur);
+    // Doc va ghi dung CHUNG co che: moi Ax duoc chap nhan ghi {err, id, slave,
+    // len} vao FIFO thu tu; kenh du lieu (R hoac W/B) tra ve dung thu tu do va
+    // pop khi beat cuoi di qua. Kenh doc tung co ROB rieng (utils/ROB.v) de
+    // tra R khac thu tu - xem ghi chu o dsp_read_channel ve ly do bo.
+    assign fifo_xa_order_wr_en = Ax_handshake_occur;
+    assign fifo_xa_order_rd_en = transfer_ctn_match & xDATA_handshake_occur;
     // Error / timeout detection
     assign addr_invalid = (addr_hit_count_r != {{SLV_ID_W{1'b0}}, 1'b1});
-    assign order_fifo_full_block = USE_REORDER_BUFFER ? 1'b0 : fifo_xa_order_full;
-    assign rob_accept_ready = USE_REORDER_BUFFER ? (rob_tag_valid_r | rob_alloc_ready_i) : 1'b1;
-    assign normal_accept = (~addr_invalid) & sa_AxREADY_i[addr_slv_mapping[SLV_ID_W-1:0]] & (~order_fifo_full_block) & rob_accept_ready;
+    assign normal_accept = (~addr_invalid) & sa_AxREADY_i[addr_slv_mapping[SLV_ID_W-1:0]] & (~fifo_xa_order_full);
     assign addr_err = addr_invalid | timeout_expire;
-    assign err_accept = msb_fwd_valid & (~order_fifo_full_block) & addr_err & (USE_REORDER_BUFFER ? (rob_alloc_ready_i & ~rob_tag_valid_r) : 1'b1);
-    assign rob_tag_capture = USE_REORDER_BUFFER & msb_fwd_valid & (~addr_err) & (~rob_tag_valid_r) & rob_alloc_ready_i;
-    assign rob_tag_out = rob_tag_valid_r ? rob_tag_r : rob_alloc_tag_i;
-    assign timeout_allowed = USE_REORDER_BUFFER ? ~rob_tag_valid_r : 1'b1;
+    assign err_accept = msb_fwd_valid & (~fifo_xa_order_full) & addr_err;
     // Handshake detector
     assign Ax_handshake_occur = msb_fwd_valid & msb_fwd_ready;
     assign xDATA_handshake_occur = m_xVALID_i & m_xREADY_i;
@@ -238,11 +217,7 @@ module dsp_Ax_channel
     // Output to Slave Arbitration
     generate 
         for(slv_idx = 0; slv_idx < SLV_AMT; slv_idx = slv_idx + 1) begin : SLV_LOGIC
-            if (AX_OUT_ID_W == TRANS_MST_ID_W) begin : ORIG_ID_OUT
-                assign sa_AxID_o[AX_OUT_ID_W*(slv_idx+1)-1-:AX_OUT_ID_W] = msb_fwd_AxID;
-            end else begin : ROB_ID_OUT
-                assign sa_AxID_o[AX_OUT_ID_W*(slv_idx+1)-1-:AX_OUT_ID_W] = {rob_tag_out, msb_fwd_AxID};
-            end
+            assign sa_AxID_o[TRANS_MST_ID_W*(slv_idx+1)-1-:TRANS_MST_ID_W]         = msb_fwd_AxID;
             assign sa_AxADDR_o[ADDR_WIDTH*(slv_idx+1)-1-:ADDR_WIDTH]                = msb_fwd_AxADDR;
             assign sa_AxBURST_o[TRANS_BURST_W*(slv_idx+1)-1-:TRANS_BURST_W]         = msb_fwd_AxBURST;
             assign sa_AxLEN_o[TRANS_DATA_LEN_W*(slv_idx+1)-1-:TRANS_DATA_LEN_W]     = msb_fwd_AxLEN;
@@ -252,7 +227,7 @@ module dsp_Ax_channel
             assign sa_AxPROT_o[3*(slv_idx+1)-1-:3]                                  = msb_fwd_AxPROT;
             assign sa_AxQOS_o[4*(slv_idx+1)-1-:4]                                   = msb_fwd_AxQOS;
             assign sa_AxREGION_o[4*(slv_idx+1)-1-:4]                                = msb_fwd_AxREGION;
-            assign sa_AxVALID_o[slv_idx]                                            = msb_fwd_valid & addr_hit[slv_idx] & (~order_fifo_full_block) & rob_accept_ready & (~addr_err);
+            assign sa_AxVALID_o[slv_idx]                                            = msb_fwd_valid & addr_hit[slv_idx] & (~fifo_xa_order_full) & (~addr_err);
         end
     endgenerate
     // Master skid buffer
@@ -260,12 +235,6 @@ module dsp_Ax_channel
     assign msb_bwd_valid    = m_AxVALID_i;
     assign msb_fwd_ready    = normal_accept | err_accept;
     assign {msb_fwd_AxID, msb_fwd_AxADDR, msb_fwd_AxBURST, msb_fwd_AxLEN, msb_fwd_AxSIZE, msb_fwd_AxLOCK, msb_fwd_AxCACHE, msb_fwd_AxPROT, msb_fwd_AxQOS, msb_fwd_AxREGION} = msb_fwd_data;
-    // Output to optional read reorder buffer
-    assign rob_alloc_valid_o  = USE_REORDER_BUFFER ? (rob_tag_capture | err_accept) : 1'b0;
-    assign rob_alloc_slv_id_o = addr_slv_mapping[SLV_ID_W-1:0];
-    assign rob_alloc_id_o     = msb_fwd_AxID;
-    assign rob_alloc_len_o    = msb_fwd_AxLEN;
-    assign rob_alloc_err_o    = addr_err;
     // Output to xDATA dispatcher
     assign dsp_xDATA_slv_id_o = slv_id;
     assign dsp_xDATA_disable_o = fifo_xa_order_empty;
@@ -290,36 +259,11 @@ module dsp_Ax_channel
         end
     end
 
-    generate
-        if (USE_REORDER_BUFFER) begin : gen_rob_tag_state
-            reg                     rob_tag_valid_q;
-            reg [ROB_TAG_W-1:0]     rob_tag_q;
-
-            assign rob_tag_valid_r = rob_tag_valid_q;
-            assign rob_tag_r       = rob_tag_q;
-
-            always @(posedge ACLK_i) begin
-                if (~ARESETn_i) begin
-                    rob_tag_valid_q <= 1'b0;
-                    rob_tag_q       <= {ROB_TAG_W{1'b0}};
-                end else if (normal_accept && rob_tag_valid_q) begin
-                    rob_tag_valid_q <= 1'b0;
-                end else if (rob_tag_capture && ~normal_accept) begin
-                    rob_tag_valid_q <= 1'b1;
-                    rob_tag_q       <= rob_alloc_tag_i;
-                end
-            end
-        end else begin : gen_no_rob_tag_state
-            assign rob_tag_valid_r = 1'b0;
-            assign rob_tag_r       = {ROB_TAG_W{1'b0}};
-        end
-    endgenerate
-    
     // Timeout counter
     generate
         if (TIMEOUT_W > 0) begin : TIMEOUT_LOGIC
             reg [TIMEOUT_W-1:0] timeout_ctn_r;
-            wire timeout_counting = msb_fwd_valid & (~addr_invalid) & timeout_allowed & rob_accept_ready & (~normal_accept) & (~order_fifo_full_block);
+            wire timeout_counting = msb_fwd_valid & (~addr_invalid) & (~normal_accept) & (~fifo_xa_order_full);
             assign timeout_expire = timeout_counting & (&timeout_ctn_r);
             always @(posedge ACLK_i) begin
                 if (~ARESETn_i || ~timeout_counting)
@@ -817,10 +761,8 @@ module dsp_read_channel
     // Transaction configuration
     parameter DATA_WIDTH        = 32,
     parameter ADDR_WIDTH        = 32,
-    parameter TRANS_MST_ID_W    = 5,    // Bus width of master transaction ID 
-    parameter ROB_TAG_W         = $clog2(OUTSTANDING_AMT),
-    parameter ROB_ID_WIDTH      = ROB_TAG_W + TRANS_MST_ID_W,
-    parameter TRANS_BURST_W     = 2,    // Width of xBURST 
+    parameter TRANS_MST_ID_W    = 5,    // Bus width of master transaction ID
+    parameter TRANS_BURST_W     = 2,    // Width of xBURST
     parameter TRANS_DATA_LEN_W  = 8,    // Bus width of xLEN (AXI4: 8-bit, burst 1-256)
     parameter TRANS_DATA_SIZE_W = 3,    // Bus width of xSIZE
     parameter TRANS_WR_RESP_W   = 2,
@@ -857,7 +799,7 @@ module dsp_read_channel
     // --Read address channel (master)
     input   [SLV_AMT-1:0]                   sa_ARREADY_i,
     // --Read data channel (master)
-    input   [ROB_ID_WIDTH*SLV_AMT-1:0]      sa_RID_i,
+    input   [TRANS_MST_ID_W*SLV_AMT-1:0]    sa_RID_i,
     input   [DATA_WIDTH*SLV_AMT-1:0]        sa_RDATA_i,
     input   [TRANS_WR_RESP_W*SLV_AMT-1:0]   sa_RRESP_i,
     input   [SLV_AMT-1:0]                   sa_RLAST_i,
@@ -873,8 +815,8 @@ module dsp_read_channel
     output                                  m_RLAST_o,
     output                                  m_RVALID_o,
     // To Slave Arbitration
-    // --Read address channel            
-    output  [ROB_ID_WIDTH*SLV_AMT-1:0]      sa_ARID_o,
+    // --Read address channel
+    output  [TRANS_MST_ID_W*SLV_AMT-1:0]    sa_ARID_o,
     output  [ADDR_WIDTH*SLV_AMT-1:0]        sa_ARADDR_o,
     output  [TRANS_BURST_W*SLV_AMT-1:0]     sa_ARBURST_o,
     output  [TRANS_DATA_LEN_W*SLV_AMT-1:0]  sa_ARLEN_o,
@@ -889,48 +831,55 @@ module dsp_read_channel
     // --Read data channel
     output  [SLV_AMT-1:0]                   sa_RREADY_o
 );
-    // Localparam initialization
-    localparam OUTST_CTN_W = $clog2(OUTSTANDING_AMT) + 1;
-    // Số beat tối đa của một read burst mà ROB có thể đệm.
-    // beat_mem_q trong utils/ROB.v có ROB_DEPTH * ROB_MAX_BURST_BEATS entry,
-    // nên tham số này quyết định trực tiếp diện tích của dispatcher đọc.
-    // Burst dài nhất trong SoC là 16 beat: DMA giới hạn MAX_BURST = 64 byte
-    // (interrupt/dma/dma.v) / 4 byte mỗi beat; icache và dcache dùng 4 beat;
-    // debug-DTM dùng 1 beat.
+    // -------------------------------------------------------------------------
+    // KENH DOC KHONG CON ROB (2026-09-11).
     //
-    // CẢNH BÁO: nếu một master phát ARLEN > ROB_MAX_BURST_BEATS-1 thì ROB
-    // clamp số beat mong đợi (alloc_len_ok_c trong utils/ROB.v) và bật cờ
-    // r_overflow_o, transaction sẽ hỏng. Khi tăng MAX_BURST của DMA thì phải
-    // tăng giá trị này theo.
-    localparam ROB_MAX_BURST_BEATS = 16;
-    localparam ROB_BEAT_CNT_W = $clog2(ROB_MAX_BURST_BEATS + 1);
-    localparam ROB_ID_COUNT = (1 << TRANS_MST_ID_W);
-    localparam ROB_ID_PTR_W = $clog2(OUTSTANDING_AMT);
-    localparam ROB_ID_CNT_W = $clog2(OUTSTANDING_AMT) + 1;
-    
+    // Truoc day R di qua axi_read_reorder_buffer (utils/ROB.v): moi AR duoc gan
+    // mot ROB tag ghep vao ID phia slave, va ROB dem toi da OUTSTANDING_AMT
+    // burst x 16 beat de tra R ve master KHAC thu tu AR. Trong SoC nay khong
+    // ai can dieu do: icache, dcache va debug chi co 1 read outstanding; chi
+    // DMA co 4, va DMA khong phu thuoc thu tu tra ve. ROB chiem ~76% dien tich
+    // moi dispatcher doc (area_elaborated 2026-09-11: 26.4k / 34.9k), x4 master.
+    //
+    // Nay kenh doc dung DUNG co che cua kenh ghi:
+    //   AR -> dsp_Ax_channel ghi {err, id, slave, len} vao FIFO thu tu
+    //   R  -> dsp_R_channel: moi slave mot FIFO RDATA nho; dau ra master lay tu
+    //         FIFO cua slave o dau FIFO thu tu, pop khi dem du ARLEN+1 beat.
+    // R ve master DUNG thu tu AR - chat hon AXI yeu cau (chi can dung thu tu
+    // trong cung mot ID), nen hop le voi moi master.
+    //
+    // Ba dieu kien de khong be tac, deu dung trong SoC nay:
+    //   1. Moi slave tra R cho cung mot master theo thu tu AR (axi_ram, rom,
+    //      sdram, qspi, apb bridge, clint deu xu ly tung giao dich mot).
+    //   2. Chi MOT master co >1 read outstanding toi cac slave khac nhau (DMA).
+    //      Vong cho can it nhat hai master nhu vay, doc theo thu tu nguoc nhau.
+    //   3. Master khong ha RREADY voi du lieu no da xin. Cache va debug luon
+    //      san sang; DMA gio giu cho trong FIFO truoc khi phat AR (dma_core.v,
+    //      rd_inflight) - truoc day ROB che viec DMA dat qua cho.
+    // Them master co nhieu read outstanding thi phai xem lai muc 2.
+    // -------------------------------------------------------------------------
+    localparam OUTST_CTN_W = $clog2(OUTSTANDING_AMT) + 1;
+
     // Internal variable
     genvar slv_idx;
-    
+
     // Internal signal declaration
-    // AR channel to ROB
-    wire                        AR_ROB_alloc_valid;
-    wire                        AR_ROB_alloc_ready;
-    wire [SLV_ID_W-1:0]         AR_ROB_alloc_slv_id;
-    wire [TRANS_MST_ID_W-1:0]   AR_ROB_alloc_id;
-    wire [TRANS_DATA_LEN_W-1:0] AR_ROB_alloc_len;
-    wire                        AR_ROB_alloc_err;
-    wire [ROB_TAG_W-1:0]        AR_ROB_alloc_tag;
-    // ROB status
-    wire                        rob_full;
-    wire                        rob_id_order_full;
-    wire                        rob_r_unexpected_id;
-    wire                        rob_r_overflow;
-    wire                        rob_r_last_mismatch;
-    
+    // AR channel -> R channel
+    wire [SLV_ID_W-1:0]         AR_R_slv_id;
+    wire                        AR_R_disable;
+    wire                        AR_R_err;
+    wire [TRANS_MST_ID_W-1:0]   AR_R_axid;
+    wire                        AR_R_last;
+    // R channel -> AR channel (beat handshake, drives the transfer counter)
+    wire                        R_AR_RVALID;
+    wire                        R_AR_RREADY;
+    // Outstanding counter
+    wire [OUTST_CTN_W-1:0]      AR_outst_ctn;
+
     // Combinational logic
     generate
     for(slv_idx = 0; slv_idx < SLV_AMT; slv_idx = slv_idx + 1) begin : SLV_LOGIC
-        assign sa_AR_outst_full_o[slv_idx] = rob_full;
+        assign sa_AR_outst_full_o[slv_idx] = (AR_outst_ctn == OUTSTANDING_AMT);
     end
     endgenerate
     // Module
@@ -943,14 +892,11 @@ module dsp_read_channel
         .TRANS_BURST_W(TRANS_BURST_W),
         .TRANS_DATA_LEN_W(TRANS_DATA_LEN_W),
         .TRANS_DATA_SIZE_W(TRANS_DATA_SIZE_W),
-        .AX_OUT_ID_W(ROB_ID_WIDTH),
-        .ROB_TAG_W(ROB_TAG_W),
         .SLV_ID_W(SLV_ID_W),
         .SLV_ID_MSB_IDX(SLV_ID_MSB_IDX),
         .SLV_ID_LSB_IDX(SLV_ID_LSB_IDX),
         .SLV_BASE_ADDR(SLV_BASE_ADDR),
-        .SLV_ADDR_MASK(SLV_ADDR_MASK),
-        .USE_REORDER_BUFFER(1)
+        .SLV_ADDR_MASK(SLV_ADDR_MASK)
     ) AR_channel (
         .ACLK_i(ACLK_i),
         .ARESETn_i(ARESETn_i),
@@ -965,10 +911,8 @@ module dsp_read_channel
         .m_AxQOS_i(m_ARQOS_i),
         .m_AxREGION_i(m_ARREGION_i),
         .m_AxVALID_i(m_ARVALID_i),
-        .m_xVALID_i(1'b0),
-        .m_xREADY_i(1'b0),
-        .rob_alloc_ready_i(AR_ROB_alloc_ready),
-        .rob_alloc_tag_i(AR_ROB_alloc_tag),
+        .m_xVALID_i(R_AR_RVALID),
+        .m_xREADY_i(R_AR_RREADY),
         .sa_AxREADY_i(sa_ARREADY_i),
         .m_AxREADY_o(m_ARREADY_o),
         .sa_AxID_o(sa_ARID_o),
@@ -982,65 +926,47 @@ module dsp_read_channel
         .sa_AxQOS_o(sa_ARQOS_o),
         .sa_AxREGION_o(sa_ARREGION_o),
         .sa_AxVALID_o(sa_ARVALID_o),
-        .sa_Ax_outst_ctn_o(),
-        .rob_alloc_valid_o(AR_ROB_alloc_valid),
-        .rob_alloc_slv_id_o(AR_ROB_alloc_slv_id),
-        .rob_alloc_id_o(AR_ROB_alloc_id),
-        .rob_alloc_len_o(AR_ROB_alloc_len),
-        .rob_alloc_err_o(AR_ROB_alloc_err),
-        .dsp_xDATA_slv_id_o(),
-        .dsp_xDATA_disable_o(),
-        .dsp_xDATA_err_o(),
-        .dsp_xDATA_axid_o(),
-        .dsp_xDATA_last_o(),
+        .sa_Ax_outst_ctn_o(AR_outst_ctn),
+        .dsp_xDATA_slv_id_o(AR_R_slv_id),
+        .dsp_xDATA_disable_o(AR_R_disable),
+        .dsp_xDATA_err_o(AR_R_err),
+        .dsp_xDATA_axid_o(AR_R_axid),
+        .dsp_xDATA_last_o(AR_R_last),
         .dsp_WRESP_slv_id_o(),  // N/C
         .dsp_WRESP_shift_en_o(), // N/C
         .dsp_WRESP_err_o(),     // N/C
         .dsp_WRESP_axid_o()     // N/C
     );
 
-    axi_read_reorder_buffer  #(
+    dsp_R_channel #(
         .SLV_AMT(SLV_AMT),
         .DATA_WIDTH(DATA_WIDTH),
-        .ID_WIDTH(TRANS_MST_ID_W),
-        .LEN_WIDTH(TRANS_DATA_LEN_W),
-        .RESP_WIDTH(TRANS_WR_RESP_W),
-        .ROB_DEPTH(OUTSTANDING_AMT),
-        .MAX_BURST_BEATS(ROB_MAX_BURST_BEATS),
-        .ROB_TAG_W(ROB_TAG_W),
-        .BEAT_CNT_W(ROB_BEAT_CNT_W),
-        .ID_COUNT(ROB_ID_COUNT),
-        .ID_PTR_W(ROB_ID_PTR_W),
-        .ID_CNT_W(ROB_ID_CNT_W),
-        .ROB_ID_WIDTH(ROB_ID_WIDTH),
-        .SLV_PTR_W(SLV_ID_W)
+        .TRANS_MST_ID_W(TRANS_MST_ID_W),
+        .TRANS_WR_RESP_W(TRANS_WR_RESP_W),
+        .SLV_ID_W(SLV_ID_W),
+        .DSP_RDATA_DEPTH(DSP_RDATA_DEPTH)
     ) R_channel (
         .ACLK_i(ACLK_i),
         .ARESETn_i(ARESETn_i),
-        .alloc_valid_i(AR_ROB_alloc_valid),
-        .alloc_ready_o(AR_ROB_alloc_ready),
-        .alloc_id_i(AR_ROB_alloc_id),
-        .alloc_len_i(AR_ROB_alloc_len),
-        .alloc_err_i(AR_ROB_alloc_err),
-        .alloc_tag_o(AR_ROB_alloc_tag),
-        .alloc_fire_o(),
         .m_RREADY_i(m_RREADY_i),
         .sa_RID_i(sa_RID_i),
         .sa_RDATA_i(sa_RDATA_i),
         .sa_RRESP_i(sa_RRESP_i),
         .sa_RLAST_i(sa_RLAST_i),
         .sa_RVALID_i(sa_RVALID_i),
+        .dsp_AR_slv_id_i(AR_R_slv_id),
+        .dsp_AR_disable_i(AR_R_disable),
+        .dsp_AR_err_i(AR_R_err),
+        .dsp_AR_axid_i(AR_R_axid),
+        .dsp_AR_last_i(AR_R_last),
         .m_RID_o(m_RID_o),
         .m_RDATA_o(m_RDATA_o),
         .m_RRESP_o(m_RRESP_o),
         .m_RLAST_o(m_RLAST_o),
         .m_RVALID_o(m_RVALID_o),
         .sa_RREADY_o(sa_RREADY_o),
-        .rob_full_o(rob_full),
-        .id_order_full_o(rob_id_order_full),
-        .r_unexpected_tag_o(rob_r_unexpected_id),
-        .r_overflow_o(rob_r_overflow),
-        .r_last_mismatch_o(rob_r_last_mismatch)
+        .dsp_RVALID_q1_o(R_AR_RVALID),
+        .dsp_RREADY_q1_o(R_AR_RREADY)
     );
 
 endmodule
@@ -1192,8 +1118,6 @@ module dsp_write_channel
         .m_AxVALID_i(m_AWVALID_i),
         .m_xVALID_i(W_AW_WVALID),
         .m_xREADY_i(W_AW_WREADY),
-        .rob_alloc_ready_i(1'b1),
-        .rob_alloc_tag_i(1'b0),
         .sa_AxREADY_i(sa_AWREADY_i),
         .m_AxREADY_o(m_AWREADY_o),
         .sa_AxID_o(sa_AWID_o),
@@ -1208,11 +1132,6 @@ module dsp_write_channel
         .sa_AxREGION_o(sa_AWREGION_o),
         .sa_AxVALID_o(sa_AWVALID_o),
         .sa_Ax_outst_ctn_o(AW_outst_ctn),
-        .rob_alloc_valid_o(),
-        .rob_alloc_slv_id_o(),
-        .rob_alloc_id_o(),
-        .rob_alloc_len_o(),
-        .rob_alloc_err_o(),
         .dsp_xDATA_slv_id_o(AW_W_slv_id),
         .dsp_xDATA_disable_o(AW_W_disable),
         .dsp_xDATA_err_o(AW_W_err),
@@ -1292,9 +1211,7 @@ module ai_dispatcher
     // Transaction configuration
     parameter DATA_WIDTH        = 32,
     parameter ADDR_WIDTH        = 32,
-    parameter TRANS_MST_ID_W    = 5,    // Bus width of master transaction ID 
-    parameter ROB_TAG_W         = $clog2(OUTSTANDING_AMT),
-    parameter ROB_ID_WIDTH      = ROB_TAG_W + TRANS_MST_ID_W,
+    parameter TRANS_MST_ID_W    = 5,    // Bus width of master transaction ID
     parameter TRANS_BURST_W     = 2,    // Width of xBURST 
     parameter TRANS_DATA_LEN_W  = 8,    // Bus width of xLEN (AXI4: 8-bit, burst 1-256)
     parameter TRANS_DATA_SIZE_W = 3,    // Bus width of xSIZE
@@ -1359,7 +1276,7 @@ module ai_dispatcher
     // Read address channel (master)
     input   [SLV_AMT-1:0]                   sa_ARREADY_i,
     // Read data channel (master)
-    input   [ROB_ID_WIDTH*SLV_AMT-1:0]      sa_RID_i,
+    input   [TRANS_MST_ID_W*SLV_AMT-1:0]    sa_RID_i,
     input   [DATA_WIDTH*SLV_AMT-1:0]        sa_RDATA_i,
     input   [TRANS_WR_RESP_W*SLV_AMT-1:0]   sa_RRESP_i,
     input   [SLV_AMT-1:0]                   sa_RLAST_i,
@@ -1404,7 +1321,7 @@ module ai_dispatcher
     // Write response channel          
     output  [SLV_AMT-1:0]                   sa_BREADY_o,
     // Read address channel            
-    output  [ROB_ID_WIDTH*SLV_AMT-1:0]      sa_ARID_o,
+    output  [TRANS_MST_ID_W*SLV_AMT-1:0]    sa_ARID_o,
     output  [ADDR_WIDTH*SLV_AMT-1:0]        sa_ARADDR_o,
     output  [TRANS_BURST_W*SLV_AMT-1:0]     sa_ARBURST_o,
     output  [TRANS_DATA_LEN_W*SLV_AMT-1:0]  sa_ARLEN_o,
@@ -1488,8 +1405,6 @@ module ai_dispatcher
         .DATA_WIDTH(DATA_WIDTH),
         .ADDR_WIDTH(ADDR_WIDTH),
         .TRANS_MST_ID_W(TRANS_MST_ID_W),
-        .ROB_TAG_W(ROB_TAG_W),
-        .ROB_ID_WIDTH(ROB_ID_WIDTH),
         .TRANS_BURST_W(TRANS_BURST_W),
         .TRANS_DATA_LEN_W(TRANS_DATA_LEN_W),
         .TRANS_DATA_SIZE_W(TRANS_DATA_SIZE_W),

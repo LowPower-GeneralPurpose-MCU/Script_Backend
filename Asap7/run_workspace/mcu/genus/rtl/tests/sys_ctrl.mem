@@ -1,0 +1,33 @@
+// tb_sys_ctrl.sv - SYSCON reset/boot/khoa debug + halt khi WFI.
+// SINH TU DONG boi gen_sys_ctrl_mem.py - sua o do, khong sua tay file nay.
+40007437  // 00010000  lui  s0, 0x40007        s0 = SYSCON
+00842583  // 00010004  lw   a1, 8(s0)          a1 = RST_CAUSE sau POR (mong doi 1 = EXT)
+00f00293  // 00010008  addi t0, zero, 15
+00542423  // 0001000c  sw   t0, 8(s0)          W1C xoa moi co
+00842603  // 00010010  lw   a2, 8(s0)          a2 = RST_CAUSE sau khi xoa (mong doi 0)
+00442683  // 00010014  lw   a3, 4(s0)          a3 = CLK_GATE_CTRL ([6] = clock DM)
+00100393  // 00010018  addi t2, zero, 1        pha 1: sap ngu
+10500073  // 0001001c  wfi                     mie = 0 -> chi haltreq danh thuc duoc
+00000013  // 00010020  nop                     (lenh ngay sau wfi chay truoc khi ngu)
+00000013  // 00010024  nop
+00200393  // 00010028  addi t2, zero, 2        pha 2: debugger da resume
+000102b7  // 0001002c  lui  t0, 0x10
+08028293  // 00010030  addi t0, t0, 0x80       t0 = 0x0001_0080
+00542023  // 00010034  sw   t0, 0(s0)          RESET_VECTOR = loi vao boot 2
+05fa0337  // 00010038  lui  t1, 0x05FA0
+00130313  // 0001003c  addi t1, t1, 1          t1 = 0x05FA_0001
+00642623  // 00010040  sw   t1, 12(s0)         SW_RESET -> warm reset
+0000006f  // 00010044  jal  zero, 0
+@20
+40007437  // 00010080  lui  s0, 0x40007
+00842703  // 00010084  lw   a4, 8(s0)          a4 = RST_CAUSE (mong doi 8 = SW)
+00100293  // 00010088  addi t0, zero, 1
+00542823  // 0001008c  sw   t0, 16(s0)         SEC_CTRL.BOOT_LOCK
+000102b7  // 00010090  lui  t0, 0x10
+00542023  // 00010094  sw   t0, 0(s0)          thu ghi RESET_VECTOR = 0x10000 (phai bi bo qua)
+00042783  // 00010098  lw   a5, 0(s0)          a5 = RESET_VECTOR (mong doi 0x0001_0080)
+00400293  // 0001009c  addi t0, zero, 4
+00542823  // 000100a0  sw   t0, 16(s0)         SEC_CTRL.DBG_LOCK
+01042803  // 000100a4  lw   a6, 16(s0)         a6 = SEC_CTRL (mong doi 5 = DBG_LOCK | BOOT_LOCK)
+00300393  // 000100a8  addi t2, zero, 3        pha 3: xong
+0000006f  // 000100ac  jal  zero, 0

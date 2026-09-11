@@ -99,7 +99,13 @@ module apb_uart #(
                         prdata <= {24'b0, rx_fifo_rdata};
                         if (!rx_fifo_empty) rx_fifo_rd <= 1'b1; // Pop RX FIFO
                     end
-                    12'h00C: prdata <= {26'b0, rx_busy, tx_busy, rx_fifo_empty, tx_fifo_full, frame_error, timeout_error};
+                    // [4] TX_BUSY = shifter dang phat HOAC TX FIFO con byte. Ban cu chi
+                    // lay tx_busy cua uart_tx, ma no ve 0 dung MOT chu ky giua hai byte
+                    // lien tiep (IDLE chu ky dau: ready_o con 0 nen chua pop duoc).
+                    // `while (STATUS & TX_BUSY)` trong HAL_UART_Transmit trung khe do la
+                    // thoat khi FIFO con toi 15 byte - phu thuoc pha; truoc khi gate
+                    // clock UART hay doi baud thi mat byte. Nay nghia = TC cua STM32.
+                    12'h00C: prdata <= {26'b0, rx_busy, tx_busy | ~tx_fifo_empty, rx_fifo_empty, tx_fifo_full, frame_error, timeout_error};
                     12'h010: prdata <= {28'b0, reg_dma_int};
                     default: prdata <= 32'b0;
                 endcase

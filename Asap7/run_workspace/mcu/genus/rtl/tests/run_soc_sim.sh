@@ -7,6 +7,12 @@
 #   ./run_soc_sim.sh ascon  - tb_ascon_apb.sv  : KAT ASCON-128 / ASCON-Hash qua APB
 #   ./run_soc_sim.sh core   - tb_core_jalr.sv  : R13/R14 bang CPU that (anh ROM
 #                             tests/core_jalr.mem, viet tay)
+#   ./run_soc_sim.sh sys    - tb_sys_ctrl.sv   : WFI + haltreq, RST_CAUSE,
+#                             SW_RESET, RESET_VECTOR giu lai, khoa debug (anh ROM
+#                             tests/sys_ctrl.mem, sinh boi gen_sys_ctrl_mem.py)
+#   ./run_soc_sim.sh irq    - tb_irq_pmp.sv    : PMP + CLIC bang CPU that (anh ROM
+#                             tests/irq_pmp.mem, sinh boi gen_irq_pmp_mem.py)
+#   ./run_soc_sim.sh per    - tb_periph.sv     : pinmux, UART1, TIM0/TIM1, ID CLIC
 #   ./run_soc_sim.sh all    - tat ca (mac dinh)
 #
 # Bien moi truong ghi de duoc:
@@ -137,12 +143,48 @@ quit
     grep -E '^\[TB\]\[FAIL\]|PASS COUNT|FAIL COUNT|RESULT' xsim_ascon.log || true
 }
 
+run_sys() {
+    echo "=== sys testbench: SYSCON / Debug Module / WFI (ROM = tests/sys_ctrl.mem) ==="
+    python "$HERE/gen_sys_ctrl_mem.py" > /dev/null
+    python "$HERE/gen_boot_rom.py" "$HERE/sys_ctrl.mem" "$OUT_DIR/sys_inc"
+    xvlog.bat -sv -work sys -i "$OUT_DIR/sys_inc" "${INC[@]}" -f rtl_files.f "$HERE/tb_sys_ctrl.sv" > xvlog_sys.log
+    xelab.bat -relax -s sys_sim -timescale 1ns/1ps sys.tb_sys_ctrl -L sys > xelab_sys.log
+    printf 'run all
+quit
+' > run.tcl
+    xsim.bat sys_sim -tclbatch run.tcl > xsim_sys.log
+    grep -E '\[TB\]|PASS COUNT|RESULT' xsim_sys.log || true
+}
+
+run_irq() {
+    echo "=== irq testbench: PMP + CLIC (ROM = tests/irq_pmp.mem) ==="
+    python "$HERE/gen_irq_pmp_mem.py" > /dev/null
+    python "$HERE/gen_boot_rom.py" "$HERE/irq_pmp.mem" "$OUT_DIR/irq_inc"
+    xvlog.bat -sv -work irq -i "$OUT_DIR/irq_inc" "${INC[@]}" -f rtl_files.f "$HERE/tb_irq_pmp.sv" > xvlog_irq.log
+    xelab.bat -relax -s irq_sim -timescale 1ns/1ps irq.tb_irq_pmp -L irq > xelab_irq.log
+    printf 'run all\nquit\n' > run.tcl
+    xsim.bat irq_sim -tclbatch run.tcl > xsim_irq.log
+    grep -E '\[TB\]|PASS COUNT|RESULT' xsim_irq.log || true
+}
+
+run_per() {
+    echo "=== peripheral testbench: pinmux / UART1 / TIM0-1 / CLIC ID ==="
+    xvlog.bat -sv -work per "${INC[@]}" -f rtl_files.f "$HERE/tb_periph.sv" > xvlog_per.log
+    xelab.bat -relax -s per_sim -timescale 1ns/1ps per.tb_periph -L per > xelab_per.log
+    printf 'run all\nquit\n' > run.tcl
+    xsim.bat per_sim -tclbatch run.tcl > xsim_per.log
+    grep -E '\[TB\]|PASS COUNT|RESULT' xsim_per.log || true
+}
+
 case "$MODE" in
     apb)   run_apb ;;
     fw)    run_fw ;;
     mem)   run_mem ;;
     ascon) run_ascon ;;
     core)  run_core ;;
-    all)   run_apb; run_fw; run_mem; run_ascon; run_core ;;
-    *)     echo "cach dung: $0 [apb|fw|mem|ascon|core|all]"; exit 1 ;;
+    sys)   run_sys ;;
+    irq)   run_irq ;;
+    per)   run_per ;;
+    all)   run_apb; run_fw; run_mem; run_ascon; run_core; run_sys; run_irq; run_per ;;
+    *)     echo "cach dung: $0 [apb|fw|mem|ascon|core|sys|irq|per|all]"; exit 1 ;;
 esac

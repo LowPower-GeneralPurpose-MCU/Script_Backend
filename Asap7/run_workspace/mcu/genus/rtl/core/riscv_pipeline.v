@@ -24,6 +24,17 @@ module riscv_pipeline #(
     input  wire        meip_i,
     input  wire        msip_i,
     input  wire        mtip_i,
+    // --- CLIC (interrupt/clic/clic.v) - ngat ngoai o che do mtvec.mode = 11 ---
+    // Bon tin hieu duoi da duoc CLIC chot thanh ghi: ngat uu tien cao nhat dang
+    // cho va da enable. Core tu quyet dinh nhan hay khong (so muc voi mil /
+    // mintthresh va mstatus.MIE) va bao lai bang clic_ack_o khi THAT SU nhan,
+    // de CLIC xoa pending cua ngat kich canh. Khong con lenh claim qua bus.
+    input  wire        clic_irq_valid_i,
+    input  wire [4:0]  clic_irq_id_i,
+    input  wire [7:0]  clic_irq_level_i,
+    input  wire        clic_irq_shv_i,
+    output wire        clic_ack_o,
+    output wire [4:0]  clic_ack_id_o,
     input  wire [31:0] reset_vector_in,
     output reg         riscv_done,
 
@@ -282,11 +293,16 @@ module riscv_pipeline #(
     // =========================================================================
     wire [31:0] mie_val;
     wire        mstatus_mie_val;
+    wire        clic_mode;
+    wire [7:0]  clic_mil;
+    wire [7:0]  clic_mintthresh;
     wire [31:0] mtvec_pc;
     wire [31:0] mepc_pc;
     wire [31:0] csr_read_data_raw;
+    wire [31:0] csr_read_data_rf;
     wire [31:0] csr_read_data_fwd;
     wire [31:0] csr_dbg_read_data;
+    wire [31:0] csr_dbg_read_data_rf;
     wire [31:0] rf_dbg_read_data;
     wire [31:0] frf_dbg_read_data;
     wire [31:0] dpc_out;
@@ -339,9 +355,24 @@ module riscv_pipeline #(
     // =========================================================================
     // Trap and interrupt logic
     // =========================================================================
-    wire wake_interrupt = (meip_i & mie_val[11]) |
-                          (msip_i & mie_val[3])  |
-                          (mtip_i & mie_val[7]);
+    // -------------------------------------------------------------------------
+    // CLIC (2026-09-11). Ngat CLIC duoc NHAN khi muc cua no vuot ca muc dang
+    // phuc vu (mil) lan nguong phan mem (mintthresh) - Smclic. Hai so sanh 8
+    // bit tren ba gia tri tu flop (CLIC chot dau ra, mil/mintthresh la CSR).
+    // -------------------------------------------------------------------------
+    wire [7:0] clic_th   = (clic_mil > clic_mintthresh) ? clic_mil : clic_mintthresh;
+    wire       clic_take = clic_mode & clic_irq_valid_i & (clic_irq_level_i > clic_th);
+
+    // WFI thuc day khi co ngat DU DIEU KIEN (bat ke mstatus.MIE) - dac ta.
+    wire wake_interrupt = clic_mode ? clic_take :
+                          ((meip_i & mie_val[11]) |
+                           (msip_i & mie_val[3])  |
+                           (mtip_i & mie_val[7]));
+
+    // PMP (core/block_unit/pmp_unit.v): loi load/store o tang MEM va loi lay
+    // lenh o tang ID. Khai bao o day vi trap logic ben duoi dung chung.
+    wire pmp_d_fault;
+    wire pmp_i_fault;
 
     // -------------------------------------------------------------------------
     // KHOAN NO C - ngat duoc quy cho lenh dang o EX/MEM, KHONG cho lenh o tang IF.
@@ -364,11 +395,32 @@ module riscv_pipeline #(
     // luon co lenh that di qua. WFI co duong danh thuc RIENG (wake_interrupt,
     // khong qua mstatus.MIE).
     // -------------------------------------------------------------------------
-    wire irq_ok          = ex_mem_valid & mstatus_mie_val;
-    wire is_external_irq = meip_i & mie_val[11] & irq_ok;
-    wire is_software_irq = msip_i & mie_val[3]  & irq_ok;
-    wire is_timer_irq    = mtip_i & mie_val[7]  & irq_ok;
-    wire trap_interrupt  = is_external_irq | is_software_irq | is_timer_irq;
+    // -------------------------------------------------------------------------
+    // 2026-09-11 - NGAT KHONG DUOC NHAN KHI TANG MEM DANG GIU MOT LOAD/STORE.
+    //
+    // Ngat duoc quy cho lenh o EX/MEM va lenh do bi HUY roi chay lai sau mret.
+    // Voi lenh ALU thi vo hai. Voi load/store thi khong: neu truy cap da ra bus
+    // (D-cache dang AR_REQ/R_WAIT cua mot lenh doc MMIO) thi commit_kill chi rut
+    // yeu cau phia core, giao dich AXI van chay xong - thanh ghi UART RX / FIFO
+    // da bi pop, roi lenh doc CHAY LAI sau mret va pop them lan nua. Mat du lieu.
+    //
+    // Nen ngat chi nhan tren lenh KHONG phai truy cap bo nho. Mot chuoi load/
+    // store lien tiep chi hoan ngat vai chu ky: moi vong lap co it nhat mot lenh
+    // nhanh/ALU di qua MEM. Dieu kien dung toan flop ex_mem_* nen KHONG tao vong
+    // to hop voi dcache_stall (xem ghi chu vong lap P2c o top_soc.v).
+    //
+    // Phan con lai cua loi (CSR bi ghi trong luc dong bang) nam o trap_commit,
+    // xem ben duoi va o csr_register_file.
+    // -------------------------------------------------------------------------
+    wire irq_ok          = ex_mem_valid & mstatus_mie_val &
+                           ~(ex_mem_mem_read | ex_mem_mem_write);
+    // Che do CLINT: msip/mtip qua mie. meip_i khong con nguon (PLIC da bo,
+    // top_soc noi 0) - giu cong de core dung duoc voi PLIC ngoai neu can.
+    wire is_external_irq = ~clic_mode & meip_i & mie_val[11] & irq_ok;
+    wire is_software_irq = ~clic_mode & msip_i & mie_val[3]  & irq_ok;
+    wire is_timer_irq    = ~clic_mode & mtip_i & mie_val[7]  & irq_ok;
+    wire is_clic_irq     = clic_take & irq_ok;
+    wire trap_interrupt  = is_clic_irq | is_external_irq | is_software_irq | is_timer_irq;
 
     // -------------------------------------------------------------------------
     // V5 - illegal-instruction (mcause = 2).
@@ -402,8 +454,12 @@ module riscv_pipeline #(
     // khong the len cho mot lenh da bi flush. Van AND them ex_mem_valid de bong
     // bong khong sinh trap - cung ly do voi irq_ok (khoan no C).
     // -------------------------------------------------------------------------
+    // PMP: ex_mem_fault con mang loi lay lenh do PMP-X (gop o cong ID/EX), va
+    // pmp_d_fault gop vao loi du lieu - cung mcause 1/5/7 voi loi bus, dung
+    // nhu dac ta. pmp_d_fault tinh tu flop (ex_mem_alu_result, CSR PMP) nen no
+    // chan duoc yeu cau D-cache qua commit_kill ma khong tao vong to hop.
     wire trap_instr_access = ex_mem_valid & ex_mem_fault;
-    wire trap_data_access  = ex_mem_valid & ex_mem_is_mem & dcache_error;
+    wire trap_data_access  = ex_mem_valid & ex_mem_is_mem & (dcache_error | pmp_d_fault);
     wire trap_st_access    = trap_data_access &  ex_mem_mem_write;
     wire trap_ld_access    = trap_data_access & ~ex_mem_mem_write;
 
@@ -441,7 +497,9 @@ module riscv_pipeline #(
     // Thu tu uu tien theo bang "Synchronous exception priority" cua dac ta:
     // ngat truoc moi ngoai le; roi illegal / ebreak / ecall (ba cai loai tru
     // nhau nen thu tu giua chung khong quan trong); roi MISALIGNED.
-    wire [31:0] trap_cause = (trap_interrupt && is_external_irq) ? 32'h8000000b :
+    // CLIC: exccode = ID cua ngat (Smclic), bit 31 = 1.
+    wire [31:0] trap_cause = is_clic_irq ? {1'b1, 26'd0, clic_irq_id_i} :
+                             (trap_interrupt && is_external_irq) ? 32'h8000000b :
                              (trap_interrupt && is_software_irq) ? 32'h80000003 :
                              (trap_interrupt && is_timer_irq)    ? 32'h80000007 :
                              ex_mem_ecall                        ? 32'd11       :
@@ -473,9 +531,18 @@ module riscv_pipeline #(
     // cause[4:0] la du: 5 bit phu het 0-31, va mtvec_base da can le 4 byte nen
     // phep cong chi cham toi bit [6:2] - mot bo dem 5 bit, khong phai adder 32 bit.
     // -------------------------------------------------------------------------
+    // CLIC (mode 11, base can le 64 byte - WARL o register_file.v):
+    //   ngat shv = 1 -> BASE + 4*id   (moi o la mot lenh `j handler_id`)
+    //   ngat shv = 0 va moi ngoai le -> BASE
+    // LECH Smclic co y: Smclic doc mot BANG DIA CHI o mtvt[id] roi nhay toi dia
+    // chi do; o day o vector la mot LENH nhu che do vectored cua CLINT. Tu lay
+    // mot word du lieu trong luc vao trap can them mot duong doc bo nho vao
+    // tang IF - rui ro lon cho pipeline nay - trong khi do tre chi hon mot lenh
+    // `j`. mtvt (0x307) vi vay KHONG ton tai (truy cap -> illegal).
     wire [31:0] mtvec_base   = {mtvec_pc[31:2], 2'b00};
-    wire        mtvec_vector = mtvec_pc[0];
-    wire [31:0] trap_vector  = (mtvec_vector && trap_cause[31])
+    wire        mtvec_vector = clic_mode ? (is_clic_irq & clic_irq_shv_i)
+                                         : (mtvec_pc[0] & trap_cause[31]);
+    wire [31:0] trap_vector  = mtvec_vector
                              ? (mtvec_base + {25'd0, trap_cause[4:0], 2'b00})
                              : mtvec_base;
 
@@ -532,8 +599,41 @@ module riscv_pipeline #(
     // -------------------------------------------------------------------------
     wire mem_freeze = dcache_stall;
 
+    // -------------------------------------------------------------------------
+    // TRAP COMMIT (2026-09-11). PC chi doi huong khi !dcache_stall (khoi pc_reg
+    // ben duoi), nen moi tac dung phu cua trap - ghi CSR, ack cho CLIC - cung
+    // chi duoc xay ra trong DUNG chu ky do. Xem ghi chu day du o cong
+    // trap_commit cua csr_register_file. trap_enter tho van la commit_kill:
+    // chan truy cap bo nho cua lenh o MEM ngay khi trap xuat hien.
+    //
+    // Chu ky commit tinh trap_cause / trap_vector / clic_ack tu CUNG mot bo gia
+    // tri, nen neu CLIC doi ngat uu tien nhat trong luc cho thi ca ba van khop.
+    // -------------------------------------------------------------------------
+    wire trap_commit = trap_enter & ~mem_freeze;
+    wire mret_commit = mret_exec  & ~mem_freeze;
+
+    assign clic_ack_o    = trap_commit & is_clic_irq;
+    assign clic_ack_id_o = clic_irq_id_i;
+
+    // -------------------------------------------------------------------------
+    // C8 - RESET_VECTOR cua SYSCON truoc day KHONG he toi core: pc_reg reset
+    // bat dong bo ve hang 0x0001_0000 (xem khoi pc_reg ben duoi), con
+    // reset_vector_in chi vao pc_out luc DANG reset, ma luc do pc_reg khong nap.
+    // Firmware ghi vector roi reset van boot tu ROM.
+    //
+    // Giu reset ve HANG (reset bat dong bo ve mot bien la sai: mo phong va cong
+    // se khac nhau khi bien doi sat luc tha reset). Them MOT chu ky sau reset:
+    // boot_load_q = 1 -> pc_reg nap reset_vector_in, va chu ky do KHONG lay
+    // lenh. reset_vector_in la flop mien POR cua apb_syscon, on dinh tu truoc.
+    // -------------------------------------------------------------------------
+    reg boot_load_q;
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) boot_load_q <= 1'b1;
+        else          boot_load_q <= 1'b0;
+    end
+
     // F4 - cong lenh chi mo khi that su dang lay lenh.
-    wire fetch_enable = ~(stall_IF | is_sleeping_internal | dbg_halted);
+    wire fetch_enable = ~(stall_IF | is_sleeping_internal | dbg_halted | boot_load_q);
 
     wire stall_if_id  = dcache_stall | mf_alu_stall | load_use_stall | stall_ID;
 
@@ -660,7 +760,9 @@ module riscv_pipeline #(
             // cannot disagree when reset_vector_in changes near reset release.
             pc_reg <= 32'h0001_0000;
         end else if (riscv_start && !riscv_done) begin
-            if (dbg_halted && !dbg_resume_req) begin
+            if (boot_load_q) begin
+                pc_reg <= reset_vector_in;
+            end else if (dbg_halted && !dbg_resume_req) begin
                 pc_reg <= dpc_out;
             end else if ((flush_trap || flush_branch || flush_jalr || flush_jal) && !dcache_stall) begin
                 // Doi huong PC cung phai CHO bo nho: neu khong thi PC nhay di trong
@@ -839,7 +941,7 @@ module riscv_pipeline #(
         .msip_i(msip_i),
         .mtip_i(mtip_i),
         .csr_addr(id_ex_csr_addr),
-        .csr_read_data(csr_read_data_raw),
+        .csr_read_data(csr_read_data_rf),
         .csr_addr_lane1(12'd0),
         .csr_read_data_lane1(),
         .csr_write_addr(ex_mem_csr_addr),
@@ -849,7 +951,9 @@ module riscv_pipeline #(
         .count_en(!dbg_halted),
         .instret_en(instret_pulse),   // khoan no I - dem LENH RETIRE, khong dem chu ky
         .trap_enter(trap_enter),
+        .trap_commit(trap_commit),
         .mret_exec(mret_exec),
+        .mret_commit(mret_commit),
         .trap_cause(trap_cause),
         .trap_pc(trap_pc_value),
         .trap_val(trap_val_value),
@@ -857,13 +961,18 @@ module riscv_pipeline #(
         .mepc_out(mepc_pc),
         .mie_out(mie_val),
         .mstatus_mie(mstatus_mie_val),
+        .trap_clic_irq(is_clic_irq),
+        .clic_level(clic_irq_level_i),
+        .clic_mode(clic_mode),
+        .mil_out(clic_mil),
+        .mintthresh_out(clic_mintthresh),
         .dbg_halt_req(dbg_halt_req),
         .dbg_halted(dbg_halted),
         .debug_pc_in(pc_in),
         .dpc_out(dpc_out),
         .dcsr_out(dcsr_out),
         .dbg_reg_read_addr(dbg_reg_read_addr[11:0]),
-        .dbg_read_data(csr_dbg_read_data),
+        .dbg_read_data(csr_dbg_read_data_rf),
         .dbg_reg_write_en(dbg_csr_we),
         .dbg_reg_write_addr(dbg_reg_write_addr[11:0]),
         .dbg_reg_write_data(dbg_reg_write_data),
@@ -871,9 +980,50 @@ module riscv_pipeline #(
         .csr_illegal_addr(csr_illegal_addr)
     );
 
+    // -------------------------------------------------------------------------
+    // PMP - CSR nam trong pmp_unit, mux vao hai cong doc cua CSR file.
+    // -------------------------------------------------------------------------
+    function automatic is_pmp_csr;
+        input [11:0] a;
+        begin
+            is_pmp_csr = (a[11:2] == 10'b0011_1010_00) || (a[11:4] == 8'h3B);
+        end
+    endfunction
+
+    wire [31:0] pmp_rdata_a, pmp_rdata_b, pmp_wr_result;
+
+    pmp_unit #(.PMP_ENTRIES(8)) PMP (
+        .clk       (clk),
+        .reset_n   (reset_n),
+        // Cung dieu kien voi nhanh ghi CSR thuong trong csr_register_file.
+        .csr_we    (ex_mem_csr_we && (ex_mem_csr_op != 2'b00) &&
+                    !trap_enter && !mret_exec && is_pmp_csr(ex_mem_csr_addr)),
+        .csr_waddr (ex_mem_csr_addr),
+        .csr_wdata (ex_mem_csr_write_data),
+        .rd_addr_a (id_ex_csr_addr),
+        .rd_data_a (pmp_rdata_a),
+        .rd_addr_b (dbg_reg_read_addr[11:0]),
+        .rd_data_b (pmp_rdata_b),
+        .wr_result (pmp_wr_result),
+        .d_addr    (ex_mem_alu_result),
+        .d_read    (ex_mem_mem_read),
+        .d_write   (ex_mem_mem_write),
+        .d_fault   (pmp_d_fault),
+        .i_addr    (if_id_pc_in),
+        .i_fault   (pmp_i_fault)
+    );
+
+    assign csr_read_data_raw = is_pmp_csr(id_ex_csr_addr)           ? pmp_rdata_a : csr_read_data_rf;
+    assign csr_dbg_read_data = is_pmp_csr(dbg_reg_read_addr[11:0])  ? pmp_rdata_b : csr_dbg_read_data_rf;
+
+    // Forwarding CSR: lenh ngay truoc dang ghi dung CSR nay. Voi PMP phai
+    // chuyen tiep gia tri SAU WARL VA KHOA (pmp_wr_result): mau "ghi roi doc
+    // lai de kiem khoa" cua boot ROM se thay du lieu vua ghi neu chuyen tiep
+    // nguyen si, du entry da khoa va thanh ghi khong doi.
     assign csr_read_data_fwd =
         (ex_mem_csr_we && (ex_mem_csr_addr == id_ex_csr_addr)) ?
-        ex_mem_csr_write_data : csr_read_data_raw;
+        (is_pmp_csr(id_ex_csr_addr) ? pmp_wr_result : ex_mem_csr_write_data) :
+        csr_read_data_raw;
 
     register_file RF (
         .clk(clk),
@@ -924,7 +1074,9 @@ module riscv_pipeline #(
         .rob_tag({ROB_TAG_W{1'b0}}),
         .rob_valid(1'b0),
         .if_id_valid(if_id_valid),
-        .if_id_fault(if_id_fault),
+        // PMP-X gop vao bit loi lay lenh o day: dia chi if_id_pc_in la flop,
+        // nen bo so sanh PMP nam giua hai flop, khong o sau PC-mux.
+        .if_id_fault(if_id_fault | pmp_i_fault),
         .illegal_instr(illegal_instr),
         .if_id_pc_plus_4(if_id_pc_plus_4),
         .if_id_pc_in(if_id_pc_in),

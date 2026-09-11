@@ -239,14 +239,28 @@ module pipeline_control_unit (
 
     // =========================================================================
     // LOGIC SLEEP (WFI) & WAKE-UP
+    //
+    // Hai su kien danh thuc: ngat, va haltreq cua debugger (2026-09-11). Ban cu
+    // chi co ngat, nen mot core dang WFI khong halt duoc: stall_IF giu vi
+    // sleeping_reg, va khi resume core lai ngu tiep. Dac ta RISC-V Debug: hart
+    // dang WFI nhan haltreq thi halt, WFI coi nhu da xong. `wfi` da retire tu
+    // truoc (xem KHOAN NO S ben duoi), nen dpc la lenh ke tiep - khong lap lenh.
+    // top_soc/apb_syscon mo lai clk_cpu cung luc, vi haltreq cung la su kien
+    // danh thuc cua clock gate.
+    //
+    // `wfi` khong vao trang thai ngu khi dang single-step hoac dang halt: step
+    // qua mot `wfi` ma ngu that thi syscon tat clock va buoc step khong bao gio
+    // xong. Dac ta cho phep thuc hien `wfi` nhu NOP trong truong hop do.
     // =========================================================================
     reg sleeping_reg;
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
             sleeping_reg <= 1'b0;
         end else begin
-            if (trap_interrupt) sleeping_reg <= 1'b0;
-            else if (wfi_req)   sleeping_reg <= 1'b1;
+            if (trap_interrupt || dbg_halt_req)
+                sleeping_reg <= 1'b0;
+            else if (wfi_req && !step_active && !dbg_halted_reg)
+                sleeping_reg <= 1'b1;
         end
     end
     assign is_sleeping = sleeping_reg;
