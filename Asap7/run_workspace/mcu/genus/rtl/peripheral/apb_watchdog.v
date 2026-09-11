@@ -1,10 +1,23 @@
 `timescale 1ns / 1ps
 
+// =============================================================================
+// apb_watchdog - bo dem nguoc, bao IRQ va/hoac reset he thong khi chay ve 0.
+//
+// MOT MIEN CLOCK DUY NHAT (2026-09-11). Truoc day bo dem chay bang rtc_clk
+// 32.768 kHz trong mien rieng, noi voi pclk qua cdc_pulse (feed) va
+// cdc_sync_bit (irq). Gio moi flop chay bang pclk; bo dem chi giam o chu ky co
+// `rtc_tick` - xung mot chu ky pclk, moi chu ky rtc mot lan, do top_soc tao ra
+// bang cach lay mau chan rtc_clk. Nghia cua WDT_LOAD (don vi = chu ky RTC) vi
+// the KHONG doi, firmware khong phai sua.
+//
+// Doi lai: watchdog khong con doc lap voi clock he thong. Neu clock he thong
+// chet thi watchdog chet theo - chip nay khong co nguon clock thu hai de lam
+// watchdog doc lap.
+// =============================================================================
 module apb_watchdog #(
     parameter ADDR_WIDTH = 12,
     parameter DATA_WIDTH = 32
 )(
-    // Miền APB
     input  wire pclk, presetn, psel, penable, pwrite,
     input  wire [ADDR_WIDTH-1:0] paddr,
     input  wire [DATA_WIDTH-1:0] pwdata,
@@ -12,82 +25,59 @@ module apb_watchdog #(
     output reg  [DATA_WIDTH-1:0] prdata,
     output reg  pready, pslverr,
 
-    // Miền Thời gian thực (RTC)
-    input  wire rtc_clk,
-    input  wire rtc_rst_n,
+    // Xung mot chu ky pclk cho moi chu ky RTC (xem top_soc.v, rtc_tick).
+    input  wire rtc_tick,
     output wire wdt_irq,
     output wire wdt_rst
 );
     reg [31:0] wdt_load;
     reg wdt_en, wdt_ie, wdt_re;
-    reg wdt_feed_pclk;
+    reg wdt_feed;
 
-    // Truyền lệnh Feed chó từ APB sang RTC
-    wire feed_rtc;
-    cdc_pulse u_feed_sync (
-        .clk_src(pclk), .rst_src_n(presetn), .pulse_src(wdt_feed_pclk),
-        .clk_dst(rtc_clk), .rst_dst_n(rtc_rst_n), .pulse_dst(feed_rtc)
-    );
-
-    // Đồng bộ cấu hình sang miền RTC
-    reg [31:0] wdt_load_rtc;
-    reg wdt_en_rtc, wdt_ie_rtc, wdt_re_rtc;
-    always @(posedge rtc_clk or negedge rtc_rst_n) begin
-        if (!rtc_rst_n) begin
-            wdt_load_rtc <= 32'b0; wdt_en_rtc <= 1'b0; 
-            wdt_ie_rtc <= 1'b0; wdt_re_rtc <= 1'b0;
-        end else begin
-            wdt_load_rtc <= wdt_load; wdt_en_rtc <= wdt_en; 
-            wdt_ie_rtc <= wdt_ie; wdt_re_rtc <= wdt_re;
-        end
-    end
-
-    // Bộ đếm đếm theo rtc_clk (Luôn luôn sống kể cả khi tắt pclk)
     reg [31:0] counter;
-    reg irq_out_rtc, rst_out_rtc;
-    always @(posedge rtc_clk or negedge rtc_rst_n) begin
-        if (!rtc_rst_n) begin
-            counter <= 32'b0; irq_out_rtc <= 1'b0; rst_out_rtc <= 1'b0;
+    reg irq_out, rst_out;
+    always @(posedge pclk or negedge presetn) begin
+        if (!presetn) begin
+            counter <= 32'b0; irq_out <= 1'b0; rst_out <= 1'b0;
         end else begin
-            if (feed_rtc) begin
-                counter <= wdt_load_rtc;
-                irq_out_rtc <= 1'b0;
-                rst_out_rtc <= 1'b0;
-            end else if (wdt_en_rtc && counter > 0) begin
+            if (wdt_feed) begin
+                counter <= wdt_load;
+                irq_out <= 1'b0;
+                rst_out <= 1'b0;
+            end else if (wdt_en && rtc_tick && counter > 0) begin
                 counter <= counter - 1;
             end
 
-            if (wdt_en_rtc && counter == 0) begin
-                if (wdt_ie_rtc) irq_out_rtc <= 1'b1;
-                if (wdt_re_rtc) rst_out_rtc <= 1'b1;
+            if (wdt_en && counter == 0) begin
+                if (wdt_ie) irq_out <= 1'b1;
+                if (wdt_re) rst_out <= 1'b1;
             end
         end
     end
 
-    // Gửi tín hiệu Ngắt về miền APB
-    cdc_sync_bit u_irq_sync (.clk_dst(pclk), .rst_dst_n(presetn), .d_in(irq_out_rtc), .q_out(wdt_irq));
-    assign wdt_rst = rst_out_rtc; 
+    assign wdt_irq = irq_out;
+    assign wdt_rst = rst_out;
 
     // Logic thanh ghi APB
     always @(posedge pclk or negedge presetn) begin
         if (!presetn) begin
-            wdt_load <= 32'hFFFF_FFFF; 
-            wdt_en <= 1'b0; wdt_ie <= 1'b0; wdt_re <= 1'b0; wdt_feed_pclk <= 1'b0;
+            wdt_load <= 32'hFFFF_FFFF;
+            wdt_en <= 1'b0; wdt_ie <= 1'b0; wdt_re <= 1'b0; wdt_feed <= 1'b0;
             pready <= 1'b0; prdata <= 32'b0; pslverr <= 1'b0;
         end else begin
-            pready <= psel && penable; 
-            pslverr <= 1'b0; 
-            wdt_feed_pclk <= 1'b0;
-            
+            pready <= psel && penable;
+            pslverr <= 1'b0;
+            wdt_feed <= 1'b0;
+
             if (psel && penable && pwrite) begin
                 case (paddr[11:0])
                     12'h000: wdt_load <= pwdata;
                     12'h004: begin wdt_en <= pwdata[0]; wdt_ie <= pwdata[1]; wdt_re <= pwdata[2]; end
-                    12'h008: if (pwdata == 32'h5A5A5A5A) wdt_feed_pclk <= 1'b1;
+                    12'h008: if (pwdata == 32'h5A5A5A5A) wdt_feed <= 1'b1;
                     default: pslverr <= 1'b1;
                 endcase
             end
-            
+
             if (psel && !penable && !pwrite) begin
                 case (paddr[11:0])
                     12'h000: prdata <= wdt_load;

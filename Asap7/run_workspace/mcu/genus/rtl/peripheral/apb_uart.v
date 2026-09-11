@@ -2,14 +2,21 @@
 
 // =============================================================================
 // Module: apb_uart (Top-level Wrapper)
-// Mục đích: Giao tiếp APB Bus, quản lý CDC bằng asyn_fifo, tạo DMA/IRQ requests
+// Mục đích: Giao tiếp APB Bus, FIFO TX/RX, tạo DMA/IRQ requests
+//
+// MOT MIEN CLOCK DUY NHAT (2026-09-11). Truoc day loi UART chay tren uart_clk
+// rieng, noi voi pclk qua hai async_fifo + dong bo 2FF cho STATUS. SoC nay gio
+// chi con mot clock he thong, nen ca module chay bang pclk: FIFO la sync_fifo,
+// STATUS doc thang. Toc do baud do CLK_DIV quyet dinh, tinh theo tan so pclk.
+// Chan RX van qua 2FF trong uart_rx - do la dong bo CHAN VAO bat dong bo, khong
+// phai CDC giua hai mien clock.
 // =============================================================================
 module apb_uart #(
     parameter ADDR_WIDTH = 12,
     parameter DATA_WIDTH = 32,
     parameter FIFO_DEPTH = 16
 )(
-    // --- APB Interface (pclk domain) ---
+    // --- APB Interface ---
     input  wire pclk,
     input  wire presetn,
     input  wire psel,
@@ -21,9 +28,7 @@ module apb_uart #(
     output reg  pready,
     output reg  pslverr,
 
-    // --- UART Core Interface (uart_clk domain) ---
-    input  wire uart_clk,
-    input  wire uart_rst_n,
+    // --- Chan UART ---
     input  wire rxd,
     output wire txd,
 
@@ -54,22 +59,15 @@ module apb_uart #(
     reg  tx_fifo_wr, rx_fifo_rd;
     wire tx_fifo_rd, rx_fifo_wr;
     
-    // Core Status Signals (từ uart_clk domain)
+    // Core Status Signals
     wire tx_busy, rx_busy, frame_error, timeout_error;
 
     wire baud_tx_en, baud_rx_en;
     wire tx_core_ready;
     wire [7:0] rx_fifo_rdata_core;
-    
-    // Đồng bộ hóa Status từ uart_clk sang pclk (2-FF CDC)
-    reg [3:0] status_sync1, status_sync2;
-    always @(posedge pclk or negedge presetn) begin
-        if (!presetn) {status_sync2, status_sync1} <= 8'b0;
-        else {status_sync2, status_sync1} <= {status_sync1, {rx_busy, tx_busy, frame_error, timeout_error}};
-    end
 
     // ==========================================
-    // 1. APB Read/Write Logic (pclk domain)
+    // 1. APB Read/Write Logic
     // ==========================================
     always @(posedge pclk or negedge presetn) begin
         if (!presetn) begin
@@ -101,7 +99,7 @@ module apb_uart #(
                         prdata <= {24'b0, rx_fifo_rdata};
                         if (!rx_fifo_empty) rx_fifo_rd <= 1'b1; // Pop RX FIFO
                     end
-                    12'h00C: prdata <= {26'b0, status_sync2[3:2], rx_fifo_empty, tx_fifo_full, status_sync2[1:0]};
+                    12'h00C: prdata <= {26'b0, rx_busy, tx_busy, rx_fifo_empty, tx_fifo_full, frame_error, timeout_error};
                     12'h010: prdata <= {28'b0, reg_dma_int};
                     default: prdata <= 32'b0;
                 endcase
@@ -117,39 +115,37 @@ module apb_uart #(
     assign uart_irq   = (tx_fifo_empty   & reg_dma_int[0]) | (!rx_fifo_empty & reg_dma_int[1]);
 
     // ==========================================
-    // 3. Asynchronous FIFOs cho CDC
+    // 3. FIFO TX / RX (dong bo, cung pclk)
     // ==========================================
-    // TX FIFO: Ghi ở pclk, Đọc ở uart_clk
-    async_fifo #(
-        .ASFIFO_TYPE(0), .DATA_WIDTH(8), .FIFO_DEPTH(FIFO_DEPTH), .NUM_SYNC_FF(2)
+    sync_fifo #(
+        .DATA_WIDTH(8), .FIFO_DEPTH(FIFO_DEPTH)
     ) u_tx_fifo (
-        .clk_wr_domain(pclk),       .clk_rd_domain(uart_clk),
-        .wrst_n(presetn),           .rrst_n(uart_rst_n),
+        .clk(pclk),                 .rst_n(presetn),
         .data_i(pwdata[7:0]),       .data_o(tx_fifo_rdata),
         .wr_valid_i(tx_fifo_wr),    .rd_valid_i(tx_fifo_rd),
         .wr_ready_o(),              .rd_ready_o(),
         .full_o(tx_fifo_full),      .empty_o(tx_fifo_empty),
-        .almost_empty_o(),          .almost_full_o()
+        .almost_empty_o(),          .almost_full_o(),
+        .counter()
     );
 
-    // RX FIFO: Ghi ở uart_clk, Đọc ở pclk
-    async_fifo #(
-        .ASFIFO_TYPE(0), .DATA_WIDTH(8), .FIFO_DEPTH(FIFO_DEPTH), .NUM_SYNC_FF(2)
+    sync_fifo #(
+        .DATA_WIDTH(8), .FIFO_DEPTH(FIFO_DEPTH)
     ) u_rx_fifo (
-        .clk_wr_domain(uart_clk),   .clk_rd_domain(pclk),
-        .wrst_n(uart_rst_n),        .rrst_n(presetn),
+        .clk(pclk),                 .rst_n(presetn),
         .data_i(rx_fifo_rdata_core),.data_o(rx_fifo_rdata),
         .wr_valid_i(rx_fifo_wr),    .rd_valid_i(rx_fifo_rd),
         .wr_ready_o(),              .rd_ready_o(),
         .full_o(rx_fifo_full),      .empty_o(rx_fifo_empty),
-        .almost_empty_o(),          .almost_full_o()
+        .almost_empty_o(),          .almost_full_o(),
+        .counter()
     );
 
     // ==========================================
-    // 4. UART Protocol Cores (uart_clk domain)
+    // 4. UART Protocol Cores
     // ==========================================
     baud_gen u_baud_gen (
-        .clk(uart_clk),             .rst_n(uart_rst_n),
+        .clk(pclk),                 .rst_n(presetn),
         .tx_divisor(reg_clk_div[15:0]), .rx_divisor(reg_clk_div[31:16]),
         .baud_tx_en(baud_tx_en),    .baud_rx_en(baud_rx_en)
     );
@@ -157,7 +153,7 @@ module apb_uart #(
     assign tx_fifo_rd = tx_core_ready & !tx_fifo_empty;
 
     uart_tx u_uart_tx (
-        .clk(uart_clk),             .rst_n(uart_rst_n),
+        .clk(pclk),                 .rst_n(presetn),
         .baudrate_clk_en(baud_tx_en),
         .data_i(tx_fifo_rdata),     .data_valid_i(tx_fifo_rd),
         .ready_o(tx_core_ready),    .tx_busy(tx_busy),
@@ -165,7 +161,7 @@ module apb_uart #(
     );
 
     uart_rx u_uart_rx (
-        .clk(uart_clk),             .rst_n(uart_rst_n),
+        .clk(pclk),                 .rst_n(presetn),
         .baudrate_clk_en(baud_rx_en),
         .RX(rxd),
         .data_out_rx(rx_fifo_rdata_core),

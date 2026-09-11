@@ -19,7 +19,7 @@
 // dung qua decode `SOC_IS_UNCACHED` / `SOC_IS_ITCM` / `SOC_IS_DTCM` that, qua
 // D-cache that, qua AXI interconnect that.  Khong mo hinh gia nao ca.
 //
-// `clk_en_cpu_s` bi force len 1 vi loi CPU that dang treo o fetch (ta cuop port
+// `clk_en_cpu` bi force len 1 vi loi CPU that dang treo o fetch (ta cuop port
 // cua no).  Neu no giai ma nham mot lenh rac thanh WFI thi clock CPU tat va
 // testbench treo; force la cach re nhat de loai bo hoan toan kha nang do.
 //
@@ -79,12 +79,11 @@ module tb_mem_paths;
     endtask
 
     // ---- clock / reset -----------------------------------------------------
-    reg clk_400m, clk_200m, clk_100m, rtc_clk;
+    // SoC mot clock tu 2026-09-11: moi thu chay bang clk 250 MHz.
+    reg clk, rtc_clk;
     reg rst_n;
 
-    initial begin clk_400m = 0; forever #1.25  clk_400m = ~clk_400m; end
-    initial begin clk_200m = 0; forever #2.5   clk_200m = ~clk_200m; end
-    initial begin clk_100m = 0; forever #5.0   clk_100m = ~clk_100m; end
+    initial begin clk      = 0; forever #2.0   clk      = ~clk;      end
     initial begin rtc_clk  = 0; forever #15258 rtc_clk  = ~rtc_clk;  end
 
     // ---- chan ngoai vi -----------------------------------------------------
@@ -122,13 +121,7 @@ module tb_mem_paths;
     pullup(i2c_sda);
 
     top_soc uut (
-        .clk_core      (clk_400m),
-        .clk_axi       (clk_200m),
-        .clk_apb       (clk_100m),
-        .clk_sdram_ext (clk_200m),
-        .uart_clk      (clk_100m),
-        .spi_clk       (clk_100m),
-        .i2c_clk       (clk_100m),
+        .clk           (clk),
         .rtc_clk       (rtc_clk),
         .rst_n         (rst_n),
         .tck(tck), .trst_n(trst_n), .tms(tms), .tdi(tdi), .tdo(tdo),
@@ -182,12 +175,12 @@ module tb_mem_paths;
     reg [31:0] amo_read_q;
     integer    amo_capture_cnt;
 
-    always @(posedge clk_400m or negedge rst_n) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) amo_read_q <= 32'h0;
         else if (uut.cpu_data_amo_capture) amo_read_q <= uut.cpu_data_rdata;
     end
 
-    always @(posedge clk_400m or negedge rst_n) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) amo_capture_cnt <= 0;
         else if (uut.cpu_data_amo_capture) amo_capture_cnt <= amo_capture_cnt + 1;
     end
@@ -214,8 +207,8 @@ module tb_mem_paths;
         tb_d_size = SZ_W;  tb_d_uns   = 1'b0;
         tb_d_amo  = 1'b0;  tb_amo_op  = AMO_ADD; tb_amo_rs2 = 32'h0;
 
-        force uut.clk_en_cpu_s      = 1'b1;
-        force uut.clk_en_dbg_s      = 1'b1;
+        force uut.clk_en_cpu        = 1'b1;
+        force uut.clk_en_dbg        = 1'b1;
         force uut.cpu_inst_req      = tb_if_req;
         force uut.cpu_inst_addr     = tb_if_addr;
         force uut.cpu_data_rd_req   = tb_d_rd;
@@ -231,7 +224,7 @@ module tb_mem_paths;
     localparam integer HANDSHAKE_TIMEOUT = 4000;   // chu ky clk_cpu
 
     // So chu ky cua giao dich core-side gan nhat.  Phan biet cache hit (2 chu
-    // ky) voi cache miss (mot vong AXI qua CDC 400/200) - hai truong hop tra ve
+    // ky) voi cache miss (mot vong AXI qua interconnect) - hai truong hop tra ve
     // cung gia tri nen khong the phan biet bang du lieu.
     integer last_xact_cycles;
     integer dc_set;
@@ -246,7 +239,7 @@ module tb_mem_paths;
                             output [31:0] rdata);
         integer n;
         begin
-            @(negedge clk_400m);
+            @(negedge clk);
             tb_d_addr  = addr;
             tb_d_wdata = wdata;
             tb_d_size  = size;
@@ -256,7 +249,7 @@ module tb_mem_paths;
 
             n = 0;
             while ((uut.cpu_data_hit !== 1'b1) && (n < HANDSHAKE_TIMEOUT)) begin
-                @(posedge clk_400m);
+                @(posedge clk);
                 #0.2;
                 n = n + 1;
             end
@@ -279,7 +272,7 @@ module tb_mem_paths;
             // canh nay (`state == DONE && cpu_read_req`), nen neu testbench ha
             // request som nua chu ky thi khong line nao duoc allocate va moi
             // lan doc deu miss - dung nhu da quan sat luc dau.
-            @(posedge clk_400m);
+            @(posedge clk);
             #0.2;
             tb_d_wr = 1'b0;
             tb_d_rd = 1'b0;
@@ -299,12 +292,12 @@ module tb_mem_paths;
     task automatic fence_();
         integer n;
         begin
-            @(negedge clk_400m);
+            @(negedge clk);
             tb_d_fence = 1'b1;
 
             n = 0;
             while ((uut.cpu_data_hit !== 1'b1) && (n < HANDSHAKE_TIMEOUT)) begin
-                @(posedge clk_400m);
+                @(posedge clk);
                 #0.2;
                 n = n + 1;
             end
@@ -316,7 +309,7 @@ module tb_mem_paths;
             end
             last_xact_cycles = n;
 
-            @(posedge clk_400m);
+            @(posedge clk);
             #0.2;
             tb_d_fence = 1'b0;
         end
@@ -352,7 +345,7 @@ module tb_mem_paths;
                          output [31:0] old_val);
         integer n;
         begin
-            @(negedge clk_400m);
+            @(negedge clk);
             tb_amo_op  = op;
             tb_amo_rs2 = rs2;
             tb_d_addr  = addr;
@@ -364,7 +357,7 @@ module tb_mem_paths;
 
             n = 0;
             while ((uut.cpu_data_hit !== 1'b1) && (n < HANDSHAKE_TIMEOUT)) begin
-                @(posedge clk_400m);
+                @(posedge clk);
                 #0.2;
                 n = n + 1;
             end
@@ -380,7 +373,7 @@ module tb_mem_paths;
             last_xact_cycles = n;
 
             // Giu them mot canh len y het cpu_xact - xem ghi chu o do.
-            @(posedge clk_400m);
+            @(posedge clk);
             #0.2;
             tb_d_rd  = 1'b0;
             tb_d_wr  = 1'b0;
@@ -392,12 +385,12 @@ module tb_mem_paths;
     task automatic ifetch(input [31:0] addr, output [31:0] data);
         integer n;
         begin
-            @(negedge clk_400m);
+            @(negedge clk);
             tb_if_addr = addr;
             tb_if_req  = 1'b1;
             n = 0;
             while ((uut.cpu_inst_hit !== 1'b1) && (n < HANDSHAKE_TIMEOUT)) begin
-                @(posedge clk_400m);
+                @(posedge clk);
                 #0.2;
                 n = n + 1;
             end
@@ -409,7 +402,7 @@ module tb_mem_paths;
             end else begin
                 data = uut.cpu_inst_data;
             end
-            @(posedge clk_400m);
+            @(posedge clk);
             #0.2;
             tb_if_req = 1'b0;
         end
@@ -445,7 +438,7 @@ module tb_mem_paths;
                             output [1:0]  resp);
         integer n;
         begin
-            @(negedge clk_200m);
+            @(negedge clk);
             tb_sba_op    = op;
             tb_sba_size  = size;
             tb_sba_addr  = addr;
@@ -454,7 +447,7 @@ module tb_mem_paths;
 
             n = 0;
             while ((uut.sba_ack !== 1'b1) && (n < HANDSHAKE_TIMEOUT)) begin
-                @(posedge clk_200m);
+                @(posedge clk);
                 #0.2;
                 n = n + 1;
             end
@@ -468,9 +461,9 @@ module tb_mem_paths;
                 rdata = uut.sba_rdata;
                 resp  = uut.sba_resp;
             end
-            @(negedge clk_200m);
+            @(negedge clk);
             tb_sba_req = 1'b0;
-            repeat (2) @(posedge clk_200m);
+            repeat (2) @(posedge clk);
         end
     endtask
 
@@ -531,10 +524,12 @@ module tb_mem_paths;
         gpio_in      = 32'h0;
         tck = 0; trst_n = 0; tms = 0; tdi = 0;
         rst_n = 1'b0;
-        repeat (40) @(posedge clk_100m);
+        repeat (40) @(posedge clk);
         rst_n  = 1'b1;
         trst_n = 1'b1;
-        repeat (40) @(posedge clk_100m);
+        // Bo keo dai reset trong top_soc giu he thong them 64 chu ky clk (+2 cua
+        // reset_sync) sau khi rst_n nha - phai cho het truoc giao dich dau tien.
+        repeat (100) @(posedge clk);
 
         $display("");
         $display("=== tb_mem_paths: cac duong bo nho mo o Phase 0 ===");
@@ -544,31 +539,31 @@ module tb_mem_paths;
         // T0 - decode: nua nao cua system RAM la uncached
         // ------------------------------------------------------------------
         $display("--- T0: decode SOC_IS_UNCACHED ---");
-        @(negedge clk_400m);
+        @(negedge clk);
         tb_d_addr = ADDR_RAM_LO; #0.2;
         chk32("RAM lo  0x20000000 -> dc_uncache_en", {31'b0, uut.dc_uncache_en}, 32'h0);
-        @(negedge clk_400m);
+        @(negedge clk);
         tb_d_addr = ADDR_RAM_HI; #0.2;
         chk32("RAM hi  0x20020000 -> dc_uncache_en", {31'b0, uut.dc_uncache_en}, 32'h1);
-        @(negedge clk_400m);
+        @(negedge clk);
         tb_d_addr = ADDR_RAM_HI + 32'h1_FFFC; #0.2;
         chk32("RAM hi  0x2003FFFC -> dc_uncache_en", {31'b0, uut.dc_uncache_en}, 32'h1);
-        @(negedge clk_400m);
+        @(negedge clk);
         tb_d_addr = ADDR_RAM_LO + 32'h1_FFFC; #0.2;
         chk32("RAM lo  0x2001FFFC -> dc_uncache_en", {31'b0, uut.dc_uncache_en}, 32'h0);
-        @(negedge clk_400m);
+        @(negedge clk);
         tb_d_addr = ADDR_DTCM; #0.2;
         chk32("DTCM    0x00024000 -> ls_sel_dtcm", {31'b0, uut.ls_sel_dtcm}, 32'h1);
-        @(negedge clk_400m);
+        @(negedge clk);
         tb_d_addr = ADDR_ITCM; #0.2;
         chk32("ITCM    0x00020000 -> ls_sel_itcm", {31'b0, uut.ls_sel_itcm}, 32'h1);
-        @(negedge clk_400m);
+        @(negedge clk);
         tb_d_addr = 32'h0;
 
         // ------------------------------------------------------------------
         // TP - D-cache co THAT SU hit khong?
         //
-        //   Doc lan dau  = miss, phai di tron mot vong AXI qua CDC 400/200.
+        //   Doc lan dau  = miss, phai di tron mot vong AXI qua interconnect.
         //   Doc lan sau  = hit,  phai xong trong vai chu ky clk_cpu.
         //
         // Khong bai test chuc nang nao phan biet duoc hai truong hop nay: ca
@@ -696,7 +691,7 @@ module tb_mem_paths;
         end
 
         // Va no phai THUC SU cho.  Mot entry duy nhat cung mat tron mot vong AXI
-        // qua CDC 400/200 - hang chuc chu ky - nen nguong 3 phan biet dut khoat
+        // qua interconnect - hang chuc chu ky - nen nguong 3 phan biet dut khoat
         // "co xa" voi "tra ve ngay nhu NOP".
         if (last_xact_cycles > 3) begin
             pass_count = pass_count + 1;
@@ -838,7 +833,7 @@ module tb_mem_paths;
         // ------------------------------------------------------------------
         $display("");
         $display("--- T5: ITCM, trong tai F/D (luat f_starved) ---");
-        @(negedge clk_400m);
+        @(negedge clk);
         tb_if_addr = ADDR_ITCM + 32'h0004;
         tb_if_req  = 1'b1;
         tb_d_addr  = ADDR_ITCM + 32'h0000;
@@ -848,12 +843,12 @@ module tb_mem_paths;
 
         n_fetch_wait = 0;
         while ((uut.cpu_inst_hit !== 1'b1) && (n_fetch_wait < 200)) begin
-            @(posedge clk_400m);
+            @(posedge clk);
             #0.2;
             n_fetch_wait = n_fetch_wait + 1;
         end
         d = uut.cpu_inst_data;
-        @(negedge clk_400m);
+        @(negedge clk);
         tb_if_req = 1'b0;
         tb_d_rd   = 1'b0;
 
@@ -1101,7 +1096,7 @@ module tb_mem_paths;
         // Bang chung manh nhat cho R11: doc lai bang SBA cua debug module, di
         // thang qua AXI nen KHONG dung mang cache.  Phan ghi cua AMO nam trong
         // store buffer nen phai xa het truoc.  P2c - dung `fence` that thay cho
-        // ban cu `repeat (200) @(posedge clk_200m)`: con so 200 la doan, con
+        // ban cu `repeat (200) @(posedge clk)`: con so 200 la doan, con
         // fence cho DUNG toi khi `sb_drained` (TF da chung minh no khong la NOP).
         fence_();
         sba_xact(2'd1, 2'd2, ADDR_RAM_LO + 32'h6800, 32'h0, d, sba_resp);

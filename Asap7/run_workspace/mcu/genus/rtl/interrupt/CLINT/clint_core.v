@@ -81,16 +81,17 @@ module clint_irq_gen #(
 endmodule
 
 // ============================================================
-//  clint_timer.v  —  bộ đếm mtime 64-bit với Toggle CDC
+//  clint_timer.v  —  bộ đếm mtime 64-bit
 //
-//  Tối ưu:
-//    1. Toggle synchronizer (3-FF) thay vì level sync + edge detect
-//       -> robust hơn: hoạt động đúng bất kể tỉ lệ clk/rtc
-//       -> không bỏ tick kể cả khi rtc ~ sys_clk/4
-//    2. Priority ghi: bus write > rtc_tick (tránh race)
-//    3. Snapshot 64-bit: latch mtime_hi khi đọc mtime_lo
+//  mtime tăng 1 ở mỗi chu kỳ có `rtc_tick_i`. Xung đó do top_soc.v tạo ra
+//  bằng cách lấy mẫu chân rtc_clk (2FF + bắt cạnh lên) trong clock hệ thống,
+//  nên tần số mtime vẫn là 32.768 kHz như RTC_CLOCK_HZ của firmware. Trước
+//  2026-09-11 module này có flop toggle chạy bằng rtc_clk và bộ sync 3FF;
+//  từ khi SoC chỉ còn một clock, không flop nào ở đây chạy bằng rtc_clk nữa.
+//
+//    1. Priority ghi: bus write > rtc_tick (tránh race)
+//    2. Snapshot 64-bit: latch mtime_hi khi đọc mtime_lo
 //       -> software đọc nhất quán dù counter tràn giữa 2 lần đọc
-//    4. (* ASYNC_REG = "TRUE" *) đánh dấu FF cho tool timing analysis
 //
 //  Ports:
 //    mtime_wr_valid_i  : bus muốn ghi mtime
@@ -106,7 +107,7 @@ endmodule
 module clint_timer (
     input  wire        clk_i,
     input  wire        rst_ni,
-    input  wire        rtc_clk_i,      // RTC clock (bất đồng bộ với clk_i)
+    input  wire        rtc_tick_i,     // xung 1 chu kỳ clk_i mỗi chu kỳ RTC
 
     //  Write port từ bus ─
     input  wire        mtime_wr_valid_i,
@@ -123,38 +124,7 @@ module clint_timer (
     output wire [31:0] mtime_hi_snap_o  // shadow cho đọc hi
 );
 
-    reg rtc_toggle_r;
-    always @(posedge rtc_clk_i or negedge rst_ni) begin
-        if (!rst_ni) rtc_toggle_r <= 1'b0;
-        else         rtc_toggle_r <= ~rtc_toggle_r;
-    end
-
-`ifdef FPGA
-    (* ASYNC_REG = "TRUE" *)
-`endif
-    reg sync_ff1_r;
-`ifdef FPGA
-    (* ASYNC_REG = "TRUE" *)
-`endif
-    reg sync_ff2_r;
-`ifdef FPGA
-    (* ASYNC_REG = "TRUE" *)
-`endif
-    reg sync_ff3_r;
-
-    always @(posedge clk_i or negedge rst_ni) begin
-        if (!rst_ni) begin
-            sync_ff1_r <= 1'b0;
-            sync_ff2_r <= 1'b0;
-            sync_ff3_r <= 1'b0;
-        end else begin
-            sync_ff1_r <= rtc_toggle_r; // có thể metastable
-            sync_ff2_r <= sync_ff1_r;   // ổn định hơn
-            sync_ff3_r <= sync_ff2_r;   // hoàn toàn ổn định
-        end
-    end
-
-    wire rtc_tick = sync_ff3_r ^ sync_ff2_r;
+    wire rtc_tick = rtc_tick_i;
     reg [31:0] mtime_lo_r;
     reg [31:0] mtime_hi_r;
 

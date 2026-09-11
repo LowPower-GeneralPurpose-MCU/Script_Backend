@@ -38,7 +38,7 @@ module axi_clint #(
     //  Clocks & Reset ─
     input  wire clk_i,
     input  wire rst_ni,
-    input  wire rtc_clk_i,    // RTC clock (bất đồng bộ)
+    input  wire rtc_tick_i,   // xung 1 chu kỳ clk_i mỗi chu kỳ RTC (top_soc.v)
 
     //  AXI4 Full Slave
 
@@ -185,7 +185,7 @@ module axi_clint #(
     clint_timer u_timer (
         .clk_i(clk_i), 
         .rst_ni(rst_ni), 
-        .rtc_clk_i(rtc_clk_i),
+        .rtc_tick_i(rtc_tick_i),
         .mtime_wr_valid_i  (mtime_wr_valid),
         .mtime_wr_hi_i     (mtime_wr_hi),
         .mtime_wr_data_i   (mtime_wr_data),

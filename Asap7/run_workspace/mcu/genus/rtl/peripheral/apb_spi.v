@@ -1,11 +1,15 @@
 `timescale 1ns / 1ps
 
+// MOT MIEN CLOCK DUY NHAT (2026-09-11): FSM SPI chay cung pclk voi giao dien
+// APB. Truoc day no nam o spi_clk rieng voi async_fifo + cdc_sync_bit; SoC gio
+// chi co mot clock he thong nen cac duong do la noi thang. Tan so SCLK =
+// f_pclk / (2 * (DIV + 1)). MISO van qua 2FF - dong bo chan vao.
 module apb_spi #(
     parameter ADDR_WIDTH = 12,
     parameter DATA_WIDTH = 32,
     parameter FIFO_DEPTH = 16
 )(
-    // --- Miền xung nhịp APB (pclk - 100MHz) ---
+    // --- Giao dien APB ---
     input  wire                   pclk,
     input  wire                   presetn,
     input  wire                   psel,
@@ -18,10 +22,6 @@ module apb_spi #(
     output reg  [DATA_WIDTH-1:0]  prdata,
     output reg                    pslverr,
 
-    // --- Miền xung nhịp Core (spi_clk) ---
-    input  wire                   spi_clk,
-    input  wire                   spi_rst_n,
-    
     // Giao diện vật lý SPI
     output wire                   sclk,
     output wire                   mosi,
@@ -46,21 +46,18 @@ module apb_spi #(
     wire [7:0] rx_data_apb;
     reg  tx_wr_apb, rx_rd_apb;
 
-    // --- Miền SPI Core ---
+    // --- SPI Core ---
     wire tx_empty, rx_full;
     wire [7:0] tx_data_core;
     reg  tx_rd_core, rx_wr_core;
     reg [7:0]  spi_tx_shift;
     reg [7:0]  spi_rx_shift;
-    reg        core_done;
+    reg        core_done;   // xung 1 chu ky khi xong mot byte va TX da rong
 
-    wire core_busy_sync, core_done_sync;
-    reg  core_done_sync_dly; // Dùng để bắt cạnh lên của core_done_sync
-    
     wire core_busy = (state != IDLE) || (!tx_empty);
 
     // ============================================================
-    // 1. APB INTERFACE (Miền pclk)
+    // 1. APB INTERFACE
     // ============================================================
     always @(posedge pclk or negedge presetn) begin
         if (!presetn) begin
@@ -93,86 +90,69 @@ module apb_spi #(
                         prdata <= {24'b0, rx_data_apb}; 
                         if (!rx_empty) rx_rd_apb <= 1; 
                     end
-                    12'h014: prdata <= {28'b0, rx_empty, tx_full, spi_done_flag, core_busy_sync};
+                    12'h014: prdata <= {28'b0, rx_empty, tx_full, spi_done_flag, core_busy};
                     12'h018: prdata <= {28'b0, reg_dma_int};
                     default: prdata <= 32'b0;
                 endcase
             end
 
-            // Cập nhật ngắt khi SPI Core báo xong (chỉ duy trì 1 nhịp từ sync)
-            if (core_done_sync && !core_done_sync_dly) spi_done_flag <= 1'b1;
+            // Cập nhật ngắt khi SPI Core báo xong. core_done đã là xung 1 chu
+            // kỳ cùng clock, nên không cần bắt cạnh nữa. Đặt SAU khối ghi để
+            // lần set thắng lệnh W1C trong cùng chu kỳ, như bản cũ.
+            if (core_done) spi_done_flag <= 1'b1;
         end
     end
 
     // ============================================================
-    // 2. CDC & FIFOs (Truyền giữa pclk và spi_clk)
+    // 2. FIFOs (đồng bộ, cùng pclk)
     // ============================================================
-    
-    // Đưa Config tĩnh (CTRL, DIV) sang miền Core
-    reg [31:0] reg_div_core;
-    reg [1:0]  reg_ctrl_core;
-    always @(posedge spi_clk or negedge spi_rst_n) begin
-        if (!spi_rst_n) begin
-            reg_div_core <= 32'd2;
-            reg_ctrl_core <= 2'b00;
-        end else begin
-            reg_div_core <= reg_div;
-            reg_ctrl_core <= reg_ctrl;
-        end
-    end
-
-    // Đồng bộ tín hiệu Trạng thái
-    cdc_sync_bit u_sync_busy (.clk_dst(pclk), .rst_dst_n(presetn), .d_in(core_busy), .q_out(core_busy_sync));
-    cdc_sync_bit u_sync_done (.clk_dst(pclk), .rst_dst_n(presetn), .d_in(core_done), .q_out(core_done_sync));
-    
-    always @(posedge pclk or negedge presetn) begin
-        if (!presetn) core_done_sync_dly <= 1'b0;
-        else          core_done_sync_dly <= core_done_sync;
-    end
+    // CTRL / DIV được FSM đọc thẳng. Bản cũ chép chúng sang miền spi_clk bằng
+    // một tầng flop; cùng clock thì tầng đó chỉ còn là trễ một chu kỳ.
+    wire [31:0] reg_div_core  = reg_div;
+    wire [1:0]  reg_ctrl_core = reg_ctrl;
 
     assign spi_irq = (spi_done_flag & reg_dma_int[0]) | (!rx_empty & reg_dma_int[1]);
     assign dma_tx_req = (!tx_full)  & reg_dma_int[2];
     assign dma_rx_req = (!rx_empty) & reg_dma_int[3];
 
-    // Async FIFOs
-    async_fifo #(.DATA_WIDTH(8), .FIFO_DEPTH(16)) u_spi_tx_fifo (
-        .clk_wr_domain(pclk),       .clk_rd_domain(spi_clk),
+    sync_fifo #(.DATA_WIDTH(8), .FIFO_DEPTH(FIFO_DEPTH)) u_spi_tx_fifo (
+        .clk(pclk),                 .rst_n(presetn),
         .data_i(pwdata[7:0]),       .data_o(tx_data_core),
         .wr_valid_i(tx_wr_apb),     .rd_valid_i(tx_rd_core),
         .full_o(tx_full),           .empty_o(tx_empty),
-        .wrst_n(presetn),           .rrst_n(spi_rst_n),
-        .wr_ready_o(), .rd_ready_o(), .almost_empty_o(), .almost_full_o()
+        .wr_ready_o(), .rd_ready_o(), .almost_empty_o(), .almost_full_o(),
+        .counter()
     );
 
-    async_fifo #(.DATA_WIDTH(8), .FIFO_DEPTH(16)) u_spi_rx_fifo (
-        .clk_wr_domain(spi_clk),    .clk_rd_domain(pclk),
+    sync_fifo #(.DATA_WIDTH(8), .FIFO_DEPTH(FIFO_DEPTH)) u_spi_rx_fifo (
+        .clk(pclk),                 .rst_n(presetn),
         .data_i(spi_rx_shift),      .data_o(rx_data_apb),
         .wr_valid_i(rx_wr_core),    .rd_valid_i(rx_rd_apb),
         .full_o(rx_full),           .empty_o(rx_empty),
-        .wrst_n(spi_rst_n),         .rrst_n(presetn),
-        .wr_ready_o(), .rd_ready_o(), .almost_empty_o(), .almost_full_o()
+        .wr_ready_o(), .rd_ready_o(), .almost_empty_o(), .almost_full_o(),
+        .counter()
     );
 
     // ============================================================
-    // 3. SPI CORE FSM (Miền spi_clk)
+    // 3. SPI CORE FSM
     // ============================================================
-    
+
     // Đồng bộ tín hiệu MISO từ ngoài vào (Chống Metastability)
     reg miso_sync1, miso_sync2;
-    always @(posedge spi_clk or negedge spi_rst_n) begin
-        if (!spi_rst_n) {miso_sync2, miso_sync1} <= 2'b00;
-        else            {miso_sync2, miso_sync1} <= {miso_sync1, miso};
+    always @(posedge pclk or negedge presetn) begin
+        if (!presetn) {miso_sync2, miso_sync1} <= 2'b00;
+        else          {miso_sync2, miso_sync1} <= {miso_sync1, miso};
     end
 
     reg [31:0] clk_cnt;
     reg [2:0]  bit_cnt;
     reg        sclk_reg;
-    
+
     assign sclk = (state == IDLE) ? reg_ctrl_core[1] : sclk_reg;
     assign mosi = spi_tx_shift[7];
 
-    always @(posedge spi_clk or negedge spi_rst_n) begin
-        if (!spi_rst_n) begin
+    always @(posedge pclk or negedge presetn) begin
+        if (!presetn) begin
             state <= IDLE; clk_cnt <= 0; bit_cnt <= 0;
             sclk_reg <= 0; spi_tx_shift <= 0; spi_rx_shift <= 0;
             tx_rd_core <= 0; rx_wr_core <= 0; core_done <= 0;
