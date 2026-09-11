@@ -23,7 +23,11 @@
 // cua no).  Neu no giai ma nham mot lenh rac thanh WFI thi clock CPU tat va
 // testbench treo; force la cach re nhat de loai bo hoan toan kha nang do.
 //
-// Cac nhom test:
+// Cac nhom test (theo thu tu chay):
+//   T0  decode SOC_IS_UNCACHED
+//   TP  D-cache co hit khong            - do do tre, hit <= 3 / miss >= 10
+//   TS  Store buffer cua D-cache       - Phase 1 / P2
+//   TF  `fence` xa store buffer        - P2c
 //   T1  RAM hi, truy cap word           - chung minh slave 6 + duong uncached
 //   T2  RAM hi, truy cap byte/halfword  - sb/sh/lb/lh vao DMAPOOL
 //   T3  DTCM                            - TCM chua tung duoc kich hoat lan nao
@@ -31,7 +35,12 @@
 //   T5  ITCM: tranh chap F/D, luat f_starved
 //   T6  DMA ghi DMAPOOL roi CPU doc lai - chung minh P0 that su dong
 //   T7  Thu tu store vao MMIO           - bai test BAT BUOC truoc Phase 1
+//   T9  Debugger SBA ghi/doc bo nho     - dung `fence_()` that (P2c)
+//   T8  Doi chung hazard coherency      - vung cacheable, chung minh P0
+//   T10 Lenh nguyen tu (AMO)            - R1b bat tay 2 chu ky, R11 AMO truot
+//   T10e QUAN SAT (khong tinh diem)     - AMO vao vung uncached, R12 chua sua
 //
+// Tong so check mong doi: 128 (121 truoc P2c + 7 cua TF).
 // Chay: genus/rtl/tests/run_soc_sim.sh mem
 // =============================================================================
 
@@ -144,6 +153,7 @@ module tb_mem_paths;
     reg        tb_if_req;
     reg [31:0] tb_if_addr;
     reg        tb_d_rd, tb_d_wr;
+    reg        tb_d_fence;                 // P2c
     reg [31:0] tb_d_addr, tb_d_wdata;
     reg [1:0]  tb_d_size;
     reg        tb_d_uns;
@@ -199,6 +209,7 @@ module tb_mem_paths;
     initial begin
         tb_if_req = 1'b0;  tb_if_addr = 32'h0;
         tb_d_rd   = 1'b0;  tb_d_wr    = 1'b0;
+        tb_d_fence = 1'b0;
         tb_d_addr = 32'h0; tb_d_wdata = 32'h0;
         tb_d_size = SZ_W;  tb_d_uns   = 1'b0;
         tb_d_amo  = 1'b0;  tb_amo_op  = AMO_ADD; tb_amo_rs2 = 32'h0;
@@ -209,6 +220,7 @@ module tb_mem_paths;
         force uut.cpu_inst_addr     = tb_if_addr;
         force uut.cpu_data_rd_req   = tb_d_rd;
         force uut.cpu_data_wr_req   = tb_d_wr;
+        force uut.cpu_data_fence    = tb_d_fence;
         force uut.cpu_data_addr     = tb_d_addr;
         force uut.cpu_data_wdata    = tb_d_wdata_eff;
         force uut.cpu_data_amo_req  = tb_d_amo;
@@ -275,6 +287,40 @@ module tb_mem_paths;
     endtask
 
     reg [31:0] junk;
+
+    // -------------------------------------------------------------------------
+    // P2c - `fence`.  Cung giao thuc voi cpu_xact (`stall` cao suot, `hit` la
+    // xung ket thuc), chi khac la khong co dia chi va khong co du lieu.
+    //
+    // `last_xact_cycles` cho biet fence da cho BAO NHIEU chu ky - do la cach duy
+    // nhat de phan biet "fence that su xa buffer" voi "fence bi bo qua nhu NOP":
+    // ca hai deu tra ve dung du lieu neu khong co master nao khac xen vao.
+    // -------------------------------------------------------------------------
+    task automatic fence_();
+        integer n;
+        begin
+            @(negedge clk_400m);
+            tb_d_fence = 1'b1;
+
+            n = 0;
+            while ((uut.cpu_data_hit !== 1'b1) && (n < HANDSHAKE_TIMEOUT)) begin
+                @(posedge clk_400m);
+                #0.2;
+                n = n + 1;
+            end
+
+            if (n >= HANDSHAKE_TIMEOUT) begin
+                timeout_hits = timeout_hits + 1;
+                fail_count   = fail_count + 1;
+                $display("[FAIL] TIMEOUT fence sau %0d chu ky", n);
+            end
+            last_xact_cycles = n;
+
+            @(posedge clk_400m);
+            #0.2;
+            tb_d_fence = 1'b0;
+        end
+    endtask
 
     task automatic sw (input [31:0] a, input [31:0] d);
         begin cpu_xact(1'b1, a, d, SZ_W, 1'b0, junk); end
@@ -620,6 +666,67 @@ module tb_mem_paths;
         chk32("TS hai store cung dia chi giu dung thu tu", d, 32'hC0DE_0002);
 
         // ------------------------------------------------------------------
+        // TF - `fence` xa store buffer (P2c).
+        //
+        // T9 chung minh fence dung TRONG MOT KICH BAN.  Nhom nay do thang tinh
+        // chat cua no, vi mot fence bi noi nham thanh NOP van lam T9 PASS: cac
+        // buoc JTAG cua sba_xact tinh co du dai de buffer tu xa.
+        //
+        // Hai chieu phai kiem ca hai, khong duoc thieu chieu nao:
+        //   - buffer CO du lieu  -> fence phai cho, va sau do buffer phai rong;
+        //   - buffer DA rong     -> fence khong duoc cho, neu khong thi moi
+        //                           `fence` trong vong lap deu tra tien vo ich.
+        // ------------------------------------------------------------------
+        $display("");
+        $display("--- TF: fence xa store buffer (P2c) ---");
+
+        // Do sau FIFO la 4 nen 4 store lien tiep chac chan de lai entry cho xa.
+        for (i = 0; i < 4; i = i + 1)
+            sw(ADDR_RAM_LO + 32'h7400 + i*4, 32'hFE0C_0000 + i);
+
+        fence_();
+        if (uut.u_dcache.sb_drained === 1'b1) begin
+            pass_count = pass_count + 1;
+            $display("[PASS] sau fence, store buffer rong (cho %0d chu ky)",
+                     last_xact_cycles);
+        end else begin
+            fail_count = fail_count + 1;
+            $display("[FAIL] sau fence, store buffer VAN chua xa: sb_state=%0d wptr=%0d rptr=%0d",
+                     uut.u_dcache.sb_state, uut.u_dcache.sb_wptr, uut.u_dcache.sb_rptr);
+        end
+
+        // Va no phai THUC SU cho.  Mot entry duy nhat cung mat tron mot vong AXI
+        // qua CDC 400/200 - hang chuc chu ky - nen nguong 3 phan biet dut khoat
+        // "co xa" voi "tra ve ngay nhu NOP".
+        if (last_xact_cycles > 3) begin
+            pass_count = pass_count + 1;
+            $display("[PASS] fence cho that su (%0d chu ky), khong tra ve ngay",
+                     last_xact_cycles);
+        end else begin
+            fail_count = fail_count + 1;
+            $display("[FAIL] fence tra ve sau %0d chu ky voi buffer con day - chay nhu NOP",
+                     last_xact_cycles);
+        end
+
+        // Fence tren buffer da rong: khong duoc cho.  Nguong 3 chu ky la do tre
+        // chot cua chinh giao thuc handshake, khong phai do tre xa.
+        fence_();
+        if (last_xact_cycles <= 3) begin
+            pass_count = pass_count + 1;
+            $display("[PASS] fence tren buffer rong khong cho (%0d chu ky)",
+                     last_xact_cycles);
+        end else begin
+            fail_count = fail_count + 1;
+            $display("[FAIL] fence tren buffer rong ton %0d chu ky", last_xact_cycles);
+        end
+
+        // Du lieu cua chuoi store tren van phai dung sau khi fence xa.
+        for (i = 0; i < 4; i = i + 1) begin
+            lw(ADDR_RAM_LO + 32'h7400 + i*4, d);
+            chk32("TF du lieu con nguyen sau fence", d, 32'hFE0C_0000 + i);
+        end
+
+        // ------------------------------------------------------------------
         // T1 - RAM hi, truy cap word. Chung minh slave 6 ton tai va tra loi.
         //      Bao gom bien macro (4 KiB) va word cuoi cung cua instance.
         // ------------------------------------------------------------------
@@ -894,16 +1001,21 @@ module tb_mem_paths;
         // day la duong khac han.
         sw(ADDR_RAM_LO + 32'h6000, 32'h0000_0000);
 
-        // FENCE thu cong.  Store tren la CACHEABLE nen no chi di vao store
+        // P2c - FENCE THAT.  Store tren la CACHEABLE nen no chi di vao store
         // buffer roi retire ngay; chua chac da toi RAM khi debugger ghi de len
-        // cung line ngay sau do.  Mot truy cap UNCACHED bat store buffer phai
-        // xa het truoc (quy tac 2 trong dcache.v), nen doc mot thanh ghi APB
-        // chinh la lenh fence duy nhat SoC nay dang co.
+        // cung line ngay sau do.
+        //
+        // Truoc P2c cho nay phai gia lam fence bang mot lenh doc uncached bat ky
+        // (`lw(ADDR_SYSCON + 0)`), dua vao quy tac 2 trong dcache.v: moi truy cap
+        // uncached deu ep xa buffer truoc.  Cach do chay, nhung no la mot HIEU UNG
+        // PHU - khong co gi trong RTL noi rang no phai tiep tuc dung, va phan mem
+        // that thi khong the viet "doc bua mot thanh ghi APB" vao driver.
         //
         // Rang buoc nay khong dung cho DMA: thanh ghi DMA la MMIO, nen chinh
         // hanh dong khoi dong DMA da xa store buffer roi.  No chi dung cho
         // debugger, master duy nhat vao thang AXI ma khong qua CPU.
-        lw(ADDR_SYSCON + 32'h000, junk);
+        fence_();
+        $display("[INFO] fence cho %0d chu ky de xa store buffer", last_xact_cycles);
 
         sba_xact(2'd2, 2'd0, ADDR_RAM_LO + 32'h6001, 32'h0000_00C3, d, sba_resp);
         chk32("SBA ghi byte vao RAM lo: BRESP OKAY", {30'b0, sba_resp}, 32'h0);
@@ -987,8 +1099,11 @@ module tb_mem_paths;
         end
 
         // Bang chung manh nhat cho R11: doc lai bang SBA cua debug module, di
-        // thang qua AXI nen KHONG dung mang cache.  Cho store buffer xa het.
-        repeat (200) @(posedge clk_200m);
+        // thang qua AXI nen KHONG dung mang cache.  Phan ghi cua AMO nam trong
+        // store buffer nen phai xa het truoc.  P2c - dung `fence` that thay cho
+        // ban cu `repeat (200) @(posedge clk_200m)`: con so 200 la doan, con
+        // fence cho DUNG toi khi `sb_drained` (TF da chung minh no khong la NOP).
+        fence_();
         sba_xact(2'd1, 2'd2, ADDR_RAM_LO + 32'h6800, 32'h0, d, sba_resp);
         chk32("T10b R11: RAM THAT da duoc cap nhat (doc bang SBA)", d, 32'h1000_0007);
 
@@ -1025,7 +1140,7 @@ module tb_mem_paths;
             $display("[INFO] T10e AMO uncached CO ghi");
         else
             $display("[INFO] T10e AMO uncached KHONG ghi - AMO tren vung uncached bi bo am tham");
-
+
         // ------------------------------------------------------------------
         $display("");
         $display("=== tb_mem_paths ket qua ===");

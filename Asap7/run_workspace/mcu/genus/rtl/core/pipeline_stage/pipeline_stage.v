@@ -501,6 +501,7 @@ module instruction_decode (
     output [1:0] csr_op,
     output csr_we,
     output wire wfi_req,
+    output fence_op,        // P2c - `fence` xa store buffer cua D-cache
     output illegal_instr,   // V5 - ma lenh khong ton tai -> illegal-instruction
     output fpu_en,
     output f_reg_write,
@@ -637,6 +638,7 @@ module instruction_decode (
         .f_to_x(f_to_x),
         .x_to_f(x_to_f),
         .fpu_operation(fpu_operation),
+        .fence_op(fence_op),
         .illegal_instr(cu_illegal)
     );
 
@@ -875,6 +877,9 @@ module memory_access (
     input [31:0] ex_mem_instr,
     input ex_mem_mem_write,
     input ex_mem_mem_read,
+    // P2c - `fence` da toi tang MEM.  Khong doc, khong ghi: no chi bao D-cache
+    // giu core lai cho toi khi store buffer xa het.
+    input ex_mem_fence_op,
     // -------------------------------------------------------------------------
     // KHOAN NO C - huy commit TO HOP trong chinh chu ky nhan trap.
     //
@@ -895,6 +900,7 @@ module memory_access (
     output [31:0] mem_read_data,
     output dcache_read_req,
     output dcache_write_req,
+    output dcache_fence,
     output [31:0] dcache_addr,
     output [31:0] dcache_write_data,
     input [31:0] dcache_read_data,
@@ -1021,6 +1027,13 @@ module memory_access (
     // SC.W: only write if reservation matches
     assign dcache_write_req = commit_kill ? 1'b0 :
                               amo_sc      ? sc_success : ex_mem_mem_write;
+    // P2c - chan bang commit_kill dung nhu dcache_write_req, va vi mot ly do
+    // KHAC: fence keo dcache_stall len cao cho toi khi buffer xa xong.  Neu
+    // khong ha no trong chinh chu ky nhan trap thi mot fence DA BI HUY van giu
+    // ca pipeline lai them may chuc chu ky truoc khi vao mtvec - do tre trap
+    // ma khong ai giai thich duoc.  flush_ex_mem la xoa DONG BO, no chi co
+    // hieu luc o suon xung ke tiep, nen mot minh no khong du.
+    assign dcache_fence     = commit_kill ? 1'b0 : ex_mem_fence_op;
     assign dcache_addr = ex_mem_alu_result;
     assign dcache_write_data = ex_mem_atomic ? amo_write_data : ex_mem_mem_write_data;
     // SC.W result: 0 = success, 1 = failure (per RISC-V spec)

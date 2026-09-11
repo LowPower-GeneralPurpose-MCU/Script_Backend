@@ -17,13 +17,17 @@ Mọi thay đổi trong tài liệu này phải giữ nguyên ba kết quả bas
 bash genus/rtl/tests/run_soc_sim.sh all
 ```
 
-| Testbench | Baseline |
-|---|---|
-| `apb` — `Test_bench/SoC_testbench.sv` | **PASS 256 / FAIL 0** |
-| `fw` — `Driver/tb_top_soc.v` | **PASS** — UART in `HELLO RISC-V UART TEST!`, CPU tới WFI (2026-09-08 sau Phase F: **t = 1 528 046 000 ns**, trước đó 2 831 456 000) |
-| `mem` — `genus/rtl/tests/tb_mem_paths.sv` | **PASS 99 / FAIL 0 / TIMEOUT 0** (2026-09-08: **109/109** sau Phase F) |
+| Testbench | Baseline 2026-09-05 | Hiện hành |
+|---|---|---|
+| `apb` — `Test_bench/SoC_testbench.sv` | **PASS 256 / FAIL 0** | 256/256 (2026-09-10) |
+| `fw` — `Driver/tb_top_soc.v` | **PASS** — UART in `HELLO RISC-V UART TEST!`, CPU tới WFI | PASS **t = 1 701 796 000 ns** (2026-09-10, sau R2). Mốc trước: 2 831 456 000 → 1 528 046 000 (Phase F) → 1 701 796 000 (R2, +11.4 %) |
+| `mem` — `genus/rtl/tests/tb_mem_paths.sv` | **PASS 99 / FAIL 0 / TIMEOUT 0** | 121/121 (2026-09-10); **mong đợi 128** sau P2c — chưa chạy lại |
+| `ascon` — `genus/rtl/tests/tb_ascon_apb.sv` | — | 31/31 (2026-09-10) |
 
-Ba bộ này **không** phủ được exception, CSR conformance hay dự đoán nhánh. Mỗi
+Mốc `t` của `fw` chỉ so được **trên cùng một file `.mem`** — xem đính chính ở
+§6. R1a, R1b và R11 không đổi `t` một pico giây vì firmware không có atomics.
+
+Các bộ này **không** phủ được exception, CSR conformance hay dự đoán nhánh. Mỗi
 phase dưới đây vì vậy phải kèm testcase riêng, nếu không thì "không có gì bắt
 được khi làm hỏng" — đúng bài học đã ghi ở `MEMORY_FIX_PLAN.md` mục Phase 1.
 
@@ -64,7 +68,7 @@ doc lan 1 (miss, nap line): sau 90 chu ky       <- read miss phai cho buffer xa
 | ID | Vấn đề | Mức | Phase |
 |---|---|---|---|
 | **P1** | `pc + (compressed ? 2 : 4)` đặt **mux trước adder**, nguồn là dữ liệu cache → ripple-carry chiếm 58 % đường tới hạn | Timing | C |
-| **P2** | BTB 16 entry, BHT 16 entry index `pc[5:2]`, **không có RAS** → mọi `ret` mispredict | IPC | D |
+| **P2** | BTB 16 entry, BHT 16 entry index `pc[5:2]`, **không có RAS** → mọi `ret` mispredict (từ R2, mỗi JALR tốn **2** bong bóng thay vì 1) | IPC | D |
 | **P3** | MUL 10 chu kỳ / DIV ~19 chu kỳ | IPC (DSP) | E |
 | **P4** | D-cache không có store buffer → mỗi store ~25–35 chu kỳ | IPC | **F — xong (35 → 1)** |
 | **P5** | Cache là FSM request/response, 2 chu kỳ/lệnh kể cả hit → **IPC trần 0.5** | IPC | G |
@@ -305,6 +309,12 @@ Thêm:
 
 ## 5. Phase C — Đường tới hạn ở IF (P1)
 
+> Số liệu mục này là của bản tổng hợp **trước 2026-09-09**. Sau Phase C, đường
+> tới hạn chuyển sang bộ cộng JALR (R2) rồi họ AMO (R1); sau cả hai, lần chạy
+> 2026-09-10 cho CLK_CPU +812.6 ps ở TT / +1.3 ps ở SS với đường tới hạn phân
+> tán (MUL/DIV, `pc_reg`, `IF_ID_instr`, dữ liệu ghi SRAM D-cache). Xem §10 và
+> GENUS_REVIEW_2026-09-09.md §17.
+
 `reports/timing_syn.rpt` Path 1, slack **+6 ps** trên chu kỳ 2500 ps:
 
 ```
@@ -424,7 +434,8 @@ giá trị reset `2'b10` (weakly **taken**). Cần CoreMark để xác nhận ha
    nhánh không nhảy.
 3. **Genus xác nhận timing.** `btb_hit`/`predict_target` là tổ hợp đi thẳng vào
    mux PC; index rộng thêm 2 bit làm mux đọc to gấp 4 trên đúng khu vực đường
-   tới hạn, mà slack `CLK_CPU` lần đo cuối chỉ +5.5 ps.
+   tới hạn, mà slack `CLK_CPU` lúc đó chỉ +5.5 ps (hiện: +1.3 ps ở góc SS, run
+   2026-09-10).
 
 Bài học ghi lại: đây là hạng mục **không được sửa mù**. Không có phép đo thì
 phóng to bộ dự đoán là đánh bạc, và lần đánh bạc này thua.
@@ -439,7 +450,7 @@ target, và đó là hai thay đổi cùng lúc vào đúng khu vực đường 
 
 **Rủi ro timing của phần đã làm:** `btb_hit` và `predict_target` là tổ hợp từ
 mảng BTB và đi thẳng vào mux PC. Index rộng thêm 2 bit làm mux đọc to gấp 4.
-Slack `CLK_CPU` lần đo cuối chỉ +5.5 ps, nên **Genus phải xác nhận lại**. Nếu
+Slack `CLK_CPU` lúc đó chỉ +5.5 ps (hiện: +1.3 ps ở SS), nên **Genus phải xác nhận lại**. Nếu
 thiếu slack: hạ `ENTRY` về 32 (`INDEX = 5`) trước, rồi mới xét chốt
 `predict_target` vào một flop.
 
@@ -497,7 +508,11 @@ khi ĐỒNG THỜI hạ D-cache từ 4-way xuống 2-way.
 * Lỗi bus của store **đã trở thành imprecise** đúng như dự đoán. Quyết định đã
   chốt: báo qua **ngắt riêng (PLIC nguồn 7)**, không phải exception đồng bộ.
   Store uncached vẫn giữ đường precise `dcache_error` → mcause 7.
-* **Còn nợ:** `FENCE` chưa xả buffer. Xem `MEMORY_FIX_PLAN.md` § Phase 1.
+* ~~**Còn nợ:** `FENCE` chưa xả buffer.~~ **Đã trả (P2c, 2026-09-11).** Bit
+  `fence_op` chạy `control_unit → ID/EX → EX/MEM → dcache_fence → cpu_fence`, bị
+  `commit_kill` chặn tổ hợp như `dcache_write_req`. D-cache giữ `dcache_stall`
+  cho tới `sb_drained`. `fence.i` vẫn illegal. Chi tiết và test: MEMORY_FIX_PLAN.md
+  § Phase 1. **Chưa chạy lại sim sau merge.**
 
 ---
 
@@ -536,7 +551,60 @@ tới hạn IF đã thoáng — pipeline cache sẽ đẩy thêm logic vào đú
 
 ---
 
-## 10. Bảng theo dõi
+## 10. Thay đổi core từ bản đánh giá Genus 2026-09-09
+
+Thiết kế và số đo đầy đủ ở [GENUS_REVIEW_2026-09-09.md](GENUS_REVIEW_2026-09-09.md);
+ở đây chỉ ghi phần ảnh hưởng tới core.
+
+| ID | Thay đổi | Hệ quả cho core |
+|---|---|---|
+| **R2** | JALR tính đích ở EX, chốt vào EX/MEM, phân giải cùng tầng với nhánh điều kiện | Bỏ mux next-PC (~315 ps) khỏi đường bộ cộng JALR. Giá: **+11.4 %** `fw` (2 bong bóng mỗi JALR). |
+| **R1b** | AMO đọc-sửa-ghi thành bắt tay 2 chu kỳ; AMO ALU ăn `amo_read_q` (flop) | Chỉ AMO thật tốn thêm 1 chu kỳ; LR.W/SC.W không đổi. |
+| **R11** | AMO trượt cache chạy lại vòng tra cứu thay vì retire không ghi | Lỗi đúng đắn có từ trước — spinlock/refcount. |
+| **P2c** | `fence` xả store buffer | Xem §8. |
+
+### ⚠️ R13 — `flush_jalr` không có trong `flush_ex_mem` (rủi ro mở, chưa sửa)
+
+`riscv_pipeline.v`:
+
+```verilog
+wire flush_id_ex  = ~mem_freeze & (flush_trap | flush_branch | flush_jalr | ...);
+wire flush_ex_mem = ~mem_freeze & (flush_trap | flush_branch | mf_alu_stall);   // khong co flush_jalr
+```
+
+Lý do ghi trong comment và trong GENUS_REVIEW §12.1 là *"EX/MEM giữ chính lệnh
+JALR, xoá nó là thừa"*. Lập luận đó **mâu thuẫn với chính `flush_branch`**: nhánh
+điều kiện cũng phân giải khi đang ở EX/MEM, nhưng `flush_branch` **có** trong
+`flush_ex_mem`. Flush là **đồng bộ**: ở cạnh clock đó JALR đã sang MEM/WB, còn
+thứ bị xoá là lệnh đang ở ID/EX (lệnh ngay sau JALR) — không phải JALR.
+
+Khi `ex_mem_jalr = 1`, ID/EX giữ lệnh tuần tự ngay sau JALR (JALR+4, hoặc +2
+nếu nén), chứ không phải JALR+8 như comment viết. BTB chỉ cập nhật cho nhánh
+điều kiện (`ex_mem_branch`), nên không có dự đoán nào cho JALR — lệnh sau nó
+luôn là đường sai. Không có `flush_jalr` trong `flush_ex_mem` thì lệnh đó, nếu
+hợp lệ, **đi tiếp vào EX/MEM và chạy**, còn PC vẫn nhảy tới `ex_mem_jalr_target`.
+
+Vì sao `fw` vẫn PASS: cache 2 chu kỳ/lệnh (P5, IPC ≤ 0.5) nên thường có một bong
+bóng ngay sau JALR, và bong bóng thì chạy vô hại. Nhưng không có gì **bảo đảm**
+điều đó — hai lệnh nén trong cùng một word (`c.jr ra` + lệnh sau), hay lệnh đã
+lấy sẵn trong lúc pipeline stall, đều có thể xếp sát nhau.
+
+**Điểm chưa giải thích được:** nếu ID/EX gần như luôn là bong bóng thì thêm
+`flush_jalr` vào `flush_ex_mem` phải gần như **không tốn gì**, vậy mà đo ra
++85 %. Hoặc ID/EX thường xuyên giữ lệnh hợp lệ (tức lỗi xảy ra thường xuyên và
+`fw` PASS là do may), hoặc có một tương tác khác (ví dụ `flush` thắng `stall`
+trong `ex_mem_register` khi `stall_MEM` bật) mà chưa ai lần ra.
+
+**Chưa sửa RTL**, vì chưa giải thích được +85 % và máy này không có XSim. Việc
+cần làm theo thứ tự:
+
+1. Thêm assertion mô phỏng trong `riscv_pipeline.v`: báo lỗi khi
+   `ex_mem_jalr && id_ex_valid && !stall_ex_mem`, rồi chạy `fw`. Không có lần
+   nào ⇒ rủi ro chỉ còn trên lý thuyết; có ⇒ lỗi thật.
+2. Nếu có: sửa `flush_ex_mem |= flush_jalr`, rồi lần ra vì sao nó làm `fw` chậm
+   85 % trước khi chấp nhận con số đó.
+
+## 11. Bảng theo dõi
 
 | ID | Việc | Phase | Trạng thái | File |
 |---|---|---|---|---|
@@ -549,12 +617,17 @@ tới hạn IF đã thoáng — pipeline cache sẽ đẩy thêm logic vào đú
 | C1a | D-cache bus error → mcause 5/7 | B | **Xong (chưa có test riêng)** | `memory/dcache.v`, `core/riscv_pipeline.v` |
 | C1b | I-cache bus error → mcause 1 | B | **Xong (chưa có test riêng)** | `memory/icache.v`, `core/pipeline_register/pipeline_register.v` |
 | P1 | Mux sau adder ở IF | C | **Xong** | `core/pipeline_stage/pipeline_stage.v` |
-| P2 | BTB/BHT lớn hơn + RAS | D | **Đã thử và REVERT — đo ra chậm hơn 27 %** | `core/block_unit/branch_prediction_unit.v` |
+| P2 | BTB/BHT lớn hơn + RAS | D | **Đã thử và REVERT — chưa đo được** (phép đo 27 % bị đính chính ở §6) | `core/block_unit/branch_prediction_unit.v` |
 | P3 | Nhân pipeline | E | | `core/block_unit/multiplier_divider_unit.v` |
 | C8 | `RESET_VECTOR` | D | | `peripheral/apb_syscon.v`, `core/riscv_pipeline.v` |
-| P4 | Store buffer | F | Chờ G | `memory/dcache.v` |
-| P5 | Pipeline hoá cache | G | Chờ Genus | `memory/icache.v`, `memory/dcache.v` |
+| P4 | Store buffer | F | **Xong (2026-09-08), 35 → 1 chu kỳ, fw 1.85×** | `memory/dcache.v`, `top_soc.v` |
+| P2c | `fence` xả store buffer | F | **Xong ở RTL (2026-09-11), chờ sim** | `core/block_unit/control_unit.v`, `core/pipeline_register/`, `core/pipeline_stage/`, `core/riscv_pipeline.v`, `memory/dcache.v`, `top_soc.v` |
+| R2 | JALR phân giải ở EX/MEM | — | Xong (2026-09-09), +11.4 % `fw` | `core/pipeline_stage/`, `core/pipeline_register/`, `core/block_unit/pipeline_control_unit.v`, `core/riscv_pipeline.v` |
+| R13 | `flush_jalr` thiếu trong `flush_ex_mem` | — | **Rủi ro mở — cần sim** (§10) | `core/riscv_pipeline.v` |
+| R1b / R11 | AMO 2 chu kỳ / AMO trượt cache | — | Xong, verify bằng T10 | `core/pipeline_stage/pipeline_stage.v`, `memory/dcache.v` |
+| P5 | Pipeline hoá cache | G | Chưa — Genus đã chạy, nhưng góc SS còn +1.3 ps | `memory/icache.v`, `memory/dcache.v` |
 | V | `tb_core_traps.sv` — test exception/CSR | A+B | | `genus/rtl/tests/` |
 | A6 | `CONFIG_HAS_FPU` + vá `fcsr` trong ảnh firmware | A | **Xong** | `Driver/inc/soc_config.h`, `Driver/my_soc_firmware_word.mem` |
 | — | Build lại firmware bằng toolchain RISC-V | A | **Chưa — máy không có toolchain**, hướng dẫn ở [`Driver/BUILD.md`](../../../../Driver/BUILD.md) | `Driver/` |
-| — | **Chạy lại Genus** | GATE | Chặn E và G | máy có license |
+| — | Chạy Genus | GATE | **Đã chạy 2026-09-09 và 2026-09-10.** Góc SS: CLK_CPU +1.3 ps — E và G vẫn cần timing trước | máy có license |
+| — | Vá core song song sang `integrated-matrix-extension/core/` | — | **Chưa** — cả R2 lẫn P2c | cây ngoài repo |

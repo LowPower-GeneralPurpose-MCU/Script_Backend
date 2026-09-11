@@ -134,18 +134,23 @@ make_gated_clock CLK_DBG    clk_axi  cg_dbg/clk_out    $P_AXI
 make_gated_clock CLK_PWM    clk_apb  cg_pwm/clk_out    $P_APB
 make_gated_clock CLK_GPIO   clk_apb  cg_gpio/clk_out   $P_APB
 make_gated_clock CLK_CORDIC clk_apb  cg_cordic/clk_out $P_APB
+# ASCON + TRNG (APB S10, 2026-09-10) - cung mau voi CORDIC: clock gate rieng tu
+# clk_apb, giu mo bang `ascon_clk_req` (xem top_soc.v).  Khong co dong nay thi
+# flop cua u_apb_ascon van duoc tinh theo CLK_APB xuyen qua cong AND, nhung
+# cg_ascon khong co clock-gating check.
+make_gated_clock CLK_ASCON  clk_apb  cg_ascon/clk_out  $P_APB
 make_gated_clock CLK_UART_G uart_clk cg_uart/clk_out   $P_UART
 make_gated_clock CLK_SPI_G  spi_clk  cg_spi/clk_out    $P_SPI
 make_gated_clock CLK_I2C_G  i2c_clk  cg_i2c/clk_out    $P_I2C
 
 set_clock_gating_check -setup 50.0 -hold 50.0 \
-    [get_clocks {CLK_CPU CLK_DBG CLK_PWM CLK_GPIO CLK_CORDIC \
+    [get_clocks {CLK_CPU CLK_DBG CLK_PWM CLK_GPIO CLK_CORDIC CLK_ASCON \
         CLK_UART_G CLK_SPI_G CLK_I2C_G}]
 
 set_clock_groups -asynchronous \
     -group [get_clocks {CLK_CORE CLK_CPU}] \
     -group [get_clocks {CLK_AXI CLK_DBG CLK_SDRAM CLK_SDRAM_OUT}] \
-    -group [get_clocks {CLK_APB CLK_PWM CLK_GPIO CLK_CORDIC}] \
+    -group [get_clocks {CLK_APB CLK_PWM CLK_GPIO CLK_CORDIC CLK_ASCON}] \
     -group [get_clocks {CLK_UART CLK_UART_G}] \
     -group [get_clocks {CLK_SPI CLK_SPI_G}] \
     -group [get_clocks {CLK_I2C CLK_I2C_G}] \
@@ -298,8 +303,8 @@ set_max_transition $MAX_TRAN_FAST_PS [get_clocks {CLK_CORE CLK_CPU}]
 set_max_transition $MAX_TRAN_MED_PS \
     [get_clocks {CLK_AXI CLK_DBG CLK_SDRAM CLK_SDRAM_OUT}]
 set_max_transition $MAX_TRAN_SLOW_PS \
-    [get_clocks {CLK_APB CLK_PWM CLK_GPIO CLK_CORDIC \
+    [get_clocks {CLK_APB CLK_PWM CLK_GPIO CLK_CORDIC CLK_ASCON \
         CLK_UART CLK_UART_G CLK_SPI CLK_SPI_G \
         CLK_I2C CLK_I2C_G CLK_RTC CLK_TCK}]
 
-puts "INFO: MCU SDC loaded with 9 primary, 1 forwarded and 8 gated clocks"
+puts "INFO: MCU SDC loaded with 9 primary, 1 forwarded and 9 gated clocks"

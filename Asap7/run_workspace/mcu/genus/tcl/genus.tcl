@@ -25,7 +25,7 @@ set MULTI_CORNER      1      ;# 0 = chi phan tich goc TT
 set MULTI_VT          1      ;# 1 = cam LVT o syn_generic/syn_map, mo lai o syn_opt
 set GENUS_PHYSICAL    1      ;# 1 = LEF + QRC + PLE (co tre day uoc luong)
 set EXPECTED_RTL      58
-set EXPECTED_CLOCKS   18     ;# 9 goc + 1 forwarded + 8 gated
+set EXPECTED_CLOCKS   19     ;# 9 goc + 1 forwarded + 9 gated (CLK_ASCON tu 2026-09-11)
 set RO_EXPECTED_CELLS 7      ;# RingOscillator: 6 INVx1 + 1 NAND2x1
 
 # Phai khop CLOCK_PORTS / RESET_PORTS trong constraint.sdc.
@@ -336,7 +336,7 @@ set_interactive_constraint_modes mode_func
 # SDC da gan qua create_constraint_mode; KHONG read_sdc lai (nhan doi clock).
 
 if {[sizeof_collection [get_clocks *]] != $EXPECTED_CLOCKS} {
-    error "Expected $EXPECTED_CLOCKS clocks (9 primary + 1 forwarded + 8 gated); inspect the SDC"
+    error "Expected $EXPECTED_CLOCKS clocks (9 primary + 1 forwarded + 9 gated); inspect the SDC"
 }
 if {[info exists ::dc::sdc_failed_commands] && [llength $::dc::sdc_failed_commands] > 0} {
     set fp [open ./reports/failed_sdc_commands.rpt w]
@@ -401,7 +401,7 @@ catch {report_timing -lint > ./reports/timing_lint_pre_syn.rpt}
 # 10. COST GROUPS
 # ------------------------------------------------------------------------
 # Tach duong I/O ra nhom rieng de co bao cao va dong QoR rieng.  KHONG tao
-# C2C nhu flow sram_axi: MCU co 18 clock, gop moi reg2reg vao mot nhom se mat
+# C2C nhu flow sram_axi: MCU co 19 clock, gop moi reg2reg vao mot nhom se mat
 # dong QoR theo tung clock (CLK_CPU, CLK_AXI...). Reg2reg o lai nhom theo clock.
 
 set DATA_INPUTS  [remove_from_collection [all_inputs] [get_ports $NON_DATA_PORTS]]

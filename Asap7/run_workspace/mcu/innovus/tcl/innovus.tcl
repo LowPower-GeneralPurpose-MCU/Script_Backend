@@ -26,6 +26,9 @@ globalNetConnect VDD -type pgpin -pin VDD -inst * -verbose
 globalNetConnect VSS -type pgpin -pin VSS -inst * -verbose
 
 set_interactive_constraint_modes [all_constraint_modes]
+# Can duoi, khong phai so chinh xac: netlist tong hop truoc 2026-09-11 co 18
+# clock (8 gated), ban moi co 19 (them CLK_ASCON).  So chinh xac do genus.tcl
+# (EXPECTED_CLOCKS) kiem luc tong hop.
 if {[sizeof_collection [all_clocks]] < 18} {
     error "Incomplete multi-clock SDC handoff; fewer than 18 clocks are active"
 }

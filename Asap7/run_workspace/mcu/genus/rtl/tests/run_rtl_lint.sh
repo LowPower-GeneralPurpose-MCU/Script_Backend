@@ -28,8 +28,11 @@ shopt -s globstar nullglob
 # tests/ khong nam trong filelist tong hop: no chua model hanh vi cua hard macro
 # (duoc truyen rieng qua $macro_model) va cac testbench.  Bo qua no o day de con
 # so khop dung voi `find ... ! -path '*/tests/*'` ma run_soc_sim.sh va filelist
-# cua Genus dung - neu khong, model bi nap hai lan va con so 55 khong bao gio
+# cua Genus dung - neu khong, model bi nap hai lan va con so 58 khong bao gio
 # dung.
+#
+# 58 = EXPECTED_RTL trong tcl/genus.tcl = so dong cua tcl/rtl_filelist.tcl
+# (55 cu + 3 file apb_ascon/ tu 2026-09-10).  Doi mot cho thi doi ca ba.
 rtl=()
 for f in **/*.v; do
     case "$f" in
@@ -38,8 +41,8 @@ for f in **/*.v; do
     rtl+=("$f")
 done
 
-if [[ "${#rtl[@]}" -ne 55 ]]; then
-    echo "Expected 55 synthesizable Verilog files, found ${#rtl[@]}" >&2
+if [[ "${#rtl[@]}" -ne 58 ]]; then
+    echo "Expected 58 synthesizable Verilog files, found ${#rtl[@]}" >&2
     exit 1
 fi
 

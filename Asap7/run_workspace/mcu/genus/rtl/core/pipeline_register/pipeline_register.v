@@ -89,6 +89,7 @@ module id_ex_register #(
     input [31:0] branch_target, jal_target,
     input if_id_predict_taken, if_id_btb_hit,
     input ecall, ebreak, mret,
+    input fence_op,                // P2c - `fence` xa store buffer cua D-cache
     input [11:0] csr_addr,
     input [1:0] csr_op,
     input csr_we, md_type,
@@ -109,6 +110,7 @@ module id_ex_register #(
     output reg [3:0] id_ex_alu_ctrl,
     output reg [31:0] id_ex_branch_target, id_ex_jal_target,
     output reg id_ex_predict_taken, id_ex_btb_hit, id_ex_ecall, id_ex_ebreak, id_ex_mret,
+    output reg id_ex_fence_op,
     output reg [11:0] id_ex_csr_addr,
     output reg [1:0] id_ex_csr_op,
     output reg id_ex_csr_we, id_ex_md_type,
@@ -142,6 +144,7 @@ module id_ex_register #(
             id_ex_f_to_x <= 1'b0; id_ex_x_to_f <= 1'b0;
             id_ex_fpu_operation <= 5'd0;
             id_ex_ecall <= 1'b0; id_ex_mret <= 1'b0; id_ex_ebreak <= 1'b0;
+            id_ex_fence_op <= 1'b0;
             id_ex_valid <= 1'b0; id_ex_illegal <= 1'b0; id_ex_fault <= 1'b0;
             // (Reset các biến khác nếu cần, nhưng các tín hiệu điều khiển trên là quan trọng nhất)
         end else if (riscv_start && !riscv_done) begin
@@ -172,6 +175,10 @@ module id_ex_register #(
                 id_ex_ecall <= 1'b0; 
                 id_ex_ebreak <= 1'b0; 
                 id_ex_mret <= 1'b0; 
+                // P2c - bong bong khong duoc mang fence.  Bit nay giu ca
+                // pipeline lai cho toi khi store buffer xa; de no song qua flush
+                // la tu tang do tre cua moi lan doan nham nhanh.
+                id_ex_fence_op <= 1'b0;
                 id_ex_csr_we <= 1'b0;
                 id_ex_csr_op <= 2'b00;
                 id_ex_md_type <= 1'b0;
@@ -206,6 +213,7 @@ module id_ex_register #(
                 id_ex_predict_taken <= if_id_predict_taken; id_ex_btb_hit <= if_id_btb_hit;
                 id_ex_instr <= if_id_instr; id_ex_ecall <= ecall;
                 id_ex_ebreak <= ebreak; id_ex_mret <= mret;
+                id_ex_fence_op <= fence_op;
                 id_ex_csr_addr <= csr_addr; id_ex_csr_op <= csr_op; id_ex_csr_we <= csr_we;
                 id_ex_md_type <= md_type; id_ex_md_operation <= md_operation;
                 id_ex_fpu_en <= fpu_en; id_ex_f_reg_write <= f_reg_write;
@@ -242,6 +250,7 @@ module ex_mem_register #(
     input [1:0] id_ex_mem_size,
     input [31:0] id_ex_read_data2, mem_write_data,
     input id_ex_predict_taken, id_ex_btb_hit, id_ex_ecall, id_ex_ebreak, id_ex_mret,
+    input id_ex_fence_op,          // P2c
     input [11:0] id_ex_csr_addr, input [1:0] id_ex_csr_op, input id_ex_csr_we,
     input [31:0] csr_write_data_in, id_ex_instr, fpu_result, id_ex_read_f_data2,
     input id_ex_f_reg_write, id_ex_f_mem_to_reg, id_ex_f_mem_write,
@@ -256,6 +265,8 @@ module ex_mem_register #(
     output reg [1:0] ex_mem_mem_size,
     output reg [31:0] ex_mem_mem_write_data,
     output reg ex_mem_predict_taken, ex_mem_btb_hit, ex_mem_ecall, ex_mem_ebreak, ex_mem_mret,
+    // P2c - nguon cua `dcache_fence`, chan cuoi cung cua duong fence trong core.
+    output reg ex_mem_fence_op,
     output reg [11:0] ex_mem_csr_addr,
     output reg [1:0] ex_mem_csr_op,
     output reg ex_mem_csr_we,
@@ -282,6 +293,7 @@ module ex_mem_register #(
             ex_mem_predict_taken <= 1'b0; ex_mem_btb_hit <= 1'b0;
             ex_mem_csr_we <= 1'b0; ex_mem_csr_op <= 2'b00;
             ex_mem_ecall <= 1'b0; ex_mem_ebreak <= 1'b0; ex_mem_mret <= 1'b0;
+            ex_mem_fence_op <= 1'b0;
             ex_mem_f_reg_write <= 1'b0; ex_mem_f_mem_to_reg <= 1'b0; ex_mem_f_mem_write <= 1'b0;
             ex_mem_valid <= 1'b0; ex_mem_illegal <= 1'b0; ex_mem_fault <= 1'b0;
         end else if (riscv_start && !riscv_done) begin
@@ -304,6 +316,7 @@ module ex_mem_register #(
                 ex_mem_ecall <= 1'b0;
                 ex_mem_ebreak <= 1'b0; 
                 ex_mem_mret <= 1'b0; 
+                ex_mem_fence_op <= 1'b0;
                 ex_mem_csr_we <= 1'b0;
                 ex_mem_f_reg_write <= 1'b0;
                 ex_mem_f_mem_write <= 1'b0;
@@ -326,6 +339,7 @@ module ex_mem_register #(
                 ex_mem_mem_write_data <= mem_write_data; ex_mem_predict_taken <= id_ex_predict_taken;
                 ex_mem_btb_hit <= id_ex_btb_hit; ex_mem_instr <= id_ex_instr;
                 ex_mem_ecall <= id_ex_ecall; ex_mem_ebreak <= id_ex_ebreak; ex_mem_mret <= id_ex_mret;
+                ex_mem_fence_op <= id_ex_fence_op;
                 ex_mem_csr_addr <= id_ex_csr_addr; ex_mem_csr_op <= id_ex_csr_op; 
                 ex_mem_csr_we <= id_ex_csr_we; ex_mem_csr_write_data <= csr_write_data_in;
                 ex_mem_fpu_result <= fpu_result; ex_mem_f_store_data <= id_ex_read_f_data2;
