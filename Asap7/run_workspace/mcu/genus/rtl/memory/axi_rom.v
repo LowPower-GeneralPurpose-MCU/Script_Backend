@@ -9,8 +9,8 @@ module axi_rom #(
     parameter ADDR_WIDTH        = 32,
     parameter DATA_WIDTH        = 32,
     parameter ID_WIDTH          = 7,
-    parameter ADDR_MASK         = 32'h0000_1FFF, // Mask 8KB
-    parameter MEM_DEPTH         = 2048,          // 8KB / 4 = 2048 Words
+    parameter ADDR_MASK         = 32'h0000_7FFF, // Mask 32KB
+    parameter MEM_DEPTH         = 8192,          // 32KB / 4 = 8192 Words
     parameter INIT_FILE         = "boot.mem"     // File chứa mã máy
 )(
     input  wire                     clk,

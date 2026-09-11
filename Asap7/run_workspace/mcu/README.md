@@ -109,10 +109,15 @@ Ngoài `ASAP7_ROOT`/`ASAP7_HOME`, flow hỗ trợ các override tách riêng nh�
   rồi tạo ba SRAM island từ trái sang phải — RAM 8 x 8, cache 8 x 2 (cache data
   + TCM), tag 4 x 1 — với halo và placement blockage.
 
-Không chuyển register file, FIFO, ROB hoặc boot ROM sang macro này: các khối
-đó cần multi-port, byte mask hoặc initialization không phù hợp với SRAM 1RW
-hiện có. I-cache, D-cache và TCM thì đã dùng macro. RAM hard macro cũng không được preload từ `boot.mem`;
-boot ROM hiện tại vẫn đảm nhiệm nội dung khởi động.
+Không chuyển register file, FIFO hay ROB sang macro này, vì các khối đó cần
+multi-port hoặc byte mask. Boot ROM cũng **cố ý không dùng macro**: macro SRAM là X
+lúc cấp nguồn và ASAP7 không có ROM compiler. Boot ROM là **mask ROM 32 KiB tổng hợp
+thành logic** từ `rtl/memory/boot.mem`, chứa mã boot tầng 1: đặt `mtvec`, kiểm
+header ảnh ở đầu QSPI flash, chép (tuỳ chọn) rồi nhảy vào firmware chạy XIP.
+Phương án shadow ROM trên 2 macro + loader phần cứng đã thử rồi bỏ; lý do, định
+dạng header và luồng boot ở [MEMORY_ARCHITECTURE.md](MEMORY_ARCHITECTURE.md)
+mục 6. Rà soát "còn chỗ nào thiếu vùng nhớ" ở
+[MEMORY_FIX_PLAN.md](MEMORY_FIX_PLAN.md) mục 8.
 
 Ngoại vi APB: UART, GPIO, PWM, SPI, I2C, Watchdog, CORDIC, Syscon, DMA config,
 PLIC, và **ASCON-128 / ASCON-Hash + TRNG** ở S10 `0x4000_C000` (IRQ = PLIC
@@ -126,7 +131,7 @@ bash genus/rtl/tests/run_rtl_lint.sh
 bash genus/rtl/tests/run_axi_ram_verilator.sh
 ```
 
-Bốn testbench mức SoC chạy bằng Vivado XSim:
+Năm testbench chạy bằng Vivado XSim:
 
 ```bash
 bash genus/rtl/tests/run_soc_sim.sh all
@@ -135,9 +140,10 @@ bash genus/rtl/tests/run_soc_sim.sh all
 | Suite | File | Phủ | Kết quả gần nhất |
 |---|---|---|---|
 | `apb` | `Test_bench/SoC_testbench.sv` | quét thanh ghi ngoại vi APB | 256/256 (2026-09-10) |
-| `fw` | `Driver/tb_top_soc.v` | firmware thật qua CPU tới khi in UART và WFI | PASS `t = 1 701 796 000` (2026-09-10) |
+| `fw` | `Driver/tb_top_soc.v` | firmware thật qua CPU tới khi in UART và WFI | PASS `t = 1 701 796 000` (2026-09-10) — **mốc hết hiệu lực sau R13**, xem CORE_FIX_PLAN.md §10; ảnh firmware nay phải ≤ 32 KiB |
 | `mem` | `genus/rtl/tests/tb_mem_paths.sv` | RAM uncached, ITCM/DTCM, trọng tài F/D, DMA, thứ tự MMIO, store buffer, `fence`, debugger SBA, AMO, đo độ trễ hit/miss | 121/121 (2026-09-10); **mong đợi 128** sau P2c — chưa chạy lại |
 | `ascon` | `genus/rtl/tests/tb_ascon_apb.sv` | KAT ASCON-128 / ASCON-Hash qua APB, TRNG | 31/31 (2026-09-10) |
+| `core` | `genus/rtl/tests/tb_core_jalr.sv` | R13 (lệnh đường sai sau JALR) và R14 (link của JALR) trên CPU thật, ảnh ROM `tests/core_jalr.mem` | mới 2026-09-11, **chưa chạy** |
 
 `mem` không cần firmware: nó `force` các chân core-side của `top_soc` và tự đóng
 vai CPU (kể cả tầng MEM cho AMO). Xem [MEMORY_FIX_PLAN.md](MEMORY_FIX_PLAN.md)
