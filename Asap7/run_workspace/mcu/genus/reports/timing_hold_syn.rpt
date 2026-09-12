@@ -1,0 +1,31 @@
+============================================================
+ HOLD KHONG DUOC PHAN TICH O GENUS - DAY KHONG PHAI LOI
+============================================================
+
+Genus 23.14-s090_1 khong co bat ky cach nao de in bao cao hold:
+  report_timing -early / -late / -hold / -check_type  -> TUI-204
+  report_timing -views view_ff                        -> TUI-745
+Kieu kiem di theo analysis view, va report_timing chi phan tich
+view dang active cho SETUP.  Khong to hop nao ra duoc hold.
+
+Cau hinh view cua run nay:
+  setup : view_ss view_tt
+  hold  : view_ff view_tt
+view_tt nam o ca hai ben nen luon duoc bao cao nhu setup.
+
+Va truoc CTS hold cung chua co nghia: skew clock con bang 0, hold
+slack chi phan anh uncertainty cong min delay cua thu vien.
+
+HOLD DONG O DAU:
+  Innovus, sau CTS, tren cac view hold o tren.
+
+  TINH TRANG 2026-09-12: flow Innovus (../innovus/tcl/innovus.tcl)
+  moi chay toi CHECKPOINT FLOORPLAN - init_design, macro floorplan,
+  checkFPlan, saveDesign - CHUA co place, CHUA co CTS, CHUA co route.
+  Nghia la hien tai hold CHUA duoc kiem o BAT KY dau trong ca du an.
+  Day khong phai loi cua genus.tcl, nhung dung coi setup MET la du.
+
+CANH BAO KEM THEO: .lib cua 84 macro SRAM chi co o MOT goc, nen hold
+o view_ff dung min delay cua goc danh dinh.  genus.tcl bu bang
+set_timing_derate -early x0.75 (khoi 9c); Innovus phai
+dat lai derate tuong duong, neu khong hold o FF se lac quan.
