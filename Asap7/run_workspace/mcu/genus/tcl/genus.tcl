@@ -36,9 +36,11 @@ set RO_EXPECTED_CELLS 7      ;# RingOscillator: 6 INVx1 + 1 NAND2x1
 
 set CLOCK_GATING      1      ;# (0) Genus chen ICG.  Can ICG LVT duoc mo o MULTI_VT
 set MIN_ICG_CELLS     200    ;# duoi nguong nay = clock gating im lang that bai
-set CLOCK_GATE_MIN_W  3      ;# be rong bank toi thieu de dat mot ICG
-set SYN_THREADS       8      ;# (1) PBS-2 doi toi thieu 8; van 1 process, khong super-thread
 set DATAPATH_OPT      1      ;# (0) bat lai cac attribute datapath (RTLOPT-55)
+
+# KHONG co bien so luong CPU o day, va do la co y: xem khoi 3.  Genus chay
+# mot process mot CPU.  PBS-2 ("should be run with a minimum of 8 threads")
+# la goi y ve runtime, khong phai loi - dung sua theo no.
 
 # SRAM_DERATE_SS / SRAM_DERATE_FF bu goc .lib con thieu cua 84 macro SRAM.
 # Chung nam trong rtl/flow/project_config.tcl chu KHONG o day, vi Innovus phai
@@ -240,15 +242,33 @@ set_db / .init_lib_search_path [list $STD_LIB_DIR [file dirname $SRAM_LIB]]
 set_db / .script_search_path   [list $GENUS_TCL_DIR]
 set_db / .init_hdl_search_path [concat [list $RTL_ROOT] $RTL_INCLUDE_DIRS]
 
-# Mot process, khong super-thread (do la phan tan, can license rieng): on dinh
-# tren may va license hien tai.  Nhung PBS-2 doi toi thieu 8 LUONG trong CUNG
-# mot process - do la .max_cpus_per_server, khong ton license va truoc day dat
-# 0 nen Genus chay don luong va mat 4469 s.  Dat SYN_THREADS 1 de quay lai.
+# MOT PROCESS, MOT CPU.  KHONG dung lai .max_cpus_per_server - da thu, da hong.
+#
+# 2026-09-12 12:30: run bi giet boi dung dong do.  Ly luan sai luc ay la
+# "PBS-2 doi toi thieu 8 luong, ma .max_cpus_per_server la luong local trong
+# cung mot process nen khong ton license".  Genus khong hieu nhu the.  Dat no
+# > 0 la BAT LUON super-threading, ke ca khi auto_super_thread = false va
+# super_thread_servers rong:
+#
+#   Info    : Attempting to launch a super-threading server. [ST-120]
+#           : Attempting to Launch server 1 of 8.        <- 8 = SYN_THREADS
+#   Warning : Executing jobs using the foreground process until a background
+#             server becomes available. [ST-115]
+#   Warning : Failed to establish connection with super-threading server.
+#             [ST-111]
+#   CURRENT RESOURCES: RT {elapsed: 5878s, ST: 1411s, FG: 1411s, CPU: 0.8%}
+#   Abnormal exit.
+#
+# Genus cho server con, server con khong bao gio ket noi duoc, CPU tut ve
+# 0.8%, treo o 5878 s dong ho cho 1411 s cong viec that, phai Ctrl-C.  Ket qua
+# ra ve TAY TRANG: khong netlist, khong mot bao cao nao.
+#
+# Comment goc o day ("on dinh tren may va license hien tai") la DUNG.  PBS-2
+# chi la goi y ve thoi gian chay, khong phai loi: 4469 s don luong ma xong van
+# hon 5878 s roi chet.  Dung dong vao ba dong duoi nua.
 set_db / .auto_super_thread    false
 set_db / .super_thread_servers {}
-mcu_try "$SYN_THREADS luong local (PBS-2)" {
-    set_db / .max_cpus_per_server $SYN_THREADS
-}
+set_db / .max_cpus_per_server  0
 
 set_db / .hdl_unconnected_value      0
 set_db / .hdl_track_filename_row_col true
@@ -268,12 +288,13 @@ set_db / .auto_ungroup               both
 # sua de giu lai ICG; khoi 11b dem lai ICG va bao loi neu van bang 0.
 set_db / .lp_insert_clock_gating $CLOCK_GATING
 if {$CLOCK_GATING} {
-    mcu_try "ICG toi thieu $CLOCK_GATE_MIN_W bit" {
-        set_db / .lp_clock_gating_min_flops $CLOCK_GATE_MIN_W
-    }
-    mcu_try "ICG dung cell tich hop (khong tu rap latch+AND)" {
-        set_db / .lp_insert_clock_gating_incremental true
-    }
+    # Chi con attribute da duoc log 12:30 xac nhan la CO that.  Ba cai bo di
+    # vi Genus 23.14 khong biet chung (moi cai mot dong "WARNING: khong ap
+    # duoc ..." trong log, vo hai nhung vo ich):
+    #   .lp_clock_gating_min_flops           .lp_insert_clock_gating_incremental
+    #   .lp_clock_gating_cells
+    # Be rong bank toi thieu do Genus tu quyet; run 12:30 da chen gating that
+    # ("[Clock Gating] Clock gating design done. (19 s.)") ma khong can chung.
     mcu_try "giu ten tin hieu enable tren ICG" {
         set_db / .lp_clock_gating_prefix "cg_icg_"
     }
@@ -291,24 +312,15 @@ if {$CLOCK_GATING} {
 # suy ra datapath, dung giua luc infer va optimize - dung nghia cua RTLOPT-55.
 # Nen giu hierarchy datapath rieng.  Ten attribute khac nhau theo ban Genus,
 # vi vay tat ca deu di qua mcu_try.
+# Log 12:30 da do xong danh sach: trong sau attribute thu, Genus 23.14 chi
+# biet DUY NHAT .dp_area_mode.  Nam cai kia khong ton tai va chi de lai
+# "WARNING: khong ap duoc ..." - da bo:
+#   .dp_ungroup  .dp_csa  .dp_sharing  .dp_rewriting  .hdl_resource_sharing
+# Nen RTLOPT-55 van CHUA co cach nao chac chan de dong.  Lan sau muon do tiep
+# thi lay ten tu `get_db -h dp_*` tren chinh ban Genus nay, dung doan nua.
 if {$DATAPATH_OPT} {
-    mcu_try "khong ungroup module datapath" {
-        set_db / .dp_ungroup false
-    }
-    mcu_try "carry-save cho chuoi cong" {
-        set_db / .dp_csa true
-    }
-    mcu_try "chia se tai nguyen datapath" {
-        set_db / .dp_sharing true
-    }
-    mcu_try "rewriting datapath" {
-        set_db / .dp_rewriting true
-    }
     mcu_try "uu tien timing hon area trong datapath" {
         set_db / .dp_area_mode false
-    }
-    mcu_try "phan tich datapath o muc HDL" {
-        set_db / .hdl_resource_sharing true
     }
 }
 
@@ -529,9 +541,14 @@ if {$CLOCK_GATING} {
         }
         set_db $cell_obj .dont_use false
     }
+    # Run 12:30 in ra dung 10 bien the, khop danh sach trong memory ASAP7:
+    #   ICGx1 ICGx2 ICGx2p67DC ICGx3 ICGx4 ICGx4DC ICGx5 ICGx5p33DC
+    #   ICGx6p67DC ICGx8DC  (tat ca deu _ASAP7_75t_L)
+    # Chi can bo dont_use la du - `.lp_clock_gating_cells` khong ton tai o
+    # Genus 23.14 (log 12:30 dong 1115) nen da bo.
     puts "Clock gating: [llength $icg_names] bien the ICG duoc mo ([join [lsort $icg_names] { }])"
-    mcu_try "chi dinh danh sach ICG cho Genus" {
-        set_db / .lp_clock_gating_cells $icg_names
+    if {[llength $icg_names] != 10} {
+        puts "WARNING: doi 10 bien the ICG cua ASAP7, thay [llength $icg_names]"
     }
 }
 
@@ -835,7 +852,7 @@ if {$CLOCK_GATING && $icg_count < $MIN_ICG_CELLS} {
     puts "         Kiem tra theo thu tu:"
     puts "         1. ICG co bi dont_use khong  - xem dong 'Clock gating: N bien the ICG duoc mo'"
     puts "         2. .lp_insert_clock_gating   - [get_db / .lp_insert_clock_gating]"
-    puts "         3. CLOCK_GATE_MIN_W = $CLOCK_GATE_MIN_W co qua lon so voi be rong bank khong"
+    puts "         3. cac dong '\[Clock Gating\]' trong log - co chay khong, bao nhieu giay"
     puts "         4. cac dong 'WARNING: khong ap duoc ...' o dau log"
 }
 
