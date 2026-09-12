@@ -1003,6 +1003,34 @@ module memory_access (
     end
 
     // -------------------------------------------------------------------------
+    // 2026-09-13 - KET QUA AMO CUNG VAO MOT THANH GHI (bat tay 3 chu ky).
+    //
+    // Sau R1b, nua thu hai van la: ex_mem_instr (chon phep) -> bo cong/tru dung
+    // chung cua bon phep so sanh va AMOADD -> mux -> D-cache lane-align -> chan
+    // `wd` cua SRAM.  Run Genus 2026-09-12 15:21: 51/100 duong toi han nhat la ho
+    // nay (slack 0 ps o SS, bo cong ~1.9 ns van map ripple).  Va ho do ton tai
+    // ca khi ENABLE_A_EXTENSION = 0: mux cu chon theo `ex_mem_atomic`, tin hieu
+    // chi phu thuoc bit opcode, nen Genus phai toi uu no nhu mot duong that.
+    //
+    // Bay gio D-cache giu AMO them mot chu ky nua (dcache.v, amo_cnt):
+    //   chu ky 1 (capture) : chot amo_read_q
+    //   chu ky 2           : ALU tu flop -> chot amo_wdata_q
+    //   chu ky 3           : amo_wdata_q (flop) -> store buffer / SRAM
+    // Enable = amo_rmw: ex_mem_* dong bang suot thoi gian stall nen dau vao ALU
+    // o chu ky 2 va 3 bang nhau, chot lai o chu ky 3 cung khong doi gia tri.
+    //
+    // Mux chon theo `amo_rmw` thay vi `ex_mem_atomic`: SC.W van ghi rs2 (nhanh
+    // default o tren tra dung ex_mem_mem_write_data), LR.W khong ghi.
+    // -------------------------------------------------------------------------
+    reg [31:0] amo_wdata_q;
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n)
+            amo_wdata_q <= 32'd0;
+        else if (amo_rmw)
+            amo_wdata_q <= amo_write_data;
+    end
+
+    // -------------------------------------------------------------------------
     // B1 - DOC cung phai bi commit_kill chan.
     //
     // Comment cu noi "doc lai la vo hai voi RAM/cache, va chan no chi keo dai
@@ -1035,7 +1063,7 @@ module memory_access (
     // hieu luc o suon xung ke tiep, nen mot minh no khong du.
     assign dcache_fence     = commit_kill ? 1'b0 : ex_mem_fence_op;
     assign dcache_addr = ex_mem_alu_result;
-    assign dcache_write_data = ex_mem_atomic ? amo_write_data : ex_mem_mem_write_data;
+    assign dcache_write_data = amo_rmw ? amo_wdata_q : ex_mem_mem_write_data;
     // SC.W result: 0 = success, 1 = failure (per RISC-V spec)
     //
     // R1b - voi AMO that, gia tri tra ve rd la gia tri CU, ma o chu ky thu hai

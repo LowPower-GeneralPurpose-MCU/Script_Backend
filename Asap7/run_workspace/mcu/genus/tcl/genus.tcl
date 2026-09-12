@@ -34,7 +34,7 @@ set RO_EXPECTED_CELLS 7      ;# RingOscillator: 6 INVx1 + 1 NAND2x1
 # day dieu khien cac sua tuong ung; dat ve gia tri trong ngoac de quay lai
 # dung hanh vi cua run 2026-09-12 05:50.
 
-set CLOCK_GATING      1      ;# (0) Genus chen ICG.  Can ICG LVT duoc mo o MULTI_VT
+set CLOCK_GATING      1      ;# (0) Genus chen ICG (ASAP7 co ICG ca RVT lan LVT)
 set MIN_ICG_CELLS     200    ;# duoi nguong nay = clock gating im lang that bai
 set DATAPATH_OPT      1      ;# (0) bat lai cac attribute datapath (RTLOPT-55)
 
@@ -485,11 +485,11 @@ puts "Analysis views: setup = $SETUP_VIEWS ; hold = $HOLD_VIEWS ; power = $POWER
 # 5. MULTI-Vt - chan LVT TRUOC khi doc RTL
 # ------------------------------------------------------------------------
 
-# ASAP7 chi phat hanh ICG o LVT.  Cam tron goi "*_ASAP7_75t_L" nhu truoc thi
-# cam luon ca 10 bien the ICG, va do la ly do that su khien run 2026-09-12
-# 05:50 ra 0 ICG cell: khong phai vi .lp_insert_clock_gating false mot minh,
-# ma vi ke ca bat len thi cung khong con cell nao de chen.  Hai thu phai sua
-# CUNG luc.  ICG duoi day duoc mien tru khoi dont_use.
+# ICG LVT duoc mien tru khoi dont_use.  Ghi chu cu o day noi "ASAP7 chi phat
+# hanh ICG o LVT" - SAI: bang POPT cua run 2026-09-12 15:21 liet ke ca
+# ICGx*_ASAP7_75t_R, va netlist dung 1625 x ICGx1_ASAP7_75t_R, 0 ICG LVT.
+# Run 05:50 ra 0 ICG la vi .lp_insert_clock_gating false.  Mien tru giu lai:
+# vo hai, va de Genus con lua chon ICG LVT cho cay clock can nhanh.
 
 set LVT_CELLS {}
 set ICG_LIB_CELLS {}
@@ -501,18 +501,12 @@ if {$MULTI_VT} {
             continue
         }
 
-        # Nhan dien ICG bang thuoc tinh cua Liberty truoc (chac chan nhat), roi
-        # moi den ten cell.  Ban Genus nao khong co thuoc tinh do thi catch va
-        # roi ve so khop ten - ASAP7 dat ten ICG la ICGx*_ASAP7_75t_L.
-        set is_icg 0
-        catch {
-            if {[get_db $cell_obj .is_integrated_clock_gating_cell]} {
-                set is_icg 1
-            }
-        }
-        if {!$is_icg && [string match "ICG*" $leaf]} {
-            set is_icg 1
-        }
+        # Nhan dien ICG theo TEN (ASAP7: ICGx*_ASAP7_75t_{L,R}).  Ban truoc thu
+        # `.is_integrated_clock_gating_cell` truoc trong mot catch - thuoc tinh
+        # do KHONG ton tai o Genus 23.14, va catch khong nuot duoc thong bao:
+        # run 2026-09-12 15:21 in 212 dong "Error : Unrecognized attribute
+        # [TUI-183]", moi cell LVT mot dong, che mat loi that trong log.
+        set is_icg [string match "ICG*" $leaf]
 
         if {$is_icg && $CLOCK_GATING} {
             lappend ICG_LIB_CELLS $cell_obj
@@ -794,6 +788,85 @@ foreach view $SETUP_VIEWS {
 puts "Cost groups: I2C (input->reg), C2O (reg->output), I2O (input->output); reg2reg giu theo clock"
 
 # ------------------------------------------------------------------------
+# 10b. MARGIN TONG HOP (chi trong luc syn_generic/syn_map/syn_opt)
+# ------------------------------------------------------------------------
+# Run 2026-09-12 15:21 MET o moi nhom nhung 100 duong xau nhat o view_ss deu
+# chi du 0-6 ps: Genus toi uu toi slack 0 la dung.  Chua co dat cell that, chua
+# co cay clock, va Innovus chua chay qua floorplan - ca ba deu chi lam slack
+# XAU di.  path_adjust -delay AM lam rang buoc CHAT hon SYN_MARGIN_PS cho cac
+# duong CAPTURE boi nhung clock duoi day, de Genus chua lai mot khoang.
+#
+# Exception nay KHONG duoc ra netlist/SDC: khoi 11c xoa no ngay sau syn_opt,
+# TRUOC write_sdc va TRUOC moi report_timing - bao cao van la slack that so voi
+# chu ky 4000 ps.  Dat MCU_SYN_MARGIN_PS=0 de tat.
+#
+# Chi bon clock nay: o view_tt chung la bon nhom duy nhat duoi ~1.6 ns slack
+# (CPU 1330, SYS 1152, CORDIC 1365, DBG 1510); cac nhom khac du vai ns, chat
+# them chi ton runtime.
+
+set SYN_MARGIN_PS 100.0
+if {[info exists ::env(MCU_SYN_MARGIN_PS)] && $::env(MCU_SYN_MARGIN_PS) ne ""} {
+    set SYN_MARGIN_PS $::env(MCU_SYN_MARGIN_PS)
+}
+set SYN_MARGIN_CLOCKS {CLK_CPU CLK_SYS CLK_CORDIC CLK_DBG}
+set SYN_MARGIN_EXCEPTIONS {}
+
+# Duoi MMMC moi constraint mode co ban clock rieng, nen thu tung setup view
+# (-view) truoc; ban Genus nao khong nhan -view cho path_adjust thi tao mot
+# exception chung.  Loi o day KHONG duoc giet run (mcu_try), nhung se in ro.
+proc mcu_syn_margin_add {clk_name delay} {
+    global SETUP_VIEWS SYN_MARGIN_EXCEPTIONS
+    set clk_objs [get_db clocks -if ".base_name == $clk_name"]
+    if {[llength $clk_objs] == 0} {
+        error "khong thay clock $clk_name"
+    }
+    set made {}
+    if {[catch {
+        foreach view $SETUP_VIEWS {
+            set view_clks {}
+            foreach c $clk_objs {
+                if {[string match "*/$view/*" $c]} {
+                    lappend view_clks $c
+                }
+            }
+            if {[llength $view_clks] == 0} {
+                set view_clks $clk_objs
+            }
+            lappend made [path_adjust -delay $delay -to $view_clks -view $view \
+                              -name syn_margin_${clk_name}_$view]
+        }
+    } err_view]} {
+        foreach e $made {
+            catch {delete_obj $e}
+        }
+        set made {}
+        if {[catch {
+            lappend made [path_adjust -delay $delay -to $clk_objs -name syn_margin_$clk_name]
+        } err_glob]} {
+            error "path_adjust -view: $err_view ; khong -view: $err_glob"
+        }
+    }
+    foreach e $made {
+        lappend SYN_MARGIN_EXCEPTIONS $e
+    }
+    return [llength $made]
+}
+
+if {$SYN_MARGIN_PS > 0} {
+    foreach clk_name $SYN_MARGIN_CLOCKS {
+        mcu_try "margin tong hop -${SYN_MARGIN_PS} ps cho $clk_name" {
+            mcu_syn_margin_add $clk_name [expr {-1.0 * $SYN_MARGIN_PS}]
+        }
+    }
+    puts "Margin tong hop: [llength $SYN_MARGIN_EXCEPTIONS] path_adjust (-$SYN_MARGIN_PS ps) tren $SYN_MARGIN_CLOCKS"
+    if {[llength $SYN_MARGIN_EXCEPTIONS] == 0} {
+        puts "WARNING: KHONG tao duoc path_adjust nao - Genus se lai dung o slack 0"
+    }
+} else {
+    puts "Margin tong hop: tat (MCU_SYN_MARGIN_PS = $SYN_MARGIN_PS)"
+}
+
+# ------------------------------------------------------------------------
 # 11. SYNTHESIS
 # ------------------------------------------------------------------------
 
@@ -820,6 +893,26 @@ if {[llength $LVT_CELLS] > 0} {
 
 set_db / .syn_opt_effort $SYN_EFFORT
 syn_opt
+
+# ------------------------------------------------------------------------
+# 11c. GO MARGIN TONG HOP - truoc write_sdc va truoc moi bao cao timing
+# ------------------------------------------------------------------------
+# Neu con sot mot exception thi (1) SDC giao cho Innovus mang rang buoc gia va
+# (2) qor_syn.rpt bao slack da tru margin.  Ca hai deu am tham, nen dem lai va
+# dung run neu con sot.
+set margin_left 0
+foreach e $SYN_MARGIN_EXCEPTIONS {
+    if {[catch {delete_obj $e} del_err]} {
+        puts "WARNING: khong xoa duoc $e: $del_err"
+        incr margin_left
+    }
+}
+if {$margin_left > 0} {
+    error "$margin_left path_adjust margin tong hop khong xoa duoc - SDC/bao cao se sai"
+}
+if {[llength $SYN_MARGIN_EXCEPTIONS] > 0} {
+    puts "Margin tong hop: da xoa [llength $SYN_MARGIN_EXCEPTIONS] path_adjust; bao cao duoi day la slack that"
+}
 
 # ------------------------------------------------------------------------
 # 11b. XAC NHAN CLOCK GATING DA THAT SU XAY RA
@@ -1121,6 +1214,7 @@ puts " - SDC     : [file normalize $MAPPED_SDC]"
 puts " - SRAM    : [join $sram_summary { + }]"
 puts " - Derate  : SRAM SS late x$SRAM_DERATE_SS, FF early x$SRAM_DERATE_FF"
 puts " - Gating  : $icg_count ICG, $sdfh_count flop enable con lai"
+puts " - Margin  : [llength $SYN_MARGIN_EXCEPTIONS] path_adjust -$SYN_MARGIN_PS ps khi toi uu (da go truoc bao cao)"
 puts " - SAIF    : [expr {$SAIF_ANNOTATED ? "co" : "KHONG - dynamic power khong dung duoc"}]"
 puts "============================================================"
 

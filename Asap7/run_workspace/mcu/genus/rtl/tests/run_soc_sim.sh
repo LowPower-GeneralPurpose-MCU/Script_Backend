@@ -176,6 +176,31 @@ run_per() {
     grep -E '\[TB\]|PASS COUNT|RESULT' xsim_per.log || true
 }
 
+run_amo() {
+    echo "=== amo testbench: AMO bang CPU that (ROM = tests/amo_core.mem) ==="
+    python "$HERE/gen_amo_mem.py" > /dev/null
+    python "$HERE/gen_boot_rom.py" "$HERE/amo_core.mem" "$OUT_DIR/amo_inc"
+    xvlog.bat -sv -work amo -i "$OUT_DIR/amo_inc" "${INC[@]}" -f rtl_files.f "$HERE/tb_amo_core.sv" > xvlog_amo.log
+    xelab.bat -relax -s amo_sim -timescale 1ns/1ps amo.tb_amo_core -L amo > xelab_amo.log
+    printf 'run all
+quit
+' > run.tcl
+    xsim.bat amo_sim -tclbatch run.tcl > xsim_amo.log
+    grep -E '\[TB\]|PASS COUNT|RESULT' xsim_amo.log || true
+}
+
+run_pmp() {
+    echo "=== pmp_unit testbench: ge32 + dc_q so voi mo hinh dac ta ==="
+    # Chi can pmp_unit.v - khong compile ca SoC.
+    xvlog.bat -sv -work pmp "$RTL/core/block_unit/pmp_unit.v" "$HERE/tb_pmp_unit.sv" > xvlog_pmp.log
+    xelab.bat -relax -s pmp_sim -timescale 1ns/1ps pmp.tb_pmp_unit -L pmp > xelab_pmp.log
+    printf 'run all
+quit
+' > run.tcl
+    xsim.bat pmp_sim -tclbatch run.tcl > xsim_pmp.log
+    grep -E '\[TB\]|PASS COUNT|RESULT' xsim_pmp.log || true
+}
+
 case "$MODE" in
     apb)   run_apb ;;
     fw)    run_fw ;;
@@ -185,6 +210,8 @@ case "$MODE" in
     sys)   run_sys ;;
     irq)   run_irq ;;
     per)   run_per ;;
-    all)   run_apb; run_fw; run_mem; run_ascon; run_core; run_sys; run_irq; run_per ;;
-    *)     echo "cach dung: $0 [apb|fw|mem|ascon|core|sys|irq|per|all]"; exit 1 ;;
+    pmp)   run_pmp ;;
+    amo)   run_amo ;;
+    all)   run_apb; run_fw; run_mem; run_ascon; run_core; run_sys; run_irq; run_per; run_pmp; run_amo ;;
+    *)     echo "cach dung: $0 [apb|fw|mem|ascon|core|sys|irq|per|pmp|amo|all]"; exit 1 ;;
 esac

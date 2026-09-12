@@ -384,10 +384,15 @@ module data_cache #(
     // cycle that also releases the core.  Gating the array write with the same
     // term keeps the merge single-shot when the buffer is full and LOOKUP has
     // to be held for several cycles.
-    // R1b - `amo_hold` danh dau chu ky DAU cua mot AMO: chua duoc day vao store
-    // buffer, chua duoc nha stall, vi ket qua ALU chua ton tai.
-    reg  amo_pending;
-    wire amo_hold = cpu_amo_req && !amo_pending;
+    // R1b - `amo_hold` danh dau cac chu ky cua mot AMO khi ket qua ALU CHUA
+    // nam trong thanh ghi: chua duoc day vao store buffer, chua duoc nha stall.
+    //
+    // 2026-09-13 - tu HAI len BA chu ky.  u_core/MEM gio chot ket qua ALU vao
+    // amo_wdata_q (xem pipeline_stage.v) de chan `wd` cua SRAM chi con thay mot
+    // flop.  amo_cnt: 0 = chua capture, 1 = amo_read_q vua co (ALU dang chay),
+    // 2 = amo_wdata_q hop le -> duoc push / nha stall.
+    reg  [1:0] amo_cnt;
+    wire amo_hold = cpu_amo_req && (amo_cnt != 2'd2);
 
     wire sb_push = (state == LOOKUP) && cpu_write_req && !uncache_en &&
                    (cpu_addr == req_addr) && !sb_full && !amo_hold;
@@ -637,16 +642,21 @@ module data_cache #(
     end
 
     // R1b - dat sau khoi tinh `hit_flag` o tren vi no dung tin hieu do.
-    assign dcache_amo_capture = (state == LOOKUP) && amo_hold && !uncache_en &&
-                                (cpu_addr == req_addr) && hit_flag;
+    assign dcache_amo_capture = (state == LOOKUP) && cpu_amo_req && (amo_cnt == 2'd0) &&
+                                !uncache_en && (cpu_addr == req_addr) && hit_flag;
 
+    // 1 -> 2 khong can dieu kien them: o LOOKUP thi req_addr, hit_flag va
+    // read_word giu nguyen (array_read chi o IDLE), ex_mem_* dong bang.  Neu
+    // lenh bi commit_kill thi cpu_read_req ha, FSM ve IDLE va dem ve 0.
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
-            amo_pending <= 1'b0;
+            amo_cnt <= 2'd0;
         else if (state != LOOKUP)
-            amo_pending <= 1'b0;
+            amo_cnt <= 2'd0;
         else if (dcache_amo_capture)
-            amo_pending <= 1'b1;
+            amo_cnt <= 2'd1;
+        else if (amo_cnt == 2'd1)
+            amo_cnt <= 2'd2;
     end
 
     always @(*) begin
@@ -728,10 +738,17 @@ module data_cache #(
                 dcache_stall = 1'b1;
                 if (cpu_read_req && cpu_addr == req_addr) begin
                     if (hit_flag) begin
-                        // R1b - mot AMO phai o lai them mot chu ky. `amo_hold`
-                        // chi cao o chu ky dau; chu ky sau no ha va nhanh nay
-                        // nha stall y het truoc day.
-                        if (!amo_hold) begin
+                        // R1b - mot AMO phai o lai cho toi khi ket qua ALU nam
+                        // trong thanh ghi (amo_cnt = 2); luc do amo_hold ha va
+                        // nhanh nay nha stall y het truoc day.
+                        //
+                        // 2026-09-13 - VA store buffer phai con cho.  Mot AMO
+                        // dat CA read lan write; nhanh doc nay nha stall khi
+                        // HIT ma truoc day KHONG nhin sb_full, trong khi sb_push
+                        // doi !sb_full.  Buffer day dung luc do -> AMO retire
+                        // voi rd dung nhung phan GHI bi bo, im lang.  Lenh doc
+                        // thuong co cpu_write_req = 0 nen khong bi anh huong.
+                        if (!amo_hold && !(cpu_write_req && sb_full)) begin
                             dcache_stall = 1'b0;
                             dcache_hit   = 1'b1;
                             next_state   = IDLE;
