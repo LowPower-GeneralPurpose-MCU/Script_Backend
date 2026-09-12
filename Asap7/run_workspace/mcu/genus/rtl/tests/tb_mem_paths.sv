@@ -508,6 +508,7 @@ module tb_mem_paths;
     reg [31:0] d, e;
     reg [31:0] amo_old;
     integer    cap_snap;
+    integer    t10f_n;
     reg [1:0]  sba_resp;
     reg        ok;
     integer    i;
@@ -1115,6 +1116,60 @@ module tb_mem_paths;
         amo_w(AMO_OR, ADDR_RAM_LO + 32'h6000, 32'h1100_0011, amo_old);
         lw(ADDR_RAM_LO + 32'h6000, d);
         chk32("T10d amoor.w", d, 32'h11BB_CC11);
+
+        // T10f - AMO HIT dung luc store buffer DAY (2026-09-13).
+        //   Nhanh doc cua LOOKUP nha stall khi HIT ma truoc day khong nhin
+        //   sb_full, con sb_push thi doi !sb_full -> AMO retire, rd dung, phan
+        //   GHI mat.  Chan kenh AW de 4 lenh sw lap day buffer, chay AMO, roi
+        //   30 chu ky sau moi tha AW.  AMO dung phai CHO toi luc do.
+        $display("");
+        $display("--- T10f: AMO khi store buffer day ---");
+        // Xa het buffer truoc (AMO cua T10c/T10d co the con trong do), roi moi
+        // chan AW va ghi cho toi khi day - khong gia dinh do sau buffer.
+        fence_();
+        // Chan CA HAI phia cua mot handshake (net lien tuc, release sach):
+        // chi chan awready phia cache thi interconnect van thay awvalid va
+        // nhan AW ma cache khong biet.
+        force uut.m1_awvalid = 1'b0;
+        force uut.dc_awready = 1'b0;
+        t10f_n = 0;
+        while (uut.u_dcache.sb_full !== 1'b1 && t10f_n < 8) begin
+            sw(ADDR_RAM_LO + 32'h7000 + 4 * t10f_n, 32'hF000_0001 + t10f_n);
+            t10f_n = t10f_n + 1;
+        end
+        if (uut.u_dcache.sb_full === 1'b1) begin
+            pass_count = pass_count + 1;
+            $display("[PASS] T10f chuan bi: store buffer day sau %0d sw (AW bi chan)", t10f_n);
+        end else begin
+            fail_count = fail_count + 1;
+            $display("[FAIL] T10f chuan bi: sb_full = %b - test khong tao duoc dieu kien", uut.u_dcache.sb_full);
+        end
+        fork
+            amo_w(AMO_ADD, ADDR_RAM_LO + 32'h6000, 32'h0000_0003, amo_old);
+            begin
+                repeat (30) @(posedge clk);
+                // Tha o canh XUONG: tha ngay canh len thi cache va interconnect
+                // lay mau hai phia handshake o hai thoi diem khac nhau (race).
+                @(negedge clk);
+                release uut.m1_awvalid;
+                release uut.dc_awready;
+            end
+        join
+        chk32("T10f amoadd.w tra ve gia tri CU", amo_old, 32'h11BB_CC11);
+        if (last_xact_cycles >= 30) begin
+            pass_count = pass_count + 1;
+            $display("[PASS] T10f AMO cho buffer co cho (%0d chu ky)", last_xact_cycles);
+        end else begin
+            fail_count = fail_count + 1;
+            $display("[FAIL] T10f AMO nha stall sau %0d chu ky trong luc buffer day", last_xact_cycles);
+        end
+        lw(ADDR_RAM_LO + 32'h6000, d);
+        chk32("T10f duong cache thay 0x11BBCC11 + 3", d, 32'h11BB_CC14);
+        fence_();
+        sba_xact(2'd1, 2'd2, ADDR_RAM_LO + 32'h6000, 32'h0, d, sba_resp);
+        chk32("T10f RAM THAT (SBA) thay 0x11BBCC11 + 3", d, 32'h11BB_CC14);
+        sba_xact(2'd1, 2'd2, ADDR_RAM_LO + 32'h7000 + 4 * (t10f_n - 1), 32'h0, d, sba_resp);
+        chk32("T10f sw cuoi cung van toi RAM", d, 32'hF000_0000 + t10f_n);
 
         // T10e - QUAN SAT (khong tinh diem): AMO vao vung UNCACHED.
         //   `dcache_amo_capture` doi !uncache_en, va nhanh sua R11 o DONE cung

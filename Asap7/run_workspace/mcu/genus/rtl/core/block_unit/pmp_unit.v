@@ -193,12 +193,46 @@ module pmp_unit #(
     assign rd_data_b = rd_b_r;
     assign wr_result = wr_res_r;
 
+    // -------------------------------------------------------------------------
+    // 2026-09-13 - MAT NA NAPOT LA THANH GHI.
+    //
+    // dc[b] = &pmpaddr[b-1:0] (xem khoi khop dia chi ben duoi) la mot chuoi AND
+    // tien to 31 tang ma MOI dau ra deu can.  Run Genus 2026-09-12 15:21: 31/100
+    // duong toi han nhat bat dau o PMP_addr_q_reg[*][0] va di qua ~30 tang
+    // NAND2/NOR2 xen ke truoc khi toi pmp_d_fault -> trap_enter -> D-cache ->
+    // pc_reg (slack 0 ps o SS).  Mat na chi phu thuoc pmpaddr, ma pmpaddr chi
+    // doi khi co lenh ghi CSR, nen tinh no MOT lan luc ghi va giu trong flop:
+    // tren duong kiem tra no la dau ra flop, 0 tang logic.
+    //
+    // Luon ghi CUNG dieu kien voi addr_q nen hai mang khong the lech nhau.
+    // Reset: pmpaddr = 0 -> dc = ...0001.
+    // -------------------------------------------------------------------------
+    function automatic [31:0] napot_dc;
+        input [31:0] v;
+        integer b;
+        begin
+            napot_dc[0] = 1'b1;
+            for (b = 1; b < 32; b = b + 1)
+                napot_dc[b] = napot_dc[b-1] & v[b-1];
+        end
+    endfunction
+
+    reg  [31:0] dc_q [0:PMP_ENTRIES-1];
+    wire [32*PMP_ENTRIES-1:0] flat_dc;
+    genvar gd;
+    generate
+        for (gd = 0; gd < PMP_ENTRIES; gd = gd + 1) begin : g_flat_dc
+            assign flat_dc[32*gd +: 32] = dc_q[gd];
+        end
+    endgenerate
+
     integer i;
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
             for (i = 0; i < PMP_ENTRIES; i = i + 1) begin
                 cfg_q[i]  <= 8'd0;
                 addr_q[i] <= 32'd0;
+                dc_q[i]   <= 32'd1;
             end
         end else if (csr_we) begin
             if (csr_waddr[11:2] == 10'b0011_1010_00) begin
@@ -208,11 +242,42 @@ module pmp_unit #(
                             cfg_q[csr_waddr[1:0] * 4 + i] <= cfg_legal(csr_wdata[8*i +: 8]);
             end else if (csr_waddr[11:4] == 8'h3B) begin
                 if (csr_waddr[3:0] < PMP_ENTRIES)
-                    if (!addr_locked(csr_waddr[3:0]))
+                    if (!addr_locked(csr_waddr[3:0])) begin
                         addr_q[csr_waddr[3:0]] <= csr_wdata;
+                        dc_q[csr_waddr[3:0]]   <= napot_dc(csr_wdata);
+                    end
             end
         end
     end
+
+    // -------------------------------------------------------------------------
+    // 2026-09-13 - SO SANH a >= b DANG CAY TIEN TO, do sau log2(32) = 5 tang.
+    //
+    // `aw >= pmpaddr` viet bang toan tu bi Genus map thanh chuoi muon ripple
+    // (cung trieu chung RTLOPT-55 voi bo cong JALR/DMA, nguyen nhan chua ro).
+    // Viet tuong minh bang logic bit thi khong con la toan tu datapath.
+    //
+    //   la      : gt[i] = a[i] & ~b[i],  eq[i] = ~(a[i] ^ b[i])
+    //   ghep doan cao H (vi tri k+s) voi doan thap L (vi tri k):
+    //             gt = gt_H | (eq_H & gt_L),   eq = eq_H & eq_L
+    //   a >= b  = gt_goc | eq_goc
+    // -------------------------------------------------------------------------
+    function automatic ge32;
+        input [31:0] a;
+        input [31:0] b;
+        reg   [31:0] g, e;
+        integer s, k;
+        begin
+            g = a & ~b;
+            e = ~(a ^ b);
+            for (s = 1; s < 32; s = s * 2)
+                for (k = 0; k < 32; k = k + 2 * s) begin
+                    g[k] = g[k+s] | (e[k+s] & g[k]);
+                    e[k] = e[k+s] & e[k];
+                end
+            ge32 = g[0] | e[0];
+        end
+    endfunction
 
     // -------------------------------------------------------------------------
     // Khop dia chi. aw = dia chi word {2'b00, a[31:2]}, cung don vi voi pmpaddr.
@@ -222,8 +287,8 @@ module pmp_unit #(
     //   NAPOT: pmpaddr = base | 0..0111 (k so 1 cuoi) -> vung 2^(k+3) byte. Bit b
     //          cua aw la "khong quan tam" khi moi bit THAP HON b cua pmpaddr deu
     //          bang 1 (dc[b] = &pmpaddr[b-1:0], dc[0] = 1) - tuc cac bit 1 cuoi
-    //          VA bit 0 dau tien. Synthesis dung chung cay AND tien to; khong
-    //          co bo cong pmpaddr+1 (chuoi carry 32 bit).
+    //          VA bit 0 dau tien. dc lay tu thanh ghi dc_q (tinh luc ghi CSR);
+    //          khong co bo cong pmpaddr+1 (chuoi carry 32 bit).
     //
     // ge[i] = (aw >= pmpaddr[i]) duoc DUNG CHUNG: TOR cua entry i can ~ge[i] va
     // ge[i-1], nen 8 entry chi can 8 bo so sanh moi cong, khong phai 16.
@@ -235,15 +300,13 @@ module pmp_unit #(
         reg   [31:0] aw;
         reg   [PMP_ENTRIES-1:0] ge;
         reg   [31:0] dc;
-        integer e, b;
+        integer e;
         begin
             aw = {2'b00, a[31:2]};
             for (e = 0; e < PMP_ENTRIES; e = e + 1)
-                ge[e] = (aw >= flat_addr[32*e +: 32]);
+                ge[e] = ge32(aw, flat_addr[32*e +: 32]);
             for (e = 0; e < PMP_ENTRIES; e = e + 1) begin
-                dc[0] = 1'b1;
-                for (b = 1; b < 32; b = b + 1)
-                    dc[b] = dc[b-1] & flat_addr[32*e + b - 1];
+                dc = flat_dc[32*e +: 32];
                 case (flat_cfg[8*e + 3 +: 2])
                     A_TOR:   match_vec[e] = ((e == 0) ? 1'b1 : ge[(e == 0) ? 0 : e-1]) & ~ge[e];
                     A_NA4:   match_vec[e] = (aw == flat_addr[32*e +: 32]);
@@ -269,7 +332,7 @@ module pmp_unit #(
     endfunction
 
     reg [3:0] d_perm, i_perm;
-    always @(d_addr or i_addr or flat_cfg or flat_addr) begin
+    always @(d_addr or i_addr or flat_cfg or flat_addr or flat_dc) begin
         d_perm = decide(match_vec(d_addr));
         i_perm = decide(match_vec(i_addr));
     end

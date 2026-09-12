@@ -56,6 +56,34 @@ proc apply_clock_uncertainty {clk_obj period} {
     set_clock_uncertainty -hold  $UNC_HOLD_PS $clk_obj
 }
 
+############################################################
+## Source latency (tre ngoai chip toi chan clk / tck)
+############################################################
+# early 100 / late 150: nua chu ky capture thay 100, nua launch thay 150, nen
+# moi duong reg2reg bi tru 50 ps bi quan - dong vai OCV cua nguon clock.
+#
+# 2026-09-13 - PHAI dat CA tren generated clock.  Genus KHONG cho generated
+# clock ke thua source latency cua master: run 2026-09-12 15:21 in
+# "Src Latency: 0 / 0" cho moi duong CLK_CPU, trong khi CLK_SYS co 100 / 150.
+# Hau qua (cung mot clock vat ly):
+#   CLK_CPU -> CLK_CPU  : thieu 50 ps bi quan so voi CLK_SYS -> CLK_SYS
+#   CLK_SYS -> gated    : launch 150, capture 0 -> bi quan THUA 150 ps
+#   gated   -> CLK_SYS  : launch 0, capture 100 -> lac quan 100 ps
+# Duong toi han cua core (CLK_CPU) vi vay duoc tinh de hon phan con lai.
+#
+# Truoc CTS (Genus, Innovus pre-CTS - clock ly tuong) day la dung.  Sau CTS voi
+# set_propagated_clock, cong cu tu tinh tre tu chan clk qua ICG; khi do nen
+# go -source tren generated clock neu cong cu cong don thay vi thay the (kiem
+# report_clock_timing o buoc CTS).
+set SRC_LAT_EARLY_PS [sdc_env_number MCU_SRC_LAT_EARLY_PS 100.0]
+set SRC_LAT_LATE_PS  [sdc_env_number MCU_SRC_LAT_LATE_PS  150.0]
+
+proc apply_source_latency {clk_obj} {
+    global SRC_LAT_EARLY_PS SRC_LAT_LATE_PS
+    set_clock_latency -source -early $SRC_LAT_EARLY_PS $clk_obj
+    set_clock_latency -source -late  $SRC_LAT_LATE_PS  $clk_obj
+}
+
 proc make_primary_clock {name port period} {
     set port_obj [require_scalar_port $port]
     create_clock \
@@ -67,8 +95,7 @@ proc make_primary_clock {name port period} {
     set_clock_transition -min 10.0 $clk_obj
     set_clock_transition -max 40.0 $clk_obj
     apply_clock_uncertainty $clk_obj $period
-    set_clock_latency -source -early 100.0 $clk_obj
-    set_clock_latency -source -late 150.0 $clk_obj
+    apply_source_latency $clk_obj
 }
 
 proc make_gated_clock {name source_port output_pin period} {
@@ -86,6 +113,8 @@ proc make_gated_clock {name source_port output_pin period} {
     # this the whole CLK_CPU domain - which owns the critical path - was
     # analysed with zero uncertainty.
     apply_clock_uncertainty [get_clocks $name] $period
+    # Cung ly do voi uncertainty o tren: source latency cung khong ke thua.
+    apply_source_latency [get_clocks $name]
 }
 
 ############################################################
@@ -108,6 +137,7 @@ create_generated_clock \
     -invert \
     [require_scalar_port sdram_clk]
 apply_clock_uncertainty [get_clocks CLK_SDRAM_OUT] $P_SYS
+apply_source_latency    [get_clocks CLK_SDRAM_OUT]
 
 # 9 nhanh da gate cua CLK_SYS. Khong nam trong clock group nao: moi duong giua
 # chung va CLK_SYS deu duoc tinh timing day du.
