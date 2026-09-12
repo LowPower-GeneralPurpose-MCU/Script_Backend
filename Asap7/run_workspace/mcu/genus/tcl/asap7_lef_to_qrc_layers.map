@@ -3,15 +3,22 @@
 # Both stacks report 10 routing layers, but they are not the same 10:
 #   LEF : M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
 #   QRC : LISD M1 M2 M3 M4 M5 M6 M7 M8 M9
-# Genus paired them by position, so the last run mapped LEF M1 onto QRC
+# Genus paired them by position, so an early run mapped LEF M1 onto QRC
 # LISD, LEF M4 onto QRC M3, LEF M6 onto QRC M5 and LEF M8 onto QRC M7
-# (see the four PHYS-25 warnings in genus.log).  Every layer therefore
-# picked up the R and C of the layer below it.
+# (the four PHYS-25 warnings).  This file forces name-based matching and
+# PHYS-25 is gone as of the 2026-09-12 run.
 #
-# This file forces name-based matching.  Vias are deliberately left out:
-# the QRC via names are not visible from the PHYS-25 messages.  If the
-# QRC layer names turn out to differ from the ones below, fix them here
-# and rerun; PHYS-25 disappearing from genus.log is the pass criterion.
+# 2026-09-12: vias added.  Leaving V1..V9 out made Genus fall back to
+# positional matching for them too, which is what produced the nine
+# PHYS-129 "Via with no resistance will have a value of '0.0'" messages
+# (one per via layer V1..V9) and PHYS-24 "LEF has more layers than cap
+# table".  V0 is the gate/active contact, not a routing via, and QRC does
+# not model it - it stays unmapped on purpose.
+#
+# The names below are VERIFIED AT RUNTIME: tcl/genus.tcl block 3b parses
+# $QRC_FILE, collects every layer/via name it declares, and errors out
+# before synthesis starts if any target on the right-hand side is absent.
+# So a wrong guess here costs seconds, not a 75-minute run.
 M1 M1 \
 M2 M2 \
 M3 M3 \
@@ -20,4 +27,13 @@ M5 M5 \
 M6 M6 \
 M7 M7 \
 M8 M8 \
-M9 M9
+M9 M9 \
+V1 V1 \
+V2 V2 \
+V3 V3 \
+V4 V4 \
+V5 V5 \
+V6 V6 \
+V7 V7 \
+V8 V8 \
+V9 V9

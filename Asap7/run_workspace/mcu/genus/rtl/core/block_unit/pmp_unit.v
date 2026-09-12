@@ -89,6 +89,32 @@ module pmp_unit #(
     reg [31:0] addr_q [0:PMP_ENTRIES-1];
 
     // -------------------------------------------------------------------------
+    // Ban "trai phang" cua hai mang tren.  Verilog-2001 khong cho dat mot mang
+    // unpacked vao danh sach nhay, nen moi khoi to hop duoi day nhay theo
+    // flat_cfg / flat_addr.
+    //
+    // Va vi the MOI function to hop trong file nay phai doc flat_*, KHONG doc
+    // cfg_q/addr_q: neu mot function doc thang mang thi tin hieu do thanh dau
+    // vao cua khoi always ma khong nam trong danh sach nhay, va Genus bao
+    // CDFG-360 "Referenced signals are not added in sensitivity list. This may
+    // cause simulation mismatches".  Run 2026-09-12 05:50 co dung 4 canh bao do
+    // o file nay (dong 169 va 254 luc bay gio).  Gia tri hai ben luon bang nhau
+    // vi flat_* la assign lien tuc, nen doi sang flat_* khong doi hanh vi.
+    //
+    // Khoi tuan tu (@posedge clk) van ghi thang vao cfg_q/addr_q - o do khong
+    // co van de danh sach nhay.
+    // -------------------------------------------------------------------------
+    wire [8*PMP_ENTRIES-1:0]  flat_cfg;
+    wire [32*PMP_ENTRIES-1:0] flat_addr;
+    genvar gf;
+    generate
+        for (gf = 0; gf < PMP_ENTRIES; gf = gf + 1) begin : g_flat
+            assign flat_cfg [8*gf  +: 8]  = cfg_q[gf];
+            assign flat_addr[32*gf +: 32] = addr_q[gf];
+        end
+    endgenerate
+
+    // -------------------------------------------------------------------------
     // WARL cho mot byte pmpcfg: bit [6:5] luon 0; to hop R=0,W=1 la reserved
     // (khong co Smepmp) -> ep ve R=W=0, giong Ibex.
     // -------------------------------------------------------------------------
@@ -104,9 +130,10 @@ module pmp_unit #(
     function automatic addr_locked;
         input integer j;
         begin
-            addr_locked = cfg_q[j][7];
+            addr_locked = flat_cfg[8*j + 7];
             if (j + 1 < PMP_ENTRIES)
-                if (cfg_q[j+1][7] && (cfg_q[j+1][4:3] == A_TOR))
+                if (flat_cfg[8*(j+1) + 7] &&
+                    (flat_cfg[8*(j+1) + 3 +: 2] == A_TOR))
                     addr_locked = 1'b1;
         end
     endfunction
@@ -121,11 +148,11 @@ module pmp_unit #(
                 for (b = 0; b < 4; b = b + 1) begin
                     e = a[1:0] * 4 + b;
                     if (e < PMP_ENTRIES)
-                        csr_value[8*b +: 8] = cfg_q[e];
+                        csr_value[8*b +: 8] = flat_cfg[8*e +: 8];
                 end
             end else if (a[11:4] == 8'h3B) begin            // 0x3B0-0x3BF
                 if (a[3:0] < PMP_ENTRIES)
-                    csr_value = addr_q[a[3:0]];
+                    csr_value = flat_addr[32*a[3:0] +: 32];
             end
         end
     endfunction
@@ -141,7 +168,7 @@ module pmp_unit #(
                 for (b = 0; b < 4; b = b + 1) begin
                     e = a[1:0] * 4 + b;
                     if (e < PMP_ENTRIES)
-                        if (!cfg_q[e][7])
+                        if (!flat_cfg[8*e + 7])
                             csr_after_write[8*b +: 8] = cfg_legal(v[8*b +: 8]);
                 end
             end else if (a[11:4] == 8'h3B) begin
@@ -152,19 +179,9 @@ module pmp_unit #(
         end
     endfunction
 
-    // Danh sach nhay tuong minh cho ly do G2 cua register_file.v: ham doc mang
-    // cfg_q/addr_q ben trong than, mot so cong cu khong tu dua chung vao @(*).
-    // Mang duoc "trai" ra bang flat_* de liet ke duoc.
-    wire [8*PMP_ENTRIES-1:0]  flat_cfg;
-    wire [32*PMP_ENTRIES-1:0] flat_addr;
-    genvar gf;
-    generate
-        for (gf = 0; gf < PMP_ENTRIES; gf = gf + 1) begin : g_flat
-            assign flat_cfg [8*gf  +: 8]  = cfg_q[gf];
-            assign flat_addr[32*gf +: 32] = addr_q[gf];
-        end
-    endgenerate
-
+    // flat_cfg / flat_addr khai bao o dau module, ngay duoi cfg_q/addr_q.
+    // Sau khi cac function o tren doc flat_* thay vi mang, danh sach nhay duoi
+    // day la DAY DU chinh xac - khong con CDFG-360.
     reg [31:0] rd_a_r, rd_b_r, wr_res_r;
     always @(rd_addr_a or rd_addr_b or csr_waddr or csr_wdata or
              flat_cfg or flat_addr) begin
@@ -222,15 +239,15 @@ module pmp_unit #(
         begin
             aw = {2'b00, a[31:2]};
             for (e = 0; e < PMP_ENTRIES; e = e + 1)
-                ge[e] = (aw >= addr_q[e]);
+                ge[e] = (aw >= flat_addr[32*e +: 32]);
             for (e = 0; e < PMP_ENTRIES; e = e + 1) begin
                 dc[0] = 1'b1;
                 for (b = 1; b < 32; b = b + 1)
-                    dc[b] = dc[b-1] & addr_q[e][b-1];
-                case (cfg_q[e][4:3])
+                    dc[b] = dc[b-1] & flat_addr[32*e + b - 1];
+                case (flat_cfg[8*e + 3 +: 2])
                     A_TOR:   match_vec[e] = ((e == 0) ? 1'b1 : ge[(e == 0) ? 0 : e-1]) & ~ge[e];
-                    A_NA4:   match_vec[e] = (aw == addr_q[e]);
-                    A_NAPOT: match_vec[e] = ~|((aw ^ addr_q[e]) & ~dc);
+                    A_NA4:   match_vec[e] = (aw == flat_addr[32*e +: 32]);
+                    A_NAPOT: match_vec[e] = ~|((aw ^ flat_addr[32*e +: 32]) & ~dc);
                     default: match_vec[e] = 1'b0;
                 endcase
             end
@@ -246,7 +263,8 @@ module pmp_unit #(
             decide = 4'b0111;
             for (e = PMP_ENTRIES - 1; e >= 0; e = e - 1)
                 if (m[e])
-                    decide = cfg_q[e][7] ? {1'b1, cfg_q[e][2:0]} : 4'b0111;
+                    decide = flat_cfg[8*e + 7] ? {1'b1, flat_cfg[8*e +: 3]}
+                                               : 4'b0111;
         end
     endfunction
 

@@ -226,6 +226,31 @@ set ALL_TIMING_LIBS    [concat $STD_LIBS    [list $SRAM_LIB $SRAM_TAG_LIB]]
 set ALL_TIMING_LIBS_SS [concat $STD_LIBS_SS [list $SRAM_LIB $SRAM_TAG_LIB]]
 set ALL_TIMING_LIBS_FF [concat $STD_LIBS_FF [list $SRAM_LIB $SRAM_TAG_LIB]]
 
+# -----------------------------------------------------------------------------
+# Derate bu cho goc .lib con thieu cua 84 macro SRAM.
+#
+# Ba library_set o tren deu tro toi CUNG hai file .lib, nen 84 macro co dung
+# mot bo so tre o view_ss, view_tt va view_ff.  Hau qua:
+#   - o SS : macro qua NHANH -> setup lac quan.  Run 2026-09-12 05:50 co bon
+#            duong te thu 4..7 (4 ps) ket thuc tai u_dtcm/.../u_sram/wd[31],
+#            tuc dung o chan du lieu macro; 4 ps do khong that.
+#   - o FF : macro qua CHAM -> hold lac quan sau CTS.
+#
+# Derate duoi day chi ap cho macro, khong dung toi standard cell (chung da co
+# .lib rieng tung goc nen derate them la phat hai lan).  Huong luon BI QUAN nen
+# no khong bao gio giau duoc mot vi pham - cung lam, la bao thua.
+#
+# Con so: ASAP7 TT = 0.70 V / 25 C, SS = 0.63 V / 100 C, FF = 0.77 V / 0 C.
+# 1.30 / 0.75 la muc thuong dung cho macro thieu goc o muc chenh PVT nay.
+# KHI NAO PDK sinh du .lib SRAM cho SS/FF: dat ca hai ve 1.0, roi xoa khoi 9c
+# trong genus/tcl/genus.tcl va khoi derate trong innovus/tcl/innovus.tcl.
+#
+# Genus va Innovus PHAI dung cung hai con so nay, neu khong hold o FF sau CTS
+# se lac quan hon setup o SS ma khong ai nhan ra.  Do la ly do chung nam o day
+# chu khong nam trong tung flow.
+set SRAM_DERATE_SS 1.30
+set SRAM_DERATE_FF 0.75
+
 # The macro data/control pins have a 0.320 ns Liberty max-transition.
 set SIGNAL_MAX_TRANSITION_PS 300.0
 set SIGNAL_MAX_TRANSITION_NS 0.300

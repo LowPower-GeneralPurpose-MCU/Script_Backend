@@ -1114,6 +1114,19 @@ module riscv_pipeline #(
         .md_type(md_type),
         .md_operation(md_operation),
         .if_id_instr(if_id_instr),
+        // FPU TAT.  Day la cho duy nhat duong f_* bi cat, va no CO CHU Y:
+        // instance o duoi dat .ENABLE_FPU(0), f_register_file tra ve 0, va
+        // register_file.v da bo bit F khoi misa.  Decoder van sinh f_reg_write
+        // / f_mem_write / f_to_x... (khoang dong 918) nhung khong ai nhan
+        // chung tu day tro di.
+        //
+        // He qua trong bao cao tong hop, de khoi phai dieu tra lai lan sau:
+        // reports/deleted_sequential_syn.rpt cua run 2026-09-12 05:50 liet ke
+        //   u_core/EX_MEM/ex_mem_f_mem_write_reg          constant 0
+        //   u_core/EX_MEM/ex_mem_f_store_data_reg[31:0]   constant 0
+        // Do la 33 flop chet DUNG NHU MONG DOI, khong phai noi sai.  Muon bat
+        // FPU thi phai sua ca ba cho: .ENABLE_FPU(1), bay tin hieu that vao
+        // bay cong duoi day, va khai lai bit F trong misa.
         .fpu_en(1'b0),
         .f_reg_write(1'b0),
         .f_mem_to_reg(1'b0),
