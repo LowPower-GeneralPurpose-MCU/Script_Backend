@@ -4,7 +4,8 @@
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |    Id     |  Sev  |Count|                                                                        Message Text                                                                         |
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-|CDFG-780   |Info   |    2|Reversed the data and condition priority for priority mux chain (possibly created from loop based RTL), using new loop reversal algorithm.                   |
+|CDFG-360   |Warning|    4|Referenced signals are not added in sensitivity list. This may cause simulation mismatches between the original and the synthesized design.                  |
+|           |       |     |Add missing reference signals in the sensitivity list or use '*' to add all the signals in the sensitivity list. Example : always @(a or b) (OR) always (*)) |
 |CFM-1      |Info   |    1|Wrote dofile.                                                                                                                                                |
 |CFM-5      |Info   |    1|Wrote formal verification information.                                                                                                                       |
 |DPOPT-1    |Info   |    3|Optimizing datapath logic.                                                                                                                                   |
@@ -16,18 +17,18 @@
 |ELAB-3     |Info   |    1|Done Elaborating Design.                                                                                                                                     |
 |ELABUTL-133|Info   |    1|To insure proper verification, preserved netlist point(s) because they are involved in combinational loop(s)                                                 |
 |           |       |     | . To disable this, set the 'cb_preserve_ports_nets' root attribute to 'false'.                                                                              |
-|GLO-12     |Info   |10207|Replacing a flip-flop with a logic constant 0.                                                                                                               |
+|GLO-12     |Info   |10029|Replacing a flip-flop with a logic constant 0.                                                                                                               |
 |           |       |     |To prevent this optimization, set the 'optimize_constant_0_flops' root attribute to 'false' or 'optimize_constant_0_seq' instance attribute to 'false'. You  |
 |           |       |     | can also see the complete list of deleted sequential with command 'report sequential -deleted' (on Reason 'constant0').                                     |
-|GLO-13     |Info   |  995|Replacing a flip-flop with a logic constant 1.                                                                                                               |
+|GLO-13     |Info   |  999|Replacing a flip-flop with a logic constant 1.                                                                                                               |
 |           |       |     |To prevent this optimization, set the 'optimize_constant_1_flops' root attribute to 'false' or 'optimize_constant_1_seq' instance attribute to 'false'.      |
-|GLO-14     |Info   |    4|Replacing a latch with a logic constant 0.                                                                                                                   |
+|GLO-14     |Info   |    5|Replacing a latch with a logic constant 0.                                                                                                                   |
 |           |       |     |This optimization was enabled by the root attribute 'optimize_constant_latches'.                                                                             |
 |GLO-15     |Info   |    4|Replacing a latch with a logic constant 1.                                                                                                                   |
 |           |       |     |This optimization was enabled by the root attribute 'optimize_constant_latches'.                                                                             |
 |GLO-21     |Info   |   20|Replacing a blocking flip-flop with a logic constant 0.                                                                                                      |
 |           |       |     |The value used to replace the flop can be set by the root attribute 'optimize_seq_x_to'.                                                                     |
-|GLO-34     |Info   |   25|Deleting instances not driving any primary outputs.                                                                                                          |
+|GLO-34     |Info   |   26|Deleting instances not driving any primary outputs.                                                                                                          |
 |           |       |     |Optimizations such as constant propagation or redundancy removal could change the connections so a hierarchical instance does not drive any primary outputs  |
 |           |       |     | anymore. To see the list of deleted hierarchical instances, set the 'information_level' attribute to 2 or above. If the message is truncated set the message|
 |           |       |     | attribute 'truncate' to false to see the complete list. To prevent this optimization, set the 'delete_unloaded_insts' root/subdesign attribute to 'false' or|
@@ -92,19 +93,11 @@
 |SYNTH-8    |Info   |    1|Done incrementally optimizing.                                                                                                                               |
 |SYNTH-33   |Warning|    1|The selected flow setting will be removed in a future release.                                                                                               |
 |           |       |     |Contact Cadence support to understand current flows.                                                                                                         |
-|TIM-20     |Warning|    4|A combinational loop has been found.                                                                                                                         |
-|           |       |     |Run 'check_timing_intent' to get the detailed information By default Genus inserts cdn_loop_breaker instances to break combinational feedback loops during   |
-|           |       |     | timing analysis. You can use command 'report cdn_loop_breaker' to report all the loop breakers in the design. You can use command 'remove_cdn_loop_breaker' |
-|           |       |     | to remove the loop breakers. Once the loop breaker instances inserted by Genus are removed, the user can break the loops manually using command             |
-|           |       |     | set_disable_timing.                                                                                                                                         |
 |TIM-21     |Info   |    1|Removed preserve settings that are no longer part of a combinational loop.                                                                                   |
-|TIM-22     |Info   |    4|Confirmed that preserve settings are part of a combinational loop.                                                                                           |
 |TUI-32     |Warning|    1|This attribute will be obsolete in a next major release.                                                                                                     |
 |TUI-296    |Info   |    1|The given (sub)design is already uniquified.                                                                                                                 |
 |           |       |     |Try running the 'edit_netlist uniquify' command on the parent hierarchy of this (sub)design, if there exists any.                                            |
 |TUI-744    |Info   |    8|Timing analysis will be done for this view.                                                                                                                  |
 |           |       |     |Worst paths will be shown in this view.                                                                                                                      |
-|UTUI-122   |Info   |    2|Removing instance.                                                                                                                                           |
-|           |       |     |This loop breaker instance has been removed.                                                                                                                 |
 |VLOGPT-506 |Warning|    4|Unused attribute.                                                                                                                                            |
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
