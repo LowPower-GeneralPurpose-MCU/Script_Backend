@@ -1,0 +1,938 @@
+#######################################################
+#                                                     
+#  Innovus Command Logging File                     
+#  Created on Tue Sep 15 00:50:24 2026                
+#                                                     
+#######################################################
+
+#@(#)CDS: Innovus v23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: NanoRoute 23.14-s088_1 NR250219-0822/23_14-UB (database version 18.20.661) {superthreading v2.20}
+#@(#)CDS: AAE 23.14-s018 (64bit) 02/28/2025 (Linux 3.10.0-693.el7.x86_64)
+#@(#)CDS: CTE 23.14-s036_1 () Feb 22 2025 01:17:26 ( )
+#@(#)CDS: SYNTECH 23.14-s010_1 () Feb 19 2025 23:56:49 ( )
+#@(#)CDS: CPE v23.14-s082
+#@(#)CDS: IQuantus/TQuantus 23.1.1-s336 (64bit) Mon Jan 20 22:11:00 PST 2025 (Linux 3.10.0-693.el7.x86_64)
+
+set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+suppressMessage ENCEXT-2799
+getVersion
+getVersion
+getVersion
+win
+setLibraryUnit -time 1ns -cap 1pf
+set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_128x4x20_6t122.lef.4x.lef}
+set init_verilog /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v
+set init_top_cell top_soc
+set init_mmmc_file ./tcl/viewDefinition.tcl
+set init_pwr_net VDD
+set init_gnd_net VSS
+set init_design_settop 1
+set init_abstract_view abstract
+set init_layout_view layout
+set ::TimeLib::tsgMarkCellLatchConstructFlag 1
+set conf_qxconf_file NULL
+set conf_qxlib_file NULL
+set defHierChar /
+get_message -id GLOBAL-100 -suppress
+get_message -id GLOBAL-100 -suppress
+set latch_time_borrow_mode max_borrow
+set init_design_uniquify 1
+init_design
+setDesignMode -process 7
+setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+setMultiCpuUsage -acquireLicense 8 -localCpu 8
+setDistributeHost -local
+globalNetConnect VDD -type pgpin -pin VDD -inst * -verbose
+globalNetConnect VSS -type pgpin -pin VSS -inst * -verbose
+globalNetConnect VDD -type tiehi -inst * -verbose
+globalNetConnect VSS -type tielo -inst * -verbose
+set_timing_derate -delay_corner dc_ss -late -cell_delay -cell_check  $SRAM_DERATE_SS $SRAM_DERATE_INSTS
+set_timing_derate -delay_corner dc_ff -early -cell_delay -cell_check  $SRAM_DERATE_FF $SRAM_DERATE_INSTS
+report_timing_derate > ./reports/sram_derate.rpt
+all_constraint_modes
+set_interactive_constraint_modes [all_constraint_modes]
+set_max_fanout 1 [get_pins -of_objects $SRAM_DERATE_INSTS -filter "direction == out"]
+set_interactive_constraint_modes {}
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+fit
+setDrawView fplan
+panCenter 468.08750 985.10725
+zoomBox -1725.97900 -385.23800 3086.17675 2193.01000
+selectObject Module u_axi_ram_lo
+deselectAll
+selectObject Module u_axi_ram_lo
+deselectAll
+selectObject Module u_axi_ram_lo
+deselectAll
+selectObject Module u_axi_ram_lo
+gui_select -rect {-350.77000 690.82550 -352.92200 462.70000}
+deselectAll
+selectObject Module u_axi_ram_lo
+uiSetTool move
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_ram_lo 1.6185 720.9625 983.522 1701.97875
+zoomBox -1180.12450 32.21525 1957.68750 1894.99950
+uiSetTool select
+deselectAll
+selectObject Module u_axi_ram_lo
+deselectAll
+selectObject Module u_axi_ram_lo
+move_obj -selected -direction left -to core_box -group
+zoomBox -849.60475 395.95950 1417.46450 1741.82125
+zoomBox -517.54300 761.40075 874.72125 1587.92825
+zoomBox -370.88975 922.79600 635.02125 1519.96225
+zoomBox -223.55225 1084.94425 394.20300 1451.67900
+zoomBox -133.06850 1184.52375 246.31050 1409.74475
+zoomBox -93.10700 1228.50250 180.99450 1391.22475
+move_obj -selected -direction left -to die_box -group
+move_obj -selected -direction left -to die_box -group
+zoomBox -71.82750 1275.46425 96.50525 1375.39625
+zoomBox -44.88625 1299.41225 58.49125 1360.78300
+zoomBox -28.34125 1314.11925 35.14575 1351.80875
+zoomBox -20.57150 1320.62325 25.29800 1347.85400
+zoomBox -17.53725 1323.16325 21.45200 1346.30950
+zoomBox -24.27550 1317.67925 29.68925 1349.71575
+zoomBox -28.55100 1315.14500 34.93700 1352.83500
+zoomBox -38.30275 1310.87950 49.57000 1363.04575
+zoomBox -67.63325 1300.07200 75.45300 1385.01625
+zoomBox -80.69675 1295.41725 87.64025 1395.35175
+zoomBox -133.58300 1280.89825 140.52625 1443.62525
+zoomBox -305.41625 1233.72475 312.35875 1600.47125
+zoomBox -359.38575 1218.54425 367.40850 1650.01075
+zoomBox -685.21825 1106.08575 707.09150 1932.64025
+zoomBox -947.03475 1015.72175 980.03775 2159.74200
+pan 57.29650 1711.60700
+deselectAll
+selectObject Module u_axi_ram_lo
+zoomBox -1347.47625 500.85950 1319.75250 2084.27875
+gui_select -rect {982.71425 712.33450 890.19375 749.34275}
+deselectAll
+selectObject Module u_axi_ram_lo
+is_innovus_plus
+deselectAll
+selectObject Module u_axi_ram_lo
+is_innovus_plus
+zoomBox -3022.50350 -98.22900 2087.06950 2935.10525
+pan 1048.24750 2724.24650
+fit
+move_obj -selected -direction left -to core_box -group
+move_obj -selected -direction up -to core_box -group
+uiSetTool move
+setObjFPlanBox Module u_axi_ram_lo 0.00000 905.80675 785.28950 1693.44000
+pan -1617.10800 712.93850
+deselectAll
+selectObject Module u_axi_ram_hi
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_ram_hi 275.26575 486.68725 1257.16925 1467.7035
+zoomBox -2601.67400 -125.37400 1089.86925 2066.13675
+pan 1485.67225 2193.03125
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_ram_hi 719.70575 719.402 1701.64175 1700.042
+setObjFPlanBox Module u_axi_ram_hi 875.84050 911.84350 1694.95200 1693.44000
+pan -1662.84075 742.11575
+deselectAll
+selectObject Module u_core
+zoomBox -3126.14700 -165.94175 1216.84500 2412.30625
+pan 630.57300 2671.82025
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 710.94725 344.021 962.448 595.2945
+deselectAll
+selectObject Module u_axi_interconnect
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 257.30425 482.9785 664.0645 889.37125
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 732.37725 172.35 983.80125 423.99
+deselectAll
+selectObject Module u_axi_interconnect
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 539.18475 482.76 945.91275 888.84
+setObjFPlanBox Module u_axi_interconnect 362.45050 482.76000 945.86400 888.84000
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 461.446 482.76 1044.862 888.84
+setObjFPlanBox Module u_axi_interconnect 461.37600 482.76000 1238.36625 888.84000
+deselectAll
+selectObject Module u_dcache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dcache 52.8605 43.94475 463.9605 454.67325
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 248.536 487.1375 444.299 682.72375
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 1212.38025 41.52025 1463.80425 293.16025
+deselectAll
+selectObject Module u_axi_interconnect
+deselectAll
+selectObject Module u_dtcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dtcm 1350.39125 340.93825 1698.60475 688.83725
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 977.82625 38.888 1229.25025 290.528
+deselectAll
+selectObject Module u_dtcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dtcm 1314.478 522.05875 1662.67 869.81875
+deselectAll
+selectObject Module u_itcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1336.76425 26.58225 1685.1155 374.61875
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 924.029 60.4015 1175.453 312.0415
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 962.78625 45.415 1214.21025 297.055
+deselectAll
+selectObject Module u_itcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1317.45475 169.0405 1665.86275 516.8005
+deselectAll
+selectObject Module u_axi_interconnect
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 360.226 489.2165 1137.178 895.2965
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 22.64275 650.6415 218.33875 846.1215
+deselectAll
+selectObject Module u_dtcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dtcm 1316.72825 545.3135 1664.92025 893.0735
+move_obj -selected -direction right -to core_box -group
+deselectAll
+selectObject Module u_itcm
+move_obj -selected -direction right -to core_box -group
+pan 983.52200 1970.22725
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 1001.45025 189.5525 1252.87425 441.1925
+deselectAll
+selectObject Module u_axi_interconnect
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 248.3775 484.9355 1025.3295 891.0155
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 323.7245 502.137 1100.6765 908.217
+deselectAll
+selectObject Module u_dcache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dcache 392.956 5.54175 804.004 415.94175
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dcache 126.04025 3.248 537.08825 413.648
+deselectAll
+selectObject Module u_icache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_icache 541.43725 0.90225 948.5105 407.60775
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 1061.6355 230.97025 1313.0595 482.61025
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 1050.8795 239.7285 1302.3035 491.3685
+deselectAll
+selectObject Module u_axi_interconnect
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 246.30725 467.76575 1023.25925 873.84575
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 1022.86225 149.37075 1274.28625 401.01075
+zoomBox -1374.85425 -274.51650 2316.68925 1916.99450
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon 1077.744 522.97025 1195.5845 640.70425
+deselectAll
+selectObject Module u_clic
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 133.05 458.9445 223.45725 549.27025
+deselectAll
+selectObject Module u_axi_interconnect
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 359.65725 482.2745 1136.60925 888.3545
+spaceObject -fixSide middle -space 0
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 248.05225 726.05775 1025.00425 1132.13775
+zoomSelected
+fit
+deselectAll
+selectObject Module u_axi_ram_lo
+deselectAll
+selectObject Module u_axi_interconnect
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 275.9565 501.85275 1052.9085 907.93275
+deselectAll
+selectObject Module u_axi_ram_lo
+deselectAll
+selectObject Module u_axi_interconnect
+uiSetTool select
+deselectObject Module u_axi_interconnect
+selectObject Module u_axi_ram_lo
+selectObject Module u_axi_interconnect
+spaceObject -fixSide bottom -space 0
+deselectAll
+selectObject Module u_axi_interconnect
+deselectAll
+selectObject Module u_axi_interconnect
+gui_select -rect {612.69425 726.99175 617.35900 655.46600}
+deselectAll
+uiSetTool move
+selectObject Module u_axi_interconnect
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 280.71275 485.096 1057.66475 891.176
+uiSetTool select
+deselectAll
+selectObject Module u_axi_interconnect
+selectObject Module u_axi_ram_lo
+spaceObject -fixSide middle -space 0
+move_obj -selected -direction left -to core_box -group
+move_obj -selected -direction up -to core_box -group
+deselectAll
+selectObject Module u_axi_ram_hi
+zoomBox -201.04550 180.26150 2066.02350 1526.12300
+uiSetTool move
+setObjFPlanBox Module u_axi_ram_hi 875.88000 903.74625 1694.95200 1693.44000
+deselectAll
+selectObject Module u_dtcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dtcm 1349.00675 554.38725 1697.19875 902.14725
+deselectAll
+selectObject Module u_itcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1345.4205 205.5095 1693.8285 553.2695
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon -14.12775 492.3875 103.80825 610.1075
+deselectAll
+selectObject Module u_clic
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 1082.349 517.418 1172.853 608.138
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 147.6875 464.519 238.1915 555.239
+deselectAll
+selectObject Module u_axi_interconnect
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_interconnect 433.5855 501.1635 1210.5375 907.2435
+zoomBox -298.13025 -56.19400 2839.68150 1806.59025
+pan -679.49650 315.01725
+deselectAll
+selectObject Module u_apb_gpio
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_gpio 41.876 402.053 106.972 467.09025
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon 268.99975 686.844 386.93575 804.564
+deselectAll
+selectObject Module u_apb_i2c
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_i2c 43.22075 524.891 107.939 589.551
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 231.03825 490.004 426.73425 685.484
+deselectAll
+selectObject Module u_clic
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 76.218 708.52125 166.722 799.24125
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 126.00525 439.48025 216.50925 530.20025
+deselectAll
+selectObject Module u_debug_module
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_debug_module 1162.787 396.5115 1223.16725 456.83725
+zoomBox -378.29000 124.75900 1888.77900 1470.62050
+zoomBox -139.84325 162.84300 1787.16525 1306.82525
+zoomBox 381.55025 246.11850 1564.97450 948.66675
+zoomBox 505.66900 270.83675 1511.57975 868.00275
+zoomBox 70.00125 175.62250 1707.95925 1148.00775
+zoomBox -639.41125 20.58175 2027.73025 1603.94925
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_debug_module 1071.5325 212.647 1132.0125 273.127
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 1029.36825 252.13075 1280.79225 503.77075
+deselectAll
+selectObject Module u_debug_module
+zoomBox -938.65425 6.12100 2199.15925 1868.90625
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_debug_module 996.7845 30.52425 1057.2645 91.00425
+pan 118.17325 728.64250
+zoomBox -781.83325 628.36125 856.12550 1600.74700
+zoomBox -761.65850 1065.99725 93.36625 1573.58875
+zoomBox -755.54500 1198.62325 -137.78900 1565.35850
+deselectAll
+selectObject Module u_apb_syscon
+zoomBox -786.49950 1157.62075 -59.72775 1589.07400
+zoomBox -1026.14200 1071.40375 157.28525 1773.95375
+pan 303.77375 1847.13775
+zoomBox -1079.59925 765.81200 558.36250 1738.19950
+pan 551.12775 1293.47175
+zoomBox -1138.56800 150.58700 1128.50700 1496.45225
+zoomBox -1496.61100 96.46425 1170.53650 1679.83525
+pan 1041.48275 1260.01225
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_syscon 1214.07425 507.00275 1247.81975 540.71775
+deselectAll
+selectObject Module u_debug_module
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_debug_module 1217.56025 627.63875 1278.04025 688.11875
+zoomBox -508.07325 -401.26450 2629.74750 1461.52500
+zoomBox -643.64125 -837.23275 3699.36300 1741.02250
+pan -423.97025 -94.59325
+zoomBox -994.97725 -400.88775 2696.57650 1790.62925
+zoomBox -932.96350 -114.14300 2204.85725 1748.64650
+zoomBox -795.56300 498.46025 1131.45150 1642.44600
+zoomBox -711.18175 874.67525 472.24600 1577.22550
+deselectAll
+selectObject Module u_apb_watchdog
+zoomBox -1508.07675 817.75400 758.99925 2163.61975
+zoomBox -2148.40700 768.13275 989.41450 2630.92275
+zoomBox -4258.50200 574.49375 1752.57925 4143.01475
+pan 2284.68750 2962.35200
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_watchdog 349.318 430.0565 386.04525 466.75075
+zoomBox -1807.66850 -636.52475 2535.33775 1941.73175
+zoomBox -1643.23850 29.50000 1023.91025 1612.87175
+zoomBox -1542.25850 438.52225 95.70475 1410.91075
+deselectAll
+selectObject Module u_axi_flash
+zoomBox -2304.20350 174.34050 362.94650 1757.71300
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_flash 55.722 803.478 97.237 844.9555
+deselectAll
+selectObject Module u_jtag_dtm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_jtag_dtm 155.0215 731.51575 193.8975 770.35675
+deselectAll
+selectObject Module u_axi_rom
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 196.54075 790.99175 231.294 825.71375
+zoomBox -5452.60600 -626.01650 558.47875 2942.50650
+pan 1548.94150 4624.03575
+fit
+zoomBox -257.63950 261.67650 1380.31800 1234.06150
+deselectAll
+selectObject Module u_axi_interconnect
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 206.76975 472.463 402.46575 667.943
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon 99.28025 776.164 217.21625 893.884
+deselectAll
+selectObject Module u_axi_flash
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_flash 294.36 815.695 335.832 856.735
+deselectAll
+selectObject Module u_axi_rom
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 336.9795 706.14575 371.7555 740.70575
+deselectAll
+selectObject Module u_axi_flash
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_flash 37.1075 751.27775 78.5795 792.31775
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon -10.21575 715.6445 107.72025 833.3645
+deselectAll
+selectObject Module u_axi_flash
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_flash 49.32725 625.87075 90.79925 666.91075
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon -0.81175 783.409 117.12425 901.129
+move_obj -selected -direction left -to core_box -group
+deselectAll
+selectObject Module u_axi_ram_lo
+uiSetTool select
+selectObject Module u_apb_ascon_u_ascon
+deselectObject Module u_axi_ram_lo
+spaceObject -fixSide middle -space 0
+selectObject Module u_axi_ram_lo
+deselectObject Module u_apb_ascon_u_ascon
+selectObject Module u_apb_ascon_u_ascon
+deselectObject Module u_axi_ram_lo
+zoomBox -369.65075 149.66550 1557.35825 1293.64800
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+selectObject Module u_axi_ram_lo
+spaceObject -fixSide top -space 0
+deselectAll
+zoomBox -790.85200 -238.53575 2346.96075 1624.24900
+zoomBox -402.08150 7.41225 1864.98875 1353.27450
+zoomBox -274.88775 185.10975 1363.07100 1157.49550
+zoomBox -116.59400 406.25550 738.43075 913.84700
+selectObject Module u_jtag_dtm
+pan -11.44000 588.94650
+zoomBox -243.41350 366.41175 940.01175 1068.96050
+zoomBox -624.13975 16.83125 1642.93175 1362.69425
+panCenter 172.36850 748.18075
+uiSetTool move
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_jtag_dtm 1249.30375 530.067 1288.18375 568.947
+panCenter 990.22175 435.86850
+pan 269.62200 -104.98325
+deselectAll
+selectObject Module u_itcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1344.3405 133.30075 1692.7485 481.06075
+deselectAll
+selectObject Module u_dtcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dtcm 1341.14275 531.5715 1689.33475 879.3315
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 996.87675 128.06325 1248.30075 379.70325
+deselectAll
+selectObject Module u_jtag_dtm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_jtag_dtm 1253.83775 390.97525 1292.71775 429.85525
+deselectAll
+selectObject Module u_apb_syscon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_syscon 1286.03525 296.4395 1319.73125 329.9195
+deselectAll
+selectObject Module u_debug_module
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_debug_module 1161.42075 385.9435 1221.90075 446.4235
+deselectAll
+selectObject Module u_axi_interconnect
+setObjFPlanBox Module u_axi_interconnect 433.51200 501.12000 1276.69500 907.20000
+deselectAll
+selectObject Module u_dtcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dtcm 1346.761 553.8285 1694.953 901.5885
+deselectAll
+selectObject Module u_axi_ram_hi
+uiSetTool select
+selectObject Module u_dtcm
+deselectObject Module u_axi_ram_hi
+zoomBox 341.50000 -140.95400 2268.51075 1003.02950
+zoomBox -424.70300 -523.15575 2713.11250 1339.63075
+deselectAll
+selectObject Module u_axi_ram_hi
+selectObject Module u_dtcm
+spaceObject -fixSide top -space 0
+deselectAll
+selectObject Module u_axi_interconnect
+selectObject Module u_axi_ram_hi
+spaceObject -fixSide top -space 0
+deselectAll
+selectObject Module u_dtcm
+zoomBox 71.93975 -166.31500 2339.01200 1179.54850
+zoomBox 266.40450 -26.78550 2193.41600 1117.19850
+uiSetTool move
+setObjFPlanBox Module u_dtcm 1275.74600 556.20000 1694.95200 903.96000
+deselectAll
+selectObject Module u_itcm
+setObjFPlanBox Module u_itcm 1278.61075 132.84000 1692.79200 556.66550
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1132.40275 199.68375 1546.69075 623.04375
+undo
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1768.3735 764.0365 2182.6615 1187.3965
+deselectAll
+selectObject Module u_apb_syscon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_syscon 1015.824 432.4725 1049.52 465.9525
+deselectAll
+selectObject Module u_itcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1278.504 103.23775 1692.792 526.59775
+deselectAll
+selectObject Module u_dtcm
+setObjFPlanBox Module u_dtcm 1275.69600 528.01800 1694.95200 903.96000
+move_obj -selected -direction right -to core_box -group
+deselectAll
+selectObject Module u_itcm
+move_obj -selected -direction right -to core_box -group
+move_obj -selected -direction right -to core_box -group
+deselectAll
+selectObject Module u_jtag_dtm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_jtag_dtm 1081.996 31.91325 1120.876 70.79325
+deselectAll
+selectObject Module u_debug_module
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_debug_module 1163.342 12.1895 1223.822 72.6695
+deselectAll
+selectObject Module u_apb_syscon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_syscon 865.92675 437.7295 899.62275 471.2095
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 1001.6145 217.32675 1253.0385 468.96675
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 945.25225 243.8175 1196.67625 495.4575
+setObjFPlanBox Module u_core 945.21600 107.85700 1276.70100 495.72000
+deselectAll
+selectObject Module u_debug_module
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_debug_module 1164.331 19.5195 1224.811 79.9995
+pan -697.08550 -355.25925
+deselectAll
+selectObject Module u_dcache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dcache 64.07475 -45.4605 475.12275 364.9395
+deselectAll
+selectObject Module u_apb_gpio
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_gpio 170.817 747.438 235.833 812.238
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 221.99075 480.554 417.68675 676.034
+deselectAll
+selectObject Module u_axi_rom
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 328.366 818.9995 363.142 853.5595
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 210.589 599.96375 406.285 795.44375
+deselectAll
+selectObject Module u_axi_interconnect
+deselectAll
+selectObject Module u_dcache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dcache 1.128 4.7745 412.176 415.1745
+deselectAll
+selectObject Module u_icache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_icache -403.8505 83.2025 3.3095 490.3625
+deselectAll
+selectObject Module u_dcache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dcache 495.724 -3.31925 906.772 407.08075
+deselectAll
+selectObject Module u_icache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_icache 0.95475 1.9925 408.11475 409.1525
+deselectAll
+selectObject Module u_dcache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dcache 410.73275 1.90975 821.78075 412.30975
+deselectAll
+selectObject Module u_core
+deselectAll
+selectObject Module u_apb_syscon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_syscon 840.16125 376.28575 873.85725 409.76575
+setObjFPlanBox Module u_apb_syscon 840.24000 227.22100 932.93275 409.32000
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_syscon 828.78125 19.58425 921.44525 202.10425
+deselectAll
+selectObject Module u_dcache
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dcache 409.87725 -2.61475 820.92525 407.78525
+deselectAll
+selectObject Module u_axi_interconnect
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 207.73525 551.7795 403.43125 747.2595
+deselectAll
+selectObject Module u_clic
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 217.5995 441.46975 308.1035 532.18975
+deselectAll
+selectObject Module u_axi_interconnect
+deselectAll
+selectObject Module u_core
+setObjFPlanBox Module u_core 945.21600 108.00000 1276.77600 422.97775
+setObjFPlanBox Module u_core 945.21600 108.00000 1276.77600 433.48175
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon -1.91 782.6705 116.026 900.3905
+deselectAll
+selectObject Module u_apb_gpio
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_gpio 1.83675 713.938 66.85275 778.738
+setObjFPlanBox Module u_apb_gpio 1.94400 713.88000 114.57350 778.68000
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 189.64875 600.5805 385.34475 796.0605
+deselectAll
+selectObject Module u_axi_rom
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 353.14775 519.75275 387.92375 554.31275
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 176.27925 700.74575 371.97525 896.22575
+deselectAll
+selectObject Module u_axi_rom
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 251.9395 475.554 286.7155 510.114
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 350.21175 561.142 384.98775 595.702
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 176.25600 700.92000 432.55900 896.40000
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 175.30125 710.469 431.69325 905.949
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 188.76075 711.595 445.15275 907.075
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 176.37025 709.81025 432.76225 905.29025
+deselectAll
+selectObject Module u_axi_flash
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_flash 189.62 579.60925 231.092 620.64925
+deselectAll
+selectObject Module u_apb_i2c
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_i2c 1.18375 641.37925 65.98375 706.17925
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_i2c -1.78475 630.061 63.01525 694.861
+deselectAll
+selectObject Module u_apb_gpio
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_gpio 0.989 703.376 113.525 768.176
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_gpio 0.12525 714.539 112.66125 779.339
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon 0.0 782.04525 117.936 899.76525
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 142.26600 709.56000 432.86400 905.04000
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon -2.86475 785.73975 115.07125 903.45975
+deselectAll
+selectObject Module u_axi_ram_lo
+uiSetTool select
+deselectAll
+selectObject Module u_axi_ram_lo
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+selectObject Module u_axi_ram_lo
+spaceObject -fixSide top -space 0
+deselectAll
+selectObject Module u_apb_gpio
+deselectAll
+selectObject Module u_apb_gpio
+deselectAll
+selectObject Module u_apb_gpio
+deselectAll
+selectObject Module u_apb_gpio
+deselectAll
+selectObject Module u_apb_ascon_u_ascon
+selectObject Module u_apb_gpio
+spaceObject -fixSide top -space 0
+uiSetTool move
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_gpio 212.20625 722.645 324.74225 787.445
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon 211.99025 787.445 329.92625 905.165
+undo
+undo
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_gpio -36.0705 736.96875 76.4655 801.76875
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon -36.2865 801.76875 81.6495 919.48875
+undo
+undo
+undo
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_gpio -58.9885 671.034 53.5475 735.834
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon -59.2045 744.474 58.7315 862.194
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_gpio 0.95475 713.651 113.49075 778.451
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_ascon_u_ascon 0.95475 787.091 118.89075 904.811
+spaceObject -fixSide top -space 0
+uiSetTool select
+deselectAll
+selectObject Module u_axi_ram_lo
+selectObject Module u_apb_ascon_u_ascon
+spaceObject -fixSide top -space 0
+deselectAll
+zoomBox -394.44225 23.15625 1243.51775 995.54275
+zoomBox -296.28500 326.55275 558.74100 834.14500
+selectObject Module u_apb_i2c
+uiSetTool move
+deselectAll
+selectObject Module u_clic
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 252.679 511.63025 343.183 602.35025
+deselectAll
+selectObject Module u_axi_rom
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 249.29525 646.34 284.07125 680.9
+deselectAll
+selectObject Module u_clic
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 268.8205 542.0025 359.3245 632.7225
+setObjFPlanBox Module u_clic 268.92000 542.16000 431.63100 632.88000
+deselectAll
+selectObject Module u_apb_i2c
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_i2c 5.50825 627.09775 70.30825 691.89775
+setObjFPlanBox Module u_apb_i2c 5.61600 627.48000 160.88700 692.28000
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_i2c 0.5315 627.9035 155.8355 692.7035
+deselectAll
+selectObject Module u_axi_apb_dma_u_dma_engine
+zoomBox -394.98200 274.28825 610.93075 871.45550
+deselectAll
+selectObject Module u_apb_watchdog
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_watchdog -0.15575 480.684 36.56425 517.404
+setObjFPlanBox Module u_apb_watchdog 0.00000 480.60000 143.36575 517.32000
+zoomBox -787.74150 91.37625 850.21950 1063.76350
+zoomBox -1429.83500 -206.97525 1237.31125 1376.39500
+pan 239.22375 1220.21625
+deselectAll
+selectObject Module u_apb_syscon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_syscon 834.07875 131.78275 926.74275 314.30275
+setObjFPlanBox Module u_apb_syscon 833.97600 131.76000 926.64000 428.75175
+deselectAll
+selectObject Module u_clic
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 181.68925 444.35575 344.33725 535.07575
+setObjFPlanBox Module u_clic 181.65600 443.88000 432.40925 599.24825
+deselectAll
+selectObject Module u_axi_flash
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_flash 349.571 639.4355 391.043 680.4755
+deselectAll
+selectObject Module u_axi_rom
+zoomBox -974.51700 -80.55700 1292.55750 1265.30775
+zoomBox -788.47750 27.46050 1138.53575 1171.44550
+zoomBox -381.31075 263.65400 802.11625 966.20375
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 289.96425 664.49625 324.74025 699.05625
+deselectAll
+selectObject Module u_axi_flash
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_flash 222.818 624.11275 264.29 665.15275
+setObjFPlanBox Module u_axi_apb_dma_u_dma_engine 130.64750 725.76525 432.86400 905.04000
+deselectAll
+selectObject Module u_axi_rom
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 258.791 675.92875 293.567 710.48875
+setObjFPlanBox Module u_axi_rom 258.76800 676.08000 416.82800 710.64000
+setObjFPlanBox Module u_axi_rom 258.76800 676.08000 416.88000 725.76525
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_rom 274.01525 676.66625 432.12725 726.34625
+deselectAll
+selectObject Module u_axi_flash
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_axi_flash 241.0915 634.79575 282.5635 675.83575
+setObjFPlanBox Module u_axi_flash 241.05600 635.04000 433.24825 676.08000
+deselectAll
+selectObject Module u_clic
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 161.13075 473.78825 411.90675 629.30825
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_clic 181.075 478.225 431.851 633.745
+deselectAll
+selectObject Module u_apb_i2c
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_i2c -1.32725 644.4865 153.97675 709.2865
+setObjFPlanBox Module u_apb_i2c 0.00000 644.76000 226.23650 709.56000
+deselectAll
+selectObject Module u_apb_watchdog
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_watchdog 1.17275 558.0095 144.59675 594.7295
+setObjFPlanBox Module u_apb_watchdog 1.08000 473.59775 144.50400 595.08000
+deselectAll
+selectObject Module u_icache
+zoomBox -593.71225 209.14575 1044.24925 1181.53325
+setObjFPlanBox Module u_icache 0.86400 2.16000 408.02400 440.47325
+deselectAll
+selectObject Module u_dcache
+setObjFPlanBox Module u_dcache 409.96800 0.00000 821.01600 442.09675
+zoomBox -1623.84300 -4.16425 1513.97675 1858.62475
+zoomBox -3597.25025 -412.79925 2413.82750 3155.71975
+pan 819.15075 2898.49325
+fit
+pan 32.65325 461.04275
+deselectAll
+selectObject Module u_apb_syscon
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_syscon 826.20125 159.7485 918.86525 456.7485
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_apb_syscon 823.09025 144.29075 915.75425 441.29075
+zoomBox -557.45450 -126.03275 2109.68550 1457.33375
+zoomBox -451.39000 -13.62425 1815.67900 1332.23725
+zoomBox -284.60375 163.13800 1353.35375 1135.52300
+zoomBox -164.10075 290.39800 1019.32375 992.94625
+deselectAll
+selectObject Module u_axi_interconnect
+setObjFPlanBox Module u_axi_interconnect 433.51200 466.91475 1276.77600 903.96000
+zoomBox -332.35500 205.93300 1305.60325 1178.31850
+zoomBox -555.23125 177.14250 1371.77850 1321.12550
+deselectAll
+selectObject Module u_apb_syscon
+zoomBox -1115.64850 104.88975 1551.49350 1688.25750
+deselectAll
+selectObject Module u_axi_interconnect
+pan 551.13875 1216.57325
+deselectAll
+selectObject Module u_axi_ram_hi
+zoomBox -1240.17000 -309.75075 2451.37650 1881.76200
+zoomBox -860.95425 -272.15850 2276.86050 1590.62750
+deselectAll
+selectObject Module u_debug_module
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_debug_module 1144.02625 22.54975 1204.50625 83.02975
+deselectAll
+selectObject Module u_itcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1279.109 -0.499 1693.397 422.861
+deselectAll
+selectObject Module u_dtcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dtcm 1278.80575 423.941 1698.06175 799.781
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dtcm 1277.251 435.32425 1696.507 811.16425
+deselectAll
+selectObject Module u_core
+setObjFPlanBox Module u_core 920.97625 108.00000 1276.77600 467.98025
+deselectAll
+selectObject Module u_dtcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_dtcm 1277.251 525.42475 1696.507 901.26475
+deselectAll
+selectObject Module u_itcm
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1294.701 0.0 1708.989 423.36
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_itcm 1280.664 101.06925 1694.952 524.42925
+deselectAll
+selectObject Module u_core
+getFPlanMode -autoSyncMasterClone -quiet
+setObjFPlanBox Module u_core 922.579 109.55475 1278.331 469.19475
+zoomBox -1764.68275 -833.93550 3344.72500 2199.30050
