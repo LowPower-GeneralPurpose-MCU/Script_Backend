@@ -37,9 +37,9 @@ set SOC_SRAM_GROUPS {
     CACHE   big 8 2 {u_icache/ u_dcache/ u_itcm/ u_dtcm/}
     TAG     tag 2 2 {u_icache/ u_dcache/}
 }
-# Vi tri mam do 02_planning.tcl dat (sau do ban keo lai trong GUI):
+# Vi tri mam do KHOI 3 cua tcl/innovus.tcl dat (sau do ban keo lai trong GUI):
 #   RAM_LO sat mep trai, RAM_HI sat mep phai, CACHE giua sat mep duoi,
-#   TAG ben phai CACHE.  Muon doi thi sua proc soc_seed_origin.
+#   TAG ben phai CACHE.  Muon doi thi sua proc soc_layout (soc_fp_procs.tcl).
 
 # ---- Module guide (Hierarchy trang 24-28) ---------------------------------
 # Chi guide module lon.  Dien tich std cell (area_hierarchy_syn.rpt 2026-09-14):
