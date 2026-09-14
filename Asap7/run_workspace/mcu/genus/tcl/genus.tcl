@@ -496,12 +496,9 @@ if {[llength $LVT_CELLS] > 0} {
 }
 
 set_db / .syn_opt_effort $SYN_EFFORT
-# SYNTH-33: 'syn_opt' tron se bi bo. Option sai thi loi ngay khi parse,
-# chua toi uu gi, nen fallback ve dang cu la an toan.
-if {[catch {syn_opt -logical} syn_opt_err]} {
-    puts "WARNING: syn_opt -logical khong chay ($syn_opt_err), dung syn_opt"
-    syn_opt
-}
+# SYNTH-33 (syn_opt tron se bi bo) chap nhan: 'syn_opt -logical' can license
+# GEN_ENG100, may nay khong co (LIC-5, run 2026-09-14).
+syn_opt
 
 # Xoa margin sau syn_opt. Genus gop 8 path_adjust thanh 'zipped_path_adjust_N'
 # (run 2026-09-14: ten syn_margin_* bien mat, report van con -100 ps), nen bat
@@ -582,6 +579,7 @@ set REPORTS {
     area_syn.rpt                 {report_area}
     area_hierarchy_syn.rpt       {report_area -depth 5}
     timing_syn.rpt               {report_timing -max_paths 100}
+    drc_syn.rpt                  {report_design_rules}
     power_syn.rpt                {report_power}
     gates_syn.rpt                {report_gates}
     datapath_syn.rpt             {report_dp}
@@ -641,6 +639,21 @@ if {[file isfile $DELETED_RPT]} {
     close $fp
 }
 
+# report_qor khong in DRC; run 2026-09-14 incr_tns day Max Trans 0 -> 30308 ma khong ai sua.
+set drc_summary [list "khong doc duoc drc_syn.rpt"]
+if {[file isfile ./reports/drc_syn.rpt]} {
+    set fp [open ./reports/drc_syn.rpt r]
+    set drc_text [read $fp]
+    close $fp
+    set drc_summary {}
+    foreach {-> rule total} [regexp -all -inline -nocase -- {(\S+) design rule \(violation total = ([-0-9.eE+]+)\)} $drc_text] {
+        lappend drc_summary "$rule=$total"
+    }
+    if {[llength $drc_summary] == 0} {
+        set drc_summary [list "khong thay 'violation total' - xem drc_syn.rpt"]
+    }
+}
+
 write_do_lec -revised_design $MAPPED_NETLIST -logfile ./logs/lec_genus.log > ./outputs/genus_mapping_hints.do
 
 # ------------------------------------------------------------------------
@@ -664,6 +677,7 @@ puts "GENUS MCU SYNTHESIS COMPLETED"
 puts " - Netlist : [file normalize $MAPPED_NETLIST]"
 puts " - SRAM    : [join $sram_summary { + }]"
 puts " - Gating  : $icg_count ICG, $sdfh_count SDFH"
+puts " - DRC     : [join $drc_summary {, }]"
 puts " - Margin  : [llength $SYN_MARGIN_EXCEPTIONS] path_adjust -$SYN_MARGIN_PS ps, con sot trong report: $margin_residual"
 puts " - SAIF    : [expr {$SAIF_ANNOTATED ? "co" : "khong (dynamic power khong dung duoc)"}]"
 puts "============================================================"
