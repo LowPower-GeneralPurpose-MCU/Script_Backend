@@ -497,8 +497,23 @@ if {[llength $LVT_CELLS] > 0} {
 set_db / .syn_opt_effort $SYN_EFFORT
 syn_opt
 
-foreach e $SYN_MARGIN_EXCEPTIONS {
-    delete_obj $e
+# Xoa margin theo ten, query lai moi vong: handle luu tu luc tao co the da
+# thanh 'object_deleted' (path_adjust cung -to tren 2 view cua mode_func bi gop).
+set margin_guard 0
+while {1} {
+    set margin_left {}
+    foreach ex [get_db exceptions] {
+        if {[string match syn_margin_* [get_db $ex .base_name]]} {
+            lappend margin_left $ex
+        }
+    }
+    if {[llength $margin_left] == 0} {
+        break
+    }
+    if {[incr margin_guard] > 64} {
+        error "Khong xoa duoc margin: [get_db $margin_left .base_name]"
+    }
+    delete_obj [lindex $margin_left 0]
 }
 
 set icg_count  0
