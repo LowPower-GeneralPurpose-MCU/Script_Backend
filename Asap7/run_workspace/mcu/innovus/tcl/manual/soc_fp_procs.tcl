@@ -323,6 +323,30 @@ proc soc_check_macros {report} {
     return $errors
 }
 
+# Luoi toan chip: M7 doc (via len ring M8), M6 ngang (via xuong M5 de an vao
+# canh doc cua block ring SRAM).  Stripe dung o block ring.
+proc soc_add_mesh {} {
+    setAddStripeMode -reset
+    setAddStripeMode -allow_jog none -break_at {block_ring} -split_vias true \
+        -via_using_exact_crossover_size false \
+        -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
+    addStripe -nets {VDD VSS} -layer M7 -direction vertical \
+        -width $::SOC_MESH_W -spacing $::SOC_MESH_S \
+        -set_to_set_distance $::SOC_MESH_PITCH \
+        -start_from left -start_offset $::SOC_MESH_OFFSET \
+        -snap_wire_center_to_grid Grid
+
+    setAddStripeMode -reset
+    setAddStripeMode -allow_jog none -break_at {block_ring} -split_vias true \
+        -via_using_exact_crossover_size false \
+        -stacked_via_bottom_layer M5 -stacked_via_top_layer M7
+    addStripe -nets {VDD VSS} -layer M6 -direction horizontal \
+        -width $::SOC_MESH_W -spacing $::SOC_MESH_S \
+        -set_to_set_distance $::SOC_MESH_PITCH \
+        -start_from bottom -start_offset $::SOC_MESH_OFFSET \
+        -snap_wire_center_to_grid Grid
+}
+
 # Rail M1 + stripe M5 cho std cell.  Flow Risc_V lam buoc nay SAU placement;
 # lam truoc placement voi strap thap da gay short VDD/VSS o flow do.
 proc soc_stdcell_rails {} {
