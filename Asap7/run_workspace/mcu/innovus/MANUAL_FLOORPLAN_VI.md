@@ -15,13 +15,15 @@ Chạy trong thư mục `Asap7/run_workspace/mcu/innovus`, trên máy Linux có 
 | 0 | Nạp thiết kế, derate, dont_touch TRNG | | |
 | 1 | `floorPlan` + guide mầm | Hierarchy tr. 24–26 | **LÀM TAY 1:** chỉnh guide (< 80%) |
 | 2 | snap guide, `FloorPlan.fp` | tr. 29 | |
-| 3 | Đặt sẵn 84 SRAM + halo | tr. 31–32 | **LÀM TAY 2:** xếp SRAM, Space 4.32 |
-| 4 | snap, kiểm tra, FIXED, `FloorPlan_withMacro.fp` | tr. 36 | |
-| 5 | Ring lõi M8/M9 | | |
-| 6 | Block ring cho từng cụm SRAM | tr. 37–40 | **LÀM TAY 3 (tùy chọn):** xem hoặc làm lại ring |
-| 7 | sroute chân SRAM + lưới M7/M6 | tr. 38, 41 | |
+| 3 | **Ring lõi M8/M9** (chỉ bám mép lõi nên làm trước SRAM) | | tùy chọn: `soc_add_mesh` xem lưới rồi `editDelete -shape STRIPE` |
+| 4 | Đặt sẵn 84 SRAM + halo (báo lỗi nếu còn stripe tạm) | tr. 31–32 | **LÀM TAY 2:** xếp SRAM, Space 4.32 |
+| 5 | snap, kiểm tra, FIXED, `FloorPlan_withMacro.fp` | tr. 36 | |
+| 6 | Block ring từng cụm SRAM (báo lỗi nếu SRAM chưa FIXED) | tr. 37–40 | **LÀM TAY 3 (tùy chọn)** |
+| 7 | sroute chân SRAM + lưới M7/M6 (dừng ở block ring) | tr. 38, 41 | |
 | 8 | Blockage + pin | tr. 38, 9–10 | tùy chọn: đổi cạnh pin |
 | 9 | verify + `saved/top_soc_powerplan.enc` | | |
+
+Thứ tự power theo slide: ring lõi làm trước; block ring và stripe chỉ làm sau khi SRAM đã FIXED. Slide trang 32 cũng chỉ vẽ ring + stripe tạm để tạo PG model, rồi xóa đi trước khi đặt macro.
 
 Mỗi khối (trừ khối 0) được bọc trong `soc_block`: một lệnh lỗi thì cả khối dừng, không chạy tiếp các lệnh phía sau. Cuối file có hướng dẫn chạy lại từ giữa trong session mới, bằng `loadFPlan FloorPlan.fp` hoặc `FloorPlan_withMacro.fp`.
 
