@@ -204306,20 +204306,20 @@
 "object":"/designs/top_soc/instances_seq/u_axi_sdram_s_axi_rid_reg[6]",
 "type":"instance"},
 {"index": "1", 
- "date": "Mon Sep 14 10:47:38 UTC 2026",
- "seconds": 1789382858.099659,
+ "date": "Mon Sep 14 12:10:28 UTC 2026",
+ "seconds": 1789387828.5647209,
  "netlist": "fv/top_soc/fv_map.v.gz", 
  "netlist_exists": "1", 
  "netlist_normalize": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/fv/top_soc/fv_map.v.gz", 
- "netlist_mtime": "1789382832", 
- "netlist_timestamp": "Mon Sep 14 10:47:12 UTC 2026", 
- "netlist_size": "1864746", 
- "netlist_cksum": "3886666436", 
+ "netlist_mtime": "1789387802", 
+ "netlist_timestamp": "Mon Sep 14 12:10:02 UTC 2026", 
+ "netlist_size": "1864747", 
+ "netlist_cksum": "1056131123", 
  "design_name": "top_soc", 
  "synth_workdir": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus", 
  "synthesis_command":"",
  "current_label": "fv_map", 
  "previous_label": "rtl", 
- "write_verif_file_runtime": 26.055739 
+ "write_verif_file_runtime": 25.714572 
  }
 ]
