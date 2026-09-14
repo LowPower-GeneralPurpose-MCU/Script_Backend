@@ -390,6 +390,7 @@ module top_soc (
     // P2c - `fence` tu tang MEM cua core toi D-cache.  Xem cpu_fence trong
     // memory/dcache.v va nhanh 7'b0001111 trong core/block_unit/control_unit.v.
     wire cpu_data_fence;
+    wire cpu_data_block;   // PMP du lieu vi pham (to hop) - xem riscv_pipeline.v trap_data_access
     wire cpu_inst_error, cpu_data_error;   // C1 - loi bus tu cache ve core
     wire [1:0] cpu_data_size;
     wire dbg_halt_req, dbg_resume_req, dbg_halted, dbg_reg_write_en;
@@ -471,6 +472,7 @@ module top_soc (
         .dcache_hit         (cpu_data_hit),
         .dcache_stall       (cpu_data_stall),
         .dcache_error       (cpu_data_error),
+        .dcache_block       (cpu_data_block),
         .mem_size_top       (cpu_data_size),
         .mem_unsigned_top   (cpu_data_unsigned),
         .wfi_sleep_out      (wfi_sleep_state),
@@ -891,6 +893,7 @@ module top_soc (
         .cpu_write_req   (cpu_data_wr_req & ~ls_sel_tcm),
         // KHONG gate bang ~ls_sel_tcm: xem ghi chu ls_sel_*_rsp ben tren.
         .cpu_fence       (cpu_data_fence),
+        .cpu_block       (cpu_data_block),
         .cpu_addr        (cpu_data_addr),
         .cpu_write_data  (cpu_data_wdata),
         .mem_unsigned    (cpu_data_unsigned),
@@ -1041,6 +1044,7 @@ module top_soc (
         .f_stall    (itcm_f_stall),
         .d_rd_req   (cpu_data_rd_req & ls_sel_itcm),
         .d_wr_req   (cpu_data_wr_req & ls_sel_itcm),
+        .d_block    (cpu_data_block),
         .d_addr     (cpu_data_addr),
         .d_wdata    (cpu_data_wdata),
         .d_size     (cpu_data_size),
@@ -1065,6 +1069,7 @@ module top_soc (
         .f_stall    (),
         .d_rd_req   (cpu_data_rd_req & ls_sel_dtcm),
         .d_wr_req   (cpu_data_wr_req & ls_sel_dtcm),
+        .d_block    (cpu_data_block),
         .d_addr     (cpu_data_addr),
         .d_wdata    (cpu_data_wdata),
         .d_size     (cpu_data_size),

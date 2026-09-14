@@ -869,7 +869,12 @@ module execute #(
 endmodule
 
 
-module memory_access (
+module memory_access #(
+    // Phai khop voi main_control_unit / register_file. Khi = 0, decoder coi AMO
+    // la illegal nhung Genus khong tu suy ra `mem_read && mem_write` chi di cung
+    // AMO, nen van giu ca bo ALU AMO (run 2026-09-14: 32/100 path toi han).
+    parameter ENABLE_A_EXTENSION = 0
+) (
     input wire clk,
     input wire reset_n,
     input [31:0] ex_mem_alu_result,
@@ -918,7 +923,8 @@ module memory_access (
     input  dcache_amo_capture
 );
 
-    wire        ex_mem_atomic = (ex_mem_instr[6:0] == 7'b0101111);
+    wire        ex_mem_atomic = (ENABLE_A_EXTENSION != 0) &&
+                                (ex_mem_instr[6:0] == 7'b0101111);
     wire [4:0]  amo_op = ex_mem_instr[31:27];
     wire        amo_lr = ex_mem_atomic && (amo_op == 5'b00010);
     wire        amo_sc = ex_mem_atomic && (amo_op == 5'b00011);

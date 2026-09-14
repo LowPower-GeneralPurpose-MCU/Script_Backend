@@ -211,6 +211,7 @@ module tb_mem_paths;
         force uut.cpu_data_rd_req   = tb_d_rd;
         force uut.cpu_data_wr_req   = tb_d_wr;
         force uut.cpu_data_fence    = tb_d_fence;
+        force uut.cpu_data_block    = 1'b0;
         force uut.cpu_data_addr     = tb_d_addr;
         force uut.cpu_data_wdata    = tb_d_wdata_eff;
         force uut.cpu_data_amo_req  = tb_d_amo;

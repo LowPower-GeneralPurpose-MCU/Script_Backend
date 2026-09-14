@@ -55,6 +55,11 @@ module data_cache #(
     // gia lam fence bang mot lenh doc uncached bat ky (xem T9 cu).
     // -------------------------------------------------------------------------
     input  wire                          cpu_fence,
+    // 2026-09-14 - `cpu_block`: PMP cua lenh o MEM vi pham (to hop tu flop
+    // ex_mem_*).  Chi chan CHUYEN TRANG THAI o IDLE (khong ra bus, khong vao
+    // LOOKUP/store buffer); `dcache_stall` KHONG nhin tin hieu nay.  Chu ky sau
+    // core trap bang ban da dang ky va rut request.  Xem riscv_pipeline.v.
+    input  wire                          cpu_block,
     input  wire [C_M_AXI_ADDR_W-1:0]     cpu_addr,
     input  wire [C_M_AXI_DATA_W-1:0]     cpu_write_data,
     input  wire                          mem_unsigned,
@@ -722,7 +727,10 @@ module data_cache #(
                 // LOOKUP, so even a hit costs one stall cycle.
                 else if (cpu_read_req || cpu_write_req) begin
                     dcache_stall = 1'b1;
-                    if (uncache_en) begin
+                    if (cpu_block) begin
+                        // PMP chan: dung o IDLE, stall giu cao cho toi khi core
+                        // trap va rut request (dung mot chu ky).
+                    end else if (uncache_en) begin
                         // Rule 2.  A device access must not pass a buffered
                         // memory store, so hold here until the last BRESP has
                         // landed.  Re-latching the same req_addr every cycle

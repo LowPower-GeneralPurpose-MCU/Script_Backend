@@ -68,6 +68,8 @@ module riscv_pipeline #(
     input  wire        dcache_hit,
     input  wire        dcache_stall,
     input  wire        dcache_error,   // B2 - loi bus khi truy cap du lieu -> mcause 5/7
+    // PMP du lieu vi pham (to hop): chan dcache/tcm bat dau truy cap. Xem trap_data_access.
+    output wire        dcache_block,
 
     output wire [1:0]  mem_size_top,
     output wire        mem_unsigned_top,
@@ -455,11 +457,40 @@ module riscv_pipeline #(
     // bong khong sinh trap - cung ly do voi irq_ok (khoan no C).
     // -------------------------------------------------------------------------
     // PMP: ex_mem_fault con mang loi lay lenh do PMP-X (gop o cong ID/EX), va
-    // pmp_d_fault gop vao loi du lieu - cung mcause 1/5/7 voi loi bus, dung
-    // nhu dac ta. pmp_d_fault tinh tu flop (ex_mem_alu_result, CSR PMP) nen no
-    // chan duoc yeu cau D-cache qua commit_kill ma khong tao vong to hop.
+    // loi PMP du lieu gop vao loi du lieu - cung mcause 1/5/7 voi loi bus.
+    //
+    // 2026-09-14 - LOI PMP DU LIEU DI QUA MOT THANH GHI.
+    // Truoc: pmp_d_fault (~1.8 ns so sanh) -> trap_enter -> commit_kill -> rut
+    // request D-cache -> dcache_stall -> enable IF_ID.  Genus 2026-09-14: 13/100
+    // path toi han (EX_MEM_alu_result -> IF_ID_instr, 3.66 ns).
+    //
+    // Moi truy cap load/store deu nam it nhat MOT chu ky o IDLE (dcache) /
+    // S_IDLE (tcm) voi stall = 1 va chua tac dung phu nao ngoai chuyen trang
+    // thai.  Nen:
+    //   chu ky 1: dcache_block (to hop) chi chan chuyen trang thai / cap macro;
+    //             stall khong phu thuoc no, commit_kill cung khong.
+    //   chu ky 2: pmp_d_fault_q (flop) hop le vi ex_mem giu nguyen suot chu ky
+    //             stall (stall_ex_mem = dcache_stall, flush_ex_mem co ~mem_freeze)
+    //             -> trap -> commit_kill rut request -> stall ha -> trap commit.
+    // Truy cap hop le khong ton them chu ky nao; truy cap bi cam ton them mot.
+    // Cau hinh PMP chi doi qua lenh ghi CSR o MEM, ma lenh o MEM luc do la chinh
+    // load/store nay, nen ket qua da dang ky khong the cu.
+    reg  pmp_d_fault_q, pmp_d_held_q;
+    always @(posedge clk or negedge reset_n) begin
+        if (!reset_n) begin
+            pmp_d_fault_q <= 1'b0;
+            pmp_d_held_q  <= 1'b0;
+        end else begin
+            pmp_d_fault_q <= pmp_d_fault;
+            pmp_d_held_q  <= dcache_stall;
+        end
+    end
+    wire pmp_d_fault_now = ex_mem_valid & ex_mem_is_mem & pmp_d_fault;
+    assign dcache_block  = pmp_d_fault_now;
+
     wire trap_instr_access = ex_mem_valid & ex_mem_fault;
-    wire trap_data_access  = ex_mem_valid & ex_mem_is_mem & (dcache_error | pmp_d_fault);
+    wire trap_data_access  = ex_mem_valid & ex_mem_is_mem &
+                             (dcache_error | (pmp_d_fault_q & pmp_d_held_q));
     wire trap_st_access    = trap_data_access &  ex_mem_mem_write;
     wire trap_ld_access    = trap_data_access & ~ex_mem_mem_write;
 
