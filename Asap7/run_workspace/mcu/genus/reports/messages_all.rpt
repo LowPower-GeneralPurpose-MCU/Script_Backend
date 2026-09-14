@@ -4,6 +4,9 @@
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 |    Id     |  Sev  |Count|                                                                        Message Text                                                                         |
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|CDFG-508   |Warning|    4|Removing unused register.                                                                                                                                    |
+|           |       |     |Genus removes the flip-flop or latch inferred for an unused signal or variable. To preserve the flip-flop or latch, set the hdl_preserve_unused_registers    |
+|           |       |     | attribute to true or use a pragma in the RTL.                                                                                                               |
 |CFM-1      |Info   |    1|Wrote dofile.                                                                                                                                                |
 |CFM-5      |Info   |    1|Wrote formal verification information.                                                                                                                       |
 |CG-400     |Info   |   20|Removed a clock-gating instance.                                                                                                                             |
@@ -48,6 +51,11 @@
 |           |       |     | (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).                                                 |
 |LBR-714    |Warning|    2|Inconsistency detected among the units specified in the timing libraries being used.                                                                         |
 |           |       |     |Default system time/capacitance unit will be used.                                                                                                           |
+|LIC-1      |Info   |    1|Limited access feature.                                                                                                                                      |
+|           |       |     |Final production licensing of this limited access feature has not been determined and is subject to change. Usage and support of this limited access feature |
+|           |       |     | are subject to prior agreement with Cadence. In addition, Cadence assumes you understand the feature limitations and expected results. Contact your Cadence |
+|           |       |     | representative if you have any questions.                                                                                                                   |
+|LIC-5      |Warning|    1|Limited access feature unavailable.                                                                                                                          |
 |MAP-32     |Info   |    2|Relaxed some design requirements on sequential instances to run synthesis successfully.                                                                      |
 |           |       |     |To see the list of relaxed sequential instances, set the 'information_level' attribute to 2 or above. If the message is truncated set the message attribute  |
 |           |       |     | 'truncate' to false to see the complete list.                                                                                                               |
@@ -101,7 +109,6 @@
 |SYNTH-33   |Warning|    1|The selected flow setting will be removed in a future release.                                                                                               |
 |           |       |     |Contact Cadence support to understand current flows.                                                                                                         |
 |TIM-21     |Info   |    1|Removed preserve settings that are no longer part of a combinational loop.                                                                                   |
-|TUI-32     |Warning|    1|This attribute will be obsolete in a next major release.                                                                                                     |
 |TUI-296    |Info   |    1|The given (sub)design is already uniquified.                                                                                                                 |
 |           |       |     |Try running the 'edit_netlist uniquify' command on the parent hierarchy of this (sub)design, if there exists any.                                            |
 |TUI-744    |Info   |    8|Timing analysis will be done for this view.                                                                                                                  |
