@@ -204901,20 +204901,20 @@
 "object":"/designs/top_soc/instances_seq/u_axi_sdram_s_axi_rid_reg[6]",
 "type":"instance"},
 {"index": "1", 
- "date": "Mon Sep 14 06:59:45 UTC 2026",
- "seconds": 1789369185.595412,
+ "date": "Mon Sep 14 08:20:01 UTC 2026",
+ "seconds": 1789374001.74904,
  "netlist": "fv/top_soc/fv_map.v.gz", 
  "netlist_exists": "1", 
  "netlist_normalize": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/fv/top_soc/fv_map.v.gz", 
- "netlist_mtime": "1789369158", 
- "netlist_timestamp": "Mon Sep 14 06:59:18 UTC 2026", 
+ "netlist_mtime": "1789373975", 
+ "netlist_timestamp": "Mon Sep 14 08:19:35 UTC 2026", 
  "netlist_size": "1881816", 
- "netlist_cksum": "3022427032", 
+ "netlist_cksum": "2627310493", 
  "design_name": "top_soc", 
  "synth_workdir": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus", 
  "synthesis_command":"",
  "current_label": "fv_map", 
  "previous_label": "rtl", 
- "write_verif_file_runtime": 26.885737 
+ "write_verif_file_runtime": 26.139395 
  }
 ]
