@@ -1,11 +1,11 @@
 constant 0                       8348
 constant 1                        791
 merged                            375
-unloaded                         5146
-TOTAL                           14660
+unloaded                         5245
+TOTAL                           14759
 
 u_axi_interconnect              13598
-u_core                            436
+u_core                            533
 u_axi_apb_dma                     170
 u_axi_apb_dma_u_dma_engine         96
 u_axi_sdram                        54
@@ -18,9 +18,9 @@ u_axi_flash                        23
 u_apb_i2c                          22
 u_axi_to_apb                       21
 u_dtm_axi                          10
+u_dcache                           10
 u_clint                             9
 u_debug_module                      8
-u_dcache                            8
 u_axi_to_apb_u_cmd_fifo             4
 u_apb_uart                          3
 u_apb_uart1                         3
