@@ -1,5 +1,5 @@
 ############################################################
-## Proc dung chung cho floorplan bang tay (01/02/03)
+## Proc dung chung cho tcl/manual/innovus_soc.tcl
 ## Can soc_fp_config.tcl va project_config.tcl da source.
 ############################################################
 
@@ -7,6 +7,14 @@ proc soc_banner {text} {
     puts "============================================================"
     puts $text
     puts "============================================================"
+}
+
+# Chay mot khoi lenh o muc global.  Lenh nao loi thi ca khoi dung ngay, ke ca
+# khi khoi duoc paste vao console (paste tung dong thi lenh sau van chay).
+proc soc_block {title body} {
+    soc_banner ">>> $title"
+    uplevel #0 $body
+    puts ">>> XONG: $title"
 }
 
 proc soc_snap_up {value grid} {

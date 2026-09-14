@@ -33,7 +33,7 @@ if {[llength $missing] > 0} {
 check_top_io_handoff $SYN_NETLIST $SYN_SDC
 
 # Hai master SRAM: 80 x 256x4x32 (RAM, cache data, TCM) + 4 x 128x4x20 (tag).
-# Kich thuoc LEF duoc ghim vi macro_floorplan.tcl tinh luoi tu chung.
+# Kich thuoc LEF duoc ghim vi floorplan (tcl/manual/soc_fp_procs.tcl) tinh luoi tu chung.
 foreach {master expected lib lef size_pattern} [list \
     $SRAM_MASTER     $SRAM_EXPECTED_COUNT     $SRAM_LIB     $SRAM_LEF \
         {SIZE[ \t]+121\.392[ \t]+BY[ \t]+172\.8} \

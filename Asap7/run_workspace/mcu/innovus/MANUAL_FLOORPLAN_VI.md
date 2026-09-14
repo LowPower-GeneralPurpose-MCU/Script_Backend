@@ -2,33 +2,38 @@
 
 Flow này đi theo đúng các bước trong slide của thầy (ROHM 180 nm), nhưng lệnh và layer đã đổi sang ASAP7. Các con số lấy từ hai flow đã route sạch trong repo: `Risc_V/innovus` và `sram_axi/innovus`.
 
-Flow tự động cũ (`tcl/innovus.tcl` + `macro_floorplan.tcl`) vẫn giữ nguyên. Cả hai flow dùng chung `tcl/init_common.tcl`.
+Mọi bước nằm trong **một file `tcl/innovus.tcl`**, chia thành KHỐI 0–9. Ở các chỗ `[LAM TAY]`, comment trong file ghi thao tác GUI kèm lệnh tương đương. File cũ `macro_floorplan.tcl` (xếp SRAM tự động) không còn được gọi.
 
 ## Chạy
 
-Mọi lệnh chạy trong thư mục `Asap7/run_workspace/mcu/innovus`, trên máy Linux có license.
+Chạy trong thư mục `Asap7/run_workspace/mcu/innovus`, trên máy Linux có license.
 
-| Bước | Slide | Mở session | Sau khi chỉnh GUI, gõ trong console Innovus |
+**Cách 1 – làm tay, giống slide:** chạy `innovus`, rồi copy từng khối trong `tcl/innovus.tcl` paste vào console.
+
+| Khối | Việc | Slide | Sau khối này |
 |---|---|---|---|
-| 1. Hierarchy FP | Hierarchy tr. 24–29 | `innovus -files tcl/manual/01_hierFP.tcl` | `source tcl/manual/01_finish_hierFP.tcl` |
-| 2. Đặt SRAM | Hierarchy tr. 31–36, Macro tr. 7–14 | `innovus -files tcl/manual/02_planning.tcl` | `source tcl/manual/02_finish_planning.tcl` |
-| 3. Power grid + pin | Hierarchy tr. 37–41, 9–10 | `innovus -files tcl/manual/03_powerGrid.tcl` | tự chạy hết; muốn dừng sau ring thì đặt `MCU_STOP_AFTER_RINGS=1` |
+| 0 | Nạp thiết kế, derate, dont_touch TRNG | | |
+| 1 | `floorPlan` + guide mầm | Hierarchy tr. 24–26 | **LÀM TAY 1:** chỉnh guide (< 80%) |
+| 2 | snap guide, `FloorPlan.fp` | tr. 29 | |
+| 3 | Đặt sẵn 84 SRAM + halo | tr. 31–32 | **LÀM TAY 2:** xếp SRAM, Space 4.32 |
+| 4 | snap, kiểm tra, FIXED, `FloorPlan_withMacro.fp` | tr. 36 | |
+| 5 | Ring lõi M8/M9 | | |
+| 6 | Block ring cho từng cụm SRAM | tr. 37–40 | **LÀM TAY 3 (tùy chọn):** xem hoặc làm lại ring |
+| 7 | sroute chân SRAM + lưới M7/M6 | tr. 38, 41 | |
+| 8 | Blockage + pin | tr. 38, 9–10 | tùy chọn: đổi cạnh pin |
+| 9 | verify + `saved/top_soc_powerplan.enc` | | |
 
-Mỗi bước sinh ra các file sau:
+Mỗi khối (trừ khối 0) được bọc trong `soc_block`: một lệnh lỗi thì cả khối dừng, không chạy tiếp các lệnh phía sau. Cuối file có hướng dẫn chạy lại từ giữa trong session mới, bằng `loadFPlan FloorPlan.fp` hoặc `FloorPlan_withMacro.fp`.
 
-- **Bước 1:** `outputs/FloorPlan.fp`, `saved/top_soc_hierFP.enc`, `reports/guide_util_hierFP*.rpt`
-- **Bước 2:** `outputs/FloorPlan_withMacro.fp`, `saved/top_soc_macroFP.enc`, `reports/sram_macro_check*.rpt`
-- **Bước 3:** `saved/top_soc_powerplan.enc`, `verify_rpt/connectivity_powerplan.rpt`, `verify_rpt/drc_powerplan.rpt`
+**Cách 2 – chạy một mạch** (không chỉnh tay, dùng vị trí mầm): `innovus -files tcl/innovus.tcl`
 
 Các biến môi trường điều khiển flow:
 
 - **`MCU_CORE_WIDTH_UM` / `MCU_CORE_HEIGHT_UM`:** ép kích thước lõi.
 - **`MCU_TARGET_STD_UTIL`:** mặc định 0.55.
-- **`MCU_RUN_PROTO_DESIGN=1`:** dùng `proto_design` như slide. Cần license `invs_ehfs`, flow Risc_V báo không có.
-- **`MCU_REUSE_MACRO_FP=1`:** ở bước 2, nạp lại `FloorPlan_withMacro.fp` đã duyệt thay vì đặt mầm mới.
-- **`MCU_RAILS_BEFORE_PLACE=1`:** làm rail M1 và stripe M5 ngay ở bước 3, như slide.
+- **`MCU_RUN_PROTO_DESIGN=1`:** dùng `proto_design` như slide. Cần license `invs_ehfs`.
 
-Muốn đổi nhóm SRAM, guide, khe, halo hay layer ring thì chỉ sửa `tcl/manual/soc_fp_config.tcl`.
+Muốn đổi nhóm SRAM, guide, khe, halo hay layer ring thì sửa `tcl/manual/soc_fp_config.tcl`. Đổi cạnh pin thì sửa `tcl/manual/soc_pins.tcl`.
 
 ## Slide ROHM → ASAP7
 
@@ -49,7 +54,7 @@ Muốn đổi nhóm SRAM, guide, khe, halo hay layer ring thì chỉ sửa `tcl/
 1. **Hai loại SRAM** (80 × 256x4x32 và 4 × 128x4x20) chia thành 4 cụm: RAM_LO, RAM_HI, CACHE (cache + TCM) và TAG.
    - `soc_check_groups` bắt lỗi khi một macro thiếu nhóm hoặc nằm ở hai nhóm.
    - Mỗi cụm có block ring riêng.
-2. **Derate SRAM** (`set_timing_derate` SS/FF) phải khớp với Genus. Phần này nằm trong `init_common.tcl`.
+2. **Derate SRAM** (`set_timing_derate` SS/FF) phải khớp với Genus. Phần này nằm trong `tcl/init_common.tcl` (KHỐI 0).
 3. **`set_max_fanout 1` trên output SRAM** (slide Hierarchy trang 36). Phần này cũng nằm trong `init_common.tcl`.
 4. **15 clock** (CLK_SYS, TCK, SDRAM_OUT + 12 gated). Script kiểm tra đủ 15; flow cũ đòi ≥ 18 nên sẽ báo lỗi với netlist hiện tại.
 5. **TRNG ring oscillator** (7 cell) cần `set_dont_touch` trong Innovus. Nếu thiếu, optDesign có thể resize hoặc chèn buffer vào vòng. Nên đặt 7 cell này sát nhau, cạnh `u_apb_ascon_u_ascon`.
