@@ -497,13 +497,16 @@ if {[llength $LVT_CELLS] > 0} {
 set_db / .syn_opt_effort $SYN_EFFORT
 syn_opt
 
-# Xoa margin theo ten, query lai moi vong: handle luu tu luc tao co the da
-# thanh 'object_deleted' (path_adjust cung -to tren 2 view cua mode_func bi gop).
+# Xoa margin sau syn_opt. Genus gop 8 path_adjust thanh 'zipped_path_adjust_N'
+# (run 2026-09-14: ten syn_margin_* bien mat, report van con -100 ps), nen bat
+# ca hai dang ten; flow khong tao path_adjust nao khac. Query lai moi vong.
 set margin_guard 0
 while {1} {
     set margin_left {}
     foreach ex [get_db exceptions] {
-        if {[string match syn_margin_* [get_db $ex .base_name]]} {
+        set ex_name [get_db $ex .base_name]
+        if {[string match syn_margin_* $ex_name] ||
+            [string match zipped_path_adjust_* $ex_name]} {
             lappend margin_left $ex
         }
     }
@@ -514,6 +517,16 @@ while {1} {
         error "Khong xoa duoc margin: [get_db $margin_left .base_name]"
     }
     delete_obj [lindex $margin_left 0]
+}
+set margin_residual 0
+if {$SYN_MARGIN_PS > 0} {
+    report_timing -max_paths 50 > ./reports/margin_check_syn.rpt
+    set fp [open ./reports/margin_check_syn.rpt r]
+    set margin_residual [regexp -all -- {path_adjust} [read $fp]]
+    close $fp
+    if {$margin_residual > 0} {
+        puts "WARNING: margin chua xoa het ($margin_residual path con path_adjust) - slack trong report bi tru them $SYN_MARGIN_PS ps"
+    }
 }
 
 set icg_count  0
@@ -645,6 +658,6 @@ puts "GENUS MCU SYNTHESIS COMPLETED"
 puts " - Netlist : [file normalize $MAPPED_NETLIST]"
 puts " - SRAM    : [join $sram_summary { + }]"
 puts " - Gating  : $icg_count ICG, $sdfh_count SDFH"
-puts " - Margin  : [llength $SYN_MARGIN_EXCEPTIONS] path_adjust -$SYN_MARGIN_PS ps"
+puts " - Margin  : [llength $SYN_MARGIN_EXCEPTIONS] path_adjust -$SYN_MARGIN_PS ps, con sot trong report: $margin_residual"
 puts " - SAIF    : [expr {$SAIF_ANNOTATED ? "co" : "khong (dynamic power khong dung duoc)"}]"
 puts "============================================================"
