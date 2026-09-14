@@ -51,11 +51,6 @@
 |           |       |     | (via nom_process,nom_voltage and nom_temperature respectively), or by the default PVT values (1.0,1.0,1.0).                                                 |
 |LBR-714    |Warning|    2|Inconsistency detected among the units specified in the timing libraries being used.                                                                         |
 |           |       |     |Default system time/capacitance unit will be used.                                                                                                           |
-|LIC-1      |Info   |    1|Limited access feature.                                                                                                                                      |
-|           |       |     |Final production licensing of this limited access feature has not been determined and is subject to change. Usage and support of this limited access feature |
-|           |       |     | are subject to prior agreement with Cadence. In addition, Cadence assumes you understand the feature limitations and expected results. Contact your Cadence |
-|           |       |     | representative if you have any questions.                                                                                                                   |
-|LIC-5      |Warning|    1|Limited access feature unavailable.                                                                                                                          |
 |MAP-32     |Info   |    2|Relaxed some design requirements on sequential instances to run synthesis successfully.                                                                      |
 |           |       |     |To see the list of relaxed sequential instances, set the 'information_level' attribute to 2 or above. If the message is truncated set the message attribute  |
 |           |       |     | 'truncate' to false to see the complete list.                                                                                                               |

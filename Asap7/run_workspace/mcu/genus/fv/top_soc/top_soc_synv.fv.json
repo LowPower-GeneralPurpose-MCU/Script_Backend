@@ -203795,20 +203795,20 @@
 "object":"/designs/top_soc/instances_seq/u_axi_sdram_write_data_hold_reg[30]",
 "type":"instance"},
 {"index": "2", 
- "date": "Mon Sep 14 11:13:32 UTC 2026",
- "seconds": 1789384412.3161838,
+ "date": "Mon Sep 14 12:36:16 UTC 2026",
+ "seconds": 1789389376.3045309,
  "netlist": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v", 
  "netlist_exists": "1", 
  "netlist_normalize": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v", 
- "netlist_mtime": "1789384354", 
- "netlist_timestamp": "Mon Sep 14 11:12:34 UTC 2026", 
+ "netlist_mtime": "1789389314", 
+ "netlist_timestamp": "Mon Sep 14 12:35:14 UTC 2026", 
  "netlist_size": "21012205", 
- "netlist_cksum": "565187441", 
+ "netlist_cksum": "1211345348", 
  "design_name": "top_soc", 
  "synth_workdir": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus", 
  "synthesis_command":"",
  "current_label": "top_soc_synv", 
  "previous_label": "fv_map", 
- "write_verif_file_runtime": 24.928853 
+ "write_verif_file_runtime": 24.332333 
  }
 ]
