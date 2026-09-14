@@ -41,7 +41,8 @@ proc soc_group_records {group} {
         }
         set records {}
         foreach ptr [dbGet -p2 top.insts.cell.name [soc_master_name $kind]] {
-            set inst [dbGet $ptr.name]
+            # dbGet tra ve list: ten co [0] bi boc {...} neu khong lindex
+            set inst [lindex [dbGet $ptr.name] 0]
             foreach prefix $prefixes {
                 if {[string first $prefix $inst] == 0} {
                     lappend records [list $inst $ptr]
@@ -110,7 +111,9 @@ proc soc_group_dims {group} {
 proc soc_std_area_by_top_inst {} {
     set ptrs [dbGet -p2 top.insts.cell.baseClass core]
     set areas [dict create]
-    foreach inst [dbGet $ptrs.name] area [dbGet $ptrs.cell.area] {
+    # libCell khong co thuoc tinh 'area' (IMPDBTCL-204) -> size_x * size_y
+    foreach inst [dbGet $ptrs.name] sx [dbGet $ptrs.cell.size_x] sy [dbGet $ptrs.cell.size_y] {
+        set area [expr {double($sx) * double($sy)}]
         set top [lindex [split $inst /] 0]
         if {$top eq $inst} {
             set top __top_glue__
@@ -248,7 +251,7 @@ proc soc_report_guides {areas report} {
         set guides {}
     }
     foreach guide_ptr $guides {
-        set name [dbGet $guide_ptr.name]
+        set name [lindex [dbGet $guide_ptr.name] 0]
         lassign [lindex [dbGet $guide_ptr.box] 0] x0 y0 x1 y1
         set garea [expr {($x1 - $x0) * ($y1 - $y0)}]
         if {![dict exists $areas $name]} {
