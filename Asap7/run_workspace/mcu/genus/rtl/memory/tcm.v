@@ -55,6 +55,7 @@ module tcm #(
     // --- Port D: load/store, higher priority -------------------------------
     input  wire                    d_rd_req,
     input  wire                    d_wr_req,
+    input  wire                    d_block,
     input  wire [ADDR_WIDTH-1:0]   d_addr,
     input  wire [DATA_WIDTH-1:0]   d_wdata,
     input  wire [1:0]              d_size,
@@ -156,7 +157,9 @@ module tcm #(
 
     // Port D wins, except against a fetch that already lost once.
     wire f_priority = fetch_req && f_starved;
-    wire grant_d    = data_req && !f_priority;
+    // d_block (PMP, xem dcache.v cpu_block): khong cap macro cho truy cap bi
+    // cam - mot write full-word se ghi ngay o S_IDLE.  d_stall khong doi.
+    wire grant_d    = data_req && !d_block && !f_priority;
     wire grant_f    = fetch_req && (!data_req || f_starved);
     wire start      = (state == S_IDLE) && (grant_d || grant_f);
 

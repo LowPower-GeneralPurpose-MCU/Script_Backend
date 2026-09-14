@@ -114,6 +114,27 @@ module tb_irq_pmp;
             !uut.u_core.dcache_stall)
             pmp_fwd_cnt = pmp_fwd_cnt + 1;
 
+    // ---- P12: truy cap bi PMP chan KHONG BAO GIO ra bus -----------------------
+    // 2026-09-14 loi PMP du lieu di qua thanh ghi (riscv_pipeline.v), chi
+    // `dcache_block` to hop chan truy cap o chu ky dau.  mcause dung chua du:
+    // phai chac AR/AW khong bat len.  Tu luc entry2 (NA4 0x2002_0100) khoa:
+    //   AR/AW toi 0x2002_0100               -> ro ri
+    //   AW trong [0x2002_0200, 0x2002_0300) -> ro ri (entry1 TOR chi R)
+    integer pmp_leak_cnt = 0;
+    always @(posedge clk)
+        if (rst_n && uut.u_core.PMP.cfg_q[2][7]) begin
+            if (uut.dc_arvalid && uut.dc_araddr == 32'h2002_0100) begin
+                pmp_leak_cnt = pmp_leak_cnt + 1;
+                $display("[TB][LEAK] t=%0t AR 0x%08h", $time, uut.dc_araddr);
+            end
+            if (uut.dc_awvalid &&
+                (uut.dc_awaddr == 32'h2002_0100 ||
+                 (uut.dc_awaddr >= 32'h2002_0200 && uut.dc_awaddr < 32'h2002_0300))) begin
+                pmp_leak_cnt = pmp_leak_cnt + 1;
+                $display("[TB][LEAK] t=%0t AW 0x%08h", $time, uut.dc_awaddr);
+            end
+        end
+
     task automatic wait_t2(input [31:0] v);
         integer waited;
         begin
@@ -172,6 +193,7 @@ module tb_irq_pmp;
         chk32("P10 fetch vung khoa X=0: mtval = PC",      X(25), FUNC_NOX);
         chk32("P11 pmpaddr8 (entry >= 8) chi doc 0",      X(26), 32'd0);
         chk32("P11 pmpcfg2 chi doc 0",                    X(27), 32'd0);
+        chk("P12 truy cap bi PMP chan khong ra bus (AR/AW)", pmp_leak_cnt == 0);
 
         // ------------------------------------------------------------ pha 2
         wait_t2(2);

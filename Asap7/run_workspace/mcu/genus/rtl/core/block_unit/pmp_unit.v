@@ -39,10 +39,11 @@
 //
 // Tu cach kiem tra (ca hai cong giong nhau, chi khac dia chi):
 //   * Cong DU LIEU (tang MEM, dia chi = ex_mem_alu_result). Vi pham -> access
-//     fault mcause 5 (load) / 7 (store), mtval = dia chi. Loi di vao trap_enter,
-//     trap_enter la commit_kill cua tang MEM, nen yeu cau D-cache/TCM bi CHAN
-//     ngay trong chu ky do - truy cap bi cam KHONG BAO GIO ra toi bus, ke ca
-//     mot lenh doc MMIO co tac dung phu (pop FIFO).
+//     fault mcause 5 (load) / 7 (store), mtval = dia chi. Tu 2026-09-14 d_fault
+//     KHONG con vao thang trap_enter: chu ky dau no chan D-cache/TCM bat dau
+//     truy cap (dcache_block), chu ky sau ban da dang ky moi gay trap (xem
+//     riscv_pipeline.v trap_data_access). Truy cap bi cam van KHONG BAO GIO ra
+//     toi bus, ke ca mot lenh doc MMIO co tac dung phu (pop FIFO) - tb_irq_pmp P12.
 //   * Cong LAY LENH (tang ID, dia chi = if_id_pc_in - mot THANH GHI). Vi pham
 //     di chung bit loi lay lenh da co (B3) -> mcause 1, mtval = PC. Kiem o ID
 //     thay vi o IF de khong chen them bo so sanh vao sau PC-mux (duong toi han

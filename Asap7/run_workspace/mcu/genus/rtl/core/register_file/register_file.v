@@ -272,10 +272,12 @@ module csr_register_file (
     //                (cpu_write_req)` - doc thang, phan GHI bi nuot im lang.
     //                Vi vay MAC DINH tat A. Khi nao data_cache co FSM
     //                AMO_READ -> ALU -> AMO_WRITE (va AWLOCK that) thi bat
-    //                ENABLE_A_EXTENSION len 1 O CA HAI NOI:
+    //                ENABLE_A_EXTENSION len 1 O CA BA NOI:
     //                  - localparam ENABLE_A_EXTENSION o day
     //                  - parameter  ENABLE_A_EXTENSION cua main_control_unit
-    //                Hai noi phai khop, neu khong MISA lai lech voi decoder.
+    //                  - parameter  ENABLE_A_EXTENSION cua memory_access
+    //                Ba noi phai khop, neu khong MISA lai lech voi decoder, hoac
+    //                MEM bo qua AMO ma decoder da cho qua.
     // =====================================================================
     localparam ENABLE_A_EXTENSION = 0;   // xem ghi chu tren truoc khi bat len 1
 

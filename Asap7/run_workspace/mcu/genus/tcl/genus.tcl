@@ -491,11 +491,17 @@ if {[llength $LVT_CELLS] > 0} {
     foreach cell_obj $LVT_CELLS {
         set_db $cell_obj .dont_use false
     }
-    set_db / .leakage_power_effort high
+    # TUI-32: leakage_power_effort bi bo, thay bang design_power_effort.
+    set_db / .design_power_effort high
 }
 
 set_db / .syn_opt_effort $SYN_EFFORT
-syn_opt
+# SYNTH-33: 'syn_opt' tron se bi bo. Option sai thi loi ngay khi parse,
+# chua toi uu gi, nen fallback ve dang cu la an toan.
+if {[catch {syn_opt -logical} syn_opt_err]} {
+    puts "WARNING: syn_opt -logical khong chay ($syn_opt_err), dung syn_opt"
+    syn_opt
+}
 
 # Xoa margin sau syn_opt. Genus gop 8 path_adjust thanh 'zipped_path_adjust_N'
 # (run 2026-09-14: ten syn_margin_* bien mat, report van con -100 ps), nen bat

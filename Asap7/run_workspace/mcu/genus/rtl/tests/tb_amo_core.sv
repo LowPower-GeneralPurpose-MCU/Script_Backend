@@ -16,6 +16,7 @@
 module tb_amo_core;
 
     defparam uut.u_core.ID.MCU.ENABLE_A_EXTENSION = 1;
+    defparam uut.u_core.MEM.ENABLE_A_EXTENSION    = 1;
 
     localparam integer TIMEOUT_NS = 400_000;
 
