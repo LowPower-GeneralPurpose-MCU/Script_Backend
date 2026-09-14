@@ -1,0 +1,40 @@
+constant 0                       8348
+constant 1                        791
+merged                            375
+unloaded                         5146
+TOTAL                           14660
+
+u_axi_interconnect              13598
+u_core                            436
+u_axi_apb_dma                     170
+u_axi_apb_dma_u_dma_engine         96
+u_axi_sdram                        54
+u_axi_ram_lo                       47
+u_axi_ram_hi                       47
+u_apb_cordic                       31
+u_axi_rom                          30
+u_clic                             25
+u_axi_flash                        23
+u_apb_i2c                          22
+u_axi_to_apb                       21
+u_dtm_axi                          10
+u_clint                             9
+u_debug_module                      8
+u_dcache                            8
+u_axi_to_apb_u_cmd_fifo             4
+u_apb_uart                          3
+u_apb_uart1                         3
+u_apb_spi                           2
+u_apb_syscon                        1
+u_axi_to_apb_r_len_reg_reg[5]        1
+u_axi_to_apb_r_len_reg_reg[6]        1
+u_axi_to_apb_r_len_reg_reg[7]        1
+u_axi_to_apb_w_len_reg_reg[5]        1
+u_axi_to_apb_w_len_reg_reg[6]        1
+u_axi_to_apb_w_len_reg_reg[7]        1
+u_jtag_dtm                          1
+u_axi_to_apb_r_prot_reg_reg[1]        1
+u_axi_to_apb_r_prot_reg_reg[2]        1
+u_axi_to_apb_w_prot_reg_reg[1]        1
+u_axi_to_apb_req_r_reg              1
+u_axi_to_apb_apb_fsm_reg[1]         1
