@@ -246,6 +246,20 @@ proc soc_snap_group {group} {
     return $moved
 }
 
+# Ring loi M8/M9 (KHOI 2) phai du 2 doan M8 + 2 doan M9 cho moi net.
+proc soc_check_core_ring {} {
+    foreach net {VDD VSS} {
+        set rings [dbGet -e -p [dbGet -p top.nets.name $net].sWires.shape ring]
+        set layers [expr {[llength $rings] ? [dbGet $rings.layer.name] : {}}]
+        set n8 [llength [lsearch -all -exact $layers M8]]
+        set n9 [llength [lsearch -all -exact $layers M9]]
+        puts "Ring loi $net: $n8 doan M8, $n9 doan M9"
+        if {$n8 < 2 || $n9 < 2} {
+            error "Ring loi $net thieu (M8=$n8 M9=$n9) - chua chay KHOI 2 hoac addRing loi (xem innovus.log)"
+        }
+    }
+}
+
 # Luu vi tri 84 SRAM (sau khi xep tay) ra file Tcl de lan sau KHOI 3 nap lai.
 proc soc_save_sram_place {{file ""}} {
     if {$file eq ""} {
@@ -666,8 +680,19 @@ proc soc_free_intervals {lo hi blocked} {
 # Vi tri cap VDD/VSS van theo luoi chung (goc loi + OFFSET + k*PITCH); cac vi tri
 # lien tiep co cung doan tu do gop vao mot lenh addStripe -area.
 # Doan tu do chay tu mep die den mep die (cat qua ring loi), editTrim cat phan thua.
-proc soc_mesh_layer {layer dir keepouts} {
-    set pair [expr {2.0 * $::SOC_MESH_W + $::SOC_MESH_S}]
+# shape = {rong trong pitch offset} (mac dinh luoi SOC_MESH_*).  extra = them vi
+# tri cap o sat canh trai/phai (hoac duoi/tren) cua moi keepout, de kenh hep giua
+# hai cum van co 1 cap; vi tri luoi qua gan vi tri extra thi bo.
+proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0}} {
+    set snap_opts {}
+    if {[llength $shape] == 0} {
+        set shape [list $::SOC_MESH_W $::SOC_MESH_S $::SOC_MESH_PITCH $::SOC_MESH_OFFSET]
+    } else {
+        # Day mong 0.096/0.288: snap vao track co the lam lech spacing (nhu sram_axi)
+        set snap_opts {-allow_snapping_override_custom_spacing 1}
+    }
+    lassign $shape W S pitch offset
+    set pair [expr {2.0 * $W + $S}]
     set E $::SOC_PG_EPS
     set min_len [expr {2.0 * $::SOC_MACRO_GAP}]
     lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
@@ -677,9 +702,42 @@ proc soc_mesh_layer {layer dir keepouts} {
     } else {
         lassign [list $cy0 $cy1 [expr {$dx0 + $E}] [expr {$dx1 - $E}] bottom] c0 c1 s0 s1 from
     }
+    set edge_pos {}
+    if {$extra} {
+        foreach k $keepouts {
+            lassign $k kx0 ky0 kx1 ky1
+            lassign [expr {$dir eq "vertical" ? [list $kx0 $kx1] : [list $ky0 $ky1]}] a0 a1
+            foreach p [list [expr {$a0 - 2.0 * $E - $pair}] [expr {$a1 + 2.0 * $E}]] {
+                if {$p < $c0 || $p + $pair > $c1} {
+                    continue
+                }
+                set near 0
+                foreach q $edge_pos {
+                    if {abs($p - $q) < $pair + $S} {
+                        set near 1
+                    }
+                }
+                if {!$near} {
+                    lappend edge_pos $p
+                }
+            }
+        }
+    }
+    set positions $edge_pos
+    for {set pos [expr {$c0 + $offset}]} {$pos + $pair <= $c1 + 1e-6} \
+        {set pos [expr {$pos + $pitch}]} {
+        set near 0
+        foreach q $edge_pos {
+            if {abs($pos - $q) < $pair + $S} {
+                set near 1
+            }
+        }
+        if {!$near} {
+            lappend positions $pos
+        }
+    }
     set groups {}
-    for {set pos [expr {$c0 + $::SOC_MESH_OFFSET}]} {$pos + $pair <= $c1 + 1e-6} \
-        {set pos [expr {$pos + $::SOC_MESH_PITCH}]} {
+    foreach pos [lsort -real $positions] {
         set blocked {}
         foreach k $keepouts {
             lassign $k kx0 ky0 kx1 ky1
@@ -698,7 +756,9 @@ proc soc_mesh_layer {layer dir keepouts} {
                 lappend free $iv
             }
         }
-        if {[llength $groups] > 0 && [lindex $groups end 2] eq $free} {
+        # Chi gop khi dung buoc pitch: addStripe -set_to_set_distance dat lai tung cap.
+        if {[llength $groups] > 0 && [lindex $groups end 2] eq $free &&
+            abs($pos - [lindex $groups end 1] - $pitch) < 1e-6} {
             lset groups end 1 $pos
         } else {
             lappend groups [list $pos $pos $free]
@@ -717,10 +777,10 @@ proc soc_mesh_layer {layer dir keepouts} {
                 set area [list $b0 $p0 $b1 $p1]
             }
             addStripe -nets {VDD VSS} -layer $layer -direction $dir \
-                -width $::SOC_MESH_W -spacing $::SOC_MESH_S \
-                -set_to_set_distance $::SOC_MESH_PITCH \
+                -width $W -spacing $S \
+                -set_to_set_distance $pitch \
                 -start_from $from -start_offset $E -area $area \
-                -snap_wire_center_to_grid Grid
+                -snap_wire_center_to_grid Grid {*}$snap_opts
             incr n
         }
     }
@@ -731,7 +791,8 @@ proc soc_mesh_layer {layer dir keepouts} {
 # cac SRAM).  Noi vao luoi M4/M5 cua cum o mep cum:
 #   M6 ngang dung sat than cum -> cat cap M5 mep trai/phai cum, via M5-M6
 #   M7 doc  dung sat than cum -> cat cap M4 mep tren/duoi cum, via M4..M7
-proc soc_add_mesh {} {
+# Hop bao moi cum SRAM (soc_sram_islands), noi rong moi phia 'grow' um.
+proc soc_island_keepouts {{grow 0.0}} {
     set keepouts {}
     foreach island [soc_sram_islands [soc_sram_boxes]] {
         set xs0 {}; set ys0 {}; set xs1 {}; set ys1 {}
@@ -739,9 +800,15 @@ proc soc_add_mesh {} {
             lassign $m name group mx0 my0 mx1 my1
             lappend xs0 $mx0; lappend ys0 $my0; lappend xs1 $mx1; lappend ys1 $my1
         }
-        lappend keepouts [list [tcl::mathfunc::min {*}$xs0] [tcl::mathfunc::min {*}$ys0] \
-            [tcl::mathfunc::max {*}$xs1] [tcl::mathfunc::max {*}$ys1]]
+        lappend keepouts [list \
+            [expr {[tcl::mathfunc::min {*}$xs0] - $grow}] [expr {[tcl::mathfunc::min {*}$ys0] - $grow}] \
+            [expr {[tcl::mathfunc::max {*}$xs1] + $grow}] [expr {[tcl::mathfunc::max {*}$ys1] + $grow}]]
     }
+    return $keepouts
+}
+
+proc soc_add_mesh {} {
+    set keepouts [soc_island_keepouts]
 
     setAddStripeMode -reset
     setAddStripeMode -allow_jog none -break_at none -split_vias true \
@@ -757,36 +824,38 @@ proc soc_add_mesh {} {
     puts "Luoi M7: $n7 vung, M6: $n6 vung (tranh [llength $keepouts] cum SRAM)"
 }
 
-# Rail M1 + stripe M5 cho std cell.  Flow Risc_V lam buoc nay SAU placement;
-# lam truoc placement voi strap thap da gay short VDD/VSS o flow do.
+# Vung cum SRAM + khe mep cum (cap M4/M5 rieng cua cum nam trong khe 4.32):
+# khong co row, khong co std cell, khong co stripe M5 cua std cell.
+proc soc_sram_no_std_boxes {} {
+    return [soc_island_keepouts $::SOC_MACRO_GAP]
+}
+
+# Rail M1 + stripe M5 cho std cell.  Flow Risc_V/sram_axi lam SAU placement;
+# lam truoc placement voi strap thap da gay short VDD/VSS o flow Risc_V.
+#   1. sroute followpin M1 theo row (row trong vung SRAM da cutRow o KHOI 9)
+#   2. M5 doc pitch 25.92, KHONG di vao cum SRAM + khe mep cum; them 1 cap sat
+#      moi canh cum de kenh hep giua hai cum van duoc noi.  Via M1->M6 tai
+#      giao diem voi rail M1 va luoi M6 (KHOI 6).
 proc soc_stdcell_rails {} {
-    set die  [lindex [dbGet top.fPlan.box] 0]
-    set core [lindex [dbGet top.fPlan.coreBox] 0]
+    setSrouteMode -reset
+    setSrouteMode -viaConnectToShape {ring stripe blockring}
+    sroute -nets {VDD VSS} \
+        -connect {corePin} \
+        -corePinCheckStdcellGeoms \
+        -allowJogging 0 \
+        -allowLayerChange 0
+
     setAddStripeMode -reset
     setAddStripeMode \
         -allow_jog none \
         -allow_nonpreferred_dir none \
-        -break_at {block_ring} \
+        -break_at none \
         -extend_to_closest_target area_boundary \
         -stacked_via_bottom_layer M1 \
         -stacked_via_top_layer M6
-    addStripe -nets {VDD VSS} \
-        -layer M5 -direction vertical \
-        -width $::SOC_M5_W -spacing $::SOC_M5_S \
-        -set_to_set_distance $::SOC_M5_PITCH \
-        -start_from left -start_offset $::SOC_M5_OFFSET \
-        -create_pins 0 \
-        -area [list [lindex $core 0] [lindex $die 1] [lindex $core 2] [lindex $die 3]] \
-        -snap_wire_center_to_grid Grid \
-        -allow_snapping_override_custom_spacing 1
-
-    setSrouteMode -reset
-    setSrouteMode -viaConnectToShape {stripe blockring}
-    sroute -nets {VDD VSS} \
-        -connect {corePin} \
-        -corePinTarget {stripe} \
-        -corePinCheckStdcellGeoms \
-        -allowJogging 0 \
-        -allowLayerChange 0
+    set keepouts [soc_sram_no_std_boxes]
+    set n5 [soc_mesh_layer M5 vertical $keepouts \
+        [list $::SOC_M5_W $::SOC_M5_S $::SOC_M5_PITCH $::SOC_M5_OFFSET] 1]
+    puts "Stripe M5 std cell: $n5 vung (tranh [llength $keepouts] cum SRAM + khe)"
     editTrim -nets {VDD VSS}
 }
