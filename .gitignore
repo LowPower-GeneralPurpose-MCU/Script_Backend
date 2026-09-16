@@ -22,7 +22,6 @@
 **/outputs/*.fp.spr
 
 # Tool logs and session scratch
-**/innovus.log
 **/innovus.logv
 **/innovus.cmd
 **/genus.log
