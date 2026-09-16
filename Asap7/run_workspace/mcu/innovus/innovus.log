@@ -1,0 +1,564 @@
+
+Cadence Innovus(TM) Implementation System.
+Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+
+Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
+Options:	
+Date:		Thu Sep 17 01:32:28 2026
+Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
+OS:		Ubuntu 26.04.1 LTS
+
+License:
+		[01:32:32.206170] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+		invs	Innovus Implementation System	23.1	checkout succeeded
+		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
+Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
+Info: Process UID = 221789 / f5e1332d-9a71-41dc-93b5-92ab664fbb10 / aYBxXaaqwR
+
+**INFO:  MMMC transition support version v31-84 
+
+<CMD> set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+<CMD> suppressMessage ENCEXT-2799
+<CMD> getVersion
+<CMD> getVersion
+<CMD> getVersion
+[INFO] Loading PVS 21.12 fill procedures
+<CMD> win
+<CMD> setLibraryUnit -time 1ns -cap 1pf
+<CMD> set init_lef_file {/home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_128x4x20_6t122.lef.4x.lef}
+<CMD> set init_verilog /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v
+<CMD> set init_top_cell top_soc
+<CMD> set init_mmmc_file ./tcl/viewDefinition.tcl
+<CMD> set init_pwr_net VDD
+<CMD> set init_gnd_net VSS
+<CMD> set init_design_settop 1
+<CMD> set init_abstract_view abstract
+<CMD> set init_layout_view layout
+<CMD> set ::TimeLib::tsgMarkCellLatchConstructFlag 1
+<CMD> set conf_qxconf_file NULL
+<CMD> set conf_qxlib_file NULL
+<CMD> set defHierChar /
+<CMD> get_message -id GLOBAL-100 -suppress
+<CMD> get_message -id GLOBAL-100 -suppress
+<CMD> set latch_time_borrow_mode max_borrow
+<CMD> set init_design_uniquify 1
+<CMD> init_design
+#% Begin Load MMMC data ... (date=09/17 01:34:45, mem=1949.8M)
+#% End Load MMMC data ... (date=09/17 01:34:45, total cpu=0:00:00.1, real=0:00:00.0, peak res=1951.4M, current mem=1951.4M)
+rc_typ rc_ff rc_ss
+
+Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef ...
+
+Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_R_4x_220121a.lef ...
+Set DBUPerIGU to M1 pitch 576.
+
+Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/scaled/asap7sc7p5t_28_L_4x_220121a.lef ...
+
+Loading LEF file /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_256x4x32_6t122.lef.4x.lef ...
+
+Loading LEF file /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LEF/4xLEF/srambank_128x4x20_6t122.lef.4x.lef ...
+**ERROR: (IMPLF-82):	The y coordinate value 0.8660
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 5.5060
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 0.8660
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 5.5060
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 5.1860
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 9.8260
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 5.1860
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 9.8260
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 9.5060
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 14.1460
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 9.5060
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 14.1460
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 13.8260
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 18.4660
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 13.8260
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 18.4660
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 18.1460
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 22.7860
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 18.1460
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**ERROR: (IMPLF-82):	The y coordinate value 22.7860
+in pin 'VDD' in macro 'srambank_128x4x20_6t122' is not on Manufacturing Grid.
+This is likely to result in placement/routing that cannot be manufactured. Check the manufacturing grid defined in the technology LEF file (MANUFACTURINGGRID) and make sure the value is an integral multiple of the grid.
+**WARN: (EMS-27):	Message (IMPLF-82) has exceeded the current message display limit of 20.
+To increase the message display limit, refer to the product command reference manual.
+**ERROR: (IMPLF-40):	Macro 'srambank_128x4x20_6t122' references a site 'coreSite' that has not been defined. The sites must be defined before they can be referenced from a macro. Review the LEF files specified in the init_lef_file variable to see if the site does not exist or is specified after the one that defines the macro.
+Type 'man IMPLF-40' for more detail.
+
+##  Check design process and node:  
+##  Both design process and tech node are not set.
+
+Loading view definition file from ./tcl/viewDefinition.tcl
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib, Line 46704)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib, Line 75658)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_SS_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_SS_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_RVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_SS_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_RVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_SS_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_SS_ccs_220123' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib, Line 46704)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib, Line 75658)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_SS_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_SS_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_LVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_SS_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_LVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_SS_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_SS_ccs_220123' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib' ...
+Read 1 cells in library 'srambank_256x4x32_6t122' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib' ...
+Read 1 cells in library 'srambank_128x4x20_6t122' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib, Line 46726)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib, Line 75682)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_FF_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_FF_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_RVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_FF_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_RVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_FF_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_FF_ccs_220123' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120.lib, Line 46704)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120.lib, Line 75658)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_FF_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_FF_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_LVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_FF_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
+*** End library_loading (cpu=0.45min, real=0.43min, mem=340.1M, fe_cpu=2.34min, fe_real=2.72min, fe_mem=2481.7M) ***
+#% Begin Load netlist data ... (date=09/17 01:35:11, mem=1981.6M)
+*** Begin netlist parsing (mem=2481.7M) ***
+**WARN: (IMPVL-536):	The PG type of pin 'VSS' of cell 'srambank_128x4x20_6t122' doesn't match between the timing library and LEF file. In the timing library the pin is defined as 'ground' pin, but in LEF file it is defined as 'power' pin. Check the library data and make the update accordingly.
+**WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+**WARN: (IMPVL-159):	Pin 'sdel[1]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+**WARN: (IMPVL-159):	Pin 'sdel[2]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+**WARN: (IMPVL-159):	Pin 'sdel[3]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+**WARN: (IMPVL-159):	Pin 'sdel[4]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+Created 406 new cells from 22 timing libraries.
+Reading netlist ...
+Backslashed names will retain backslash and a trailing blank character.
+Reading verilog netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v'
+
+*** Memory Usage v#2 (Current mem = 2481.703M, initial mem = 847.699M) ***
+*** End netlist parsing (cpu=0:00:00.5, real=0:00:01.0, mem=2481.7M) ***
+#% End Load netlist data ... (date=09/17 01:35:12, total cpu=0:00:00.6, real=0:00:01.0, peak res=2135.4M, current mem=2135.4M)
+Set top cell to top_soc.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[3]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[2]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[1]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[0]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+Hooked 810 DB cells to tlib cells.
+Starting recursive module instantiation check.
+No recursion found.
+Building hierarchical netlist for Cell top_soc ...
+***** UseNewTieNetMode *****.
+*** Netlist is unique.
+Set DBUPerIGU to techSite asap7sc7p5t width 864.
+** info: there are 2535 modules.
+** info: there are 124056 stdCell insts.
+** info: there are 124056 stdCell insts with at least one signal pin.
+** info: there are 84 macros.
+
+*** Memory Usage v#2 (Current mem = 2505.715M, initial mem = 847.699M) ***
+Start create_tracks
+Extraction setup Started for TopCell top_soc 
+Initializing multi-corner RC extraction with 3 active RC Corners ...
+Captable file(s) not specified in multi-corner setup. PreRoute extraction will use technology file. For postRoute extraction, default value for effort level would be 'medium' and effort level 'low' would not be allowed.
+Generating auto layer map file.
+Importing multi-corner technology file(s) for preRoute extraction...
+/home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
+Generating auto layer map file.
+
+Completed (cpu: 0:00:01.4 real: 0:00:01.0)
+Set Shrink Factor to 1.00000
+Summary of Active RC-Corners : 
+ 
+ Analysis View: view_ss
+    RC-Corner Name        : rc_ss
+    RC-Corner Index       : 0
+    RC-Corner Temperature : 100 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PreRoute Res Factor         : 1
+    RC-Corner PreRoute Cap Factor         : 1
+    RC-Corner PostRoute Res Factor        : 1 {1 1 1}
+    RC-Corner PostRoute Cap Factor        : 1 {1 1 1}
+    RC-Corner PostRoute XCap Factor       : 1 {1 1 1}
+    RC-Corner PreRoute Clock Res Factor   : 1	[Derived from postRoute_res (effortLevel low)]
+    RC-Corner PreRoute Clock Cap Factor   : 1	[Derived from postRoute_cap (effortLevel low)]
+    RC-Corner PostRoute Clock Cap Factor  : 1 {1 1 1} 	[Derived from postRoute_cap (effortLevel low)]
+    RC-Corner PostRoute Clock Res Factor  : 1 {1 1 1} 	[Derived from postRoute_res (effortLevel low)]
+    RC-Corner PostRoute Clock coupling capacitance Factor : 1 {1 1 1} 
+    RC-Corner Technology file: '/home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06'
+ 
+ Analysis View: view_tt
+    RC-Corner Name        : rc_typ
+    RC-Corner Index       : 1
+    RC-Corner Temperature : 25 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PreRoute Res Factor         : 1
+    RC-Corner PreRoute Cap Factor         : 1
+    RC-Corner PostRoute Res Factor        : 1 {1 1 1}
+    RC-Corner PostRoute Cap Factor        : 1 {1 1 1}
+    RC-Corner PostRoute XCap Factor       : 1 {1 1 1}
+    RC-Corner PreRoute Clock Res Factor   : 1	[Derived from postRoute_res (effortLevel low)]
+    RC-Corner PreRoute Clock Cap Factor   : 1	[Derived from postRoute_cap (effortLevel low)]
+    RC-Corner PostRoute Clock Cap Factor  : 1 {1 1 1} 	[Derived from postRoute_cap (effortLevel low)]
+    RC-Corner PostRoute Clock Res Factor  : 1 {1 1 1} 	[Derived from postRoute_res (effortLevel low)]
+    RC-Corner PostRoute Clock coupling capacitance Factor : 1 {1 1 1} 
+    RC-Corner Technology file: '/home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06'
+ 
+ Analysis View: view_ff
+    RC-Corner Name        : rc_ff
+    RC-Corner Index       : 2
+    RC-Corner Temperature : 0 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PreRoute Res Factor         : 1
+    RC-Corner PreRoute Cap Factor         : 1
+    RC-Corner PostRoute Res Factor        : 1 {1 1 1}
+    RC-Corner PostRoute Cap Factor        : 1 {1 1 1}
+    RC-Corner PostRoute XCap Factor       : 1 {1 1 1}
+    RC-Corner PreRoute Clock Res Factor   : 1	[Derived from postRoute_res (effortLevel low)]
+    RC-Corner PreRoute Clock Cap Factor   : 1	[Derived from postRoute_cap (effortLevel low)]
+    RC-Corner PostRoute Clock Cap Factor  : 1 {1 1 1} 	[Derived from postRoute_cap (effortLevel low)]
+    RC-Corner PostRoute Clock Res Factor  : 1 {1 1 1} 	[Derived from postRoute_res (effortLevel low)]
+    RC-Corner PostRoute Clock coupling capacitance Factor : 1 {1 1 1} 
+    RC-Corner Technology file: '/home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06'
+Updating RC Grid density data for preRoute extraction ...
+Initializing multi-corner resistance tables ...
+Default value for postRoute extraction mode's effortLevel (-effortLevel option of setExtractRCMode) changed to 'medium'.
+*Info: initialize multi-corner CTS.
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 46726)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 75682)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_RVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_RVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_TT_ccs_220123' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 46726)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 75682)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_LVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
+Reading timing constraints file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc' ...
+Current (total cpu=0:02:38, real=0:03:00, peak res=2771.4M, current mem=2758.8M)
+top_soc
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cpu/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 19).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_dbg/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 20).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_pwm/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 21).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_gpio/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 22).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cordic/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 23).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_ascon/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 24).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 25).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_spi/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 26).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_i2c/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 27).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 28).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim0/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 29).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 30).
+
+------------------------------------------------------------------------------------
+CONSTRAINT READING SUMMARY                                                          
+------------------------------------------------------------------------------------
+Constraint                                        | Success        | Fail           
+------------------------------------------------------------------------------------
+set_clock_latency                                 | 30             | 0              
+set_clock_uncertainty                             | 30             | 0              
+set_dont_touch                                    | 7              | 0              
+set_input_transition                              | 114            | 0              
+set_max_fanout                                    | 53             | 0              
+set_disable_timing                                | 1              | 0              
+current_design                                    | 3              | 0              
+get_cells                                         | 8              | 0              
+get_ports                                         | 585            | 0              
+create_clock                                      | 2              | 0              
+create_generated_clock                            | 13             | 0              
+get_pins                                          | 19             | 0              
+set_clock_gating_check                            | 13             | 0              
+set_output_delay                                  | 228            | 0              
+get_clocks                                        | 441            | 0              
+set_max_delay                                     | 2              | 0              
+set_max_transition                                | 16             | 0              
+get_lib_pins                                      | 52             | 0              
+set_false_path                                    | 4              | 0              
+set_clock_transition                              | 4              | 0              
+set_input_delay                                   | 110            | 0              
+set_load                                          | 115            | 0              
+------------------------------------------------------------------------------------
+Number of path exceptions in the constraint file = 10
+INFO (CTE): Reading of timing constraints file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc completed, with 12 WARNING
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2800.1M, current mem=2800.1M)
+Current (total cpu=0:02:38, real=0:03:00, peak res=2800.1M, current mem=2800.1M)
+Total number of combinational cells: 338
+Total number of sequential cells: 66
+Total number of tristate cells: 0
+Total number of level shifter cells: 0
+Total number of power gating cells: 0
+Total number of isolation cells: 0
+Total number of power switch cells: 0
+Total number of pulse generator cells: 0
+Total number of always on buffers: 0
+Total number of retention cells: 0
+Total number of physical cells: 0
+List of usable buffers: BUFx10_ASAP7_75t_L BUFx12_ASAP7_75t_L BUFx12f_ASAP7_75t_L BUFx16f_ASAP7_75t_L BUFx24_ASAP7_75t_L BUFx2_ASAP7_75t_L BUFx3_ASAP7_75t_L BUFx4_ASAP7_75t_L BUFx5_ASAP7_75t_L BUFx4f_ASAP7_75t_L BUFx6f_ASAP7_75t_L BUFx8_ASAP7_75t_L HB1xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx2_ASAP7_75t_R BUFx3_ASAP7_75t_R BUFx5_ASAP7_75t_R BUFx4f_ASAP7_75t_R BUFx6f_ASAP7_75t_R BUFx8_ASAP7_75t_R HB1xp67_ASAP7_75t_R
+Total number of usable buffers: 25
+List of unusable buffers:
+Total number of unusable buffers: 0
+List of usable inverters: CKINVDCx10_ASAP7_75t_L CKINVDCx12_ASAP7_75t_L CKINVDCx11_ASAP7_75t_L CKINVDCx14_ASAP7_75t_L CKINVDCx16_ASAP7_75t_L CKINVDCx20_ASAP7_75t_L CKINVDCx8_ASAP7_75t_L CKINVDCx5p33_ASAP7_75t_L CKINVDCx6p67_ASAP7_75t_L CKINVDCx9p33_ASAP7_75t_L INVx11_ASAP7_75t_L INVx13_ASAP7_75t_L INVx1_ASAP7_75t_L INVx2_ASAP7_75t_L INVx3_ASAP7_75t_L INVx4_ASAP7_75t_L INVx5_ASAP7_75t_L INVx6_ASAP7_75t_L INVx8_ASAP7_75t_L INVxp67_ASAP7_75t_L INVxp33_ASAP7_75t_L CKINVDCx10_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx11_ASAP7_75t_R CKINVDCx14_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx20_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R CKINVDCx5p33_ASAP7_75t_R CKINVDCx6p67_ASAP7_75t_R CKINVDCx9p33_ASAP7_75t_R INVx11_ASAP7_75t_R INVx13_ASAP7_75t_R INVx1_ASAP7_75t_R INVx2_ASAP7_75t_R INVx3_ASAP7_75t_R INVx4_ASAP7_75t_R INVx5_ASAP7_75t_R INVx6_ASAP7_75t_R INVx8_ASAP7_75t_R INVxp67_ASAP7_75t_R INVxp33_ASAP7_75t_R
+Total number of usable inverters: 42
+List of unusable inverters:
+Total number of unusable inverters: 0
+List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L BUFx24_ASAP7_75t_R BUFx4_ASAP7_75t_R HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_R
+Total number of identified usable delay cells: 7
+List of identified unusable delay cells:
+Total number of identified unusable delay cells: 0
+#% Begin Load MMMC data post ... (date=09/17 01:35:29, mem=2803.2M)
+#% End Load MMMC data post ... (date=09/17 01:35:29, total cpu=0:00:00.1, real=0:00:00.0, peak res=2803.2M, current mem=2803.2M)
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+ERROR     IMPLF-40             1  Macro '%s' references a site '%s' that h...
+ERROR     IMPLF-82          3907  %s is not on Manufacturing Grid. This is...
+WARNING   IMPTS-124            5  Timing library description of pin '%s' i...
+WARNING   IMPVL-536            1  The PG type of pin '%s' of cell '%s' doe...
+WARNING   IMPVL-159            5  Pin '%s' of cell '%s' is defined in LEF ...
+WARNING   TCLCMD-1531         12  '%s' has been applied on hierarchical pi...
+WARNING   TECHLIB-1277        12  The %s '%s' has been defined for %s %s '...
+*** Message Summary: 35 warning(s), 3908 error(s)
+
+<CMD> setDesignMode -process 7
+##  Process: 7             (User Set)               
+##     Node: (not set)                           
+
+##  Check design process and node:  
+##  Design tech node is not set.
+
+Applying the recommended capacitance filtering threshold values for 7nm process node: total_c_th=0, relative_c_th=1 and coupling_c_th=0.1.
+	These values will be used by all post-route extraction engines, including TQuantus, IQuantus and Quantus QRC extraction.
+	Capacitance filtering mode(-capFilterMode option of the setExtractRCMode) is 'relAndCoup' for all engines.
+	The accuracy mode for postRoute effortLevel low extraction will be set to 'high'.
+	Default value for EffortLevel(-effortLevel option of the setExtractRCMode) in postRoute extraction mode is 'medium'.
+<CMD> setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+<CMD> setMultiCpuUsage -acquireLicense 8 -localCpu 8
+<CMD> setDistributeHost -local
+The timeout for a remote job to respond is 3600 seconds.
+Submit command for task runs will be: local
+<CMD> globalNetConnect VDD -type pgpin -pin VDD -inst * -verbose
+124140 new pwr-pin connections were made to global net 'VDD'.
+<CMD> globalNetConnect VSS -type pgpin -pin VSS -inst * -verbose
+124140 new gnd-pin connections were made to global net 'VSS'.
+<CMD> globalNetConnect VDD -type tiehi -inst * -verbose
+<CMD> globalNetConnect VSS -type tielo -inst * -verbose
+Multithreaded Timing Analysis is initialized with 8 threads
+
+<CMD> set_timing_derate -delay_corner dc_ss -late -cell_delay -cell_check  $SRAM_DERATE_SS $SRAM_DERATE_INSTS
+<CMD> set_timing_derate -delay_corner dc_ff -early -cell_delay -cell_check  $SRAM_DERATE_FF $SRAM_DERATE_INSTS
+<CMD> report_timing_derate > ./reports/sram_derate.rpt
+<CMD> all_constraint_modes
+mode_func
+<CMD> set_interactive_constraint_modes [all_constraint_modes]
+<CMD> set_max_fanout 1 [get_pins -of_objects $SRAM_DERATE_INSTS -filter "direction == out"]
+<CMD> set_interactive_constraint_modes {}
+<CMD> set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+<CMD> set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+<CMD> set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+<CMD> set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+<CMD> set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+<CMD> set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+<CMD> set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+<CMD> floorPlan -s 2190.888 1412.64 10.0 10.0 10.0 10.0
+The core width changes from 2190.888000 to 2190.816000 when snapping to grid "PlacementGrid".
+**WARN: (IMPFP-4026):	Adjusting core to 'Left' to 9.936000 due to track/row misalignment. To force the value, specify the -noSnapToGrid option or use fpiSetSnapRule command to specify the die/core to different grid.
+**WARN: (IMPFP-4026):	Adjusting core to 'Bottom' to 9.936000 due to track/row misalignment. To force the value, specify the -noSnapToGrid option or use fpiSetSnapRule command to specify the die/core to different grid.
+**WARN: (IMPFP-4026):	Adjusting core to 'Right' to 9.936000 due to track/row misalignment. To force the value, specify the -noSnapToGrid option or use fpiSetSnapRule command to specify the die/core to different grid.
+**WARN: (IMPFP-4026):	Adjusting core to 'Top' to 9.936000 due to track/row misalignment. To force the value, specify the -noSnapToGrid option or use fpiSetSnapRule command to specify the die/core to different grid.
+Start create_tracks
+**WARN: (IMPFP-325):	Floorplan of the design is resized. All current floorplan objects are automatically derived based on specified new floorplan. This may change blocks, fixed standard cells, existing routes and blockages.
+<CMD> saveFPlan ./outputs/FloorPlan.fp
+<CMD> checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_FP.rpt
+Checking routing tracks.....
+Checking other grids.....
+Checking FINFET Grid is on Manufacture Grid.....
+Checking core/die box is on Grid.....
+Checking snap rule ......
+Checking Row is on grid......
+Checking AreaIO row.....
+Checking row out of die ...
+Checking routing blockage.....
+Checking placement blockage.....
+placeBlkGrid grid_type = 1 
+Checking components.....
+Checking IO Pads out of die...
+Checking constraints (guide/region/fence).....
+
+Checking Preroutes.....
+No. of regular pre-routes not on tracks : 0 
+
+Reporting Utilizations.....
+
+Core utilization  = 64.922132
+Effective Utilizations
+Extracting standard cell pins and blockage ...... 
+Pin and blockage extraction finished
+Extracting macro/IO cell pins and blockage ...... 
+Pin and blockage extraction finished
+Average macro density = 0.552.
+Average macro with halo density = 0.552.
+Average module density = 0.649.
+Pure std cell Density 0.216625
+ Density for the design = 0.649.
+       = (stdcell_area 1286624 sites (300144 um^2) + block_area 7326341 sites (1709089 um^2)) / alloc_area 13265736 sites (3094631 um^2).
+Density for the design with macro halo = 0.649.
+       = (stdcell_area 1286624 sites (300144 um^2) + block_area with halo 7326341 sites (1709089 um^2)) / alloc_area 13265736 sites (3094631 um^2).
+Pin Density = 0.03340.
+            = total # of pins 443129 / total area 13265736.
+*** Message Summary: 0 warning(s), 0 error(s)
+
+<CMD> deleteAllPowerPreroutes
+<CMD> setAddStripeMode -reset
+<CMD> addRing -nets VDD -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.54 -spacing 0.54 -offset 8.316 -snap_wire_center_to_grid Grid
+#% Begin addRing (date=09/17 01:35:30, mem=2981.5M)
+
+viaInitial starts at Thu Sep 17 01:35:30 2026
+viaInitial ends at Thu Sep 17 01:35:30 2026
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+**WARN: (IMPPP-152):	-width_top (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
+**WARN: (IMPPP-152):	-width_bottom (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
+**WARN: (IMPPP-152):	-width_left (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
+**WARN: (IMPPP-152):	-width_right (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3573.6M)
+Ring generation is complete.
+vias are now being generated.
+addRing created 4 wires.
+ViaGen created 4 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M8   |        2       |       NA       |
+|   V8   |        4       |        0       |
+|   M9   |        2       |       NA       |
++--------+----------------+----------------+
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addRing (date=09/17 01:35:30, total cpu=0:00:00.3, real=0:00:00.0, peak res=3006.7M, current mem=3006.7M)
+<CMD> addRing -nets VSS -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.54 -spacing 0.54 -offset 9.396 -snap_wire_center_to_grid Grid
+#% Begin addRing (date=09/17 01:35:30, mem=3006.7M)
+setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
+Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
+Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
+setViaGenMode -optimize_cross_via true is set by default for this design of 12nm node or under. 
+Setting -disable_via_merging to 1. ViaGen disables via merging with the via created earlier.
+setViaGenMode -disable_via_merging true is set by default for this design of 12nm node or under. 
+Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
+setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
+
+**WARN: (IMPPP-152):	-width_top (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
+**WARN: (IMPPP-152):	-width_bottom (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
+**WARN: (IMPPP-152):	-width_left (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
+**WARN: (IMPPP-152):	-width_right (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3573.6M)
+**WARN: (IMPPP-220):	The power planner does not create core rings outside the design boundary. Check the design boundary, or specify valid offsets.
+**WARN: (IMPPP-4051):	Failed to add rings, because the IO cells might contain gaps. Run the 'addIoFiller' command to fill gaps between the cells and try again.
+Type 'man IMPPP-4051' for more detail.
+setAddStripeMode -use_exact_spacing is reset to default value: false.
+setViaGenMode -disable_via_merging is reset to default value: false.
+setViaGenMode -keep_existing_via is reset to default value: 0.
+setViaGenMode -optimize_cross_via is reset to default value: false.
+#% End addRing (date=09/17 01:35:30, total cpu=0:00:00.1, real=0:00:00.0, peak res=3006.7M, current mem=3006.7M)
+Ring loi VSS khong duoc tao du (M8=0 M9=0) - xem addRing trong innovus.log
