@@ -80,11 +80,14 @@ soc_block "KHOI 2: core ring" {
     lassign [lindex [dbGet top.fPlan.box] 0] dx0 dy0 dx1 dy1
     lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
     set margin [expr {min($cx0 - $dx0, $cy0 - $dy0, $dx1 - $cx1, $dy1 - $cy1)}]
-    # -offset = mep loi -> canh trong cua vong.  VSS sat mep die, VDD vao trong.
-    set vss_ring_offset [expr {$margin - $SOC_CORE_RING_W}]
+    # -offset = mep loi -> canh trong cua vong.  VSS ngoai (cach mep die 1 khoang S),
+    # VDD vao trong.  Lam tron xuong manufacturing grid de Innovus khong tu snap ra ngoai.
+    set g $SOC_MFG_GRID
+    set vss_ring_offset [expr {floor(($margin - $SOC_CORE_RING_S - $SOC_CORE_RING_W) / $g + 1e-6) * $g}]
     set SOC_CORE_RING_OFFSET [expr {$vss_ring_offset - $SOC_CORE_RING_S - $SOC_CORE_RING_W}]
-    puts [format "Ring loi: le %.3f | VSS %.3f | trong %.3f | VDD %.3f | trong %.3f -> loi" \
-        $margin $SOC_CORE_RING_W $SOC_CORE_RING_S $SOC_CORE_RING_W $SOC_CORE_RING_OFFSET]
+    puts [format "Ring loi: le %.3f | trong %.3f | VSS %.3f | trong %.3f | VDD %.3f | trong %.3f -> loi" \
+        $margin [expr {$margin - $vss_ring_offset - $SOC_CORE_RING_W}] \
+        $SOC_CORE_RING_W $SOC_CORE_RING_S $SOC_CORE_RING_W $SOC_CORE_RING_OFFSET]
     if {$SOC_CORE_RING_OFFSET < $SOC_MACRO_GAP} {
         error [format "Khoang trong trong cung %.3f < %.2f (cap VSS/VDD mep cum SRAM) - tang SOC_CORE_MARGIN" \
             $SOC_CORE_RING_OFFSET $SOC_MACRO_GAP]
@@ -108,7 +111,7 @@ soc_block "KHOI 2: core ring" {
             error "Ring loi $net khong duoc tao du (M8=$n8 M9=$n9) - xem addRing trong innovus.log"
         }
     }
-    # Ring rong 0.48 um tren loi ~2000 um: zoom-all se khong thay, zoom vao goc loi de xem.
+    # Ring rong 0.544 um tren loi ~2000 um: zoom-all se khong thay, zoom vao goc loi de xem.
 }
 
 # --------------------------------------------------------------------------
