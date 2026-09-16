@@ -359,6 +359,9 @@ soc_block "KHOI 9: placement" {
     }
 
     setDelayCalMode -SIAware false -equivalent_waveform_model none
+    # Mac dinh optDesign KHONG sua max_fanout: run 2026-09-17 con 1684 net > 20
+    # (ke ca buffer FE_OFN* do chinh place_opt chen vao, fanout 65-75).
+    setOptMode -fixFanoutLoad true
     setPlaceMode -reset
     setPlaceMode \
         -place_global_uniform_density false \

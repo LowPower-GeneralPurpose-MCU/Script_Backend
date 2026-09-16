@@ -3,10 +3,9 @@
 ## kim dong ho).  Layer/kich thuoc cua Risc_V: canh tren/duoi M7 doc,
 ## canh trai/phai M6 ngang, 0.128 x 0.288 um.
 ##
-## Pin trai du 4 canh.  SRAM ASAP7 chi chan cac layer thap (chan PG tren M4),
-## nen pin M6/M7 di duoc qua tren SRAM.  Nhung tren than SRAM khong dat
-## duoc buffer, nen clock/reset/JTAG de o canh co logic (duoi); pin GPIO
-## cham thi de canh nao cung duoc.  Doi canh: chi sua bon danh sach duoi day.
+## Bon danh sach duoi day giu theo nhom chuc nang; khi dat, moi pin chi nam
+## tren canh tren/duoi trong khoang x vung logic (xem ghi chu cuoi file).
+## Tren than SRAM khong dat duoc buffer nen pin khong duoc nam doi dien SRAM.
 ############################################################
 
 proc soc_bus {name msb lsb} {
@@ -54,20 +53,51 @@ if {[llength $assigned] != [llength [lsort -unique $assigned]]} {
     error "soc_pins.tcl: co pin bi gan hai lan"
 }
 
-setPinAssignMode -pinEditInBatch true
-foreach {side layer pins} [list \
-    LEFT   M6 $left_pins \
-    TOP    M7 $top_pins \
-    RIGHT  M6 $right_pins \
-    BOTTOM M7 $bottom_pins] {
-    if {[llength $pins] == 0} {
-        continue
+# Run 2026-09-17: RAM_LO/RAM_HI la hai tuong SRAM cao het loi o canh trai/phai
+# (row da cat), nen net tu pin canh trai/phai (va doan canh tren/duoi nam tren
+# SRAM) dai ~500 um khong co cho dat buffer -> 90/101 vi pham max_tran la port.
+# Vi vay moi pin chi nam tren canh TREN/DUOI, trong khoang x cua vung logic
+# giua hai tuong SRAM.  Canh duoi con cum CACHE cao ~360 um nen chi de pin VAO.
+#   Tren (nguoc chieu kim dong ho, phai -> trai): SDRAM | pad_out | flash + pad_oe
+#   Duoi (trai -> phai): clock/reset/JTAG + pad_in
+set top_side_pins [concat $right_pins $top_pins $left_pins]
+set bottom_side_pins $bottom_pins
+
+lassign [lindex [dbGet top.fPlan.box] 0] die_x0 die_y0 die_x1 die_y1
+lassign [lindex [dbGet top.fPlan.coreBox] 0] core_x0 core_y0 core_x1 core_y1
+set logic_x0 $core_x0
+set logic_x1 $core_x1
+foreach k [soc_sram_no_std_boxes] {
+    lassign $k kx0 ky0 kx1 ky1
+    # Keepout cham ca mep duoi lan mep tren loi = tuong SRAM
+    if {$ky0 <= $core_y0 + 1.0 && $ky1 >= $core_y1 - 1.0} {
+        if {$kx0 <= $core_x0 + 1.0} {
+            set logic_x0 [expr {max($logic_x0, $kx1)}]
+        }
+        if {$kx1 >= $core_x1 - 1.0} {
+            set logic_x1 [expr {min($logic_x1, $kx0)}]
+        }
     }
-    editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 \
-        -spreadType side -spreadDirection counterclockwise \
-        -side $side -layer $layer -honorConstraint 1 -pin $pins
 }
+set pin_margin 20.0
+set pin_x0 [expr {$logic_x0 + $pin_margin}]
+set pin_x1 [expr {$logic_x1 - $pin_margin}]
+set need [expr {max([llength $top_side_pins], [llength $bottom_side_pins]) * 2.0}]
+if {$pin_x1 - $pin_x0 < $need} {
+    error [format "soc_pins.tcl: vung logic %.1f..%.1f qua hep cho %d pin" \
+        $pin_x0 $pin_x1 [llength $top_side_pins]]
+}
+
+setPinAssignMode -pinEditInBatch true
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 \
+    -spreadType range -spreadDirection counterclockwise \
+    -start [list $pin_x1 $die_y1] -end [list $pin_x0 $die_y1] \
+    -side TOP -layer M7 -honorConstraint 1 -pin $top_side_pins
+editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 \
+    -spreadType range -spreadDirection counterclockwise \
+    -start [list $pin_x0 $die_y0] -end [list $pin_x1 $die_y0] \
+    -side BOTTOM -layer M7 -honorConstraint 1 -pin $bottom_side_pins
 setPinAssignMode -pinEditInBatch false
 
-puts "INFO: da gan [llength $assigned] pin top_soc (trai [llength $left_pins],\
- tren [llength $top_pins], phai [llength $right_pins], duoi [llength $bottom_pins])"
+puts [format "INFO: da gan %d pin top_soc: tren %d, duoi %d, x %.1f..%.1f" \
+    [llength $assigned] [llength $top_side_pins] [llength $bottom_side_pins] $pin_x0 $pin_x1]
