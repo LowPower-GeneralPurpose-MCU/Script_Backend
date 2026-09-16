@@ -88,6 +88,18 @@ soc_block "KHOI 2: core ring" {
             -width $SOC_CORE_RING_W -spacing $SOC_CORE_RING_S -offset $offset \
             -snap_wire_center_to_grid Grid
     }
+    # addRing hong thuong chi in WARNING -> dem that so doan ring M8/M9 cua tung net
+    foreach net {VDD VSS} {
+        set rings [dbGet -e -p [dbGet -p top.nets.name $net].sWires.shape ring]
+        set layers [expr {[llength $rings] ? [dbGet $rings.layer.name] : {}}]
+        set n8 [llength [lsearch -all -exact $layers M8]]
+        set n9 [llength [lsearch -all -exact $layers M9]]
+        puts "Ring loi $net: $n8 doan M8, $n9 doan M9"
+        if {$n8 < 2 || $n9 < 2} {
+            error "Ring loi $net khong duoc tao du (M8=$n8 M9=$n9) - xem addRing trong innovus.log"
+        }
+    }
+    # Ring rong 0.48 um tren loi ~2000 um: zoom-all se khong thay, zoom vao goc loi de xem.
 }
 
 # --------------------------------------------------------------------------
