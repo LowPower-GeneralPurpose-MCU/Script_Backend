@@ -45,10 +45,14 @@ set SOC_SRAM_GROUPS {
 # ---- Power (Hierarchy trang 37-41) ----------------------------------------
 # Ring loi M8/M9 va luoi M6/M7: so cua Risc_V.
 # Ring loi 2 vong trong le loi->die (tu ngoai vao):
-#   mep die | VSS rong 0.5 row | trong SOC_CORE_RING_S | VDD rong 0.5 row | trong | mep loi
+#   mep die | trong S | VSS rong W | trong S | VDD rong W | trong | mep loi
 # Khoang trong trong cung (con lai) phai >= SOC_MACRO_GAP de chua cap M4/M5 mep cum SRAM.
-set SOC_CORE_RING_W [expr {0.5 * $SOC_ROW_H}]     ;# 0.54
-set SOC_CORE_RING_S [expr {0.5 * $SOC_ROW_H}]     ;# khoang trong giua 2 vong
+# W/S phai la boi CHAN cua manufacturing grid 0.004 (tam day nam tren grid):
+# 0.54 = 135*0.004 le -> Innovus tu nang len 0.544 (IMPPP-152), vong VSS sat
+# mep die lo ra ngoai 4 nm va bi bo (IMPPP-220).
+set SOC_MFG_GRID    0.004
+set SOC_CORE_RING_W 0.544         ;# ~0.5 row, 136*0.004
+set SOC_CORE_RING_S 0.544         ;# khoang trong giua 2 vong va giua VSS - mep die
 set SOC_MESH_W           0.640
 set SOC_MESH_S           0.288
 set SOC_MESH_PITCH      34.560
