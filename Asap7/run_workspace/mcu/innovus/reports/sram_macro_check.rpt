@@ -30,65 +30,55 @@
 {u_axi_ram_lo/u_mem/G_SRAM_BANK[29].u_sram} RAM_LO {387.072 895.536 508.464 1068.336}
 {u_axi_ram_lo/u_mem/G_SRAM_BANK[30].u_sram} RAM_LO {387.072 1072.656 508.464 1245.456}
 {u_axi_ram_lo/u_mem/G_SRAM_BANK[31].u_sram} RAM_LO {387.072 1249.776 508.464 1422.576}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[0].u_sram} RAM_HI {1702.296 9.936 1823.688 182.736}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[1].u_sram} RAM_HI {1702.296 187.056 1823.688 359.856}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[2].u_sram} RAM_HI {1702.296 364.176 1823.688 536.976}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[3].u_sram} RAM_HI {1702.296 541.296 1823.688 714.096}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[4].u_sram} RAM_HI {1702.296 718.416 1823.688 891.216}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[5].u_sram} RAM_HI {1702.296 895.536 1823.688 1068.336}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[6].u_sram} RAM_HI {1702.296 1072.656 1823.688 1245.456}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[7].u_sram} RAM_HI {1702.296 1249.776 1823.688 1422.576}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[8].u_sram} RAM_HI {1828.008 9.936 1949.4 182.736}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[9].u_sram} RAM_HI {1828.008 187.056 1949.4 359.856}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[10].u_sram} RAM_HI {1828.008 364.176 1949.4 536.976}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[11].u_sram} RAM_HI {1828.008 541.296 1949.4 714.096}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[12].u_sram} RAM_HI {1828.008 718.416 1949.4 891.216}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[13].u_sram} RAM_HI {1828.008 895.536 1949.4 1068.336}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[14].u_sram} RAM_HI {1828.008 1072.656 1949.4 1245.456}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[15].u_sram} RAM_HI {1828.008 1249.776 1949.4 1422.576}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[16].u_sram} RAM_HI {1953.72 9.936 2075.112 182.736}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[17].u_sram} RAM_HI {1953.72 187.056 2075.112 359.856}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[18].u_sram} RAM_HI {1953.72 364.176 2075.112 536.976}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[19].u_sram} RAM_HI {1953.72 541.296 2075.112 714.096}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[20].u_sram} RAM_HI {1953.72 718.416 2075.112 891.216}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[21].u_sram} RAM_HI {1953.72 895.536 2075.112 1068.336}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[22].u_sram} RAM_HI {1953.72 1072.656 2075.112 1245.456}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[23].u_sram} RAM_HI {1953.72 1249.776 2075.112 1422.576}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[24].u_sram} RAM_HI {2079.432 9.936 2200.824 182.736}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[25].u_sram} RAM_HI {2079.432 187.056 2200.824 359.856}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[26].u_sram} RAM_HI {2079.432 364.176 2200.824 536.976}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[27].u_sram} RAM_HI {2079.432 541.296 2200.824 714.096}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[28].u_sram} RAM_HI {2079.432 718.416 2200.824 891.216}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[29].u_sram} RAM_HI {2079.432 895.536 2200.824 1068.336}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[30].u_sram} RAM_HI {2079.432 1072.656 2200.824 1245.456}
-{u_axi_ram_hi/u_mem/G_SRAM_BANK[31].u_sram} RAM_HI {2079.432 1249.776 2200.824 1422.576}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[0].u_sram} RAM_HI {1702.08 9.936 1823.472 182.736}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[1].u_sram} RAM_HI {1702.08 187.056 1823.472 359.856}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[2].u_sram} RAM_HI {1702.08 364.176 1823.472 536.976}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[3].u_sram} RAM_HI {1702.08 541.296 1823.472 714.096}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[4].u_sram} RAM_HI {1702.08 718.416 1823.472 891.216}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[5].u_sram} RAM_HI {1702.08 895.536 1823.472 1068.336}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[6].u_sram} RAM_HI {1702.08 1072.656 1823.472 1245.456}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[7].u_sram} RAM_HI {1702.08 1249.776 1823.472 1422.576}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[8].u_sram} RAM_HI {1827.792 9.936 1949.184 182.736}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[9].u_sram} RAM_HI {1827.792 187.056 1949.184 359.856}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[10].u_sram} RAM_HI {1827.792 364.176 1949.184 536.976}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[11].u_sram} RAM_HI {1827.792 541.296 1949.184 714.096}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[12].u_sram} RAM_HI {1827.792 718.416 1949.184 891.216}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[13].u_sram} RAM_HI {1827.792 895.536 1949.184 1068.336}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[14].u_sram} RAM_HI {1827.792 1072.656 1949.184 1245.456}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[15].u_sram} RAM_HI {1827.792 1249.776 1949.184 1422.576}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[16].u_sram} RAM_HI {1953.504 9.936 2074.896 182.736}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[17].u_sram} RAM_HI {1953.504 187.056 2074.896 359.856}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[18].u_sram} RAM_HI {1953.504 364.176 2074.896 536.976}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[19].u_sram} RAM_HI {1953.504 541.296 2074.896 714.096}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[20].u_sram} RAM_HI {1953.504 718.416 2074.896 891.216}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[21].u_sram} RAM_HI {1953.504 895.536 2074.896 1068.336}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[22].u_sram} RAM_HI {1953.504 1072.656 2074.896 1245.456}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[23].u_sram} RAM_HI {1953.504 1249.776 2074.896 1422.576}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[24].u_sram} RAM_HI {2079.216 9.936 2200.608 182.736}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[25].u_sram} RAM_HI {2079.216 187.056 2200.608 359.856}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[26].u_sram} RAM_HI {2079.216 364.176 2200.608 536.976}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[27].u_sram} RAM_HI {2079.216 541.296 2200.608 714.096}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[28].u_sram} RAM_HI {2079.216 718.416 2200.608 891.216}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[29].u_sram} RAM_HI {2079.216 895.536 2200.608 1068.336}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[30].u_sram} RAM_HI {2079.216 1072.656 2200.608 1245.456}
+{u_axi_ram_hi/u_mem/G_SRAM_BANK[31].u_sram} RAM_HI {2079.216 1249.776 2200.608 1422.576}
 {u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram} CACHE {528.552 9.936 649.944 182.736}
 {u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram} CACHE {528.552 187.056 649.944 359.856}
 {u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram} CACHE {654.264 9.936 775.656 182.736}
 {u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram} CACHE {654.264 187.056 775.656 359.856}
-{u_dtcm/u_mem/G_SRAM_BANK[0].u_sram} CACHE {779.976 9.936 901.368 182.736}
-{u_dtcm/u_mem/G_SRAM_BANK[1].u_sram} CACHE {779.976 187.056 901.368 359.856}
-{u_dtcm/u_mem/G_SRAM_BANK[2].u_sram} CACHE {905.688 9.936 1027.08 182.736}
-{u_dtcm/u_mem/G_SRAM_BANK[3].u_sram} CACHE {905.688 187.056 1027.08 359.856}
-{u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram} CACHE {1031.4 9.936 1152.792 182.736}
-{u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram} CACHE {1031.4 187.056 1152.792 359.856}
-{u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram} CACHE {1157.112 9.936 1278.504 182.736}
-{u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram} CACHE {1157.112 187.056 1278.504 359.856}
-{u_itcm/u_mem/G_SRAM_BANK[0].u_sram} CACHE {1282.824 9.936 1404.216 182.736}
-{u_itcm/u_mem/G_SRAM_BANK[1].u_sram} CACHE {1282.824 187.056 1404.216 359.856}
-{u_itcm/u_mem/G_SRAM_BANK[2].u_sram} CACHE {1408.536 9.936 1529.928 182.736}
-{u_itcm/u_mem/G_SRAM_BANK[3].u_sram} CACHE {1408.536 187.056 1529.928 359.856}
-{u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram} TAG {1549.8 9.936 1613.8 130.896}
-{u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram} TAG {1549.8 135.216 1613.8 256.176}
-{u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram} TAG {1618.056 9.936 1682.056 130.896}
-{u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram} TAG {1618.056 135.216 1682.056 256.176}
-ERROR u_axi_ram_hi/u_mem/G_SRAM_BANK[24].u_sram ra ngoai loi: 2079.432 9.936 2200.824 182.736
-ERROR u_axi_ram_hi/u_mem/G_SRAM_BANK[25].u_sram ra ngoai loi: 2079.432 187.056 2200.824 359.856
-ERROR u_axi_ram_hi/u_mem/G_SRAM_BANK[26].u_sram ra ngoai loi: 2079.432 364.176 2200.824 536.976
-ERROR u_axi_ram_hi/u_mem/G_SRAM_BANK[27].u_sram ra ngoai loi: 2079.432 541.296 2200.824 714.096
-ERROR u_axi_ram_hi/u_mem/G_SRAM_BANK[28].u_sram ra ngoai loi: 2079.432 718.416 2200.824 891.216
-ERROR u_axi_ram_hi/u_mem/G_SRAM_BANK[29].u_sram ra ngoai loi: 2079.432 895.536 2200.824 1068.336
-ERROR u_axi_ram_hi/u_mem/G_SRAM_BANK[30].u_sram ra ngoai loi: 2079.432 1072.656 2200.824 1245.456
-ERROR u_axi_ram_hi/u_mem/G_SRAM_BANK[31].u_sram ra ngoai loi: 2079.432 1249.776 2200.824 1422.576
-ERROR u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram - u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram cach 4.256 um < 4.320
-ERROR u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram - u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram cach 4.256 um < 4.320
+{u_dtcm/u_mem/G_SRAM_BANK[0].u_sram} CACHE {929.664 9.936 1051.056 182.736}
+{u_dtcm/u_mem/G_SRAM_BANK[1].u_sram} CACHE {929.664 187.056 1051.056 359.856}
+{u_dtcm/u_mem/G_SRAM_BANK[2].u_sram} CACHE {1055.376 9.936 1176.768 182.736}
+{u_dtcm/u_mem/G_SRAM_BANK[3].u_sram} CACHE {1055.376 187.056 1176.768 359.856}
+{u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram} CACHE {1191.24 9.936 1312.632 182.736}
+{u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram} CACHE {1191.24 187.056 1312.632 359.856}
+{u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram} CACHE {1316.952 9.936 1438.344 182.736}
+{u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram} CACHE {1316.952 187.056 1438.344 359.856}
+{u_itcm/u_mem/G_SRAM_BANK[0].u_sram} CACHE {1442.664 9.936 1564.056 182.736}
+{u_itcm/u_mem/G_SRAM_BANK[1].u_sram} CACHE {1442.664 187.056 1564.056 359.856}
+{u_itcm/u_mem/G_SRAM_BANK[2].u_sram} CACHE {1568.376 9.936 1689.768 182.736}
+{u_itcm/u_mem/G_SRAM_BANK[3].u_sram} CACHE {1568.376 187.056 1689.768 359.856}
+{u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram} TAG {784.296 9.936 848.296 130.896}
+{u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram} TAG {784.296 135.216 848.296 256.176}
+{u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram} TAG {856.872 9.936 920.872 130.896}
+{u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram} TAG {856.872 135.216 920.872 256.176}
