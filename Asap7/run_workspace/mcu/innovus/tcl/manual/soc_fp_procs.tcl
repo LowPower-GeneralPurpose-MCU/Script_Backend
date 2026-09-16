@@ -530,28 +530,122 @@ proc soc_island_pg {members all_boxes} {
     return $label
 }
 
-# Luoi toan chip: M7 doc (via len ring M8), M6 ngang (via xuong M5 de an vao
-# canh doc cua block ring SRAM).  Stripe dung o block ring.
+# Cac doan tu do trong lo..hi sau khi bo cac doan cam {a b}.
+proc soc_free_intervals {lo hi blocked} {
+    set out {}
+    set cur $lo
+    foreach b [soc_merge_intervals $blocked] {
+        lassign $b a z
+        if {$z <= $cur} {
+            continue
+        }
+        if {$a >= $hi} {
+            break
+        }
+        if {$a > $cur} {
+            lappend out [list $cur $a]
+        }
+        set cur $z
+    }
+    if {$hi > $cur} {
+        lappend out [list $cur $hi]
+    }
+    return $out
+}
+
+# Mot layer luoi toan chip, bo qua moi vung trong 'keepouts' {x0 y0 x1 y1}.
+# Vi tri cap VDD/VSS van theo luoi chung (goc loi + OFFSET + k*PITCH); cac vi tri
+# lien tiep co cung doan tu do gop vao mot lenh addStripe -area.
+# Doan tu do chay tu mep die den mep die (cat qua ring loi), editTrim cat phan thua.
+proc soc_mesh_layer {layer dir keepouts} {
+    set pair [expr {2.0 * $::SOC_MESH_W + $::SOC_MESH_S}]
+    set E $::SOC_PG_EPS
+    set min_len [expr {2.0 * $::SOC_MACRO_GAP}]
+    lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
+    lassign [lindex [dbGet top.fPlan.box] 0] dx0 dy0 dx1 dy1
+    if {$dir eq "vertical"} {
+        lassign [list $cx0 $cx1 [expr {$dy0 + $E}] [expr {$dy1 - $E}] left] c0 c1 s0 s1 from
+    } else {
+        lassign [list $cy0 $cy1 [expr {$dx0 + $E}] [expr {$dx1 - $E}] bottom] c0 c1 s0 s1 from
+    }
+    set groups {}
+    for {set pos [expr {$c0 + $::SOC_MESH_OFFSET}]} {$pos + $pair <= $c1 + 1e-6} \
+        {set pos [expr {$pos + $::SOC_MESH_PITCH}]} {
+        set blocked {}
+        foreach k $keepouts {
+            lassign $k kx0 ky0 kx1 ky1
+            if {$dir eq "vertical"} {
+                lassign [list $kx0 $kx1 $ky0 $ky1] a0 a1 b0 b1
+            } else {
+                lassign [list $ky0 $ky1 $kx0 $kx1] a0 a1 b0 b1
+            }
+            if {$pos < $a1 + $E && $pos + $pair > $a0 - $E} {
+                lappend blocked [list [expr {$b0 - $E}] [expr {$b1 + $E}]]
+            }
+        }
+        set free {}
+        foreach iv [soc_free_intervals $s0 $s1 $blocked] {
+            if {[lindex $iv 1] - [lindex $iv 0] >= $min_len} {
+                lappend free $iv
+            }
+        }
+        if {[llength $groups] > 0 && [lindex $groups end 2] eq $free} {
+            lset groups end 1 $pos
+        } else {
+            lappend groups [list $pos $pos $free]
+        }
+    }
+    set n 0
+    foreach g $groups {
+        lassign $g first last free
+        set p0 [expr {$first - $E}]
+        set p1 [expr {$last + $pair + $E}]
+        foreach iv $free {
+            lassign $iv b0 b1
+            if {$dir eq "vertical"} {
+                set area [list $p0 $b0 $p1 $b1]
+            } else {
+                set area [list $b0 $p0 $b1 $p1]
+            }
+            addStripe -nets {VDD VSS} -layer $layer -direction $dir \
+                -width $::SOC_MESH_W -spacing $::SOC_MESH_S \
+                -set_to_set_distance $::SOC_MESH_PITCH \
+                -start_from $from -start_offset $E -area $area \
+                -snap_wire_center_to_grid Grid
+            incr n
+        }
+    }
+    return $n
+}
+
+# Luoi toan chip M7 doc / M6 ngang, KHONG di len vung cum SRAM (than + khe giua
+# cac SRAM).  Noi vao luoi M4/M5 cua cum o mep cum:
+#   M6 ngang dung sat than cum -> cat cap M5 mep trai/phai cum, via M5-M6
+#   M7 doc  dung sat than cum -> cat cap M4 mep tren/duoi cum, via M4..M7
 proc soc_add_mesh {} {
-    setAddStripeMode -reset
-    setAddStripeMode -allow_jog none -break_at {block_ring} -split_vias true \
-        -via_using_exact_crossover_size false \
-        -stacked_via_bottom_layer M7 -stacked_via_top_layer M8
-    addStripe -nets {VDD VSS} -layer M7 -direction vertical \
-        -width $::SOC_MESH_W -spacing $::SOC_MESH_S \
-        -set_to_set_distance $::SOC_MESH_PITCH \
-        -start_from left -start_offset $::SOC_MESH_OFFSET \
-        -snap_wire_center_to_grid Grid
+    set keepouts {}
+    foreach island [soc_sram_islands [soc_sram_boxes]] {
+        set xs0 {}; set ys0 {}; set xs1 {}; set ys1 {}
+        foreach m $island {
+            lassign $m name group mx0 my0 mx1 my1
+            lappend xs0 $mx0; lappend ys0 $my0; lappend xs1 $mx1; lappend ys1 $my1
+        }
+        lappend keepouts [list [tcl::mathfunc::min {*}$xs0] [tcl::mathfunc::min {*}$ys0] \
+            [tcl::mathfunc::max {*}$xs1] [tcl::mathfunc::max {*}$ys1]]
+    }
 
     setAddStripeMode -reset
-    setAddStripeMode -allow_jog none -break_at {block_ring} -split_vias true \
+    setAddStripeMode -allow_jog none -break_at none -split_vias true \
+        -via_using_exact_crossover_size false \
+        -stacked_via_bottom_layer M4 -stacked_via_top_layer M8
+    set n7 [soc_mesh_layer M7 vertical $keepouts]
+
+    setAddStripeMode -reset
+    setAddStripeMode -allow_jog none -break_at none -split_vias true \
         -via_using_exact_crossover_size false \
         -stacked_via_bottom_layer M5 -stacked_via_top_layer M7
-    addStripe -nets {VDD VSS} -layer M6 -direction horizontal \
-        -width $::SOC_MESH_W -spacing $::SOC_MESH_S \
-        -set_to_set_distance $::SOC_MESH_PITCH \
-        -start_from bottom -start_offset $::SOC_MESH_OFFSET \
-        -snap_wire_center_to_grid Grid
+    set n6 [soc_mesh_layer M6 horizontal $keepouts]
+    puts "Luoi M7: $n7 vung, M6: $n6 vung (tranh [llength $keepouts] cum SRAM)"
 }
 
 # Rail M1 + stripe M5 cho std cell.  Flow Risc_V lam buoc nay SAU placement;
