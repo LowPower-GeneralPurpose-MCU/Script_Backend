@@ -17,8 +17,8 @@ Chạy trong thư mục `Asap7/run_workspace/mcu/innovus`, trên máy Linux có 
 | 2 | **Ring lõi M8/M9** (chỉ bám mép lõi nên làm trước SRAM) | | tùy chọn: `soc_add_mesh` xem lưới rồi `editDelete -shape STRIPE` |
 | 3 | Đặt sẵn 84 SRAM + halo (báo lỗi nếu còn stripe tạm) | tr. 31–32 | **LÀM TAY 1:** xếp SRAM, Space 4.32 |
 | 4 | snap, kiểm tra, FIXED, `FloorPlan_withMacro.fp` | tr. 36 | |
-| 5 | Block ring từng cụm SRAM (báo lỗi nếu SRAM chưa FIXED) | tr. 37–40 | **LÀM TAY 2 (tùy chọn)** |
-| 6 | sroute chân SRAM + lưới M7/M6 (dừng ở block ring) | tr. 38, 41 | |
+| 5 | Lưới M4 ngang/M5 dọc riêng từng cụm SRAM + tap M5 mỗi SRAM (cụm tính theo vị trí thật) | tr. 37–40 | **LÀM TAY 2 (tùy chọn):** xem lưới |
+| 6 | Lưới M7/M6 toàn chip | tr. 41 | |
 | 7 | Blockage + pin | tr. 38, 9–10 | tùy chọn: đổi cạnh pin |
 | 8 | verify + `saved/top_soc_powerplan.enc` | | |
 
@@ -40,10 +40,10 @@ Muốn đổi nhóm SRAM, khe, halo hay layer ring thì sửa `tcl/manual/soc_fp
 | Slide | Ở đây | Lý do |
 |---|---|---|
 | Gap SRAM 20.16 um (4 row) | 4.32 um (4 row × 1.08) | Cùng quy tắc 4 row |
-| `addRing -around shared_cluster`, M5/M4 rộng 1.92 | Cùng lệnh, M4 ngang / M5 dọc, rộng 0.096 | Đây là độ rộng một track hợp lệ trên M4/M5. Strap thấp rộng hơn đã gây short ở Risc_V |
+| `addRing -around shared_cluster`, M5/M4 rộng 1.92 | `addStripe -area` từng kênh: M4 ngang ở mép và khe giữa hàng, M5 dọc ở mép và khe giữa cột, rộng 0.096 (`soc_island_pg`) | addRing bao cả 84 SRAM và chỉ ra cạnh dọc (2026-09-16). Cách addStripe lấy từ sram_axi đã route sạch |
 | Stripe M4/M5 1.92 | Lưới M7 dọc / M6 ngang, 0.64, pitch 34.56 | Lấy từ Risc_V |
 | Không có ring lõi riêng | Ring lõi M8/M9 0.48 | Lấy từ Risc_V |
-| `sroute -blockPinTarget nearestTarget` | `blockring` (biến `SOC_BLOCKPIN_TARGET`) | sram_axi đã phải tắt `nearestTarget` |
+| `sroute -connect blockPin` | Tap M5 ở cạnh phải mỗi SRAM, nối chân M4 xuống khe | sram_axi: nearestTarget nối bừa và để hở hàng dưới |
 | `refine_macro_place` | Snap tọa độ về lưới site/row | `refine` có thể dời macro vừa xếp bằng tay |
 | `sroute -connect corePin` trước placement | Để sau placement (`soc_stdcell_rails`) | Risc_V bị short VDD/VSS khi làm trước |
 | `createGuide` / `proto_design` (chia vùng module) | Bỏ, placer tự kéo std cell lại gần SRAM | SoC nhỏ; guide mầm đã quá dày (cache ~190%) |
