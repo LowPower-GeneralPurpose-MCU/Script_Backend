@@ -205,6 +205,47 @@ proc soc_place_group {group x0 y0 status} {
     return $index
 }
 
+# Snap goc moi SRAM trong nhom ve luoi site/row, roi dich CA NHOM vao trong
+# loi neu lo mep (be rong loi khong chia het site: keo sat mep phai bang
+# move_obj -to core_box, lam tron len la ra ngoai 72 nm).  Dich ca nhom de
+# khe giua cac SRAM khong doi.  Tra ve list {name ptr x y sx sy}.
+proc soc_snap_group {group} {
+    lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
+    foreach {name kind cols rows prefixes} $::SOC_SRAM_GROUPS {
+        if {$name eq $group} {
+            lassign [soc_macro_size $kind] w h
+        }
+    }
+    set out {}
+    set over_x 0.0
+    set over_y 0.0
+    set under_x 0.0
+    set under_y 0.0
+    foreach record [soc_group_records $group] {
+        lassign $record name ptr
+        lassign [lindex [dbGet $ptr.pt] 0] x y
+        set sx [soc_snap_near $x $cx0 $::SOC_SITE_W]
+        set sy [soc_snap_near $y $cy0 $::SOC_ROW_H]
+        set over_x  [expr {max($over_x, $sx + $w - $cx1)}]
+        set over_y  [expr {max($over_y, $sy + $h - $cy1)}]
+        set under_x [expr {max($under_x, $cx0 - $sx)}]
+        set under_y [expr {max($under_y, $cy0 - $sy)}]
+        lappend out [list $name $ptr $x $y $sx $sy]
+    }
+    set dx [expr {[soc_snap_up $under_x $::SOC_SITE_W] - [soc_snap_up $over_x $::SOC_SITE_W]}]
+    set dy [expr {[soc_snap_up $under_y $::SOC_ROW_H] - [soc_snap_up $over_y $::SOC_ROW_H]}]
+    if {$dx == 0.0 && $dy == 0.0} {
+        return $out
+    }
+    puts [format "Nhom %s lo mep loi -> dich ca nhom dx=%.3f dy=%.3f" $group $dx $dy]
+    set moved {}
+    foreach item $out {
+        lassign $item name ptr x y sx sy
+        lappend moved [list $name $ptr $x $y [expr {$sx + $dx}] [expr {$sy + $dy}]]
+    }
+    return $moved
+}
+
 # Luu vi tri 84 SRAM (sau khi xep tay) ra file Tcl de lan sau KHOI 3 nap lai.
 proc soc_save_sram_place {{file ""}} {
     if {$file eq ""} {
