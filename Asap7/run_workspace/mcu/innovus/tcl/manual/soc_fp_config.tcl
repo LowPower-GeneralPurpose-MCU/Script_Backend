@@ -18,7 +18,8 @@ set SOC_ROW_H    1.080
 # Mac dinh tu tinh tu nhom SRAM + dien tich std cell.  Dat
 # MCU_CORE_WIDTH_UM / MCU_CORE_HEIGHT_UM (xem project_config.tcl) de ep kich thuoc.
 set SOC_CORE_MARGIN 10.0          ;# loi -> die, du cho ring M8/M9
-set SOC_EDGE_GAP    10.0          ;# macro -> mep loi
+set SOC_EDGE_GAP    0.0           ;# macro -> mep loi (10_Macro Priority 3: sat bien block;
+                                  ;#  cap VSS/VDD mep cum nam trong le loi->die)
 set SOC_GROUP_GAP   20.0          ;# giua hai nhom macro / nhom macro va logic
 
 # ---- SRAM (10_Macro trang 11-14, Hierarchy trang 34-35) -------------------
@@ -43,9 +44,11 @@ set SOC_SRAM_GROUPS {
 
 # ---- Power (Hierarchy trang 37-41) ----------------------------------------
 # Ring loi M8/M9 va luoi M6/M7: so cua Risc_V.
-set SOC_CORE_RING_W      0.480
-set SOC_CORE_RING_S      0.480
-set SOC_CORE_RING_OFFSET 0.192
+# Ring loi 2 vong trong le loi->die (tu ngoai vao):
+#   mep die | VSS rong 0.5 row | trong SOC_CORE_RING_S | VDD rong 0.5 row | trong | mep loi
+# Khoang trong trong cung (con lai) phai >= SOC_MACRO_GAP de chua cap M4/M5 mep cum SRAM.
+set SOC_CORE_RING_W [expr {0.5 * $SOC_ROW_H}]     ;# 0.54
+set SOC_CORE_RING_S [expr {0.5 * $SOC_ROW_H}]     ;# khoang trong giua 2 vong
 set SOC_MESH_W           0.640
 set SOC_MESH_S           0.288
 set SOC_MESH_PITCH      34.560
