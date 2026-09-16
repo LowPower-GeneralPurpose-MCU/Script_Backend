@@ -246,14 +246,28 @@ proc soc_report_guides {areas report} {
     set bad 0
     set fp [open $report w]
     puts $fp [format "%-30s %12s %12s %7s" guide std_area guide_area util]
-    set guides [dbGet -p top.fPlan.guides]
+    # -p/-p2 bat buoc co pattern (IMPTCM-113); top.fPlan.guides da la list con tro
+    set guides [dbGet -e top.fPlan.guides]
     if {$guides eq "0x0"} {
         set guides {}
     }
+    if {[llength $guides] == 0} {
+        puts "WARNING: khong co guide nao trong top.fPlan.guides"
+    }
     foreach guide_ptr $guides {
         set name [lindex [dbGet $guide_ptr.name] 0]
-        lassign [lindex [dbGet $guide_ptr.box] 0] x0 y0 x1 y1
-        set garea [expr {($x1 - $x0) * ($y1 - $y0)}]
+        # guide co the co nhieu hinh chu nhat: thu .boxes truoc, khong co thi .box
+        if {[catch {dbGet $guide_ptr.boxes} rects] || $rects eq "" || $rects eq "0x0"} {
+            if {[catch {dbGet $guide_ptr.box} rects]} {
+                close $fp
+                error "Guide $name khong doc duoc .boxes/.box - xem: dbGet $guide_ptr.?"
+            }
+        }
+        set garea 0.0
+        foreach rect $rects {
+            lassign $rect x0 y0 x1 y1
+            set garea [expr {$garea + ($x1 - $x0) * ($y1 - $y0)}]
+        }
         if {![dict exists $areas $name]} {
             set line [format "%-30s %12s %12.1f %7s  (khong khop ten instance cap 1)" $name ? $garea ?]
         } else {
