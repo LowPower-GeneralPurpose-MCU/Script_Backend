@@ -75,7 +75,14 @@ soc_block "KHOI 1: floorPlan" {
 # Ring chi bam mep loi, khong phu thuoc SRAM -> lam truoc khi dat SRAM.
 # Neu sau nay doi kich thuoc loi (floorPlan) thi phai paste lai khoi nay.
 soc_block "KHOI 2: core ring" {
-    deleteAllPowerPreroutes
+    # Ring phai co TRUOC luoi M6/M7 (KHOI 6 tao via M7-M8 luc addStripe).
+    # Khong dung deleteAllPowerPreroutes: paste lai khoi nay sau KHOI 5/6 se
+    # xoa sach luoi ma khong bao gi.
+    set stripes [dbGet -e top.nets.sWires.shape stripe]
+    if {[llength $stripes] > 0} {
+        error "Da co [llength $stripes] stripe - ring phai lam truoc KHOI 5/6.  Chay lai tu KHOI 0 theo thu tu 0-1-2-3-4-5-6-7-8"
+    }
+    editDelete -shape RING
     # Le loi->die that (floorPlan co the snap) = canh ngan nhat trong 4 canh
     lassign [lindex [dbGet top.fPlan.box] 0] dx0 dy0 dx1 dy1
     lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
@@ -101,16 +108,7 @@ soc_block "KHOI 2: core ring" {
             -snap_wire_center_to_grid Grid
     }
     # addRing hong thuong chi in WARNING -> dem that so doan ring M8/M9 cua tung net
-    foreach net {VDD VSS} {
-        set rings [dbGet -e -p [dbGet -p top.nets.name $net].sWires.shape ring]
-        set layers [expr {[llength $rings] ? [dbGet $rings.layer.name] : {}}]
-        set n8 [llength [lsearch -all -exact $layers M8]]
-        set n9 [llength [lsearch -all -exact $layers M9]]
-        puts "Ring loi $net: $n8 doan M8, $n9 doan M9"
-        if {$n8 < 2 || $n9 < 2} {
-            error "Ring loi $net khong duoc tao du (M8=$n8 M9=$n9) - xem addRing trong innovus.log"
-        }
-    }
+    soc_check_core_ring
     # Ring rong 0.544 um tren loi ~2000 um: zoom-all se khong thay, zoom vao goc loi de xem.
 }
 
@@ -240,6 +238,7 @@ soc_block "KHOI 5: luoi nguon M4/M5 cho tung cum SRAM" {
     if {$unfixed > 0} {
         error "$unfixed SRAM chua FIXED - chay KHOI 4 truoc"
     }
+    soc_check_core_ring
     # Xoa ket qua lan truoc (block ring cu + stripe M4/M5); ring loi M8/M9 van con.
     editDelete -shape BLOCKRING
     editDelete -layer M4 -shape STRIPE
@@ -275,6 +274,7 @@ soc_block "KHOI 5: luoi nguon M4/M5 cho tung cum SRAM" {
 # hang duoi).  M6 ngang via xuong M5 cua cum SRAM; M7 doc via len ring M8.
 # Neu paste lai KHOI 5 thi phai paste lai khoi nay.
 soc_block "KHOI 6: luoi M7/M6" {
+    soc_check_core_ring
     editDelete -layer M6 -shape STRIPE
     editDelete -layer M7 -shape STRIPE
     soc_add_mesh
@@ -302,6 +302,8 @@ soc_block "KHOI 7: blockage + pin" {
 # KHOI 8 - Kiem tra + luu (truoc placement)
 # ==========================================================================
 soc_block "KHOI 8: verify + saveDesign" {
+    # verifyConnectivity van sach khi thieu ring (M6/M7 tu noi voi nhau) -> dem rieng.
+    soc_check_core_ring
     clearDrc
     verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet \
         -error 100000 -warning 1000 \
@@ -317,7 +319,100 @@ soc_block "KHOI 8: verify + saveDesign" {
       (open o chan std cell la binh thuong - rail M1 chua lam)
   verify_rpt/drc_powerplan.rpt          : phai 0 vi pham PG
   GUI: Tools > Violation Browser de xem tung loi
-Sau place_design: soc_stdcell_rails (rail M1 + stripe M5, Risc_V lam sau placement)"
+Tiep theo: KHOI 9 (placement), KHOI 10 (rail M1 + stripe M5 std cell)"
+}
+
+
+# ==========================================================================
+# KHOI 9 - Placement std cell   (theo sram_axi/innovus_pnr.tcl da chay sach)
+# ==========================================================================
+# - Cat row trong cum SRAM + khe 4.32 quanh cum: khong std cell nao nam o noi
+#   stripe M5 cua std cell khong toi duoc (luoi M4/M5 rieng cua cum nam trong khe).
+# - Path group cua Genus: Innovus khong doc group_path trong SDC cua constraint mode.
+# - place_opt_design = place + toi uu preCTS; SRAM FIXED, khong refine macro.
+soc_block "KHOI 9: placement" {
+    soc_check_core_ring
+    if {[llength [dbGet -e top.nets.sWires.shape stripe]] == 0} {
+        error "Chua co luoi nguon - chay KHOI 5-8 truoc"
+    }
+    foreach {group kind cols rows prefixes} $SOC_SRAM_GROUPS {
+        foreach record [soc_group_records $group] {
+            if {[dbGet [lindex $record 1].pStatus] ne "fixed"} {
+                error "[lindex $record 0] chua FIXED - chay KHOI 4 truoc"
+            }
+        }
+    }
+
+    lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
+    foreach box [soc_sram_no_std_boxes] {
+        lassign $box x0 y0 x1 y1
+        # cutRow chi co nghia trong loi
+        cutRow -area [list [expr {max($x0, $cx0)}] [expr {max($y0, $cy0)}] \
+            [expr {min($x1, $cx1)}] [expr {min($y1, $cy1)}]]
+    }
+
+    if {[file isfile $INNOVUS_PATH_GROUPS]} {
+        puts "Doc path group: $INNOVUS_PATH_GROUPS"
+        source $INNOVUS_PATH_GROUPS
+    } else {
+        puts "WARNING: khong co $INNOVUS_PATH_GROUPS - chay khong path group cua Genus"
+    }
+
+    setDelayCalMode -SIAware false -equivalent_waveform_model none
+    setPlaceMode -reset
+    setPlaceMode \
+        -place_global_uniform_density false \
+        -place_global_module_aware_spare true \
+        -place_global_auto_blockage_in_channel soft \
+        -place_detail_preroute_as_obs {2 3} \
+        -place_global_cong_effort high \
+        -place_global_reorder_scan false \
+        -place_design_refine_macro false
+
+    place_opt_design
+    # Hang so 1'b0/1'b1 trong netlist -> cell TIE sat chan dung no
+    setTieHiLoMode -reset
+    setTieHiLoMode -cell {TIEHIx1_ASAP7_75t_R TIELOx1_ASAP7_75t_R} -maxFanout 8
+    addTieHiLo
+    refinePlace
+
+    checkPlace ./verify_rpt/checkPlace_place.rpt
+    checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_place.rpt
+    timeDesign -preCTS -outDir ./reports/timing_preCTS -prefix place
+    report_area > ./reports/area_place.rpt
+    saveDesign ./saved/${TOP}_placed.enc
+}
+# GUI: bat Instance, tat cac layer PG de nhin phan bo std cell; Place > Display >
+# Density Map / Route > Congestion de xem vung ket.
+# Xem: verify_rpt/checkPlace_place.rpt (phai 0 overlap / 0 unplaced),
+#      reports/timing_preCTS/place*.summary (WNS/TNS setup truoc CTS).
+
+
+# ==========================================================================
+# KHOI 10 - Rail M1 + stripe M5 cho std cell   (sau placement, nhu Risc_V)
+# ==========================================================================
+# Chi chay MOT lan tren design vua place: stripe M5 cua std cell va cua cum SRAM
+# cung shape STRIPE nen khong xoa rieng duoc.  Chay lai thi restoreDesign
+# saved/top_soc_placed.enc.dat roi paste lai khoi nay.
+soc_block "KHOI 10: rail M1 + stripe M5 std cell" {
+    if {[llength [dbGet -e top.nets.sWires.shape followpin]] > 0} {
+        error "Da co followpin - KHOI 10 da chay.  restoreDesign ./saved/${TOP}_placed.enc.dat $TOP roi chay lai"
+    }
+    soc_stdcell_rails
+
+    clearDrc
+    verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet \
+        -error 100000 -warning 1000 \
+        -report ./verify_rpt/connectivity_place.rpt
+    verify_drc -limit 100000 -report ./verify_rpt/drc_place.rpt
+    checkPlace ./verify_rpt/checkPlace_place_pg.rpt
+    saveDesign ./saved/${TOP}_placed_pg.enc
+
+    soc_banner "PLACEMENT XONG - saved/${TOP}_placed_pg.enc
+  verify_rpt/connectivity_place.rpt : phai 'Found no problems' (moi rail M1 co stripe M5)
+  verify_rpt/drc_place.rpt          : phai 0 vi pham
+  reports/timing_preCTS/            : WNS/TNS truoc CTS
+Tiep theo: CTS"
 }
 
 
@@ -339,3 +434,11 @@ Sau place_design: soc_stdcell_rails (rail M1 + stripe M5, Risc_V lam sau placeme
 #
 # c) Chi mo lai ket qua da luu de xem:
 #   restoreDesign ./saved/top_soc_powerplan.enc.dat top_soc
+#
+# d) Da co power grid (sau KHOI 8), chay placement:
+#   restoreDesign ./saved/top_soc_powerplan.enc.dat top_soc
+#   source ./tcl/project_config.tcl
+#   source ./tcl/manual/soc_fp_config.tcl
+#   source ./tcl/manual/soc_fp_procs.tcl
+#   -> paste KHOI 9, 10
+#   (KHOI 10 hong: restoreDesign ./saved/top_soc_placed.enc.dat top_soc, source 3 file tren, paste KHOI 10)
