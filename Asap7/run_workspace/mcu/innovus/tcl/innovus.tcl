@@ -13,7 +13,7 @@
 ##
 ## THU TU POWER (giong slide):
 ##   - Ring loi M8/M9 chi bam mep loi -> lam truoc khi dat SRAM (KHOI 2).
-##   - Block ring can -around shared_cluster, stripe can dung o block ring
+##   - Luoi M4/M5 rieng tung cum SRAM + luoi M6/M7 toan chip
 ##     -> chi lam SAU khi SRAM da FIXED (KHOI 5, 6).
 ##   - Slide trang 32 cung chi ve ring + stripe TAM de tao PG model roi xoa
 ##     (editDelete -shape {STRIPE BLOCKRING}) truoc khi dat macro.
@@ -201,12 +201,17 @@ soc_block "KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp" {
 
 
 # ==========================================================================
-# KHOI 5 - Block ring quanh TUNG cum SRAM   (Hierarchy trang 37-40)
+# KHOI 5 - Luoi nguon rieng TUNG cum SRAM   (Hierarchy trang 37-40)
 # ==========================================================================
-# Chi lam SAU KHOI 4: -around shared_cluster can SRAM da nam dung cho.
-# Slide: chon mot cum SRAM trong GUI roi addRing, lap lai cho moi cum.
-# Khoi nay tu chon tung cum theo SOC_SRAM_GROUPS roi goi soc_ring_selected.
-soc_block "KHOI 5: block ring cho cac cum SRAM" {
+# Slide dung 'addRing -type block_rings -around shared_cluster' voi cum dang
+# chon.  O day lenh do bao ca 84 SRAM va chi ra canh doc, nen thay bang
+# addStripe theo vung (cach sram_axi da route sach), tinh tu toa do that cua
+# tung cum - khong phu thuoc selection:
+#   M4 ngang: mep duoi, moi khe giua hai hang, mep tren
+#   M5 doc  : mep trai, moi khe giua hai cot, mep phai
+#   M5 tap  : moi SRAM 1 cap o canh phai, noi chan PG M4 cua SRAM xuong khe
+# Chi lam SAU KHOI 4 (SRAM da FIXED).
+soc_block "KHOI 5: luoi nguon M4/M5 cho tung cum SRAM" {
     set unfixed 0
     foreach {group kind cols rows prefixes} $SOC_SRAM_GROUPS {
         foreach record [soc_group_records $group] {
@@ -218,60 +223,47 @@ soc_block "KHOI 5: block ring cho cac cum SRAM" {
     if {$unfixed > 0} {
         error "$unfixed SRAM chua FIXED - chay KHOI 4 truoc"
     }
-    proc soc_ring_selected {} {
-        addRing -nets {VSS VDD} \
-            -type block_rings -around shared_cluster \
-            -layer $::SOC_BLOCK_RING_LAYERS \
-            -width $::SOC_BLOCK_RING_W \
-            -spacing $::SOC_BLOCK_RING_S \
-            -offset $::SOC_BLOCK_RING_OFFSET
+    # Xoa ket qua lan truoc (block ring cu + stripe M4/M5); ring loi M8/M9 van con.
+    editDelete -shape BLOCKRING
+    editDelete -layer M4 -shape STRIPE
+    editDelete -layer M5 -shape STRIPE
+    # Cum = cac SRAM nam sat nhau tren layout (< 2 khe), khong theo ten nhom
+    set SOC_SRAM_BOXES [soc_sram_boxes]
+    set SOC_ISLANDS [soc_sram_islands $SOC_SRAM_BOXES]
+    puts "[llength $SOC_SRAM_BOXES] SRAM -> [llength $SOC_ISLANDS] cum"
+    foreach island $SOC_ISLANDS {
+        soc_island_pg $island $SOC_SRAM_BOXES
     }
-    foreach {group kind cols rows prefixes} $SOC_SRAM_GROUPS {
-        deselectAll
-        foreach record [soc_group_records $group] {
-            selectInst [lindex $record 0]
-        }
-        puts "Block ring cum $group: [llength [dbGet selected]] macro"
-        soc_ring_selected
-    }
-    deselectAll
+    editTrim -nets {VSS VDD}
 }
 
 # --------------------------------------------------------------------------
-# [LAM TAY 2 - tuy chon] Xem / lam lai block ring   (Hierarchy trang 39-40)
+# [LAM TAY 2 - tuy chon] Xem luoi nguon cum SRAM   (Hierarchy trang 39-40)
 # --------------------------------------------------------------------------
 # GUI:
-#   - Zoom vao khe giua hai SRAM: phai thay 1 cap VDD/VSS (M4 ngang, M5 doc).
-#   - Click ra ngoai floorplan de bo chon sau khi xem (slide trang 39).
-# Lam lai ring kieu slide (chon cum bang tay):
-#   editDelete -shape BLOCKRING      ;# xoa het block ring (ring loi van con)
-#   (GUI) chon cac SRAM cua mot cum
-#   soc_ring_selected                ;# ring cho cum dang chon
-#   deselectAll                      ;# lap lai cho cum khac
+#   - Panel Layer: chi bat M4, M5 (va Instance) de nhin.
+#   - Zoom vao khe giua hai SRAM: phai thay 1 cap VSS/VDD - khe ngang la M4,
+#     khe doc la M5; bon mep moi cum cung co 1 cap; giua hai cum KHONG co day.
+#   - Canh phai moi SRAM co 1 cap M5 ngan (tap) chui tu khe ben duoi len.
+# Neu da doi vi tri SRAM: paste lai KHOI 4 roi KHOI 5 (khoi 5 tu xoa M4/M5 cu).
+# Hai SRAM cach nhau < 8.64 um (2 khe) duoc tinh chung mot cum; muon tach cum
+# thi keo xa hon 8.64 um.
 
 
 # ==========================================================================
-# KHOI 6 - Noi chan SRAM + luoi nguon toan chip   (Hierarchy trang 38, 41)
+# KHOI 6 - Luoi nguon toan chip M7/M6   (Hierarchy trang 41)
 # ==========================================================================
-# Chi lam SAU KHOI 5: stripe dung o block ring (-break_at block_ring).
-soc_block "KHOI 6: sroute blockPin + luoi M7/M6" {
-    # Chan VDD/VSS cua SRAM (tren M4) -> block ring.  Slide dung nearestTarget;
-    # flow sram_axi phai tat nearestTarget, nen mac dinh la blockring.
-    setSrouteMode -reset
-    setSrouteMode \
-        -extendNearestTarget true \
-        -blockPinRouteWithPinWidth true \
-        -viaConnectToShape {blockring}
-    sroute -connect {blockPin} \
-        -blockPinTarget [list $SOC_BLOCKPIN_TARGET] \
-        -nets {VSS VDD}
-
-    # M7 doc via len ring M8; M6 ngang via xuong canh M5 cua block ring.
+# Chan PG cua SRAM da duoc tap M5 o KHOI 5 noi vao luoi cum, nen khong con
+# 'sroute -connect blockPin' (sram_axi: nearestTarget noi bua thanh M4 va de ho
+# hang duoi).  M6 ngang via xuong M5 cua cum SRAM; M7 doc via len ring M8.
+# Neu paste lai KHOI 5 thi phai paste lai khoi nay.
+soc_block "KHOI 6: luoi M7/M6" {
+    editDelete -layer M6 -shape STRIPE
+    editDelete -layer M7 -shape STRIPE
     soc_add_mesh
     editTrim -nets {VDD VSS}
 }
-# GUI: panel Layer, bat/tat M6, M7 de nhin luoi.  Stripe phai dung o block
-# ring, khong de len than SRAM.
+# GUI: panel Layer, bat/tat M6, M7 de nhin luoi.
 
 
 # ==========================================================================

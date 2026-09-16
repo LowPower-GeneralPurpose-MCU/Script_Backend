@@ -248,6 +248,285 @@ proc soc_check_macros {report} {
     return $errors
 }
 
+# Canh duoi/trai cua cap VSS/VDD dat giua kenh lo..hi, tam day tren track.
+# Chep y tu pg_track_aligned_pair_offset cua sram_axi.
+proc soc_pg_pair_edge {layer lo hi} {
+    set w $::SOC_ISLAND_PG_W
+    set pitch $::SOC_PG_PITCH($layer)
+    set off $::SOC_PG_OFFSET($layer)
+    set pair [expr {2.0 * $w + $::SOC_ISLAND_PG_S}]
+    if {$hi - $lo <= $pair} {
+        error "$layer: kenh [format %.3f $lo]..[format %.3f $hi] hep hon mot cap VSS/VDD"
+    }
+    set nominal [expr {$lo + ($hi - $lo - $pair) / 2.0 + $w / 2.0}]
+    set edge [expr {$off + round(($nominal - $off) / $pitch) * $pitch - $w / 2.0}]
+    while {$edge < $lo - 1e-6} {
+        set edge [expr {$edge + $pitch}]
+    }
+    while {$edge > $hi - $pair + 1e-6} {
+        set edge [expr {$edge - $pitch}]
+    }
+    if {$edge < $lo - 1e-6} {
+        error "$layer: khong co track nao dat vua cap VSS/VDD trong $lo..$hi"
+    }
+    return $edge
+}
+
+# Mot cap VSS/VDD: M4 ngang hoac M5 doc, nam gon trong 'area'.
+proc soc_pg_pair {layer dir area} {
+    lassign $area ax0 ay0 ax1 ay1
+    if {$dir eq "horizontal"} {
+        lassign [list $ay0 $ay1 bottom] lo hi from
+    } else {
+        lassign [list $ax0 $ax1 left] lo hi from
+    }
+    set edge [soc_pg_pair_edge $layer $lo $hi]
+    addStripe -nets {VSS VDD} -layer $layer -direction $dir \
+        -width $::SOC_ISLAND_PG_W -spacing $::SOC_ISLAND_PG_S \
+        -start_from $from -start_offset [format %.6f [expr {$edge - $lo}]] \
+        -number_of_sets 1 -create_pins 0 -area $area \
+        -snap_wire_center_to_grid Grid \
+        -allow_snapping_override_custom_spacing 1
+}
+
+# So doan stripe VDD+VSS tren mot layer.
+proc soc_stripe_count {layer} {
+    set n 0
+    foreach net {VDD VSS} {
+        set ptrs [dbGet -e -p [dbGet -p top.nets.name $net].sWires.shape stripe]
+        if {[llength $ptrs] > 0} {
+            incr n [llength [lsearch -all -exact [dbGet $ptrs.layer.name] $layer]]
+        }
+    }
+    return $n
+}
+
+# Gop cac doan {lo hi} chong/cham nhau, sap tang dan.
+proc soc_merge_intervals {ivs} {
+    set out {}
+    foreach iv [lsort -real -index 0 $ivs] {
+        lassign $iv lo hi
+        if {[llength $out] > 0 && $lo <= [lindex $out end 1] + 1e-3} {
+            lset out end 1 [expr {max([lindex $out end 1], $hi)}]
+        } else {
+            lappend out [list $lo $hi]
+        }
+    }
+    return $out
+}
+
+# Moi SRAM: {ten nhom x0 y0 x1 y1} theo vi tri that (goc + kich thuoc LEF).
+proc soc_sram_boxes {} {
+    set boxes {}
+    foreach {group kind cols rows prefixes} $::SOC_SRAM_GROUPS {
+        lassign [soc_macro_size $kind] w h
+        foreach record [soc_group_records $group] {
+            lassign $record name ptr
+            lassign [lindex [dbGet $ptr.pt] 0] x y
+            lappend boxes [list $name $group $x $y [expr {$x + $w}] [expr {$y + $h}]]
+        }
+    }
+    return $boxes
+}
+
+# Chia SRAM thanh cum theo VI TRI (khong theo nhom config): hai SRAM cach nhau
+# < 2 khe (khong du cho 2 cap VSS/VDD rieng) thi chung mot cum.  Nhu vay TAG xep
+# chen giua cac cot CACHE van dung, va hai cum xa nhau khong dung chung day.
+proc soc_sram_islands {boxes} {
+    set n [llength $boxes]
+    set limit [expr {2.0 * $::SOC_MACRO_GAP - 1e-3}]
+    set label [lrepeat $n -1]
+    set islands {}
+    for {set i 0} {$i < $n} {incr i} {
+        if {[lindex $label $i] >= 0} {
+            continue
+        }
+        set id [llength $islands]
+        lset label $i $id
+        set queue [list $i]
+        set members {}
+        while {[llength $queue] > 0} {
+            set k [lindex $queue 0]
+            set queue [lrange $queue 1 end]
+            lappend members [lindex $boxes $k]
+            lassign [lrange [lindex $boxes $k] 2 5] ax0 ay0 ax1 ay1
+            for {set j 0} {$j < $n} {incr j} {
+                if {[lindex $label $j] >= 0} {
+                    continue
+                }
+                lassign [lrange [lindex $boxes $j] 2 5] bx0 by0 bx1 by1
+                if {max($bx0 - $ax1, $ax0 - $bx1, $by0 - $ay1, $ay0 - $by1) < $limit} {
+                    lset label $j $id
+                    lappend queue $j
+                }
+            }
+        }
+        lappend islands $members
+    }
+    return $islands
+}
+
+# Luoi nguon rieng cho MOT cum (tu soc_sram_islands).  Cum khong can deu:
+#   M5 doc  : moi kenh doc suot chieu cao cum - mep trai, khe giua cac cot, mep phai
+#   M4 ngang: trong tung cot - mep duoi, moi khe giua hai SRAM, mep tren - keo
+#             sang hai kenh doc ke ben de cat qua cap M5 (co via M4-M5)
+#   M5 tap  : moi SRAM mot cap o canh phai, tu khe ben duoi an len chan PG M4
+# Moi dai deu nam ngoai than SRAM (tru phan tap trong than SRAM cua chinh no).
+proc soc_island_pg {members all_boxes} {
+    set G $::SOC_MACRO_GAP
+    set E $::SOC_PG_EPS
+    set eps 1e-3
+    set pair [expr {2.0 * $::SOC_ISLAND_PG_W + $::SOC_ISLAND_PG_S}]
+
+    set groups {}
+    set xivs {}
+    set ys0 {}
+    set ys1 {}
+    foreach m $members {
+        lassign $m name group mx0 my0 mx1 my1
+        if {$group ni $groups} {
+            lappend groups $group
+        }
+        lappend xivs [list $mx0 $mx1]
+        lappend ys0 $my0
+        lappend ys1 $my1
+    }
+    set label "[join $groups +]([llength $members])"
+    set ymin [tcl::mathfunc::min {*}$ys0]
+    set ymax [tcl::mathfunc::max {*}$ys1]
+    set spans [soc_merge_intervals $xivs]
+    set x0 [expr {[lindex $spans 0 0] - $G}]
+    set x1 [expr {[lindex $spans end 1] + $G}]
+    set y0 [expr {$ymin - $G}]
+    set y1 [expr {$ymax + $G}]
+    lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
+    if {$x0 < $cx0 - $eps || $y0 < $cy0 - $eps || $x1 > $cx1 + $eps || $y1 > $cy1 + $eps} {
+        error [format "Cum %s {%.3f %.3f %.3f %.3f} phai cach mep loi >= %.2f um de co cho cap VSS/VDD - keo vao trong (LAM TAY 1) roi paste lai KHOI 4" \
+            $label [expr {$x0 + $G}] $ymin [expr {$x1 - $G}] $ymax $G]
+    }
+
+    # Kenh doc: mep trai, giua cac cot (suot chieu cao khong co SRAM), mep phai
+    set vchans [list [list $x0 [lindex $spans 0 0]]]
+    foreach a [lrange $spans 0 end-1] b [lrange $spans 1 end] {
+        if {[lindex $b 0] - [lindex $a 1] < $G - $eps} {
+            error [format "Cum %s: hai cot SRAM x=%.3f va x=%.3f cach %.3f < %.2f" \
+                $label [lindex $a 1] [lindex $b 0] [expr {[lindex $b 0] - [lindex $a 1]}] $G]
+        }
+        lappend vchans [list [lindex $a 1] [lindex $b 0]]
+    }
+    lappend vchans [list [lindex $spans end 1] $x1]
+
+    set areas {}
+    foreach c $vchans {
+        lappend areas [list M5 vertical [list [lindex $c 0] $y0 [lindex $c 1] $y1]]
+    }
+    # Kenh ngang trong tung cot, keo sang hai kenh doc ke ben (cach than SRAM E)
+    set nh 0
+    set last [expr {[llength $spans] - 1}]
+    for {set i 0} {$i <= $last} {incr i} {
+        lassign [lindex $spans $i] sx0 sx1
+        set ax0 [lindex $vchans $i 0]
+        set ax1 [lindex $vchans [expr {$i + 1}] 1]
+        if {$i > 0} {
+            set ax0 [expr {$ax0 + $E}]
+        }
+        if {$i < $last} {
+            set ax1 [expr {$ax1 - $E}]
+        }
+        set yivs {}
+        foreach m $members {
+            lassign $m name group mx0 my0 mx1 my1
+            if {$mx0 < $sx1 - $eps && $mx1 > $sx0 + $eps} {
+                lappend yivs [list $my0 $my1]
+            }
+        }
+        set rows [soc_merge_intervals $yivs]
+        set hchans [list [list [expr {[lindex $rows 0 0] - $G}] [lindex $rows 0 0]]]
+        foreach a [lrange $rows 0 end-1] b [lrange $rows 1 end] {
+            if {[lindex $b 0] - [lindex $a 1] < $G - $eps} {
+                error [format "Cum %s: hai SRAM y=%.3f va y=%.3f (cot x=%.1f) cach %.3f < %.2f" \
+                    $label [lindex $a 1] [lindex $b 0] $sx0 [expr {[lindex $b 0] - [lindex $a 1]}] $G]
+            }
+            lappend hchans [list [lindex $a 1] [lindex $b 0]]
+        }
+        lappend hchans [list [lindex $rows end 1] [expr {[lindex $rows end 1] + $G}]]
+        foreach c $hchans {
+            lappend areas [list M4 horizontal [list $ax0 [lindex $c 0] $ax1 [lindex $c 1]]]
+            incr nh
+        }
+    }
+
+    # Khong dai nao de len than SRAM (cua bat ky cum nao)
+    foreach item $areas {
+        lassign [lindex $item 2] ax0 ay0 ax1 ay1
+        foreach body $all_boxes {
+            lassign $body bname bgroup bx0 by0 bx1 by1
+            if {min($ax1, $bx1) - max($ax0, $bx0) > $eps && min($ay1, $by1) - max($ay0, $by0) > $eps} {
+                error [format "Cum %s: dai %s {%.3f %.3f %.3f %.3f} de len %s" \
+                    $label [lindex $item 0] $ax0 $ay0 $ax1 $ay1 $bname]
+            }
+        }
+    }
+    # Cap M4 cua hai cot ke nhau gap nhau trong kenh doc: phai trung nhau hoan toan
+    # hoac cach du xa, neu khong VSS cot nay de len VDD cot kia.
+    set m4 {}
+    foreach item $areas {
+        if {[lindex $item 0] eq "M4"} {
+            lassign [lindex $item 2] ax0 ay0 ax1 ay1
+            lappend m4 [list $ax0 $ax1 [soc_pg_pair_edge M4 $ay0 $ay1]]
+        }
+    }
+    foreach a $m4 {
+        foreach b $m4 {
+            lassign $a a0 a1 ea
+            lassign $b b0 b1 eb
+            set d [expr {abs($ea - $eb)}]
+            if {min($a1, $b1) - max($a0, $b0) > $eps && $d > 1e-6 && $d < $pair + $::SOC_ISLAND_PG_S - 1e-6} {
+                error [format "Cum %s: cap M4 y=%.3f va y=%.3f cua hai cot ke nhau lech %.3f um - cho khe ngang hai cot thang hang hoac lech xa hon" \
+                    $label $ea $eb $d]
+            }
+        }
+    }
+    # Tap: phan nam trong khe ben duoi SRAM khong duoc cham SRAM khac
+    set taps {}
+    foreach m $members {
+        lassign $m name group mx0 my0 mx1 my1
+        set tap [list [expr {$mx1 - $::SOC_PIN_TAP_BORDER}] [expr {$my0 - $G}] \
+            [expr {$mx1 - $E}] [expr {$my0 + $::SOC_PIN_TAP_DEPTH}]]
+        lassign $tap tx0 ty0 tx1 ty1
+        foreach body $all_boxes {
+            lassign $body bname bgroup bx0 by0 bx1 by1
+            if {$bname ne $name && min($tx1, $bx1) - max($tx0, $bx0) > $eps && min($ty1, $by1) - max($ty0, $by0) > $eps} {
+                error "Cum $label: tap cua $name de len $bname"
+            }
+        }
+        lappend taps $tap
+    }
+
+    set n4 [soc_stripe_count M4]
+    set n5 [soc_stripe_count M5]
+    setAddStripeMode -reset
+    setAddStripeMode -allow_jog none -allow_nonpreferred_dir none -break_at none \
+        -extend_to_closest_target area_boundary \
+        -stacked_via_bottom_layer M4 -stacked_via_top_layer M5
+    foreach item $areas {
+        soc_pg_pair {*}$item
+    }
+    foreach tap $taps {
+        soc_pg_pair M5 vertical $tap
+    }
+    set add4 [expr {[soc_stripe_count M4] - $n4}]
+    set add5 [expr {[soc_stripe_count M5] - $n5}]
+    set want4 [expr {2 * $nh}]
+    set want5 [expr {2 * ([llength $vchans] + [llength $taps])}]
+    puts [format "Cum %-16s %2d cot: M4 ngang %3d/%-3d doan, M5 doc %3d/%-3d doan" \
+        $label [llength $spans] $add4 $want4 $add5 $want5]
+    if {$add4 < $want4 || $add5 < $want5} {
+        error "Cum $label thieu stripe (M4 $add4/$want4, M5 $add5/$want5) - xem addStripe trong innovus.log"
+    }
+    return $label
+}
+
 # Luoi toan chip: M7 doc (via len ring M8), M6 ngang (via xuong M5 de an vao
 # canh doc cua block ring SRAM).  Stripe dung o block ring.
 proc soc_add_mesh {} {

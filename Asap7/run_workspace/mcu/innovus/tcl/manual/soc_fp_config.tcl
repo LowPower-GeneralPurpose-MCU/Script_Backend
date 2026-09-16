@@ -27,8 +27,8 @@ set SOC_HALO_ROWS      2          ;# halo quanh moi SRAM
 set SOC_MACRO_GAP  [expr {$SOC_MACRO_GAP_ROWS * $SOC_ROW_H}]
 set SOC_MACRO_HALO [expr {$SOC_HALO_ROWS * $SOC_ROW_H}]
 
-# Nhom SRAM = cac macro cung module, dat thanh mot cum va dung chung mot
-# block ring (addRing -around shared_cluster).
+# Nhom SRAM = cac macro cung module, dat thanh mot cum va co luoi nguon
+# M4/M5 rieng (soc_island_pg).
 #   ten    master(big|tag)  cot  hang  tien to instance
 # big = SRAM_MASTER (256x4x32), tag = SRAM_TAG_MASTER (128x4x20).
 set SOC_SRAM_GROUPS {
@@ -51,21 +51,22 @@ set SOC_MESH_S           0.288
 set SOC_MESH_PITCH      34.560
 set SOC_MESH_OFFSET     17.280
 
-# Block ring quanh cum SRAM: M4 tren/duoi, M5 trai/phai, rong 1 track (0.096,
-# nhu sram_axi).  Offset dat canh chung cua hai macro ke nhau vao giua khe.
-set SOC_BLOCK_RING_LAYERS {top M4 bottom M4 left M5 right M5}
-set SOC_BLOCK_RING_W 0.096
-set SOC_BLOCK_RING_S 0.288
-set SOC_BLOCK_RING_OFFSET [expr {
-    ($SOC_MACRO_GAP - (2.0 * $SOC_BLOCK_RING_W + $SOC_BLOCK_RING_S)) / 2.0
-}]
+# Luoi nguon rieng cho tung cum SRAM (thay addRing -around shared_cluster, xem
+# soc_island_pg): 1 cap VSS/VDD o moi mep cum va moi khe 4.32 giua SRAM.
+#   M4 ngang: mep duoi, mep tren, moi khe giua hai hang
+#   M5 doc  : mep trai, mep phai, moi khe giua hai cot
+#   M5 tap  : moi SRAM mot cap o canh phai, tu khe ben duoi an len chan M4
+# So lay tu sram_axi/innovus/tcl/sram_island_power.tcl (da route sach).
+set SOC_ISLAND_PG_W 0.096
+set SOC_ISLAND_PG_S 0.288
+set SOC_PIN_TAP_DEPTH  [expr {8 * $SOC_ROW_H}]     ;# tap an vao than SRAM
+set SOC_PIN_TAP_BORDER [expr {2 * $SOC_ROW_H}]     ;# tap nam trong 2 row sat canh phai
+set SOC_PG_EPS 0.192
+array set SOC_PG_PITCH  {M4 0.192 M5 0.192}
+array set SOC_PG_OFFSET {M4 0.012 M5 0.000}
 
 # Stripe M5 doc de noi rail M1 cua std cell (Risc_V: pitch 25.92).
 set SOC_M5_W      0.096
 set SOC_M5_S      0.288
 set SOC_M5_PITCH 25.920
 set SOC_M5_OFFSET 12.960
-
-# Dich cua 'sroute -connect blockPin'.  Slide dung nearestTarget; flow
-# sram_axi da phai tat nearestTarget.  Mac dinh noi vao block ring.
-set SOC_BLOCKPIN_TARGET blockring
