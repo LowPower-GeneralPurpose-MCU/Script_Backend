@@ -2,7 +2,7 @@
 
 Flow này đi theo đúng các bước trong slide của thầy (ROHM 180 nm), nhưng lệnh và layer đã đổi sang ASAP7. Các con số lấy từ hai flow đã route sạch trong repo: `Risc_V/innovus` và `sram_axi/innovus`.
 
-Mọi bước nằm trong **một file `tcl/innovus.tcl`**, chia thành KHỐI 0–9. Ở các chỗ `[LAM TAY]`, comment trong file ghi thao tác GUI kèm lệnh tương đương. File cũ `macro_floorplan.tcl` (xếp SRAM tự động) không còn được gọi.
+Mọi bước nằm trong **một file `tcl/innovus.tcl`**, chia thành KHỐI 0–8. Ở các chỗ `[LAM TAY]`, comment trong file ghi thao tác GUI kèm lệnh tương đương. File cũ `macro_floorplan.tcl` (xếp SRAM tự động) không còn được gọi.
 
 ## Chạy
 
@@ -13,15 +13,14 @@ Chạy trong thư mục `Asap7/run_workspace/mcu/innovus`, trên máy Linux có 
 | Khối | Việc | Slide | Sau khối này |
 |---|---|---|---|
 | 0 | Nạp thiết kế, derate, dont_touch TRNG | | |
-| 1 | `floorPlan` + guide mầm | Hierarchy tr. 24–26 | **LÀM TAY 1:** chỉnh guide (< 80%) |
-| 2 | snap guide, `FloorPlan.fp` | tr. 29 | |
-| 3 | **Ring lõi M8/M9** (chỉ bám mép lõi nên làm trước SRAM) | | tùy chọn: `soc_add_mesh` xem lưới rồi `editDelete -shape STRIPE` |
-| 4 | Đặt sẵn 84 SRAM + halo (báo lỗi nếu còn stripe tạm) | tr. 31–32 | **LÀM TAY 2:** xếp SRAM, Space 4.32 |
-| 5 | snap, kiểm tra, FIXED, `FloorPlan_withMacro.fp` | tr. 36 | |
-| 6 | Block ring từng cụm SRAM (báo lỗi nếu SRAM chưa FIXED) | tr. 37–40 | **LÀM TAY 3 (tùy chọn)** |
-| 7 | sroute chân SRAM + lưới M7/M6 (dừng ở block ring) | tr. 38, 41 | |
-| 8 | Blockage + pin | tr. 38, 9–10 | tùy chọn: đổi cạnh pin |
-| 9 | verify + `saved/top_soc_powerplan.enc` | | |
+| 1 | `floorPlan` (kích thước lõi), `FloorPlan.fp`. Không chia vùng guide | Hierarchy tr. 24 | |
+| 2 | **Ring lõi M8/M9** (chỉ bám mép lõi nên làm trước SRAM) | | tùy chọn: `soc_add_mesh` xem lưới rồi `editDelete -shape STRIPE` |
+| 3 | Đặt sẵn 84 SRAM + halo (báo lỗi nếu còn stripe tạm) | tr. 31–32 | **LÀM TAY 1:** xếp SRAM, Space 4.32 |
+| 4 | snap, kiểm tra, FIXED, `FloorPlan_withMacro.fp` | tr. 36 | |
+| 5 | Block ring từng cụm SRAM (báo lỗi nếu SRAM chưa FIXED) | tr. 37–40 | **LÀM TAY 2 (tùy chọn)** |
+| 6 | sroute chân SRAM + lưới M7/M6 (dừng ở block ring) | tr. 38, 41 | |
+| 7 | Blockage + pin | tr. 38, 9–10 | tùy chọn: đổi cạnh pin |
+| 8 | verify + `saved/top_soc_powerplan.enc` | | |
 
 Thứ tự power theo slide: ring lõi làm trước; block ring và stripe chỉ làm sau khi SRAM đã FIXED. Slide trang 32 cũng chỉ vẽ ring + stripe tạm để tạo PG model, rồi xóa đi trước khi đặt macro.
 
@@ -33,9 +32,8 @@ Các biến môi trường điều khiển flow:
 
 - **`MCU_CORE_WIDTH_UM` / `MCU_CORE_HEIGHT_UM`:** ép kích thước lõi.
 - **`MCU_TARGET_STD_UTIL`:** mặc định 0.55.
-- **`MCU_RUN_PROTO_DESIGN=1`:** dùng `proto_design` như slide. Cần license `invs_ehfs`.
 
-Muốn đổi nhóm SRAM, guide, khe, halo hay layer ring thì sửa `tcl/manual/soc_fp_config.tcl`. Đổi cạnh pin thì sửa `tcl/manual/soc_pins.tcl`.
+Muốn đổi nhóm SRAM, khe, halo hay layer ring thì sửa `tcl/manual/soc_fp_config.tcl`. Đổi cạnh pin thì sửa `tcl/manual/soc_pins.tcl`.
 
 ## Slide ROHM → ASAP7
 
@@ -48,7 +46,7 @@ Muốn đổi nhóm SRAM, guide, khe, halo hay layer ring thì sửa `tcl/manual
 | `sroute -blockPinTarget nearestTarget` | `blockring` (biến `SOC_BLOCKPIN_TARGET`) | sram_axi đã phải tắt `nearestTarget` |
 | `refine_macro_place` | Snap tọa độ về lưới site/row | `refine` có thể dời macro vừa xếp bằng tay |
 | `sroute -connect corePin` trước placement | Để sau placement (`soc_stdcell_rails`) | Risc_V bị short VDD/VSS khi làm trước |
-| `proto_design` | Guide mầm tính từ diện tích module | Không có license EHFS |
+| `createGuide` / `proto_design` (chia vùng module) | Bỏ, placer tự kéo std cell lại gần SRAM | SoC nhỏ; guide mầm đã quá dày (cache ~190%) |
 | Pin `-layer 2/3` | M6 (trái/phải), M7 (trên/dưới), 0.128 × 0.288 | Lấy từ Risc_V |
 
 ## Những việc SoC này cần mà ví dụ RISC-V trong slide không có
@@ -66,9 +64,9 @@ Muốn đổi nhóm SRAM, guide, khe, halo hay layer ring thì sửa `tcl/manual
 
 ```
 +----------------------------------------------------------------+
-| RAM_LO |               DMA guide                      | RAM_HI |
-| 4 x 8  |         u_axi_interconnect guide             | 4 x 8  |
-|        |    u_icache | u_core | u_dcache   (guide)     |        |
+| RAM_LO |                                              | RAM_HI |
+| 4 x 8  |      vùng logic (placer tự đặt std cell)     | 4 x 8  |
+|        |                                              |        |
 |        |  CACHE 8 x 2 (icache/dcache/itcm/dtcm) | TAG |        |
 +----------------------------------------------------------------+
 lõi khoảng 2211 x 1433 um (tính với 300k um² std cell, util 0.55)
@@ -84,7 +82,6 @@ Mật độ tổng thể thấp vì hai bức tường RAM cao 1413 um quyết �
   - Trên DB giả lập với kích thước LEF thật, mầm đặt đủ 84 macro, 0 lỗi.
   - Negative control: SRAM đặt cách nhau 0.82 um bị báo lỗi, xoay R90 bị báo lỗi.
 - **Chưa chạy trên Innovus.** Các điểm cần xem kỹ ở lần chạy đầu:
-  - Thuộc tính `top.fPlan.guides` (.name có phải tên instance không).
   - `sroute -blockPinTarget blockring`.
   - `createPlaceBlockage -allMacro -outerRingBySide`.
   - DRC của block ring M4/M5 trong khe 4.32 um.
