@@ -41,21 +41,6 @@ set SOC_SRAM_GROUPS {
 #   RAM_LO sat mep trai, RAM_HI sat mep phai, CACHE giua sat mep duoi,
 #   TAG ben phai CACHE.  Muon doi thi sua proc soc_layout (soc_fp_procs.tcl).
 
-# ---- Module guide (Hierarchy trang 24-28) ---------------------------------
-# Chi guide module lon.  Dien tich std cell (area_hierarchy_syn.rpt 2026-09-14):
-#   u_axi_interconnect 115.7k, u_core 44.2k, DMA 26.8k,
-#   phan logic u_dcache ~19k, u_icache ~16k (khong tinh macro).
-#   hinst                         hang (0 = sat cum CACHE, 1 = giua, 2 = tren)
-set SOC_GUIDES {
-    u_icache                     0
-    u_core                       0
-    u_dcache                     0
-    u_axi_interconnect           1
-    u_axi_apb_dma_u_dma_engine   2
-}
-set SOC_GUIDE_TARGET_UTIL 0.75    ;# slide: ~75% la tot nhat
-set SOC_GUIDE_MAX_UTIL    0.80    ;# slide: phai < 80%
-
 # ---- Power (Hierarchy trang 37-41) ----------------------------------------
 # Ring loi M8/M9 va luoi M6/M7: so cua Risc_V.
 set SOC_CORE_RING_W      0.480
