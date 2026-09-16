@@ -38,6 +38,8 @@ set SOC_SRAM_GROUPS {
     CACHE   big 8 2 {u_icache/ u_dcache/ u_itcm/ u_dtcm/}
     TAG     tag 2 2 {u_icache/ u_dcache/}
 }
+# Vi tri SRAM da xep tay (soc_save_sram_place ghi, KHOI 3 nap neu file ton tai).
+set SOC_SRAM_PLACE_FILE ./tcl/manual/soc_sram_place.tcl
 # Vi tri mam do KHOI 3 cua tcl/innovus.tcl dat (sau do ban keo lai trong GUI):
 #   RAM_LO sat mep trai, RAM_HI sat mep phai, CACHE giua sat mep duoi,
 #   TAG ben phai CACHE.  Muon doi thi sua proc soc_layout (soc_fp_procs.tcl).

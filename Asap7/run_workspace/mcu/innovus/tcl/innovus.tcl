@@ -131,13 +131,18 @@ soc_block "KHOI 3: dat mam 84 SRAM" {
     if {[llength $stripes] > 0} {
         error "Con [llength $stripes] stripe tam - chay 'editDelete -shape STRIPE' truoc"
     }
-    # Tinh lai bo cuc tren loi hien tai (neu ban da doi loi o KHOI 1).
-    set MCU_CORE_WIDTH_OVERRIDE  [dbGet top.fPlan.coreBox_sizex]
-    set MCU_CORE_HEIGHT_OVERRIDE [dbGet top.fPlan.coreBox_sizey]
-    set SOC_LAYOUT [soc_layout 0.0]
-    foreach g {RAM_LO RAM_HI CACHE TAG} {
-        lassign [dict get $SOC_LAYOUT $g] x y
-        puts "Cum $g: [soc_place_group $g $x $y placed] macro"
+    if {[file isfile $SOC_SRAM_PLACE_FILE]} {
+        # Da xep tay truoc do (KHOI 4 / soc_save_sram_place da luu) -> nap lai.
+        puts "Nap [soc_load_sram_place] SRAM tu $SOC_SRAM_PLACE_FILE (xoa file de xep mam lai)"
+    } else {
+        # Tinh lai bo cuc tren loi hien tai (neu ban da doi loi o KHOI 1).
+        set MCU_CORE_WIDTH_OVERRIDE  [dbGet top.fPlan.coreBox_sizex]
+        set MCU_CORE_HEIGHT_OVERRIDE [dbGet top.fPlan.coreBox_sizey]
+        set SOC_LAYOUT [soc_layout 0.0]
+        foreach g {RAM_LO RAM_HI CACHE TAG} {
+            lassign [dict get $SOC_LAYOUT $g] x y
+            puts "Cum $g: [soc_place_group $g $x $y placed] macro"
+        }
     }
     # Halo 2 row moi phia: hai SRAM cach 4 row thi hai halo vua kin khe.
     addHaloToBlock -allBlock $SOC_MACRO_HALO $SOC_MACRO_HALO $SOC_MACRO_HALO $SOC_MACRO_HALO
@@ -164,6 +169,9 @@ soc_block "KHOI 3: dat mam 84 SRAM" {
 #   dbGet [dbGet -p top.insts.name <ten>].pt         ;# xem toa do goc
 # Kiem tra bat ky luc nao (huong, nam trong loi, khe >= 4.32):
 #   soc_check_macros ./reports/sram_macro_check.rpt
+# Luu vi tri dang xep bat ky luc nao (KHOI 3 lan sau tu nap lai; KHOI 4 cung tu luu):
+#   soc_save_sram_place                              ;# -> tcl/manual/soc_sram_place.tcl
+#   file delete tcl/manual/soc_sram_place.tcl        ;# bo ban luu, KHOI 3 xep mam lai
 # Quy tac:
 #   - SRAM cung module nam cung cum; cum sat canh/goc; khong de notch
 #   - chan SRAM hai cot ke nhau quay vao nhau (mam: cot chan R0, cot le MY)
@@ -192,6 +200,8 @@ soc_block "KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp" {
         }
     }
     snapFPlan -block
+    # Luu truoc khi kiem tra: check loi thi cong xep tay van con, sua roi chay lai.
+    soc_save_sram_place
 
     set errors [soc_check_macros ./reports/sram_macro_check_final.rpt]
     if {[llength $errors] > 0} {
@@ -325,6 +335,8 @@ Sau place_design: soc_stdcell_rails (rail M1 + stripe M5, Risc_V lam sau placeme
 # a) Da co loi (sau KHOI 1), lam lai SRAM:
 #   loadFPlan ./outputs/FloorPlan.fp
 #   -> paste KHOI 2, KHOI 3, LAM TAY 1, KHOI 4 ...
+#   Neu co tcl/manual/soc_sram_place.tcl thi KHOI 3 nap vi tri da xep tay,
+#   khong can LAM TAY 1 nua: KHOI 0 -> 1 -> 2 -> 3 -> 4.
 #
 # b) SRAM da FIXED (sau KHOI 4), lam lai power grid:
 #   loadFPlan ./outputs/FloorPlan_withMacro.fp

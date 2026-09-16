@@ -21,6 +21,10 @@ proc soc_snap_up {value grid} {
     return [expr {ceil(double($value) / $grid - 1e-9) * $grid}]
 }
 
+proc soc_snap_down {value grid} {
+    return [expr {floor(double($value) / $grid + 1e-9) * $grid}]
+}
+
 proc soc_snap_near {value origin grid} {
     return [expr {$origin + round((double($value) - $origin) / $grid) * $grid}]
 }
@@ -141,18 +145,24 @@ proc soc_layout {std_area_total} {
     set core_w [expr {2 * $E + $W(RAM_LO) + $G + $mid_w + $G + $W(RAM_HI)}]
     set core_h [expr {2 * $E + max($H(RAM_LO), $H(RAM_HI), \
         $band_h + $G + $logic_area / $mid_w)}]
-    if {$::MCU_CORE_WIDTH_OVERRIDE > 0.0} {
-        set core_w $::MCU_CORE_WIDTH_OVERRIDE
-    }
-    if {$::MCU_CORE_HEIGHT_OVERRIDE > 0.0} {
-        set core_h $::MCU_CORE_HEIGHT_OVERRIDE
-    }
     set core_w [soc_snap_up $core_w $::SOC_SITE_W]
     set core_h [soc_snap_up $core_h $::SOC_ROW_H]
+    # Override (KHOI 3 lay tu coreBox that) KHONG duoc snap len: floorPlan snap
+    # be rong loi theo PlacementGrid, khong phai site 0.216 (2190.816 khong chia
+    # het 0.216) -> snap len thanh 2190.888 thi RAM_HI lo ra ngoai loi 72 nm.
+    if {$::MCU_CORE_WIDTH_OVERRIDE > 0.0} {
+        set core_w [expr {double($::MCU_CORE_WIDTH_OVERRIDE)}]
+    }
+    if {$::MCU_CORE_HEIGHT_OVERRIDE > 0.0} {
+        set core_h [expr {double($::MCU_CORE_HEIGHT_OVERRIDE)}]
+    }
 
     set L [dict create core_w $core_w core_h $core_h]
     dict set L RAM_LO [list $E $E $W(RAM_LO) $H(RAM_LO)]
-    dict set L RAM_HI [list [expr {$core_w - $E - $W(RAM_HI)}] $E $W(RAM_HI) $H(RAM_HI)]
+    # Cum sat mep phai: lam tron XUONG luoi site, soc_place_group snap_near se
+    # giu nguyen (lam tron len la vuot mep loi).
+    dict set L RAM_HI [list [soc_snap_down [expr {$core_w - $E - $W(RAM_HI)}] $::SOC_SITE_W] \
+        $E $W(RAM_HI) $H(RAM_HI)]
     set x_cache [expr {$E + $W(RAM_LO) + $G}]
     dict set L CACHE [list $x_cache $E $W(CACHE) $H(CACHE)]
     dict set L TAG [list [expr {$x_cache + $W(CACHE) + $G}] $E $W(TAG) $H(TAG)]
@@ -193,6 +203,64 @@ proc soc_place_group {group x0 y0 status} {
         incr index
     }
     return $index
+}
+
+# Luu vi tri 84 SRAM (sau khi xep tay) ra file Tcl de lan sau KHOI 3 nap lai.
+proc soc_save_sram_place {{file ""}} {
+    if {$file eq ""} {
+        set file $::SOC_SRAM_PLACE_FILE
+    }
+    set lines {}
+    foreach {group kind cols rows prefixes} $::SOC_SRAM_GROUPS {
+        foreach record [soc_group_records $group] {
+            lassign $record name ptr
+            if {[dbGet $ptr.pStatus] eq "unplaced"} {
+                error "$name chua dat - khong luu"
+            }
+            lassign [lindex [dbGet $ptr.pt] 0] x y
+            lappend lines [format "    {%s %.4f %.4f %s}" [list $name] $x $y [dbGet $ptr.orient]]
+        }
+    }
+    set fp [open $file w]
+    puts $fp "# Vi tri SRAM luu boi soc_save_sram_place - KHOI 3 nap lai file nay."
+    puts $fp "# Xoa file de KHOI 3 xep lai vi tri mam."
+    puts $fp "set SOC_SRAM_PLACE_CORE {[lindex [dbGet top.fPlan.coreBox] 0]}"
+    puts $fp "set SOC_SRAM_PLACE {"
+    puts $fp [join $lines \n]
+    puts $fp "}"
+    close $fp
+    puts "Da luu [llength $lines] SRAM vao $file"
+    return [llength $lines]
+}
+
+# Nap file cua soc_save_sram_place; loi neu loi (core) khac luc luu.
+proc soc_load_sram_place {{file ""}} {
+    if {$file eq ""} {
+        set file $::SOC_SRAM_PLACE_FILE
+    }
+    uplevel #0 [list source $file]
+    set saved $::SOC_SRAM_PLACE_CORE
+    set now [lindex [dbGet top.fPlan.coreBox] 0]
+    foreach a $saved b $now {
+        if {abs($a - $b) > 1e-3} {
+            error "Loi hien tai {$now} khac loi luc luu {$saved} - xoa $file de xep mam lai"
+        }
+    }
+    set expected [expr {$::SRAM_EXPECTED_COUNT + $::SRAM_TAG_EXPECTED_COUNT}]
+    if {[llength $::SOC_SRAM_PLACE] != $expected} {
+        error "$file co [llength $::SOC_SRAM_PLACE] SRAM, netlist co $expected"
+    }
+    foreach entry $::SOC_SRAM_PLACE {
+        lassign $entry name x y orient
+        set ptr [dbGet -e -p top.insts.name $name]
+        if {$ptr eq ""} {
+            error "$file: khong co instance $name"
+        }
+        dbSet $ptr.pStatus unplaced
+        placeInstance $name $x $y $orient
+        dbSet $ptr.pStatus placed
+    }
+    return [llength $::SOC_SRAM_PLACE]
 }
 
 # Kiem tra SRAM sau khi chinh tay: huong, nam trong loi, khe >= SOC_MACRO_GAP.
