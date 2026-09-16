@@ -184,14 +184,9 @@ soc_block "KHOI 3: dat mam 84 SRAM" {
 soc_block "KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp" {
     # Snap goc SRAM ve luoi site/row (thay refine_macro_place cua slide, lenh
     # do co the dich macro vua xep tay).
-    set core_llx [dbGet top.fPlan.coreBox_llx]
-    set core_lly [dbGet top.fPlan.coreBox_lly]
     foreach {group kind cols rows prefixes} $SOC_SRAM_GROUPS {
-        foreach record [soc_group_records $group] {
-            lassign $record name ptr
-            lassign [lindex [dbGet $ptr.pt] 0] x y
-            set sx [soc_snap_near $x $core_llx $SOC_SITE_W]
-            set sy [soc_snap_near $y $core_lly $SOC_ROW_H]
+        foreach snapped [soc_snap_group $group] {
+            lassign $snapped name ptr x y sx sy
             if {abs($sx - $x) > 1e-4 || abs($sy - $y) > 1e-4} {
                 set orient [dbGet $ptr.orient]
                 dbSet $ptr.pStatus unplaced

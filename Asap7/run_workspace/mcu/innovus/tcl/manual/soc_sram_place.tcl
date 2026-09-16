@@ -34,38 +34,38 @@ set SOC_SRAM_PLACE {
     {{u_axi_ram_lo/u_mem/G_SRAM_BANK[29].u_sram} 387.0720 895.5360 MY}
     {{u_axi_ram_lo/u_mem/G_SRAM_BANK[30].u_sram} 387.0720 1072.6560 MY}
     {{u_axi_ram_lo/u_mem/G_SRAM_BANK[31].u_sram} 387.0720 1249.7760 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[0].u_sram} 1702.2960 9.9360 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[1].u_sram} 1702.2960 187.0560 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[2].u_sram} 1702.2960 364.1760 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[3].u_sram} 1702.2960 541.2960 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[4].u_sram} 1702.2960 718.4160 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[5].u_sram} 1702.2960 895.5360 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[6].u_sram} 1702.2960 1072.6560 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[7].u_sram} 1702.2960 1249.7760 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[8].u_sram} 1828.0080 9.9360 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[9].u_sram} 1828.0080 187.0560 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[10].u_sram} 1828.0080 364.1760 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[11].u_sram} 1828.0080 541.2960 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[12].u_sram} 1828.0080 718.4160 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[13].u_sram} 1828.0080 895.5360 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[14].u_sram} 1828.0080 1072.6560 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[15].u_sram} 1828.0080 1249.7760 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[16].u_sram} 1953.7200 9.9360 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[17].u_sram} 1953.7200 187.0560 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[18].u_sram} 1953.7200 364.1760 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[19].u_sram} 1953.7200 541.2960 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[20].u_sram} 1953.7200 718.4160 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[21].u_sram} 1953.7200 895.5360 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[22].u_sram} 1953.7200 1072.6560 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[23].u_sram} 1953.7200 1249.7760 R0}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[24].u_sram} 2079.4320 9.9360 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[25].u_sram} 2079.4320 187.0560 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[26].u_sram} 2079.4320 364.1760 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[27].u_sram} 2079.4320 541.2960 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[28].u_sram} 2079.4320 718.4160 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[29].u_sram} 2079.4320 895.5360 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[30].u_sram} 2079.4320 1072.6560 MY}
-    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[31].u_sram} 2079.4320 1249.7760 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[0].u_sram} 1702.0800 9.9360 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[1].u_sram} 1702.0800 187.0560 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[2].u_sram} 1702.0800 364.1760 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[3].u_sram} 1702.0800 541.2960 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[4].u_sram} 1702.0800 718.4160 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[5].u_sram} 1702.0800 895.5360 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[6].u_sram} 1702.0800 1072.6560 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[7].u_sram} 1702.0800 1249.7760 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[8].u_sram} 1827.7920 9.9360 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[9].u_sram} 1827.7920 187.0560 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[10].u_sram} 1827.7920 364.1760 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[11].u_sram} 1827.7920 541.2960 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[12].u_sram} 1827.7920 718.4160 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[13].u_sram} 1827.7920 895.5360 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[14].u_sram} 1827.7920 1072.6560 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[15].u_sram} 1827.7920 1249.7760 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[16].u_sram} 1953.5040 9.9360 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[17].u_sram} 1953.5040 187.0560 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[18].u_sram} 1953.5040 364.1760 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[19].u_sram} 1953.5040 541.2960 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[20].u_sram} 1953.5040 718.4160 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[21].u_sram} 1953.5040 895.5360 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[22].u_sram} 1953.5040 1072.6560 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[23].u_sram} 1953.5040 1249.7760 R0}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[24].u_sram} 2079.2160 9.9360 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[25].u_sram} 2079.2160 187.0560 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[26].u_sram} 2079.2160 364.1760 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[27].u_sram} 2079.2160 541.2960 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[28].u_sram} 2079.2160 718.4160 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[29].u_sram} 2079.2160 895.5360 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[30].u_sram} 2079.2160 1072.6560 MY}
+    {{u_axi_ram_hi/u_mem/G_SRAM_BANK[31].u_sram} 2079.2160 1249.7760 MY}
     {{u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram} 528.5520 9.9360 R0}
     {{u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram} 528.5520 187.0560 R0}
     {{u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram} 654.2640 9.9360 MY}
