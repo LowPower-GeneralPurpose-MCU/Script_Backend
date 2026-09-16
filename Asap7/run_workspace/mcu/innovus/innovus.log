@@ -4,17 +4,17 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
 Options:	
-Date:		Thu Sep 17 01:32:28 2026
+Date:		Thu Sep 17 01:41:14 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04.1 LTS
 
 License:
-		[01:32:32.206170] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[01:41:18.206202] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		invs	Innovus Implementation System	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 221789 / f5e1332d-9a71-41dc-93b5-92ab664fbb10 / aYBxXaaqwR
+Info: Process UID = 265993 / 20e0bac8-26a8-4aed-8607-139957d12219 / QKXmxug1Z0
 
 **INFO:  MMMC transition support version v31-84 
 
@@ -44,8 +44,8 @@ Info: Process UID = 221789 / f5e1332d-9a71-41dc-93b5-92ab664fbb10 / aYBxXaaqwR
 <CMD> set latch_time_borrow_mode max_borrow
 <CMD> set init_design_uniquify 1
 <CMD> init_design
-#% Begin Load MMMC data ... (date=09/17 01:34:45, mem=1949.8M)
-#% End Load MMMC data ... (date=09/17 01:34:45, total cpu=0:00:00.1, real=0:00:00.0, peak res=1951.4M, current mem=1951.4M)
+#% Begin Load MMMC data ... (date=09/17 01:43:33, mem=1951.6M)
+#% End Load MMMC data ... (date=09/17 01:43:34, total cpu=0:00:00.1, real=0:00:00.0, peak res=1952.9M, current mem=1952.9M)
 rc_typ rc_ff rc_ss
 
 Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_4x_201209.lef ...
@@ -179,9 +179,9 @@ Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/C
 Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120' 
 Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
-*** End library_loading (cpu=0.45min, real=0.43min, mem=340.1M, fe_cpu=2.34min, fe_real=2.72min, fe_mem=2481.7M) ***
-#% Begin Load netlist data ... (date=09/17 01:35:11, mem=1981.6M)
-*** Begin netlist parsing (mem=2481.7M) ***
+*** End library_loading (cpu=0.50min, real=0.48min, mem=340.1M, fe_cpu=2.40min, fe_real=2.82min, fe_mem=2481.6M) ***
+#% Begin Load netlist data ... (date=09/17 01:44:03, mem=1982.4M)
+*** Begin netlist parsing (mem=2481.6M) ***
 **WARN: (IMPVL-536):	The PG type of pin 'VSS' of cell 'srambank_128x4x20_6t122' doesn't match between the timing library and LEF file. In the timing library the pin is defined as 'ground' pin, but in LEF file it is defined as 'power' pin. Check the library data and make the update accordingly.
 **WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
 Type 'man IMPVL-159' for more detail.
@@ -198,9 +198,9 @@ Reading netlist ...
 Backslashed names will retain backslash and a trailing blank character.
 Reading verilog netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v'
 
-*** Memory Usage v#2 (Current mem = 2481.703M, initial mem = 847.699M) ***
-*** End netlist parsing (cpu=0:00:00.5, real=0:00:01.0, mem=2481.7M) ***
-#% End Load netlist data ... (date=09/17 01:35:12, total cpu=0:00:00.6, real=0:00:01.0, peak res=2135.4M, current mem=2135.4M)
+*** Memory Usage v#2 (Current mem = 2481.570M, initial mem = 839.699M) ***
+*** End netlist parsing (cpu=0:00:00.6, real=0:00:00.0, mem=2481.6M) ***
+#% End Load netlist data ... (date=09/17 01:44:03, total cpu=0:00:00.6, real=0:00:00.0, peak res=2136.8M, current mem=2136.8M)
 Set top cell to top_soc.
 **WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
 Type 'man IMPTS-124' for more detail.
@@ -224,7 +224,7 @@ Set DBUPerIGU to techSite asap7sc7p5t width 864.
 ** info: there are 124056 stdCell insts with at least one signal pin.
 ** info: there are 84 macros.
 
-*** Memory Usage v#2 (Current mem = 2505.715M, initial mem = 847.699M) ***
+*** Memory Usage v#2 (Current mem = 2505.582M, initial mem = 839.699M) ***
 Start create_tracks
 Extraction setup Started for TopCell top_soc 
 Initializing multi-corner RC extraction with 3 active RC Corners ...
@@ -234,7 +234,7 @@ Importing multi-corner technology file(s) for preRoute extraction...
 /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
 Generating auto layer map file.
 
-Completed (cpu: 0:00:01.4 real: 0:00:01.0)
+Completed (cpu: 0:00:01.4 real: 0:00:02.0)
 Set Shrink Factor to 1.00000
 Summary of Active RC-Corners : 
  
@@ -317,7 +317,7 @@ Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120'
 Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
 Reading timing constraints file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc' ...
-Current (total cpu=0:02:38, real=0:03:00, peak res=2771.4M, current mem=2758.8M)
+Current (total cpu=0:02:43, real=0:03:07, peak res=2770.2M, current mem=2761.1M)
 top_soc
 **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cpu/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc, Line 19).
 
@@ -373,8 +373,8 @@ set_load                                          | 115            | 0
 ------------------------------------------------------------------------------------
 Number of path exceptions in the constraint file = 10
 INFO (CTE): Reading of timing constraints file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc completed, with 12 WARNING
-Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2800.1M, current mem=2800.1M)
-Current (total cpu=0:02:38, real=0:03:00, peak res=2800.1M, current mem=2800.1M)
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2802.4M, current mem=2802.4M)
+Current (total cpu=0:02:43, real=0:03:08, peak res=2802.4M, current mem=2802.4M)
 Total number of combinational cells: 338
 Total number of sequential cells: 66
 Total number of tristate cells: 0
@@ -398,8 +398,8 @@ List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L B
 Total number of identified usable delay cells: 7
 List of identified unusable delay cells:
 Total number of identified unusable delay cells: 0
-#% Begin Load MMMC data post ... (date=09/17 01:35:29, mem=2803.2M)
-#% End Load MMMC data post ... (date=09/17 01:35:29, total cpu=0:00:00.1, real=0:00:00.0, peak res=2803.2M, current mem=2803.2M)
+#% Begin Load MMMC data post ... (date=09/17 01:44:22, mem=2805.5M)
+#% End Load MMMC data post ... (date=09/17 01:44:22, total cpu=0:00:00.1, real=0:00:00.0, peak res=2805.5M, current mem=2805.5M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -502,11 +502,11 @@ Pin Density = 0.03340.
 
 <CMD> deleteAllPowerPreroutes
 <CMD> setAddStripeMode -reset
-<CMD> addRing -nets VDD -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.54 -spacing 0.54 -offset 8.316 -snap_wire_center_to_grid Grid
-#% Begin addRing (date=09/17 01:35:30, mem=2981.5M)
+<CMD> addRing -nets VDD -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.544 -spacing 0.544 -offset 7.76 -snap_wire_center_to_grid Grid
+#% Begin addRing (date=09/17 01:44:31, mem=3029.9M)
 
-viaInitial starts at Thu Sep 17 01:35:30 2026
-viaInitial ends at Thu Sep 17 01:35:30 2026
+viaInitial starts at Thu Sep 17 01:44:31 2026
+viaInitial ends at Thu Sep 17 01:44:31 2026
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -516,11 +516,7 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-**WARN: (IMPPP-152):	-width_top (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
-**WARN: (IMPPP-152):	-width_bottom (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
-**WARN: (IMPPP-152):	-width_left (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
-**WARN: (IMPPP-152):	-width_right (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3573.6M)
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3677.5M)
 Ring generation is complete.
 vias are now being generated.
 addRing created 4 wires.
@@ -536,9 +532,9 @@ setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addRing (date=09/17 01:35:30, total cpu=0:00:00.3, real=0:00:00.0, peak res=3006.7M, current mem=3006.7M)
-<CMD> addRing -nets VSS -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.54 -spacing 0.54 -offset 9.396 -snap_wire_center_to_grid Grid
-#% Begin addRing (date=09/17 01:35:30, mem=3006.7M)
+#% End addRing (date=09/17 01:44:31, total cpu=0:00:00.3, real=0:00:00.0, peak res=3053.1M, current mem=3053.1M)
+<CMD> addRing -nets VSS -type core_rings -follow core -layer {top M8 bottom M8 left M9 right M9} -width 0.544 -spacing 0.544 -offset 8.848 -snap_wire_center_to_grid Grid
+#% Begin addRing (date=09/17 01:44:31, mem=3053.1M)
 setAddStripeMode -use_exact_spacing true is set by default for this design under 20nm node. 
 Setting -use_cce to 1. ViaGen will call CCE to colorize via and may re-colorize surrounding vias to resolve color conflict within the local range.
 Setting -optimize_cross_via to 1. ViaGen will try to generate vias with the minimum enclosure.
@@ -548,17 +544,403 @@ setViaGenMode -disable_via_merging true is set by default for this design of 12n
 Setting -keep_existing_via to 1. ViaGen will keep the existing vias.
 setViaGenMode -keep_existing_via 1 is set by default for this design of 12nm node or under. 
 
-**WARN: (IMPPP-152):	-width_top (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
-**WARN: (IMPPP-152):	-width_bottom (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
-**WARN: (IMPPP-152):	-width_left (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
-**WARN: (IMPPP-152):	-width_right (0.540000) is not an even multiple of manufacturing grid (0.004000), setting to 0.544000.
-Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3573.6M)
-**WARN: (IMPPP-220):	The power planner does not create core rings outside the design boundary. Check the design boundary, or specify valid offsets.
-**WARN: (IMPPP-4051):	Failed to add rings, because the IO cells might contain gaps. Run the 'addIoFiller' command to fill gaps between the cells and try again.
-Type 'man IMPPP-4051' for more detail.
+Loading cell geometries (cpu: 0:00:00.0, real: 0:00:00.0, peak mem: 3679.5M)
+Ring generation is complete.
+vias are now being generated.
+addRing created 4 wires.
+ViaGen created 4 vias, deleted 0 via to avoid violation.
++--------+----------------+----------------+
+|  Layer |     Created    |     Deleted    |
++--------+----------------+----------------+
+|   M8   |        2       |       NA       |
+|   V8   |        4       |        0       |
+|   M9   |        2       |       NA       |
++--------+----------------+----------------+
 setAddStripeMode -use_exact_spacing is reset to default value: false.
 setViaGenMode -disable_via_merging is reset to default value: false.
 setViaGenMode -keep_existing_via is reset to default value: 0.
 setViaGenMode -optimize_cross_via is reset to default value: false.
-#% End addRing (date=09/17 01:35:30, total cpu=0:00:00.1, real=0:00:00.0, peak res=3006.7M, current mem=3006.7M)
-Ring loi VSS khong duoc tao du (M8=0 M9=0) - xem addRing trong innovus.log
+#% End addRing (date=09/17 01:44:31, total cpu=0:00:00.1, real=0:00:01.0, peak res=3053.1M, current mem=3053.1M)
+<CMD> zoomBox -329.73850 -293.21400 2118.29300 1898.29675
+<CMD> zoomBox -15.67525 178.49150 1487.72250 1524.35350
+<CMD> zoomBox 55.73200 560.41275 722.79775 1157.57900
+<CMD> pan -271.83125 533.15850
+<CMD> zoomBox -132.51800 700.11000 277.14400 1066.84500
+<CMD> zoomBox -68.93500 784.71850 144.91125 976.15650
+<CMD> zoomBox -47.74700 808.05600 106.75725 946.37025
+<CMD> zoomBox -26.46000 831.57975 68.42500 916.52200
+<CMD> zoomBox -15.61325 846.45225 42.65800 898.61750
+<CMD> zoomBox -8.95225 855.58575 26.83400 887.62200
+<CMD> zoomBox -7.36200 857.76625 23.05625 884.99700
+<CMD> zoomBox -3.05450 863.67225 12.82400 877.88700
+<CMD> zoomBox -10.82325 853.02025 31.27850 890.71025
+<CMD> zoomBox -26.46150 831.46075 68.42600 916.40525
+<CMD> zoomBox -72.88525 767.40025 178.70650 992.62850
+<CMD> zoomBox -144.71100 671.13550 337.25975 1102.60225
+<CMD> zoomBox -333.10600 418.63925 753.13525 1391.05700
+<CMD> zoomBox -644.49925 3.01950 1436.39800 1865.86675
+<CMD> pan 209.97400 41.82425
+<CMD> fit
+<CMD> zoomBox 116.46675 -156.13875 1609.86975 1180.77575
+<CMD> zoomBox 237.98225 -56.98850 1155.11850 764.04425
+<CMD> zoomBox 425.69925 -32.60225 904.45050 395.98225
+<CMD> zoomBox 539.74075 -17.78775 752.16550 172.37775
+<CMD> zoomBox 590.34125 -11.21475 684.59575 73.16325
+<CMD> zoomBox 605.91525 -8.95625 663.79925 42.86225
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[0].u_sram} 9.936 9.936 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[1].u_sram} 9.936 187.056 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[2].u_sram} 9.936 364.176 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[3].u_sram} 9.936 541.296 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[4].u_sram} 9.936 718.416 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[5].u_sram} 9.936 895.536 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[6].u_sram} 9.936 1072.656 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[7].u_sram} 9.936 1249.776 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[8].u_sram} 135.648 9.936 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[9].u_sram} 135.648 187.056 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[10].u_sram} 135.648 364.176 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[11].u_sram} 135.648 541.296 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[12].u_sram} 135.648 718.416 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[13].u_sram} 135.648 895.536 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[14].u_sram} 135.648 1072.656 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[15].u_sram} 135.648 1249.776 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[16].u_sram} 261.36 9.936 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[17].u_sram} 261.36 187.056 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[18].u_sram} 261.36 364.176 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[19].u_sram} 261.36 541.296 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[20].u_sram} 261.36 718.416 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[21].u_sram} 261.36 895.536 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[22].u_sram} 261.36 1072.656 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[23].u_sram} 261.36 1249.776 R0
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[24].u_sram} 387.072 9.936 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[25].u_sram} 387.072 187.056 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[26].u_sram} 387.072 364.176 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[27].u_sram} 387.072 541.296 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[28].u_sram} 387.072 718.416 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[29].u_sram} 387.072 895.536 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[30].u_sram} 387.072 1072.656 MY
+<CMD> placeInstance {u_axi_ram_lo/u_mem/G_SRAM_BANK[31].u_sram} 387.072 1249.776 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[0].u_sram} 1702.296 9.936 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[1].u_sram} 1702.296 187.056 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[2].u_sram} 1702.296 364.176 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[3].u_sram} 1702.296 541.296 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[4].u_sram} 1702.296 718.416 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[5].u_sram} 1702.296 895.536 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[6].u_sram} 1702.296 1072.656 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[7].u_sram} 1702.296 1249.776 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[8].u_sram} 1828.008 9.936 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[9].u_sram} 1828.008 187.056 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[10].u_sram} 1828.008 364.176 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[11].u_sram} 1828.008 541.296 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[12].u_sram} 1828.008 718.416 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[13].u_sram} 1828.008 895.536 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[14].u_sram} 1828.008 1072.656 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[15].u_sram} 1828.008 1249.776 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[16].u_sram} 1953.72 9.936 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[17].u_sram} 1953.72 187.056 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[18].u_sram} 1953.72 364.176 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[19].u_sram} 1953.72 541.296 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[20].u_sram} 1953.72 718.416 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[21].u_sram} 1953.72 895.536 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[22].u_sram} 1953.72 1072.656 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[23].u_sram} 1953.72 1249.776 R0
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[24].u_sram} 2079.432 9.936 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[25].u_sram} 2079.432 187.056 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[26].u_sram} 2079.432 364.176 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[27].u_sram} 2079.432 541.296 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[28].u_sram} 2079.432 718.416 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[29].u_sram} 2079.432 895.536 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[30].u_sram} 2079.432 1072.656 MY
+<CMD> placeInstance {u_axi_ram_hi/u_mem/G_SRAM_BANK[31].u_sram} 2079.432 1249.776 MY
+<CMD> placeInstance {u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram} 528.552 9.936 R0
+<CMD> placeInstance {u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram} 528.552 187.056 R0
+<CMD> placeInstance {u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram} 654.264 9.936 MY
+<CMD> placeInstance {u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram} 654.264 187.056 MY
+<CMD> placeInstance {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram} 779.976 9.936 R0
+<CMD> placeInstance {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram} 779.976 187.056 R0
+<CMD> placeInstance {u_dtcm/u_mem/G_SRAM_BANK[2].u_sram} 905.688 9.936 MY
+<CMD> placeInstance {u_dtcm/u_mem/G_SRAM_BANK[3].u_sram} 905.688 187.056 MY
+<CMD> placeInstance {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram} 1031.4 9.936 R0
+<CMD> placeInstance {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram} 1031.4 187.056 R0
+<CMD> placeInstance {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram} 1157.112 9.936 MY
+<CMD> placeInstance {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram} 1157.112 187.056 MY
+<CMD> placeInstance {u_itcm/u_mem/G_SRAM_BANK[0].u_sram} 1282.824 9.936 R0
+<CMD> placeInstance {u_itcm/u_mem/G_SRAM_BANK[1].u_sram} 1282.824 187.056 R0
+<CMD> placeInstance {u_itcm/u_mem/G_SRAM_BANK[2].u_sram} 1408.536 9.936 MY
+<CMD> placeInstance {u_itcm/u_mem/G_SRAM_BANK[3].u_sram} 1408.536 187.056 MY
+<CMD> placeInstance {u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram} 1549.8 9.936 R0
+<CMD> placeInstance {u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram} 1549.8 135.216 R0
+<CMD> placeInstance {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram} 1618.056 9.936 MY
+<CMD> placeInstance {u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram} 1618.056 135.216 MY
+<CMD> addHaloToBlock -allBlock 2.16 2.16 2.16 2.16
+<CMD> zoomBox 588.41225 -25.14175 682.66675 59.23625
+<CMD> zoomBox 559.91150 -51.42050 713.38925 85.97475
+<CMD> zoomBox 491.55200 -113.96250 785.56700 149.24375
+<CMD> zoomBox 312.24850 -278.00650 974.88450 315.19425
+<CMD> zoomBox 10.04225 -548.81475 1279.44525 587.57200
+<CMD> fit
+<CMD> zoomBox -258.97675 157.59675 1865.94875 1296.08550
+<CMD> zoomBox -169.86725 362.95225 1135.10275 1062.12675
+<CMD> zoomBox -95.38350 514.15150 585.81950 879.12525
+<CMD> zoomBox -55.33775 593.07825 300.25475 783.59700
+<CMD> zoomBox -30.78525 634.50650 154.83675 733.95875
+<CMD> zoomBox -14.31825 656.64800 82.57800 708.56300
+<CMD> zoomBox -6.04125 666.19600 53.46550 698.07850
+<CMD> zoomBox 0.78950 673.58675 31.85275 690.22975
+<CMD> zoomBox -11.53100 660.25675 70.83250 704.38525
+<CMD> zoomBox -36.33150 633.42475 149.29575 732.87975
+<CMD> zoomBox -110.09175 553.76900 382.09325 817.47100
+<CMD> zoomBox -305.66500 342.56450 999.34800 1041.76200
+<CMD> zoomBox -946.97950 114.89775 1553.01600 1454.34075
+<CMD> pan 215.78675 889.69500
+<CMD> pan 381.26050 562.10150
+<CMD> zoomBox -95.18100 -141.08375 2029.81525 997.44275
+<CMD> zoomBox 121.35775 -117.27725 1927.60450 850.47025
+<CMD> selectInst {u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram}
+<CMD> selectInst {u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram}
+<CMD> deselectAll
+<CMD> selectInst {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_itcm/u_mem/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_itcm/u_mem/G_SRAM_BANK[3].u_sram}
+<CMD> selectInst {u_itcm/u_mem/G_SRAM_BANK[2].u_sram}
+<CMD> selectInst {u_itcm/u_mem/G_SRAM_BANK[0].u_sram}
+<CMD> selectInst {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram}
+<CMD> selectInst {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram}
+<CMD> uiSetTool move
+<CMD> zoomBox 1568.13225 -79.31050 1505.93150 -10.64750
+<CMD> zoomBox 1428.26200 -97.35300 1636.94250 14.45350
+<CMD> zoomBox 1383.59825 -115.63425 1672.42950 39.11525
+<CMD> zoomBox 1358.11300 -133.07275 1697.91450 48.98550
+<CMD> zoomBox 1202.53700 -239.52675 1853.49025 109.23975
+<CMD> zoomBox 665.02250 -607.32525 2391.00450 317.41825
+<CMD> zoomBox 105.31575 -968.66100 2915.78975 537.12975
+<CMD> zoomBox -152.64900 -1131.46925 3153.79125 640.04925
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram {(1118.6450000000 , -427.7680000000) (1240.0370000000 , -254.9680000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram} 1118.645 -427.768 1240.037 -254.968
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram {(1244.3570000000 , -427.7680000000) (1365.7490000000 , -254.9680000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram} 1244.357 -427.768 1365.749 -254.968
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_itcm/u_mem/G_SRAM_BANK[0].u_sram {(1370.0690000000 , -427.7680000000) (1491.4610000000 , -254.9680000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_itcm/u_mem/G_SRAM_BANK[0].u_sram} 1370.069 -427.768 1491.461 -254.968
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_itcm/u_mem/G_SRAM_BANK[2].u_sram {(1495.7810000000 , -427.7680000000) (1617.1730000000 , -254.9680000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_itcm/u_mem/G_SRAM_BANK[2].u_sram} 1495.781 -427.768 1617.173 -254.968
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_itcm/u_mem/G_SRAM_BANK[3].u_sram {(1495.7810000000 , -250.6480000000) (1617.1730000000 , -77.8480000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_itcm/u_mem/G_SRAM_BANK[3].u_sram} 1495.781 -250.648 1617.173 -77.848
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_itcm/u_mem/G_SRAM_BANK[1].u_sram {(1370.0690000000 , -250.6480000000) (1491.4610000000 , -77.8480000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_itcm/u_mem/G_SRAM_BANK[1].u_sram} 1370.069 -250.648 1491.461 -77.848
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram {(1244.3570000000 , -250.6480000000) (1365.7490000000 , -77.8480000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram} 1244.357 -250.648 1365.749 -77.848
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram {(1118.6450000000 , -250.6480000000) (1240.0370000000 , -77.8480000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram} 1118.645 -250.648 1240.037 -77.848
+<CMD> zoomBox -6.03300 -931.84075 2804.44125 573.95000
+<CMD> uiSetTool select
+<CMD> deselectAll
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[3].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[2].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram}
+<CMD> uiSetTool move
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_dtcm/u_mem/G_SRAM_BANK[0].u_sram {(773.6915000000 , -423.7015000000) (895.0835000000 , -250.9015000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram} 773.6915 -423.7015 895.0835 -250.9015
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_dtcm/u_mem/G_SRAM_BANK[2].u_sram {(899.4035000000 , -423.7015000000) (1020.7955000000 , -250.9015000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_dtcm/u_mem/G_SRAM_BANK[2].u_sram} 899.4035 -423.7015 1020.7955 -250.9015
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_dtcm/u_mem/G_SRAM_BANK[3].u_sram {(899.4035000000 , -246.5815000000) (1020.7955000000 , -73.7815000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_dtcm/u_mem/G_SRAM_BANK[3].u_sram} 899.4035 -246.5815 1020.7955 -73.7815
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_dtcm/u_mem/G_SRAM_BANK[1].u_sram {(773.6915000000 , -246.5815000000) (895.0835000000 , -73.7815000000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram} 773.6915 -246.5815 895.0835 -73.7815
+<CMD> uiSetTool select
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> uiSetTool move
+<CMD> uiSetTool select
+<CMD> deselectAll
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> uiSetTool move
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram} 806.96 12.45 870.96 133.41
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram} 875.216 12.45 939.216 133.41
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram} 875.216 137.73 939.216 258.69
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram} 806.96 137.73 870.96 258.69
+<CMD> zoomBox 248.10500 -612.81650 1715.19075 173.21600
+<CMD> pan -30.83750 -625.37425
+<CMD> uiSetTool copy
+<CMD> fit
+<CMD> zoomBox 82.97600 12.62825 1889.16275 980.34375
+<CMD> zoomBox 359.76600 63.43525 1468.99050 657.73350
+<CMD> zoomBox 482.14650 86.28700 1283.56125 515.66750
+<CMD> deselectAll
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> deselectAll
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> deleteSelectedFromFPlan
+<CMD> setLayerPreference allM4 -isVisible 0
+<CMD> setLayerPreference allM2Cont -isVisible 1
+<CMD> setLayerPreference allM3Cont -isVisible 1
+<CMD> setLayerPreference allM4Cont -isVisible 0
+<CMD> setLayerPreference allM5Cont -isVisible 0
+<CMD> setLayerPreference allM6Cont -isVisible 1
+<CMD> setLayerPreference allM7Cont -isVisible 1
+<CMD> setLayerPreference allM8Cont -isVisible 1
+<CMD> setLayerPreference allM9Cont -isVisible 1
+<CMD> setLayerPreference allM10Cont -isVisible 1
+<CMD> undo
+<CMD> deleteSelectedFromFPlan
+<CMD> undo
+<CMD> spaceObject -fixSide right -space 04.32 -honorHalo
+<CMD> deselectAll
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> deselectAll
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram}
+<CMD> spaceObject -fixSide left -space 04.32 -honorHalo
+<CMD> zoomBox 425.34825 62.82125 1276.26650 567.97500
+<CMD> deselectAll
+<CMD> selectInst {u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram}
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> spaceObject -fixSide left -space 04.32 -honorHalo
+<CMD> pan 31.62475 -469.62950
+<CMD> deselectAll
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> spaceObject -fixSide left -space 04.32 -honorHalo
+<CMD> deselectAll
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> spaceObject -fixSide left -space 04.32 -honorHalo
+<CMD> zoomBox 280.60475 -101.45150 1458.34650 597.72325
+<CMD> deselectAll
+<CMD> zoomBox -27.42900 -141.42275 1890.32700 997.06675
+<CMD> pan 30.41050 -264.14500
+<CMD> zoomBox -275.88175 -391.95000 2378.45200 1183.81400
+<CMD> pan 14.46850 -359.40400
+<CMD> fit
+<CMD> pan 39.45975 -177.32000
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[3].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[2].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram}
+<CMD> zoomBox -20.97150 -377.04450 2235.21075 962.35400
+<CMD> uiSetTool move
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram} 944.75025 13.44925 1066.14225 186.24925
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_dtcm/u_mem/G_SRAM_BANK[2].u_sram} 1070.46225 13.44925 1191.85425 186.24925
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_dtcm/u_mem/G_SRAM_BANK[3].u_sram} 1070.46225 190.56925 1191.85425 363.36925
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram} 944.75025 190.56925 1066.14225 363.36925
+<CMD> uiSetTool select
+<CMD> zoomBox 127.27900 -317.00650 2045.03400 821.48225
+<CMD> zoomBox 244.31150 -250.15125 1874.40325 717.56425
+<CMD> deselectAll
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram}
+<CMD> spaceObject -fixSide left -space 04.32 -honorHalo
+<CMD> deselectAll
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram}
+<CMD> spaceObject -fixSide left -space 04.32 -honorHalo
+<CMD> deselectAll
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[3].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[2].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram}
+<CMD> deselectAll
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[3].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram}
+<CMD> spaceObject -fixSide left -space 04.32
+<CMD> deselectAll
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[2].u_sram}
+<CMD> spaceObject -fixSide left -space 04.32
+<CMD> deselectAll
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> deselectInst {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram}
+<CMD> selectInst {u_dcache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram}
+<CMD> move_obj -selected -direction down -distance 0
+<CMD> move_obj -selected -direction down -to core_box -group
+<CMD> deselectAll
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[3].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[2].u_sram}
+<CMD> selectInst {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram}
+<CMD> move_obj -selected -direction down -to core_box -group
+<CMD> zoomBox -161.80975 -355.01700 2094.37275 984.38175
+<CMD> pan 231.43200 -251.34475
+<CMD> pan 148.69775 -902.03775
+<CMD> gui_select -rect {1754.49175 -533.90175 1027.77300 -47.55925}
+<CMD> deselectAll
+<CMD> deselectAll
+<CMD> selectInst {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_itcm/u_mem/G_SRAM_BANK[1].u_sram}
+<CMD> selectInst {u_itcm/u_mem/G_SRAM_BANK[3].u_sram}
+<CMD> selectInst {u_itcm/u_mem/G_SRAM_BANK[2].u_sram}
+<CMD> selectInst {u_itcm/u_mem/G_SRAM_BANK[0].u_sram}
+<CMD> selectInst {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram}
+<CMD> selectInst {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram}
+<CMD> uiSetTool move
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram {(1191.3157500000 , 9.3812500000) (1312.7077500000 , 182.1812500000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram} 1191.31575 9.38125 1312.70775 182.18125
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram {(1317.0277500000 , 9.3812500000) (1438.4197500000 , 182.1812500000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram} 1317.02775 9.38125 1438.41975 182.18125
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_itcm/u_mem/G_SRAM_BANK[0].u_sram {(1442.7397500000 , 9.3812500000) (1564.1317500000 , 182.1812500000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_itcm/u_mem/G_SRAM_BANK[0].u_sram} 1442.73975 9.38125 1564.13175 182.18125
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+**WARN: (IMPFP-10191):	The provided box of u_itcm/u_mem/G_SRAM_BANK[2].u_sram {(1568.4517500000 , 9.3812500000) (1689.8437500000 , 182.1812500000)} is not completely inside the core box. 
+<CMD> setObjFPlanBox Instance {u_itcm/u_mem/G_SRAM_BANK[2].u_sram} 1568.45175 9.38125 1689.84375 182.18125
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_itcm/u_mem/G_SRAM_BANK[3].u_sram} 1568.45175 186.50125 1689.84375 359.30125
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_itcm/u_mem/G_SRAM_BANK[1].u_sram} 1442.73975 186.50125 1564.13175 359.30125
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram} 1317.02775 186.50125 1438.41975 359.30125
+<CMD> getFPlanMode -autoSyncMasterClone -quiet
+<CMD> setObjFPlanBox Instance {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram} 1191.31575 186.50125 1312.70775 359.30125
+<CMD> move_obj -selected -direction down -to core_box -group
+<CMD> uiSetTool select
+<CMD> deselectAll
+<CMD> placeInstance {u_dtcm/u_mem/G_SRAM_BANK[0].u_sram} 929.664 9.936 R0
+<CMD> placeInstance {u_dtcm/u_mem/G_SRAM_BANK[1].u_sram} 929.664 187.056 R0
+<CMD> placeInstance {u_dtcm/u_mem/G_SRAM_BANK[2].u_sram} 1055.376 9.936 MY
+<CMD> placeInstance {u_dtcm/u_mem/G_SRAM_BANK[3].u_sram} 1055.376 187.056 MY
+<CMD> placeInstance {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram} 1191.24 9.936 R0
+<CMD> placeInstance {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram} 1191.24 187.056 R0
+<CMD> placeInstance {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram} 1316.952 9.936 MY
+<CMD> placeInstance {u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram} 1316.952 187.056 MY
+<CMD> placeInstance {u_itcm/u_mem/G_SRAM_BANK[0].u_sram} 1442.664 9.936 R0
+<CMD> placeInstance {u_itcm/u_mem/G_SRAM_BANK[1].u_sram} 1442.664 187.056 R0
+<CMD> placeInstance {u_itcm/u_mem/G_SRAM_BANK[2].u_sram} 1568.376 9.936 MY
+<CMD> placeInstance {u_itcm/u_mem/G_SRAM_BANK[3].u_sram} 1568.376 187.056 MY
+<CMD> placeInstance {u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram} 856.872 9.936 MY
+<CMD> placeInstance {u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram} 856.872 135.216 MY
+<CMD> snapFPlan -block
+8 loi vi tri SRAM - quay lai LAM TAY 1
