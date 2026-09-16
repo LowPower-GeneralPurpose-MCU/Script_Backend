@@ -399,10 +399,13 @@ proc soc_island_pg {members all_boxes} {
     set x1 [expr {[lindex $spans end 1] + $G}]
     set y0 [expr {$ymin - $G}]
     set y1 [expr {$ymax + $G}]
-    lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
-    if {$x0 < $cx0 - $eps || $y0 < $cy0 - $eps || $x1 > $cx1 + $eps || $y1 > $cy1 + $eps} {
-        error [format "Cum %s {%.3f %.3f %.3f %.3f} phai cach mep loi >= %.2f um de co cho cap VSS/VDD - keo vao trong (LAM TAY 1) roi paste lai KHOI 4" \
-            $label [expr {$x0 + $G}] $ymin [expr {$x1 - $G}] $ymax $G]
+    # Cum duoc dat sat mep loi: khe mep ngoai (G) khi do nam trong le loi->die
+    # (SOC_CORE_MARGIN = 10 um), duoi ring loi M8/M9 - khac layer nen khong dung.
+    lassign [lindex [dbGet top.fPlan.box] 0] dx0 dy0 dx1 dy1
+    if {$x0 < $dx0 + $E - $eps || $y0 < $dy0 + $E - $eps ||
+        $x1 > $dx1 - $E + $eps || $y1 > $dy1 - $E + $eps} {
+        error [format "Cum %s {%.3f %.3f %.3f %.3f}: khe mep ngoai %.2f um ra ngoai die - SRAM khong duoc vuot mep loi (SOC_CORE_MARGIN phai >= %.2f)" \
+            $label [expr {$x0 + $G}] $ymin [expr {$x1 - $G}] $ymax $G [expr {$G + $E}]]
     }
 
     # Kenh doc: mep trai, giua cac cot (suot chieu cao khong co SRAM), mep phai
