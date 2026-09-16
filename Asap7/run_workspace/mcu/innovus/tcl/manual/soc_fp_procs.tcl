@@ -837,8 +837,11 @@ proc soc_sram_no_std_boxes {} {
 #      moi canh cum de kenh hep giua hai cum van duoc noi.  Via M1->M6 tai
 #      giao diem voi rail M1 va luoi M6 (KHOI 6).
 proc soc_stdcell_rails {} {
+    # Chi ve followpin, KHONG tu via len stripe: sroute ha via M1->M7 roi thieu
+    # VIARULE M6-M7 cho rail 0.072 (IMPPP-610, run 2026-09-17).  Via M1->M6 do
+    # addStripe M5 ben duoi tao.
     setSrouteMode -reset
-    setSrouteMode -viaConnectToShape {ring stripe blockring}
+    setSrouteMode -viaConnectToShape {noshape}
     sroute -nets {VDD VSS} \
         -connect {corePin} \
         -corePinCheckStdcellGeoms \
@@ -853,7 +856,16 @@ proc soc_stdcell_rails {} {
         -extend_to_closest_target area_boundary \
         -stacked_via_bottom_layer M1 \
         -stacked_via_top_layer M6
-    set keepouts [soc_sram_no_std_boxes]
+    # Row sat mep tren/duoi vung cat row co rail nam dung tren mep keepout; neu
+    # stripe dung cach mep EPS thi khong cat qua rail do -> rail ho (khoang tren
+    # cum TAG: VDD open 779.976..925.344 @ y 260.496).  Thu keepout theo chieu
+    # doc nua row de stripe an qua rail mep; van cach cap M4 mep cum (giua khe 4.32).
+    set R [expr {$::SOC_PG_EPS + 0.5 * $::SOC_ROW_H}]
+    set keepouts {}
+    foreach k [soc_sram_no_std_boxes] {
+        lassign $k x0 y0 x1 y1
+        lappend keepouts [list $x0 [expr {$y0 + $R}] $x1 [expr {$y1 - $R}]]
+    }
     set n5 [soc_mesh_layer M5 vertical $keepouts \
         [list $::SOC_M5_W $::SOC_M5_S $::SOC_M5_PITCH $::SOC_M5_OFFSET] 1]
     puts "Stripe M5 std cell: $n5 vung (tranh [llength $keepouts] cum SRAM + khe)"
