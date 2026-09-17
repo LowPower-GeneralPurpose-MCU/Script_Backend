@@ -415,7 +415,162 @@ soc_block "KHOI 10: rail M1 + stripe M5 std cell" {
   verify_rpt/connectivity_place.rpt : phai 'Found no problems' (moi rail M1 co stripe M5)
   verify_rpt/drc_place.rpt          : phai 0 vi pham
   reports/timing_preCTS/            : WNS/TNS truoc CTS
-Tiep theo: CTS"
+Tiep theo: KHOI 11 (CTS)"
+}
+
+
+# ==========================================================================
+# KHOI 11 - Clock tree synthesis   (theo sram_axi/innovus_pnr.tcl muc 3)
+# ==========================================================================
+# 15 clock (CLK_SYS, CLK_TCK, CLK_SDRAM_OUT + 12 clock gate) va ~1600 ICG.
+# Chan clk cua SRAM gioi han transition 46 ps (Liberty) -> leaf 35 ps.
+# SRAM nam trong tuong RAM_LO/RAM_HI khong dat duoc buffer, leaf toi cot SRAM xa
+# dai ~400 um nen cho leaf len M5 (sram_axi: leaf M2/M3 -> 104 ps o chan clk SRAM).
+soc_block "KHOI 11: CTS" {
+    if {[llength [dbGet -e top.nets.sWires.shape followpin]] == 0} {
+        error "Chua co rail M1 - chay KHOI 10 truoc"
+    }
+    foreach {rt bot top} {soc_leaf M3 M5 soc_trunk M5 M7 soc_top M6 M7} {
+        # Paste lai khoi nay: route type da ton tai thi bo qua
+        if {[catch {create_route_type -name $rt \
+                -bottom_preferred_layer $bot -top_preferred_layer $top} err]} {
+            puts "route_type $rt: $err"
+        }
+    }
+    set_ccopt_property -net_type leaf  route_type soc_leaf
+    set_ccopt_property -net_type trunk route_type soc_trunk
+    set_ccopt_property -net_type top   route_type soc_top
+    set_ccopt_property buffer_cells {
+        BUFx4_ASAP7_75t_R BUFx8_ASAP7_75t_R BUFx10_ASAP7_75t_R BUFx12_ASAP7_75t_R
+        BUFx12f_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx24_ASAP7_75t_R
+    }
+    set_ccopt_property inverter_cells {
+        CKINVDCx8_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R
+    }
+    set_ccopt_property use_inverters auto
+    set_ccopt_property -net_type leaf  target_max_trans 35ps
+    set_ccopt_property -net_type trunk target_max_trans 40ps
+    set_ccopt_property -net_type top   target_max_trans 40ps
+    set_ccopt_property target_skew 50ps
+
+    # sram_axi: dung clock_opt_design, KHONG source ccopt.spec (IMPCCOPT-2048)
+    clock_opt_design
+    refinePlace
+    checkPlace ./verify_rpt/checkPlace_cts.rpt
+
+    # Sau CTS moi dung clock that (propagated)
+    set_interactive_constraint_modes [all_constraint_modes -active]
+    set_propagated_clock [all_clocks]
+    set_interactive_constraint_modes {}
+
+    report_ccopt_clock_trees -file ./reports/cts_clock_trees.rpt
+    report_ccopt_skew_groups -file ./reports/cts_skew_groups.rpt
+    timeDesign -postCTS -outDir ./reports/timing_postCTS_raw -prefix cts
+    saveDesign ./saved/${TOP}_cts.enc
+}
+# Xem: reports/cts_skew_groups.rpt (skew tung clock), timing_postCTS_raw/cts.summary
+# (max_tran o chan clk SRAM phai het).  GUI: Clock > CCOpt Clock Tree Debugger.
+
+
+# ==========================================================================
+# KHOI 12 - Toi uu sau CTS: setup + hold
+# ==========================================================================
+soc_block "KHOI 12: optDesign postCTS" {
+    setOptMode -fixFanoutLoad true -fixTran true -fixCap true
+    optDesign -postCTS -setup -hold -prefix postCTS
+    checkPlace ./verify_rpt/checkPlace_postCTS.rpt
+    timeDesign -postCTS       -outDir ./reports/timing_postCTS      -prefix postCTS
+    timeDesign -postCTS -hold -outDir ./reports/timing_postCTS_hold -prefix postCTS
+    saveDesign ./saved/${TOP}_postCTS.enc
+}
+# Xem: timing_postCTS/postCTS.summary.gz va timing_postCTS_hold/postCTS_hold.summary.gz
+# - WNS setup va hold phai >= 0, DRV "Real" = 0 truoc khi route.
+
+
+# ==========================================================================
+# KHOI 13 - Route tin hieu   (M2-M7; M8/M9 danh cho ring)
+# ==========================================================================
+soc_block "KHOI 13: routeDesign" {
+    setAnalysisMode -analysisType onChipVariation -cppr both
+    setDelayCalMode -SIAware true -equivalent_waveform_model propagation
+    setExtractRCMode -engine postRoute -effortLevel medium
+    setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+    setNanoRouteMode -reset
+    setNanoRouteMode \
+        -route_with_timing_driven true \
+        -route_with_si_driven true \
+        -route_with_via_only_for_stdcell_pin true \
+        -route_detail_fix_antenna true \
+        -route_detail_end_iteration 20
+    routeDesign -globalDetail
+    routeDesign -viaOpt -wireOpt
+    clearDrc
+    verify_drc -limit 100000 -report ./verify_rpt/drc_route.rpt
+    saveDesign ./saved/${TOP}_routed.enc
+}
+# Xem: verify_rpt/drc_route.rpt.  Con loi thi: ecoRoute -fix_drc roi verify_drc lai.
+
+
+# ==========================================================================
+# KHOI 14 - Toi uu sau route: setup + hold + DRV
+# ==========================================================================
+soc_block "KHOI 14: optDesign postRoute" {
+    setOptMode -fixCap true -fixTran true -fixFanoutLoad true \
+        -setupTargetSlack 0.020 -holdTargetSlack 0.020
+    optDesign -postRoute -setup -hold -prefix postRoute
+    ecoRoute -fix_drc
+    timeDesign -postRoute       -outDir ./reports/timing_postRoute      -prefix postRoute
+    timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold -prefix postRoute
+    saveDesign ./saved/${TOP}_postRoute.enc
+}
+
+
+# ==========================================================================
+# KHOI 15 - Filler + kiem tra cuoi
+# ==========================================================================
+# Filler them SAU moi buoc toi uu (sram_axi: filler som lam row day 100%, het
+# cho chen buffer sua hold).
+soc_block "KHOI 15: filler + verify" {
+    set fillers {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L}
+    setFillerMode -reset
+    setFillerMode -core $fillers -add_fillers_with_drc false -fitGap true
+    addFiller -cell $fillers -prefix FILLER
+    checkPlace ./verify_rpt/checkPlace_final.rpt
+
+    clearDrc
+    verify_drc -limit 100000 -report ./verify_rpt/drc_final.rpt
+    verifyConnectivity -type all -error 1000 -warning 1000 \
+        -report ./verify_rpt/connectivity_final.rpt
+    verifyProcessAntenna -report ./verify_rpt/antenna_final.rpt
+    timeDesign -postRoute       -outDir ./reports/timing_final      -prefix final
+    timeDesign -postRoute -hold -outDir ./reports/timing_final_hold -prefix final
+    report_power -outfile ./reports/power_final.rpt
+    report_area > ./reports/area_final.rpt
+    saveDesign ./saved/${TOP}_final.enc
+
+    soc_banner "PNR XONG - saved/${TOP}_final.enc
+  verify_rpt/drc_final.rpt           : 0 vi pham
+  verify_rpt/connectivity_final.rpt  : 0 open/short
+  verify_rpt/antenna_final.rpt       : 0 vi pham antenna
+  reports/timing_final*/             : WNS setup/hold >= 0
+Tiep theo: KHOI 16 (xuat file)"
+}
+
+
+# ==========================================================================
+# KHOI 16 - Xuat file cho STA / LEC / ve so do
+# ==========================================================================
+# Khong streamOut GDS: bo SRAM ASAP7 khong co GDS rieng tung macro va
+# project_config chua co map file / GDS std cell.
+soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF" {
+    foreach rc {rc_typ rc_ss rc_ff} {
+        rcOut -spef ./outputs/${TOP}_pnr_${rc}.spef -rc_corner $rc
+    }
+    write_sdf -view view_ss ./outputs/${TOP}_pnr_ss.sdf
+    write_sdf -view view_ff ./outputs/${TOP}_pnr_ff.sdf
+    saveNetlist ./outputs/${TOP}_pnr.v -excludeLeafCell
+    saveNetlist ./outputs/${TOP}_pnr_pg.v -includePowerGround -excludeLeafCell
+    defOut -floorplan -netlist -routing ./outputs/${TOP}_pnr.def
 }
 
 
@@ -445,3 +600,13 @@ Tiep theo: CTS"
 #   source ./tcl/manual/soc_fp_procs.tcl
 #   -> paste KHOI 9, 10
 #   (KHOI 10 hong: restoreDesign ./saved/top_soc_placed.enc.dat top_soc, source 3 file tren, paste KHOI 10)
+#
+# e) Tiep tu checkpoint sau placement tro di (moi lan: restoreDesign + source 3 file tren):
+#   saved/top_soc_placed_pg.enc.dat -> KHOI 11
+#   saved/top_soc_cts.enc.dat       -> KHOI 12
+#   saved/top_soc_postCTS.enc.dat   -> KHOI 13
+#   saved/top_soc_routed.enc.dat    -> KHOI 14
+#   saved/top_soc_postRoute.enc.dat -> KHOI 15, 16
+#   Luu y: derate SRAM, set_max_fanout SRAM, dont_touch TRNG dat o KHOI 0; neu
+#   report_timing_derate sau restore khong con x1.30/x0.75 thi source lai
+#   ./tcl/init_common.tcl KHONG duoc (no goi init_design) - chay lai tu KHOI 0.
