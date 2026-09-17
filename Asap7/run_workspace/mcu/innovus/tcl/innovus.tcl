@@ -109,6 +109,8 @@ soc_block "KHOI 2: core ring" {
     }
     # addRing hong thuong chi in WARNING -> dem that so doan ring M8/M9 cua tung net
     soc_check_core_ring
+    # Chan PG VDD/VSS cua top tren ring (09_PnR tr.21): DEF/GDS/LEF co chan nguon
+    soc_add_pg_pins
     # Ring rong 0.544 um tren loi ~2000 um: zoom-all se khong thay, zoom vao goc loi de xem.
 }
 
@@ -331,6 +333,7 @@ Tiep theo: KHOI 9 (placement), KHOI 10 (rail M1 + stripe M5 std cell)"
 # ==========================================================================
 # - Cat row trong cum SRAM + khe 4.32 quanh cum: khong std cell nao nam o noi
 #   stripe M5 cua std cell khong toi duoc (luoi M4/M5 rieng cua cum nam trong khe).
+# - Notch con row giua cac cum (hoc tren TAG, khe hep giua cum): blockage mem.
 # - Path group cua Genus: Innovus khong doc group_path trong SDC cua constraint mode.
 # - place_opt_design = place + toi uu preCTS; SRAM FIXED, khong refine macro.
 soc_block "KHOI 9: placement" {
@@ -346,12 +349,30 @@ soc_block "KHOI 9: placement" {
         }
     }
 
+    if {[llength [dbGet -e top.insts.cell.name $SOC_TAP_CELL]] > 0} {
+        error "Da co tap cell - KHOI 9 da chay.  restoreDesign ./saved/${TOP}_powerplan.enc.dat $TOP roi chay lai"
+    }
+
     lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
     foreach box [soc_sram_no_std_boxes] {
         lassign $box x0 y0 x1 y1
         # cutRow chi co nghia trong loi
         cutRow -area [list [expr {max($x0, $cx0)}] [expr {max($y0, $cy0)}] \
             [expr {min($x1, $cx1)}] [expr {min($y1, $cy1)}]]
+    }
+    # Tap cell (10_Macro tr.21, deck ACTIVE.LUP.1) - sau cutRow de moi doan row
+    # con lai deu co tap, truoc blockage notch de tap vao ca kenh hep.
+    addWellTap -cell $SOC_TAP_CELL -cellInterval $SOC_TAP_INTERVAL \
+        -inRowOffset $SOC_TAP_OFFSET -prefix WELLTAP
+    soc_global_pg_connect
+    puts "Tap cell: [llength [dbGet -e top.insts.cell.name $SOC_TAP_CELL]] $SOC_TAP_CELL"
+    # Notch giua cac cum SRAM (10_Macro Priority 7): blockage MEM, placer khong
+    # dat logic vao nhung CTS/optDesign van dat buffer (xem SOC_NOTCH_MAX_W).
+    foreach box [soc_notch_boxes] {
+        lassign $box x0 y0 x1 y1
+        puts [format "Notch %8.3f %8.3f %8.3f %8.3f  (%.2f x %.2f um)" \
+            $x0 $y0 $x1 $y1 [expr {$x1 - $x0}] [expr {$y1 - $y0}]]
+        createPlaceBlockage -type soft -box $box -name soc_notch
     }
 
     if {[file isfile $INNOVUS_PATH_GROUPS]} {
@@ -530,6 +551,8 @@ soc_block "KHOI 13: routeDesign" {
 soc_block "KHOI 14: optDesign postRoute" {
     setOptMode -fixCap true -fixTran true -fixFanoutLoad true \
         -setupTargetSlack 0.020 -holdTargetSlack 0.020
+    # Xoa doan day treo sau route (09_PnR tr.25) truoc khi toi uu
+    deleteDanglingNet
     optDesign -postRoute -setup -hold -prefix postRoute
     # Hold clock gate roi cg_* (xem KHOI 12) tinh lai voi RC that; buffer moi
     # chua co day -> ecoRoute
@@ -554,11 +577,9 @@ soc_block "KHOI 15: filler + verify" {
         -honorPrerouteAsObs true -diffCellViol true
     addFiller -cell $fillers -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
     # Filler/buffer moi chen (CTS, optDesign, filler) phai noi chan VDD/VSS vao net
-    globalNetConnect VDD -type pgpin -pin VDD -inst * -override
-    globalNetConnect VSS -type pgpin -pin VSS -inst * -override
-    globalNetConnect VDD -type tiehi -inst * -override
-    globalNetConnect VSS -type tielo -inst * -override
-    applyGlobalNets
+    soc_global_pg_connect
+    # Metal fill (09_PnR tr.26) truoc verify va timing cuoi
+    soc_metal_fill
     checkPlace ./verify_rpt/checkPlace_final.rpt
     # Luu truoc khi verify: lenh verify nao loi thi soc_block dung, van con checkpoint
     saveDesign ./saved/${TOP}_final.enc
@@ -567,6 +588,16 @@ soc_block "KHOI 15: filler + verify" {
     verify_drc -limit 100000 -report ./verify_rpt/drc_final.rpt
     verifyConnectivity -type all -error 1000 -warning 1000 \
         -report ./verify_rpt/connectivity_final.rpt
+    # Moi std cell cach tap <= SOC_TAP_RULE (deck ACTIVE.LUP.1, LEF 4x).  Chua
+    # chay thu tren Innovus 23.14: loi cu phap thi chi bao, khong dung khoi.
+    if {[catch {verifyWellTap -cell $SOC_TAP_CELL -rule $SOC_TAP_RULE \
+            -report ./verify_rpt/welltap_final.rpt} err]} {
+        puts "WARNING: verifyWellTap: $err"
+    }
+    # Luat mat do M5 trong tech LEF (15-90%, cua so 80x80 buoc 40)
+    if {[catch {verifyMetalDensity -report ./verify_rpt/density_final.rpt} err]} {
+        puts "WARNING: verifyMetalDensity: $err"
+    }
     # Khong kiem antenna: tech LEF ASAP7 khong co luat antenna
     # (run 2026-09-17: verifyProcessAntenna -> ERROR IMPVPA-22).
     timeDesign -postRoute       -outDir ./reports/timing_final      -prefix final
@@ -576,10 +607,13 @@ soc_block "KHOI 15: filler + verify" {
     set_power_analysis_mode -analysis_view view_tt
     report_power -outfile ./reports/power_final.rpt
     report_area > ./reports/area_final.rpt
+    reportGateCount -limit 0 -level 2 -outfile ./reports/gateCount.rpt
+    summaryReport -noHtml -outfile ./reports/summary_final.rpt
 
     soc_banner "PNR XONG - saved/${TOP}_final.enc
   verify_rpt/drc_final.rpt           : 0 vi pham
   verify_rpt/connectivity_final.rpt  : 0 open/short
+  verify_rpt/welltap_final.rpt       : 0 cell xa tap qua ${SOC_TAP_RULE} um
   reports/timing_final/final.tran.gz : khong con chan clk SRAM (max 46 ps)
   reports/timing_final*/             : WNS setup/hold >= 0
 Tiep theo: KHOI 16 (xuat file)"
@@ -589,18 +623,38 @@ Tiep theo: KHOI 16 (xuat file)"
 # ==========================================================================
 # KHOI 16 - Xuat file cho STA / LEC / ve so do
 # ==========================================================================
-# Khong streamOut GDS: bo SRAM ASAP7 khong co GDS rieng tung macro va
-# project_config chua co map file / GDS std cell.
-soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF" {
+# (09_PnR tr.28) GDS: std cell merge tu GDS cua asap7sc7p5t_28 (STD_GDS_FILES);
+# SRAM khong co GDS rieng tung macro -> -outputMacros ghi hinh chan tu LEF
+# (LVS phai coi SRAM la hop den).
+soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
+    foreach gds $STD_GDS_FILES {
+        if {![file isfile $gds]} {
+            error "Khong co GDS std cell $gds - dat ASAP7_RVT_GDS_FILE / ASAP7_LVT_GDS_FILE"
+        }
+    }
+    extractRC
     foreach rc {rc_typ rc_ss rc_ff} {
         rcOut -spef ./outputs/${TOP}_pnr_${rc}.spef -rc_corner $rc
     }
     write_sdf -view view_ss ./outputs/${TOP}_pnr_ss.sdf
     write_sdf -view view_ff ./outputs/${TOP}_pnr_ff.sdf
+    writeTimingCon ./outputs/${TOP}_pnr.sdc
+    # Netlist mo phong / LEC; ban _pg co VDD/VSS + tap/filler cho LVS
     saveNetlist ./outputs/${TOP}_pnr.v -excludeLeafCell
-    saveNetlist ./outputs/${TOP}_pnr_pg.v -includePowerGround -excludeLeafCell
+    saveNetlist ./outputs/${TOP}_pnr_pg.v -includePowerGround -includePhysicalInst -excludeLeafCell
     defOut -floorplan -netlist -routing ./outputs/${TOP}_pnr.def
+
+    soc_write_gds_map ./outputs/${TOP}_gds.map
+    setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic \
+        -virtualConnection false -textSize 1
+    streamOut ./outputs/${TOP}.gds -mapFile ./outputs/${TOP}_gds.map \
+        -merge $STD_GDS_FILES -units $SOC_GDS_UNITS \
+        -dieAreaAsBoundary -outputMacros
+    write_lef_abstract -noCutObs ./outputs/${TOP}.lef
 }
+# Kiem tra GDS (ngoai Innovus): mo outputs/top_soc.gds, do 1 WELLTAP_* phai
+# rong 432 dbu va trung khit o dat trong DEF; log streamOut khong duoc bao
+# cell nao thieu trong GDS merge ngoai 2 master SRAM.
 
 
 # ==========================================================================
@@ -608,6 +662,9 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF" {
 # ==========================================================================
 # Luon paste KHOI 0 truoc.  saveFPlan khong giu ring/stripe, nen sau
 # loadFPlan phai paste lai KHOI 2 (ring loi).
+# Checkpoint luu truoc 2026-09-17 toi chua co chan PG (KHOI 2) va tap cell
+# (KHOI 9, phai co truoc placement): restore top_soc_powerplan.enc.dat, paste
+# 'soc_add_pg_pins' roi KHOI 9-16; hoac chay lai tu KHOI 0.
 #
 # a) Da co loi (sau KHOI 1), lam lai SRAM:
 #   loadFPlan ./outputs/FloorPlan.fp
