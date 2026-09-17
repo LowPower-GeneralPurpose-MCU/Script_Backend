@@ -35,6 +35,34 @@
 **/.rs_user1.tstamp
 **/.stats.dat
 
+# Timing exports: top_soc_pnr_{ss,ff}.sdf ~148 MB, vuot gioi han 100 MB cua GitHub
+# (push bi tu choi 2026-09-17).  Tao lai bang KHOI 16 cua tcl/innovus.tcl.
+**/outputs/*.sdf
+**/outputs/*.sdf.gz
+**/outputs/*.spef.gz
+
+# Thu muc tam cua Innovus (rcdb, mmmc copy): 268 MB / 95 file sau mot lan route
+**/innovus_temp_*/
+**/*.rcdb.d/
+**/extLogDir/
+**/.cadence/
+
+# optDesign/timeDesign khong co -outDir tu ghi vao day (hang tram file um*/)
+**/timingReports/
+
+# Log/cmd danh so cua cac phien cu (innovus.log chinh van duoc giu)
+**/innovus.log[0-9]*
+**/innovus.logv[0-9]*
+**/innovus.cmd[0-9]*
+**/genus.log[0-9]*
+**/genus.cmd[0-9]*
+
+# Report cu Innovus doi ten khi ghi de (*.rpt.old)
+**/*.old
+
+# Dofile LEC do Genus tu sinh
+**/fv/
+
 # Kept on purpose: tcl/, scripts/, reports/, verify_rpt/ and the handoff text
 # reports, which are small and are the record of what a run produced.
 
