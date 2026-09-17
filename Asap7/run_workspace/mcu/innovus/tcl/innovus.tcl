@@ -503,6 +503,11 @@ soc_block "KHOI 13: routeDesign" {
     setDelayCalMode -SIAware true -equivalent_waveform_model propagation
     setExtractRCMode -engine postRoute -effortLevel medium
     setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+    # Chan M3 tren than SRAM: tranh via V3 vao vung cam cua SRAM (run 2026-09-17:
+    # 14 loi Cut Short V3 con lai sau ecoRoute -fix_drc).  Paste lai khoi nay:
+    # xoa blockage cu truoc.
+    catch {deleteRouteBlk -name soc_sram_m3}
+    soc_sram_route_blk
     setNanoRouteMode -reset
     setNanoRouteMode \
         -route_with_timing_driven true \
