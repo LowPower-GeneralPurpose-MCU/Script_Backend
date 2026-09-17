@@ -99490,3 +99490,2183 @@ Current (total cpu=2:54:50, real=0:44:48, peak res=8630.7M, current mem=6479.4M)
 #    elapsed time = 00:00:15, memory = 7448.21 (MB)
 #    completing 30% with 17906 violations
 #    elapsed time = 00:00:16, memory = 7470.26 (MB)
+#    completing 40% with 17838 violations
+#    elapsed time = 00:00:24, memory = 7421.42 (MB)
+#    completing 50% with 17832 violations
+#    elapsed time = 00:00:28, memory = 7473.80 (MB)
+#    completing 60% with 17737 violations
+#    elapsed time = 00:00:34, memory = 7431.78 (MB)
+#    completing 70% with 17771 violations
+#    elapsed time = 00:00:38, memory = 7474.30 (MB)
+#    completing 80% with 17729 violations
+#    elapsed time = 00:00:45, memory = 7464.59 (MB)
+#    completing 90% with 17598 violations
+#    elapsed time = 00:00:52, memory = 7462.55 (MB)
+#    completing 100% with 17719 violations
+#    elapsed time = 00:00:59, memory = 7441.36 (MB)
+#   number of violations = 17719
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+------+------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| EolKO|   Enc| OffGrd| Totals|
+#---------+-------+-------+------+------+------+-------+-------+
+#  M1     |      0|      0|     0|     0|     0|      0|      0|
+#  M2     |      1|      3|     0|     3|     0|      0|      7|
+#  M3     |      0|      0|    22|     5|     0|      0|     27|
+#  M4     |      0|      0|     0|   318|     0|      3|    321|
+#  M5     |      0|      0|     0|     8| 17356|      0|  17364|
+#  Totals |      1|      3|    22|   334| 17356|      3|  17719|
+#---------+-------+-------+------+------+------+-------+-------+
+#
+#cpu time = 00:07:54, elapsed time = 00:01:00, memory = 6620.70 (MB), peak = 8630.69 (MB)
+#start 11th optimization iteration ...
+#    completing 10% with 17560 violations
+#    elapsed time = 00:00:13, memory = 7497.07 (MB)
+#    completing 20% with 17524 violations
+#    elapsed time = 00:00:17, memory = 7550.22 (MB)
+#    completing 30% with 17529 violations
+#    elapsed time = 00:00:18, memory = 7577.66 (MB)
+#    completing 40% with 17379 violations
+#    elapsed time = 00:00:28, memory = 7528.15 (MB)
+#    completing 50% with 17417 violations
+#    elapsed time = 00:00:32, memory = 7590.49 (MB)
+#    completing 60% with 17357 violations
+#    elapsed time = 00:00:40, memory = 7542.14 (MB)
+#    completing 70% with 17146 violations
+#    elapsed time = 00:00:44, memory = 7582.47 (MB)
+#    completing 80% with 17355 violations
+#    elapsed time = 00:00:52, memory = 7582.42 (MB)
+#    completing 90% with 17245 violations
+#    elapsed time = 00:01:00, memory = 7561.86 (MB)
+#    completing 100% with 17296 violations
+#    elapsed time = 00:01:09, memory = 7555.01 (MB)
+#   number of violations = 17296
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+------+------+-------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| EolKO|   Enc| CorSpc| OffGrd| Totals|
+#---------+-------+-------+------+------+------+-------+-------+-------+
+#  M1     |      0|      0|     0|     0|     0|      0|      0|      0|
+#  M2     |      3|     10|     2|     6|     0|      0|      0|     21|
+#  M3     |      0|      0|    21|     4|     0|      0|      0|     25|
+#  M4     |      0|      1|     0|   301|     0|      0|      3|    305|
+#  M5     |      0|      0|     0|     1| 16943|      0|      0|  16944|
+#  M6     |      0|      0|     0|     0|     0|      0|      0|      0|
+#  M7     |      0|      0|     0|     0|     0|      1|      0|      1|
+#  Totals |      3|     11|    23|   312| 16943|      1|      3|  17296|
+#---------+-------+-------+------+------+------+-------+-------+-------+
+#
+#cpu time = 00:09:12, elapsed time = 00:01:09, memory = 6627.93 (MB), peak = 8630.69 (MB)
+#start 12th optimization iteration ...
+#    completing 10% with 17205 violations
+#    elapsed time = 00:00:14, memory = 7539.27 (MB)
+#    completing 20% with 17156 violations
+#    elapsed time = 00:00:18, memory = 7615.29 (MB)
+#    completing 30% with 17155 violations
+#    elapsed time = 00:00:18, memory = 7617.62 (MB)
+#    completing 40% with 17026 violations
+#    elapsed time = 00:00:29, memory = 7567.29 (MB)
+#    completing 50% with 17013 violations
+#    elapsed time = 00:00:33, memory = 7618.70 (MB)
+#    completing 60% with 16989 violations
+#    elapsed time = 00:00:42, memory = 7572.20 (MB)
+#    completing 70% with 16894 violations
+#    elapsed time = 00:00:47, memory = 7600.55 (MB)
+#    completing 80% with 16703 violations
+#    elapsed time = 00:00:54, memory = 7610.59 (MB)
+#    completing 90% with 16876 violations
+#    elapsed time = 00:01:04, memory = 7601.54 (MB)
+#    completing 100% with 16816 violations
+#    elapsed time = 00:01:14, memory = 7596.75 (MB)
+#   number of violations = 16816
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+------+------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| EolKO|   Enc| OffGrd| Totals|
+#---------+-------+-------+------+------+------+-------+-------+
+#  M1     |      0|      0|     0|     0|     0|      0|      0|
+#  M2     |      2|      8|     1|     2|     0|      0|     13|
+#  M3     |      0|      0|    21|     2|     0|      0|     23|
+#  M4     |      0|      0|     0|   268|     0|      1|    269|
+#  M5     |      0|      0|     0|     2| 16509|      0|  16511|
+#  Totals |      2|      8|    22|   274| 16509|      1|  16816|
+#---------+-------+-------+------+------+------+-------+-------+
+#
+#cpu time = 00:09:46, elapsed time = 00:01:14, memory = 6632.16 (MB), peak = 8630.69 (MB)
+#start 13th optimization iteration ...
+#    completing 10% with 16712 violations
+#    elapsed time = 00:00:12, memory = 7479.85 (MB)
+#    completing 20% with 16701 violations
+#    elapsed time = 00:00:16, memory = 7561.05 (MB)
+#    completing 30% with 16693 violations
+#    elapsed time = 00:00:17, memory = 7569.47 (MB)
+#    completing 40% with 16603 violations
+#    elapsed time = 00:00:25, memory = 7523.89 (MB)
+#    completing 50% with 16594 violations
+#    elapsed time = 00:00:29, memory = 7567.53 (MB)
+#    completing 60% with 16518 violations
+#    elapsed time = 00:00:34, memory = 7536.62 (MB)
+#    completing 70% with 16553 violations
+#    elapsed time = 00:00:39, memory = 7566.09 (MB)
+#    completing 80% with 16483 violations
+#    elapsed time = 00:00:47, memory = 7561.34 (MB)
+#    completing 90% with 16469 violations
+#    elapsed time = 00:00:53, memory = 7563.70 (MB)
+#    completing 100% with 16461 violations
+#    elapsed time = 00:01:01, memory = 7548.96 (MB)
+#   number of violations = 16461
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+------+------+-------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| EolKO|   Enc| CorSpc| OffGrd| Totals|
+#---------+-------+-------+------+------+------+-------+-------+-------+
+#  M1     |      0|      0|     0|     0|     0|      0|      0|      0|
+#  M2     |      2|      6|     2|     4|     0|      0|      0|     14|
+#  M3     |      0|      0|    21|     3|     0|      0|      0|     24|
+#  M4     |      0|      0|     0|   211|     0|      0|      0|    211|
+#  M5     |      0|      0|     0|     1| 16209|      0|      1|  16211|
+#  M6     |      0|      0|     0|     0|     0|      0|      0|      0|
+#  M7     |      0|      0|     0|     0|     0|      1|      0|      1|
+#  Totals |      2|      6|    23|   219| 16209|      1|      1|  16461|
+#---------+-------+-------+------+------+------+-------+-------+-------+
+#
+#cpu time = 00:08:09, elapsed time = 00:01:02, memory = 6630.89 (MB), peak = 8630.69 (MB)
+#start 14th optimization iteration ...
+#    completing 10% with 16449 violations
+#    elapsed time = 00:00:12, memory = 7462.68 (MB)
+#    completing 20% with 16445 violations
+#    elapsed time = 00:00:15, memory = 7538.39 (MB)
+#    completing 30% with 16437 violations
+#    elapsed time = 00:00:16, memory = 7539.78 (MB)
+#    completing 40% with 16359 violations
+#    elapsed time = 00:00:25, memory = 7491.58 (MB)
+#    completing 50% with 16411 violations
+#    elapsed time = 00:00:29, memory = 7541.79 (MB)
+#    completing 60% with 16350 violations
+#    elapsed time = 00:00:34, memory = 7511.16 (MB)
+#    completing 70% with 16337 violations
+#    elapsed time = 00:00:39, memory = 7545.44 (MB)
+#    completing 80% with 16248 violations
+#    elapsed time = 00:00:46, memory = 7534.09 (MB)
+#    completing 90% with 16253 violations
+#    elapsed time = 00:00:53, memory = 7538.77 (MB)
+#    completing 100% with 16225 violations
+#    elapsed time = 00:01:01, memory = 7525.64 (MB)
+#   number of violations = 16225
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+------+------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| EolKO|   Enc| OffGrd| Totals|
+#---------+-------+-------+------+------+------+-------+-------+
+#  M1     |      0|      0|     0|     0|     0|      0|      0|
+#  M2     |      1|      2|     1|     1|     0|      0|      5|
+#  M3     |      0|      0|    21|     2|     0|      0|     23|
+#  M4     |      0|      0|     0|   297|     0|      4|    301|
+#  M5     |      0|      0|     0|     4| 15889|      1|  15894|
+#  M6     |      0|      0|     0|     2|     0|      0|      2|
+#  Totals |      1|      2|    22|   306| 15889|      5|  16225|
+#---------+-------+-------+------+------+------+-------+-------+
+#
+#cpu time = 00:08:05, elapsed time = 00:01:01, memory = 6631.05 (MB), peak = 8630.69 (MB)
+#start 15th optimization iteration ...
+#    completing 10% with 16171 violations
+#    elapsed time = 00:00:10, memory = 7437.61 (MB)
+#    completing 20% with 16150 violations
+#    elapsed time = 00:00:14, memory = 7500.70 (MB)
+#    completing 30% with 16163 violations
+#    elapsed time = 00:00:15, memory = 7514.60 (MB)
+#    completing 40% with 16061 violations
+#    elapsed time = 00:00:22, memory = 7482.86 (MB)
+#    completing 50% with 16133 violations
+#    elapsed time = 00:00:26, memory = 7513.32 (MB)
+#    completing 60% with 16023 violations
+#    elapsed time = 00:00:29, memory = 7503.40 (MB)
+#    completing 70% with 16092 violations
+#    elapsed time = 00:00:35, memory = 7517.51 (MB)
+#    completing 80% with 16038 violations
+#    elapsed time = 00:00:41, memory = 7502.18 (MB)
+#    completing 90% with 16021 violations
+#    elapsed time = 00:00:46, memory = 7510.98 (MB)
+#    completing 100% with 16038 violations
+#    elapsed time = 00:00:53, memory = 7498.98 (MB)
+#   number of violations = 16038
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+------+------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| EolKO|   Enc| OffGrd| Totals|
+#---------+-------+-------+------+------+------+-------+-------+
+#  M1     |      0|      0|     0|     0|     0|      0|      0|
+#  M2     |      2|      5|     3|     2|     0|      0|     12|
+#  M3     |      0|      0|    21|     3|     0|      0|     24|
+#  M4     |      0|      0|     0|   283|     0|      6|    289|
+#  M5     |      0|      0|     0|     0| 15711|      0|  15711|
+#  M6     |      0|      0|     0|     2|     0|      0|      2|
+#  Totals |      2|      5|    24|   290| 15711|      6|  16038|
+#---------+-------+-------+------+------+------+-------+-------+
+#
+#cpu time = 00:07:06, elapsed time = 00:00:54, memory = 6630.67 (MB), peak = 8630.69 (MB)
+#start 16th optimization iteration ...
+#    completing 10% with 15921 violations
+#    elapsed time = 00:00:12, memory = 7731.73 (MB)
+#    completing 20% with 15846 violations
+#    elapsed time = 00:00:17, memory = 7731.82 (MB)
+#    completing 30% with 15827 violations
+#    elapsed time = 00:00:18, memory = 7811.26 (MB)
+#    completing 40% with 15823 violations
+#    elapsed time = 00:00:19, memory = 7805.01 (MB)
+#    completing 50% with 15717 violations
+#    elapsed time = 00:00:29, memory = 7753.87 (MB)
+#    completing 60% with 15703 violations
+#    elapsed time = 00:00:32, memory = 7787.01 (MB)
+#    completing 70% with 15590 violations
+#    elapsed time = 00:00:40, memory = 7756.00 (MB)
+#    completing 80% with 15449 violations
+#    elapsed time = 00:00:46, memory = 7779.56 (MB)
+#    completing 90% with 15461 violations
+#    elapsed time = 00:00:55, memory = 7766.47 (MB)
+#    completing 100% with 15553 violations
+#    elapsed time = 00:01:03, memory = 7770.86 (MB)
+#   number of violations = 15553
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+------+------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| EolKO|   Enc| CorSpc| Totals|
+#---------+-------+-------+------+------+------+-------+-------+
+#  M1     |      0|      0|     0|     0|     0|      0|      0|
+#  M2     |      4|      3|     2|     4|     0|      0|     13|
+#  M3     |      0|      0|    21|     3|     0|      0|     24|
+#  M4     |      0|      1|     0|   280|     0|      1|    282|
+#  M5     |      0|      0|     0|     2| 15230|      0|  15232|
+#  M6     |      0|      0|     0|     1|     0|      0|      1|
+#  M7     |      0|      0|     0|     0|     0|      1|      1|
+#  Totals |      4|      4|    23|   290| 15230|      2|  15553|
+#---------+-------+-------+------+------+------+-------+-------+
+#
+#cpu time = 00:08:26, elapsed time = 00:01:04, memory = 6645.59 (MB), peak = 8630.69 (MB)
+#start 17th optimization iteration ...
+#    completing 10% with 15397 violations
+#    elapsed time = 00:00:12, memory = 7732.40 (MB)
+#    completing 20% with 15397 violations
+#    elapsed time = 00:00:17, memory = 7743.62 (MB)
+#    completing 30% with 15417 violations
+#    elapsed time = 00:00:19, memory = 7817.28 (MB)
+#    completing 40% with 15419 violations
+#    elapsed time = 00:00:19, memory = 7818.09 (MB)
+#    completing 50% with 15339 violations
+#    elapsed time = 00:00:30, memory = 7762.42 (MB)
+#    completing 60% with 15325 violations
+#    elapsed time = 00:00:33, memory = 7800.83 (MB)
+#    completing 70% with 15232 violations
+#    elapsed time = 00:00:41, memory = 7764.02 (MB)
+#    completing 80% with 15136 violations
+#    elapsed time = 00:00:48, memory = 7778.35 (MB)
+#    completing 90% with 15129 violations
+#    elapsed time = 00:00:56, memory = 7767.66 (MB)
+#    completing 100% with 15203 violations
+#    elapsed time = 00:01:05, memory = 7768.71 (MB)
+#   number of violations = 15203
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+------+------+-------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| EolKO|   Enc| CorSpc| OffGrd| Totals|
+#---------+-------+-------+------+------+------+-------+-------+-------+
+#  M1     |      0|      0|     0|     0|     0|      0|      0|      0|
+#  M2     |      2|      6|     0|     4|     0|      0|      0|     12|
+#  M3     |      0|      0|    21|     3|     0|      0|      0|     24|
+#  M4     |      0|      1|     0|   230|     0|      0|      1|    232|
+#  M5     |      0|      0|     0|     5| 14929|      0|      0|  14934|
+#  M6     |      0|      0|     0|     0|     0|      0|      0|      0|
+#  M7     |      0|      0|     0|     0|     0|      1|      0|      1|
+#  Totals |      2|      7|    21|   242| 14929|      1|      1|  15203|
+#---------+-------+-------+------+------+------+-------+-------+-------+
+#
+#cpu time = 00:08:42, elapsed time = 00:01:06, memory = 6648.16 (MB), peak = 8630.69 (MB)
+#start 18th optimization iteration ...
+#    completing 10% with 15141 violations
+#    elapsed time = 00:00:13, memory = 7574.97 (MB)
+#    completing 20% with 15131 violations
+#    elapsed time = 00:00:16, memory = 7638.43 (MB)
+#    completing 30% with 15137 violations
+#    elapsed time = 00:00:17, memory = 7660.84 (MB)
+#    completing 40% with 15106 violations
+#    elapsed time = 00:00:26, memory = 7611.19 (MB)
+#    completing 50% with 15148 violations
+#    elapsed time = 00:00:30, memory = 7650.40 (MB)
+#    completing 60% with 15066 violations
+#    elapsed time = 00:00:36, memory = 7626.71 (MB)
+#    completing 70% with 15149 violations
+#    elapsed time = 00:00:41, memory = 7657.25 (MB)
+#    completing 80% with 15131 violations
+#    elapsed time = 00:00:49, memory = 7650.76 (MB)
+#    completing 90% with 15037 violations
+#    elapsed time = 00:00:57, memory = 7643.33 (MB)
+#    completing 100% with 15103 violations
+#    elapsed time = 00:01:06, memory = 7632.05 (MB)
+#   number of violations = 15103
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+------+------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| EolKO|   Enc| OffGrd| Totals|
+#---------+-------+-------+------+------+------+-------+-------+
+#  M1     |      0|      0|     0|     0|     0|      0|      0|
+#  M2     |      2|      2|     0|     2|     0|      0|      6|
+#  M3     |      0|      0|    21|     1|     0|      0|     22|
+#  M4     |      0|      0|     0|   269|     0|      4|    273|
+#  M5     |      0|      0|     0|     2| 14796|      3|  14801|
+#  M6     |      0|      0|     0|     1|     0|      0|      1|
+#  Totals |      2|      2|    21|   275| 14796|      7|  15103|
+#---------+-------+-------+------+------+------+-------+-------+
+#
+#cpu time = 00:08:51, elapsed time = 00:01:07, memory = 6644.07 (MB), peak = 8630.69 (MB)
+#start 19th optimization iteration ...
+#    completing 10% with 15014 violations
+#    elapsed time = 00:00:12, memory = 7506.92 (MB)
+#    completing 20% with 15006 violations
+#    elapsed time = 00:00:15, memory = 7565.02 (MB)
+#    completing 30% with 15022 violations
+#    elapsed time = 00:00:16, memory = 7588.66 (MB)
+#    completing 40% with 14991 violations
+#    elapsed time = 00:00:22, memory = 7557.36 (MB)
+#    completing 50% with 14989 violations
+#    elapsed time = 00:00:28, memory = 7575.91 (MB)
+#    completing 60% with 14848 violations
+#    elapsed time = 00:00:30, memory = 7583.02 (MB)
+#    completing 70% with 14910 violations
+#    elapsed time = 00:00:38, memory = 7586.00 (MB)
+#    completing 80% with 14871 violations
+#    elapsed time = 00:00:45, memory = 7565.26 (MB)
+#    completing 90% with 14899 violations
+#    elapsed time = 00:00:50, memory = 7584.62 (MB)
+#    completing 100% with 14932 violations
+#    elapsed time = 00:00:58, memory = 7570.93 (MB)
+#   number of violations = 14932
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+-------+------+------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| CutSpc| EolKO|   Enc| OffGrd| Totals|
+#---------+-------+-------+------+-------+------+------+-------+-------+
+#  M1     |      0|      0|     0|      0|     0|     0|      0|      0|
+#  M2     |      2|      6|     1|      0|     2|     0|      0|     11|
+#  M3     |      0|      0|    21|      1|     4|     0|      0|     26|
+#  M4     |      0|      0|     0|      1|   226|     0|      1|    228|
+#  M5     |      0|      0|     0|      0|     1| 14664|      1|  14666|
+#  M6     |      0|      0|     0|      0|     1|     0|      0|      1|
+#  Totals |      2|      6|    22|      2|   234| 14664|      2|  14932|
+#---------+-------+-------+------+-------+------+------+-------+-------+
+#
+#cpu time = 00:07:45, elapsed time = 00:00:58, memory = 6640.34 (MB), peak = 8630.69 (MB)
+#start 20th optimization iteration ...
+#    completing 10% with 14855 violations
+#    elapsed time = 00:00:12, memory = 7514.34 (MB)
+#    completing 20% with 14845 violations
+#    elapsed time = 00:00:16, memory = 7585.77 (MB)
+#    completing 30% with 14852 violations
+#    elapsed time = 00:00:16, memory = 7605.36 (MB)
+#    completing 40% with 14798 violations
+#    elapsed time = 00:00:23, memory = 7577.45 (MB)
+#    completing 50% with 14807 violations
+#    elapsed time = 00:00:28, memory = 7596.18 (MB)
+#    completing 60% with 14713 violations
+#    elapsed time = 00:00:31, memory = 7590.97 (MB)
+#    completing 70% with 14808 violations
+#    elapsed time = 00:00:38, memory = 7591.93 (MB)
+#    completing 80% with 14841 violations
+#    elapsed time = 00:00:45, memory = 7572.08 (MB)
+#    completing 90% with 14847 violations
+#    elapsed time = 00:00:51, memory = 7594.31 (MB)
+#    completing 100% with 14854 violations
+#    elapsed time = 00:00:59, memory = 7585.80 (MB)
+#   number of violations = 14854
+#
+#  By Layer and Type:
+#
+#---------+-------+------+------+------+-------+-------+-------+
+#  -      | EOLSpc| Short| EolKO|   Enc| CorSpc| OffGrd| Totals|
+#---------+-------+------+------+------+-------+-------+-------+
+#  M1     |      0|     0|     0|     0|      0|      0|      0|
+#  M2     |      0|     0|     1|     0|      0|      0|      1|
+#  M3     |      0|    21|     1|     0|      0|      0|     22|
+#  M4     |      1|     0|   280|     0|      2|      1|    284|
+#  M5     |      0|     0|     2| 14543|      0|      0|  14545|
+#  M6     |      0|     0|     2|     0|      0|      0|      2|
+#  Totals |      1|    21|   286| 14543|      2|      1|  14854|
+#---------+-------+------+------+------+-------+-------+-------+
+#
+#cpu time = 00:07:46, elapsed time = 00:00:59, memory = 6638.52 (MB), peak = 8630.69 (MB)
+#Complete Detail Routing.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  474317|
+#  M2 ( 2H)     |     854020|  655590|
+#  M3 ( 3V)     |    1294161|  166973|
+#  M4 ( 4H)     |    1276123|   81287|
+#  M5 ( 5V)     |     925463|   14691|
+#  M6 ( 6H)     |     289904|   18563|
+#  M7 ( 7V)     |     210614|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4850285| 1411421|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4598166 um.
+#Total number of DRC violations = 14854
+#Cpu time = 03:09:57
+#Elapsed time = 00:23:57
+#Increased memory = 123.34 (MB)
+#Total memory = 6602.09 (MB)
+#Peak memory = 8630.69 (MB)
+#
+#Start Post Route wire spreading..
+#
+#Start DRC checking..
+#   number of violations = 15083
+#
+#  By Layer and Type:
+#
+#---------+-------+------+------+------+-------+-------+-------+
+#  -      | EOLSpc| Short| EolKO|   Enc| CorSpc| OffGrd| Totals|
+#---------+-------+------+------+------+-------+-------+-------+
+#  M1     |      0|     0|     0|     0|      0|      0|      0|
+#  M2     |      0|     0|     1|     0|      0|      0|      1|
+#  M3     |      0|    24|     1|     0|      0|      0|     25|
+#  M4     |      1|     0|   298|     0|      2|     50|    351|
+#  M5     |      0|     0|     2| 14702|      0|      0|  14704|
+#  M6     |      0|     0|     2|     0|      0|      0|      2|
+#  Totals |      1|    24|   304| 14702|      2|     50|  15083|
+#---------+-------+------+------+------+-------+-------+-------+
+#
+#cpu time = 00:04:22, elapsed time = 00:00:33, memory = 6640.54 (MB), peak = 8630.69 (MB)
+#CELL_VIEW top_soc,init has 15083 DRC violations
+#Total number of DRC violations = 15083
+#
+#Start data preparation for wire spreading...
+#
+#Data preparation is done on Thu Sep 17 23:53:46 2026
+#
+#
+#Start Post Route Wire Spread.
+#Done with 0 horizontal wires in 42 hboxes and 0 vertical wires in 66 hboxes.
+#Complete Post Route Wire Spread.
+#
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  474317|
+#  M2 ( 2H)     |     854020|  655590|
+#  M3 ( 3V)     |    1294161|  166973|
+#  M4 ( 4H)     |    1276123|   81287|
+#  M5 ( 5V)     |     925463|   14691|
+#  M6 ( 6H)     |     289904|   18563|
+#  M7 ( 7V)     |     210614|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4850285| 1411421|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4598166 um.
+#
+#Start DRC checking..
+#   number of violations = 15083
+#
+#  By Layer and Type:
+#
+#---------+-------+------+------+------+-------+-------+-------+
+#  -      | EOLSpc| Short| EolKO|   Enc| CorSpc| OffGrd| Totals|
+#---------+-------+------+------+------+-------+-------+-------+
+#  M1     |      0|     0|     0|     0|      0|      0|      0|
+#  M2     |      0|     0|     1|     0|      0|      0|      1|
+#  M3     |      0|    24|     1|     0|      0|      0|     25|
+#  M4     |      1|     0|   298|     0|      2|     50|    351|
+#  M5     |      0|     0|     2| 14702|      0|      0|  14704|
+#  M6     |      0|     0|     2|     0|      0|      0|      2|
+#  Totals |      1|    24|   304| 14702|      2|     50|  15083|
+#---------+-------+------+------+------+-------+-------+-------+
+#
+#cpu time = 00:04:22, elapsed time = 00:00:33, memory = 6641.72 (MB), peak = 8630.69 (MB)
+#CELL_VIEW top_soc,init has 15083 DRC violations
+#Total number of DRC violations = 15083
+#   number of violations = 15083
+#
+#  By Layer and Type:
+#
+#---------+-------+------+------+------+-------+-------+-------+
+#  -      | EOLSpc| Short| EolKO|   Enc| CorSpc| OffGrd| Totals|
+#---------+-------+------+------+------+-------+-------+-------+
+#  M1     |      0|     0|     0|     0|      0|      0|      0|
+#  M2     |      0|     0|     1|     0|      0|      0|      1|
+#  M3     |      0|    24|     1|     0|      0|      0|     25|
+#  M4     |      1|     0|   298|     0|      2|     50|    351|
+#  M5     |      0|     0|     2| 14702|      0|      0|  14704|
+#  M6     |      0|     0|     2|     0|      0|      0|      2|
+#  Totals |      1|    24|   304| 14702|      2|     50|  15083|
+#---------+-------+------+------+------+-------+-------+-------+
+#
+#cpu time = 00:04:43, elapsed time = 00:00:40, memory = 6605.59 (MB), peak = 8630.69 (MB)
+#CELL_VIEW top_soc,init has 15083 DRC violations
+#Total number of DRC violations = 15083
+#Post Route wire spread is done.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  474317|
+#  M2 ( 2H)     |     854020|  655590|
+#  M3 ( 3V)     |    1294161|  166973|
+#  M4 ( 4H)     |    1276123|   81287|
+#  M5 ( 5V)     |     925463|   14691|
+#  M6 ( 6H)     |     289904|   18563|
+#  M7 ( 7V)     |     210614|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4850285| 1411421|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4598166 um.
+#detailRoute Statistics:
+#Cpu time = 03:19:09
+#Elapsed time = 00:25:12
+#Increased memory = 109.62 (MB)
+#Total memory = 6588.37 (MB)
+#Peak memory = 8630.69 (MB)
+#
+#globalDetailRoute statistics:
+#Cpu time = 03:27:20
+#Elapsed time = 00:27:44
+#Increased memory = 377.88 (MB)
+#Total memory = 6403.50 (MB)
+#Peak memory = 8630.69 (MB)
+#Number of warnings = 6
+#Total number of warnings = 14
+#Number of fails = 0
+#Total number of fails = 0
+#Complete globalDetailRoute on Thu Sep 17 23:54:28 2026
+#
+% End globalDetailRoute (date=09/17 23:54:29, total cpu=3:27:21, real=0:27:45, peak res=7825.6M, current mem=6379.0M)
+#***Restoring views
+#Default setup view is reset to view_ss.
+#Default setup view is reset to view_ss.
+AAE_INFO: Post Route call back at the end of routeDesign
+#routeDesign: cpu time = 03:27:24, elapsed time = 00:27:46, memory = 6204.13 (MB), peak = 8630.69 (MB)
+#
+#  Scalability Statistics
+#
+#----------------------------+---------+-------------+------------+
+#  routeDesign               | cpu time| elapsed time| scalability|
+#----------------------------+---------+-------------+------------+
+#  Pre Callback              | 00:00:00|     00:00:00|         1.0|
+#  Post Callback             | 00:00:00|     00:00:00|         1.0|
+#  Timing Data Generation    | 00:05:02|     00:01:09|         4.3|
+#  DB Import                 | 00:00:04|     00:00:02|         1.7|
+#  DB Export                 | 00:00:06|     00:00:02|         2.6|
+#  Cell Pin Access           | 00:00:01|     00:00:00|         1.0|
+#  Data Preparation          | 00:00:07|     00:00:05|         1.4|
+#  Global Routing            | 00:01:22|     00:00:42|         2.0|
+#  Track Assignment          | 00:01:25|     00:00:28|         3.0|
+#  Detail Routing            | 03:09:56|     00:23:56|         7.9|
+#  Post Route Wire Spreading | 00:09:08|     00:01:13|         7.5|
+#  Entire Command            | 03:27:24|     00:27:46|         7.5|
+#----------------------------+---------+-------------+------------+
+#
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   NRDB-778             3  No multicut vias which meet all area rul...
+WARNING   NRDB-2040            1  Rule %s doesn't specify any vias that sa...
+WARNING   NRIG-1303            1  The congestion map does not match the GC...
+WARNING   NRIF-38              1  Option %s%s is not a Boolean option.     
+WARNING   TCLCMD-1403          1  '%s'                                     
+*** Message Summary: 7 warning(s), 0 error(s)
+
+#% End routeDesign (date=09/17 23:54:29, total cpu=3:27:24, real=0:27:46, peak res=7825.6M, current mem=6204.1M)
+<CMD> routeDesign -viaOpt -wireOpt
+#% Begin routeDesign (date=09/17 23:54:29, mem=6204.1M)
+#routeDesign: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 6204.13 (MB), peak = 8630.69 (MB)
+AAE_INFO: Pre Route call back at the beginning of routeDesign
+#**INFO: setDesignMode -flowEffort standard
+#**INFO: setDesignMode -powerEffort none
+**INFO: User settings:
+setNanoRouteMode -route_detail_end_iteration                                              20
+setNanoRouteMode -route_detail_fix_antenna                                                true
+setNanoRouteMode -route_detail_use_lef_pin_taper_rule                                     true
+setNanoRouteMode -route_route_side                                                        front
+setNanoRouteMode -extract_rc_model_file                                                   rc_model.bin
+setNanoRouteMode -route_extract_third_party_compatible                                    false
+setNanoRouteMode -route_global_exp_timing_driven_use_tif_timing_engine_for_import_design  false
+setNanoRouteMode -route_exp_design_mode_bottom_routing_layer                              2
+setNanoRouteMode -route_exp_design_mode_top_routing_layer                                 7
+setNanoRouteMode -route_exp_dont_invoke_reclaim_antenna_diode                             true
+setNanoRouteMode -route_with_si_driven                                                    true
+setNanoRouteMode -route_with_timing_driven                                                true
+setNanoRouteMode -route_with_via_only_for_stdcell_pin                                     true
+setNanoRouteMode -timingEngine                                                            .timing_file_2273039.tif.gz
+setDesignMode -bottomRoutingLayer                                                         2
+setDesignMode -process                                                                    7
+setDesignMode -topRoutingLayer                                                            7
+setExtractRCMode -coupled                                                                 true
+setExtractRCMode -coupling_c_th                                                           0.1
+setExtractRCMode -effortLevel                                                             medium
+setExtractRCMode -engine                                                                  postRoute
+setExtractRCMode -relative_c_th                                                           1
+setExtractRCMode -total_c_th                                                              0
+setDelayCalMode -enable_hier_save_restore_flow                                            false
+setDelayCalMode -enable_high_fanout                                                       true
+setDelayCalMode -enable_ideal_seq_async_pins                                              false
+setDelayCalMode -eng_enablePrePlacedFlow                                                  false
+setDelayCalMode -engine                                                                   aae
+setDelayCalMode -equivalent_waveform_model                                                propagation
+setDelayCalMode -ignoreNetLoad                                                            false
+setDelayCalMode -SIAware                                                                  true
+setDelayCalMode -socv_accuracy_mode                                                       low
+setSIMode -separate_delta_delay_on_data                                                   true
+
+#**INFO: multi-cut via swapping will be performed after routing.
+#**INFO: All auto set options tuned by routeDesign will be restored to their original settings on command completion.
+Begin checking placement ... (start mem=10163.6M, init mem=10163.5M)
+*info: Placed = 180297         (Fixed = 35210)
+*info: Unplaced = 0           
+Placement Density:25.90%(339645/1310983)
+Placement Density (including fixed std cells):26.71%(354155/1325493)
+Finished checkPlace (total: cpu=0:00:02.3, real=0:00:01.0; vio checks: cpu=0:00:01.9, real=0:00:00.0; mem=10131.5M)
+
+changeUseClockNetStatus Option :  -ignoreSkipRoutingNets -noFixedNetWires 
+*** Changed status on (0) nets in Clock.
+*** End changeUseClockNetStatus (cpu=0:00:00.0, real=0:00:00.0, mem=10131.5M) ***
+#**INFO: auto set of droutePostRouteSwapVia to true
+% Begin detailRoute (date=09/17 23:54:31, mem=6194.4M)
+
+detailRoute
+
+#Start detailRoute on Thu Sep 17 23:54:31 2026
+#
+Initializing multi-corner resistance tables ...
+#NanoRoute Version 23.14-s088_1 NR250219-0822/23_14-UB
+#Start routing data preparation on Thu Sep 17 23:54:36 2026
+#
+# M1           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M2           H   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M3           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M4           H   Track-Pitch = 0.19200    Line-2-Via Pitch = 0.19200
+# M5           V   Track-Pitch = 0.21600    Line-2-Via Pitch = 0.19200
+# M6           H   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M7           V   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M8           H   Track-Pitch = 0.38400    Line-2-Via Pitch = 0.32000
+# M9           V   Track-Pitch = 0.36000    Line-2-Via Pitch = 0.32000
+# Pad          H   Track-Pitch = 8.28000    Line-2-Via Pitch = 8.28000
+#Bottom routing layer index=2(M2), bottom routing layer for shielding=2(M2), bottom shield layer=2(M2)
+#shield_bottom_stripe_layer=1(M1), shield_top_stripe_layer=7(M7)
+#pin_access_rlayer=2(M2)
+#shield_top_dpt_rlayer=-1 top_rlayer=7 top_trim_metal_rlayer=-1 rlayer_lowest=1 bottom_rlayer=2
+#enable_trim_layer_shield=F enable_dpt_layer_shield=F has_line_end_grid=F
+#enable_dpt_layer_shield=F
+#has_line_end_grid=F
+#cpu time = 00:00:00, elapsed time = 00:00:00, memory = 6186.51 (MB), peak = 8630.69 (MB)
+#Regenerating Ggrids automatically.
+#Auto generating G-grids with size=15 tracks, using layer M3's pitch = 0.14400.
+#Using automatically generated G-grids.
+#Done routing data preparation.
+#cpu time = 00:00:06, elapsed time = 00:00:04, memory = 6195.71 (MB), peak = 8630.69 (MB)
+#Start reading timing information from file .timing_file_2273039.tif.gz ...
+#Read in timing information for 174 ports, 149197 instances from timing file .timing_file_2273039.tif.gz.
+#
+#Start Post Route via swapping...
+#   number of violations = 30504
+#
+#  By Layer and Type:
+#
+#---------+-------+------+------+------+-------+-------+-------+
+#  -      | EOLSpc| Short| EolKO|   Enc| CorSpc| OffGrd| Totals|
+#---------+-------+------+------+------+-------+-------+-------+
+#  M1     |      0|     0|     0|     0|      0|      0|      0|
+#  M2     |      0|     0|     1|     0|      0|      0|      1|
+#  M3     |      0|    27|     1|     0|      0|      0|     28|
+#  M4     |      1|     0|   301|     0|      2|     50|    354|
+#  M5     |      0|     0|     2| 30117|      0|      0|  30119|
+#  M6     |      0|     0|     2|     0|      0|      0|      2|
+#  Totals |      1|    27|   307| 30117|      2|     50|  30504|
+#---------+-------+------+------+------+-------+-------+-------+
+#
+#cpu time = 00:00:46, elapsed time = 00:00:06, memory = 6265.89 (MB), peak = 8630.69 (MB)
+#CELL_VIEW top_soc,init has 30504 DRC violations
+#Total number of DRC violations = 30504
+#No via is swapped.
+#Post Route via swapping is done.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  474317|
+#  M2 ( 2H)     |     854020|  655590|
+#  M3 ( 3V)     |    1294161|  166973|
+#  M4 ( 4H)     |    1276123|   81287|
+#  M5 ( 5V)     |     925463|   14691|
+#  M6 ( 6H)     |     289904|   18563|
+#  M7 ( 7V)     |     210614|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4850285| 1411421|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4598166 um.
+#
+#detailRoute statistics:
+#Cpu time = 00:01:17
+#Elapsed time = 00:00:21
+#Increased memory = 11.96 (MB)
+#Total memory = 6206.34 (MB)
+#Peak memory = 8630.69 (MB)
+#Number of warnings = 0
+#Total number of warnings = 15
+#Number of fails = 0
+#Total number of fails = 0
+#Complete detailRoute on Thu Sep 17 23:54:52 2026
+#
+% End detailRoute (date=09/17 23:54:52, total cpu=0:01:18, real=0:00:22.0, peak res=6198.6M, current mem=6198.6M)
+% Begin detailRoute (date=09/17 23:54:53, mem=6198.6M)
+
+detailRoute
+
+#Start detailRoute on Thu Sep 17 23:54:53 2026
+#
+Initializing multi-corner resistance tables ...
+#Start reading timing information from file .timing_file_2273039.tif.gz ...
+#Read in timing information for 174 ports, 149197 instances from timing file .timing_file_2273039.tif.gz.
+#NanoRoute Version 23.14-s088_1 NR250219-0822/23_14-UB
+#Start routing data preparation on Thu Sep 17 23:54:59 2026
+#
+#Initial pin access analysis.
+#Detail pin access analysis.
+# M1           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M2           H   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M3           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M4           H   Track-Pitch = 0.19200    Line-2-Via Pitch = 0.19200
+# M5           V   Track-Pitch = 0.21600    Line-2-Via Pitch = 0.19200
+# M6           H   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M7           V   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M8           H   Track-Pitch = 0.38400    Line-2-Via Pitch = 0.32000
+# M9           V   Track-Pitch = 0.36000    Line-2-Via Pitch = 0.32000
+# Pad          H   Track-Pitch = 8.28000    Line-2-Via Pitch = 8.28000
+#Bottom routing layer index=2(M2), bottom routing layer for shielding=2(M2), bottom shield layer=2(M2)
+#shield_bottom_stripe_layer=1(M1), shield_top_stripe_layer=7(M7)
+#pin_access_rlayer=2(M2)
+#shield_top_dpt_rlayer=-1 top_rlayer=7 top_trim_metal_rlayer=-1 rlayer_lowest=1 bottom_rlayer=2
+#enable_trim_layer_shield=F enable_dpt_layer_shield=F has_line_end_grid=F
+#enable_dpt_layer_shield=F
+#has_line_end_grid=F
+#cpu time = 00:00:00, elapsed time = 00:00:00, memory = 6220.43 (MB), peak = 8630.69 (MB)
+#Regenerating Ggrids automatically.
+#Auto generating G-grids with size=15 tracks, using layer M3's pitch = 0.14400.
+#Using automatically generated G-grids.
+#Done routing data preparation.
+#cpu time = 00:00:06, elapsed time = 00:00:04, memory = 6229.62 (MB), peak = 8630.69 (MB)
+#
+#Start Post Route wire spreading..
+#
+#Start data preparation for wire spreading...
+#
+#Data preparation is done on Thu Sep 17 23:55:06 2026
+#
+#
+#Start Post Route Wire Spread.
+#Done with 0 horizontal wires in 42 hboxes and 0 vertical wires in 66 hboxes.
+#Complete Post Route Wire Spread.
+#
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  474317|
+#  M2 ( 2H)     |     854020|  655590|
+#  M3 ( 3V)     |    1294161|  166973|
+#  M4 ( 4H)     |    1276123|   81287|
+#  M5 ( 5V)     |     925463|   14691|
+#  M6 ( 6H)     |     289904|   18563|
+#  M7 ( 7V)     |     210614|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4850285| 1411421|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4598166 um.
+#   number of violations = 30504
+#
+#  By Layer and Type:
+#
+#---------+-------+------+------+------+-------+-------+-------+
+#  -      | EOLSpc| Short| EolKO|   Enc| CorSpc| OffGrd| Totals|
+#---------+-------+------+------+------+-------+-------+-------+
+#  M1     |      0|     0|     0|     0|      0|      0|      0|
+#  M2     |      0|     0|     1|     0|      0|      0|      1|
+#  M3     |      0|    27|     1|     0|      0|      0|     28|
+#  M4     |      1|     0|   301|     0|      2|     50|    354|
+#  M5     |      0|     0|     2| 30117|      0|      0|  30119|
+#  M6     |      0|     0|     2|     0|      0|      0|      2|
+#  Totals |      1|    27|   307| 30117|      2|     50|  30504|
+#---------+-------+------+------+------+-------+-------+-------+
+#
+#cpu time = 00:00:18, elapsed time = 00:00:06, memory = 6231.12 (MB), peak = 8630.69 (MB)
+#CELL_VIEW top_soc,init has 30504 DRC violations
+#Total number of DRC violations = 30504
+#Post Route wire spread is done.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  474317|
+#  M2 ( 2H)     |     854020|  655590|
+#  M3 ( 3V)     |    1294161|  166973|
+#  M4 ( 4H)     |    1276123|   81287|
+#  M5 ( 5V)     |     925463|   14691|
+#  M6 ( 6H)     |     289904|   18563|
+#  M7 ( 7V)     |     210614|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4850285| 1411421|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4598166 um.
+#
+#detailRoute statistics:
+#Cpu time = 00:00:48
+#Elapsed time = 00:00:20
+#Increased memory = 6.56 (MB)
+#Total memory = 6205.18 (MB)
+#Peak memory = 8630.69 (MB)
+#Number of warnings = 0
+#Total number of warnings = 16
+#Number of fails = 0
+#Total number of fails = 0
+#Complete detailRoute on Thu Sep 17 23:55:13 2026
+#
+% End detailRoute (date=09/17 23:55:14, total cpu=0:00:48.8, real=0:00:21.0, peak res=6204.6M, current mem=6197.6M)
+#Default setup view is reset to view_ss.
+AAE_INFO: Post Route call back at the end of routeDesign
+#routeDesign: cpu time = 00:02:09, elapsed time = 00:00:44, memory = 6197.65 (MB), peak = 8630.69 (MB)
+#
+#  Scalability Statistics
+#
+#----------------------------+---------+-------------+------------+
+#  routeDesign               | cpu time| elapsed time| scalability|
+#----------------------------+---------+-------------+------------+
+#  Pre Callback              | 00:00:00|     00:00:00|         1.0|
+#  Post Callback             | 00:00:00|     00:00:00|         1.0|
+#  Timing Data Generation    | 00:00:00|     00:00:00|         1.0|
+#  DB Import                 | 00:00:24|     00:00:11|         2.2|
+#  DB Export                 | 00:00:12|     00:00:04|         2.7|
+#  Cell Pin Access           | 00:00:00|     00:00:00|         1.0|
+#  Data Preparation          | 00:00:14|     00:00:09|         1.5|
+#  Post Route Via Swapping   | 00:00:48|     00:00:08|         5.9|
+#  Post Route Wire Spreading | 00:00:19|     00:00:07|         2.8|
+#  Entire Command            | 00:02:09|     00:00:45|         2.9|
+#----------------------------+---------+-------------+------------+
+#
+*** Message Summary: 0 warning(s), 0 error(s)
+
+#% End routeDesign (date=09/17 23:55:14, total cpu=0:02:10, real=0:00:45.0, peak res=6204.6M, current mem=6197.6M)
+<CMD> clearDrc
+<CMD> verify_drc -limit 100000 -report ./verify_rpt/drc_route.rpt
+#-limit 100000                           # int, default=100000, user setting
+#-check_same_via_cell true               # bool, default=false, user setting
+#-report ./verify_rpt/drc_route.rpt      # string, default="", user setting
+ *** Starting Verify DRC (MEM: 10163.6) ***
+
+  VERIFY DRC ...... Starting Verification
+  VERIFY DRC ...... Initializing
+  VERIFY DRC ...... Deleting Existing Violations
+  VERIFY DRC ...... Creating Sub-Areas
+ VERIFY_DRC: checking all layers except Pad to Pad ...
+  VERIFY DRC ...... Using new threading
+ VERIFY DRC ...... Thread : 7 finished.
+ VERIFY DRC ...... Thread : 5 finished.
+ VERIFY DRC ...... Thread : 1 finished.
+ VERIFY DRC ...... Thread : 4 finished.
+ VERIFY DRC ...... Thread : 3 finished.
+ VERIFY DRC ...... Thread : 6 finished.
+ VERIFY DRC ...... Thread : 0 finished.
+ VERIFY DRC ...... Thread : 2 finished.
+ VERIFY_DRC: checking layers from Pad to Pad ...
+**WARN: (IMPVFG-1198):	The number of CPUs requested 8 is larger than that verify_drc used 1. In Multithreading mode, the number of CPUs verify_drc used is not larger than the number of subareas.
+ Use 'setMultiCpuUsage -localCpu' to specify the less cup number if the verify area is not large.
+  VERIFY DRC ...... Using new threading
+
+  Verification Complete : 14886 Viols.
+
+ Violation Summary By Layer and Type:
+
+	            Enc    EolKO    Short   OffGrd   CorSpc   EOLSpc   Totals
+	M2            0        1        0        0        0        0        1
+	M3            0        1       21        0        0        0       22
+	M4            0      162        0        3        2        1      168
+	M5            0        2        0        0        0        0        2
+	V5        14691        0        0        0        0        0    14691
+	M6            0        2        0        0        0        0        2
+	Totals    14691      168       21        3        2        1    14886
+
+ *** End Verify DRC (CPU TIME: 0:00:56.6  ELAPSED TIME: 0:00:10.0  MEM: 0.0M) ***
+
+<CMD> saveDesign ./saved/top_soc_routed.enc
+#% Begin save design ... (date=09/17 23:55:24, mem=6205.0M)
+INFO: Current data have to be saved into a temporary db: 'top_soc_routed.enc.dat.tmp' first. It will be renamed to the correct name 'top_soc_routed.enc.dat' after the old db was deleted.
+% Begin Save ccopt configuration ... (date=09/17 23:55:25, mem=6205.0M)
+% End Save ccopt configuration ... (date=09/17 23:55:26, total cpu=0:00:01.1, real=0:00:01.0, peak res=6205.1M, current mem=6205.1M)
+% Begin Save netlist data ... (date=09/17 23:55:26, mem=6205.1M)
+Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/vbin/top_soc.v.bin in multi-threaded mode...
+% End Save netlist data ... (date=09/17 23:55:26, total cpu=0:00:00.4, real=0:00:00.0, peak res=6205.1M, current mem=6205.1M)
+Saving symbol-table file in separate thread ...
+Saving congestion map file in separate thread ...
+Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.route.congmap.gz ...
+% Begin Save AAE data ... (date=09/17 23:55:26, mem=6207.5M)
+Saving AAE Data ...
+AAE DB initialization (MEM=6255.246094 CPU=0:00:00.1 REAL=0:00:00.0) 
+% End Save AAE data ... (date=09/17 23:55:26, total cpu=0:00:00.2, real=0:00:00.0, peak res=6245.5M, current mem=6245.5M)
+Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/gui.pref.tcl ...
+Saving mode setting ...
+**WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+Saving global file ...
+*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.bbox.lef
+Saving Drc markers ...
+... 14886 markers are saved ...
+... 14886 geometry drc markers are saved ...
+... 0 antenna drc markers are saved ...
+Saving special route data file in separate thread ...
+Saving PG file in separate thread ...
+Saving placement file in separate thread ...
+Saving route file in separate thread ...
+Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.prop
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Thu Sep 17 23:55:28 2026)
+** Saving stdCellPlacement_binary (version# 2) ...
+Save Adaptive View Pruning View Names to Binary file
+view_ss
+*** Completed savePGFile (cpu=0:00:00.6 real=0:00:00.0 mem=10258.4M) ***
+*** Completed saveProperty (cpu=0:00:01.0 real=0:00:00.0 mem=10258.4M) ***
+TAT_INFO: ::saveSpecialRoute REAL = 1 : CPU = 0 : MEM = 0.
+TAT_INFO: ::savePGFile REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
+*** Completed saveRoute (cpu=0:00:02.7 real=0:00:03.0 mem=10234.4M) ***
+TAT_INFO: ::saveRoute REAL = 3 : CPU = 1 : MEM = 0.
+TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
+#Saving pin access data to file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.apa ...
+#
+Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.techData.gz' ...
+Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/extraction/' ...
+TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
+% Begin Save power constraints data ... (date=09/17 23:55:31, mem=6279.5M)
+% End Save power constraints data ... (date=09/17 23:55:32, total cpu=0:00:00.1, real=0:00:00.0, peak res=6279.5M, current mem=6279.5M)
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+Generated self-contained design top_soc_routed.enc.dat.tmp
+libset_ss libset_tt libset_ff
+rc_typ rc_ff rc_ss
+mode_func
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc
+#% End save design ... (date=09/17 23:55:33, total cpu=0:00:08.2, real=0:00:08.0, peak res=6279.5M, current mem=6277.0M)
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
+*** Message Summary: 1 warning(s), 0 error(s)
+
+<CMD> setOptMode -fixCap true -fixTran true -fixFanoutLoad true -setupTargetSlack 0.020 -holdTargetSlack 0.020
+<CMD> deleteDanglingNet
+
+Total number of buses: 4326
+The number of dangling buses: 2
+Removable dangling buses: 2
+The number of removed dangling buses: 2
+
+Total number of nets: 121520
+The number of dangling nets: 5874
+Removed dangling nets: 8
+Not all dangling nets were removed. Use command 'reportDanglingNet -outfile <file_name>' to dump non-removable nets and the reasons for not being removed.
+*** End deleteDanglingNet (cpu=0:00:00.1 real=0:00:00.0 mem=10202.4M) ***
+<CMD> optDesign -postRoute -setup -hold -prefix postRoute
+**optDesign ... cpu = 0:00:00, real = 0:00:00, mem = 6275.4M, totSessionCpu=6:17:53 **
+*** optDesign #2 [begin] () : totSession cpu/real = 6:17:53.3/1:11:12.2 (5.3), mem = 10202.4M
+GigaOpt running with 8 threads.
+*** InitOpt #1 [begin] (optDesign #2) : totSession cpu/real = 6:17:53.3/1:11:12.2 (5.3), mem = 10714.4M
+**INFO: User settings:
+setNanoRouteMode -route_detail_end_iteration                                              20
+setNanoRouteMode -route_detail_fix_antenna                                                true
+setNanoRouteMode -route_detail_use_lef_pin_taper_rule                                     true
+setNanoRouteMode -route_detail_use_min_spacing_for_blockage                               auto
+setNanoRouteMode -extract_rc_model_file                                                   rc_model.bin
+setNanoRouteMode -route_extract_third_party_compatible                                    false
+setNanoRouteMode -route_global_exp_timing_driven_use_tif_timing_engine_for_import_design  true
+setNanoRouteMode -route_exp_design_mode_bottom_routing_layer                              2
+setNanoRouteMode -route_exp_design_mode_top_routing_layer                                 7
+setNanoRouteMode -route_strict_honor_route_rule                                           false
+setNanoRouteMode -route_with_si_driven                                                    true
+setNanoRouteMode -route_with_timing_driven                                                true
+setNanoRouteMode -route_with_via_only_for_stdcell_pin                                     true
+setNanoRouteMode -timingEngine                                                            .timing_file_2273039.tif.gz
+setDesignMode -bottomRoutingLayer                                                         2
+setDesignMode -process                                                                    7
+setDesignMode -topRoutingLayer                                                            7
+setExtractRCMode -coupled                                                                 true
+setExtractRCMode -coupling_c_th                                                           0.1
+setExtractRCMode -effortLevel                                                             medium
+setExtractRCMode -engine                                                                  postRoute
+setExtractRCMode -relative_c_th                                                           1
+setExtractRCMode -total_c_th                                                              0
+setUsefulSkewMode -opt_skew_eco_route                                                     false
+setDelayCalMode -enable_hier_save_restore_flow                                            false
+setDelayCalMode -enable_high_fanout                                                       true
+setDelayCalMode -enable_ideal_seq_async_pins                                              false
+setDelayCalMode -eng_enablePrePlacedFlow                                                  false
+setDelayCalMode -engine                                                                   aae
+setDelayCalMode -equivalent_waveform_model                                                propagation
+setDelayCalMode -ignoreNetLoad                                                            false
+setDelayCalMode -SIAware                                                                  true
+setDelayCalMode -socv_accuracy_mode                                                       low
+setOptMode -opt_view_pruning_hold_views_active_list                                       { view_ff view_tt }
+setOptMode -opt_view_pruning_setup_views_active_list                                      { view_ss view_tt }
+setOptMode -opt_view_pruning_hold_views_persistent_list                                   { view_ff}
+setOptMode -opt_view_pruning_setup_views_persistent_list                                  { view_ss}
+setOptMode -opt_view_pruning_tdgr_setup_views_persistent_list                             { view_ss}
+setOptMode -opt_view_pruning_hold_target_slack_auto_flow                                  0
+setOptMode -opt_drv_margin                                                                0
+setOptMode -opt_drv_fix_max_cap                                                           true
+setOptMode -opt_drv                                                                       true
+setOptMode -opt_fix_fanout_load                                                           true
+setOptMode -opt_drv_fix_max_tran                                                          true
+setOptMode -opt_hold_target_slack                                                         0.02
+setOptMode -opt_resize_flip_flops                                                         true
+setOptMode -opt_view_pruning_placement_setup_view_list                                    { view_ss  }
+setOptMode -opt_preserve_all_sequential                                                   false
+setOptMode -opt_setup_target_slack                                                        0.02
+setSIMode -separate_delta_delay_on_data                                                   true
+setPlaceMode -macroPlaceMode                                                              0
+setPlaceMode -place_design_refine_macro                                                   false
+setPlaceMode -place_detail_preroute_as_obs                                                {2 3}
+setPlaceMode -place_global_auto_blockage_in_channel                                       soft
+setPlaceMode -place_global_cong_effort                                                    high
+setPlaceMode -place_global_module_aware_spare                                             true
+setPlaceMode -place_global_reorder_scan                                                   false
+setPlaceMode -place_global_uniform_density                                                false
+setAnalysisMode -analysisType                                                             onChipVariation
+setAnalysisMode -checkType                                                                setup
+setAnalysisMode -clkSrcPath                                                               true
+setAnalysisMode -clockPropagation                                                         sdcControl
+setAnalysisMode -cppr                                                                     both
+setAnalysisMode -skew                                                                     true
+setAnalysisMode -usefulSkew                                                               true
+
+**INFO: setDesignMode -flowEffort standard -> setting 'setOptMode -allEndPoints true' for the duration of this command.
+Disable merging buffers from different footprints for postRoute code for non-MSV designs
+Need call spDPlaceInit before registerPrioInstLoc.
+**WARN: (IMPOPT-7320):	Glitch fixing has been disabled since glitch reporting is disabled. Glitch reporting can be enabled using command setSIMode -enable_glitch_report true
+Info: Using SynthesisEngine executable '/Cadence/DDI/INNOVUS231/bin/innovus_'.
+      SynthesisEngine workers will not check out additional licenses.
+**INFO: Using Advanced Metric Collection system.
+**optDesign ... cpu = 0:00:06, real = 0:00:15, mem = 6385.3M, totSessionCpu=6:17:59 **
+Existing Dirty Nets : 0
+New Signature Flow (optDesignCheckOptions) ....
+#Taking db snapshot
+#Taking db snapshot ... done
+Begin checking placement ... (start mem=10678.3M, init mem=10678.2M)
+*info: Placed = 180297         (Fixed = 35210)
+*info: Unplaced = 0           
+Placement Density:25.90%(339645/1310983)
+Placement Density (including fixed std cells):26.71%(354155/1325493)
+Finished checkPlace (total: cpu=0:00:16.5, real=0:00:04.0; vio checks: cpu=0:00:15.4, real=0:00:04.0; mem=10646.2M)
+#optDebug: { P: 7 W: 6201 FE: standard PE: none LDR: 1}
+ Initial DC engine is -> aae
+ 
+ AAE-Opt:: Current number of nets in RC Memory -> 100 K
+ 
+ 
+ AAE-Opt:: New number of nets in RC Memory -> 167 K
+ 
+Reset EOS DB
+Ignoring AAE DB Resetting ...
+ Set Options for AAE Based Opt flow 
+*** optDesign -postRoute ***
+DRC Margin: user margin 0.0; extra margin 0
+Setup Target Slack: user slack 0.02
+Hold Target Slack: user slack 0.02
+Multi-VT timing optimization disabled based on library information.
+*** InitOpt #1 [finish] (optDesign #2) : cpu/real = 0:00:24.1/0:00:20.2 (1.2), totSession cpu/real = 6:18:17.3/1:11:32.4 (5.3), mem = 10678.2M
+** INFO : this run is activating 'postRoute' automaton
+**INFO: flowCheckPoint #1 InitialSummary
+#Extract in post route mode
+#Finish check_net_pin_list step Enter extract_rc_in_nr_cmd
+#Fast data preparation for tQuantus.
+#Start routing data preparation on Thu Sep 17 23:55:57 2026
+#
+# M1           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M2           H   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M3           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M4           H   Track-Pitch = 0.19200    Line-2-Via Pitch = 0.19200
+# M5           V   Track-Pitch = 0.21600    Line-2-Via Pitch = 0.19200
+# M6           H   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M7           V   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M8           H   Track-Pitch = 0.38400    Line-2-Via Pitch = 0.32000
+# M9           V   Track-Pitch = 0.36000    Line-2-Via Pitch = 0.32000
+# Pad          H   Track-Pitch = 8.28000    Line-2-Via Pitch = 8.28000
+#Regenerating Ggrids automatically.
+#Auto generating G-grids with size=15 tracks, using layer M3's pitch = 0.14400.
+#Using automatically generated G-grids.
+#Done routing data preparation.
+#cpu time = 00:00:01, elapsed time = 00:00:01, memory = 6383.86 (MB), peak = 8630.69 (MB)
+#Start routing data preparation on Thu Sep 17 23:55:59 2026
+#
+#Bottom routing layer index=2(M2), bottom routing layer for shielding=2(M2), bottom shield layer=2(M2)
+#shield_bottom_stripe_layer=1(M1), shield_top_stripe_layer=7(M7)
+#pin_access_rlayer=2(M2)
+#shield_top_dpt_rlayer=-1 top_rlayer=7 top_trim_metal_rlayer=-1 rlayer_lowest=1 bottom_rlayer=2
+#enable_trim_layer_shield=F enable_dpt_layer_shield=F has_line_end_grid=F
+#enable_dpt_layer_shield=F
+#has_line_end_grid=F
+#Regenerating Ggrids automatically.
+#Auto generating G-grids with size=15 tracks, using layer M3's pitch = 0.14400.
+#Using automatically generated G-grids.
+#Done routing data preparation.
+#cpu time = 00:00:05, elapsed time = 00:00:03, memory = 6398.25 (MB), peak = 8630.69 (MB)
+#
+#Start tQuantus RC extraction...
+#Start building rc corner(s)...
+#Number of RC Corner = 3
+#Corner rc_typ /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 25.000000 (real) 
+#Corner rc_ff /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 0.000000 (real) 
+#Corner rc_ss /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 100.000000 (real) 
+#(i=10, n=10 4000)
+#LISD -> M1 (1)
+#M1 -> M2 (2)
+#M2 -> M3 (3)
+#M3 -> M4 (4)
+#M4 -> M5 (5)
+#M5 -> M6 (6)
+#M6 -> M7 (7)
+#M7 -> M8 (8)
+#M8 -> M9 (9)
+#M9 -> Pad (10)
+#SADV-On
+# Corner(s) : 
+#rc_typ [25.00] 
+#rc_ff [ 0.00] 
+#rc_ss [100.00]
+# Corner id: 0
+# Layout Scale: 1.000000
+# Has Metal Fill model: yes
+# Temperature was set
+# Temperature : 25.000000
+# Ref. Temp   : 25.000000
+# Corner id: 1
+# Layout Scale: 1.000000
+# Has Metal Fill model: yes
+# Temperature was set
+# Temperature : 0.000000
+# Ref. Temp   : 25.000000
+# Corner id: 2
+# Layout Scale: 1.000000
+# Has Metal Fill model: yes
+# Temperature was set
+# Temperature : 100.000000
+# Ref. Temp   : 25.000000
+#SADV-Off
+#
+#layer[1] tech width 288 != ict width 400.0
+#
+#layer[1] tech spc 288 != ict spc 464.0
+#
+#layer[4] tech width 384 != ict width 288.0
+#
+#layer[4] tech spc 384 != ict spc 288.0
+#
+#layer[6] tech width 512 != ict width 384.0
+#
+#layer[6] tech spc 512 != ict spc 384.0
+#
+#layer[8] tech width 640 != ict width 512.0
+#
+#layer[8] tech spc 640 != ict spc 512.0
+#
+#layer[10] tech spc 32000 != ict spc 640.0
+#total pattern=220 [30, 605]
+#Reading previously stored rc_model file ( rc_model.bin ) ...
+#found CAPMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
+#found RESMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 25.000000 
+#found RESMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 0.000000 
+#found RESMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 100.000000 
+#CCE Version read = IQuantus/TQuantus 23.1.1-s336
+#number model r/c [3,1] [30,605] read
+#0 rcmodel(s) requires rebuild
+#Build RC corners: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 6397.58 (MB), peak = 8630.69 (MB)
+#Finish check_net_pin_list step Enter extract
+#Start init net ripin tree building
+#Finish init net ripin tree building
+#Cpu time = 00:00:00
+#Elapsed time = 00:00:00
+#Increased memory = 0.00 (MB)
+#Total memory = 6397.58 (MB)
+#Peak memory = 8630.69 (MB)
+#Using multithreading with 8 threads.
+#begin processing metal fill model file
+#end processing metal fill model file
+#Length limit = 200 pitches
+#opt mode = 2
+#Finish check_net_pin_list step Fix net pin list
+#Start generate extraction boxes.
+#
+#Extract using 30 x 30 Hboxes
+#36x24 initial hboxes
+#Use area based hbox pruning.
+#0/0 hboxes pruned.
+#Complete generating extraction boxes.
+#Start step Extraction
+#Extract 734 hboxes with 8 threads on machine with  1.12GHz 1024KB Cache 12CPU...
+#Process 0 special clock nets for rc extraction
+#Total 152064 nets were built. 51747 nodes added to break long wires. 0 net(s) have incomplete routes.
+#Run Statistics for Extraction:
+#   Cpu time = 00:01:17, elapsed time = 00:00:10 .
+#   Increased memory =   666.38 (MB), total memory =  7065.14 (MB), peak memory =  8630.69 (MB)
+#Register nets and terms for rcdb /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b_user1-EliteMini_user1_Tvwq8T/nr2273039_p5xYki.rcdb.d
+#Finish registering nets and terms for rcdb.
+#Simplify RC tree: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 7012.86 (MB), peak = 8630.69 (MB)
+#RC Statistics: 931416 Res, 578617 Ground Cap, 143784 XCap (Edge to Edge)
+#RC V/H edge ratio: 0.67, Avg V/H Edge Length: 14281.97 (528016), Avg L-Edge Length: 15759.52 (233787)
+#Nets and terms are pre-registered for rcdb /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b_user1-EliteMini_user1_Tvwq8T/nr2273039_p5xYki.rcdb.d.
+#Start writing RC data.
+#Finish writing RC data
+#Finish writing rcdb with 1083631 nodes, 931567 edges, and 369414 xcaps
+#cpu time = 00:00:04, elapsed time = 00:00:01, memory = 6990.14 (MB), peak = 8630.69 (MB)
+Restoring parasitic data from file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b_user1-EliteMini_user1_Tvwq8T/nr2273039_p5xYki.rcdb.d' ...
+Reading RCDB with compressed RC data.
+Reading RCDB with compressed RC data.
+Begin read_parasitics... (cpu: 0:00:00.0 real: 0:00:00.0 mem: 10678.199M)
+Following multi-corner parasitics specified:
+	/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b_user1-EliteMini_user1_Tvwq8T/nr2273039_p5xYki.rcdb.d (rcdb)
+Reading RCDB with compressed RC data.
+		Cell top_soc has rcdb /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b_user1-EliteMini_user1_Tvwq8T/nr2273039_p5xYki.rcdb.d specified
+Cell top_soc, hinst 
+Reading RCDB with compressed RC data.
+Done read_parasitics... (cpu: 0:00:01.9 real: 0:00:01.0 mem: 10678.199M)
+#
+#Restore RCDB.
+#
+#Complete tQuantus RC extraction.
+#Cpu time = 00:01:35
+#Elapsed time = 00:00:15
+#Increased memory = 593.79 (MB)
+#Total memory = 6992.70 (MB)
+#Peak memory = 8630.69 (MB)
+#
+#51747 inserted nodes are removed
+#Restored 0 tie nets, 0 tie snets, 0 partial nets
+#Start Design Signature (0)
+#Finish Inst Signature in MT(25966989)
+#Finish Net Signature in MT(34850028)
+#Finish SNet Signature in MT (82678300)
+#Run time and memory report for RC extraction:
+#RC extraction running on  1.12GHz 1024KB Cache 12CPU.
+#Run Statistics for snet signature:
+#   Cpu time = 00:00:00, elapsed time = 00:00:00 , scale factor =  4.97/8, scale score = 0.62.
+#    Increased memory =     0.00 (MB), total memory =  6578.35 (MB), peak memory =  8630.69 (MB)
+#Run Statistics for Net Final Signature:
+#   Cpu time = 00:00:00, elapsed time = 00:00:00 .
+#   Increased memory =     0.00 (MB), total memory =  6579.52 (MB), peak memory =  8630.69 (MB)
+#Run Statistics for Net launch:
+#   Cpu time = 00:00:01, elapsed time = 00:00:00 , scale factor =  7.78/8, scale score = 0.97.
+#    Increased memory =     0.00 (MB), total memory =  6579.52 (MB), peak memory =  8630.69 (MB)
+#Run Statistics for Net init_dbsNet_slist:
+#   Cpu time = 00:00:00, elapsed time = 00:00:00 .
+#   Increased memory =     1.16 (MB), total memory =  6579.52 (MB), peak memory =  8630.69 (MB)
+#Run Statistics for net signature:
+#   Cpu time = 00:00:01, elapsed time = 00:00:00 , scale factor =  6.99/8, scale score = 0.87.
+#    Increased memory =     0.00 (MB), total memory =  6578.35 (MB), peak memory =  8630.69 (MB)
+#Run Statistics for inst signature:
+#   Cpu time = 00:00:00, elapsed time = 00:00:00 , scale factor =  3.94/8, scale score = 0.49.
+#    Increased memory =    -6.05 (MB), total memory =  6578.35 (MB), peak memory =  8630.69 (MB)
+Reading RCDB with compressed RC data.
+** INFO: Initializing Glitch Interface
+** INFO: Initializing Glitch Cache
+*** BuildHoldData #1 [begin] (optDesign #2) : totSession cpu/real = 6:20:17.5/1:12:00.5 (5.3), mem = 10678.3M
+AAE_INFO: switching setDelayCal -siAware from true to false ...
+AAE_INFO: The setting is changed from true to false in setDelayCalMode -SIAware
+Starting delay calculation for Hold views
+AAE_INFO: opIsDesignInPostRouteState() is 1
+#################################################################################
+# Design Stage: PostRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC OCV 
+# Parasitics Mode: SPEF/RCDB 
+# Signoff Settings: SI Off (EWM-WFP)
+#################################################################################
+Start delay calculation (fullDC) (8 T). (MEM=6759.34)
+*** Calculating scaling factor for libset_ff libraries using the default operating condition of each library.
+Total number of fetched objects 154067
+Total number of fetched objects 154067
+End delay calculation. (MEM=7187.55 CPU=0:01:24 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=6789.02 CPU=0:01:29 REAL=0:00:13.0)
+*** Done Building Timing Graph (cpu=0:01:39 real=0:00:15.0 totSessionCpu=6:22:04 mem=11444.8M)
+Done building cte hold timing graph (HoldAware) cpu=0:01:46 real=0:00:16.0 totSessionCpu=6:22:04 mem=11444.8M ***
+AAE_INFO: switching setDelayCal -siAware from false to true ...
+AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
+Starting delay calculation for Setup views
+AAE_INFO: opIsDesignInPostRouteState() is 1
+AAE_INFO: resetNetProps viewIdx 0 
+AAE_INFO: resetNetProps viewIdx 1 
+Starting SI iteration 1 using Infinite Timing Windows
+#################################################################################
+# Design Stage: PostRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC OCV 
+# Parasitics Mode: SPEF/RCDB 
+# Signoff Settings: SI On (EWM-WFP)
+#################################################################################
+Start delay calculation (fullDC) (8 T). (MEM=6920)
+*** Calculating scaling factor for libset_ss libraries using the default operating condition of each library.
+Total number of fetched objects 154067
+AAE_INFO-618: Total number of nets in the design is 167503,  92.8 percent of the nets selected for SI analysis
+Total number of fetched objects 154067
+AAE_INFO-618: Total number of nets in the design is 167503,  92.8 percent of the nets selected for SI analysis
+End delay calculation. (MEM=7248.38 CPU=0:02:44 REAL=0:00:21.0)
+End delay calculation (fullDC). (MEM=7248.38 CPU=0:02:48 REAL=0:00:22.0)
+Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b_user1-EliteMini_user1_Tvwq8T/.AAE_DjAkrL/.AAE_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b/waveform.data...
+Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 7191.5M)
+Add other clocks and setupCteToAAEClockMapping during iter 1
+Loading CTE timing window is completed (CPU = 0:00:02.2, REAL = 0:00:00.0, MEM = 7191.8M)
+
+Executing IPO callback for view pruning ..
+
+Active setup views:
+ view_tt
+  Dominating endpoints: 52768
+  Dominating TNS: -0.000
+
+ view_ss
+  Dominating endpoints: 368
+  Dominating TNS: -0.000
+
+Starting SI iteration 2
+Start delay calculation (fullDC) (8 T). (MEM=7138.9)
+Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b_user1-EliteMini_user1_Tvwq8T/.AAE_DjAkrL/.AAE_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b/waveform.data...
+Glitch Analysis: View view_ss -- Total Number of Nets Skipped = 0. 
+Glitch Analysis: View view_ss -- Total Number of Nets Analyzed = 0. 
+Total number of fetched objects 154067
+AAE_INFO-618: Total number of nets in the design is 167503,  6.8 percent of the nets selected for SI analysis
+Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 2579. 
+Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 154090. 
+Total number of fetched objects 154067
+AAE_INFO-618: Total number of nets in the design is 167503,  6.6 percent of the nets selected for SI analysis
+End delay calculation. (MEM=7235.83 CPU=0:00:20.1 REAL=0:00:03.0)
+End delay calculation (fullDC). (MEM=7235.83 CPU=0:00:20.3 REAL=0:00:03.0)
+*** Done Building Timing Graph (cpu=0:03:57 real=0:00:35.0 totSessionCpu=6:26:12 mem=11698.9M)
+** INFO: Initializing Glitch Interface
+** INFO: Initializing Glitch Interface
+
+OptSummary:
+
+------------------------------------------------------------------
+     Initial SI Timing Summary
+------------------------------------------------------------------
+
+Setup views included:
+ view_ss view_tt 
+
++--------------------+--------------------------------------------------+
+|     ID Number      |                 Path Group Name                  |
++--------------------+--------------------------------------------------+
+|         1          |cg_enable_group_CLK_ASCON                         |
+|         2          |cg_enable_group_CLK_CORDIC                        |
+|         3          |cg_enable_group_CLK_CPU                           |
+|         4          |cg_enable_group_CLK_DBG                           |
+|         5          |cg_enable_group_CLK_GPIO                          |
+|         6          |cg_enable_group_CLK_I2C                           |
+|         7          |cg_enable_group_CLK_PWM                           |
+|         8          |cg_enable_group_CLK_SPI                           |
+|         9          |cg_enable_group_CLK_SYS                           |
+|         10         |cg_enable_group_CLK_TCK                           |
+|         11         |cg_enable_group_CLK_TIM0                          |
+|         12         |cg_enable_group_CLK_TIM1                          |
+|         13         |cg_enable_group_CLK_UART                          |
+|         14         |cg_enable_group_CLK_UART1                         |
++--------------------+--------------------------------------------------+
+
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|     Setup mode     |   all   | reg2reg |reg2cgate| default |   C2O   |   I2C   |   I2O   |1:cg_..ON|2:cg_..IC|3:cg_..PU|4:cg_..BG|5:cg_..IO|6:cg_..2C|7:cg_..WM|8:cg_..PI|9:cg_..YS|10:cg..CK|11:cg..M0|12:cg..M1|13:cg..RT|14:cg..T1|
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|           WNS (ns):|  0.305  |  0.910  |  1.457  |  0.000  |  0.305  |  0.534  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|           TNS (ns):|  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|    Violating Paths:|    0    |    0    |    0    |    0    |    0    |    0    |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|          All Paths:|  53452  |  51661  |  1635   |    0    |   106   |   101   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+
++----------------+-------------------------------+------------------+
+|                |              Real             |       Total      |
+|    DRVs        +------------------+------------+------------------|
+|                |  Nr nets(terms)  | Worst Vio  |  Nr nets(terms)  |
++----------------+------------------+------------+------------------+
+|   max_cap      |      0 (0)       |   0.000    |      0 (0)       |
+|   max_tran     |     70 (454)     |   -0.068   |     76 (460)     |
+|   max_fanout   |      0 (0)       |     0      |    417 (417)     |
+|   max_length   |      0 (0)       |     0      |      0 (0)       |
++----------------+------------------+------------+------------------+
+
+Density: 25.908%
+------------------------------------------------------------------
+*** BuildHoldData #1 [finish] (optDesign #2) : cpu/real = 0:06:01.6/0:00:58.8 (6.1), totSession cpu/real = 6:26:19.2/1:12:59.4 (5.3), mem = 12216.9M
+**optDesign ... cpu = 0:08:26, real = 0:01:48, mem = 7230.8M, totSessionCpu=6:26:19 **
+OPTC: m4 20.0 50.0 [ 200.0 20.0 50.0 ]
+OPTC: view 50.0:200.0 50.0:200.0 [ 0.0500 ]
+Setting latch borrow mode to budget during optimization.
+Info: Done creating the CCOpt slew target map.
+**INFO: flowCheckPoint #2 OptimizationPass1
+Glitch fixing enabled
+*** ClockDrv #1 [begin] (optDesign #2) : totSession cpu/real = 6:26:36.8/1:13:02.7 (5.3), mem = 12082.9M
+Running CCOpt-PRO on entire clock network
+Leaving CCOpt scope - Initializing power interface...
+Leaving CCOpt scope - Initializing power interface done. (took cpu=0:00:00.0 real=0:00:00.0)
+Net route status summary:
+  Clock:      4072 (unrouted=0, trialRouted=0, noStatus=0, routed=4072, fixed=0, [crossesIlmBoundary=0, tooFewTerms=0, (crossesIlmBoundary AND tooFewTerms=0)])
+  Non-clock: 163431 (unrouted=15439, trialRouted=0, noStatus=0, routed=147992, fixed=0, [crossesIlmBoundary=0, tooFewTerms=15439, (crossesIlmBoundary AND tooFewTerms=0)])
+-effortLevel medium                        # enums={low medium high signoff}, default=undefined, user setting
+Clock tree cells fixed by user: 0 out of 4058 (0%)
+PRO...
+Relaxing adjacent_rows_legal and cell_density for the duration of PRO. To stop this set pro_respect_cell_density_and_adjacent_row_legal to true.
+Initializing clock structures...
+  Creating own balancer
+  Permitting the movement of (non-FIXED) datapath insts as required for sized/new clock tree insts
+  Initializing legalizer
+  Using cell based legalization.
+  Leaving CCOpt scope - Initializing placement interface...
+  Leaving CCOpt scope - Initializing placement interface done. (took cpu=0:00:00.4 real=0:00:00.3)
+[PSP]    Load db... (mem=10.2M)
+[PSP]    Read data from FE... (mem=10.2M)
+[PSP]    Done Read data from FE (cpu=0.160s, mem=10.2M)
+
+[PSP]    Done Load db (cpu=0.160s, mem=10.2M)
+
+[PSP]    Constructing placeable region... (mem=10.2M)
+[PSP]    Compute region effective width... (mem=10.2M)
+[PSP]    Done Compute region effective width (cpu=0.002s, mem=10.2M)
+
+[PSP]    Done Constructing placeable region (cpu=0.062s, mem=10.2M)
+
+  Reconstructing clock tree datastructures, skew aware...
+    Validating CTS configuration...
+    Checking module port directions...
+    Checking module port directions done. (took cpu=0:00:00.0 real=0:00:00.0)
+    Non-default CCOpt properties:
+      Public non-default CCOpt properties:
+        adjacent_rows_legal: true (default: false)
+        buffer_cells is set for at least one object
+        cannot_merge_reason is set for at least one object
+        cell_density is set for at least one object
+        cell_halo_rows: 0 (default: 1)
+        cell_halo_sites: 0 (default: 4)
+        exclusive_sinks_rank is set for at least one object
+        inverter_cells is set for at least one object
+        original_names is set for at least one object
+        primary_delay_corner: dc_ss (default: )
+        route_type is set for at least one object
+        source_latency is set for at least one object
+        target_insertion_delay is set for at least one object
+        target_max_trans is set for at least one object
+        target_max_trans_sdc is set for at least one object
+        target_skew is set for at least one object
+      Private non-default CCOpt properties:
+        allow_non_fterm_identical_swaps: 0 (default: true)
+        clock_nets_detailed_routed: 1 (default: false)
+        force_design_routing_status: 1 (default: auto)
+        last_virtual_delay_scaling_factor is set for at least one object
+        pro_enable_post_commit_delay_update: 1 (default: false)
+        use_accurate_downstream_capacitance_in_optimization: 1 (default: false)
+    Route type trimming info:
+      No route type modifications were made.
+    Library trimming buffers in power domain auto-default and half-corner dc_ss:setup.late removed 0 of 7 cells
+    Original list had 7 cells:
+    BUFx24_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx10_ASAP7_75t_R BUFx8_ASAP7_75t_R BUFx4_ASAP7_75t_R 
+    Library trimming was not able to trim any cells:
+    BUFx24_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx10_ASAP7_75t_R BUFx8_ASAP7_75t_R BUFx4_ASAP7_75t_R 
+    Library trimming inverters in power domain auto-default and half-corner dc_ss:setup.late removed 0 of 3 cells
+    Original list had 3 cells:
+    CKINVDCx16_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R 
+    Library trimming was not able to trim any cells:
+    CKINVDCx16_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R 
+    Clock tree balancer configuration for clock_trees CLK_SYS_generator_for_CLK_ASCON<1> CLK_SYS_generator_for_CLK_CPU<1> CLK_SYS_generator_for_CLK_DBG<1> CLK_SYS_generator_for_CLK_GPIO<1> CLK_SYS_generator_for_CLK_I2C<1> CLK_SYS_generator_for_CLK_PWM<1> CLK_SYS_generator_for_CLK_SPI<1> CLK_SYS_generator_for_CLK_TIM0<1> CLK_SYS_generator_for_CLK_TIM1<1> CLK_SYS_generator_for_CLK_UART<1> CLK_SYS_generator_for_CLK_UART1<1> CLK_SYS_generator_for_CLK_CORDIC<1> CLK_SYS CLK_TCK:
+    Non-default CCOpt properties:
+      Public non-default CCOpt properties:
+        cell_density: 1 (default: 0.75)
+        route_type (leaf): soc_leaf_ccopt_autotrimmed (default: default)
+        route_type (top): soc_top (default: default)
+        route_type (trunk): soc_trunk_ccopt_autotrimmed (default: default)
+      No private non-default CCOpt properties
+    For power domain auto-default:
+      Buffers:     BUFx24_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx10_ASAP7_75t_R BUFx8_ASAP7_75t_R BUFx4_ASAP7_75t_R
+      Inverters:   CKINVDCx16_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R
+      Clock gates: ICGx8DC_ASAP7_75t_L ICGx6p67DC_ASAP7_75t_L ICGx8DC_ASAP7_75t_R ICGx5p33DC_ASAP7_75t_L ICGx6p67DC_ASAP7_75t_R ICGx5_ASAP7_75t_L ICGx5p33DC_ASAP7_75t_R ICGx4DC_ASAP7_75t_L ICGx4_ASAP7_75t_L ICGx5_ASAP7_75t_R ICGx4DC_ASAP7_75t_R ICGx4_ASAP7_75t_R ICGx3_ASAP7_75t_L ICGx2p67DC_ASAP7_75t_L ICGx3_ASAP7_75t_R ICGx2p67DC_ASAP7_75t_R ICGx2_ASAP7_75t_L ICGx2_ASAP7_75t_R ICGx1_ASAP7_75t_L ICGx1_ASAP7_75t_R
+      Unblocked area available for placement of any clock cells in power_domain auto-default: 1317103.546um^2
+    Top Routing info:
+      Route-type name: soc_top; Top/bottom preferred layer name: M7/M6; 
+      Unshielded; Mask Constraint: 0; Source: route_type.
+    Trunk Routing info:
+      Route-type name: soc_trunk_ccopt_autotrimmed; Top/bottom preferred layer name: M7/M6; 
+      Unshielded; Mask Constraint: 0; Source: route_type.
+    Leaf Routing info:
+      Route-type name: soc_leaf_ccopt_autotrimmed; Top/bottom preferred layer name: M5/M4; 
+      Unshielded; Mask Constraint: 0; Source: route_type.
+    For timing_corner dc_ss:setup, late and power domain auto-default:
+      Slew time target (leaf):    0.035ns
+      Slew time target (trunk):   0.040ns
+      Slew time target (top):     0.040ns (Note: no nets are considered top nets in this clock tree)
+      Buffer unit delay: 0.034ns
+      Buffer max distance: 208.193um
+    Fastest wire driving cells and distances:
+      Buffer    : {lib_cell:BUFx12f_ASAP7_75t_R, fastest_considered_half_corner=dc_ss:setup.late, optimalDrivingDistance=207.921um, saturatedSlew=0.034ns, speed=5263.823um per ns, cellArea=20.195um^2 per 1000um}
+      Inverter  : {lib_cell:CKINVDCx8_ASAP7_75t_R, fastest_considered_half_corner=dc_ss:setup.late, optimalDrivingDistance=131.183um, saturatedSlew=0.034ns, speed=6144.403um per ns, cellArea=39.122um^2 per 1000um}
+      Clock gate: {lib_cell:ICGx8DC_ASAP7_75t_L, fastest_considered_half_corner=dc_ss:setup.late, optimalDrivingDistance=132.427um, saturatedSlew=0.037ns, speed=4679.399um per ns, cellArea=84.556um^2 per 1000um}
+    
+    
+    Logic Sizing Table:
+    
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    Cell                  Instance count    Source         Eligible library cells
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    AND2x2_ASAP7_75t_L          6           library set    {AND2x6_ASAP7_75t_L AND2x6_ASAP7_75t_R AND2x4_ASAP7_75t_L AND2x4_ASAP7_75t_R AND2x2_ASAP7_75t_L AND2x2_ASAP7_75t_R}
+    AND2x2_ASAP7_75t_R          5           library set    {AND2x6_ASAP7_75t_L AND2x6_ASAP7_75t_R AND2x4_ASAP7_75t_L AND2x4_ASAP7_75t_R AND2x2_ASAP7_75t_L AND2x2_ASAP7_75t_R}
+    AND2x4_ASAP7_75t_L          1           library set    {AND2x6_ASAP7_75t_L AND2x6_ASAP7_75t_R AND2x4_ASAP7_75t_L AND2x4_ASAP7_75t_R AND2x2_ASAP7_75t_L AND2x2_ASAP7_75t_R}
+    --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    
+    Clock tree balancer configuration for skew_group CLK_SYS/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       34001
+      Delay constrained sinks:     33943
+      Constrains:                  default
+      Non-leaf sinks:              0
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group CLK_TCK/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin tck
+      Total number of sinks:       136
+      Delay constrained sinks:     136
+      Constrains:                  default
+      Non-leaf sinks:              0
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_01/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_02/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_03/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       2
+      Delay constrained sinks:     2
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_04/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       6
+      Delay constrained sinks:     6
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_05/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_06/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_07/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_08/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_09/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_10/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_11/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Clock tree balancer configuration for skew_group _clock_gen_CLK_SYS_en_latch_reg_12/mode_func:
+     Created from constraint modes: {[mode_func]}
+      Sources:                     pin clk
+      Total number of sinks:       25
+      Delay constrained sinks:     25
+      Constrains:                  default
+      Non-leaf sinks:              1
+      Ignore pins:                 0
+     Timing corner dc_ss:setup.late:
+      Skew target:                 0.050ns
+    Primary reporting skew groups are:
+    skew_group CLK_SYS/mode_func with 34001 clock sinks
+    
+    
+    Constraint summary
+    ==================
+    
+    Transition constraints are active in the following delay corners:
+    
+    dc_ss:setup.late
+    
+    Cap constraints are active in the following delay corners:
+    
+    dc_ss:setup.late
+    
+    Transition constraint summary:
+    
+    ---------------------------------------------------------------------------------------
+    Delay corner                  Target (ns)    Num pins    Target source    Clock tree(s)
+    ---------------------------------------------------------------------------------------
+    dc_ss:setup.late (primary)         -            -              -                -
+                -                    0.035        36649      explicit         all
+                -                    0.040         5668      explicit         all
+    ---------------------------------------------------------------------------------------
+    
+    Capacitance constraint summary:
+    
+    -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    Delay corner                  Limit (pF)    Num nets    Target source                Clock tree(s)
+    -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    dc_ss:setup.late (primary)        -            -                    -                                                      -
+                -                   0.023           44      library_or_sdc_constraint    CLK_SYS_generator_for_CLK_CORDIC<1>, CLK_SYS_generator_for_CLK_UART1<1>
+                                                                                          , CLK_SYS_generator_for_CLK_UART<1>, CLK_SYS_generator_for_CLK_TIM1<1>
+                                                                                          , CLK_SYS_generator_for_CLK_TIM0<1>, CLK_SYS_generator_for_CLK_SPI<1>
+                                                                                          , CLK_SYS_generator_for_CLK_PWM<1>, CLK_SYS_generator_for_CLK_I2C<1>
+                                                                                          , CLK_SYS_generator_for_CLK_GPIO<1>, CLK_SYS_generator_for_CLK_DBG<1>
+                                                                                          , CLK_SYS_generator_for_CLK_CPU<1>, CLK_SYS_generator_for_CLK_ASCON<1>
+                -                   0.046          787      library_or_sdc_constraint    all
+                -                   0.092          872      library_or_sdc_constraint    all
+                -                   0.184          503      library_or_sdc_constraint    all
+                -                   0.369         1835      library_or_sdc_constraint    all
+                -                   0.737           36      library_or_sdc_constraint    CLK_SYS, CLK_SYS_generator_for_CLK_SPI<1>, CLK_SYS_generator_for_CLK_CPU<1>
+                -                   1.475            7      library_or_sdc_constraint    CLK_SYS, CLK_SYS_generator_for_CLK_CORDIC<1>, CLK_SYS_generator_for_CLK_CPU<1>
+                                                                                          , CLK_SYS_generator_for_CLK_ASCON<1>
+    -------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    
+    Clock DAG stats initial state:
+      cell counts      : b=2421, i=2, icg=1623, dcg=0, l=12, total=4058
+      sink counts      : regular=34137, enable_latch=0, load_capacitance=0, antenna=0, node_sink=0, total=34137
+      misc counts      : r=14, pp=12, mci=12
+      cell areas       : b=6627.252um^2, i=11.197um^2, icg=7945.517um^2, dcg=0.000um^2, l=17.729um^2, total=14601.695um^2
+      hp wire lengths  : top=0.000um, trunk=69977.304um, leaf=90240.248um, total=160217.552um
+    Clock DAG library cell distribution initial state {count}:
+       Bufs: BUFx24_ASAP7_75t_R: 7 BUFx16f_ASAP7_75t_R: 35 BUFx12f_ASAP7_75t_R: 74 BUFx12_ASAP7_75t_R: 97 BUFx10_ASAP7_75t_R: 387 BUFx8_ASAP7_75t_R: 1276 BUFx4_ASAP7_75t_R: 501 HB4xp67_ASAP7_75t_R: 44 
+       Invs: CKINVDCx12_ASAP7_75t_R: 1 CKINVDCx8_ASAP7_75t_R: 1 
+       ICGs: ICGx8DC_ASAP7_75t_L: 127 ICGx5_ASAP7_75t_L: 16 ICGx4_ASAP7_75t_L: 100 ICGx3_ASAP7_75t_L: 65 ICGx2_ASAP7_75t_L: 542 ICGx1_ASAP7_75t_L: 242 ICGx1_ASAP7_75t_R: 531 
+     Logics: AND2x4_ASAP7_75t_L: 1 AND2x2_ASAP7_75t_L: 6 AND2x2_ASAP7_75t_R: 5 
+      flow.cputime  flow.realtime  timing.setup.tns  timing.setup.wns  snapshot
+UM:*                                                                   InitialState
+    
+    Distribution of half-perimeter wire length by ICG depth:
+    
+    ----------------------------------------------------------------------------
+    Min ICG    Max ICG    Count    HPWL
+    Depth      Depth               (um)
+    ----------------------------------------------------------------------------
+       0          0       3180     [min=2, max=417, avg=40, sd=41, total=128656]
+       0          1        269     [min=1, max=429, avg=69, sd=87, total=18567]
+       1          1        623     [min=2, max=155, avg=23, sd=20, total=14022]
+    ----------------------------------------------------------------------------
+    
+    Have 8 CPUs available for CTS. Selected algorithms will run multithreaded.
+    No ideal or dont_touch nets found in the clock tree
+    No dont_touch hnets found in the clock tree
+    
+    Total number of dont_touch hpins in the clock network: 12
+      Large numbers of dont_touch hpins may damage runtime and QoR.
+      Use report_ccopt_clock_tree_structure or the Clock Tree Debugger in unit delay mode to debug these.
+    
+    Summary of reasons for dont_touch hpins in the clock network:
+    
+    -----------------------
+    Reason            Count
+    -----------------------
+    sdc_constraint     12
+    -----------------------
+    
+    Total number of dont_touch hpins in the clock network with a physical location (typically partition pins): 0
+    
+    Summary of dont_touch hpins in the clock network representing physical hierarchy:
+    
+    ---------------------
+    Type            Count
+    ---------------------
+    ilm               0
+    partition         0
+    power_domain      0
+    fence             0
+    none             12
+    ---------------------
+    Total            12
+    ---------------------
+    
+    Checking for illegal sizes of clock logic instances...
+    Checking for illegal sizes of clock logic instances done. (took cpu=0:00:00.0 real=0:00:00.0)
+    Validating CTS configuration done. (took cpu=0:00:04.1 real=0:00:03.8)
+    CCOpt configuration status: all checks passed.
+  Reconstructing clock tree datastructures, skew aware done.
+Initializing clock structures done.
+PRO...
+  PRO active optimizations:
+   - DRV fixing with sizing
+  
+  Detected clock skew data from CTS
+  ProEngine running partially connected to DB
+  Clock tree timing engine global stage delay update for dc_ss:setup.late...
+  Clock tree timing engine global stage delay update for dc_ss:setup.late done. (took cpu=0:00:02.2 real=0:00:00.6)
+  Clock DAG stats PRO initial state:
+    cell counts      : b=2421, i=2, icg=1623, dcg=0, l=12, total=4058
+    sink counts      : regular=34137, enable_latch=0, load_capacitance=0, antenna=0, node_sink=0, total=34137
+    misc counts      : r=14, pp=12, mci=12
+    cell areas       : b=6627.252um^2, i=11.197um^2, icg=7945.517um^2, dcg=0.000um^2, l=17.729um^2, total=14601.695um^2
+    cell capacitance : b=2.097pF, i=0.011pF, icg=3.882pF, dcg=0.000pF, l=0.012pF, total=6.004pF
+    sink capacitance : total=15.527pF, avg=0.000pF, sd=0.000pF, min=0.000pF, max=0.010pF
+    wire capacitance : top=0.000pF, trunk=1.752pF, leaf=4.190pF, total=5.942pF
+    wire lengths     : top=0.000um, trunk=73569.304um, leaf=136174.980um, total=209744.284um
+    hp wire lengths  : top=0.000um, trunk=69977.304um, leaf=90240.248um, total=160217.552um
+  Clock DAG net violations PRO initial state:
+    Remaining Transition : {count=162, worst=[0.032ns, 0.032ns, 0.023ns, 0.019ns, 0.018ns, 0.014ns, 0.006ns, 0.005ns, 0.005ns, 0.004ns, ...]} avg=0.002ns sd=0.004ns sum=0.248ns
+  Clock DAG primary half-corner transition distribution PRO initial state:
+    Trunk : target=0.040ns count=1572 avg=0.029ns sd=0.007ns min=0.000ns max=0.046ns {376 <= 0.024ns, 655 <= 0.032ns, 302 <= 0.036ns, 122 <= 0.038ns, 91 <= 0.040ns} {19 <= 0.042ns, 5 <= 0.044ns, 2 <= 0.048ns, 0 <= 0.060ns, 0 > 0.060ns}
+    Leaf  : target=0.035ns count=2512 avg=0.030ns sd=0.004ns min=0.008ns max=0.067ns {32 <= 0.021ns, 564 <= 0.028ns, 884 <= 0.032ns, 444 <= 0.033ns, 452 <= 0.035ns} {127 <= 0.037ns, 1 <= 0.039ns, 2 <= 0.042ns, 1 <= 0.053ns, 5 > 0.053ns}
+  Clock DAG library cell distribution PRO initial state {count}:
+     Bufs: BUFx24_ASAP7_75t_R: 7 BUFx16f_ASAP7_75t_R: 35 BUFx12f_ASAP7_75t_R: 74 BUFx12_ASAP7_75t_R: 97 BUFx10_ASAP7_75t_R: 387 BUFx8_ASAP7_75t_R: 1276 BUFx4_ASAP7_75t_R: 501 HB4xp67_ASAP7_75t_R: 44 
+     Invs: CKINVDCx12_ASAP7_75t_R: 1 CKINVDCx8_ASAP7_75t_R: 1 
+     ICGs: ICGx8DC_ASAP7_75t_L: 127 ICGx5_ASAP7_75t_L: 16 ICGx4_ASAP7_75t_L: 100 ICGx3_ASAP7_75t_L: 65 ICGx2_ASAP7_75t_L: 542 ICGx1_ASAP7_75t_L: 242 ICGx1_ASAP7_75t_R: 531 
+   Logics: AND2x4_ASAP7_75t_L: 1 AND2x2_ASAP7_75t_L: 6 AND2x2_ASAP7_75t_R: 5 
+  Primary reporting skew groups PRO initial state:
+  Skew group summary PRO initial state:
+    skew_group CLK_SYS/mode_func: insertion delay [min=0.667, max=1.058, avg=0.823, sd=0.155, skn=0.552, kur=-1.613], skew [0.391 vs 0.050*], 59.7% {0.678, 0.728} (wid=0.255 ws=0.061) (gid=0.858 gs=0.420)
+    skew_group CLK_TCK/mode_func: insertion delay [min=0.332, max=0.379, avg=0.368, sd=0.014, skn=-1.673, kur=1.412], skew [0.048 vs 0.050], 100% {0.332, 0.379} (wid=0.193 ws=0.010) (gid=0.186 gs=0.040)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_01/mode_func: insertion delay [min=0.489, max=0.535, avg=0.528, sd=0.014, skn=-1.835, kur=1.960], skew [0.046 vs 0.050], 100% {0.489, 0.535} (wid=0.217 ws=0.012) (gid=0.320 gs=0.048)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_02/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.011, skn=-1.922, kur=2.524], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.029)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_03/mode_func: insertion delay [min=0.343, max=0.371, avg=0.357, sd=0.020, skn=0.000, kur=0.000], skew [0.029 vs 0.050], 100% {0.343, 0.371} (wid=0.189 ws=0.002) (gid=0.184 gs=0.030)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_04/mode_func: insertion delay [min=0.414, max=0.419, avg=0.416, sd=0.002, skn=1.553, kur=1.530], skew [0.005 vs 0.050], 100% {0.414, 0.419} (wid=0.194 ws=0.000) (gid=0.225 gs=0.005)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_05/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.012, skn=-1.814, kur=1.879], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.029)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_06/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.013, skn=-1.759, kur=1.510], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.036)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_07/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.012, skn=-1.866, kur=2.129], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.029)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_08/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.013, skn=-1.796, kur=1.710], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.036)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_09/mode_func: insertion delay [min=0.495, max=0.535, avg=0.528, sd=0.013, skn=-1.734, kur=1.370], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.036)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_10/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.012, skn=-1.822, kur=1.924], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.029)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_11/mode_func: insertion delay [min=0.491, max=0.535, avg=0.528, sd=0.014, skn=-1.834, kur=1.944], skew [0.044 vs 0.050], 100% {0.491, 0.535} (wid=0.218 ws=0.013) (gid=0.320 gs=0.048)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_12/mode_func: insertion delay [min=0.490, max=0.535, avg=0.528, sd=0.014, skn=-1.825, kur=1.894], skew [0.045 vs 0.050], 100% {0.490, 0.535} (wid=0.218 ws=0.013) (gid=0.320 gs=0.048)
+  Recomputing CTS skew targets...
+  Resolving skew group constraints...
+    Solving LP: 14 skew groups; 78 fragments, 129 fraglets and 131 vertices; 419 variables and 1165 constraints; tolerance 1
+  Resolving skew group constraints done.
+  Recomputing CTS skew targets done. (took cpu=0:00:01.1 real=0:00:01.1)
+  PRO Fixing DRVs...
+    Fixing clock tree DRVs: ...Library trimming clock gates in power domain auto-default and half-corner dc_ss:setup.late removed 13 of 20 cells
+    Original list had 20 cells:
+    ICGx8DC_ASAP7_75t_L ICGx6p67DC_ASAP7_75t_L ICGx8DC_ASAP7_75t_R ICGx5p33DC_ASAP7_75t_L ICGx6p67DC_ASAP7_75t_R ICGx5_ASAP7_75t_L ICGx5p33DC_ASAP7_75t_R ICGx4DC_ASAP7_75t_L ICGx4_ASAP7_75t_L ICGx5_ASAP7_75t_R ICGx4DC_ASAP7_75t_R ICGx4_ASAP7_75t_R ICGx3_ASAP7_75t_L ICGx2p67DC_ASAP7_75t_L ICGx3_ASAP7_75t_R ICGx2p67DC_ASAP7_75t_R ICGx2_ASAP7_75t_L ICGx2_ASAP7_75t_R ICGx1_ASAP7_75t_L ICGx1_ASAP7_75t_R 
+    New trimmed list has 7 cells:
+    ICGx8DC_ASAP7_75t_L ICGx5_ASAP7_75t_L ICGx4_ASAP7_75t_L ICGx3_ASAP7_75t_L ICGx2_ASAP7_75t_L ICGx1_ASAP7_75t_L ICGx1_ASAP7_75t_R 
+    20% ...40% **WARN: (IMPCCOPT-2256):	CCOpt post-route optimization found legalization moved inst 'u_axi_apb_dma_u_dma_engine/CTS_ccl_a_buf_00830' before optimization. Moved 0.432um, from (1241.784,1103.976), FN (0-mirror) to (1242.216,1103.976), FN (0-mirror).
+...60% ..**WARN: (IMPCCOPT-2256):	CCOpt post-route optimization found legalization moved inst 'CTS_ccl_buf_02140' before optimization. Moved 1.080um, from (1085.400,457.056), S (180) to (1085.400,455.976), N (0).
+.80% ..**WARN: (IMPCCOPT-2256):	CCOpt post-route optimization found legalization moved inst 'u_core/CTS_ccl_a_buf_01253' before optimization. Moved 1.080um, from (1291.680,418.176), FS (180-mirror) to (1291.680,417.096), N (0).
+.100% 
+    CCOpt-PRO: considered: 4072, tested: 4072, violation detected: 162, violation ignored (due to small violation): 0, cannot run: 0, attempted: 162, unsuccessful: 0, sized: 111
+    
+    Statistics: Fix DRVs (cell sizing):
+    ===================================
+    
+    Cell changes by Net Type:
+    
+    ---------------------------------------------------------------------------------------------------------------------------
+    Net Type    Attempted            Upsized             Downsized    Swapped Same Size    Total Changed       Not Sized
+    ---------------------------------------------------------------------------------------------------------------------------
+    top                0                    0                   0            0                    0                   0
+    trunk             26 [16.0%]           16 (61.5%)           0            4 (15.4%)           20 (76.9%)           6 (23.1%)
+    leaf             136 [84.0%]           89 (65.4%)           0            2 (1.5%)            91 (66.9%)          45 (33.1%)
+    ---------------------------------------------------------------------------------------------------------------------------
+    Total            162 [100.0%]         105 (64.8%)           0            6 (3.7%)           111 (68.5%)          51 (31.5%)
+    ---------------------------------------------------------------------------------------------------------------------------
+    
+    Upsized: 105, Downsized: 0, Sized but same area: 6, Unchanged: 51, Area change: 66.485um^2 (0.455%)
+    Max. move: 1.080um (u_axi_interconnect/CTS_ccl_a_buf_01843 and 156 others), Min. move: 0.000um, Avg. move: 0.052um
+    
+    Clock DAG stats after 'PRO Fixing DRVs':
+      cell counts      : b=2421, i=2, icg=1623, dcg=0, l=12, total=4058
+      sink counts      : regular=34137, enable_latch=0, load_capacitance=0, antenna=0, node_sink=0, total=34137
+      misc counts      : r=14, pp=12, mci=12
+      cell areas       : b=6684.872um^2, i=11.197um^2, icg=7954.381um^2, dcg=0.000um^2, l=17.729um^2, total=14668.180um^2
+      cell capacitance : b=2.129pF, i=0.011pF, icg=3.886pF, dcg=0.000pF, l=0.012pF, total=6.039pF
+      sink capacitance : total=15.527pF, avg=0.000pF, sd=0.000pF, min=0.000pF, max=0.010pF
+      wire capacitance : top=0.000pF, trunk=1.752pF, leaf=4.190pF, total=5.942pF
+      wire lengths     : top=0.000um, trunk=73569.304um, leaf=136174.980um, total=209744.284um
+      hp wire lengths  : top=0.000um, trunk=69977.520um, leaf=90240.680um, total=160218.200um
+    Clock DAG net violations after 'PRO Fixing DRVs':
+      Remaining Transition : {count=55, worst=[0.032ns, 0.032ns, 0.023ns, 0.019ns, 0.018ns, 0.014ns, 0.005ns, 0.005ns, 0.003ns, 0.003ns, ...]} avg=0.003ns sd=0.007ns sum=0.178ns
+    Clock DAG primary half-corner transition distribution after 'PRO Fixing DRVs':
+      Trunk : target=0.040ns count=1572 avg=0.029ns sd=0.007ns min=0.000ns max=0.045ns {374 <= 0.024ns, 651 <= 0.032ns, 310 <= 0.036ns, 131 <= 0.038ns, 99 <= 0.040ns} {3 <= 0.042ns, 3 <= 0.044ns, 1 <= 0.048ns, 0 <= 0.060ns, 0 > 0.060ns}
+      Leaf  : target=0.035ns count=2512 avg=0.030ns sd=0.004ns min=0.008ns max=0.067ns {35 <= 0.021ns, 570 <= 0.028ns, 921 <= 0.032ns, 462 <= 0.033ns, 476 <= 0.035ns} {40 <= 0.037ns, 1 <= 0.039ns, 1 <= 0.042ns, 1 <= 0.053ns, 5 > 0.053ns}
+    Clock DAG library cell distribution after 'PRO Fixing DRVs' {count}:
+       Bufs: BUFx24_ASAP7_75t_R: 8 BUFx16f_ASAP7_75t_R: 41 BUFx12f_ASAP7_75t_R: 85 BUFx12_ASAP7_75t_R: 113 BUFx10_ASAP7_75t_R: 384 BUFx8_ASAP7_75t_R: 1254 BUFx4_ASAP7_75t_R: 493 HB4xp67_ASAP7_75t_R: 43 
+       Invs: CKINVDCx12_ASAP7_75t_R: 1 CKINVDCx8_ASAP7_75t_R: 1 
+       ICGs: ICGx8DC_ASAP7_75t_L: 128 ICGx5_ASAP7_75t_L: 20 ICGx4_ASAP7_75t_L: 95 ICGx3_ASAP7_75t_L: 67 ICGx2_ASAP7_75t_L: 545 ICGx1_ASAP7_75t_L: 242 ICGx1_ASAP7_75t_R: 526 
+     Logics: AND2x4_ASAP7_75t_L: 1 AND2x2_ASAP7_75t_L: 6 AND2x2_ASAP7_75t_R: 5 
+    Primary reporting skew groups after 'PRO Fixing DRVs':
+    Skew group summary after 'PRO Fixing DRVs':
+      skew_group CLK_SYS/mode_func: insertion delay [min=0.665, max=1.038], skew [0.373 vs 0.051*]
+      skew_group CLK_TCK/mode_func: insertion delay [min=0.332, max=0.379], skew [0.048 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_01/mode_func: insertion delay [min=0.489, max=0.535], skew [0.046 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_02/mode_func: insertion delay [min=0.495, max=0.535], skew [0.040 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_03/mode_func: insertion delay [min=0.343, max=0.371], skew [0.029 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_04/mode_func: insertion delay [min=0.414, max=0.419], skew [0.005 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_05/mode_func: insertion delay [min=0.495, max=0.535], skew [0.040 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_06/mode_func: insertion delay [min=0.495, max=0.535], skew [0.040 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_07/mode_func: insertion delay [min=0.495, max=0.535], skew [0.040 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_08/mode_func: insertion delay [min=0.495, max=0.535], skew [0.040 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_09/mode_func: insertion delay [min=0.495, max=0.535], skew [0.040 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_10/mode_func: insertion delay [min=0.495, max=0.535], skew [0.040 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_11/mode_func: insertion delay [min=0.491, max=0.535], skew [0.044 vs 0.050]
+      skew_group _clock_gen_CLK_SYS_en_latch_reg_12/mode_func: insertion delay [min=0.490, max=0.535], skew [0.045 vs 0.050]
+    Legalizer API calls during this step: 723 succeeded with high effort: 723 succeeded with medium effort: 0 succeeded with low effort: 0 succeeded with basic effort: 0 succeeded with basic unbounded effort: 0
+  PRO Fixing DRVs done. (took cpu=0:00:03.0 real=0:00:02.9)
+  Reconnecting optimized routes...
+  Reconnecting optimized routes done. (took cpu=0:00:00.4 real=0:00:00.4)
+  Clock tree timing engine global stage delay update for dc_ss:setup.late...
+  Clock tree timing engine global stage delay update for dc_ss:setup.late done. (took cpu=0:00:02.4 real=0:00:00.7)
+  Clock DAG stats PRO final:
+    cell counts      : b=2421, i=2, icg=1623, dcg=0, l=12, total=4058
+    sink counts      : regular=34137, enable_latch=0, load_capacitance=0, antenna=0, node_sink=0, total=34137
+    misc counts      : r=14, pp=12, mci=12
+    cell areas       : b=6684.872um^2, i=11.197um^2, icg=7954.381um^2, dcg=0.000um^2, l=17.729um^2, total=14668.180um^2
+    cell capacitance : b=2.129pF, i=0.011pF, icg=3.886pF, dcg=0.000pF, l=0.012pF, total=6.039pF
+    sink capacitance : total=15.527pF, avg=0.000pF, sd=0.000pF, min=0.000pF, max=0.010pF
+    wire capacitance : top=0.000pF, trunk=1.752pF, leaf=4.190pF, total=5.942pF
+    wire lengths     : top=0.000um, trunk=73569.304um, leaf=136174.980um, total=209744.284um
+    hp wire lengths  : top=0.000um, trunk=69977.520um, leaf=90240.680um, total=160218.200um
+  Clock DAG net violations PRO final:
+    Remaining Transition : {count=55, worst=[0.032ns, 0.032ns, 0.023ns, 0.019ns, 0.018ns, 0.014ns, 0.005ns, 0.005ns, 0.003ns, 0.003ns, ...]} avg=0.003ns sd=0.007ns sum=0.178ns
+  Clock DAG primary half-corner transition distribution PRO final:
+    Trunk : target=0.040ns count=1572 avg=0.029ns sd=0.007ns min=0.000ns max=0.045ns {374 <= 0.024ns, 651 <= 0.032ns, 310 <= 0.036ns, 131 <= 0.038ns, 99 <= 0.040ns} {3 <= 0.042ns, 3 <= 0.044ns, 1 <= 0.048ns, 0 <= 0.060ns, 0 > 0.060ns}
+    Leaf  : target=0.035ns count=2512 avg=0.030ns sd=0.004ns min=0.008ns max=0.067ns {35 <= 0.021ns, 570 <= 0.028ns, 921 <= 0.032ns, 461 <= 0.033ns, 477 <= 0.035ns} {40 <= 0.037ns, 1 <= 0.039ns, 1 <= 0.042ns, 1 <= 0.053ns, 5 > 0.053ns}
+  Clock DAG library cell distribution PRO final {count}:
+     Bufs: BUFx24_ASAP7_75t_R: 8 BUFx16f_ASAP7_75t_R: 41 BUFx12f_ASAP7_75t_R: 85 BUFx12_ASAP7_75t_R: 113 BUFx10_ASAP7_75t_R: 384 BUFx8_ASAP7_75t_R: 1254 BUFx4_ASAP7_75t_R: 493 HB4xp67_ASAP7_75t_R: 43 
+     Invs: CKINVDCx12_ASAP7_75t_R: 1 CKINVDCx8_ASAP7_75t_R: 1 
+     ICGs: ICGx8DC_ASAP7_75t_L: 128 ICGx5_ASAP7_75t_L: 20 ICGx4_ASAP7_75t_L: 95 ICGx3_ASAP7_75t_L: 67 ICGx2_ASAP7_75t_L: 545 ICGx1_ASAP7_75t_L: 242 ICGx1_ASAP7_75t_R: 526 
+   Logics: AND2x4_ASAP7_75t_L: 1 AND2x2_ASAP7_75t_L: 6 AND2x2_ASAP7_75t_R: 5 
+  Primary reporting skew groups PRO final:
+  Skew group summary PRO final:
+    skew_group CLK_SYS/mode_func: insertion delay [min=0.665, max=1.038, avg=0.811, sd=0.138, skn=0.522, kur=-1.659], skew [0.373 vs 0.051*], 59.8% {0.676, 0.727} (wid=0.255 ws=0.060) (gid=0.837 gs=0.398)
+    skew_group CLK_TCK/mode_func: insertion delay [min=0.332, max=0.379, avg=0.368, sd=0.014, skn=-1.673, kur=1.412], skew [0.048 vs 0.050], 100% {0.332, 0.379} (wid=0.193 ws=0.010) (gid=0.186 gs=0.040)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_01/mode_func: insertion delay [min=0.489, max=0.535, avg=0.528, sd=0.014, skn=-1.835, kur=1.960], skew [0.046 vs 0.050], 100% {0.489, 0.535} (wid=0.217 ws=0.012) (gid=0.320 gs=0.048)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_02/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.011, skn=-1.922, kur=2.524], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.029)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_03/mode_func: insertion delay [min=0.343, max=0.371, avg=0.357, sd=0.020, skn=0.000, kur=0.000], skew [0.029 vs 0.050], 100% {0.343, 0.371} (wid=0.189 ws=0.002) (gid=0.184 gs=0.030)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_04/mode_func: insertion delay [min=0.414, max=0.419, avg=0.416, sd=0.002, skn=1.553, kur=1.530], skew [0.005 vs 0.050], 100% {0.414, 0.419} (wid=0.194 ws=0.000) (gid=0.225 gs=0.005)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_05/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.012, skn=-1.814, kur=1.879], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.029)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_06/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.013, skn=-1.759, kur=1.510], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.036)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_07/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.012, skn=-1.866, kur=2.129], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.029)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_08/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.013, skn=-1.796, kur=1.710], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.036)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_09/mode_func: insertion delay [min=0.495, max=0.535, avg=0.528, sd=0.013, skn=-1.734, kur=1.370], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.036)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_10/mode_func: insertion delay [min=0.495, max=0.535, avg=0.529, sd=0.012, skn=-1.822, kur=1.924], skew [0.040 vs 0.050], 100% {0.495, 0.535} (wid=0.215 ws=0.011) (gid=0.320 gs=0.029)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_11/mode_func: insertion delay [min=0.491, max=0.535, avg=0.528, sd=0.014, skn=-1.834, kur=1.944], skew [0.044 vs 0.050], 100% {0.491, 0.535} (wid=0.218 ws=0.013) (gid=0.320 gs=0.048)
+    skew_group _clock_gen_CLK_SYS_en_latch_reg_12/mode_func: insertion delay [min=0.490, max=0.535, avg=0.528, sd=0.014, skn=-1.825, kur=1.894], skew [0.045 vs 0.050], 100% {0.490, 0.535} (wid=0.218 ws=0.013) (gid=0.320 gs=0.048)
+  Legalizer API calls during this step: 723 succeeded with high effort: 723 succeeded with medium effort: 0 succeeded with low effort: 0 succeeded with basic effort: 0 succeeded with basic unbounded effort: 0
+PRO done.
+Net route status summary:
+  Clock:      4072 (unrouted=0, trialRouted=0, noStatus=0, routed=4072, fixed=0, [crossesIlmBoundary=0, tooFewTerms=0, (crossesIlmBoundary AND tooFewTerms=0)])
+  Non-clock: 163431 (unrouted=15439, trialRouted=0, noStatus=0, routed=147992, fixed=0, [crossesIlmBoundary=0, tooFewTerms=15439, (crossesIlmBoundary AND tooFewTerms=0)])
+Updating delays...
+Updating delays done.
+PRO done. (took cpu=0:00:40.3 real=0:00:17.4)
+Leaving CCOpt scope - Cleaning up placement interface...
+Leaving CCOpt scope - Cleaning up placement interface done. (took cpu=0:00:00.8 real=0:00:00.2)
+*** ClockDrv #1 [finish] (optDesign #2) : cpu/real = 0:00:41.7/0:00:18.2 (2.3), totSession cpu/real = 6:27:18.5/1:13:20.9 (5.3), mem = 12270.9M
+**INFO: Start fixing DRV (Mem = 12026.87M) ...
+Begin: GigaOpt DRV Optimization
+Glitch fixing enabled
+*** DrvOpt #1 [begin] (optDesign #2) : totSession cpu/real = 6:27:27.0/1:13:23.9 (5.3), mem = 12026.9M
+Info: 4072 clock nets excluded from IPO operation.
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+Info: Enabling GigaOpt waveform propagation mode
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+	CornerforLayerOpt timing analysis view view_ss has been selected for calibration 
+**INFO: Extra DRV scale -- maxTran 0.97 maxCap 0.97 (high fanout net > 10: maxTran 0.97 maxCap 0.97) for over fixing
+DRV pessimism of 2.00% is used for tran, 2.00% for cap, 0.00% for fanout, on top of margin 0.00%
+** INFO: Initializing Glitch Interface
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|        max-tran       |        max-cap        |  max-fanout |  max-length |    glitch   |       setup       |        |        |        |       |          |         |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| nets | terms|  wViol  | nets | terms|  wViol  | nets | terms| nets | terms| nets | terms|   WNS   |   TNS   |  #Buf  |  #Inv  | #Resize|Density|   Real   |   Mem   |
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|   111|   755|    -0.07|     0|     0|     0.00|     0|     0|     0|     0|   115|   115|     0.32|     0.00|       0|       0|       0| 25.91%|          |         |
+|     0|     0|     0.00|     0|     0|     0.00|     0|     0|     0|     0|    14|    14|     0.32|     0.00|     108|       0|     112| 25.92%| 0:00:04.0| 12304.9M|
+|     0|     0|     0.00|     0|     0|     0.00|     0|     0|     0|     0|     7|     7|     0.32|     0.00|       4|       0|       5| 25.92%| 0:00:01.0| 12304.9M|
+|     0|     0|     0.00|     0|     0|     0.00|     0|     0|     0|     0|     6|     6|     0.32|     0.00|       1|       0|       1| 25.92%| 0:00:01.0| 12304.9M|
+|     0|     0|     0.00|     0|     0|     0.00|     0|     0|     0|     0|     5|     5|     0.32|     0.00|       1|       0|       0| 25.92%| 0:00:00.0| 12304.9M|
+|     0|     0|     0.00|     0|     0|     0.00|     0|     0|     0|     0|     5|     5|     0.32|     0.00|       0|       0|       0| 25.92%| 0:00:00.0| 12304.9M|
++---------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+Bottom Preferred Layer:
++-----------+------------+------------+----------+
+|   Layer   |   OPT_LA   |    CLK     |   Rule   |
++-----------+------------+------------+----------+
+| M4 (z=4)  |        382 |       2512 | default  |
+| M6 (z=6)  |          0 |       1560 | default  |
++-----------+------------+------------+----------+
+Via Pillar Rule:
+    None
+
+
+=======================================================================
+                Reasons for remaining drv violations
+=======================================================================
+*info: Total 27 net(s) have violations which can't be fixed by DRV optimization.
+
+MultiBuffering failure reasons
+------------------------------------------------
+*info:     5 net(s): Could not be fixed because of exceeding max local density.
+
+SingleBuffering failure reasons
+------------------------------------------------
+*info:     5 net(s): Could not be fixed because of hinst,location,fence/region mismatch.
+
+Resizing failure reasons
+------------------------------------------------
+*info:    14 net(s): Could not be fixed because instance couldn't be resized.
+*info:     1 net(s): Could not be fixed because no move is found.
+
+
+*** Finish DRV Fixing (cpu=0:00:38.6 real=0:00:10.0 mem=12304.9M) ***
+
+*** DrvOpt #1 [finish] (optDesign #2) : cpu/real = 0:00:46.6/0:00:15.9 (2.9), totSession cpu/real = 6:28:13.6/1:13:39.8 (5.3), mem = 12176.9M
+**INFO: Skipping refine place as no non-legal commits were detected
+End: GigaOpt DRV Optimization
+**optDesign ... cpu = 0:10:20, real = 0:02:28, mem = 7616.1M, totSessionCpu=6:28:14 **
+*info:
+**INFO: Completed fixing DRV (CPU Time = 0:00:47, Mem = 12176.91M).
+** INFO: Initializing Glitch Interface
+
+OptSummary:
+
+------------------------------------------------------------------
+     SI Timing Summary (cpu=0.79min real=0.28min mem=12176.9M)
+------------------------------------------------------------------
+
+Setup views included:
+ view_ss view_tt 
+
++--------------------+--------------------------------------------------+
+|     ID Number      |                 Path Group Name                  |
++--------------------+--------------------------------------------------+
+|         1          |cg_enable_group_CLK_ASCON                         |
+|         2          |cg_enable_group_CLK_CORDIC                        |
+|         3          |cg_enable_group_CLK_CPU                           |
+|         4          |cg_enable_group_CLK_DBG                           |
+|         5          |cg_enable_group_CLK_GPIO                          |
+|         6          |cg_enable_group_CLK_I2C                           |
+|         7          |cg_enable_group_CLK_PWM                           |
+|         8          |cg_enable_group_CLK_SPI                           |
+|         9          |cg_enable_group_CLK_SYS                           |
+|         10         |cg_enable_group_CLK_TCK                           |
+|         11         |cg_enable_group_CLK_TIM0                          |
+|         12         |cg_enable_group_CLK_TIM1                          |
+|         13         |cg_enable_group_CLK_UART                          |
+|         14         |cg_enable_group_CLK_UART1                         |
++--------------------+--------------------------------------------------+
+
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|     Setup mode     |   all   | reg2reg |reg2cgate| default |   C2O   |   I2C   |   I2O   |1:cg_..ON|2:cg_..IC|3:cg_..PU|4:cg_..BG|5:cg_..IO|6:cg_..2C|7:cg_..WM|8:cg_..PI|9:cg_..YS|10:cg..CK|11:cg..M0|12:cg..M1|13:cg..RT|14:cg..T1|
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|           WNS (ns):|  0.317  |  0.949  |  1.394  |  0.000  |  0.317  |  0.550  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|           TNS (ns):|  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|    Violating Paths:|    0    |    0    |    0    |    0    |    0    |    0    |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|          All Paths:|  53452  |  51661  |  1635   |    0    |   106   |   101   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+
++----------------+-------------------------------+------------------+
+|                |              Real             |       Total      |
+|    DRVs        +------------------+------------+------------------|
+|                |  Nr nets(terms)  | Worst Vio  |  Nr nets(terms)  |
++----------------+------------------+------------+------------------+
+|   max_cap      |      0 (0)       |   0.000    |      0 (0)       |
+|   max_tran     |      0 (0)       |   0.000    |      6 (6)       |
+|   max_fanout   |      0 (0)       |     0      |    417 (417)     |
+|   max_length   |      0 (0)       |     0      |      0 (0)       |
++----------------+------------------+------------+------------------+
+
+Density: 25.925%
+------------------------------------------------------------------
+**optDesign ... cpu = 0:10:27, real = 0:02:31, mem = 7579.3M, totSessionCpu=6:28:20 **
+** INFO: Initializing Glitch Interface
+*** Timing Is met
+*** Check timing (0:00:00.0)
+*** Setup timing is met (target slack 0.02ns)
+**INFO: flowCheckPoint #3 OptimizationHold
+GigaOpt Hold Optimizer is used
+Starting initialization (fixHold) cpu=0:00:00.0 real=0:00:00.0 totSessionCpu=6:28:25 mem=12176.9M ***
+*** BuildHoldData #2 [begin] (optDesign #2) : totSession cpu/real = 6:28:25.3/1:13:45.4 (5.3), mem = 12176.9M
+Saving timing graph ...
+Done save timing graph
+Latch borrow mode reset to max_borrow
+OPTC: user 20.0
+Starting delay calculation for Hold views
+AAE_INFO: opIsDesignInPostRouteState() is 1
+AAE_INFO: resetNetProps viewIdx 1 
+AAE_INFO: resetNetProps viewIdx 2 
+Starting SI iteration 1 using Infinite Timing Windows
+#################################################################################
+# Design Stage: PostRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC OCV 
+# Parasitics Mode: SPEF/RCDB 
+# Signoff Settings: SI On (EWM-WFP)
+#################################################################################
+Start delay calculation (fullDC) (8 T). (MEM=7697.25)
+*** Calculating scaling factor for libset_ff libraries using the default operating condition of each library.
+Total number of fetched objects 154181
+AAE_INFO-618: Total number of nets in the design is 167617,  92.8 percent of the nets selected for SI analysis
+Total number of fetched objects 154181
+AAE_INFO-618: Total number of nets in the design is 167617,  92.8 percent of the nets selected for SI analysis
+End delay calculation. (MEM=7800.29 CPU=0:02:44 REAL=0:00:21.0)
+End delay calculation (fullDC). (MEM=7800.29 CPU=0:02:48 REAL=0:00:22.0)
+Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b_user1-EliteMini_user1_Tvwq8T/.AAE_DjAkrL/.AAE_2273039_7d0db9d3-a7ce-475e-b126-27ddf6ab9c0b/waveform.data...
+Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 7755.6M)
+Add other clocks and setupCteToAAEClockMapping during iter 1
+Loading CTE timing window is completed (CPU = 0:00:02.3, REAL = 0:00:00.0, MEM = 7755.8M)
+
+Executing IPO callback for view pruning ..
+
+Optimization is working on the following views:
+  Setup views:  view_tt view_ss
+  Hold  views: view_ff 
