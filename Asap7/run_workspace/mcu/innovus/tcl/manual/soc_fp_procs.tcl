@@ -1047,6 +1047,19 @@ proc soc_stdcell_rails {} {
     editTrim -nets {VDD VSS}
 }
 
+# Tong so loi trong report verifyConnectivity (cac dong "N Problem(s)" o Summary);
+# report sach ("Found no problems or warnings") -> 0.
+proc soc_connectivity_problems {report} {
+    set fh [open $report r]
+    set text [read $fh]
+    close $fh
+    set n 0
+    foreach {line count} [regexp -all -inline {(\d+) Problem\(s\)} $text] {
+        incr n $count
+    }
+    return $n
+}
+
 # Hold o clock gate roi cg_* (RTL utils/clock_gate.v = latch en_latch_reg + AND2).
 # CCOpt coi en_latch_reg la generator (cay CLK_SYS_generator_for_CLK_*), net
 # latch Q -> AND.B thanh clock net nam trong "4063 clock nets excluded from IPO"
