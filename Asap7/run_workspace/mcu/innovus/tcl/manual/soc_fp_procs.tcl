@@ -273,7 +273,7 @@ proc soc_check_core_ring {} {
         set n9 [llength [lsearch -all -exact $layers M9]]
         puts "Ring loi $net: $n8 doan M8, $n9 doan M9"
         if {$n8 < 2 || $n9 < 2} {
-            error "Ring loi $net thieu (M8=$n8 M9=$n9) - chua chay KHOI 2 hoac addRing loi (xem innovus.log)"
+            error "Ring loi $net thieu (M8=$n8 M9=$n9) - chua chay KHOI 2, addRing loi, hoac doan ring bi xoa sau KHOI 2 (editDelete/editTrim) - chay lai tu KHOI 0"
         }
     }
 }

@@ -96,6 +96,7 @@ array set SOC_PG_OFFSET {M4 0.012 M5 0.000}
 
 # Chan PG VDD/VSS cua top (09_PnR tr.21 createPGPin): nam tren doan ring loi
 # phia tren (M8) cua tung net - DEF/GDS/LEF abstract co chan nguon cho LVS.
+# Tao o KHOI 16 (sau moi editTrim): tao som o KHOI 2 thi mat doan ring M8.
 set SOC_PG_PIN_LAYER M8
 
 # ---- Tap cell (10_Macro tr.21 latch-up) -----------------------------------
