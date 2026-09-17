@@ -434,6 +434,13 @@ soc_block "KHOI 10: rail M1 + stripe M5 std cell" {
         -report ./verify_rpt/connectivity_place.rpt
     verify_drc -limit 100000 -report ./verify_rpt/drc_place.rpt
     checkPlace ./verify_rpt/checkPlace_place_pg.rpt
+    # Rail ho thi dung o day, khong luu placed_pg.  Run 2026-09-17 22:13: tech LEF
+    # bat LEF58_ENCLOSURE o V3/V4 -> via M1->M5 chi con 3/8 (moi rail VSS + rail VDD
+    # y = 9.936 + 8.64k khong via) -> 4562 loi ma van luu checkpoint va sang CTS.
+    set opens [soc_connectivity_problems ./verify_rpt/connectivity_place.rpt]
+    if {$opens > 0} {
+        error "$opens loi VDD/VSS trong verify_rpt/connectivity_place.rpt (rail M1 khong noi stripe M5) - kiem tra LEF58_ENCLOSURE V3/V4 trong tech LEF.  Sua xong: restoreDesign ./saved/${TOP}_placed.enc.dat $TOP, source 3 file, paste lai KHOI 10"
+    }
     saveDesign ./saved/${TOP}_placed_pg.enc
 
     soc_banner "PLACEMENT XONG - saved/${TOP}_placed_pg.enc
