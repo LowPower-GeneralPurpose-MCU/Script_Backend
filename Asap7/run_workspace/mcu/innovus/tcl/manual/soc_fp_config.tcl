@@ -28,6 +28,18 @@ set SOC_HALO_ROWS      2          ;# halo quanh moi SRAM
 set SOC_MACRO_GAP  [expr {$SOC_MACRO_GAP_ROWS * $SOC_ROW_H}]
 set SOC_MACRO_HALO [expr {$SOC_HALO_ROWS * $SOC_ROW_H}]
 
+# Kenh dat buffer trong tuong SRAM RAM_LO/RAM_HI (4 cot, cao het loi), o khe
+# cot 0|1 va cot 2|3.  Run 2026-09-17 khe nao cung 4.32 (row bi cat) -> CTS
+# khong dat duoc buffer trong tuong, chan clk SRAM cach mep tuong 190-440 um:
+# 45 chan clk slew 57-172 ps > 46 ps (Liberty).  Cot sat mep tuong (~65 um) OK.
+# Kenh = 4.32 cap VSS/VDD cum trai + 8.64 row + 4.32 cap VSS/VDD cum phai;
+# phai >= 2 khe de soc_sram_islands tach cum, boi so site 0.216.
+set SOC_WALL_CHANNEL        17.28
+set SOC_WALL_CHANNEL_GROUPS {RAM_LO RAM_HI}
+# floorPlan lam tron be rong loi (2190.888 -> 2190.816): KHOI 3 nap file vi tri
+# SRAM van chap nhan loi lech toi nay o mep phai, dich cum sat mep phai theo.
+set SOC_CORE_SNAP_TOL 0.432
+
 # Nhom SRAM = cac macro cung module, dat thanh mot cum va co luoi nguon
 # M4/M5 rieng (soc_island_pg).
 #   ten    master(big|tag)  cot  hang  tien to instance

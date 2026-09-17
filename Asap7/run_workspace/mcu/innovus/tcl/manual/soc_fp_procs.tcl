@@ -91,7 +91,25 @@ proc soc_macro_size {kind} {
     return [list [expr {double([dbGet $ptr.size_x])}] [expr {double([dbGet $ptr.size_y])}]]
 }
 
-# Kich thuoc mot cum khi xep cols x rows voi khe SOC_MACRO_GAP.
+# Khe giua cot col va col+1 cua nhom: kenh buffer SOC_WALL_CHANNEL o khe cot
+# 0|1, 2|3... cua cac nhom trong SOC_WALL_CHANNEL_GROUPS, con lai SOC_MACRO_GAP.
+proc soc_col_gap {group col} {
+    if {$group in $::SOC_WALL_CHANNEL_GROUPS && $col % 2 == 0} {
+        return $::SOC_WALL_CHANNEL
+    }
+    return $::SOC_MACRO_GAP
+}
+
+# Toa do x cot col so voi mep trai nhom (macro rong w).
+proc soc_col_x {group col w} {
+    set x 0.0
+    for {set i 0} {$i < $col} {incr i} {
+        set x [expr {$x + $w + [soc_col_gap $group $i]}]
+    }
+    return $x
+}
+
+# Kich thuoc mot cum khi xep cols x rows (khe SOC_MACRO_GAP, kenh soc_col_gap).
 # Tra ve {cum_w cum_h macro_w macro_h so_hang}.
 proc soc_group_dims {group} {
     foreach {name kind cols rows prefixes} $::SOC_SRAM_GROUPS {
@@ -104,7 +122,7 @@ proc soc_group_dims {group} {
         lassign [soc_macro_size $kind] w h
         set gap $::SOC_MACRO_GAP
         return [list \
-            [expr {$used_cols * $w + ($used_cols - 1) * $gap}] \
+            [expr {[soc_col_x $name [expr {$used_cols - 1}] $w] + $w}] \
             [expr {$used_rows * $h + ($used_rows - 1) * $gap}] \
             $w $h $used_rows]
     }
@@ -194,7 +212,7 @@ proc soc_place_group {group x0 y0 status} {
         lassign $record name ptr
         set col [expr {$index / $rows}]
         set row [expr {$index % $rows}]
-        set x [soc_snap_near [expr {$core_llx + $x0 + $col * ($w + $gap)}] $core_llx $::SOC_SITE_W]
+        set x [soc_snap_near [expr {$core_llx + $x0 + [soc_col_x $group $col $w]}] $core_llx $::SOC_SITE_W]
         set y [soc_snap_near [expr {$core_lly + $y0 + $row * ($h + $gap)}] $core_lly $::SOC_ROW_H]
         set orient [expr {$col % 2 == 0 ? "R0" : "MY"}]
         dbSet $ptr.pStatus unplaced
@@ -288,7 +306,25 @@ proc soc_save_sram_place {{file ""}} {
     return [llength $lines]
 }
 
-# Nap file cua soc_save_sram_place; loi neu loi (core) khac luc luu.
+# Nhom config cua mot SRAM: dung ca master lan tien to (TAG va CACHE chung tien to).
+proc soc_inst_group {name ptr} {
+    set master [dbGet $ptr.cell.name]
+    foreach {group kind cols rows prefixes} $::SOC_SRAM_GROUPS {
+        if {$master ne [soc_master_name $kind]} {
+            continue
+        }
+        foreach prefix $prefixes {
+            if {[string first $prefix $name] == 0} {
+                return $group
+            }
+        }
+    }
+    error "$name ($master) khong thuoc nhom nao trong SOC_SRAM_GROUPS"
+}
+
+# Nap file cua soc_save_sram_place; loi neu loi (core) khac luc luu.  Rieng mep
+# phai duoc lech <= SOC_CORE_SNAP_TOL (floorPlan lam tron be rong loi): nhom nao
+# sat mep phai luc luu (RAM_HI) duoc dich ca nhom theo, lam tron XUONG luoi site.
 proc soc_load_sram_place {{file ""}} {
     if {$file eq ""} {
         set file $::SOC_SRAM_PLACE_FILE
@@ -296,26 +332,54 @@ proc soc_load_sram_place {{file ""}} {
     uplevel #0 [list source $file]
     set saved $::SOC_SRAM_PLACE_CORE
     set now [lindex [dbGet top.fPlan.coreBox] 0]
-    foreach a $saved b $now {
-        if {abs($a - $b) > 1e-3} {
+    set dx 0.0
+    foreach a $saved b $now i {0 1 2 3} {
+        set d [expr {$b - $a}]
+        if {abs($d) <= 1e-3} {
+            continue
+        }
+        if {$i != 2 || abs($d) > $::SOC_CORE_SNAP_TOL + 1e-6} {
             error "Loi hien tai {$now} khac loi luc luu {$saved} - xoa $file de xep mam lai"
         }
+        set dx [soc_snap_down $d $::SOC_SITE_W]
     }
     set expected [expr {$::SRAM_EXPECTED_COUNT + $::SRAM_TAG_EXPECTED_COUNT}]
     if {[llength $::SOC_SRAM_PLACE] != $expected} {
         error "$file co [llength $::SOC_SRAM_PLACE] SRAM, netlist co $expected"
     }
+    set entries {}
+    array set right {}
     foreach entry $::SOC_SRAM_PLACE {
         lassign $entry name x y orient
         set ptr [dbGet -e -p top.insts.name $name]
         if {$ptr eq ""} {
             error "$file: khong co instance $name"
         }
+        set group [soc_inst_group $name $ptr]
+        set x1 [expr {$x + [dbGet $ptr.cell.size_x]}]
+        if {![info exists right($group)] || $x1 > $right($group)} {
+            set right($group) $x1
+        }
+        lappend entries [list $name $ptr $group $x $y $orient]
+    }
+    set shifted {}
+    foreach item $entries {
+        lassign $item name ptr group x y orient
+        if {$dx != 0.0 && $right($group) > [lindex $saved 2] - 1.0} {
+            set x [expr {$x + $dx}]
+            if {$group ni $shifted} {
+                lappend shifted $group
+            }
+        }
         dbSet $ptr.pStatus unplaced
         placeInstance $name $x $y $orient
         dbSet $ptr.pStatus placed
     }
-    return [llength $::SOC_SRAM_PLACE]
+    if {[llength $shifted] > 0} {
+        puts [format "Loi lech %.3f um o mep phai -> dich nhom %s %.3f um" \
+            [expr {[lindex $now 2] - [lindex $saved 2]}] $shifted $dx]
+    }
+    return [llength $entries]
 }
 
 # Kiem tra SRAM sau khi chinh tay: huong, nam trong loi, khe >= SOC_MACRO_GAP.
@@ -683,6 +747,11 @@ proc soc_free_intervals {lo hi blocked} {
 # shape = {rong trong pitch offset} (mac dinh luoi SOC_MESH_*).  extra = them vi
 # tri cap o sat canh trai/phai (hoac duoi/tren) cua moi keepout, de kenh hep giua
 # hai cum van co 1 cap; vi tri luoi qua gan vi tri extra thi bo.
+# Cap extra chi chay doc theo canh keepout sinh ra no (+ min_len moi dau): row bi
+# cat chi nam canh keepout, phia tren/duoi keepout row lien tuc da co cap luoi.
+# Run 2026-09-17 cap extra chay het chieu cao loi: cap mep phai TAG va mep trai
+# DTCM (hai keepout cach 0.152 um) thanh 2 cap cach 1.1 um suot 1170 um, chong
+# via M1-M5 chiem het track M3/M4 -> 23/35 loi DRC final nam o x~925.
 proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0}} {
     set snap_opts {}
     if {[llength $shape] == 0} {
@@ -703,22 +772,34 @@ proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0}} {
         lassign [list $cy0 $cy1 [expr {$dx0 + $E}] [expr {$dx1 - $E}] bottom] c0 c1 s0 s1 from
     }
     set edge_pos {}
+    array set edge_span {}
     if {$extra} {
         foreach k $keepouts {
             lassign $k kx0 ky0 kx1 ky1
-            lassign [expr {$dir eq "vertical" ? [list $kx0 $kx1] : [list $ky0 $ky1]}] a0 a1
+            if {$dir eq "vertical"} {
+                lassign [list $kx0 $kx1 $ky0 $ky1] a0 a1 b0 b1
+            } else {
+                lassign [list $ky0 $ky1 $kx0 $kx1] a0 a1 b0 b1
+            }
+            set span [list [expr {$b0 - $min_len}] [expr {$b1 + $min_len}]]
             foreach p [list [expr {$a0 - 2.0 * $E - $pair}] [expr {$a1 + 2.0 * $E}]] {
                 if {$p < $c0 || $p + $pair > $c1} {
                     continue
                 }
-                set near 0
+                set near ""
                 foreach q $edge_pos {
                     if {abs($p - $q) < $pair + $S} {
-                        set near 1
+                        set near $q
                     }
                 }
-                if {!$near} {
+                if {$near eq ""} {
                     lappend edge_pos $p
+                    set edge_span($p) $span
+                } else {
+                    # Hai keepout cung mot vi tri cap: cap phu ca hai canh
+                    lassign $edge_span($near) lo hi
+                    set edge_span($near) [list [expr {min($lo, [lindex $span 0])}] \
+                        [expr {max($hi, [lindex $span 1])}]]
                 }
             }
         }
@@ -728,7 +809,11 @@ proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0}} {
         {set pos [expr {$pos + $pitch}]} {
         set near 0
         foreach q $edge_pos {
-            if {abs($pos - $q) < $pair + $S} {
+            lassign $edge_span($q) lo hi
+            # Cap extra chay suot (canh tuong SRAM, kenh buffer 8.64 um) da thay
+            # cap luoi trong vong 1 khe: kenh RAM_HI cot 2|3 tung co 3 cap/8.64 um.
+            if {abs($pos - $q) < $pair + $S ||
+                (abs($pos - $q) < $::SOC_MACRO_GAP && $lo <= $s0 && $hi >= $s1)} {
                 set near 1
             }
         }
@@ -750,10 +835,18 @@ proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0}} {
                 lappend blocked [list [expr {$b0 - $E}] [expr {$b1 + $E}]]
             }
         }
+        lassign [list $s0 $s1] lo hi
+        if {[info exists edge_span($pos)]} {
+            lassign $edge_span($pos) lo hi
+            set lo [expr {max($lo, $s0)}]
+            set hi [expr {min($hi, $s1)}]
+        }
         set free {}
-        foreach iv [soc_free_intervals $s0 $s1 $blocked] {
-            if {[lindex $iv 1] - [lindex $iv 0] >= $min_len} {
-                lappend free $iv
+        if {$hi > $lo} {
+            foreach iv [soc_free_intervals $lo $hi $blocked] {
+                if {[lindex $iv 1] - [lindex $iv 0] >= $min_len} {
+                    lappend free $iv
+                }
             }
         }
         # Chi gop khi dung buoc pitch: addStripe -set_to_set_distance dat lai tung cap.
@@ -870,4 +963,41 @@ proc soc_stdcell_rails {} {
         [list $::SOC_M5_W $::SOC_M5_S $::SOC_M5_PITCH $::SOC_M5_OFFSET] 1]
     puts "Stripe M5 std cell: $n5 vung (tranh [llength $keepouts] cum SRAM + khe)"
     editTrim -nets {VDD VSS}
+}
+
+# Hold o clock gate roi cg_* (RTL utils/clock_gate.v = latch en_latch_reg + AND2).
+# CCOpt coi en_latch_reg la generator (cay CLK_SYS_generator_for_CLK_*), net
+# latch Q -> AND.B thanh clock net nam trong "4063 clock nets excluded from IPO"
+# nen optDesign -hold khong chen buffer: run 2026-09-17 con 12 duong reg2cgate
+# -72 ps (view_ff) sau optDesign -postRoute.  Proc chen hold buffer ngay truoc
+# chan AND.B cho toi khi slack hold >= target.  Sau route phai ecoRoute.
+proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
+    set added 0
+    set left {}
+    foreach latch [dbGet -e top.insts.name cg_*/en_latch_reg] {
+        for {set n 0} {1} {incr n} {
+            set slack ""
+            set pin ""
+            foreach_in_collection p [report_timing -early -through $latch/Q \
+                    -max_paths 1 -collection] {
+                set slack [get_property $p slack]
+                set pin [get_object_name [get_property $p capturing_point]]
+            }
+            if {![string is double -strict $slack] || $slack >= $target} {
+                break
+            }
+            if {$n >= $max_buf || ![string match cg_* $pin]} {
+                lappend left "$pin $slack"
+                break
+            }
+            ecoAddRepeater -term [list $pin] -cell $cell
+            incr added
+        }
+        puts [format "%-28s hold slack %s sau %d buffer" $latch $slack $n]
+    }
+    puts "soc_fix_cg_hold: them $added $cell"
+    foreach l $left {
+        puts "WARNING: chua sua duoc hold $l"
+    }
+    return $added
 }
