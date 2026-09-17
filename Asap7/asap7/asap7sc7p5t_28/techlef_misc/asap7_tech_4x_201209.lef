@@ -452,18 +452,21 @@ LAYER V5
   # actually passing the rule is done by having the correct vias below.
 
   # DRM 1p7 (V5 theo luat V4): enclosure boi M5 / M6 >= 11 nm (x4 = 0.044)
-  # Dong "Vx 0.044 0.0" giong V4/V6: cac dong ENCLOSURE la cac phuong an (dat 1
-  # la du).  Chi co dong EOL (0.044 ca 4 phia) thi VIA56 (M5 rong 0.096 = cut,
-  # M6 cao 0.128 = cut) khong bao gio dat: route 2026-09-17 23:55 co 14691 loi
-  # VIAENCLOSURE V5 = gan het 14691 via V5; V6 cung cau truc + dong nay: 0 loi.
-  PROPERTY LEF58_ENCLOSURE "
-  ENCLOSURE CUTCLASS Vx 0.044 0.0 ;
-  ENCLOSURE CUTCLASS Vx EOL 0.0 0.044 0.044 ;
-  ENCLOSURE CUTCLASS Vx_0p480 END 0.00 SIDE 0.0 ;
-  ENCLOSURE CUTCLASS Vx_0p864 END 0.00 SIDE 0.0 ;
-  ENCLOSURE CUTCLASS Vx_1p248 END 0.00 SIDE 0.0 ;
-  ENCLOSURE CUTCLASS Vx_1p632 END 0.00 SIDE 0.0 ;
-  " ;
+  # TAT (giong ban truoc 2026-09-17 19:03).  Cut V5 hinh chu nhat 0.096x0.128:
+  # VIA56 co M5 du 0.044 o END (y) nhung M6 du 0.044 o SIDE (x), mot luat chung
+  # cho ca M5 va M6 khong the dung cho ca hai (dung ghi chu cua ASAP7 o tren).
+  #  - chi dong EOL (0.044 ca 4 phia): route 2026-09-17 23:55 co 14691 loi
+  #    VIAENCLOSURE V5 = gan het 14691 via V5.
+  #  - them "Vx 0.044 0.0": Innovus bao IMPLF-290, hieu la END 0.044 SIDE 0.0
+  #    -> M6 van sai; CTS 2026-09-18 00:35 route clock con 1977 loi Enc M5.
+  #  Run sach 2026-09-17 19:18 (V5 tat): CTS 0 loi, route 38 loi, khong loi V5.
+  # PROPERTY LEF58_ENCLOSURE "
+  # ENCLOSURE CUTCLASS Vx EOL 0.0 0.044 0.044 ;
+  # ENCLOSURE CUTCLASS Vx_0p480 END 0.00 SIDE 0.0 ;
+  # ENCLOSURE CUTCLASS Vx_0p864 END 0.00 SIDE 0.0 ;
+  # ENCLOSURE CUTCLASS Vx_1p248 END 0.00 SIDE 0.0 ;
+  # ENCLOSURE CUTCLASS Vx_1p632 END 0.00 SIDE 0.0 ;
+  # " ;
 
 #  PROPERTY LEF58_ENCLOSURE "
 #  ENCLOSURE CUTCLASS Vx EOL 0.0 0.044 0.0 ;
