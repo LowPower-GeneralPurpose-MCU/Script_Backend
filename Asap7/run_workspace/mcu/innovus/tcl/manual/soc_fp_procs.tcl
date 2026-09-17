@@ -1199,10 +1199,15 @@ proc soc_sram_route_blk {} {
         puts "WARNING: chan SRAM chi-M3 co net ([lrange $used 0 4]) - KHONG chan M3"
         return 0
     }
+    # Thu vao moi canh 0.288 (4 x M3 min width): route 2026-09-17 23:55 blockage
+    # bang dung than SRAM -> 21 loi Metal Short M3 cao 0.056 ngay mep duoi SRAM
+    # (dau day M3 qua via), NanoRoute khong go duoc.
+    set d 0.288
     set n 0
     foreach b [soc_sram_boxes] {
         lassign $b name group x0 y0 x1 y1
-        createRouteBlk -box [list $x0 $y0 $x1 $y1] -layer M3 -name soc_sram_m3
+        createRouteBlk -box [list [expr {$x0 + $d}] [expr {$y0 + $d}] \
+            [expr {$x1 - $d}] [expr {$y1 - $d}]] -layer M3 -name soc_sram_m3
         incr n
     }
     puts "Chan M3 tren $n SRAM"
