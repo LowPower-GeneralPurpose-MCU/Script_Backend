@@ -990,7 +990,15 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
                 lappend left "$pin $slack"
                 break
             }
-            ecoAddRepeater -term [list $pin] -cell $cell
+            if {[catch {ecoAddRepeater -term [list $pin] -cell $cell}]} {
+                # Truoc routeDesign net nay do CCOpt route va danh dau FIXED:
+                # IMPOPT-6228 (run 2026-09-17 15:00 dung KHOI 12).  Xoa day,
+                # routeDesign route lai.
+                set net [get_object_name [get_nets -of_objects [get_pins $pin]]]
+                puts "soc_fix_cg_hold: xoa day FIXED cua $net roi chen lai"
+                editDelete -net $net
+                ecoAddRepeater -term [list $pin] -cell $cell
+            }
             incr added
         }
         puts [format "%-28s hold slack %s sau %d buffer" $latch $slack $n]
@@ -1000,4 +1008,31 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
         puts "WARNING: chua sua duoc hold $l"
     }
     return $added
+}
+
+# Chan M3 tren than SRAM truoc routeDesign.  Run 2026-09-17 (ca 2 lan): 14-31 loi
+# "Cut Short V3 - Blockage of Cell <SRAM>" o giua than SRAM (chan rdata/wdata):
+# LEF SRAM chan cut V3 nhung khong chan M3, NanoRoute di M3 tren SRAM roi ha via
+# V3 vao chan -> ecoRoute -fix_drc khong go duoc.  Chan M3 thi phai vao chan tu
+# M4/M5.  Bo qua neu SRAM co chan tren M3 (chan M3 se lam ho chan).
+proc soc_sram_route_blk {} {
+    set layers {}
+    foreach m [list $::SRAM_MASTER $::SRAM_TAG_MASTER] {
+        set lc [dbGet -p head.libCells.name $m]
+        lappend layers {*}[dbGet -e $lc.terms.pins.allShapes.layer.name]
+    }
+    set layers [lsort -unique $layers]
+    puts "Layer chan SRAM: $layers"
+    if {[llength $layers] == 0 || "M3" in $layers} {
+        puts "WARNING: khong doc duoc layer chan SRAM hoac co chan M3 - KHONG chan M3"
+        return 0
+    }
+    set n 0
+    foreach b [soc_sram_boxes] {
+        lassign $b name group x0 y0 x1 y1
+        createRouteBlk -box [list $x0 $y0 $x1 $y1] -layer M3 -name soc_sram_m3
+        incr n
+    }
+    puts "Chan M3 tren $n SRAM"
+    return $n
 }
