@@ -533,20 +533,28 @@ soc_block "KHOI 14: optDesign postRoute" {
 soc_block "KHOI 15: filler + verify" {
     set fillers {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L}
     setFillerMode -reset
-    setFillerMode -core $fillers -add_fillers_with_drc false -fitGap true
-    addFiller -cell $fillers -prefix FILLER
+    setFillerMode -core $fillers -add_fillers_with_drc false -fitGap true \
+        -honorPrerouteAsObs true -diffCellViol true
+    addFiller -cell $fillers -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
+    # Filler/buffer moi chen (CTS, optDesign, filler) phai noi chan VDD/VSS vao net
+    globalNetConnect VDD -type pgpin -pin VDD -inst * -override
+    globalNetConnect VSS -type pgpin -pin VSS -inst * -override
+    globalNetConnect VDD -type tiehi -inst * -override
+    globalNetConnect VSS -type tielo -inst * -override
+    applyGlobalNets
     checkPlace ./verify_rpt/checkPlace_final.rpt
+    # Luu truoc khi verify: lenh verify nao loi thi soc_block dung, van con checkpoint
+    saveDesign ./saved/${TOP}_final.enc
 
     clearDrc
     verify_drc -limit 100000 -report ./verify_rpt/drc_final.rpt
     verifyConnectivity -type all -error 1000 -warning 1000 \
         -report ./verify_rpt/connectivity_final.rpt
-    verifyProcessAntenna -report ./verify_rpt/antenna_final.rpt
+    verifyProcessAntenna -reportfile ./verify_rpt/antenna_final.rpt
     timeDesign -postRoute       -outDir ./reports/timing_final      -prefix final
     timeDesign -postRoute -hold -outDir ./reports/timing_final_hold -prefix final
     report_power -outfile ./reports/power_final.rpt
     report_area > ./reports/area_final.rpt
-    saveDesign ./saved/${TOP}_final.enc
 
     soc_banner "PNR XONG - saved/${TOP}_final.enc
   verify_rpt/drc_final.rpt           : 0 vi pham
