@@ -1,9 +1,0 @@
-#NR Timing file version 1.0
-#Format:
-#Pico seconds per unit
-#TNS
-#Net Id
-#Net Name
-#Slack Slew Delta_Slew Delay Delta_Delay Cap_Ratio Transition_Slack Critial_Path_Count Path_TNS Is_End_Point Critical_Level
-0.100000
-tns 0

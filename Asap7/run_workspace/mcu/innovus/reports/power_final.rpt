@@ -2,30 +2,30 @@
 *	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
 *	
 *
-* 	Date & Time:	2026-Sep-17 12:08:34 (2026-Sep-17 03:08:34 GMT)
+* 	Date & Time:	2026-Sep-17 15:05:12 (2026-Sep-17 06:05:12 GMT)
 *
 *----------------------------------------------------------------------------------------
 *
 *	Design: top_soc
 *
 *	Liberty Libraries used: 
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_SS_ccs_220122.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_SS_ccs_211120.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_SS_ccs_211120.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_SS_ccs_220123.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_SS_ccs_220122.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_SS_ccs_211120.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_SS_ccs_211120.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_SS_ccs_220123.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib
-*	        view_ss: /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib
+*	        view_tt: /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib
 *
 *	Power Domain used: 
-*              Rail:        VDD      Voltage:       0.63 
+*              Rail:        VDD      Voltage:        0.7 
 *
-*       Power View : view_ss
+*       Power View : view_tt
 *
 *       User-Defined Activity : N.A.
 *
@@ -54,52 +54,52 @@
 
 Total Power 
 -----------------------------------------------------------------------------------------
-Total Internal Power:       86.74672901 	   95.7937%
-Total Switching Power:       3.34958129 	    3.6989%
-Total Leakage Power:         0.45942288 	    0.5073%
-Total Power:                90.55573317 
+Total Internal Power:       87.78712056 	   95.5081%
+Total Switching Power:       4.09036614 	    4.4501%
+Total Leakage Power:         0.03839288 	    0.0418%
+Total Power:                91.91587958 
 -----------------------------------------------------------------------------------------
 
 
 Group                           Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-Sequential                         2.562      0.3843      0.1383       3.085       3.406 
-Macro                              82.21      0.1684           0       82.38       90.97 
+Sequential                         3.222      0.4947     0.01007       3.727       4.055 
+Macro                               82.2      0.1122           0       82.32       89.56 
 IO                                     0           0           0           0           0 
-Combinational                      1.027       1.863      0.2583       3.147       3.476 
-Clock (Combinational)             0.7291      0.8608     0.01836       1.608       1.776 
-Clock (Sequential)                0.2216     0.07353     0.04447      0.3396       0.375 
+Combinational                      1.239       2.326     0.02249       3.587       3.903 
+Clock (Combinational)             0.8695       1.057    0.001116       1.928       2.097 
+Clock (Sequential)                0.2528      0.1006    0.004715      0.3582      0.3897 
 -----------------------------------------------------------------------------------------
-Total                              86.75        3.35      0.4594       90.56         100 
+Total                              87.79        4.09     0.03839       91.92         100 
 -----------------------------------------------------------------------------------------
 
 
 Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-VDD                      0.63      86.75        3.35      0.4594       90.56         100 
+VDD                       0.7      87.79        4.09     0.03839       91.92         100 
 
 
 Clock                           Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-CLK_TCK                        0.0004636   0.0003195    0.000555    0.001338    0.001478 
-CLK_TIM1                        0.007279    0.007715   0.0005421     0.01554     0.01716 
-CLK_CORDIC                      0.005952    0.006877   0.0003316     0.01316     0.01453 
-CLK_UART                         0.01699     0.01608    0.001519     0.03459     0.03819 
-CLK_GPIO                        0.007587     0.01022   0.0003127     0.01812     0.02001 
-CLK_CPU                            0.101     0.09823    0.007568      0.2068      0.2284 
-CLK_SYS                           0.7187      0.7002     0.04443       1.463       1.616 
-CLK_UART1                        0.01682     0.01593    0.001515     0.03426     0.03783 
-CLK_TIM0                        0.009408    0.008897   0.0006655     0.01897     0.02095 
-CLK_ASCON                         0.0226      0.0284    0.001372     0.05237     0.05783 
-CLK_SPI                          0.01537     0.01428    0.001477     0.03112     0.03437 
-CLK_DBG                          0.01053    0.009083   0.0007861      0.0204     0.02253 
-CLK_PWM                         0.003483    0.003737   0.0001776    0.007398    0.008169 
-CLK_I2C                          0.01447     0.01439    0.001571     0.03043      0.0336 
+CLK_TCK                        0.0004556   0.0004088     4.7e-05   0.0009113   0.0009915 
+CLK_TIM1                        0.008727     0.01043   5.501e-05     0.01921      0.0209 
+CLK_CORDIC                      0.007256    0.009079   2.921e-05     0.01636      0.0178 
+CLK_SYS                           0.8184      0.8476    0.004119        1.67       1.817 
+CLK_UART1                        0.02567     0.02217   0.0001572       0.048     0.05222 
+CLK_UART                         0.02103     0.02118   0.0001625     0.04237     0.04609 
+CLK_GPIO                        0.008039     0.01222   1.556e-05     0.02028     0.02206 
+CLK_TIM0                         0.01006     0.01098   4.892e-05     0.02109     0.02294 
+CLK_ASCON                          0.031     0.03832   0.0001118     0.06943     0.07554 
+CLK_SPI                          0.01782     0.01972   0.0001688     0.03771     0.04103 
+CLK_DBG                           0.0112      0.0112    7.94e-05     0.02248     0.02445 
+CLK_CPU                           0.1391      0.1302   0.0006537        0.27      0.2937 
+CLK_PWM                         0.005027    0.005015   2.097e-05     0.01006     0.01095 
+CLK_I2C                          0.01855     0.01918    0.000161     0.03789     0.04122 
 -----------------------------------------------------------------------------------------
-Total (excluding duplicates)      0.9507      0.9344     0.06283       1.948       2.151 
+Total (excluding duplicates)       1.122       1.158    0.005831       2.286       2.487 
 -----------------------------------------------------------------------------------------
 Clock: CLK_TCK
 Clock Period: 0.100000 usec 
@@ -116,27 +116,22 @@ Clock Period: 0.004000 usec
 Clock Toggle Rate:   500.0000 Mhz 
 Clock Static Probability:  0.5000
 
-Clock: CLK_UART
-Clock Period: 0.004000 usec 
-Clock Toggle Rate:   500.0000 Mhz 
-Clock Static Probability:  0.5000
-
-Clock: CLK_GPIO
-Clock Period: 0.004000 usec 
-Clock Toggle Rate:   500.0000 Mhz 
-Clock Static Probability:  0.5000
-
-Clock: CLK_CPU
-Clock Period: 0.004000 usec 
-Clock Toggle Rate:   500.0000 Mhz 
-Clock Static Probability:  0.5000
-
 Clock: CLK_SYS
 Clock Period: 0.004000 usec 
 Clock Toggle Rate:   500.0000 Mhz 
 Clock Static Probability:  0.5000
 
 Clock: CLK_UART1
+Clock Period: 0.004000 usec 
+Clock Toggle Rate:   500.0000 Mhz 
+Clock Static Probability:  0.5000
+
+Clock: CLK_UART
+Clock Period: 0.004000 usec 
+Clock Toggle Rate:   500.0000 Mhz 
+Clock Static Probability:  0.5000
+
+Clock: CLK_GPIO
 Clock Period: 0.004000 usec 
 Clock Toggle Rate:   500.0000 Mhz 
 Clock Static Probability:  0.5000
@@ -161,6 +156,11 @@ Clock Period: 0.004000 usec
 Clock Toggle Rate:   500.0000 Mhz 
 Clock Static Probability:  0.5000
 
+Clock: CLK_CPU
+Clock Period: 0.004000 usec 
+Clock Toggle Rate:   500.0000 Mhz 
+Clock Static Probability:  0.5000
+
 Clock: CLK_PWM
 Clock Period: 0.004000 usec 
 Clock Toggle Rate:   500.0000 Mhz 
@@ -175,10 +175,10 @@ Clock Static Probability:  0.5000
 
 -----------------------------------------------------------------------------------------
 *	Power Distribution Summary: 
-*                Highest Average Power: u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram (srambank_128x4x20_6t122):            1.081 
-*                Highest Leakage Power: u_axi_ram_hi/u_mem/FE_OFC14850_n (BUFx24_ASAP7_75t_L):        0.0001616 
-*          Total Cap:      3.07451e-10 F
-*          Total instances in design: 149946
+*                Highest Average Power: u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram (srambank_128x4x20_6t122):            1.082 
+*                Highest Leakage Power:    u_dcache/FE_OFC11690_n (BUFx24_ASAP7_75t_L):        1.409e-05 
+*          Total Cap:      3.04114e-10 F
+*          Total instances in design: 148795
 *          Total instances in design with no power:     0
 *          Total instances in design with no activity:     0
 *          Total Fillers and Decap:     0

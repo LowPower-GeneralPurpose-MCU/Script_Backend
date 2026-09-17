@@ -1,7 +1,5 @@
 # Vi tri SRAM luu boi soc_save_sram_place - KHOI 3 nap lai file nay.
 # Xoa file de KHOI 3 xep lai vi tri mam.
-# 2026-09-17: tu ban xep tay cu, mo kenh buffer 17.28 um o khe cot 0|1 va 2|3
-# cua RAM_LO/RAM_HI (SOC_WALL_CHANNEL); CACHE/TAG dich phai 25.92, RAM_HI 51.84 um.
 set SOC_SRAM_PLACE_CORE {9.936 9.936 2252.592 1422.576}
 set SOC_SRAM_PLACE {
     {{u_axi_ram_lo/u_mem/G_SRAM_BANK[0].u_sram} 9.9360 9.9360 R0}
