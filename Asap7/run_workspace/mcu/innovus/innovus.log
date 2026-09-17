@@ -99237,3 +99237,3150 @@ Steiner route complete.
 Add inst cg_ascon/FE_ECOC37227_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_ascon/g15__2398/B 
 *** Starting refinePlace (4:06:40 mem=11917.1M) ***
 Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 1 insts, mean move: 1.08 um, max move: 1.08 um 
+	Max move on inst (cg_ascon/FE_ECOC37227_en_latch): (1055.38, 1103.98) --> (1055.38, 1102.90)
+	Runtime: CPU: 0:00:35.2 REAL: 0:00:06.0 MEM: 11885.1MB
+Summary Report:
+Instances move: 1 (out of 144699 movable)
+Instances flipped: 0
+Mean displacement: 1.08 um
+Max displacement: 1.08 um (Instance: cg_ascon/FE_ECOC37227_en_latch) (1055.38, 1103.98) -> (1055.38, 1102.9)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.5 REAL: 0:00:07.0 MEM: 11885.1MB
+*** Finished refinePlace (4:07:16 mem=11885.1M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8158.97)
+Total number of fetched objects 153657
+Total number of fetched objects 153657
+End delay calculation. (MEM=8166.71 CPU=0:01:33 REAL=0:00:12.0)
+End delay calculation (fullDC). (MEM=8166.71 CPU=0:01:40 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_ascon/g15__2398/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8171.4)
+Total number of fetched objects 153657
+End delay calculation. (MEM=8169.13 CPU=0:00:53.6 REAL=0:00:06.0)
+End delay calculation (fullDC). (MEM=8169.13 CPU=0:00:57.7 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4013 (99.7% routed)
+ |     total nets:     4024
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_ascon/FE_ECON37227_en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_ascon/FE_ECOC37228_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_ascon/g15__2398/B 
+*** Starting refinePlace (4:10:23 mem=11984.4M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 3 insts, mean move: 0.72 um, max move: 1.08 um 
+	Max move on inst (g197691): (1057.10, 1103.98) --> (1057.10, 1102.90)
+	Runtime: CPU: 0:00:34.8 REAL: 0:00:06.0 MEM: 11952.4MB
+Summary Report:
+Instances move: 3 (out of 144700 movable)
+Instances flipped: 0
+Mean displacement: 0.72 um
+Max displacement: 1.08 um (Instance: g197691) (1057.1, 1103.98) -> (1057.1, 1102.9)
+	Length: 6 sites, height: 1 rows, site name: asap7sc7p5t, cell type: AND3x1_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.0 REAL: 0:00:07.0 MEM: 11952.4MB
+*** Finished refinePlace (4:10:58 mem=11952.4M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8222.84)
+Total number of fetched objects 153658
+Total number of fetched objects 153658
+End delay calculation. (MEM=8259.03 CPU=0:01:31 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=8259.03 CPU=0:01:37 REAL=0:00:12.0)
+<CMD> ecoAddRepeater -term cg_ascon/g15__2398/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8265.55)
+Total number of fetched objects 153658
+End delay calculation. (MEM=8262.84 CPU=0:00:54.5 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=8262.84 CPU=0:00:58.3 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4014 (99.7% routed)
+ |     total nets:     4025
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_ascon/FE_ECON37228_en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_ascon/FE_ECOC37229_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_ascon/g15__2398/B 
+*** Starting refinePlace (4:14:03 mem=12098.8M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 3 insts, mean move: 0.94 um, max move: 1.08 um 
+	Max move on inst (cg_ascon/FE_ECOC37228_en_latch): (1056.89, 1103.98) --> (1056.89, 1102.90)
+	Runtime: CPU: 0:00:34.6 REAL: 0:00:06.0 MEM: 12066.8MB
+Summary Report:
+Instances move: 3 (out of 144701 movable)
+Instances flipped: 0
+Mean displacement: 0.94 um
+Max displacement: 1.08 um (Instance: cg_ascon/FE_ECOC37228_en_latch) (1056.89, 1103.98) -> (1056.89, 1102.9)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:34.9 REAL: 0:00:06.0 MEM: 12066.8MB
+*** Finished refinePlace (4:14:38 mem=12066.8M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8311.6)
+Total number of fetched objects 153659
+Total number of fetched objects 153659
+End delay calculation. (MEM=8327.46 CPU=0:01:34 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=8327.46 CPU=0:01:41 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_ascon/g15__2398/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8334.66)
+Total number of fetched objects 153659
+End delay calculation. (MEM=8332.13 CPU=0:00:56.2 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=8332.13 CPU=0:01:00 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4015 (99.7% routed)
+ |     total nets:     4026
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_ascon/FE_ECON37229_en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_ascon/FE_ECOC37230_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_ascon/g15__2398/B 
+*** Starting refinePlace (4:17:47 mem=12175.1M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 3 insts, mean move: 0.72 um, max move: 1.08 um 
+	Max move on inst (cg_ascon/FE_ECOC37229_en_latch): (1056.89, 1103.98) --> (1056.89, 1105.06)
+	Runtime: CPU: 0:00:34.9 REAL: 0:00:06.0 MEM: 12143.1MB
+Summary Report:
+Instances move: 3 (out of 144702 movable)
+Instances flipped: 0
+Mean displacement: 0.72 um
+Max displacement: 1.08 um (Instance: cg_ascon/FE_ECOC37229_en_latch) (1056.89, 1103.98) -> (1056.89, 1105.06)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.2 REAL: 0:00:06.0 MEM: 12143.1MB
+*** Finished refinePlace (4:18:23 mem=12143.1M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8392.47)
+Total number of fetched objects 153660
+Total number of fetched objects 153660
+End delay calculation. (MEM=8398.89 CPU=0:01:30 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=8398.89 CPU=0:01:36 REAL=0:00:13.0)
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+<CMD> ecoAddRepeater -term cg_spi/g15__3680/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8401.38)
+Total number of fetched objects 153660
+End delay calculation. (MEM=8399.35 CPU=0:00:54.1 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=8399.35 CPU=0:00:57.9 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4016 (99.7% routed)
+ |     total nets:     4027
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**ERROR: (IMPOPT-6228):	The wires and/or vias of net 'cg_spi/en_latch' are marked as fixed and cannot be modified by the ecoAddRepeater command.
+	This message is issued when the user tries to add a buffer or inverter on a net with fixed wires using the 'ecoAddRepeater' command. To resolve this error, either suppress this check by specifying 'setEcoMode -honorFixedNetWire false' or change the route status of this net's wires to routed by specifying 'editSelect -net cg_spi/en_latch ; editChangeStatus -to ROUTED ; editDeselect -net cg_spi/en_latch'.
+<CMD> editDelete -net cg_spi/en_latch
+<CMD> ecoAddRepeater -term cg_spi/g15__3680/B -cell HB4xp67_ASAP7_75t_R
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4015 (99.7% routed)
+ |     total nets:     4027
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+Starting Steiner route of net cg_spi/FE_ECON37231_en_latch ...
+Steiner route complete.
+**WARN: (IMPOPT-3706):	RC data of net 'cg_spi/en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_spi/FE_ECOC37231_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_spi/g15__3680/B 
+*** Starting refinePlace (4:21:26 mem=12232.4M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 3 insts, mean move: 1.80 um, max move: 3.67 um 
+	Max move on inst (u_apb_i2c/FE_PHC31251_i2c_sda_oen): (953.86, 1108.30) --> (951.26, 1109.38)
+	Runtime: CPU: 0:00:34.9 REAL: 0:00:06.0 MEM: 12200.4MB
+Summary Report:
+Instances move: 3 (out of 144703 movable)
+Instances flipped: 0
+Mean displacement: 1.80 um
+Max displacement: 3.67 um (Instance: u_apb_i2c/FE_PHC31251_i2c_sda_oen) (953.856, 1108.3) -> (951.264, 1109.38)
+	Length: 4 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB1xp67_ASAP7_75t_L
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.2 REAL: 0:00:07.0 MEM: 12200.4MB
+*** Finished refinePlace (4:22:01 mem=12200.4M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8472.77)
+Total number of fetched objects 153661
+Total number of fetched objects 153661
+End delay calculation. (MEM=8516.16 CPU=0:01:30 REAL=0:00:12.0)
+End delay calculation (fullDC). (MEM=8516.16 CPU=0:01:36 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_spi/g15__3680/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8522.09)
+Total number of fetched objects 153661
+End delay calculation. (MEM=8520.29 CPU=0:00:53.1 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=8520.29 CPU=0:00:56.8 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4016 (99.7% routed)
+ |     total nets:     4028
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_spi/FE_ECON37231_en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_spi/FE_ECOC37232_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_spi/g15__3680/B 
+*** Starting refinePlace (4:25:04 mem=12327.8M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 2 insts, mean move: 2.38 um, max move: 4.54 um 
+	Max move on inst (cg_spi/FE_ECOC37232_en_latch): (954.72, 1108.30) --> (954.50, 1112.62)
+	Runtime: CPU: 0:00:35.1 REAL: 0:00:06.0 MEM: 12295.8MB
+Summary Report:
+Instances move: 2 (out of 144704 movable)
+Instances flipped: 0
+Mean displacement: 2.38 um
+Max displacement: 4.54 um (Instance: cg_spi/FE_ECOC37232_en_latch) (954.72, 1108.3) -> (954.504, 1112.62)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.4 REAL: 0:00:06.0 MEM: 12295.8MB
+*** Finished refinePlace (4:25:39 mem=12295.8M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8546.19)
+Total number of fetched objects 153662
+Total number of fetched objects 153662
+End delay calculation. (MEM=8564.21 CPU=0:01:31 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=8564.21 CPU=0:01:38 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_spi/g15__3680/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8568.17)
+Total number of fetched objects 153662
+End delay calculation. (MEM=8566.23 CPU=0:00:54.1 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=8566.23 CPU=0:00:57.9 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4017 (99.7% routed)
+ |     total nets:     4029
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_spi/FE_ECON37232_en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_spi/FE_ECOC37233_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_spi/g15__3680/B 
+*** Starting refinePlace (4:28:43 mem=12404.1M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 6 insts, mean move: 2.95 um, max move: 5.62 um 
+	Max move on inst (cg_spi/FE_ECOC37233_en_latch): (954.72, 1108.30) --> (957.10, 1111.54)
+	Runtime: CPU: 0:00:35.0 REAL: 0:00:06.0 MEM: 12372.1MB
+Summary Report:
+Instances move: 6 (out of 144705 movable)
+Instances flipped: 0
+Mean displacement: 2.95 um
+Max displacement: 5.62 um (Instance: cg_spi/FE_ECOC37233_en_latch) (954.72, 1108.3) -> (957.096, 1111.54)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.3 REAL: 0:00:07.0 MEM: 12372.1MB
+*** Finished refinePlace (4:29:19 mem=12372.1M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8646.31)
+Total number of fetched objects 153663
+Total number of fetched objects 153663
+End delay calculation. (MEM=8691.03 CPU=0:01:32 REAL=0:00:12.0)
+End delay calculation (fullDC). (MEM=8691.03 CPU=0:01:39 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_spi/g15__3680/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8694.28)
+Total number of fetched objects 153663
+End delay calculation. (MEM=8691.32 CPU=0:00:54.3 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=8691.32 CPU=0:00:58.0 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4017 (99.7% routed)
+ |     total nets:     4030
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_spi/FE_ECON37233_en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_spi/FE_ECOC37234_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_spi/g15__3680/B 
+*** Starting refinePlace (4:32:25 mem=12507.5M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 11 insts, mean move: 2.32 um, max move: 6.26 um 
+	Max move on inst (u_apb_spi_u_spi_rx_fifo_cg_icg__RC_CG_HIER_INST904/LTIELO): (960.77, 1110.46) --> (958.82, 1106.14)
+	Runtime: CPU: 0:00:35.2 REAL: 0:00:07.0 MEM: 12475.5MB
+Summary Report:
+Instances move: 11 (out of 144706 movable)
+Instances flipped: 0
+Mean displacement: 2.32 um
+Max displacement: 6.26 um (Instance: u_apb_spi_u_spi_rx_fifo_cg_icg__RC_CG_HIER_INST904/LTIELO) (960.768, 1110.46) -> (958.824, 1106.14)
+	Length: 3 sites, height: 1 rows, site name: asap7sc7p5t, cell type: TIELOx1_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.4 REAL: 0:00:07.0 MEM: 12475.5MB
+*** Finished refinePlace (4:33:00 mem=12475.5M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8725.78)
+Total number of fetched objects 153664
+Total number of fetched objects 153664
+End delay calculation. (MEM=8759.76 CPU=0:01:29 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=8759.76 CPU=0:01:36 REAL=0:00:13.0)
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+<CMD> ecoAddRepeater -term cg_cordic/g15__5107/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8762.51)
+Total number of fetched objects 153664
+End delay calculation. (MEM=8759 CPU=0:00:53.3 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=8759 CPU=0:00:57.3 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4017 (99.7% routed)
+ |     total nets:     4031
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**ERROR: (IMPOPT-6228):	The wires and/or vias of net 'cg_cordic/en_latch' are marked as fixed and cannot be modified by the ecoAddRepeater command.
+	This message is issued when the user tries to add a buffer or inverter on a net with fixed wires using the 'ecoAddRepeater' command. To resolve this error, either suppress this check by specifying 'setEcoMode -honorFixedNetWire false' or change the route status of this net's wires to routed by specifying 'editSelect -net cg_cordic/en_latch ; editChangeStatus -to ROUTED ; editDeselect -net cg_cordic/en_latch'.
+<CMD> editDelete -net cg_cordic/en_latch
+<CMD> ecoAddRepeater -term cg_cordic/g15__5107/B -cell HB4xp67_ASAP7_75t_R
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4016 (99.6% routed)
+ |     total nets:     4031
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+Starting Steiner route of net cg_cordic/FE_ECON37235_en_latch ...
+Steiner route complete.
+**WARN: (IMPOPT-3706):	RC data of net 'cg_cordic/en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_cordic/FE_ECOC37235_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_cordic/g15__5107/B 
+*** Starting refinePlace (4:36:02 mem=12573.8M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 3 insts, mean move: 0.94 um, max move: 1.73 um 
+	Max move on inst (cg_cordic/FE_ECOC37235_en_latch): (947.16, 1015.42) --> (945.43, 1015.42)
+	Runtime: CPU: 0:00:34.6 REAL: 0:00:06.0 MEM: 12541.8MB
+Summary Report:
+Instances move: 3 (out of 144707 movable)
+Instances flipped: 0
+Mean displacement: 0.94 um
+Max displacement: 1.73 um (Instance: cg_cordic/FE_ECOC37235_en_latch) (947.16, 1015.42) -> (945.432, 1015.42)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:34.9 REAL: 0:00:07.0 MEM: 12541.8MB
+*** Finished refinePlace (4:36:37 mem=12541.8M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8809.45)
+Total number of fetched objects 153665
+Total number of fetched objects 153665
+End delay calculation. (MEM=8836.14 CPU=0:01:30 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=8836.14 CPU=0:01:37 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_cordic/g15__5107/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8842.96)
+Total number of fetched objects 153665
+End delay calculation. (MEM=8840.17 CPU=0:00:54.7 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=8840.17 CPU=0:00:58.4 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4017 (99.6% routed)
+ |     total nets:     4032
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_cordic/FE_ECON37235_en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_cordic/FE_ECOC37236_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_cordic/g15__5107/B 
+*** Starting refinePlace (4:39:42 mem=12660.1M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 1 insts, mean move: 3.24 um, max move: 3.24 um 
+	Max move on inst (cg_cordic/FE_ECOC37236_en_latch): (947.16, 1015.42) --> (950.40, 1015.42)
+	Runtime: CPU: 0:00:34.4 REAL: 0:00:06.0 MEM: 12628.1MB
+Summary Report:
+Instances move: 1 (out of 144708 movable)
+Instances flipped: 0
+Mean displacement: 3.24 um
+Max displacement: 3.24 um (Instance: cg_cordic/FE_ECOC37236_en_latch) (947.16, 1015.42) -> (950.4, 1015.42)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:34.6 REAL: 0:00:06.0 MEM: 12628.1MB
+*** Finished refinePlace (4:40:16 mem=12628.1M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8886.38)
+Total number of fetched objects 153666
+Total number of fetched objects 153666
+End delay calculation. (MEM=8914.82 CPU=0:01:31 REAL=0:00:12.0)
+End delay calculation (fullDC). (MEM=8914.82 CPU=0:01:38 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_cordic/g15__5107/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8918.7)
+Total number of fetched objects 153666
+End delay calculation. (MEM=8916.23 CPU=0:00:53.9 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=8916.23 CPU=0:00:57.7 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4018 (99.6% routed)
+ |     total nets:     4033
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_cordic/FE_ECON37236_en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_cordic/FE_ECOC37237_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_cordic/g15__5107/B 
+*** Starting refinePlace (4:43:21 mem=12726.4M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 2 insts, mean move: 2.38 um, max move: 3.24 um 
+	Max move on inst (cg_cordic/FE_ECOC37237_en_latch): (947.16, 1015.42) --> (950.40, 1015.42)
+	Runtime: CPU: 0:00:34.5 REAL: 0:00:06.0 MEM: 12694.4MB
+Summary Report:
+Instances move: 2 (out of 144709 movable)
+Instances flipped: 0
+Mean displacement: 2.38 um
+Max displacement: 3.24 um (Instance: cg_cordic/FE_ECOC37237_en_latch) (947.16, 1015.42) -> (950.4, 1015.42)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:34.7 REAL: 0:00:06.0 MEM: 12694.4MB
+*** Finished refinePlace (4:43:56 mem=12694.4M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8970.7)
+Total number of fetched objects 153667
+Total number of fetched objects 153667
+End delay calculation. (MEM=8999.32 CPU=0:01:30 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=8999.32 CPU=0:01:36 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_cordic/g15__5107/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9004.19)
+Total number of fetched objects 153667
+End delay calculation. (MEM=9002.73 CPU=0:00:54.7 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=9002.73 CPU=0:00:58.4 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4018 (99.6% routed)
+ |     total nets:     4034
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_cordic/FE_ECON37237_en_latch' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_cordic/FE_ECOC37238_en_latch (HB4xp67_ASAP7_75t_R) to drive load cg_cordic/g15__5107/B 
+*** Starting refinePlace (4:46:59 mem=12831.8M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 4 insts, mean move: 1.84 um, max move: 3.24 um 
+	Max move on inst (cg_cordic/FE_ECOC37238_en_latch): (947.16, 1015.42) --> (950.40, 1015.42)
+	Runtime: CPU: 0:00:34.5 REAL: 0:00:06.0 MEM: 12799.8MB
+Summary Report:
+Instances move: 4 (out of 144710 movable)
+Instances flipped: 0
+Mean displacement: 1.84 um
+Max displacement: 3.24 um (Instance: cg_cordic/FE_ECOC37238_en_latch) (947.16, 1015.42) -> (950.4, 1015.42)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:34.8 REAL: 0:00:07.0 MEM: 12799.8MB
+*** Finished refinePlace (4:47:34 mem=12799.8M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9049.36)
+Total number of fetched objects 153668
+Total number of fetched objects 153668
+End delay calculation. (MEM=9071.84 CPU=0:01:29 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=9071.84 CPU=0:01:37 REAL=0:00:13.0)
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+<CMD> ecoAddRepeater -term cg_dbg/g15__4319/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9074.16)
+Total number of fetched objects 153668
+End delay calculation. (MEM=9073.5 CPU=0:00:53.6 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=9073.5 CPU=0:00:57.2 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4018 (99.6% routed)
+ |     total nets:     4035
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**ERROR: (IMPOPT-6228):	The wires and/or vias of net 'cg_dbg/CTS_2' are marked as fixed and cannot be modified by the ecoAddRepeater command.
+	This message is issued when the user tries to add a buffer or inverter on a net with fixed wires using the 'ecoAddRepeater' command. To resolve this error, either suppress this check by specifying 'setEcoMode -honorFixedNetWire false' or change the route status of this net's wires to routed by specifying 'editSelect -net cg_dbg/CTS_2 ; editChangeStatus -to ROUTED ; editDeselect -net cg_dbg/CTS_2'.
+<CMD> editDelete -net cg_dbg/CTS_2
+<CMD> ecoAddRepeater -term cg_dbg/g15__4319/B -cell HB4xp67_ASAP7_75t_R
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4017 (99.6% routed)
+ |     total nets:     4035
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+Starting Steiner route of net cg_dbg/FE_ECON37239_CTS_2 ...
+Steiner route complete.
+**WARN: (IMPOPT-3706):	RC data of net 'cg_dbg/CTS_2' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_dbg/FE_ECOC37239_CTS_2 (HB4xp67_ASAP7_75t_R) to drive load cg_dbg/g15__4319/B 
+*** Starting refinePlace (4:50:37 mem=12908.1M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 5 insts, mean move: 0.78 um, max move: 1.08 um 
+	Max move on inst (u_debug_module/g15633): (1175.04, 663.34) --> (1175.04, 664.42)
+	Runtime: CPU: 0:00:35.1 REAL: 0:00:06.0 MEM: 12876.1MB
+Summary Report:
+Instances move: 5 (out of 144711 movable)
+Instances flipped: 0
+Mean displacement: 0.78 um
+Max displacement: 1.08 um (Instance: u_debug_module/g15633) (1175.04, 663.336) -> (1175.04, 664.416)
+	Length: 6 sites, height: 1 rows, site name: asap7sc7p5t, cell type: AOI22xp33_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.4 REAL: 0:00:07.0 MEM: 12876.1MB
+*** Finished refinePlace (4:51:12 mem=12876.1M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9142.79)
+Total number of fetched objects 153669
+Total number of fetched objects 153669
+End delay calculation. (MEM=9168.85 CPU=0:01:31 REAL=0:00:12.0)
+End delay calculation (fullDC). (MEM=9168.85 CPU=0:01:38 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_dbg/g15__4319/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9174.29)
+Total number of fetched objects 153669
+End delay calculation. (MEM=9170.93 CPU=0:00:54.8 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=9170.93 CPU=0:00:58.5 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4018 (99.6% routed)
+ |     total nets:     4036
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_dbg/FE_ECON37239_CTS_2' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_dbg/FE_ECOC37240_CTS_2 (HB4xp67_ASAP7_75t_R) to drive load cg_dbg/g15__4319/B 
+*** Starting refinePlace (4:54:18 mem=13022.6M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 4 insts, mean move: 0.81 um, max move: 1.08 um 
+	Max move on inst (u_debug_module/FE_PHC11811_sbdata0_18): (1176.55, 661.18) --> (1176.55, 662.26)
+	Runtime: CPU: 0:00:35.5 REAL: 0:00:06.0 MEM: 12990.6MB
+Summary Report:
+Instances move: 4 (out of 144712 movable)
+Instances flipped: 0
+Mean displacement: 0.81 um
+Max displacement: 1.08 um (Instance: u_debug_module/FE_PHC11811_sbdata0_18) (1176.55, 661.176) -> (1176.55, 662.256)
+	Length: 7 sites, height: 1 rows, site name: asap7sc7p5t, cell type: HB4xp67_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.8 REAL: 0:00:07.0 MEM: 12990.6MB
+*** Finished refinePlace (4:54:53 mem=12990.6M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9219.79)
+Total number of fetched objects 153670
+Total number of fetched objects 153670
+End delay calculation. (MEM=9236.65 CPU=0:01:29 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=9236.65 CPU=0:01:36 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_dbg/g15__4319/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9240.95)
+Total number of fetched objects 153670
+End delay calculation. (MEM=9238.9 CPU=0:00:54.0 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=9238.9 CPU=0:00:57.6 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4019 (99.6% routed)
+ |     total nets:     4037
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_dbg/FE_ECON37240_CTS_2' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_dbg/FE_ECOC37241_CTS_2 (HB4xp67_ASAP7_75t_R) to drive load cg_dbg/g15__4319/B 
+*** Starting refinePlace (4:57:55 mem=13079.8M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 5 insts, mean move: 1.21 um, max move: 1.73 um 
+	Max move on inst (u_debug_module/add_254_76_g521): (1178.93, 662.26) --> (1179.58, 661.18)
+	Runtime: CPU: 0:00:34.9 REAL: 0:00:06.0 MEM: 13047.8MB
+Summary Report:
+Instances move: 5 (out of 144713 movable)
+Instances flipped: 0
+Mean displacement: 1.21 um
+Max displacement: 1.73 um (Instance: u_debug_module/add_254_76_g521) (1178.93, 662.256) -> (1179.58, 661.176)
+	Length: 3 sites, height: 1 rows, site name: asap7sc7p5t, cell type: INVxp33_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:35.2 REAL: 0:00:06.0 MEM: 13047.8MB
+*** Finished refinePlace (4:58:30 mem=13047.8M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9307.05)
+Total number of fetched objects 153671
+Total number of fetched objects 153671
+End delay calculation. (MEM=9350.24 CPU=0:01:33 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=9350.24 CPU=0:01:39 REAL=0:00:13.0)
+<CMD> ecoAddRepeater -term cg_dbg/g15__4319/B -cell HB4xp67_ASAP7_75t_R
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9356.83)
+Total number of fetched objects 153671
+End delay calculation. (MEM=9354.64 CPU=0:00:54.2 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=9354.64 CPU=0:00:57.9 REAL=0:00:08.0)
+   _____________________________________________________________
+  /  Design State
+ +--------------------------------------------------------------
+ | unconnected nets:      380
+ | signal nets: 
+ |    routed nets:    42621 (28.9% routed)
+ |     total nets:   147615
+ | clock nets: 
+ |    routed nets:     4019 (99.5% routed)
+ |     total nets:     4038
+ +--------------------------------------------------------------
+**INFO: Design is not detail routed
+**WARN: (IMPOPT-3706):	RC data of net 'cg_dbg/FE_ECON37241_CTS_2' has been disabled because it could not be updated as part of this buffer insertion. Timing results for this net may be inaccurate and may require re-extraction.
+Add inst cg_dbg/FE_ECOC37242_CTS_2 (HB4xp67_ASAP7_75t_R) to drive load cg_dbg/g15__4319/B 
+*** Starting refinePlace (5:01:36 mem=13184.3M) ***
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Move report: Detail placement moves 7 insts, mean move: 1.79 um, max move: 3.67 um 
+	Max move on inst (u_debug_module/add_254_76_g521): (1179.58, 661.18) --> (1183.25, 661.18)
+	Runtime: CPU: 0:00:34.5 REAL: 0:00:06.0 MEM: 13152.3MB
+Summary Report:
+Instances move: 7 (out of 144714 movable)
+Instances flipped: 0
+Mean displacement: 1.79 um
+Max displacement: 3.67 um (Instance: u_debug_module/add_254_76_g521) (1179.58, 661.176) -> (1183.25, 661.176)
+	Length: 3 sites, height: 1 rows, site name: asap7sc7p5t, cell type: INVxp33_ASAP7_75t_R
+Physical-only instances move: 0 (out of 0 movable physical-only)
+Total net bbox length = 3.928e+06 (1.775e+06 2.154e+06) (ext = 3.660e+04)
+Runtime: CPU: 0:00:34.8 REAL: 0:00:06.0 MEM: 13152.3MB
+*** Finished refinePlace (5:02:11 mem=13152.3M) ***
+<CMD> report_timing -early -through $latch/Q  -max_paths 1 -collection
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=9408.16)
+Total number of fetched objects 153672
+Total number of fetched objects 153672
+End delay calculation. (MEM=9429.91 CPU=0:01:31 REAL=0:00:11.0)
+End delay calculation (fullDC). (MEM=9429.91 CPU=0:01:38 REAL=0:00:13.0)
+<CMD> checkPlace ./verify_rpt/checkPlace_postCTS.rpt
+Begin checking placement ... (start mem=13244.6M, init mem=13250.6M)
+*info: Placed = 148787         (Fixed = 4073)
+*info: Unplaced = 0           
+Placement Density:25.59%(339320/1325493)
+Placement Density (including fixed std cells):25.59%(339320/1325493)
+Finished checkPlace (total: cpu=0:00:16.1, real=0:00:02.0; vio checks: cpu=0:00:15.4, real=0:00:02.0; mem=13218.6M)
+<CMD> timeDesign -postCTS -outDir ./reports/timing_postCTS -prefix postCTS
+*** timeDesign #3 [begin] () : totSession cpu/real = 5:04:20.4/1:16:29.1 (4.0), mem = 13218.6M
+Restoring CCOpt state...
+  Extracting original clock gating for CLK_TCK...
+    clock_tree CLK_TCK contains 136 sinks and 6 clock gates.
+  Extracting original clock gating for CLK_TCK done.
+  Extracting original clock gating for CLK_SYS...
+    clock_tree CLK_SYS contains 34013 sinks and 1629 clock gates.
+  Extracting original clock gating for CLK_SYS done.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_CORDIC<1>...
+    clock_tree CLK_SYS_generator_for_CLK_CORDIC<1> contains 362 sinks and 8 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_CORDIC<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_CORDIC<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_UART1<1>...
+    clock_tree CLK_SYS_generator_for_CLK_UART1<1> contains 427 sinks and 47 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_UART1<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_UART1<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_UART<1>...
+    clock_tree CLK_SYS_generator_for_CLK_UART<1> contains 427 sinks and 47 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_UART<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_UART<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_TIM1<1>...
+    clock_tree CLK_SYS_generator_for_CLK_TIM1<1> contains 346 sinks and 12 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_TIM1<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_TIM1<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_TIM0<1>...
+    clock_tree CLK_SYS_generator_for_CLK_TIM0<1> contains 346 sinks and 12 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_TIM0<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_TIM0<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_SPI<1>...
+    clock_tree CLK_SYS_generator_for_CLK_SPI<1> contains 410 sinks and 44 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_SPI<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_SPI<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_PWM<1>...
+    clock_tree CLK_SYS_generator_for_CLK_PWM<1> contains 163 sinks and 4 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_PWM<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_PWM<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_I2C<1>...
+    clock_tree CLK_SYS_generator_for_CLK_I2C<1> contains 375 sinks and 45 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_I2C<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_I2C<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_GPIO<1>...
+    clock_tree CLK_SYS_generator_for_CLK_GPIO<1> contains 354 sinks and 7 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_GPIO<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_GPIO<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_DBG<1>...
+    clock_tree CLK_SYS_generator_for_CLK_DBG<1> contains 450 sinks and 17 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_DBG<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_DBG<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_CPU<1>...
+    clock_tree CLK_SYS_generator_for_CLK_CPU<1> contains 7879 sinks and 124 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_CPU<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_CPU<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_ASCON<1>...
+    clock_tree CLK_SYS_generator_for_CLK_ASCON<1> contains 1272 sinks and 24 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_ASCON<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_ASCON<1>.
+  The skew group CLK_ASCON/mode_func was created. It contains 1272 sinks and 1 sources.
+  The skew group CLK_CORDIC/mode_func was created. It contains 362 sinks and 1 sources.
+  The skew group CLK_CPU/mode_func was created. It contains 7879 sinks and 1 sources.
+  The skew group CLK_DBG/mode_func was created. It contains 450 sinks and 1 sources.
+  The skew group CLK_GPIO/mode_func was created. It contains 354 sinks and 1 sources.
+  The skew group CLK_I2C/mode_func was created. It contains 375 sinks and 1 sources.
+  The skew group CLK_PWM/mode_func was created. It contains 163 sinks and 1 sources.
+  The skew group CLK_SPI/mode_func was created. It contains 410 sinks and 1 sources.
+  The skew group CLK_SYS/mode_func was created. It contains 34001 sinks and 1 sources.
+  The skew group CLK_TCK/mode_func was created. It contains 136 sinks and 1 sources.
+  The skew group CLK_TIM0/mode_func was created. It contains 346 sinks and 1 sources.
+  The skew group CLK_TIM1/mode_func was created. It contains 346 sinks and 1 sources.
+  The skew group CLK_UART/mode_func was created. It contains 427 sinks and 1 sources.
+  The skew group CLK_UART1/mode_func was created. It contains 427 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_01/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_02/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_03/mode_func was created. It contains 2 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_04/mode_func was created. It contains 6 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_05/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_06/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_07/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_08/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_09/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_10/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_11/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_12/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group CLK_SYS/mode_func was created. It contains 34001 sinks and 1 sources.
+  The skew group CLK_TCK/mode_func was created. It contains 136 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_01/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_02/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_03/mode_func was created. It contains 2 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_04/mode_func was created. It contains 6 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_05/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_06/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_07/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_08/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_09/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_10/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_11/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_12/mode_func was created. It contains 25 sinks and 1 sources.
+CCOpt state has been restored.
+Restoring CCOpt state done.
+Start to check current routing status for nets...
+Early Global Route is going to be called for routing.
+End to check current routing status for nets (mem=13207.0M)
+Removed 1 out of boundary tracks from layer 2
+Removed 1 out of boundary tracks from layer 2
+Removed 1 out of boundary tracks from layer 2
+Removed 1 out of boundary tracks from layer 2
+Removed 1 out of boundary tracks from layer 2
+Removed 1 out of boundary tracks from layer 2
+[NR-eGR] Early global route reroute 20 out of 147675 routable nets
+[NR-eGR] Track table information for default rule: 
+[NR-eGR] M1 has single uniform track structure
+[NR-eGR] M2 has non-uniform track structure
+[NR-eGR] M3 has single uniform track structure
+[NR-eGR] M4 has single uniform track structure
+[NR-eGR] M5 has single uniform track structure
+[NR-eGR] M6 has single uniform track structure
+[NR-eGR] M7 has single uniform track structure
+[NR-eGR] M8 has single uniform track structure
+[NR-eGR] M9 has single uniform track structure
+[NR-eGR] Pad has single uniform track structure
+[NR-eGR] Read 431393 PG shapes
+[NR-eGR] Read 0 clock shapes
+[NR-eGR] Read 0 other shapes
+[NR-eGR] #Routing Blockages  : 0
+[NR-eGR] #Bump Blockages     : 0
+[NR-eGR] #Instance Blockages : 1010675
+[NR-eGR] #PG Blockages       : 431393
+[NR-eGR] #Halo Blockages     : 0
+[NR-eGR] #Boundary Blockages : 0
+[NR-eGR] #Clock Blockages    : 0
+[NR-eGR] #Other Blockages    : 0
+[NR-eGR] #prerouted nets         : 151634
+[NR-eGR] #prerouted special nets : 0
+[NR-eGR] #prerouted wires        : 1551674
+[NR-eGR] Read 151654 nets ( ignored 151634 )
+[NR-eGR] There are 20 clock nets ( 0 with NDR ).
+[NR-eGR] ============ Routing rule table ============
+[NR-eGR] Rule id: 0  Rule name: (Default)  Nets: 20
+[NR-eGR] ========================================
+[NR-eGR] 
+[NR-eGR] Layer group 1: route 20 net(s) in layer range [6, 7]
+[NR-eGR] Early Global Route overflow of layer group 1: 0.00% H + 0.00% V. EstWL: 4.255200e+02um
+[NR-eGR] Congestion Analysis By layer: (blocked Gcells are excluded) 
+[NR-eGR]                        OverCon           OverCon            
+[NR-eGR]                         #Gcell            #Gcell     %Gcell
+[NR-eGR]        Layer             (1-2)             (3-4)    OverCon
+[NR-eGR] ---------------------------------------------------------------
+[NR-eGR]      M1 ( 1)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M2 ( 2)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M3 ( 3)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M4 ( 4)         2( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M5 ( 5)        31( 0.00%)         5( 0.00%)   ( 0.01%) 
+[NR-eGR]      M6 ( 6)         3( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR]      M7 ( 7)         0( 0.00%)         0( 0.00%)   ( 0.00%) 
+[NR-eGR] ---------------------------------------------------------------
+[NR-eGR]        Total        36( 0.00%)         5( 0.00%)   ( 0.00%) 
+[NR-eGR] 
+[NR-eGR] Connected 0 must-join pins/ports (post-process)
+[NR-eGR] Total eGR-routed clock nets wire length: 428um, number of vias: 220
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR]              Length (um)     Vias 
+[NR-eGR] ----------------------------------
+[NR-eGR]  M1   (1V)             0   466305 
+[NR-eGR]  M2   (2H)        954008   647042 
+[NR-eGR]  M3   (3V)       1454700    58614 
+[NR-eGR]  M4   (4H)        897091    33321 
+[NR-eGR]  M5   (5V)        592994    10943 
+[NR-eGR]  M6   (6H)        183809     4860 
+[NR-eGR]  M7   (7V)        252078        0 
+[NR-eGR]  M8   (8H)             0        0 
+[NR-eGR]  M9   (9V)             0        0 
+[NR-eGR]  Pad  (10H)            0        0 
+[NR-eGR] ----------------------------------
+[NR-eGR]       Total      4334680  1221085 
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR] Total half perimeter of net bounding box: 3928385um
+[NR-eGR] Total length: 4334680um, number of vias: 1221085
+[NR-eGR] --------------------------------------------------------------------------
+[NR-eGR] Finished Early Global Route kernel ( CPU: 4.32 sec, Real: 3.78 sec, Curr Mem: 12.40 MB )
+[NR-eGR] Finished Early Global Route ( CPU: 4.33 sec, Real: 3.79 sec, Curr Mem: 12.22 MB )
+Extraction called for design 'top_soc' of instances=148787 and nets=167119 using extraction engine 'preRoute' .
+PreRoute RC Extraction called for design top_soc.
+RC Extraction called in multi-corner(3) mode.
+RCMode: PreRoute
+      RC Corner Indexes            0       1       2   
+Capacitance Scaling Factor   : 1.00000 1.00000 1.00000 
+Resistance Scaling Factor    : 1.00000 1.00000 1.00000 
+Clock Cap. Scaling Factor    : 1.00000 1.00000 1.00000 
+Clock Res. Scaling Factor    : 1.00000 1.00000 1.00000 
+Shrink Factor                : 1.00000
+PreRoute extraction is honoring NDR/Shielding/ExtraSpace for clock nets.
+Using Quantus QRC technology file ...
+Grid density data update skipped
+Initializing multi-corner resistance tables ...
+PreRoute RC Extraction DONE (CPU Time: 0:00:03.1  Real Time: 0:00:02.0  MEM: 13238.977M)
+Starting delay calculation for Setup views
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8956.81)
+Total number of fetched objects 153672
+End delay calculation. (MEM=9115.46 CPU=0:00:53.1 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=9115.46 CPU=0:00:56.9 REAL=0:00:08.0)
+*** Done Building Timing Graph (cpu=0:01:10 real=0:00:10.0 totSessionCpu=5:05:41 mem=13263.7M)
+
+OptSummary:
+
+------------------------------------------------------------------
+          timeDesign Summary
+------------------------------------------------------------------
+
+Setup views included:
+ view_ss 
+
++--------------------+--------------------------------------------------+
+|     ID Number      |                 Path Group Name                  |
++--------------------+--------------------------------------------------+
+|         1          |cg_enable_group_CLK_ASCON                         |
+|         2          |cg_enable_group_CLK_CORDIC                        |
+|         3          |cg_enable_group_CLK_CPU                           |
+|         4          |cg_enable_group_CLK_DBG                           |
+|         5          |cg_enable_group_CLK_GPIO                          |
+|         6          |cg_enable_group_CLK_I2C                           |
+|         7          |cg_enable_group_CLK_PWM                           |
+|         8          |cg_enable_group_CLK_SPI                           |
+|         9          |cg_enable_group_CLK_SYS                           |
+|         10         |cg_enable_group_CLK_TCK                           |
+|         11         |cg_enable_group_CLK_TIM0                          |
+|         12         |cg_enable_group_CLK_TIM1                          |
+|         13         |cg_enable_group_CLK_UART                          |
+|         14         |cg_enable_group_CLK_UART1                         |
++--------------------+--------------------------------------------------+
+
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|     Setup mode     |   all   | reg2reg |reg2cgate| default |   C2O   |   I2C   |   I2O   |1:cg_..ON|2:cg_..IC|3:cg_..PU|4:cg_..BG|5:cg_..IO|6:cg_..2C|7:cg_..WM|8:cg_..PI|9:cg_..YS|10:cg..CK|11:cg..M0|12:cg..M1|13:cg..RT|14:cg..T1|
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|           WNS (ns):|  0.294  |  0.531  |  1.104  |  0.000  |  0.294  |  0.459  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|           TNS (ns):|  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|    Violating Paths:|    0    |    0    |    0    |    0    |    0    |    0    |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|          All Paths:|  53452  |  51661  |  1635   |    0    |   106   |   101   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+
++----------------+-------------------------------+------------------+
+|                |              Real             |       Total      |
+|    DRVs        +------------------+------------+------------------|
+|                |  Nr nets(terms)  | Worst Vio  |  Nr nets(terms)  |
++----------------+------------------+------------+------------------+
+|   max_cap      |      0 (0)       |   0.000    |      0 (0)       |
+|   max_tran     |      1 (1)       |   -0.000   |      6 (6)       |
+|   max_fanout   |      0 (0)       |     0      |    402 (402)     |
+|   max_length   |      0 (0)       |     0      |      0 (0)       |
++----------------+------------------+------------+------------------+
+
+Density: 25.600%
+Routing Overflow: 0.00% H and 0.00% V
+------------------------------------------------------------------
+Reported timing to dir ./reports/timing_postCTS
+Total CPU time: 87.7 sec
+Total Real time: 24.0 sec
+Total Memory Usage: 13269.664062 Mbytes
+*** timeDesign #3 [finish] () : cpu/real = 0:01:27.7/0:00:23.8 (3.7), totSession cpu/real = 5:05:48.1/1:16:52.9 (4.0), mem = 13269.7M
+<CMD> timeDesign -postCTS -hold -outDir ./reports/timing_postCTS_hold -prefix postCTS
+*** timeDesign #4 [begin] () : totSession cpu/real = 5:05:48.1/1:16:52.9 (4.0), mem = 13269.7M
+Start to check current routing status for nets...
+All nets are already routed correctly.
+End to check current routing status for nets (mem=13258.0M)
+Starting delay calculation for Hold views
+AAE_INFO: opIsDesignInPostRouteState() is 0
+#################################################################################
+# Design Stage: PreRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC Non-OCV 
+# Parasitics Mode: No SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Calculate delays in BcWc mode...
+Calculate delays in BcWc mode...
+Start delay calculation (fullDC) (8 T). (MEM=8948.3)
+*** Calculating scaling factor for libset_ff libraries using the default operating condition of each library.
+Total number of fetched objects 153672
+Total number of fetched objects 153672
+End delay calculation. (MEM=9149.76 CPU=0:01:30 REAL=0:00:12.0)
+End delay calculation (fullDC). (MEM=9149.76 CPU=0:01:37 REAL=0:00:13.0)
+*** Done Building Timing Graph (cpu=0:01:50 real=0:00:16.0 totSessionCpu=5:07:41 mem=13263.7M)
+
+OptSummary:
+
+------------------------------------------------------------------
+          timeDesign Summary
+------------------------------------------------------------------
+
+Hold views included:
+ view_ff view_tt 
+
++--------------------+--------------------------------------------------+
+|     ID Number      |                 Path Group Name                  |
++--------------------+--------------------------------------------------+
+|         1          |cg_enable_group_CLK_ASCON                         |
+|         2          |cg_enable_group_CLK_CORDIC                        |
+|         3          |cg_enable_group_CLK_CPU                           |
+|         4          |cg_enable_group_CLK_DBG                           |
+|         5          |cg_enable_group_CLK_GPIO                          |
+|         6          |cg_enable_group_CLK_I2C                           |
+|         7          |cg_enable_group_CLK_PWM                           |
+|         8          |cg_enable_group_CLK_SPI                           |
+|         9          |cg_enable_group_CLK_SYS                           |
+|         10         |cg_enable_group_CLK_TCK                           |
+|         11         |cg_enable_group_CLK_TIM0                          |
+|         12         |cg_enable_group_CLK_TIM1                          |
+|         13         |cg_enable_group_CLK_UART                          |
+|         14         |cg_enable_group_CLK_UART1                         |
++--------------------+--------------------------------------------------+
+
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|     Hold mode      |   all   | reg2reg |reg2cgate| default |   C2O   |   I2C   |   I2O   |1:cg_..ON|2:cg_..IC|3:cg_..PU|4:cg_..BG|5:cg_..IO|6:cg_..2C|7:cg_..WM|8:cg_..PI|9:cg_..YS|10:cg..CK|11:cg..M0|12:cg..M1|13:cg..RT|14:cg..T1|
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+|           WNS (ns):| -0.001  | -0.001  | -0.000  |  0.000  |  0.628  |  0.397  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|           TNS (ns):| -0.013  | -0.013  |  0.000  |  0.000  |  0.000  |  0.000  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|    Violating Paths:|   127   |   125   |    2    |    0    |    0    |    0    |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|          All Paths:|  53347  |  51556  |  1635   |    0    |   106   |   101   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
++--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
+
+Density: 25.600%
+Routing Overflow: 0.00% H and 0.00% V
+------------------------------------------------------------------
+Reported timing to dir ./reports/timing_postCTS_hold
+Total CPU time: 114.95 sec
+Total Real time: 19.0 sec
+Total Memory Usage: 13252.042969 Mbytes
+*** timeDesign #4 [finish] () : cpu/real = 0:01:55.0/0:00:18.8 (6.1), totSession cpu/real = 5:07:43.1/1:17:11.7 (4.0), mem = 13252.0M
+<CMD> saveDesign ./saved/top_soc_postCTS.enc
+#% Begin save design ... (date=09/17 20:09:44, mem=8779.6M)
+INFO: Current data have to be saved into a temporary db: 'top_soc_postCTS.enc.dat.tmp' first. It will be renamed to the correct name 'top_soc_postCTS.enc.dat' after the old db was deleted.
+% Begin Save ccopt configuration ... (date=09/17 20:09:44, mem=8779.6M)
+% End Save ccopt configuration ... (date=09/17 20:09:45, total cpu=0:00:01.0, real=0:00:01.0, peak res=8779.6M, current mem=8779.6M)
+% Begin Save netlist data ... (date=09/17 20:09:46, mem=8779.7M)
+Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/vbin/top_soc.v.bin in multi-threaded mode...
+% End Save netlist data ... (date=09/17 20:09:46, total cpu=0:00:00.5, real=0:00:00.0, peak res=8783.4M, current mem=8783.4M)
+Saving symbol-table file in separate thread ...
+Saving congestion map file in separate thread ...
+Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/top_soc.route.congmap.gz ...
+% Begin Save AAE data ... (date=09/17 20:09:46, mem=8785.4M)
+Saving AAE Data ...
+% End Save AAE data ... (date=09/17 20:09:46, total cpu=0:00:00.2, real=0:00:00.0, peak res=8785.4M, current mem=8784.6M)
+Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/gui.pref.tcl ...
+Saving mode setting ...
+**WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+Saving global file ...
+*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/top_soc.bbox.lef
+Saving Drc markers ...
+... No Drc file written since there is no markers found.
+Saving special route data file in separate thread ...
+Saving PG file in separate thread ...
+Saving placement file in separate thread ...
+Saving route file in separate thread ...
+Saving property file in separate thread ...
+Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/top_soc.prop
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Thu Sep 17 20:09:48 2026)
+** Saving stdCellPlacement_binary (version# 2) ...
+Save Adaptive View Pruning View Names to Binary file
+view_ss
+*** Completed savePGFile (cpu=0:00:00.5 real=0:00:00.0 mem=13314.1M) ***
+TAT_INFO: ::saveSpecialRoute REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::savePGFile REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
+*** Completed saveProperty (cpu=0:00:01.0 real=0:00:00.0 mem=13290.1M) ***
+*** Completed saveRoute (cpu=0:00:01.8 real=0:00:02.0 mem=13290.1M) ***
+TAT_INFO: ::saveRoute REAL = 2 : CPU = 1 : MEM = 0.
+TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
+#Saving pin access data to file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/top_soc.apa ...
+#
+Saving rc congestion map /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/top_soc.congmap.gz ...
+Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/top_soc.techData.gz' ...
+Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postCTS.enc.dat.tmp/extraction/' ...
+TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
+% Begin Save power constraints data ... (date=09/17 20:09:51, mem=8791.4M)
+% End Save power constraints data ... (date=09/17 20:09:51, total cpu=0:00:00.2, real=0:00:00.0, peak res=8791.4M, current mem=8791.2M)
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+Generated self-contained design top_soc_postCTS.enc.dat.tmp
+libset_ss libset_tt libset_ff
+rc_typ rc_ff rc_ss
+mode_func
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc
+#% End save design ... (date=09/17 20:09:54, total cpu=0:00:07.8, real=0:00:10.0, peak res=8791.4M, current mem=8775.8M)
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
+*** Message Summary: 1 warning(s), 0 error(s)
+
+<CMD> fit
+<CMD> setAnalysisMode -analysisType onChipVariation -cppr both
+<CMD> setDelayCalMode -SIAware true -equivalent_waveform_model propagation
+AAE_INFO: switching setDelayCal -siAware from false to true ...
+AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
+<CMD> setExtractRCMode -engine postRoute -effortLevel medium
+**WARN: (IMPEXT-3493):	The design extraction status has been reset by set_analysis_view/update_rc_corner or setExtractRCMode  command. The parasitic data can be regenerated either by extracting the design using the extractRC command or by loading the SPEF or RCDB file(s). To prevent resetting of the extraction status, avoid changing extraction modes.
+Type 'man IMPEXT-3493' for more detail.
+<CMD> setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
+<CMD> deleteRouteBlk -name soc_sram_m3
+**WARN: (IMPFP-6001):	NO matching routing blockage found. Nothing deleted. 
+<CMD> setNanoRouteMode -reset
+<CMD> setNanoRouteMode -route_with_timing_driven true -route_with_si_driven true -route_with_via_only_for_stdcell_pin true -route_detail_fix_antenna true -route_detail_end_iteration 20
+<CMD> routeDesign -globalDetail
+#% Begin routeDesign (date=09/17 20:11:20, mem=8615.2M)
+#routeDesign: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 8615.34 (MB), peak = 9445.36 (MB)
+AAE_INFO: Pre Route call back at the beginning of routeDesign
+#**INFO: setDesignMode -flowEffort standard
+#**INFO: setDesignMode -powerEffort none
+#WARNING (NRIG-96) Selected single pass global detail route "-globalDetail". Clock eco and post optimizations will not be run. See "man NRIG-96" for more details.
+**INFO: User settings:
+setNanoRouteMode -route_detail_end_iteration                  20
+setNanoRouteMode -route_detail_fix_antenna                    true
+setNanoRouteMode -route_route_side                            front
+setNanoRouteMode -route_exp_design_mode_bottom_routing_layer  2
+setNanoRouteMode -route_exp_design_mode_top_routing_layer     7
+setNanoRouteMode -route_with_si_driven                        true
+setNanoRouteMode -route_with_timing_driven                    true
+setNanoRouteMode -route_with_via_only_for_stdcell_pin         true
+setDesignMode -bottomRoutingLayer                             2
+setDesignMode -process                                        7
+setDesignMode -topRoutingLayer                                7
+setExtractRCMode -coupled                                     true
+setExtractRCMode -coupling_c_th                               0.1
+setExtractRCMode -effortLevel                                 medium
+setExtractRCMode -engine                                      postRoute
+setExtractRCMode -relative_c_th                               1
+setExtractRCMode -total_c_th                                  0
+setDelayCalMode -enable_hier_save_restore_flow                false
+setDelayCalMode -enable_high_fanout                           true
+setDelayCalMode -enable_ideal_seq_async_pins                  false
+setDelayCalMode -eng_enablePrePlacedFlow                      false
+setDelayCalMode -engine                                       aae
+setDelayCalMode -equivalent_waveform_model                    propagation
+setDelayCalMode -ignoreNetLoad                                false
+setDelayCalMode -SIAware                                      true
+setDelayCalMode -socv_accuracy_mode                           low
+setSIMode -separate_delta_delay_on_data                       true
+
+#**INFO: multi-cut via swapping will not be performed after routing.
+#**INFO: All auto set options tuned by routeDesign will be restored to their original settings on command completion.
+Begin checking placement ... (start mem=12199.0M, init mem=12199.0M)
+*info: Placed = 148787         (Fixed = 4073)
+*info: Unplaced = 0           
+Placement Density:25.59%(339320/1325493)
+Placement Density (including fixed std cells):25.59%(339320/1325493)
+Finished checkPlace (total: cpu=0:00:02.0, real=0:00:01.0; vio checks: cpu=0:00:01.5, real=0:00:01.0; mem=12167.0M)
+
+changeUseClockNetStatus Option :  -ignoreSkipRoutingNets -noFixedNetWires 
+*** Changed status on (3979) nets in Clock.
+*** End changeUseClockNetStatus (cpu=0:00:00.0, real=0:00:00.0, mem=12167.0M) ***
+% Begin globalDetailRoute (date=09/17 20:11:21, mem=8644.7M)
+
+globalDetailRoute
+
+#Start globalDetailRoute on Thu Sep 17 20:11:21 2026
+#
+#Generating timing data, please wait...
+#152034 total nets, 151654 already routed, 151654 will ignore in trialRoute
+#View pruning: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 8650.60 (MB), peak = 9445.36 (MB)
+#Reporting timing...
+#Normalized TNS: 0.000 -> 0.000, r2r 0.000 -> 0.000, unit 1000.000, clk period 4.000 (ns)
+#OPT Pruned View (First enabled view): view_ss
+#Default setup view is reset to view_ss.
+#Stage 1: cpu time = 00:01:06, elapsed time = 00:00:11, memory = 8750.24 (MB), peak = 9445.36 (MB)
+#Library Standard Delay: 7.10ps
+#Slack threshold: 14.20ps
+#*** Analyzed 0 timing critical paths, and collected 0.
+#Stage 2: cpu time = 00:00:03, elapsed time = 00:00:02, memory = 8750.48 (MB), peak = 9445.36 (MB)
+#Stage 3: cpu time = 00:00:01, elapsed time = 00:00:01, memory = 8774.50 (MB), peak = 9445.36 (MB)
+#Stage 4: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 8774.50 (MB), peak = 9445.36 (MB)
+#Current view: view_ss view_tt 
+#Current enabled view: view_ss 
+#Generating timing data took: cpu time = 00:01:21, elapsed time = 00:00:17, memory = 8792.12 (MB), peak = 9445.36 (MB)
+#Done generating timing data.
+#WARNING (NRIG-1303) The congestion map does not match the GCELL grid. Clearing the congestion map.
+#NanoRoute Version 23.14-s088_1 NR250219-0822/23_14-UB
+#Start routing data preparation on Thu Sep 17 20:11:44 2026
+#
+#WARNING (NRDB-2040) Rule LEF_DEFAULT doesn't specify any vias that satisfy all of the area rules for layer M2 M3 M4 M5 M6 M7 M8 
+#WARNING (NRDB-778) No multicut vias which meet all area rules for LAYER M8 are defined in RULE LEF_DEFAULT. When a LEF MINIMUMCUT rule is defined for a layer, you must define multicut vias for the layer in the LEF file. Edit your LEF file and read it in again.
+#WARNING (NRDB-778) No multicut vias which meet all area rules for LAYER M9 are defined in RULE LEF_DEFAULT. When a LEF MINIMUMCUT rule is defined for a layer, you must define multicut vias for the layer in the LEF file. Edit your LEF file and read it in again.
+#WARNING (NRDB-778) No multicut vias which meet all area rules for LAYER Pad are defined in RULE LEF_DEFAULT. When a LEF MINIMUMCUT rule is defined for a layer, you must define multicut vias for the layer in the LEF file. Edit your LEF file and read it in again.
+#Rebuild pin access data for design.
+#Rebuild pin access data for option change.
+#Initial pin access analysis.
+#Detail pin access analysis.
+# M1           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M2           H   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M3           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M4           H   Track-Pitch = 0.19200    Line-2-Via Pitch = 0.19200
+# M5           V   Track-Pitch = 0.21600    Line-2-Via Pitch = 0.19200
+# M6           H   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M7           V   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M8           H   Track-Pitch = 0.38400    Line-2-Via Pitch = 0.32000
+# M9           V   Track-Pitch = 0.36000    Line-2-Via Pitch = 0.32000
+# Pad          H   Track-Pitch = 8.28000    Line-2-Via Pitch = 8.28000
+#Bottom routing layer index=2(M2), bottom routing layer for shielding=2(M2), bottom shield layer=2(M2)
+#shield_bottom_stripe_layer=1(M1), shield_top_stripe_layer=7(M7)
+#pin_access_rlayer=2(M2)
+#shield_top_dpt_rlayer=-1 top_rlayer=7 top_trim_metal_rlayer=-1 rlayer_lowest=1 bottom_rlayer=2
+#enable_trim_layer_shield=F enable_dpt_layer_shield=F has_line_end_grid=F
+#enable_dpt_layer_shield=F
+#has_line_end_grid=F
+#cpu time = 00:00:00, elapsed time = 00:00:00, memory = 9004.60 (MB), peak = 9445.36 (MB)
+#Regenerating Ggrids automatically.
+#Auto generating G-grids with size=15 tracks, using layer M3's pitch = 0.14400.
+#Using automatically generated G-grids.
+#Done routing data preparation.
+#cpu time = 00:00:03, elapsed time = 00:00:02, memory = 9015.21 (MB), peak = 9445.36 (MB)
+#
+#Summary of active signal nets routing constraints set by OPT:
+#	preferred routing layers      : 312
+#	(M4)312 
+#	preferred routing layer effort: 0
+#	preferred extra space         : 0
+#	preferred multi-cut via       : 0
+#	avoid detour                  : 0
+#	expansion ratio               : 300
+#	net priority                  : 300
+#	s2s control                   : 0
+#	avoid chaining                : 0
+#	inst-based stacking via       : 0
+#
+#Summary of active signal nets routing constraints set by USER:
+#	preferred routing layers      : 0
+#	preferred routing layer effort     : 0
+#	preferred extra space              : 0
+#	preferred multi-cut via            : 0
+#	avoid detour                       : 0
+#	net weight                         : 0
+#	avoid chaining                     : 0
+#	cell-based stacking via (required) : 0
+#	cell-based stacking via (optional) : 0
+#
+#Start timing driven prevention iteration...
+#Setup timing driven global route constraints on 0 nets
+#
+#----------------------------------------------------
+# Summary of active signal nets routing constraints
+#+--------------------------+-----------+
+#| Max Expansion Ratio      |       300 |
+#| Preferred Layer Effort   |       312 |
+#+--------------------------+-----------+
+#  Bottom Preferred Layer
+#+----------------+----------+
+#|      Layer     | OPT_LA   |
+#+----------------+----------+
+#| M4 (4)         |      312 |
+#+----------------+----------+
+#
+#----------------------------------------------------
+#Skipped timing-driven prevention.
+#cpu time = 00:00:00, elapsed time = 00:00:00, memory = 9054.72 (MB), peak = 9445.36 (MB)
+#Total number of trivial nets (e.g. < 2 pins) = 15465 (skipped).
+#Total number of routable nets = 151654.
+#Total number of nets in the design = 167119.
+#148003 routable nets do not have any wires.
+#3651 routable nets have routed wires.
+#148003 nets will be global routed.
+#704 global routed or unrouted (routable) nets have been constrained (e.g. have preferred extra spacing, require shielding etc.)
+#3651 detail routed (routable) nets have been constrained (e.g. have preferred extra spacing, require shielding etc.)
+#Using multithreading with 8 threads.
+#
+#Finished routing data preparation on Thu Sep 17 20:11:47 2026
+#
+#Cpu time = 00:00:01
+#Elapsed time = 00:00:01
+#Increased memory = 0.48 (MB)
+#Total memory = 9055.81 (MB)
+#Peak memory = 9445.36 (MB)
+#
+#
+#Start global routing on Thu Sep 17 20:11:47 2026
+#
+#
+#Start global routing initialization on Thu Sep 17 20:11:47 2026
+#
+#Number of eco nets is 328
+#
+#Start global routing data preparation on Thu Sep 17 20:11:47 2026
+#
+#Start routing resource analysis on Thu Sep 17 20:11:47 2026
+#
+#Routing resource analysis is done on Thu Sep 17 20:11:48 2026
+#
+#  Resource Analysis:
+#
+#               Routing  #Avail      #Track     #Total     %Gcell
+#  Layer      Direction   Track     Blocked      Gcell    Blocked
+#  --------------------------------------------------------------
+#  M2             H        3948        5336      694161    52.84%
+#  M3             V        9040        6671      694161    11.86%
+#  M4             H        5957        1338      694161     1.04%
+#  M5             V       10249         225      694161     0.02%
+#  M6             H        4792         182      694161     0.00%
+#  M7             V        7595         261      694161     0.00%
+#  --------------------------------------------------------------
+#  Total                  41583      21.23%     4164966    10.96%
+#
+#
+#
+#
+#Global routing data preparation is done on Thu Sep 17 20:11:48 2026
+#
+#cpu time = 00:00:03, elapsed time = 00:00:01, memory = 9149.07 (MB), peak = 9445.36 (MB)
+#
+#
+#Global routing initialization is done on Thu Sep 17 20:11:48 2026
+#
+#cpu time = 00:00:04, elapsed time = 00:00:01, memory = 9163.77 (MB), peak = 9445.36 (MB)
+#
+#Route nets in 1/3 round...
+#start global routing iteration 1...
+#cpu time = 00:00:00, elapsed time = 00:00:00, memory = 9165.44 (MB), peak = 9445.36 (MB)
+#
+#start global routing iteration 2...
+#cpu time = 00:00:01, elapsed time = 00:00:00, memory = 9154.14 (MB), peak = 9445.36 (MB)
+#
+#start global routing iteration 3...
+#cpu time = 00:00:01, elapsed time = 00:00:01, memory = 9147.91 (MB), peak = 9445.36 (MB)
+#
+#Route nets in 2/3 round...
+#start global routing iteration 4...
+#cpu time = 00:00:01, elapsed time = 00:00:00, memory = 9147.43 (MB), peak = 9445.36 (MB)
+#
+#start global routing iteration 5...
+#cpu time = 00:00:01, elapsed time = 00:00:01, memory = 9147.16 (MB), peak = 9445.36 (MB)
+#
+#start global routing iteration 6...
+#cpu time = 00:00:02, elapsed time = 00:00:01, memory = 9155.38 (MB), peak = 9445.36 (MB)
+#
+#Route nets in 3/3 round...
+#start global routing iteration 7...
+#cpu time = 00:00:09, elapsed time = 00:00:04, memory = 9247.63 (MB), peak = 9445.36 (MB)
+#
+#start global routing iteration 8...
+#cpu time = 00:00:08, elapsed time = 00:00:07, memory = 9243.42 (MB), peak = 9445.36 (MB)
+#
+#start global routing iteration 9...
+#cpu time = 00:00:45, elapsed time = 00:00:19, memory = 9303.46 (MB), peak = 9445.36 (MB)
+#
+#
+#Total number of trivial nets (e.g. < 2 pins) = 15465 (skipped).
+#Total number of routable nets = 151654.
+#Total number of nets in the design = 167119.
+#
+#151654 routable nets have routed wires.
+#704 global routed or unrouted (routable) nets have been constrained (e.g. have preferred extra spacing, require shielding etc.)
+#3651 detail routed (routable) nets have been constrained (e.g. have preferred extra spacing, require shielding etc.)
+#
+#Routed nets constraints summary:
+#---------------------------------------------------------------------------
+#        Rules   Pref Layer   Expansion Ratio   Avoid Detour   Unconstrained  
+#---------------------------------------------------------------------------
+#      Default          700               300            388          147299  
+#---------------------------------------------------------------------------
+#        Total          700               300            388          147299  
+#---------------------------------------------------------------------------
+#
+#Routing constraints summary of the whole design:
+#---------------------------------------------------------------------------
+#        Rules   Pref Layer   Expansion Ratio   Avoid Detour   Unconstrained  
+#---------------------------------------------------------------------------
+#      Default         4351               300           4039          147299  
+#---------------------------------------------------------------------------
+#        Total         4351               300           4039          147299  
+#---------------------------------------------------------------------------
+#
+#
+#  Congestion Analysis: (blocked Gcells are excluded)
+#
+#                 OverCon       OverCon       OverCon          
+#                  #Gcell        #Gcell        #Gcell    %Gcell
+#     Layer         (1-2)         (3-4)         (5-6)   OverCon
+#  ------------------------------------------------------------
+#  M2          468(0.14%)     24(0.01%)      2(0.00%)   (0.15%)
+#  M3           65(0.01%)      0(0.00%)      0(0.00%)   (0.01%)
+#  M4          472(0.07%)      3(0.00%)      0(0.00%)   (0.07%)
+#  M5           55(0.01%)      0(0.00%)      0(0.00%)   (0.01%)
+#  M6           15(0.00%)      0(0.00%)      0(0.00%)   (0.00%)
+#  M7            0(0.00%)      0(0.00%)      0(0.00%)   (0.00%)
+#  ------------------------------------------------------------
+#     Total   1075(0.03%)     27(0.00%)      2(0.00%)   (0.03%)
+#
+#  The worst congested Gcell overcon (routing demand over resource in number of tracks) = 6
+#  Overflow after GR: 0.03% H + 0.00% V
+#
+#Hotspot report including placement blocked areas
+[hotspot] +------------+---------------+---------------+-------------------------------------+
+[hotspot] |   layer    |  max hotspot  | total hotspot |            hotspot bbox             |
+[hotspot] +------------+---------------+---------------+-------------------------------------+
+[hotspot] |   M2(H)    |          0.52 |          7.28 |  1192.32   673.92  1226.88   708.48 |
+[hotspot] |   M3(V)    |          0.17 |          0.17 |   846.72   881.28   881.28   915.84 |
+[hotspot] |   M4(H)    |         14.40 |         17.17 |  1693.44    17.28  1728.00    51.84 |
+[hotspot] |   M5(V)    |          2.34 |          4.77 |  1503.36   241.92  1537.92   276.48 |
+[hotspot] |   M6(H)    |          1.56 |          8.85 |  1105.92   466.56  1140.48   501.12 |
+[hotspot] |   M7(V)    |          0.00 |          0.00 |   (none)                            |
+[hotspot] +------------+---------------+---------------+-------------------------------------+
+[hotspot] |   worst    | (M4)    14.40 | (M4)    17.17 |                                     |
+[hotspot] +------------+---------------+---------------+-------------------------------------+
+[hotspot] | all layers |          1.39 |          3.99 |                                     |
+[hotspot] +------------+---------------+---------------+-------------------------------------+
+Local HotSpot Analysis (blockage included) (3d): normalized congestion max/total hotspot area = 1.39/3.99 (area is in unit of 4 std-cell row bins)
+[hotspot] top 5 congestion hotspot bounding boxes and scores of all layers hotspot
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] | top |            hotspot bbox             | hotspot score |           module              |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  1  |  1088.64   483.84  1123.20   518.40 |        1.21   | u_core                        |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  2  |  1192.32   432.00  1226.88   466.56 |        0.69   | u_core                        |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  3  |  1192.32   362.88  1226.88   397.44 |        0.52   | u_core                        |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  4  |  1088.64   449.28  1123.20   483.84 |        0.35   | u_core                        |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+[hotspot] |  5  |  1140.48   362.88  1175.04   397.44 |        0.17   |             NA                |
+[hotspot] +-----+-------------------------------------+---------------+-------------------------------+
+#Complete Global Routing.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  454670|
+#  M2 ( 2H)     |     686893|  389405|
+#  M3 ( 3V)     |    1140759|   99249|
+#  M4 ( 4H)     |     826889|   58257|
+#  M5 ( 5V)     |    1040208|   36022|
+#  M6 ( 6H)     |     440468|    6250|
+#  M7 ( 7V)     |     186353|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4321570| 1043853|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4108973 um.
+#Total number of involved regular nets 31476
+#Maximum src to sink distance  616.0
+#Average of max src_to_sink distance  52.3
+#Average of ave src_to_sink distance  37.0
+#Total number of involved priority nets 688
+#Maximum src to sink distance for priority net 842.7
+#Average of max src_to_sink distance for priority net 168.0
+#Average of ave src_to_sink distance for priority net 131.3
+#Max overcon = 6 tracks.
+#Total overcon = 0.03%.
+#Worst layer Gcell overcon rate = 0.07%.
+#
+#Global routing statistics:
+#Cpu time = 00:01:17
+#Elapsed time = 00:00:38
+#Increased memory = 226.82 (MB)
+#Total memory = 9282.68 (MB)
+#Peak memory = 9445.36 (MB)
+#
+#Finished global routing on Thu Sep 17 20:12:25 2026
+#
+#
+#cpu time = 00:00:01, elapsed time = 00:00:00, memory = 9218.89 (MB), peak = 9445.36 (MB)
+#Start Track Assignment.
+#Done with 253421 horizontal wires in 21 hboxes and 243276 vertical wires in 33 hboxes.
+#Done with 55145 horizontal wires in 21 hboxes and 40019 vertical wires in 33 hboxes.
+#Done with 21 horizontal wires in 21 hboxes and 33 vertical wires in 33 hboxes.
+#
+#Track assignment summary:
+# layer   (wire length)   (overlap)     (long ovlp)	(with obs/pg/clk)  
+#------------------------------------------------------------------------
+# M2        654352.63 	  0.14%  	  0.00% 	  0.08%
+# M3       1074489.28 	  0.74%  	  0.29% 	  0.70%
+# M4        796180.79 	207.22%  	196.90% 	207.17%
+# M5       1011383.29 	  0.03%  	  0.02% 	  0.01%
+# M6        398040.28 	  0.02%  	  0.00% 	  0.01%
+# M7        162252.42 	  0.00%  	  0.00% 	  0.00%
+#------------------------------------------------------------------------
+# All     4096698.69  	 40.50% 	 38.35% 	  0.00%
+#Complete Track Assignment.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  454670|
+#  M2 ( 2H)     |     675799|  389405|
+#  M3 ( 3V)     |    1120146|   99249|
+#  M4 ( 4H)     |     824400|   58257|
+#  M5 ( 5V)     |    1037322|   36022|
+#  M6 ( 6H)     |     439995|    6250|
+#  M7 ( 7V)     |     186158|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4283821| 1043853|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4108973 um.
+#cpu time = 00:00:41, elapsed time = 00:00:12, memory = 9212.98 (MB), peak = 9445.36 (MB)
+#
+#number of short segments in preferred routing layers
+#	M4        M5        M6        M7        Total 
+#	386       322       109       19        836       
+#
+#Start post global route fixing for timing critical nets ...
+#
+#* Updating design timing data...
+#Extracting RC...
+Un-suppress "**WARN ..." messages.
+#
+#Start tQuantus RC extraction...
+#Finish check_net_pin_list step Enter extract_rc_after_routing
+#Extract in track assign mode
+#Start extraction data preparation
+#Start building rc corner(s)...
+#Number of RC Corner = 3
+#Corner rc_typ /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 25.000000 (real) 
+#Corner rc_ff /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 0.000000 (real) 
+#Corner rc_ss /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 100.000000 (real) 
+#(i=10, n=10 4000)
+#LISD -> M1 (1)
+#M1 -> M2 (2)
+#M2 -> M3 (3)
+#M3 -> M4 (4)
+#M4 -> M5 (5)
+#M5 -> M6 (6)
+#M6 -> M7 (7)
+#M7 -> M8 (8)
+#M8 -> M9 (9)
+#M9 -> Pad (10)
+#SADV_On
+# Corner(s) : 
+#rc_typ [25.00] 
+#rc_ff [ 0.00] 
+#rc_ss [100.00]
+# Corner id: 0
+# Layout Scale: 1.000000
+# Has Metal Fill model: yes
+# Temperature was set
+# Temperature : 25.000000
+# Ref. Temp   : 25.000000
+# Corner id: 1
+# Layout Scale: 1.000000
+# Has Metal Fill model: yes
+# Temperature was set
+# Temperature : 0.000000
+# Ref. Temp   : 25.000000
+# Corner id: 2
+# Layout Scale: 1.000000
+# Has Metal Fill model: yes
+# Temperature was set
+# Temperature : 100.000000
+# Ref. Temp   : 25.000000
+#SADV_Off
+#
+#layer[1] tech width 288 != ict width 400.0
+#
+#layer[1] tech spc 288 != ict spc 464.0
+#
+#layer[4] tech width 384 != ict width 288.0
+#
+#layer[4] tech spc 384 != ict spc 288.0
+#
+#layer[6] tech width 512 != ict width 384.0
+#
+#layer[6] tech spc 512 != ict spc 384.0
+#
+#layer[8] tech width 640 != ict width 512.0
+#
+#layer[8] tech spc 640 != ict spc 512.0
+#
+#layer[10] tech spc 32000 != ict spc 640.0
+#total pattern=220 [30, 605]
+#Reading previously stored rc_model file ( rc_model.bin ) ...
+#found CAPMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06
+#found RESMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 25.000000 
+#found RESMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 0.000000 
+#found RESMODEL /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_scaled4xV06 100.000000 
+#CCE Version read = IQuantus/TQuantus 23.1.1-s336
+#number model r/c [3,1] [30,605] read
+#Build RC corners: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 9224.88 (MB), peak = 9445.36 (MB)
+#Finish check_net_pin_list step Enter extract
+#Start init net ripin tree building
+#Finish init net ripin tree building
+#Cpu time = 00:00:00
+#Elapsed time = 00:00:00
+#Increased memory = 0.00 (MB)
+#Total memory = 9237.54 (MB)
+#Peak memory = 9445.36 (MB)
+#Using multithreading with 8 threads.
+#begin processing metal fill model file
+#end processing metal fill model file
+#
+#Start Post Track Assignment Wire Spread.
+#Done with 52263 horizontal wires in 21 hboxes and 60110 vertical wires in 33 hboxes.
+#Complete Post Track Assignment Wire Spread.
+#
+#Length limit = 200 pitches
+#opt mode = 2
+#Finish check_net_pin_list step Fix net pin list
+#Start generate extraction boxes.
+#
+#Extract using 30 x 30 Hboxes
+#36x24 initial hboxes
+#Use area based hbox pruning.
+#0/0 hboxes pruned.
+#Complete generating extraction boxes.
+#Start step Extraction
+#Extract 726 hboxes with 8 threads on machine with  2.90GHz 1024KB Cache 12CPU...
+#Process 0 special clock nets for rc extraction
+#Total 151654 nets were built. 44055 nodes added to break long wires. 0 net(s) have incomplete routes.
+#Run Statistics for Extraction:
+#   Cpu time = 00:00:59, elapsed time = 00:00:08 .
+#   Increased memory =    87.26 (MB), total memory =  9396.01 (MB), peak memory =  9445.36 (MB)
+#
+#Scale RC for track assignment: res 1.000000; cap 1.000000; clk res 1.000000; clk cap 1.000000, xcap 1.000000
+#Simplify RC tree: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 9330.98 (MB), peak = 9445.36 (MB)
+#RC Statistics: 727301 Res, 496725 Ground Cap, 75912 XCap (Edge to Edge)
+#RC V/H edge ratio: 0.47, Avg V/H Edge Length: 10307.90 (469724), Avg L-Edge Length: 30649.19 (179256)
+#Register nets and terms for rcdb /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1141753_f4850865-bd19-42ad-b3b6-0432f401c6d9_user1-EliteMini_user1_hNoxgQ/nr1141753_71BGXD.rcdb.d
+#Finish registering nets and terms for rcdb.
+#Start writing RC data.
+#Finish writing RC data
+#Finish writing rcdb with 1000918 nodes, 849264 edges, and 188876 xcaps
+#44055 inserted nodes are removed
+#Restored 0 tie nets, 0 tie snets, 0 partial nets
+#Remove Post Track Assignment Wire Spread
+Restoring parasitic data from file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1141753_f4850865-bd19-42ad-b3b6-0432f401c6d9_user1-EliteMini_user1_hNoxgQ/nr1141753_71BGXD.rcdb.d' ...
+Reading RCDB with compressed RC data.
+Reading RCDB with compressed RC data.
+Begin read_parasitics... (cpu: 0:00:00.0 real: 0:00:00.0 mem: 13942.844M)
+Following multi-corner parasitics specified:
+	/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1141753_f4850865-bd19-42ad-b3b6-0432f401c6d9_user1-EliteMini_user1_hNoxgQ/nr1141753_71BGXD.rcdb.d (rcdb)
+Reading RCDB with compressed RC data.
+		Cell top_soc has rcdb /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1141753_f4850865-bd19-42ad-b3b6-0432f401c6d9_user1-EliteMini_user1_hNoxgQ/nr1141753_71BGXD.rcdb.d specified
+Cell top_soc, hinst 
+Reading RCDB with compressed RC data.
+Done read_parasitics... (cpu: 0:00:01.9 real: 0:00:00.0 mem: 13942.844M)
+#
+#Restore RCDB.
+#Remove Post Track Assignment Wire Spread
+#
+#Complete tQuantus RC extraction.
+#Cpu time = 00:01:35
+#Elapsed time = 00:00:25
+#Increased memory = -320.89 (MB)
+#Total memory = 8896.05 (MB)
+#Peak memory = 9445.36 (MB)
+#
+Un-suppress "**WARN ..." messages.
+#RC Extraction Completed...
+#Reporting timing...
+#Normalized TNS: 0.000 -> 0.000, r2r 0.000 -> 0.000, unit 1000.000, clk period 4.000 (ns)
+#Stage 1: cpu time = 00:02:00, elapsed time = 00:00:20, memory = 8770.53 (MB), peak = 9445.36 (MB)
+#Library Standard Delay: 7.10ps
+#Slack threshold: 0.00ps
+#*** Analyzed 0 timing critical paths, and collected 0.
+#Stage 2: cpu time = 00:00:03, elapsed time = 00:00:02, memory = 8770.58 (MB), peak = 9445.36 (MB)
+#Stage 3: cpu time = 00:00:01, elapsed time = 00:00:01, memory = 8771.13 (MB), peak = 9445.36 (MB)
+**WARN: (TCLCMD-1403):	'The -tcl_list output format of report_timing will not be supported in future releases of the software.   Path collections generated by 'report_timing -collection'  can be used instead for programmatic access to timing report data. The  report_timing -tcl_list will continue to work in this release - but, you should update your scripts to use path collections so that they are compatible with future releases.'
+Worst slack reported in the design = 2.477411 (late)
+*** writeDesignTiming (0:00:04.2) ***
+#Stage 4: cpu time = 00:00:04, elapsed time = 00:00:04, memory = 8775.87 (MB), peak = 9445.36 (MB)
+Un-suppress "**WARN ..." messages.
+#Number of victim nets: 0
+#Number of aggressor nets: 0
+#Number of weak nets: 0
+#Number of critical nets: 0
+#	level 1 [   0.0, -1000.0]: 0 nets
+#	level 2 [   0.0, -1000.0]: 0 nets
+#	level 3 [   0.0, -1000.0]: 0 nets
+#Total number of nets: 151654
+#Total number of significant detoured timing critical nets is 0
+#Total number of selected detoured timing critical nets is 0
+#
+#----------------------------------------------------
+# Summary of active signal nets routing constraints
+#+--------------------------+-----------+
+#| Max Expansion Ratio      |       300 |
+#| Preferred Layer Effort   |       312 |
+#+--------------------------+-----------+
+#  Bottom Preferred Layer
+#+----------------+----------+
+#|      Layer     | OPT_LA   |
+#+----------------+----------+
+#| M4 (4)         |      312 |
+#+----------------+----------+
+#
+#----------------------------------------------------
+Current (total cpu=5:15:26, real=1:21:09, peak res=9445.4M, current mem=8423.4M)
+top_soc
+------------------------------------------------------------------------------------
+CONSTRAINT READING SUMMARY                                                          
+------------------------------------------------------------------------------------
+Constraint                                        | Success        | Fail           
+------------------------------------------------------------------------------------
+set_max_delay                                     | 2              | 0              
+set_dont_touch                                    | 7              | 0              
+set_clock_uncertainty                             | 30             | 0              
+set_input_delay                                   | 110            | 0              
+set_load                                          | 230            | 0              
+set_input_transition                              | 114            | 0              
+set_disable_timing                                | 1              | 0              
+get_designs                                       | 2              | 0              
+set_max_fanout                                    | 2693           | 0              
+create_generated_clock                            | 13             | 0              
+get_lib_pins                                      | 52             | 0              
+set_false_path                                    | 4              | 0              
+set_clock_transition                              | 8              | 0              
+set_max_transition                                | 31             | 0              
+get_pins                                          | 2665           | 0              
+set_propagated_clock                              | 30             | 0              
+get_clocks                                        | 453            | 0              
+create_clock                                      | 2              | 0              
+get_cells                                         | 8              | 0              
+get_ports                                         | 702            | 0              
+set_output_delay                                  | 228            | 0              
+set_clock_gating_check                            | 26             | 0              
+current_design                                    | 1              | 0              
+------------------------------------------------------------------------------------
+Ending "Constraint file reading stats" (total cpu=0:00:00.3, real=0:00:00.0, peak res=8448.4M, current mem=8448.4M)
+Current (total cpu=5:15:27, real=1:21:10, peak res=9445.4M, current mem=8448.4M)
+Current (total cpu=5:15:27, real=1:21:10, peak res=9445.4M, current mem=8446.8M)
+------------------------------------------------------------------------------------
+CONSTRAINT READING SUMMARY                                                          
+------------------------------------------------------------------------------------
+Constraint                                        | Success        | Fail           
+------------------------------------------------------------------------------------
+group_path                                        | 19             | 0              
+get_ports                                         | 4              | 0              
+get_pins                                          | 2253           | 0              
+------------------------------------------------------------------------------------
+Ending "Constraint file reading stats" (total cpu=0:00:01.0, real=0:00:01.0, peak res=8469.3M, current mem=8469.3M)
+Current (total cpu=5:15:28, real=1:21:11, peak res=9445.4M, current mem=8469.3M)
+Current (total cpu=5:15:28, real=1:21:11, peak res=9445.4M, current mem=8469.3M)
+------------------------------------------------------------------------------------
+CONSTRAINT READING SUMMARY                                                          
+------------------------------------------------------------------------------------
+Constraint                                        | Success        | Fail           
+------------------------------------------------------------------------------------
+set_timing_derate                                 | 168            | 0              
+get_cells                                         | 168            | 0              
+------------------------------------------------------------------------------------
+Ending "Constraint file reading stats" (total cpu=0:00:00.2, real=0:00:00.0, peak res=8471.4M, current mem=8471.4M)
+Current (total cpu=5:15:29, real=1:21:11, peak res=9445.4M, current mem=8471.4M)
+Current (total cpu=5:15:29, real=1:21:11, peak res=9445.4M, current mem=8471.4M)
+------------------------------------------------------------------------------------
+CONSTRAINT READING SUMMARY                                                          
+------------------------------------------------------------------------------------
+Constraint                                        | Success        | Fail           
+------------------------------------------------------------------------------------
+set_timing_derate                                 | 168            | 0              
+get_cells                                         | 168            | 0              
+------------------------------------------------------------------------------------
+Ending "Constraint file reading stats" (total cpu=0:00:00.2, real=0:00:01.0, peak res=8473.3M, current mem=8473.3M)
+Current (total cpu=5:15:29, real=1:21:12, peak res=9445.4M, current mem=8473.3M)
+#cpu time = 00:00:01, elapsed time = 00:00:00, memory = 8473.46 (MB), peak = 9445.36 (MB)
+#* Importing design timing data...
+#Number of victim nets: 0
+#Number of aggressor nets: 0
+#Number of weak nets: 0
+#Number of critical nets: 0
+#	level 1 [   0.0, -1000.0]: 0 nets
+#	level 2 [   0.0, -1000.0]: 0 nets
+#	level 3 [   0.0, -1000.0]: 0 nets
+#Total number of nets: 151654
+#
+#timing driven effort level: 3
+#Start Track Assignment With Timing Driven.
+#Done with 9430 horizontal wires in 21 hboxes and 8051 vertical wires in 33 hboxes.
+#Done with 1523 horizontal wires in 21 hboxes and 1101 vertical wires in 33 hboxes.
+#Done with 21 horizontal wires in 21 hboxes and 33 vertical wires in 33 hboxes.
+#
+#Track assignment summary:
+# layer   (wire length)   (overlap)     (long ovlp)	(with obs/pg/clk)  
+#------------------------------------------------------------------------
+# M2        653747.54 	  0.11%  	  0.00% 	  0.07%
+# M3       1074357.05 	  0.73%  	  0.29% 	  0.70%
+# M4        796164.63 	207.20%  	196.89% 	207.16%
+# M5       1011303.74 	  0.03%  	  0.02% 	  0.01%
+# M6        398048.99 	  0.09%  	  0.00% 	  0.02%
+# M7        162260.02 	  0.03%  	  0.00% 	  0.01%
+#------------------------------------------------------------------------
+# All     4095881.97  	 40.50% 	 38.35% 	  0.01%
+#Complete Track Assignment With Timing Driven.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  454670|
+#  M2 ( 2H)     |     675132|  389405|
+#  M3 ( 3V)     |    1120065|   99249|
+#  M4 ( 4H)     |     824426|   58257|
+#  M5 ( 5V)     |    1037259|   36022|
+#  M6 ( 6H)     |     440008|    6250|
+#  M7 ( 7V)     |     186164|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4283055| 1043853|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4108973 um.
+#cpu time = 00:00:28, elapsed time = 00:00:09, memory = 8474.75 (MB), peak = 9445.36 (MB)
+#
+#Routing data preparation, pin analysis, global routing and track assignment statistics:
+#Cpu time = 00:06:32
+#Elapsed time = 00:02:05
+#Increased memory = -503.13 (MB)
+#Total memory = 8475.09 (MB)
+#Peak memory = 9445.36 (MB)
+#Using multithreading with 8 threads.
+#Start reading timing information from file .timing_file_1141753.tif.gz ...
+#Read in timing information for 174 ports, 148787 instances from timing file .timing_file_1141753.tif.gz.
+#
+#Start Detail Routing..
+#start initial detail routing ...
+#    completing 10% with 1153 violations
+#    elapsed time = 00:00:06, memory = 8900.26 (MB)
+#    completing 20% with 8429 violations
+#    elapsed time = 00:00:29, memory = 8867.55 (MB)
+#    completing 30% with 8680 violations
+#    elapsed time = 00:00:32, memory = 8870.16 (MB)
+#    completing 40% with 12549 violations
+#    elapsed time = 00:00:56, memory = 8917.74 (MB)
+#    completing 50% with 13058 violations
+#    elapsed time = 00:01:01, memory = 8923.13 (MB)
+#    completing 60% with 13253 violations
+#    elapsed time = 00:01:07, memory = 8919.15 (MB)
+#    completing 70% with 14996 violations
+#    elapsed time = 00:01:34, memory = 8901.57 (MB)
+#    completing 80% with 14988 violations
+#    elapsed time = 00:01:38, memory = 8907.12 (MB)
+#    completing 90% with 15373 violations
+#    elapsed time = 00:02:05, memory = 8930.08 (MB)
+#    completing 100% with 15503 violations
+#    elapsed time = 00:02:09, memory = 8936.07 (MB)
+#   number of violations = 15505
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+-------+------+-------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| PinAcc| EolKO| CorSpc| Others| Totals|
+#---------+-------+-------+------+-------+------+-------+-------+-------+
+#  M1     |      0|      0|     0|      0|  1515|      0|      0|   1515|
+#  M2     |   3588|   2782|   593|    431|  4068|     71|      0|  11533|
+#  M3     |     56|     29|    33|      0|   163|      3|    164|    448|
+#  M4     |     37|     38|    25|      0|  1643|     15|    198|   1956|
+#  M5     |      1|      3|    22|      0|    11|      1|      0|     38|
+#  M6     |      3|      3|     4|      0|     5|      0|      0|     15|
+#  Totals |   3685|   2855|   677|    431|  7405|     90|    362|  15505|
+#---------+-------+-------+------+-------+------+-------+-------+-------+
+#
+#82558 out of 148787 instances (55.5%) need to be verified(marked ipoed), dirty area = 3.6%.
+#   number of violations = 15695
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+-------+------+-------+-------+-------+
+#  -      | MetSpc| EOLSpc| Short| PinAcc| EolKO| OffGrd| Others| Totals|
+#---------+-------+-------+------+-------+------+-------+-------+-------+
+#  M1     |      0|      0|     0|      0|  1515|      0|      0|   1515|
+#  M2     |   3594|   2802|   595|    474|  4075|      0|     71|  11611|
+#  M3     |     56|     30|    32|      0|   164|      1|    176|    459|
+#  M4     |     36|     38|    21|      0|  1678|    160|    125|   2058|
+#  M5     |      1|      4|    18|      0|    11|      1|      2|     37|
+#  M6     |      3|      3|     4|      0|     5|      0|      0|     15|
+#  Totals |   3690|   2877|   670|    474|  7448|    162|    374|  15695|
+#---------+-------+-------+------+-------+------+-------+-------+-------+
+#
+#cpu time = 00:20:47, elapsed time = 00:02:37, memory = 8415.11 (MB), peak = 9445.36 (MB)
+#start 1st optimization iteration ...
+#    completing 10% with 11743 violations
+#    elapsed time = 00:00:06, memory = 8976.61 (MB)
+#    completing 20% with 9766 violations
+#    elapsed time = 00:00:08, memory = 8991.71 (MB)
+#    completing 30% with 8734 violations
+#    elapsed time = 00:00:09, memory = 8880.59 (MB)
+#    completing 40% with 8083 violations
+#    elapsed time = 00:00:10, memory = 8877.66 (MB)
+#    completing 50% with 6119 violations
+#    elapsed time = 00:00:14, memory = 8874.13 (MB)
+#    completing 60% with 4728 violations
+#    elapsed time = 00:00:15, memory = 8883.93 (MB)
+#    completing 70% with 4069 violations
+#    elapsed time = 00:00:16, memory = 8881.34 (MB)
+#    completing 80% with 2690 violations
+#    elapsed time = 00:00:19, memory = 8886.05 (MB)
+#    completing 90% with 1925 violations
+#    elapsed time = 00:00:20, memory = 8885.20 (MB)
+#    completing 100% with 1147 violations
+#    elapsed time = 00:00:22, memory = 8882.82 (MB)
+#   number of violations = 1147
+#
+#  By Layer and Type:
+#
+#---------+-------+------+-------+-------+------+-------+-------+-------+
+#  -      | EOLSpc| Short| PinAcc| CShort| EolKO| OffGrd| Others| Totals|
+#---------+-------+------+-------+-------+------+-------+-------+-------+
+#  M1     |      0|     0|      0|      0|     1|      0|      0|      1|
+#  M2     |     84|    19|    490|      0|   213|      0|     19|    825|
+#  M3     |      0|     5|      0|     38|    30|      0|     38|    111|
+#  M4     |      1|     0|      0|      0|   105|     94|      2|    202|
+#  M5     |      0|     0|      0|      0|     0|      1|      0|      1|
+#  M6     |      2|     1|      0|      0|     2|      0|      2|      7|
+#  Totals |     87|    25|    490|     38|   351|     95|     61|   1147|
+#---------+-------+------+-------+-------+------+-------+-------+-------+
+#
+#cpu time = 00:02:53, elapsed time = 00:00:22, memory = 8034.79 (MB), peak = 9445.36 (MB)
+#start 2nd optimization iteration ...
+#   number of violations = 652
+#
+#  By Layer and Type:
+#
+#---------+-------+------+-------+-------+------+-------+-------+-------+
+#  -      | EOLSpc| Short| PinAcc| CShort| EolKO| OffGrd| Others| Totals|
+#---------+-------+------+-------+-------+------+-------+-------+-------+
+#  M1     |      0|     0|      0|      0|     0|      0|      0|      0|
+#  M2     |     16|     5|    491|      0|    14|      0|      0|    526|
+#  M3     |      0|     4|      0|     38|    11|      0|      7|     60|
+#  M4     |      0|     0|      0|      0|    22|     37|      0|     59|
+#  M5     |      0|     0|      0|      0|     0|      1|      0|      1|
+#  M6     |      2|     0|      0|      0|     2|      0|      2|      6|
+#  Totals |     18|     9|    491|     38|    49|     38|      9|    652|
+#---------+-------+------+-------+-------+------+-------+-------+-------+
+#
+#cpu time = 00:00:14, elapsed time = 00:00:02, memory = 8034.45 (MB), peak = 9445.36 (MB)
+#start 3rd optimization iteration ...
+#   number of violations = 129
+#
+#  By Layer and Type:
+#
+#---------+------+-------+-------+------+-----+-------+-------+-------+
+#  -      | NSMet| PinAcc| CShort| EolKO| Rect| OffGrd| Others| Totals|
+#---------+------+-------+-------+------+-----+-------+-------+-------+
+#  M1     |     0|      0|      0|     0|    0|      0|      0|      0|
+#  M2     |     0|     28|      0|     2|    0|      0|      3|     33|
+#  M3     |     3|      0|     38|     7|    3|      0|      1|     52|
+#  M4     |     0|      0|      0|    16|    0|     27|      0|     43|
+#  M5     |     0|      0|      0|     0|    0|      1|      0|      1|
+#  Totals |     3|     28|     38|    25|    3|     28|      4|    129|
+#---------+------+-------+-------+------+-----+-------+-------+-------+
+#
+#cpu time = 00:00:15, elapsed time = 00:00:02, memory = 8034.70 (MB), peak = 9445.36 (MB)
+#start 4th optimization iteration ...
+#   number of violations = 71
+#
+#  By Layer and Type:
+#
+#---------+-------+-------+------+-------+-----+-------+-------+-------+
+#  -      | PinAcc| CShort| EolKO| WidTbl| Rect| OffGrd| Others| Totals|
+#---------+-------+-------+------+-------+-----+-------+-------+-------+
+#  M1     |      0|      0|     0|      0|    0|      0|      0|      0|
+#  M2     |      2|      0|     0|      0|    0|      0|      1|      3|
+#  M3     |      0|     38|     6|      2|    2|      0|      2|     50|
+#  M4     |      0|      0|     2|      0|    0|     16|      0|     18|
+#  Totals |      2|     38|     8|      2|    2|     16|      3|     71|
+#---------+-------+-------+------+-------+-----+-------+-------+-------+
+#
+#cpu time = 00:00:04, elapsed time = 00:00:01, memory = 8034.10 (MB), peak = 9445.36 (MB)
+#start 5th optimization iteration ...
+#   number of violations = 50
+#
+#  By Layer and Type:
+#
+#---------+------+------+-------+------+-------+-----+-------+
+#  -      | NSMet| Short| CShort| EolKO| WidTbl| Rect| Totals|
+#---------+------+------+-------+------+-------+-----+-------+
+#  M1     |     0|     0|      0|     0|      0|    0|      0|
+#  M2     |     0|     0|      0|     0|      0|    0|      0|
+#  M3     |     1|     1|     38|     5|      1|    2|     48|
+#  M4     |     0|     0|      0|     2|      0|    0|      2|
+#  Totals |     1|     1|     38|     7|      1|    2|     50|
+#---------+------+------+-------+------+-------+-----+-------+
+#
+#cpu time = 00:00:03, elapsed time = 00:00:00, memory = 8035.65 (MB), peak = 9445.36 (MB)
+#start 6th optimization iteration ...
+#   number of violations = 47
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+-----+-------+
+#  -      | Short| CShort| EolKO| WidTbl| Rect| Totals|
+#---------+------+-------+------+-------+-----+-------+
+#  M1     |     0|      0|     0|      0|    0|      0|
+#  M2     |     0|      0|     0|      0|    0|      0|
+#  M3     |     1|     38|     3|      1|    1|     44|
+#  M4     |     0|      0|     3|      0|    0|      3|
+#  Totals |     1|     38|     6|      1|    1|     47|
+#---------+------+-------+------+-------+-----+-------+
+#
+#cpu time = 00:00:04, elapsed time = 00:00:01, memory = 8035.49 (MB), peak = 9445.36 (MB)
+#start 7th optimization iteration ...
+#   number of violations = 43
+#
+#  By Layer and Type:
+#
+#---------+------+------+-------+------+-----+-------+
+#  -      | NSMet| Short| CShort| EolKO| Rect| Totals|
+#---------+------+------+-------+------+-----+-------+
+#  M1     |     0|     0|      0|     0|    0|      0|
+#  M2     |     0|     0|      0|     0|    0|      0|
+#  M3     |     1|     1|     36|     2|    1|     41|
+#  M4     |     0|     0|      0|     2|    0|      2|
+#  Totals |     1|     1|     36|     4|    1|     43|
+#---------+------+------+-------+------+-----+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.47 (MB), peak = 9445.36 (MB)
+#start 8th optimization iteration ...
+#   number of violations = 41
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     35|     2|     38|
+#  M4     |     0|      0|     3|      3|
+#  Totals |     1|     35|     5|     41|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.61 (MB), peak = 9445.36 (MB)
+#start 9th optimization iteration ...
+#   number of violations = 37
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     33|     1|     35|
+#  M4     |     0|      0|     2|      2|
+#  Totals |     1|     33|     3|     37|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.43 (MB), peak = 9445.36 (MB)
+#start 10th optimization iteration ...
+#   number of violations = 36
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     32|     2|     35|
+#  M4     |     0|      0|     1|      1|
+#  Totals |     1|     32|     3|     36|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.54 (MB), peak = 9445.36 (MB)
+#start 11th optimization iteration ...
+#   number of violations = 37
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     32|     1|     34|
+#  M4     |     0|      0|     3|      3|
+#  Totals |     1|     32|     4|     37|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.48 (MB), peak = 9445.36 (MB)
+#start 12th optimization iteration ...
+#   number of violations = 35
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     31|     2|     34|
+#  M4     |     0|      0|     1|      1|
+#  Totals |     1|     31|     3|     35|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:03, elapsed time = 00:00:00, memory = 8035.69 (MB), peak = 9445.36 (MB)
+#start 13th optimization iteration ...
+#   number of violations = 33
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     29|     1|     31|
+#  M4     |     0|      0|     2|      2|
+#  Totals |     1|     29|     3|     33|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.48 (MB), peak = 9445.36 (MB)
+#start 14th optimization iteration ...
+#   number of violations = 32
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     28|     2|     31|
+#  M4     |     0|      0|     1|      1|
+#  Totals |     1|     28|     3|     32|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.62 (MB), peak = 9445.36 (MB)
+#start 15th optimization iteration ...
+#   number of violations = 32
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     28|     1|     30|
+#  M4     |     0|      0|     2|      2|
+#  Totals |     1|     28|     3|     32|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.49 (MB), peak = 9445.36 (MB)
+#start 16th optimization iteration ...
+#   number of violations = 32
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     28|     2|     31|
+#  M4     |     0|      0|     0|      0|
+#  M5     |     0|      0|     1|      1|
+#  Totals |     1|     28|     3|     32|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.62 (MB), peak = 9445.36 (MB)
+#start 17th optimization iteration ...
+#   number of violations = 31
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     28|     1|     30|
+#  M4     |     0|      0|     1|      1|
+#  Totals |     1|     28|     2|     31|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.54 (MB), peak = 9445.36 (MB)
+#start 18th optimization iteration ...
+#   number of violations = 31
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     28|     2|     31|
+#  Totals |     1|     28|     2|     31|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:03, elapsed time = 00:00:00, memory = 8035.64 (MB), peak = 9445.36 (MB)
+#start 19th optimization iteration ...
+#   number of violations = 28
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     25|     1|     27|
+#  M4     |     0|      0|     1|      1|
+#  Totals |     1|     25|     2|     28|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:00, memory = 8035.70 (MB), peak = 9445.36 (MB)
+#start 20th optimization iteration ...
+#   number of violations = 27
+#
+#  By Layer and Type:
+#
+#---------+------+-------+------+-------+
+#  -      | Short| CShort| EolKO| Totals|
+#---------+------+-------+------+-------+
+#  M1     |     0|      0|     0|      0|
+#  M2     |     0|      0|     0|      0|
+#  M3     |     1|     25|     1|     27|
+#  Totals |     1|     25|     1|     27|
+#---------+------+-------+------+-------+
+#
+#cpu time = 00:00:02, elapsed time = 00:00:01, memory = 8035.47 (MB), peak = 9445.36 (MB)
+#Complete Detail Routing.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  473271|
+#  M2 ( 2H)     |     721683|  618233|
+#  M3 ( 3V)     |    1121776|  138714|
+#  M4 ( 4H)     |     853759|   75248|
+#  M5 ( 5V)     |    1034723|   36732|
+#  M6 ( 6H)     |     426167|    8470|
+#  M7 ( 7V)     |     193453|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4351562| 1350668|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4108973 um.
+#Total number of DRC violations = 27
+#Cpu time = 00:24:58
+#Elapsed time = 00:03:13
+#Increased memory = -476.07 (MB)
+#Total memory = 7999.03 (MB)
+#Peak memory = 9445.36 (MB)
+#
+#Start Post Route wire spreading..
+#
+#Start DRC checking..
+#   number of violations = 53
+#
+#  By Layer and Type:
+#
+#---------+------+-------+-------+------+-------+-------+
+#  -      | Short| PinAcc| CShort| EolKO| OffGrd| Totals|
+#---------+------+-------+-------+------+-------+-------+
+#  M1     |     0|      0|      0|     0|      0|      0|
+#  M2     |     0|      6|      0|     0|      0|      6|
+#  M3     |     1|      0|     25|     1|      0|     27|
+#  M4     |     0|      0|      0|     0|     20|     20|
+#  Totals |     1|      6|     25|     1|     20|     53|
+#---------+------+-------+-------+------+-------+-------+
+#
+#cpu time = 00:03:33, elapsed time = 00:00:27, memory = 8036.54 (MB), peak = 9445.36 (MB)
+#CELL_VIEW top_soc,init has 53 DRC violations
+#Total number of DRC violations = 53
+#
+#Start data preparation for wire spreading...
+#
+#Data preparation is done on Thu Sep 17 20:17:31 2026
+#
+#
+#Start Post Route Wire Spread.
+#Done with 0 horizontal wires in 42 hboxes and 0 vertical wires in 66 hboxes.
+#Complete Post Route Wire Spread.
+#
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  473271|
+#  M2 ( 2H)     |     721683|  618233|
+#  M3 ( 3V)     |    1121776|  138714|
+#  M4 ( 4H)     |     853759|   75248|
+#  M5 ( 5V)     |    1034723|   36732|
+#  M6 ( 6H)     |     426167|    8470|
+#  M7 ( 7V)     |     193453|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4351562| 1350668|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4108973 um.
+#
+#Start DRC checking..
+#   number of violations = 53
+#
+#  By Layer and Type:
+#
+#---------+------+-------+-------+------+-------+-------+
+#  -      | Short| PinAcc| CShort| EolKO| OffGrd| Totals|
+#---------+------+-------+-------+------+-------+-------+
+#  M1     |     0|      0|      0|     0|      0|      0|
+#  M2     |     0|      6|      0|     0|      0|      6|
+#  M3     |     1|      0|     25|     1|      0|     27|
+#  M4     |     0|      0|      0|     0|     20|     20|
+#  Totals |     1|      6|     25|     1|     20|     53|
+#---------+------+-------+-------+------+-------+-------+
+#
+#cpu time = 00:03:33, elapsed time = 00:00:27, memory = 8038.61 (MB), peak = 9445.36 (MB)
+#CELL_VIEW top_soc,init has 53 DRC violations
+#Total number of DRC violations = 53
+#   number of violations = 53
+#
+#  By Layer and Type:
+#
+#---------+------+-------+-------+------+-------+-------+
+#  -      | Short| PinAcc| CShort| EolKO| OffGrd| Totals|
+#---------+------+-------+-------+------+-------+-------+
+#  M1     |     0|      0|      0|     0|      0|      0|
+#  M2     |     0|      6|      0|     0|      0|      6|
+#  M3     |     1|      0|     25|     1|      0|     27|
+#  M4     |     0|      0|      0|     0|     20|     20|
+#  Totals |     1|      6|     25|     1|     20|     53|
+#---------+------+-------+-------+------+-------+-------+
+#
+#cpu time = 00:03:53, elapsed time = 00:00:33, memory = 8002.41 (MB), peak = 9445.36 (MB)
+#CELL_VIEW top_soc,init has 53 DRC violations
+#Total number of DRC violations = 53
+#Post Route wire spread is done.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  473271|
+#  M2 ( 2H)     |     721683|  618233|
+#  M3 ( 3V)     |    1121776|  138714|
+#  M4 ( 4H)     |     853759|   75248|
+#  M5 ( 5V)     |    1034723|   36732|
+#  M6 ( 6H)     |     426167|    8470|
+#  M7 ( 7V)     |     193453|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4351562| 1350668|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4108973 um.
+#detailRoute Statistics:
+#Cpu time = 00:32:31
+#Elapsed time = 00:04:16
+#Increased memory = -485.58 (MB)
+#Total memory = 7989.51 (MB)
+#Peak memory = 9445.36 (MB)
+#
+#globalDetailRoute statistics:
+#Cpu time = 00:40:38
+#Elapsed time = 00:06:46
+#Increased memory = -899.94 (MB)
+#Total memory = 7744.80 (MB)
+#Peak memory = 9445.36 (MB)
+#Number of warnings = 6
+#Total number of warnings = 12
+#Number of fails = 0
+#Total number of fails = 0
+#Complete globalDetailRoute on Thu Sep 17 20:18:07 2026
+#
+% End globalDetailRoute (date=09/17 20:18:08, total cpu=0:40:39, real=0:06:47, peak res=9378.2M, current mem=7717.6M)
+#***Restoring views
+#Default setup view is reset to view_ss.
+#Default setup view is reset to view_ss.
+AAE_INFO: Post Route call back at the end of routeDesign
+#routeDesign: cpu time = 00:40:41, elapsed time = 00:06:48, memory = 7537.46 (MB), peak = 9445.36 (MB)
+#
+#  Scalability Statistics
+#
+#----------------------------+---------+-------------+------------+
+#  routeDesign               | cpu time| elapsed time| scalability|
+#----------------------------+---------+-------------+------------+
+#  Pre Callback              | 00:00:00|     00:00:00|         1.0|
+#  Post Callback             | 00:00:00|     00:00:00|         1.0|
+#  Timing Data Generation    | 00:05:05|     00:01:12|         4.2|
+#  DB Import                 | 00:00:04|     00:00:02|         1.6|
+#  DB Export                 | 00:00:06|     00:00:03|         2.5|
+#  Cell Pin Access           | 00:00:01|     00:00:00|         1.0|
+#  Data Preparation          | 00:00:07|     00:00:05|         1.4|
+#  Global Routing            | 00:01:17|     00:00:38|         2.0|
+#  Track Assignment          | 00:01:23|     00:00:27|         3.1|
+#  Detail Routing            | 00:24:57|     00:03:13|         7.8|
+#  Post Route Wire Spreading | 00:07:29|     00:01:01|         7.4|
+#  Entire Command            | 00:40:41|     00:06:48|         6.0|
+#----------------------------+---------+-------------+------------+
+#
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   NRDB-778             3  No multicut vias which meet all area rul...
+WARNING   NRDB-2040            1  Rule %s doesn't specify any vias that sa...
+WARNING   NRIG-1303            1  The congestion map does not match the GC...
+WARNING   NRIF-38              1  Option %s%s is not a Boolean option.     
+WARNING   TCLCMD-1403          1  '%s'                                     
+*** Message Summary: 7 warning(s), 0 error(s)
+
+#% End routeDesign (date=09/17 20:18:08, total cpu=0:40:41, real=0:06:48, peak res=9378.2M, current mem=7537.5M)
+<CMD> routeDesign -viaOpt -wireOpt
+#% Begin routeDesign (date=09/17 20:18:08, mem=7537.5M)
+#routeDesign: cpu time = 00:00:00, elapsed time = 00:00:00, memory = 7537.71 (MB), peak = 9445.36 (MB)
+AAE_INFO: Pre Route call back at the beginning of routeDesign
+#**INFO: setDesignMode -flowEffort standard
+#**INFO: setDesignMode -powerEffort none
+**INFO: User settings:
+setNanoRouteMode -route_detail_end_iteration                                              20
+setNanoRouteMode -route_detail_fix_antenna                                                true
+setNanoRouteMode -route_detail_use_lef_pin_taper_rule                                     true
+setNanoRouteMode -route_route_side                                                        front
+setNanoRouteMode -extract_rc_model_file                                                   rc_model.bin
+setNanoRouteMode -route_extract_third_party_compatible                                    false
+setNanoRouteMode -route_global_exp_timing_driven_use_tif_timing_engine_for_import_design  false
+setNanoRouteMode -route_exp_design_mode_bottom_routing_layer                              2
+setNanoRouteMode -route_exp_design_mode_top_routing_layer                                 7
+setNanoRouteMode -route_exp_dont_invoke_reclaim_antenna_diode                             true
+setNanoRouteMode -route_with_si_driven                                                    true
+setNanoRouteMode -route_with_timing_driven                                                true
+setNanoRouteMode -route_with_via_only_for_stdcell_pin                                     true
+setNanoRouteMode -timingEngine                                                            .timing_file_1141753.tif.gz
+setDesignMode -bottomRoutingLayer                                                         2
+setDesignMode -process                                                                    7
+setDesignMode -topRoutingLayer                                                            7
+setExtractRCMode -coupled                                                                 true
+setExtractRCMode -coupling_c_th                                                           0.1
+setExtractRCMode -effortLevel                                                             medium
+setExtractRCMode -engine                                                                  postRoute
+setExtractRCMode -relative_c_th                                                           1
+setExtractRCMode -total_c_th                                                              0
+setDelayCalMode -enable_hier_save_restore_flow                                            false
+setDelayCalMode -enable_high_fanout                                                       true
+setDelayCalMode -enable_ideal_seq_async_pins                                              false
+setDelayCalMode -eng_enablePrePlacedFlow                                                  false
+setDelayCalMode -engine                                                                   aae
+setDelayCalMode -equivalent_waveform_model                                                propagation
+setDelayCalMode -ignoreNetLoad                                                            false
+setDelayCalMode -SIAware                                                                  true
+setDelayCalMode -socv_accuracy_mode                                                       low
+setSIMode -separate_delta_delay_on_data                                                   true
+
+#**INFO: multi-cut via swapping will be performed after routing.
+#**INFO: All auto set options tuned by routeDesign will be restored to their original settings on command completion.
+Begin checking placement ... (start mem=13174.1M, init mem=13174.0M)
+*info: Placed = 148787         (Fixed = 4073)
+*info: Unplaced = 0           
+Placement Density:25.59%(339320/1325493)
+Placement Density (including fixed std cells):25.59%(339320/1325493)
+Finished checkPlace (total: cpu=0:00:02.1, real=0:00:00.0; vio checks: cpu=0:00:01.6, real=0:00:00.0; mem=13142.0M)
+
+changeUseClockNetStatus Option :  -ignoreSkipRoutingNets -noFixedNetWires 
+*** Changed status on (0) nets in Clock.
+*** End changeUseClockNetStatus (cpu=0:00:00.0, real=0:00:01.0, mem=13142.0M) ***
+#**INFO: auto set of droutePostRouteSwapVia to true
+% Begin detailRoute (date=09/17 20:18:10, mem=7534.8M)
+
+detailRoute
+
+#Start detailRoute on Thu Sep 17 20:18:10 2026
+#
+Initializing multi-corner resistance tables ...
+#NanoRoute Version 23.14-s088_1 NR250219-0822/23_14-UB
+#Start routing data preparation on Thu Sep 17 20:18:15 2026
+#
+# M1           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M2           H   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M3           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M4           H   Track-Pitch = 0.19200    Line-2-Via Pitch = 0.19200
+# M5           V   Track-Pitch = 0.21600    Line-2-Via Pitch = 0.19200
+# M6           H   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M7           V   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M8           H   Track-Pitch = 0.38400    Line-2-Via Pitch = 0.32000
+# M9           V   Track-Pitch = 0.36000    Line-2-Via Pitch = 0.32000
+# Pad          H   Track-Pitch = 8.28000    Line-2-Via Pitch = 8.28000
+#Bottom routing layer index=2(M2), bottom routing layer for shielding=2(M2), bottom shield layer=2(M2)
+#shield_bottom_stripe_layer=1(M1), shield_top_stripe_layer=7(M7)
+#pin_access_rlayer=2(M2)
+#shield_top_dpt_rlayer=-1 top_rlayer=7 top_trim_metal_rlayer=-1 rlayer_lowest=1 bottom_rlayer=2
+#enable_trim_layer_shield=F enable_dpt_layer_shield=F has_line_end_grid=F
+#enable_dpt_layer_shield=F
+#has_line_end_grid=F
+#cpu time = 00:00:00, elapsed time = 00:00:00, memory = 7556.68 (MB), peak = 9445.36 (MB)
+#Regenerating Ggrids automatically.
+#Auto generating G-grids with size=15 tracks, using layer M3's pitch = 0.14400.
+#Using automatically generated G-grids.
+#Done routing data preparation.
+#cpu time = 00:00:06, elapsed time = 00:00:04, memory = 7565.77 (MB), peak = 9445.36 (MB)
+#Start reading timing information from file .timing_file_1141753.tif.gz ...
+#Read in timing information for 174 ports, 148787 instances from timing file .timing_file_1141753.tif.gz.
+#
+#Start Post Route via swapping...
+#   number of violations = 79
+#
+#  By Layer and Type:
+#
+#---------+------+-------+-------+------+-------+-------+
+#  -      | Short| PinAcc| CShort| EolKO| OffGrd| Totals|
+#---------+------+-------+-------+------+-------+-------+
+#  M1     |     0|      0|      0|     0|      0|      0|
+#  M2     |     0|      7|      0|     0|      0|      7|
+#  M3     |     1|      0|     50|     1|      0|     52|
+#  M4     |     0|      0|      0|     0|     20|     20|
+#  Totals |     1|      7|     50|     1|     20|     79|
+#---------+------+-------+-------+------+-------+-------+
+#
+#cpu time = 00:00:43, elapsed time = 00:00:05, memory = 7699.47 (MB), peak = 9445.36 (MB)
+#CELL_VIEW top_soc,init has 79 DRC violations
+#Total number of DRC violations = 79
+#No via is swapped.
+#Post Route via swapping is done.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  473271|
+#  M2 ( 2H)     |     721683|  618233|
+#  M3 ( 3V)     |    1121776|  138714|
+#  M4 ( 4H)     |     853759|   75248|
+#  M5 ( 5V)     |    1034723|   36732|
+#  M6 ( 6H)     |     426167|    8470|
+#  M7 ( 7V)     |     193453|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4351562| 1350668|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4108973 um.
+#
+#detailRoute statistics:
+#Cpu time = 00:01:12
+#Elapsed time = 00:00:20
+#Increased memory = 54.44 (MB)
+#Total memory = 7589.50 (MB)
+#Peak memory = 9445.36 (MB)
+#Number of warnings = 0
+#Total number of warnings = 13
+#Number of fails = 0
+#Total number of fails = 0
+#Complete detailRoute on Thu Sep 17 20:18:30 2026
+#
+% End detailRoute (date=09/17 20:18:30, total cpu=0:01:13, real=0:00:20.0, peak res=7569.7M, current mem=7569.7M)
+% Begin detailRoute (date=09/17 20:18:30, mem=7569.7M)
+
+detailRoute
+
+#Start detailRoute on Thu Sep 17 20:18:31 2026
+#
+Initializing multi-corner resistance tables ...
+#Start reading timing information from file .timing_file_1141753.tif.gz ...
+#Read in timing information for 174 ports, 148787 instances from timing file .timing_file_1141753.tif.gz.
+#NanoRoute Version 23.14-s088_1 NR250219-0822/23_14-UB
+#Start routing data preparation on Thu Sep 17 20:18:37 2026
+#
+#Initial pin access analysis.
+#Detail pin access analysis.
+# M1           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M2           H   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M3           V   Track-Pitch = 0.14400    Line-2-Via Pitch = 0.14400
+# M4           H   Track-Pitch = 0.19200    Line-2-Via Pitch = 0.19200
+# M5           V   Track-Pitch = 0.21600    Line-2-Via Pitch = 0.19200
+# M6           H   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M7           V   Track-Pitch = 0.28800    Line-2-Via Pitch = 0.25600
+# M8           H   Track-Pitch = 0.38400    Line-2-Via Pitch = 0.32000
+# M9           V   Track-Pitch = 0.36000    Line-2-Via Pitch = 0.32000
+# Pad          H   Track-Pitch = 8.28000    Line-2-Via Pitch = 8.28000
+#Bottom routing layer index=2(M2), bottom routing layer for shielding=2(M2), bottom shield layer=2(M2)
+#shield_bottom_stripe_layer=1(M1), shield_top_stripe_layer=7(M7)
+#pin_access_rlayer=2(M2)
+#shield_top_dpt_rlayer=-1 top_rlayer=7 top_trim_metal_rlayer=-1 rlayer_lowest=1 bottom_rlayer=2
+#enable_trim_layer_shield=F enable_dpt_layer_shield=F has_line_end_grid=F
+#enable_dpt_layer_shield=F
+#has_line_end_grid=F
+#cpu time = 00:00:00, elapsed time = 00:00:00, memory = 7589.53 (MB), peak = 9445.36 (MB)
+#Regenerating Ggrids automatically.
+#Auto generating G-grids with size=15 tracks, using layer M3's pitch = 0.14400.
+#Using automatically generated G-grids.
+#Done routing data preparation.
+#cpu time = 00:00:06, elapsed time = 00:00:04, memory = 7598.84 (MB), peak = 9445.36 (MB)
+#
+#Start Post Route wire spreading..
+#
+#Start data preparation for wire spreading...
+#
+#Data preparation is done on Thu Sep 17 20:18:43 2026
+#
+#
+#Start Post Route Wire Spread.
+#Done with 0 horizontal wires in 42 hboxes and 0 vertical wires in 66 hboxes.
+#Complete Post Route Wire Spread.
+#
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  473271|
+#  M2 ( 2H)     |     721683|  618233|
+#  M3 ( 3V)     |    1121776|  138714|
+#  M4 ( 4H)     |     853759|   75248|
+#  M5 ( 5V)     |    1034723|   36732|
+#  M6 ( 6H)     |     426167|    8470|
+#  M7 ( 7V)     |     193453|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4351562| 1350668|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4108973 um.
+#   number of violations = 79
+#
+#  By Layer and Type:
+#
+#---------+------+-------+-------+------+-------+-------+
+#  -      | Short| PinAcc| CShort| EolKO| OffGrd| Totals|
+#---------+------+-------+-------+------+-------+-------+
+#  M1     |     0|      0|      0|     0|      0|      0|
+#  M2     |     0|      7|      0|     0|      0|      7|
+#  M3     |     1|      0|     50|     1|      0|     52|
+#  M4     |     0|      0|      0|     0|     20|     20|
+#  Totals |     1|      7|     50|     1|     20|     79|
+#---------+------+-------+-------+------+-------+-------+
+#
+#cpu time = 00:00:17, elapsed time = 00:00:05, memory = 7600.32 (MB), peak = 9445.36 (MB)
+#CELL_VIEW top_soc,init has 79 DRC violations
+#Total number of DRC violations = 79
+#Post Route wire spread is done.
+#
+#  Routing Statistics
+#
+#---------------+-----------+--------+
+#  Layer        | Length(um)|    Vias|
+#---------------+-----------+--------+
+#  Active ( 0H) |          0|       0|
+#  M1 ( 1V)     |          0|  473271|
+#  M2 ( 2H)     |     721683|  618233|
+#  M3 ( 3V)     |    1121776|  138714|
+#  M4 ( 4H)     |     853759|   75248|
+#  M5 ( 5V)     |    1034723|   36732|
+#  M6 ( 6H)     |     426167|    8470|
+#  M7 ( 7V)     |     193453|       0|
+#  M8 ( 8H)     |          0|       0|
+#  M9 ( 9V)     |          0|       0|
+#  Pad (10H)    |          0|       0|
+#---------------+-----------+--------+
+#  Total        |    4351562| 1350668|
+#---------------+-----------+--------+
+#
+# Total half perimeter of net bounding box: 4108973 um.
+#
+#detailRoute statistics:
+#Cpu time = 00:00:46
+#Elapsed time = 00:00:20
+#Increased memory = 7.81 (MB)
+#Total memory = 7577.51 (MB)
+#Peak memory = 9445.36 (MB)
+#Number of warnings = 0
+#Total number of warnings = 14
+#Number of fails = 0
+#Total number of fails = 0
+#Complete detailRoute on Thu Sep 17 20:18:50 2026
+#
+% End detailRoute (date=09/17 20:18:51, total cpu=0:00:46.9, real=0:00:20.0, peak res=7579.0M, current mem=7569.5M)
+#Default setup view is reset to view_ss.
+AAE_INFO: Post Route call back at the end of routeDesign
+#routeDesign: cpu time = 00:02:02, elapsed time = 00:00:43, memory = 7569.53 (MB), peak = 9445.36 (MB)
+#
+#  Scalability Statistics
+#
+#----------------------------+---------+-------------+------------+
+#  routeDesign               | cpu time| elapsed time| scalability|
+#----------------------------+---------+-------------+------------+
+#  Pre Callback              | 00:00:00|     00:00:00|         1.0|
+#  Post Callback             | 00:00:00|     00:00:00|         1.0|
+#  Timing Data Generation    | 00:00:00|     00:00:00|         1.0|
+#  DB Import                 | 00:00:23|     00:00:11|         2.2|
+#  DB Export                 | 00:00:12|     00:00:04|         2.8|
+#  Cell Pin Access           | 00:00:00|     00:00:00|         1.0|
+#  Data Preparation          | 00:00:13|     00:00:09|         1.5|
+#  Post Route Via Swapping   | 00:00:45|     00:00:08|         5.8|
+#  Post Route Wire Spreading | 00:00:18|     00:00:06|         2.8|
+#  Entire Command            | 00:02:03|     00:00:43|         2.9|
+#----------------------------+---------+-------------+------------+
+#
+*** Message Summary: 0 warning(s), 0 error(s)
+
+#% End routeDesign (date=09/17 20:18:51, total cpu=0:02:03, real=0:00:43.0, peak res=7579.0M, current mem=7569.5M)
+<CMD> clearDrc
+<CMD> verify_drc -limit 100000 -report ./verify_rpt/drc_route.rpt
+#-limit 100000                           # int, default=100000, user setting
+#-check_same_via_cell true               # bool, default=false, user setting
+#-report ./verify_rpt/drc_route.rpt      # string, default="", user setting
+ *** Starting Verify DRC (MEM: 13174.1) ***
+
+  VERIFY DRC ...... Starting Verification
+  VERIFY DRC ...... Initializing
+  VERIFY DRC ...... Deleting Existing Violations
+  VERIFY DRC ...... Creating Sub-Areas
+ VERIFY_DRC: checking all layers except Pad to Pad ...
+  VERIFY DRC ...... Using new threading
+ VERIFY DRC ...... Thread : 5 finished.
+ VERIFY DRC ...... Thread : 7 finished.
+ VERIFY DRC ...... Thread : 3 finished.
+ VERIFY DRC ...... Thread : 2 finished.
+ VERIFY DRC ...... Thread : 0 finished.
+ VERIFY DRC ...... Thread : 4 finished.
+ VERIFY DRC ...... Thread : 6 finished.
+ VERIFY DRC ...... Thread : 1 finished.
+ VERIFY_DRC: checking layers from Pad to Pad ...
+**WARN: (IMPVFG-1198):	The number of CPUs requested 8 is larger than that verify_drc used 1. In Multithreading mode, the number of CPUs verify_drc used is not larger than the number of subareas.
+ Use 'setMultiCpuUsage -localCpu' to specify the less cup number if the verify area is not large.
+  VERIFY DRC ...... Using new threading
+
+  Verification Complete : 38 Viols.
+
+ Violation Summary By Layer and Type:
+
+	         CShort      Mar   OffGrd    Short    EolKO   Totals
+	M1            0        8        0        0        0        8
+	M3            0        0        0        1        1        2
+	V3           25        0        0        0        0       25
+	M4            0        0        3        0        0        3
+	Totals       25        8        3        1        1       38
+
+ *** End Verify DRC (CPU TIME: 0:00:52.6  ELAPSED TIME: 0:00:09.0  MEM: 256.1M) ***
+
+<CMD> saveDesign ./saved/top_soc_routed.enc
+#% Begin save design ... (date=09/17 20:19:01, mem=7579.4M)
+INFO: Current data have to be saved into a temporary db: 'top_soc_routed.enc.dat.tmp' first. It will be renamed to the correct name 'top_soc_routed.enc.dat' after the old db was deleted.
+% Begin Save ccopt configuration ... (date=09/17 20:19:01, mem=7579.4M)
+% End Save ccopt configuration ... (date=09/17 20:19:02, total cpu=0:00:01.1, real=0:00:02.0, peak res=7591.8M, current mem=7591.8M)
+% Begin Save netlist data ... (date=09/17 20:19:03, mem=7591.9M)
+Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/vbin/top_soc.v.bin in multi-threaded mode...
+% End Save netlist data ... (date=09/17 20:19:03, total cpu=0:00:00.5, real=0:00:00.0, peak res=7592.5M, current mem=7592.5M)
+Saving symbol-table file in separate thread ...
+Saving congestion map file in separate thread ...
+Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.route.congmap.gz ...
+% Begin Save AAE data ... (date=09/17 20:19:03, mem=7599.9M)
+Saving AAE Data ...
+AAE DB initialization (MEM=7648.300781 CPU=0:00:00.0 REAL=0:00:00.0) 
+% End Save AAE data ... (date=09/17 20:19:03, total cpu=0:00:00.3, real=0:00:00.0, peak res=7638.6M, current mem=7638.6M)
+Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/gui.pref.tcl ...
+Saving mode setting ...
+**WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+Saving global file ...
+*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.bbox.lef
+Saving Drc markers ...
+... 38 markers are saved ...
+... 38 geometry drc markers are saved ...
+... 0 antenna drc markers are saved ...
+Saving special route data file in separate thread ...
+Saving PG file in separate thread ...
+Saving placement file in separate thread ...
+Saving route file in separate thread ...
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Thu Sep 17 20:19:05 2026)
+** Saving stdCellPlacement_binary (version# 2) ...
+Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.prop
+Save Adaptive View Pruning View Names to Binary file
+view_ss
+*** Completed savePGFile (cpu=0:00:00.5 real=0:00:00.0 mem=13525.0M) ***
+*** Completed saveProperty (cpu=0:00:01.0 real=0:00:00.0 mem=13525.0M) ***
+TAT_INFO: ::saveSpecialRoute REAL = 1 : CPU = 0 : MEM = 0.
+TAT_INFO: ::savePGFile REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::savePlace REAL = 0 : CPU = 0 : MEM = 0.
+*** Completed saveRoute (cpu=0:00:02.7 real=0:00:03.0 mem=13501.0M) ***
+TAT_INFO: ::saveRoute REAL = 3 : CPU = 1 : MEM = 0.
+TAT_INFO: ::db::saveAnnotationAndProp REAL = 0 : CPU = 0 : MEM = 0.
+#Saving pin access data to file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.apa ...
+#
+Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/top_soc.techData.gz' ...
+Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_routed.enc.dat.tmp/extraction/' ...
+TAT_INFO: ::db::saveSymbolTable REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
+% Begin Save power constraints data ... (date=09/17 20:19:09, mem=7680.5M)
+% End Save power constraints data ... (date=09/17 20:19:09, total cpu=0:00:00.2, real=0:00:00.0, peak res=7680.5M, current mem=7680.5M)
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+Generated self-contained design top_soc_routed.enc.dat.tmp
+libset_ss libset_tt libset_ff
+rc_typ rc_ff rc_ss
+mode_func
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc
+#% End save design ... (date=09/17 20:19:12, total cpu=0:00:08.7, real=0:00:11.0, peak res=7727.1M, current mem=7680.1M)
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
+*** Message Summary: 1 warning(s), 0 error(s)
+
