@@ -6,6 +6,14 @@ source [file join $FLOW_ROOT genus rtl flow project_config.tcl]
 set SYN_NETLIST [file join $FLOW_ROOT genus outputs [format "%s_syn.v" $TOP]]
 set SYN_SDC     [file join $FLOW_ROOT genus outputs [format "%s_syn.sdc" $TOP]]
 
+# GDS std cell cho streamOut -merge (KHOI 16): netlist dung ca RVT lan LVT.
+# Repo asap7sc7p5t_28 @ f970bd3: GDS 1x, 4000 dbu/um (TAPCELL rong 432 dbu).
+set STD_GDS_FILES [list \
+    [mcu_resolve_path RVT_CELL_GDS {ASAP7_RVT_GDS_FILE} \
+        [file join $STDCELL_ROOT GDS asap7sc7p5t_28_R_220121a.gds]] \
+    [mcu_resolve_path LVT_CELL_GDS {ASAP7_LVT_GDS_FILE} \
+        [file join $STDCELL_ROOT GDS asap7sc7p5t_28_L_220121a.gds]]]
+
 set INNOVUS_SDC [file join $INNOVUS_DIR outputs \
     [format "%s_syn.innovus.sdc" $TOP]]
 set INNOVUS_PATH_GROUPS \

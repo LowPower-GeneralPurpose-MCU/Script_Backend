@@ -923,6 +923,88 @@ proc soc_sram_no_std_boxes {} {
     return [soc_island_keepouts $::SOC_MACRO_GAP]
 }
 
+# Notch giua cac cum SRAM (10_Macro Priority 7).  Hai vung khong std cell a, b
+# (soc_sram_no_std_boxes; mep loi cung tinh) doi mat nhau cach d
+# (1 site/row <= d <= SOC_NOTCH_MAX_W) tren doan chung s0..s1:
+#   - vung c nam giua va chan suot s0..s1 -> a, b khong doi mat, bo qua
+#   - vung c phu ca khe (sai lech < 1 site) -> bo doan cua c khoi s0..s1
+#     (hoc tren TAG: bo phan TAG, con 145.37 x 103.68)
+# Tra ve {x0 y0 x1 y1}, da cat theo loi.
+proc soc_notch_boxes {} {
+    lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
+    set core [list $cx0 $cy0 $cx1 $cy1]
+    set eps 1e-3
+    set boxes [soc_sram_no_std_boxes]
+    lappend boxes [list [expr {$cx0 - 1}] $cy0 $cx0 $cy1] [list $cx1 $cy0 [expr {$cx1 + 1}] $cy1] \
+        [list $cx0 [expr {$cy0 - 1}] $cx1 $cy0] [list $cx0 $cy1 $cx1 [expr {$cy1 + 1}]]
+    set out {}
+    # k = 0: khe doc (a ben trai b), k = 1: khe ngang (a ben duoi b); o = truc con lai
+    foreach k {0 1} o {1 0} step [list $::SOC_SITE_W $::SOC_ROW_H] ostep [list $::SOC_ROW_H $::SOC_SITE_W] {
+        foreach a $boxes {
+            foreach b $boxes {
+                set g0 [expr {max([lindex $a [expr {$k + 2}]], [lindex $core $k])}]
+                set g1 [expr {min([lindex $b $k], [lindex $core [expr {$k + 2}]])}]
+                set s0 [expr {max([lindex $a $o], [lindex $b $o], [lindex $core $o])}]
+                set s1 [expr {min([lindex $a [expr {$o + 2}]], [lindex $b [expr {$o + 2}]], \
+                    [lindex $core [expr {$o + 2}]])}]
+                if {$g1 - $g0 < $step - $eps || $g1 - $g0 > $::SOC_NOTCH_MAX_W || $s1 - $s0 < $ostep - $eps} {
+                    continue
+                }
+                set covered {}
+                set facing 1
+                foreach c $boxes {
+                    lassign [list [lindex $c $k] [lindex $c [expr {$k + 2}]] \
+                        [lindex $c $o] [lindex $c [expr {$o + 2}]]] c0 c1 d0 d1
+                    if {$c0 >= $g1 - $eps || $c1 <= $g0 + $eps || $d1 <= $s0 + $eps || $d0 >= $s1 - $eps} {
+                        continue
+                    }
+                    if {$d0 <= $s0 + $eps && $d1 >= $s1 - $eps} {
+                        set facing 0
+                        break
+                    }
+                    if {$c0 < $g0 + $step && $c1 > $g1 - $step} {
+                        lappend covered [list $d0 $d1]
+                    }
+                }
+                if {!$facing} {
+                    continue
+                }
+                foreach iv [soc_free_intervals $s0 $s1 $covered] {
+                    lassign $iv f0 f1
+                    if {$f1 - $f0 < $ostep - $eps} {
+                        continue
+                    }
+                    lappend out [expr {$k == 0 ? [list $g0 $f0 $g1 $f1] : [list $f0 $g0 $f1 $g1]}]
+                }
+            }
+        }
+    }
+    # Mot hoc co the tim ra tu 2 cap (vd hoc sat mep loi: cap trai-phai va cap
+    # mep loi-cum ben tren) -> bo hop nam trong hop lon hon da giu.
+    set sized {}
+    foreach b $out {
+        lassign $b x0 y0 x1 y1
+        lappend sized [list [expr {($x1 - $x0) * ($y1 - $y0)}] $b]
+    }
+    set kept {}
+    foreach item [lsort -real -decreasing -index 0 $sized] {
+        set b [lindex $item 1]
+        lassign $b x0 y0 x1 y1
+        set inside 0
+        foreach c $kept {
+            lassign $c u0 v0 u1 v1
+            if {$u0 <= $x0 + $eps && $v0 <= $y0 + $eps && $u1 >= $x1 - $eps && $v1 >= $y1 - $eps} {
+                set inside 1
+                break
+            }
+        }
+        if {!$inside} {
+            lappend kept $b
+        }
+    }
+    return $kept
+}
+
 # Rail M1 + stripe M5 cho std cell.  Flow Risc_V/sram_axi lam SAU placement;
 # lam truoc placement voi strap thap da gay short VDD/VSS o flow Risc_V.
 #   1. sroute followpin M1 theo row (row trong vung SRAM da cutRow o KHOI 9)
@@ -971,11 +1053,23 @@ proc soc_stdcell_rails {} {
 # nen optDesign -hold khong chen buffer: run 2026-09-17 con 12 duong reg2cgate
 # -72 ps (view_ff) sau optDesign -postRoute.  Proc chen hold buffer ngay truoc
 # chan AND.B cho toi khi slack hold >= target.  Sau route phai ecoRoute.
+# Chay theo VONG: do slack ca 12 latch (1 lan tinh tre), chen 1 buffer cho moi
+# latch con vi pham o che do ECO batch, refinePlace 1 lan.  Ban cu chen tung
+# buffer: moi buffer 2 lan full delay calc + refinePlace (~3.7 phut CPU); run
+# 2026-09-17 20:00 KHOI 12 can 12 latch x 4 buffer = 48 lan, trong nhu lap mai.
 proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
+    set latches [dbGet -e top.insts.name cg_*/en_latch_reg]
+    set nbuf [dict create]
+    set final [dict create]
+    foreach latch $latches {
+        dict set nbuf $latch 0
+    }
     set added 0
-    set left {}
-    foreach latch [dbGet -e top.insts.name cg_*/en_latch_reg] {
-        for {set n 0} {1} {incr n} {
+    set t0 [clock seconds]
+    for {set round 1} {1} {incr round} {
+        # Lenh report_timing dau tien sau vong truoc tu tinh lai tre (1 lan/vong)
+        set todo {}
+        foreach latch $latches {
             set slack ""
             set pin ""
             foreach_in_collection p [report_timing -early -through $latch/Q \
@@ -983,48 +1077,113 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
                 set slack [get_property $p slack]
                 set pin [get_object_name [get_property $p capturing_point]]
             }
-            if {![string is double -strict $slack] || $slack >= $target} {
-                break
+            dict set final $latch [list $slack $pin]
+            if {![string is double -strict $slack] || $slack >= $target ||
+                [dict get $nbuf $latch] >= $max_buf || ![string match cg_* $pin]} {
+                continue
             }
-            if {$n >= $max_buf || ![string match cg_* $pin]} {
-                lappend left "$pin $slack"
-                break
-            }
-            if {[catch {ecoAddRepeater -term [list $pin] -cell $cell}]} {
-                # Truoc routeDesign net nay do CCOpt route va danh dau FIXED:
-                # IMPOPT-6228 (run 2026-09-17 15:00 dung KHOI 12).  Xoa day,
-                # routeDesign route lai.
-                set net [get_object_name [get_nets -of_objects [get_pins $pin]]]
-                puts "soc_fix_cg_hold: xoa day FIXED cua $net roi chen lai"
-                editDelete -net $net
-                ecoAddRepeater -term [list $pin] -cell $cell
-            }
-            incr added
+            lappend todo [list $latch $pin $slack]
         }
-        puts [format "%-28s hold slack %s sau %d buffer" $latch $slack $n]
+        puts [format "soc_fix_cg_hold vong %d (%d s): %d latch hold < %.3f" \
+            $round [expr {[clock seconds] - $t0}] [llength $todo] $target]
+        if {[llength $todo] == 0} {
+            break
+        }
+        setEcoMode -batchMode true -refinePlace false -updateTiming false
+        set failed [catch {
+            foreach item $todo {
+                lassign $item latch pin slack
+                puts "  $latch slack $slack -> buffer thu [expr {[dict get $nbuf $latch] + 1}] truoc $pin"
+                if {[catch {ecoAddRepeater -term [list $pin] -cell $cell}]} {
+                    # Truoc routeDesign net nay do CCOpt route va danh dau FIXED:
+                    # IMPOPT-6228 (run 2026-09-17 15:00 dung KHOI 12).  Xoa day,
+                    # routeDesign route lai.
+                    set net [get_object_name [get_nets -of_objects [get_pins $pin]]]
+                    puts "  xoa day FIXED cua $net roi chen lai"
+                    editDelete -net $net
+                    ecoAddRepeater -term [list $pin] -cell $cell
+                }
+                dict incr nbuf $latch
+                incr added
+            }
+        } msg opts]
+        setEcoMode -batchMode false -refinePlace true -updateTiming true
+        if {$failed} {
+            return -options $opts $msg
+        }
+        refinePlace
     }
-    puts "soc_fix_cg_hold: them $added $cell"
-    foreach l $left {
-        puts "WARNING: chua sua duoc hold $l"
+    puts "soc_fix_cg_hold: them $added $cell sau [expr {[clock seconds] - $t0}] s"
+    foreach latch $latches {
+        lassign [dict get $final $latch] slack pin
+        puts [format "  %-28s hold slack %s sau %d buffer" $latch $slack [dict get $nbuf $latch]]
+        if {[string is double -strict $slack] && $slack < $target} {
+            puts "WARNING: chua sua duoc hold $latch -> $pin ($slack)"
+        }
     }
     return $added
+}
+
+# Layer cua tung chan trong file LEF macro: dict {ten_chan {layer ...}}.
+# Doc thang file LEF (khong qua dbGet libTerm) de biet chan vao duoc tu layer nao.
+proc soc_lef_pin_layers {file} {
+    set fp [open $file]
+    set text [read $fp]
+    close $fp
+    set pins [dict create]
+    set pin ""
+    foreach line [split $text \n] {
+        set w [regexp -inline -all {\S+} $line]
+        switch -- [lindex $w 0] {
+            PIN   { set pin [lindex $w 1] }
+            OBS   { set pin "" }
+            END   { if {[lindex $w 1] eq $pin} { set pin "" } }
+            LAYER { if {$pin ne ""} { dict lappend pins $pin [lindex $w 1] } }
+        }
+    }
+    return [dict map {name layers} $pins { lsort -unique $layers }]
 }
 
 # Chan M3 tren than SRAM truoc routeDesign.  Run 2026-09-17 (ca 2 lan): 14-31 loi
 # "Cut Short V3 - Blockage of Cell <SRAM>" o giua than SRAM (chan rdata/wdata):
 # LEF SRAM chan cut V3 nhung khong chan M3, NanoRoute di M3 tren SRAM roi ha via
 # V3 vao chan -> ecoRoute -fix_drc khong go duoc.  Chan M3 thi phai vao chan tu
-# M4/M5.  Bo qua neu SRAM co chan tren M3 (chan M3 se lam ho chan).
+# M4/M5.
+# Ban cu bo qua khi chan SRAM co hinh tren M3 -> run 2026-09-17 20:24 khong tao
+# blockage nao (log: deleteRouteBlk IMPFP-6001, khong co createRouteBlk), van 25
+# loi V3.  LEF 4x (asap7_sram_0p0 @ 522eecc) chan dataout[20]: stub M3 bi OBS M3
+# bao kin, thanh M4 59.444-62.036, OBS V3 phu ca thanh tru via rieng o x 61.8.
+# NanoRoute bo qua OBS nam trong hinh chan, ha V3 tu track M3 x 59.76 xuong thanh
+# M4 -> verify_drc bao Cut Short.  Chan co hinh M4 vao duoc bang M4 / V4 tu M5
+# nen chan M3 an toan.  LEF 256x4x32 co 64 chan CHI tren M3 (dataout[32..63],
+# wd[32..63]) - SRAM 32 bit nen chung khong noi; chi bo chan M3 neu mot chan
+# chi-M3 nao do co net that.
 proc soc_sram_route_blk {} {
-    set layers {}
-    foreach m [list $::SRAM_MASTER $::SRAM_TAG_MASTER] {
-        set lc [dbGet -p head.libCells.name $m]
-        lappend layers {*}[dbGet -e $lc.terms.pins.allShapes.layer.name]
+    set used {}
+    foreach lef [list $::SRAM_LEF $::SRAM_TAG_LEF] master [list $::SRAM_MASTER $::SRAM_TAG_MASTER] {
+        set m3_only {}
+        dict for {pin layers} [soc_lef_pin_layers $lef] {
+            if {[lsearch -regexp $layers {^M[4-9]$}] < 0} {
+                lappend m3_only $pin
+            }
+        }
+        puts "[file tail $lef]: [llength $m3_only] chan chi co tren M1-M3"
+        foreach ptr [dbGet -e -p2 top.insts.cell.name $master] {
+            set inst [lindex [dbGet $ptr.name] 0]
+            foreach pin $m3_only {
+                set p [get_pins -quiet [list $inst/$pin]]
+                if {[sizeof_collection $p] > 0 &&
+                    [sizeof_collection [get_nets -quiet -of_objects $p]] > 0} {
+                    lappend used $inst/$pin
+                }
+            }
+            if {[llength $used] > 0} {
+                break
+            }
+        }
     }
-    set layers [lsort -unique $layers]
-    puts "Layer chan SRAM: $layers"
-    if {[llength $layers] == 0 || "M3" in $layers} {
-        puts "WARNING: khong doc duoc layer chan SRAM hoac co chan M3 - KHONG chan M3"
+    if {[llength $used] > 0} {
+        puts "WARNING: chan SRAM chi-M3 co net ([lrange $used 0 4]) - KHONG chan M3"
         return 0
     }
     set n 0
@@ -1035,4 +1194,76 @@ proc soc_sram_route_blk {} {
     }
     puts "Chan M3 tren $n SRAM"
     return $n
+}
+
+# Chan PG cua top (09_PnR tr.21): moi net mot chan phu doan ring loi
+# SOC_PG_PIN_LAYER nam tren cung.  Paste lai KHOI 2: chan da co thi giu nguyen.
+proc soc_add_pg_pins {} {
+    foreach net {VDD VSS} {
+        if {![catch {dbGet -e top.pgTerms.name $net} have] && $have ne ""} {
+            puts "Chan PG $net da co - bo qua"
+            continue
+        }
+        set best {}
+        foreach w [dbGet -e -p [dbGet -p top.nets.name $net].sWires.shape ring] {
+            if {[dbGet $w.layer.name] ne $::SOC_PG_PIN_LAYER} {
+                continue
+            }
+            set box [lindex [dbGet $w.box] 0]
+            if {[llength $best] == 0 || [lindex $box 1] > [lindex $best 1]} {
+                set best $box
+            }
+        }
+        if {[llength $best] == 0} {
+            error "Ring $net khong co doan $::SOC_PG_PIN_LAYER - chay lai KHOI 2"
+        }
+        createPGPin $net -geom $::SOC_PG_PIN_LAYER {*}$best
+        puts [format "Chan PG %s: %s {%.3f %.3f %.3f %.3f}" $net $::SOC_PG_PIN_LAYER {*}$best]
+    }
+}
+
+# Noi chan VDD/VSS, TIEHI/TIELO cua moi instance vao net.  Goi sau moi buoc
+# them cell (tap KHOI 9, filler KHOI 15; CTS/optDesign chen buffer o giua).
+proc soc_global_pg_connect {} {
+    globalNetConnect VDD -type pgpin -pin VDD -inst * -override
+    globalNetConnect VSS -type pgpin -pin VSS -inst * -override
+    globalNetConnect VDD -type tiehi -inst * -override
+    globalNetConnect VSS -type tielo -inst * -override
+    applyGlobalNets
+}
+
+# Metal fill (09_PnR tr.26) tren cac layer SOC_FILL_LAYERS, bo rong co dinh =
+# min width, gap/active/density theo tung dong (xem soc_fp_config.tcl).  Goi sau
+# filler, truoc verify va timing cuoi (fill lam tang C ghep).
+proc soc_metal_fill {} {
+    set layers {}
+    foreach {layer w gap active dmin dmax dpref} $::SOC_FILL_LAYERS {
+        setMetalFill -layer $layer -minWidth $w -maxWidth $w \
+            -minLength $::SOC_FILL_MIN_LEN -maxLength $::SOC_FILL_MAX_LEN \
+            -activeSpacing $active -gapSpacing $gap \
+            -minDensity $dmin -maxDensity $dmax -preferredDensity $dpref
+        lappend layers $layer
+    }
+    addMetalFill -layer $layers -snap
+}
+
+# File map layer cho streamOut (09_PnR tr.11 A2GDS.map), so lay tu SOC_GDS_LAYERS.
+# Khong ghi LEFOBS: vung cam trong LEF abstract SRAM (-outputMacros) khong phai
+# kim loai that, ghi ra thanh short gia khi DRC/LVS.
+proc soc_write_gds_map {file} {
+    set fp [open $file w]
+    foreach {layer num} $::SOC_GDS_LAYERS {
+        if {[string match {V[0-9]} $layer]} {
+            set types {VIA VIAFILL}
+        } else {
+            set types {NET SPNET PIN LEFPIN FILL VIA VIAFILL}
+        }
+        foreach t $types {
+            puts $fp "$layer $t $num 0"
+        }
+        if {![string match {V[0-9]} $layer]} {
+            puts $fp "NAME $layer/PIN $num $::SOC_GDS_PIN_TEXT"
+        }
+    }
+    close $fp
 }

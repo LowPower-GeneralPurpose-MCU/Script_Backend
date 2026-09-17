@@ -36,6 +36,14 @@ set SOC_MACRO_HALO [expr {$SOC_HALO_ROWS * $SOC_ROW_H}]
 # phai >= 2 khe de soc_sram_islands tach cum, boi so site 0.216.
 set SOC_WALL_CHANNEL        17.28
 set SOC_WALL_CHANNEL_GROUPS {RAM_LO RAM_HI}
+# Notch (10_Macro Priority 7): vung con row kep giua hai cum SRAM (hoac cum va
+# mep loi), hep hon nguong nay -> KHOI 9 dat placement blockage MEM (soft):
+# placer khong dat logic vao, CTS/optDesign van dat buffer/inverter.  Khong dung
+# blockage cung: run 2026-09-17 CTS dat buffer clk SRAM trong hoc tren TAG
+# (837,260) (916,260) (947,264) va khe RAM_LO|dcache (545,97).
+# Vi tri hien tai: hoc tren TAG 145.37, khe RAM_LO|dcache 11.45, dtcm|icache
+# 5.83, itcm|RAM_HI 3.67, 4 kenh buffer trong tuong RAM 8.64.
+set SOC_NOTCH_MAX_W 160.0
 # floorPlan lam tron be rong loi (2190.888 -> 2190.816): KHOI 3 nap file vi tri
 # SRAM van chap nhan loi lech toi nay o mep phai, dich cum sat mep phai theo.
 set SOC_CORE_SNAP_TOL 0.432
@@ -85,6 +93,52 @@ set SOC_PIN_TAP_BORDER [expr {2 * $SOC_ROW_H}]     ;# tap nam trong 2 row sat ca
 set SOC_PG_EPS 0.192
 array set SOC_PG_PITCH  {M4 0.192 M5 0.192}
 array set SOC_PG_OFFSET {M4 0.012 M5 0.000}
+
+# Chan PG VDD/VSS cua top (09_PnR tr.21 createPGPin): nam tren doan ring loi
+# phia tren (M8) cua tung net - DEF/GDS/LEF abstract co chan nguon cho LVS.
+set SOC_PG_PIN_LAYER M8
+
+# ---- Tap cell (10_Macro tr.21 latch-up) -----------------------------------
+# Deck calibreDRC.rul ACTIVE.LUP.1: PMOS cach tap N-well <= 30 um (1x) = 120 um
+# tren LEF 4x.  Cell va khoang cach theo techlef_misc/example_innovus.tcl cua
+# asap7sc7p5t_28 (-cellInterval 50).  Offset 1.08 thay 10.564 cua vi du: row sau
+# cutRow co doan hep 3.67-8.64 um (kenh buffer, khe notch) van phai co tap.
+set SOC_TAP_CELL     TAPCELL_ASAP7_75t_R
+set SOC_TAP_INTERVAL 50.0
+set SOC_TAP_OFFSET   1.08
+set SOC_TAP_RULE     120.0
+
+# ---- Metal fill (09_PnR tr.26) --------------------------------------------
+# Tech LEF asap7_tech_4x_201209.lef chi co luat mat do o M5 (MINIMUMDENSITY 15,
+# MAXIMUMDENSITY 90, DENSITYCHECKWINDOW 80 80, STEP 40) va Pad (khong dung);
+# deck calibreDRC.rul khong co luat mat do.  -> mac dinh chi fill M5.  M2-M7 co
+# RIGHTWAYONGRIDONLY + RECTONLY + WIDTHTABLE (SADP): fill them layer la them rui
+# ro DRC ma khong co luat nao doi.
+# Bo rong = min width (dong dau WIDTHTABLE); gap giua 2 mieng fill >= EOL
+# ENDTOEND 0.160 -> 1 pitch; cach day that 2 pitch.  Fill 0.096 cach 0.192 +
+# snap track -> toi da ~25% nen density uu tien 25.
+#   layer width gap   active minD maxD prefD
+set SOC_FILL_LAYERS {
+    M5    0.096 0.192 0.384  15   90   25
+}
+# Muon fill them cho giong slide (khong co luat LEF, tu chiu DRC):
+#   M4 0.096 0.192 0.384 15 90 25   M6 0.128 0.256 0.512 15 90 25
+#   M7 0.128 0.256 0.512 15 90 25   M8 0.160 0.320 0.640 15 90 25
+set SOC_FILL_MIN_LEN     1.0     ;# > AREA/width (M5: 0.032 / 0.096 = 0.33)
+set SOC_FILL_MAX_LEN    16.8
+
+# ---- GDS (09_PnR tr.28) ---------------------------------------------------
+# So layer lay tu calibreDRC.rul; text chan = datatype 251 (calibreLVS.rul
+# LAYER MAP <n> TEXTTYPE == 251).
+set SOC_GDS_LAYERS {
+    M1 19 V1 21 M2 20 V2 25 M3 30 V3 35 M4 40 V4 45 M5 50
+    V5 55 M6 60 V6 65 M7 70 V7 75 M8 80 V8 85 M9 90 V9 95 Pad 96
+}
+set SOC_GDS_PIN_TEXT 251
+# LEF 4x, GDS std cell 1x o 4000 dbu/um: TAPCELL LEF 0.432 um = 432 dbu trong
+# GDS -> ghi 1000 dbu/um thi so dbu cua cell va cua layout khop nhau; deck
+# Calibre ep LAYOUT PRECISION 4000 nen doc lai dung ti le 1x.
+set SOC_GDS_UNITS 1000
 
 # Stripe M5 doc de noi rail M1 cua std cell (Risc_V: pitch 25.92).
 set SOC_M5_W      0.096
