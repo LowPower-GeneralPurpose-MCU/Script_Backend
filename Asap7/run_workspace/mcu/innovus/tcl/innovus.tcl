@@ -154,6 +154,9 @@ soc_block "KHOI 3: dat mam 84 SRAM" {
 # GUI:
 #   - Floorplan View, mo Toolbox.
 #   - Toolbox > Space: nhap 4.32 (slide ROHM 20.16 = 4 row; ASAP7 4 row = 4.32).
+#     RIENG tuong RAM_LO/RAM_HI: khe cot 0|1 va cot 2|3 la kenh buffer 17.28
+#     (SOC_WALL_CHANNEL) - khong keo sat lai 4.32, CTS can row trong kenh de
+#     dat buffer cho chan clk SRAM (run 2026-09-17: slew 172 ps khi khong co kenh).
 #   - Chon nhieu SRAM (Shift+click hoac keo khung) roi Space / Align.
 #   - Chon 1 SRAM, nhan Q: sua Location / Orientation trong Attribute Editor.
 #   - Flip/Rotate: chi Flip (MY/MX). KHONG xoay 90/270 do.
@@ -424,8 +427,10 @@ Tiep theo: KHOI 11 (CTS)"
 # ==========================================================================
 # 15 clock (CLK_SYS, CLK_TCK, CLK_SDRAM_OUT + 12 clock gate) va ~1600 ICG.
 # Chan clk cua SRAM gioi han transition 46 ps (Liberty) -> leaf 35 ps.
-# SRAM nam trong tuong RAM_LO/RAM_HI khong dat duoc buffer, leaf toi cot SRAM xa
-# dai ~400 um nen cho leaf len M5 (sram_axi: leaf M2/M3 -> 104 ps o chan clk SRAM).
+# Tren than SRAM khong dat duoc buffer: run 2026-09-17 tuong 4 cot khong kenh ->
+# leaf dai ~440 um, 45 chan clk SRAM 57-172 ps.  Nay tuong co kenh buffer 17.28 um
+# o khe cot 0|1, 2|3 (SOC_WALL_CHANNEL) -> chan clk cach row <= 65 um.
+# Leaf cho len M5 (sram_axi: leaf M2/M3 -> 104 ps o chan clk SRAM).
 soc_block "KHOI 11: CTS" {
     if {[llength [dbGet -e top.nets.sWires.shape followpin]] == 0} {
         error "Chua co rail M1 - chay KHOI 10 truoc"
@@ -478,6 +483,9 @@ soc_block "KHOI 11: CTS" {
 soc_block "KHOI 12: optDesign postCTS" {
     setOptMode -fixFanoutLoad true -fixTran true -fixCap true
     optDesign -postCTS -setup -hold -prefix postCTS
+    # 12 clock gate roi cg_* (latch + AND2): net latch->AND la clock net,
+    # optDesign khong sua hold o do (run 2026-09-17: -120 ps postCTS)
+    soc_fix_cg_hold 0.020
     checkPlace ./verify_rpt/checkPlace_postCTS.rpt
     timeDesign -postCTS       -outDir ./reports/timing_postCTS      -prefix postCTS
     timeDesign -postCTS -hold -outDir ./reports/timing_postCTS_hold -prefix postCTS
@@ -518,6 +526,10 @@ soc_block "KHOI 14: optDesign postRoute" {
     setOptMode -fixCap true -fixTran true -fixFanoutLoad true \
         -setupTargetSlack 0.020 -holdTargetSlack 0.020
     optDesign -postRoute -setup -hold -prefix postRoute
+    # Hold clock gate roi cg_* (xem KHOI 12) tinh lai voi RC that; buffer moi
+    # chua co day -> ecoRoute
+    soc_fix_cg_hold 0.020
+    ecoRoute
     ecoRoute -fix_drc
     timeDesign -postRoute       -outDir ./reports/timing_postRoute      -prefix postRoute
     timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold -prefix postRoute
@@ -550,16 +562,20 @@ soc_block "KHOI 15: filler + verify" {
     verify_drc -limit 100000 -report ./verify_rpt/drc_final.rpt
     verifyConnectivity -type all -error 1000 -warning 1000 \
         -report ./verify_rpt/connectivity_final.rpt
-    verifyProcessAntenna -reportfile ./verify_rpt/antenna_final.rpt
+    # Khong kiem antenna: tech LEF ASAP7 khong co luat antenna
+    # (run 2026-09-17: verifyProcessAntenna -> ERROR IMPVPA-22).
     timeDesign -postRoute       -outDir ./reports/timing_final      -prefix final
     timeDesign -postRoute -hold -outDir ./reports/timing_final_hold -prefix final
+    # Mac dinh report_power lay view setup dau tien (view_ss 0.63 V); cong suat
+    # danh nghia tinh o TT.  Chua co VCD: activity mac dinh 0.2.
+    set_power_analysis_mode -analysis_view view_tt
     report_power -outfile ./reports/power_final.rpt
     report_area > ./reports/area_final.rpt
 
     soc_banner "PNR XONG - saved/${TOP}_final.enc
   verify_rpt/drc_final.rpt           : 0 vi pham
   verify_rpt/connectivity_final.rpt  : 0 open/short
-  verify_rpt/antenna_final.rpt       : 0 vi pham antenna
+  reports/timing_final/final.tran.gz : khong con chan clk SRAM (max 46 ps)
   reports/timing_final*/             : WNS setup/hold >= 0
 Tiep theo: KHOI 16 (xuat file)"
 }

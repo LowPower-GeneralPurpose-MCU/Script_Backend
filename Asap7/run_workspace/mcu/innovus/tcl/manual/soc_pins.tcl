@@ -67,14 +67,16 @@ lassign [lindex [dbGet top.fPlan.box] 0] die_x0 die_y0 die_x1 die_y1
 lassign [lindex [dbGet top.fPlan.coreBox] 0] core_x0 core_y0 core_x1 core_y1
 set logic_x0 $core_x0
 set logic_x1 $core_x1
+set core_xm [expr {($core_x0 + $core_x1) / 2.0}]
 foreach k [soc_sram_no_std_boxes] {
     lassign $k kx0 ky0 kx1 ky1
-    # Keepout cham ca mep duoi lan mep tren loi = tuong SRAM
+    # Keepout cham ca mep duoi lan mep tren loi = mot cum cua tuong SRAM.  Tu khi
+    # co kenh buffer (SOC_WALL_CHANNEL) moi tuong la 3 cum, cum trong khong cham
+    # mep loi -> xet theo nua loi, khong theo mep.
     if {$ky0 <= $core_y0 + 1.0 && $ky1 >= $core_y1 - 1.0} {
-        if {$kx0 <= $core_x0 + 1.0} {
+        if {($kx0 + $kx1) / 2.0 < $core_xm} {
             set logic_x0 [expr {max($logic_x0, $kx1)}]
-        }
-        if {$kx1 >= $core_x1 - 1.0} {
+        } else {
             set logic_x1 [expr {min($logic_x1, $kx0)}]
         }
     }
