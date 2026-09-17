@@ -109,8 +109,9 @@ soc_block "KHOI 2: core ring" {
     }
     # addRing hong thuong chi in WARNING -> dem that so doan ring M8/M9 cua tung net
     soc_check_core_ring
-    # Chan PG VDD/VSS cua top tren ring (09_PnR tr.21): DEF/GDS/LEF co chan nguon
-    soc_add_pg_pins
+    # Chan PG VDD/VSS (createPGPin) KHONG tao o day ma o KHOI 16: run 2026-09-17
+    # 21:42 tao chan phu doan ring M8 tren o khoi nay, editTrim cua KHOI 5 xoa
+    # mat doan ring do (KHOI 8: "Ring loi VDD thieu (M8=1 M9=2)").
     # Ring rong 0.544 um tren loi ~2000 um: zoom-all se khong thay, zoom vao goc loi de xem.
 }
 
@@ -642,6 +643,8 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     # Netlist mo phong / LEC; ban _pg co VDD/VSS + tap/filler cho LVS
     saveNetlist ./outputs/${TOP}_pnr.v -excludeLeafCell
     saveNetlist ./outputs/${TOP}_pnr_pg.v -includePowerGround -includePhysicalInst -excludeLeafCell
+    # Chan PG VDD/VSS tren ring M8 (09_PnR tr.21) - sau moi lenh editTrim/sroute
+    soc_add_pg_pins
     defOut -floorplan -netlist -routing ./outputs/${TOP}_pnr.def
 
     soc_write_gds_map ./outputs/${TOP}_gds.map
@@ -662,9 +665,9 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
 # ==========================================================================
 # Luon paste KHOI 0 truoc.  saveFPlan khong giu ring/stripe, nen sau
 # loadFPlan phai paste lai KHOI 2 (ring loi).
-# Checkpoint luu truoc 2026-09-17 toi chua co chan PG (KHOI 2) va tap cell
-# (KHOI 9, phai co truoc placement): restore top_soc_powerplan.enc.dat, paste
-# 'soc_add_pg_pins' roi KHOI 9-16; hoac chay lai tu KHOI 0.
+# Checkpoint luu truoc 2026-09-17 toi chua co tap cell (KHOI 9, phai co truoc
+# placement): restore top_soc_powerplan.enc.dat roi KHOI 9-16; hoac tu KHOI 0.
+# Checkpoint cua run 21:42 (co chan PG tao o KHOI 2) da mat ring M8 -> KHOI 0.
 #
 # a) Da co loi (sau KHOI 1), lam lai SRAM:
 #   loadFPlan ./outputs/FloorPlan.fp
