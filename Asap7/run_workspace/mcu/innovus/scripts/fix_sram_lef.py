@@ -21,9 +21,11 @@ Khong co --fix thi chi doc va bao cao, khong ghi gi.
 
 import argparse
 import collections
-import math
+import decimal
 import re
 import sys
+
+from decimal import Decimal
 
 # Lenh LEF mang toa do.  Chi snap so tren nhung dong nay - khong dong vao
 # VERSION, DATABASE MICRONS, MINIMUMDENSITY, RESISTANCE...
@@ -31,29 +33,42 @@ GEOMETRY_KEYWORDS = ("RECT", "POLYGON", "PATH", "ORIGIN", "SIZE", "FOREIGN")
 
 NUMBER_RE = re.compile(r"-?\d+\.\d+|-?\d+")
 
+# PHAI tinh bang Decimal, khong duoc dung float.  LEF 128x4x20 co 3903 toa do
+# lech DUNG nua grid (2 nm tren grid 4 nm), va trong so thuc 0.086/0.004 ra
+# 21.499999999999996 chu khong phai 21.5 -> floor(q+0.5) lam tron XUONG cho
+# nhung toa do do va LEN cho nhung toa do khac.  Hai canh cua cung mot hinh di
+# hai huong khac nhau thi hinh doi kich thuoc.  Decimal chia chinh xac nen
+# 'nua grid' luon duoc xu ly nhat quan (ROUND_HALF_UP).
+HALF = Decimal("0.5")
+
 
 def snap(value, grid, mode):
-    """Dua mot toa do ve boi so cua grid."""
+    """Dua mot toa do ve boi so cua grid.  value/grid tinh bang Decimal."""
     q = value / grid
     if mode == "nearest":
-        n = math.floor(q + 0.5)
+        # floor(q + 1/2) tinh chinh xac.  KHONG dung ROUND_HALF_UP: no lam tron
+        # 'ra xa so 0', nen toa do am nam dung nua grid se di NGUOC huong voi
+        # toa do duong.  Cach nay cho moi truong hop hoa (nua grid) di cung mot
+        # huong, bat ke dau -> ca 3903 toa do +2.000 nm dich deu, hinh giu nguyen
+        # kich thuoc.
+        n = (q + HALF).to_integral_value(rounding=decimal.ROUND_FLOOR)
     elif mode == "down":
-        n = math.floor(q)
+        n = q.to_integral_value(rounding=decimal.ROUND_FLOOR)
     elif mode == "up":
-        n = math.ceil(q)
+        n = q.to_integral_value(rounding=decimal.ROUND_CEILING)
     else:
         raise ValueError(mode)
     return n * grid
 
 
 def is_on_grid(value, grid):
-    q = value / grid
-    return abs(q - round(q)) < 1e-6
+    return value % grid == 0
 
 
 def fmt(value, decimals):
     """Ghi lai so voi dung so chu so thap phan cua so goc (diff de doc)."""
-    text = "%.*f" % (decimals, value)
+    quantum = Decimal(1).scaleb(-decimals)
+    text = str(value.quantize(quantum, rounding=decimal.ROUND_HALF_UP))
     return "0" if text.lstrip("-").strip("0.") == "" and text.startswith("-") else text
 
 
@@ -62,6 +77,7 @@ def process(lines, grid, mode, site_map, drop_site):
     stats = collections.Counter()
     residuals = collections.Counter()
     offenders = collections.Counter()   # (macro, context) -> so toa do lech
+    resized = []                        # RECT bi doi kich thuoc sau khi snap
     macro = "<top>"
     context = "<none>"
 
@@ -108,14 +124,14 @@ def process(lines, grid, mode, site_map, drop_site):
             text = m.group(0)
             if "." not in text:          # BY / so nguyen trong FOREIGN: bo qua
                 return text
-            value = float(text)
+            value = Decimal(text)
             stats["coords_seen"] += 1
             if is_on_grid(value, grid):
                 return text
             stats["coords_offgrid"] += 1
             offenders[(macro, context)] += 1
             # do lech so voi diem grid ngay duoi, tinh bang nm cho de doc
-            residuals[round((value - snap(value, grid, "down")) * 1000, 4)] += 1
+            residuals[float((value - snap(value, grid, "down")) * 1000)] += 1
             new = snap(value, grid, mode)
             if abs(new - value) > grid:            # khong bao gio nhay qua 1 grid
                 return text
@@ -126,9 +142,22 @@ def process(lines, grid, mode, site_map, drop_site):
         new_line = NUMBER_RE.sub(repl, line)
         if changed[0]:
             stats["lines_fixed"] += 1
+            # Cau hoi quan trong nhat: hinh co doi KICH THUOC khong?  Hai canh
+            # cua mot RECT lech khac nhau thi sau khi snap chung dich khac nhau.
+            if upper.startswith("RECT"):
+                old_n = [Decimal(t) for t in NUMBER_RE.findall(line) if "." in t]
+                new_n = [Decimal(t) for t in NUMBER_RE.findall(new_line) if "." in t]
+                if len(old_n) == 4 and len(new_n) == 4:
+                    old_wh = (old_n[2] - old_n[0], old_n[3] - old_n[1])
+                    new_wh = (new_n[2] - new_n[0], new_n[3] - new_n[1])
+                    if old_wh != new_wh:
+                        stats["rect_resized"] += 1
+                        resized.append((macro, context, old_wh, new_wh))
+                    else:
+                        stats["rect_moved_only"] += 1
         out.append(new_line + "\n")
 
-    return out, stats, residuals, offenders
+    return out, stats, residuals, offenders, resized
 
 
 def main(argv=None):
@@ -139,7 +168,7 @@ def main(argv=None):
     ap.add_argument("--fix", action="store_true",
                     help="ghi file da sua (can -o).  Khong co thi chi bao cao.")
     ap.add_argument("-o", "--out", help="file LEF ket qua")
-    ap.add_argument("--grid", type=float, default=0.004,
+    ap.add_argument("--grid", type=Decimal, default=Decimal("0.004"),
                     help="MANUFACTURINGGRID, um (mac dinh 0.004 = tech LEF 4x)")
     ap.add_argument("--mode", choices=("nearest", "down", "up"),
                     default="nearest",
@@ -172,11 +201,11 @@ def main(argv=None):
                 site_map.setdefault(s.split()[1].rstrip(";").strip(),
                                     fallback_site)
 
-    out, stats, residuals, offenders = process(
+    out, stats, residuals, offenders, resized = process(
         lines, args.grid, args.mode, site_map, args.drop_site)
 
     print("file        : %s" % args.lef)
-    print("grid        : %g um   mode: %s" % (args.grid, args.mode))
+    print("grid        : %s um   mode: %s" % (args.grid, args.mode))
     print("toa do doc  : %d" % stats["coords_seen"])
     print("lech grid   : %d" % stats["coords_offgrid"])
     print("da snap     : %d  (tren %d dong)"
@@ -198,12 +227,23 @@ def main(argv=None):
         print("\nphan bo do lech (nm, so voi diem grid ngay duoi):")
         for res, count in sorted(residuals.items()):
             print("  %+8.3f nm : %d" % (res, count))
-        if len(residuals) == 1:
-            print("  -> moi toa do lech cung mot luong: snap chi dich ca macro,"
-                  " kich thuoc tung hinh giu nguyen.")
-        else:
-            print("  -> do lech khong dong nhat: mode 'nearest' co the doi kich"
-                  " thuoc vai hinh 1 grid.  Xem lai truoc khi dung.")
+
+    # Day moi la cau tra loi cho "snap co lam hong hinh khong".
+    print("")
+    print("RECT sau khi snap:")
+    print("  chi dich cho, giu nguyen kich thuoc : %d" % stats["rect_moved_only"])
+    print("  DOI kich thuoc                      : %d" % stats["rect_resized"])
+    if resized:
+        print("  (kich thuoc cu -> moi, um)")
+        for macro_name, ctx, old_wh, new_wh in resized[:20]:
+            print("    %-26s %-16s %s x %s  ->  %s x %s"
+                  % (macro_name, ctx, old_wh[0], old_wh[1], new_wh[0], new_wh[1]))
+        if len(resized) > 20:
+            print("    ... con %d hinh nua" % (len(resized) - 20))
+        print("  -> xem lai nhung hinh nay. Doi 1 grid tren OBS hoac chan nguon")
+        print("     thuong vo hai; doi tren chan tin hieu hep thi phai kiem tra ky.")
+    else:
+        print("  -> khong hinh nao doi kich thuoc: snap an toan.")
 
     if offenders:
         print("\nnoi lech nhieu nhat:")
