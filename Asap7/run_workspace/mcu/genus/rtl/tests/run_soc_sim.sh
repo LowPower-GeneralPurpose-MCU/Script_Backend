@@ -189,6 +189,33 @@ quit
     grep -E '\[TB\]|PASS COUNT|RESULT' xsim_amo.log || true
 }
 
+run_fpuv() {
+    echo "=== fpu_unit testbench: so voi mo hinh tham chieu chinh xac ==="
+    # Chi can floating_point_unit.v - khong compile ca SoC (giong run_pmp).
+    python "$HERE/gen_fpu_vectors.py" > /dev/null
+    cp "$HERE/fpu_vectors.mem" "$OUT_DIR/fpu_vectors.mem"
+    xvlog.bat -sv -work fpuv -i "$RTL" "$RTL/core/block_unit/floating_point_unit.v" "$HERE/tb_fpu_unit.sv" > xvlog_fpuv.log
+    xelab.bat -relax -s fpuv_sim -timescale 1ns/1ps fpuv.tb_fpu_unit -L fpuv > xelab_fpuv.log
+    printf 'run all
+quit
+' > run.tcl
+    xsim.bat fpuv_sim -tclbatch run.tcl > xsim_fpuv.log
+    grep -E '\[TB\]|PASS COUNT|RESULT' xsim_fpuv.log || true
+}
+
+run_fpu() {
+    echo "=== fpu testbench: RV32F bang CPU that (ROM = tests/fpu_core.mem) ==="
+    python "$HERE/gen_fpu_mem.py" > /dev/null
+    python "$HERE/gen_boot_rom.py" "$HERE/fpu_core.mem" "$OUT_DIR/fpu_inc"
+    xvlog.bat -sv -work fpu -i "$OUT_DIR/fpu_inc" "${INC[@]}" -f rtl_files.f "$HERE/tb_fpu_core.sv" > xvlog_fpu.log
+    xelab.bat -relax -s fpu_sim -timescale 1ns/1ps fpu.tb_fpu_core -L fpu > xelab_fpu.log
+    printf 'run all
+quit
+' > run.tcl
+    xsim.bat fpu_sim -tclbatch run.tcl > xsim_fpu.log
+    grep -E '\[TB\]|PASS COUNT|RESULT' xsim_fpu.log || true
+}
+
 run_pmp() {
     echo "=== pmp_unit testbench: ge32 + dc_q so voi mo hinh dac ta ==="
     # Chi can pmp_unit.v - khong compile ca SoC.
@@ -212,6 +239,8 @@ case "$MODE" in
     per)   run_per ;;
     pmp)   run_pmp ;;
     amo)   run_amo ;;
-    all)   run_apb; run_fw; run_mem; run_ascon; run_core; run_sys; run_irq; run_per; run_pmp; run_amo ;;
+    fpu)   run_fpu ;;
+    fpuv)  run_fpuv ;;
+    all)   run_apb; run_fw; run_mem; run_ascon; run_core; run_sys; run_irq; run_per; run_pmp; run_amo; run_fpu; run_fpuv ;;
     *)     echo "cach dung: $0 [apb|fw|mem|ascon|core|sys|irq|per|pmp|amo|all]"; exit 1 ;;
 esac

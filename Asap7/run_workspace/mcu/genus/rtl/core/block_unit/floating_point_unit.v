@@ -371,9 +371,44 @@ module fpu_unit #(
     // Sticky cua c duoc bom vao bit 0, tuc DUOI LSB cua tich (bit 3), nen no
     // khong bao gio lam hong bit nao cua tich.
     // =========================================================================
-    wire signed [11:0] sh_c_raw = ec_q - pexp_q + 12'sd26;
-    wire signed [11:0] sh_c     = (sh_c_raw > 12'sd53)  ?  12'sd53 :
-                                  (sh_c_raw < -12'sd25) ? -12'sd25 : sh_c_raw;
+    // Neo vao so mu LON HON trong hai. Day la diem mau chot, va la cho ban dau
+    // tien cua file nay SAI:
+    //
+    //   Ban dau acc luon duoc neo vao so mu cua TICH, con so hang cong thi dich
+    //   theo, voi phep chan `sh_c > 53 -> 53`. Phep chan do KHONG vo hai nhu ghi
+    //   chu cu khang dinh: neo van o pexp nen dich c xuong 53 co nghia la CHIA c
+    //   cho 2^(sh_c_raw - 53). Voi `fadd(2^-149, 1.0)` thi sh_c_raw = 175, tuc
+    //   1.0 bi chia cho 2^122 va ket qua ra 0 thay vi 1.0.
+    //   Mo hinh tham chieu trong tests/gen_fpu_vectors.py bat 2250 / 14335 vector
+    //   vi loi nay; nhan / chia / can bac hai khong dinh vi chung khong co so
+    //   hang cong.
+    //
+    // Cach dung: neo vao max(pexp, ec) roi dich CA HAI. Ben nao nho hon se roi
+    // xuong duoi bit 0 va tro thanh sticky - dieu do moi thuc su vo hai, vi hai
+    // so cach nhau xa thi khong the trieu tieu. Khi chung GAN nhau (truong hop
+    // duy nhat co trieu tieu lon) thi ca hai phep dich deu khong am nen khong
+    // mat bit nao.
+    //
+    // has_addend_q PHAI nam trong dieu kien: voi FMUL thi ec_q / mc_q lay tu mot
+    // toan hang c khong dung den, de lon hon pexp va keo neo di sai cho.
+    wire signed [11:0] anchor_exp =
+        (has_addend_q && (ec_q > pexp_q)) ? ec_q : pexp_q;
+
+    // Tich: gia tri = p_sig * 2^(pexp-46). Khi neo trung pexp thi sh_p = 3, tuc
+    // dung bo cuc cu - nho vay duong nhan thuan tuy khong doi hanh vi.
+    wire signed [11:0] sh_p_raw = pexp_q - anchor_exp + 12'sd3;
+    wire signed [11:0] sh_p     = (sh_p_raw < -12'sd56) ? -12'sd56 : sh_p_raw;
+    wire [5:0]  sh_p_abs   = sh_p[11] ? (6'd0 - sh_p[5:0]) : sh_p[5:0];
+    wire [47:0] p_shr      = prod_q >> sh_p_abs;
+    wire        p_shr_lost = ((p_shr << sh_p_abs) != prod_q);
+    wire [ACC_W-1:0] acc_p =
+        sh_p[11] ? ({{(ACC_W-48){1'b0}}, p_shr} |
+                    {{(ACC_W-1){1'b0}}, p_shr_lost})
+                 : ({{(ACC_W-48){1'b0}}, prod_q} << sh_p_abs);
+
+    // So hang cong: gia tri = mc * 2^(ec-23).
+    wire signed [11:0] sh_c_raw = ec_q - anchor_exp + 12'sd26;
+    wire signed [11:0] sh_c     = (sh_c_raw < -12'sd26) ? -12'sd26 : sh_c_raw;
     wire [5:0]  sh_c_abs   = sh_c[11] ? (6'd0 - sh_c[5:0]) : sh_c[5:0];
     wire [23:0] c_shr      = mc_q >> sh_c_abs;
     wire        c_shr_lost = ((c_shr << sh_c_abs) != mc_q);
@@ -382,8 +417,8 @@ module fpu_unit #(
         sh_c[11]      ? ({{(ACC_W-24){1'b0}}, c_shr} |
                          {{(ACC_W-1){1'b0}}, c_shr_lost})
                       : ({{(ACC_W-24){1'b0}}, mc_q} << sh_c_abs);
-    wire [ACC_W-1:0] acc_p  = {{(ACC_W-48){1'b0}}, prod_q} << 3;
-    wire             eff_sub = sign_p_q ^ sign_c_q;
+
+    wire eff_sub = sign_p_q ^ sign_c_q;
 
     // =========================================================================
     // Bien tam cua khoi always (gan blocking, KHONG sinh thanh ghi)
@@ -717,7 +752,7 @@ module fpu_unit #(
             // CUA TICH. Xem chung minh phep chan o phan khai bao sh_c.
             // -----------------------------------------------------------------
             S_ALIGN: begin
-                acc_exp <= pexp_q - 12'sd49;
+                acc_exp <= anchor_exp - 12'sd49;
                 sum_q   <= eff_sub ? ({1'b0, acc_p} - {1'b0, acc_c})
                                    : ({1'b0, acc_p} + {1'b0, acc_c});
                 state   <= S_ADDFIX;
@@ -808,10 +843,25 @@ module fpu_unit #(
                     result <= {(rm_q == `FRM_RDN), 31'd0};
                     state  <= S_DONE;
                 end else begin
-                    if (norm_need_r) begin
-                        acc     <= (acc >> norm_sh) |
-                                   {{(ACC_W-1){1'b0}}, norm_lost};
-                        acc_exp <= acc_exp + $signed({6'd0, norm_sh});
+                    // HUONG dich phai quyet dinh bang need_r1 (co bat ky bit nao
+                    // TREN MSB_TARGET khong), KHONG phai bang norm_need_r cua
+                    // rieng buoc nay.
+                    //
+                    // Ban dau viet `if (norm_need_r) ... else if (norm_can_l)`,
+                    // va do la mot loi: norm_need_r cua buoc sh chi hoi "co bit
+                    // nao tu MSB_TARGET+sh tro len khong". Voi bit 1 dan dau nam
+                    // o 51 thi need_r4 = |acc[79:54] = 0, trong khi can_l4 =
+                    // ~|acc[50:47] hoan toan co the bang 1 - the la no DICH TRAI
+                    // 4 bit mot gia tri dang o TREN dich. Mo hinh tham chieu bat
+                    // duoc dung mot vector fmadd voi trieu tieu nhe (acc[50:47]
+                    // tinh co bang 0) - xac suat thap nhung khong he hiem trong
+                    // phan mem that.
+                    if (need_r1) begin
+                        if (norm_need_r) begin
+                            acc     <= (acc >> norm_sh) |
+                                       {{(ACC_W-1){1'b0}}, norm_lost};
+                            acc_exp <= acc_exp + $signed({6'd0, norm_sh});
+                        end
                     end else if (norm_can_l) begin
                         acc     <= acc << norm_sh;
                         acc_exp <= acc_exp - $signed({6'd0, norm_sh});
@@ -930,7 +980,12 @@ module fpu_unit #(
                 state <= S_DONE;
                 if (rnd_inexact) flags_q[`FFLAG_NX] <= 1'b1;
                 if (f2i_unsigned_q) begin
-                    if (res_sign && (f2i_mag != 33'd0)) begin
+                    // Mot so AM vuot pham vi phai ra 0 chu khong phai UINT_MAX.
+                    // Dieu kien PHAI gom ca f2i_oob_q / f2i_ovf_hi: voi mot so am
+                    // rat lon (vd -2^52) thi lat cat acc[58:27] co the tinh co
+                    // bang 0, va ban dau chi kiem `f2i_mag != 0` nen no roi
+                    // xuong nhanh ke tiep va tra ve UINT_MAX - sai dau hoan toan.
+                    if (res_sign && (f2i_oob_q || f2i_ovf_hi || (f2i_mag != 33'd0))) begin
                         flags_q[`FFLAG_NV] <= 1'b1;
                         flags_q[`FFLAG_NX] <= 1'b0;
                         result <= 32'h00000000;
