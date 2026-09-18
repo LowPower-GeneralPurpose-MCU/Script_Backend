@@ -16,7 +16,21 @@ module riscv_pipeline #(
     // kien `riscv_start && !riscv_done`, ca loi DONG BANG VINH VIEN. Do la di
     // san cua testbench lot vao RTL production: mot syscall lam chet chip.
     // -------------------------------------------------------------------------
-    parameter HALT_ON_ECALL = 0
+    parameter HALT_ON_ECALL = 0,
+    // -------------------------------------------------------------------------
+    // RV32F (2026-09-18). MOT cong tac duy nhat cho toan bo duong dau phay dong:
+    // no di thang xuong ENABLE_F_EXTENSION cua decoder, ENABLE_FPU cua tang EX
+    // va ENABLE_F_EXTENSION cua tep CSR (bit F trong misa). Truoc day ba cho do
+    // phai sua BANG TAY va de lech nhau - dung loi ma ghi chu F1 trong
+    // register_file.v mo ta.
+    //
+    // MAC DINH 0. Ly do khong phai ky thuat ma la LUONG THIET KE: ban chay
+    // Innovus sach ngay 2026-09-18 (DRC 0, setup +349 ps, hold +21 ps) duoc dung
+    // tren netlist KHONG co FPU. Bat len 1 lam netlist phinh dang ke nen phai
+    // chay lai ca Genus lan 11 khoi Innovus. Mo phong bat rieng bang defparam
+    // (xem tests/tb_fpu_core.sv).
+    // -------------------------------------------------------------------------
+    parameter ENABLE_F = 0
 )(
     input  wire        clk,
     input  wire        reset_n,
@@ -166,6 +180,12 @@ module riscv_pipeline #(
     wire        f_to_x;
     wire        x_to_f;
     wire [4:0]  fpu_operation;
+    // ---- RV32F: duong f o tang ID -----------------------------------------
+    wire [4:0]  fs3;                  // instr[31:27], toan hang thu ba cua FMA
+    wire        uses_fs1, uses_fs2, uses_fs3;
+    wire [31:0] read_f_data1, read_f_data2, read_f_data3;
+    wire [2:0]  frm_val;              // fcsr.frm
+    wire        fs_off_val;           // mstatus.FS == Off
 
     // =========================================================================
     // ID/EX
@@ -215,6 +235,8 @@ module riscv_pipeline #(
     wire [4:0]  id_ex_fpu_operation;
     wire [31:0] id_ex_read_f_data1;
     wire [31:0] id_ex_read_f_data2;
+    wire [31:0] id_ex_read_f_data3;
+    wire [4:0]  id_ex_fs3;
     wire [ROB_TAG_W-1:0] id_ex_rob_tag;
     wire        id_ex_rob_valid;
 
@@ -227,6 +249,8 @@ module riscv_pipeline #(
     wire [31:0] csr_write_data_ex;
     wire [31:0] fpu_in1;
     wire [31:0] fpu_in2;
+    wire [31:0] fpu_in3;
+    wire [4:0]  fpu_fflags;
     wire [31:0] alu_result;
     wire        branch_taken;
     wire        mf_alu_stall;
@@ -266,6 +290,8 @@ module riscv_pipeline #(
     wire        ex_mem_f_reg_write;
     wire        ex_mem_f_mem_to_reg;
     wire        ex_mem_f_mem_write;
+    wire [4:0]  ex_mem_fflags;
+    wire        ex_mem_fp_active;
     wire [ROB_TAG_W-1:0] ex_mem_rob_tag;
     wire        ex_mem_rob_valid;
     wire [31:0] final_mem_write_data;
@@ -908,7 +934,9 @@ module riscv_pipeline #(
     // =========================================================================
     // ID
     // =========================================================================
-    instruction_decode ID (
+    instruction_decode #(
+        .ENABLE_F_EXTENSION(ENABLE_F)
+    ) ID (
         .if_id_pc_in(if_id_pc_in),
         .if_id_instr(if_id_instr),
         .ext_imm(ext_imm),
@@ -951,21 +979,58 @@ module riscv_pipeline #(
         .f_mem_write(f_mem_write),
         .f_to_x(f_to_x),
         .x_to_f(x_to_f),
-        .fpu_operation(fpu_operation)
+        .fpu_operation(fpu_operation),
+        .fs3(fs3),
+        .uses_fs1(uses_fs1),
+        .uses_fs2(uses_fs2),
+        .uses_fs3(uses_fs3),
+        .fs_off(fs_off_val),
+        .frm_i(frm_val)
     );
 
     wire is_csr = (dbg_reg_read_addr[15:12] == 4'h0);
     wire is_gpr = (dbg_reg_read_addr[15:5]  == 11'h080);
-    wire is_fpr = 1'b0;
+    // Ban do thanh ghi cua Debug Module (dac ta debug, bang "abstract register"):
+    //   0x0000-0x0FFF  CSR
+    //   0x1000-0x101F  thanh ghi so nguyen x0-x31
+    //   0x1020-0x103F  thanh ghi dau phay dong f0-f31
+    // Nhanh FPR truoc day bi ep bang 0 nen OpenOCD doc `info float` ra toan 0.
+    wire is_fpr = (dbg_reg_read_addr[15:5]  == 11'h081) && (ENABLE_F != 0);
 
     wire dbg_gpr_we = dbg_reg_write_en & (dbg_reg_write_addr[15:5]  == 11'h080);
+    wire dbg_fpr_we = dbg_reg_write_en & (dbg_reg_write_addr[15:5]  == 11'h081) &
+                      (ENABLE_F != 0);
     wire dbg_csr_we = dbg_reg_write_en & (dbg_reg_write_addr[15:12] == 4'h0);
 
     assign dbg_reg_read_data = is_csr ? csr_dbg_read_data :
                                is_gpr ? rf_dbg_read_data  :
                                is_fpr ? frf_dbg_read_data : 32'd0;
 
-    csr_register_file CSR_RF (
+    // =========================================================================
+    // RV32F - dieu kien COMMIT cua trang thai fcsr.
+    //
+    // Dung chinh bo ba dieu kien cua instret_pulse (khoan no I): mot lenh chi
+    // duoc phep sua trang thai kien truc khi no THAT SU retire.
+    //   ex_mem_valid  : khong phai bong bong
+    //   !stall_mem_wb : khong dem lai trong luc dong bang - QUAN TRONG, vi
+    //                   fflags la co TICH LUY, OR lai nhieu lan thi vo hai,
+    //                   NHUNG neu thieu dieu kien nay thi mot lenh F dang cho
+    //                   D-cache se bam co suot chuc chu ky va lam nhieu moi phep
+    //                   do. Giu de dong bo voi minstret.
+    //   !trap_enter   : lenh gay trap KHONG retire, nen khong duoc dat co.
+    // -------------------------------------------------------------------------
+    wire fp_commit    = ex_mem_valid & ~stall_mem_wb & ~trap_enter;
+    wire fflags_we_w  = fp_commit & ex_mem_fp_active;
+    wire fs_dirty_w   = fp_commit & (ex_mem_f_reg_write | ex_mem_fp_active);
+
+    csr_register_file #(
+        .ENABLE_F_EXTENSION(ENABLE_F)
+    ) CSR_RF (
+        .fflags_set(ex_mem_fflags),
+        .fflags_we(fflags_we_w),
+        .fs_dirty(fs_dirty_w),
+        .frm_out(frm_val),
+        .fs_off_out(fs_off_val),
         .clk(clk),
         .reset_n(reset_n),
         .meip_i(meip_i),
@@ -1092,8 +1157,73 @@ module riscv_pipeline #(
     assign read_data2 = (rs2 != 5'd0 && rs2 == mem_wb_rd && mem_wb_reg_write) ?
                         wb_write_data : read_data2_temp;
 
-    assign frf_dbg_read_data = 32'd0;
-    assign wb_f_write_data   = 32'd0;
+    // =========================================================================
+    // Tep thanh ghi dau phay dong (3R1W).
+    //
+    // Truoc 2026-09-18 module nay TON TAI trong register_file.v nhung KHONG duoc
+    // instantiate o dau ca - hai dong `assign ... = 32'd0` thay cho no. Do la
+    // mot trong ba cho cat duong F ma ghi chu o khoi ID/EX ben duoi mo ta.
+    //
+    // KHAC tep so nguyen o hai diem, ca hai deu de sai neu chep nguyen:
+    //   * f0 la thanh ghi THAT - khong co ngoai le "doc ra 0, ghi thi bo".
+    //   * Ba cong doc thay vi hai, vi FMA can f[rs1], f[rs2] va f[rs3] cung luc.
+    //
+    // Khi ENABLE_F = 0 thi ca khoi bi tat: khong instantiate, khong 32 thanh ghi
+    // 32 bit chet nam trong netlist.
+    // =========================================================================
+    wire [31:0] frf_read_data1, frf_read_data2, frf_read_data3;
+
+    generate
+    if (ENABLE_F) begin : gen_fregfile
+        f_register_file FRF (
+            .clk(clk),
+            .reset_n(reset_n),
+            .read_reg1(rs1),
+            .read_reg2(rs2),
+            .read_reg3(fs3),
+            .read_reg1_lane1(5'd0),
+            .read_reg2_lane1(5'd0),
+            .read_data1(frf_read_data1),
+            .read_data2(frf_read_data2),
+            .read_data3(frf_read_data3),
+            .read_data1_lane1(),
+            .read_data2_lane1(),
+            .reg_write_en(mem_wb_f_reg_write),
+            .write_reg(mem_wb_rd),
+            .write_data(wb_f_write_data),
+            .reg_write_en_lane1(1'b0),
+            .write_reg_lane1(5'd0),
+            .write_data_lane1(32'd0),
+            .dbg_mode(dbg_halted),
+            .dbg_read_addr(dbg_reg_read_addr[4:0]),
+            .dbg_read_data(frf_dbg_read_data),
+            .dbg_write_en(dbg_fpr_we),
+            .dbg_write_addr(dbg_reg_write_addr[4:0]),
+            .dbg_write_data(dbg_reg_write_data)
+        );
+    end else begin : no_fregfile
+        assign frf_read_data1  = 32'd0;
+        assign frf_read_data2  = 32'd0;
+        assign frf_read_data3  = 32'd0;
+        assign frf_dbg_read_data = 32'd0;
+    end
+    endgenerate
+
+    // Bypass ghi-doc trong CUNG chu ky, y het read_data1/read_data2 ben x: tep
+    // thanh ghi ghi o suon len nen mot lenh o ID doc cung thanh ghi ma MEM/WB
+    // dang ghi se lay gia tri CU. Ben x da co duong nay san; ben f thi chua bao
+    // gio co vi tep chua tung duoc noi.
+    assign read_f_data1 = (mem_wb_f_reg_write && (mem_wb_rd == rs1)) ?
+                          wb_f_write_data : frf_read_data1;
+    assign read_f_data2 = (mem_wb_f_reg_write && (mem_wb_rd == rs2)) ?
+                          wb_f_write_data : frf_read_data2;
+    assign read_f_data3 = (mem_wb_f_reg_write && (mem_wb_rd == fs3)) ?
+                          wb_f_write_data : frf_read_data3;
+
+    // Ghi nguoc ve tep f: `flw` lay du lieu tu duong bo nho, moi lenh F khac lay
+    // tu FPU. Giong het write_back cua duong so nguyen, chi khac nguon.
+    assign wb_f_write_data = mem_wb_f_mem_to_reg ? mem_wb_mem_read_data
+                                                 : mem_wb_fpu_result;
 
     id_ex_register #(.ROB_TAG_W(ROB_TAG_W)) ID_EX (
         .clk(clk),
@@ -1158,15 +1288,17 @@ module riscv_pipeline #(
         // Do la 33 flop chet DUNG NHU MONG DOI, khong phai noi sai.  Muon bat
         // FPU thi phai sua ca ba cho: .ENABLE_FPU(1), bay tin hieu that vao
         // bay cong duoi day, va khai lai bit F trong misa.
-        .fpu_en(1'b0),
-        .f_reg_write(1'b0),
-        .f_mem_to_reg(1'b0),
-        .f_mem_write(1'b0),
-        .f_to_x(1'b0),
-        .x_to_f(1'b0),
-        .fpu_operation(5'd0),
-        .read_f_data1(32'd0),
-        .read_f_data2(32'd0),
+        .fpu_en(fpu_en),
+        .f_reg_write(f_reg_write),
+        .f_mem_to_reg(f_mem_to_reg),
+        .f_mem_write(f_mem_write),
+        .f_to_x(f_to_x),
+        .x_to_f(x_to_f),
+        .fpu_operation(fpu_operation),
+        .read_f_data1(read_f_data1),
+        .read_f_data2(read_f_data2),
+        .read_f_data3(read_f_data3),
+        .fs3(fs3),
         .id_ex_pc_plus_4(id_ex_pc_plus_4),
         .id_ex_pc_in(id_ex_pc_in),
         .id_ex_funct3(id_ex_funct3),
@@ -1212,6 +1344,8 @@ module riscv_pipeline #(
         .id_ex_fpu_operation(id_ex_fpu_operation),
         .id_ex_read_f_data1(id_ex_read_f_data1),
         .id_ex_read_f_data2(id_ex_read_f_data2),
+        .id_ex_read_f_data3(id_ex_read_f_data3),
+        .id_ex_fs3(id_ex_fs3),
         .id_ex_rob_tag(id_ex_rob_tag),
         .id_ex_rob_valid(id_ex_rob_valid),
         .id_ex_valid(id_ex_valid),
@@ -1235,22 +1369,26 @@ module riscv_pipeline #(
         .mem_wb_rd(mem_wb_rd),
         .ex_mem_alu_result(ex_mem_alu_result),
         .mem_wb_write_data(wb_write_data),
-        .id_ex_read_f_data1(32'd0),
-        .id_ex_read_f_data2(32'd0),
-        .ex_mem_f_reg_write(1'b0),
-        .mem_wb_f_reg_write(1'b0),
-        .ex_mem_fpu_result(32'd0),
-        .mem_wb_f_write_data(32'd0),
+        .id_ex_fs3(id_ex_fs3),
+        .id_ex_read_f_data1(id_ex_read_f_data1),
+        .id_ex_read_f_data2(id_ex_read_f_data2),
+        .id_ex_read_f_data3(id_ex_read_f_data3),
+        .ex_mem_f_reg_write(ex_mem_f_reg_write),
+        .ex_mem_f_mem_to_reg(ex_mem_f_mem_to_reg),
+        .mem_wb_f_reg_write(mem_wb_f_reg_write),
+        .ex_mem_fpu_result(ex_mem_fpu_result),
+        .mem_wb_f_write_data(wb_f_write_data),
         .alu_in1(alu_in1),
         .alu_in2(alu_in2),
         .mem_write_data(mem_write_data),
         .fpu_in1(fpu_in1),
-        .fpu_in2(fpu_in2)
+        .fpu_in2(fpu_in2),
+        .fpu_in3(fpu_in3)
     );
 
     execute #(
         .ENABLE_MULDIV(1),
-        .ENABLE_FPU(0),
+        .ENABLE_FPU(ENABLE_F),
         .ENABLE_CSR(1),
         .ENABLE_BRANCH(1)
     ) EX (
@@ -1273,17 +1411,23 @@ module riscv_pipeline #(
         .id_ex_csr_we(id_ex_csr_we),
         .csr_read_data(csr_read_data_fwd),
         .id_ex_rs1(id_ex_rs1),
-        .id_ex_fpu_en(1'b0),
-        .id_ex_fpu_operation(5'd0),
-        .id_ex_read_f_data1(32'd0),
-        .id_ex_read_f_data2(32'd0),
-        .id_ex_f_to_x(1'b0),
-        .id_ex_x_to_f(1'b0),
+        .id_ex_fpu_en(id_ex_fpu_en),
+        .id_ex_fpu_operation(id_ex_fpu_operation),
+        // Cac cong nay nhan ban DA FORWARD chu khong phai ban thang tu ID/EX -
+        // day chinh la ly do forwarding_unit co ba dau ra fpu_in*. Truoc day
+        // tang EX doc `id_ex_read_f_data1` truc tiep, tuc bo qua forwarding.
+        .id_ex_read_f_data1(fpu_in1),
+        .id_ex_read_f_data2(fpu_in2),
+        .id_ex_read_f_data3(fpu_in3),
+        .id_ex_f_to_x(id_ex_f_to_x),
+        .id_ex_x_to_f(id_ex_x_to_f),
+        .frm_i(frm_val),
         .alu_result(alu_result),
         .branch_taken(branch_taken),
         .csr_write_data(csr_write_data_ex),
         .mf_alu_stall(mf_alu_stall),
         .fpu_result_out(fpu_result_out),
+        .fpu_fflags(fpu_fflags),
         .jalr_target(jalr_target)
     );
 
@@ -1329,11 +1473,13 @@ module riscv_pipeline #(
         .id_ex_csr_we(id_ex_csr_we),
         .csr_write_data_in(csr_write_data_ex),
         .id_ex_instr(id_ex_instr),
-        .fpu_result(32'd0),
-        .id_ex_read_f_data2(32'd0),
-        .id_ex_f_reg_write(1'b0),
-        .id_ex_f_mem_to_reg(1'b0),
-        .id_ex_f_mem_write(1'b0),
+        .fpu_result(fpu_result_out),
+        .id_ex_read_f_data2(fpu_in2),   // du lieu ghi cua `fsw`, da forward
+        .id_ex_f_reg_write(id_ex_f_reg_write),
+        .id_ex_f_mem_to_reg(id_ex_f_mem_to_reg),
+        .id_ex_f_mem_write(id_ex_f_mem_write),
+        .fpu_fflags(fpu_fflags),
+        .id_ex_fpu_en(id_ex_fpu_en),
         .ex_mem_alu_result(ex_mem_alu_result),
         .ex_mem_branch_target(ex_mem_branch_target),
         .ex_mem_pc_plus_4(ex_mem_pc_plus_4),
@@ -1367,6 +1513,8 @@ module riscv_pipeline #(
         .ex_mem_f_reg_write(ex_mem_f_reg_write),
         .ex_mem_f_mem_to_reg(ex_mem_f_mem_to_reg),
         .ex_mem_f_mem_write(ex_mem_f_mem_write),
+        .ex_mem_fflags(ex_mem_fflags),
+        .ex_mem_fp_active(ex_mem_fp_active),
         .ex_mem_rob_tag(ex_mem_rob_tag),
         .ex_mem_rob_valid(ex_mem_rob_valid),
         .ex_mem_valid(ex_mem_valid),
@@ -1430,9 +1578,9 @@ module riscv_pipeline #(
         .ex_mem_alu_result(ex_mem_alu_result),
         .ex_mem_rd(ex_mem_rd),
         .ex_mem_ecall(ex_mem_ecall),
-        .ex_mem_fpu_result(32'd0),
-        .ex_mem_f_reg_write(1'b0),
-        .ex_mem_f_mem_to_reg(1'b0),
+        .ex_mem_fpu_result(ex_mem_fpu_result),
+        .ex_mem_f_reg_write(ex_mem_f_reg_write),
+        .ex_mem_f_mem_to_reg(ex_mem_f_mem_to_reg),
         .mem_wb_mem_read_data(mem_wb_mem_read_data),
         .mem_wb_pc_plus_4(mem_wb_pc_plus_4),
         .mem_wb_alu_result(mem_wb_alu_result),
@@ -1471,6 +1619,14 @@ module riscv_pipeline #(
         // G4 - interlock phai dua tren mem_to_reg: SC.W co mem_read = 0 nhung
         // rd VAN nhan ma trang thai 0/1 tu duong bo nho.
         .id_ex_mem_to_reg(id_ex_mem_to_reg),
+        // RV32F - interlock rieng cho thanh ghi f. `flw` la lenh F duy nhat lay
+        // ket qua tu duong bo nho va no khong co duong forward.
+        .id_ex_f_mem_to_reg(id_ex_f_mem_to_reg),
+        .uses_fs1(uses_fs1),
+        .uses_fs2(uses_fs2),
+        .uses_fs3(uses_fs3),
+        .fs3(fs3),
+        .id_x_to_f(x_to_f),
         .id_ex_jal(id_ex_jal),
         .id_ex_jalr(id_ex_jalr),
         .ex_mem_jalr(ex_mem_jalr),

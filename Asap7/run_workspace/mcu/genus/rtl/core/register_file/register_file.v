@@ -1,6 +1,7 @@
 //==================================================================================================
 // File: register_file.v
 //==================================================================================================
+`include "core/fpu_defines.vh"
 
 module register_file (
     input clk,
@@ -111,12 +112,17 @@ endmodule
 module f_register_file (
     input clk, 
     input reset_n,
-    input [4:0] read_reg1, 
+    input [4:0] read_reg1,
     input [4:0] read_reg2,
+    // Cong doc thu BA: nhom FMA (fmadd/fmsub/fnmsub/fnmadd) can ba toan hang
+    // trong CUNG mot chu ky. Day la ly do tep thanh ghi f can 3R1W trong khi
+    // tep so nguyen chi can 2R1W.
+    input [4:0] read_reg3,
     input [4:0] read_reg1_lane1,
     input [4:0] read_reg2_lane1,
-    output [31:0] read_data1, 
+    output [31:0] read_data1,
     output [31:0] read_data2,
+    output [31:0] read_data3,
     output [31:0] read_data1_lane1,
     output [31:0] read_data2_lane1,
     input reg_write_en,   
@@ -142,6 +148,7 @@ module f_register_file (
     // Đọc cho Pipeline
     assign read_data1 = f_regfile[read_reg1];
     assign read_data2 = f_regfile[read_reg2];
+    assign read_data3 = f_regfile[read_reg3];
     assign read_data1_lane1 = f_regfile[read_reg1_lane1];
     assign read_data2_lane1 = f_regfile[read_reg2_lane1];
     
@@ -177,9 +184,22 @@ module f_register_file (
 endmodule
 
 
-module csr_register_file (
+module csr_register_file #(
+    // F1 - PHAI khop voi parameter ENABLE_F_EXTENSION cua main_control_unit va
+    // voi .ENABLE_FPU cua `execute`. Ba noi lech nhau nghia la misa noi doi ve
+    // cai da hien thuc - dung loi ma ghi chu F1 ben duoi mo ta.
+    parameter ENABLE_F_EXTENSION = 0
+) (
     input clk,
     input reset_n,
+    // ---- RV32F: gop co ngoai le tu FPU vao fcsr.fflags --------------------
+    // Duong nay o TANG MEM, cung tang voi csr_write_en, nen no chiu chung luat
+    // commit: lenh bi trap hoac bi flush thi khong duoc dat co.
+    input [4:0]  fflags_set,
+    input        fflags_we,      // lenh F SO HOC dang commit -> gop co
+    input        fs_dirty,       // lenh nao do vua doi thanh ghi f (ke ca flw)
+    output [2:0] frm_out,        // che do lam tron dong, cho FPU va cho decoder
+    output       fs_off_out,     // mstatus.FS == Off -> moi lenh F la illegal
     input meip_i, // External Interrupt Pending
     input msip_i, // Software Interrupt Pending
     input mtip_i, // Timer Interrupt Pending
@@ -283,16 +303,27 @@ module csr_register_file (
 
     localparam integer MISA_A = 0;
     localparam integer MISA_C = 2;
+    localparam integer MISA_F = 5;
     localparam integer MISA_I = 8;
     localparam integer MISA_M = 12;
 
+    // 2026-09-18: bit F duoc khai LAI, nhung lan nay co hang that dang sau no -
+    // FPU IEEE-754 day du, fcsr/fflags/frm, va decoder da ha illegal_instr cho
+    // toan bo 26 ma lenh RV32F. Ghi chu F1 ben tren van dung nguyen tac: bit nay
+    // CHI duoc len khi ENABLE_F_EXTENSION = 1 o CA BA noi (xem parameter).
     localparam [31:0] MISA = (32'd1 << 30)     |  // MXL = 1 -> XLEN = 32
                              (32'd1 << MISA_I) |  // I - co so
                              (32'd1 << MISA_M) |  // M - nhan / chia
                              (32'd1 << MISA_C) |  // C - lenh nen 16 bit
+                             ((ENABLE_F_EXTENSION != 0) ? (32'd1 << MISA_F) : 32'd0) |
                              ((ENABLE_A_EXTENSION != 0) ? (32'd1 << MISA_A) : 32'd0);
 
     reg [31:0] mstatus;
+    // ---- fcsr (0x003) = {24'd0, frm[2:0], fflags[4:0]} ---------------------
+    // fflags (0x001) va frm (0x002) la hai cua so nhin vao CUNG hai thanh ghi
+    // nay, khong phai ba thanh ghi rieng - do la ly do chung nam canh nhau o day.
+    reg [4:0]  fflags;
+    reg [2:0]  frm;
     reg [31:0] mie;
     reg [31:0] mtvec;
     reg [31:0] mscratch;
@@ -349,6 +380,26 @@ module csr_register_file (
     assign mepc_out = mepc;
     assign mstatus_mie = mstatus[3];
     assign mie_out = mie;
+
+    // =====================================================================
+    // mstatus.FS (bit 14:13) - trang thai don vi dau phay dong.
+    //   00 Off      moi lenh F la illegal-instruction
+    //   01 Initial  bat, thanh ghi f con nguyen gia tri khoi tao
+    //   10 Clean    bat, f khop voi ban da luu trong bo nho
+    //   11 Dirty    bat, f DA THAY DOI - bo dieu phoi ngu canh phai luu lai
+    //
+    // Gia tri reset cua mstatus la 0x3800, tuc bit 13 = 1 -> FS = 01 (Initial).
+    // Nho vay firmware KHONG phai bat gi truoc khi dung lenh F. (Truoc day bit
+    // 13 chi tinh co nam trong hang so 0x3800 canh MPP; gio no co y nghia.)
+    //
+    // mstatus.SD (bit 31) la "tom tat": bang 1 khi FS = Dirty. No chi doc, sinh
+    // ra tu FS chu khong phai mot flip-flop rieng.
+    // =====================================================================
+    wire [1:0]  fs_field  = mstatus[14:13];
+    wire [31:0] mstatus_rd = {(fs_field == 2'b11), mstatus[30:0]};
+
+    assign fs_off_out = (fs_field == 2'b00) || (ENABLE_F_EXTENSION == 0);
+    assign frm_out    = frm;
     
     // Bổ sung: Gán giá trị dpc ra cổng dpc_out
     assign dpc_out = dpc;
@@ -363,7 +414,12 @@ module csr_register_file (
                 12'hF13: csr_read_value = MIMPID;
                 12'hF14: csr_read_value = MHARTID;
                 12'h301: csr_read_value = MISA;
-                12'h300: csr_read_value = mstatus;
+                12'h300: csr_read_value = mstatus_rd;
+                // fcsr va hai cua so con cua no. Chung la CSR do NGUOI DUNG
+                // truy cap duoc (dia chi 0x0xx), khac moi CSR khac o day.
+                12'h001: csr_read_value = {27'd0, fflags};
+                12'h002: csr_read_value = {29'd0, frm};
+                12'h003: csr_read_value = {24'd0, frm, fflags};
                 12'h304: csr_read_value = mie_rd;
                 12'h305: csr_read_value = mtvec;
                 12'h340: csr_read_value = mscratch;
@@ -446,6 +502,12 @@ module csr_register_file (
                 12'hB00, 12'hB80, 12'hB02, 12'hB82,          // mcycle(h) minstret(h)
                 12'hC00, 12'hC80, 12'hC02, 12'hC82:          // cycle(h) instret(h)
                     csr_exists = 1'b1;
+                // fflags / frm / fcsr chi ton tai khi CO don vi F. Neu khong,
+                // mot `csrw fcsr, t0` phai bao illegal chu khong duoc roi vao
+                // khoang khong - day dung la lop bug ma csr_exists sinh ra de
+                // chan.
+                12'h001, 12'h002, 12'h003:
+                    csr_exists = (ENABLE_F_EXTENSION != 0);
                 // Debug CSR: chi ton tai trong Debug Mode.
                 12'h7b0, 12'h7b1, 12'h7b2:
                     csr_exists = in_debug;
@@ -504,9 +566,10 @@ module csr_register_file (
     // danh sach duoi day. Quen dong thu hai = CSR do doc ra gia tri cu, im lang.
     // =====================================================================
     always @(csr_addr  or csr_addr_lane1 or dbg_reg_read_addr or
-             mstatus   or mie_rd         or mtvec     or mscratch or
+             mstatus_rd or mie_rd        or mtvec     or mscratch or
              mepc      or mcause_rd      or mtval     or mip_val  or
              mintthresh or mil           or
+             fflags    or frm            or
              mcycle    or minstret       or
              dcsr      or dpc            or dscratch0) begin
         csr_read_data = csr_read_value(csr_addr);
@@ -516,7 +579,11 @@ module csr_register_file (
     
     always @(posedge clk or negedge reset_n) begin
         if (!reset_n) begin
+            // Bit 13 cua 0x3800 la FS[0] -> FS = 01 (Initial), tuc don vi F BAT
+            // ngay tu dau. Xem ghi chu mstatus.FS ben tren.
             mstatus   <= 32'h00003800;
+            fflags    <= 5'd0;
+            frm       <= `FRM_RNE;
             mie       <= 32'b0;
             mtvec     <= 32'b0;
             mscratch  <= 32'b0;
@@ -573,7 +640,33 @@ module csr_register_file (
             if (instret_en) begin
                 minstret <= minstret + 64'd1;
             end
-            
+
+            // =============================================================
+            // RV32F - gop co ngoai le va danh dau FS = Dirty.
+            //
+            // Nam RIENG ngoai chuoi if/else o duoi (trap_commit / mret_commit /
+            // csr_write) vi no KHONG phai mot lenh CSR: mot lenh F va mot lenh
+            // CSR khong bao gio cung o tang MEM, nen hai duong ghi khong the
+            // tranh nhau. Viet trong chuoi do se khien `csrw fflags` va mot lenh
+            // F bat ky loai tru nhau mot cach vo nghia.
+            //
+            // fflags la co TICH LUY theo dac ta: chi phan mem moi xoa duoc no.
+            // Vi vay OR chu khong gan.
+            //
+            // fflags_we / fs_dirty da bao gom dieu kien commit (ex_mem_valid,
+            // khong trap, khong stall) o riscv_pipeline.v - giong het cach
+            // csr_write_en duoc dung.
+            // =============================================================
+            if (fflags_we) begin
+                fflags <= fflags | fflags_set;
+            end
+            if (fflags_we || fs_dirty) begin
+                // Chi len Dirty khi F dang BAT. Neu FS = Off thi lenh F da la
+                // illegal roi, khong the toi day - dieu kien nay la lop chan.
+                if (mstatus[14:13] != 2'b00) mstatus[14:13] <= 2'b11;
+            end
+
+
             if (trap_commit) begin
                 mepc <= trap_pc;
                 mcause <= trap_cause;
@@ -599,6 +692,22 @@ module csr_register_file (
                         mstatus[3] <= csr_write_data[3];
                         mstatus[7] <= csr_write_data[7];
                         mstatus[12:11] <= csr_write_data[12:11];
+                        // FS la WARL voi CA BON gia tri hop le, nen ghi thang.
+                        // Phan mem TAT F bang cach ghi 00 vao day (bo dieu phoi
+                        // ngu canh lam vay de khong phai luu 32 thanh ghi f cho
+                        // mot tien trinh khong dung so thuc).
+                        mstatus[14:13] <= csr_write_data[14:13];
+                        // mstatus.SD (bit 31) chi doc, sinh tu FS -> khong ghi.
+                    end
+                    // ---- fcsr va hai cua so con -----------------------------
+                    // Ba dia chi nay la BA CACH NHIN vao cung hai thanh ghi. Ghi
+                    // fflags khong duoc cham frm va nguoc lai; chi 0x003 ghi ca
+                    // hai. Cac bit tren [7:0] cua fcsr la du tru, ghi bi bo qua.
+                    12'h001: fflags <= csr_write_data[4:0];
+                    12'h002: frm    <= csr_write_data[2:0];
+                    12'h003: begin
+                        fflags <= csr_write_data[4:0];
+                        frm    <= csr_write_data[7:5];
                     end
                     12'h304: mie <= csr_write_data & 32'h00000888;
                     12'h347: mintthresh <= csr_write_data[7:0];

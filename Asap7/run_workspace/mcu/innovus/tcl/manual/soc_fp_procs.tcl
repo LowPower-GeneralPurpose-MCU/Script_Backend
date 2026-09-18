@@ -351,6 +351,13 @@ proc soc_load_sram_place {{file ""}} {
     uplevel #0 [list source $file]
     set saved $::SOC_SRAM_PLACE_CORE
     set now [lindex [dbGet top.fPlan.coreBox] 0]
+    # Chua co design trong bo nho thi dbGet tra 0x0; 'expr' doc 0x0 la so 0 nen
+    # so sanh ben duoi bao "loi khac nhau" va XUI XOA file vi tri SRAM - mat
+    # het cong xep tay.  Run 2026-09-18 16:59 dinh dung cai bay nay sau khi
+    # KHOI 0 that bai o preflight.
+    if {[llength $now] != 4} {
+        error "soc_load_sram_place: chua co floorplan trong bo nho (dbGet coreBox = '$now').  Chay KHOI 0 (init_design) va KHOI 1 (floorPlan) truoc. KHONG xoa $file - vi tri SRAM trong do van dung."
+    }
     set dx 0.0
     foreach a $saved b $now i {0 1 2 3} {
         set d [expr {$b - $a}]

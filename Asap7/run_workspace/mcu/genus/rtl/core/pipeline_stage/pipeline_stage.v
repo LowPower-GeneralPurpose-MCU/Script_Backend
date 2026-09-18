@@ -466,7 +466,12 @@ module instruction_fetch (
 endmodule
 
 
-module instruction_decode (
+module instruction_decode #(
+    // Truyen xuong main_control_unit. Truoc day tham so do chi dat duoc bang
+    // `defparam` tu testbench, nen khong co cach nao bat F tu tang top - va do
+    // la mot phan ly do duong F chua bao gio duoc bat.
+    parameter ENABLE_F_EXTENSION = 0
+) (
     input [31:0] if_id_pc_in,
     input [31:0] if_id_instr,
     output [31:0] ext_imm, 
@@ -509,8 +514,19 @@ module instruction_decode (
     output f_mem_write,
     output f_to_x,
     output x_to_f,
-    output [4:0] fpu_operation
+    output [4:0] fpu_operation,
+    // ---- RV32F -------------------------------------------------------------
+    // fs3 la toan hang thu BA cua nhom FMA. No nam o instr[31:27], tuc CHONG
+    // LEN truong funct7 - khong the tai su dung rs2 hay funct7 duoc.
+    output [4:0] fs3,
+    output uses_fs1,
+    output uses_fs2,
+    output uses_fs3,
+    input  fs_off,          // mstatus.FS == Off -> moi lenh F la illegal
+    input  [2:0] frm_i      // fcsr.frm, de bat rm = DYN voi frm khong hop le
 );
+
+    assign fs3 = if_id_instr[31:27];
 
     reg [19:0] u_imm;
     reg [11:0] i_imm;
@@ -538,9 +554,15 @@ module instruction_decode (
     wire [31:0] b_imm_ext = {{19{b_imm[11]}}, b_imm, 1'b0};
     wire [31:0] j_imm_ext = {{11{j_imm[19]}}, j_imm, 1'b0};
     
+    // 0000111 = FLW va 0100111 = FSW dung DUNG dinh dang I / S cua lw / sw.
+    // Truoc 2026-09-18 ca hai roi vao nhanh cuoi `32'b0`, nen MOI flw / fsw deu
+    // tinh dia chi voi offset = 0 - tuc `flw ft0, 8(a0)` doc dung dia chi a0.
+    // Loi nay khong the thay duoc trong mo phong vi decoder chua bao gio cho
+    // lenh F chay (illegal_instr luon = 1), nen no nam yen suot.
     assign ext_imm = (opcode == 7'b0110111 || opcode == 7'b0010111) ? u_imm_ext :
-                     (opcode == 7'b0000011 || opcode == 7'b0010011 || opcode == 7'b1100111) ? i_imm_ext :
-                     (opcode == 7'b0100011) ? s_imm_ext :
+                     (opcode == 7'b0000011 || opcode == 7'b0010011 ||
+                      opcode == 7'b1100111 || opcode == 7'b0000111) ? i_imm_ext :
+                     (opcode == 7'b0100011 || opcode == 7'b0100111) ? s_imm_ext :
                      (opcode == 7'b1100011) ? b_imm_ext :
                      (opcode == 7'b1101111) ? j_imm_ext :
                      32'b0;
@@ -612,7 +634,9 @@ module instruction_decode (
     wire sys_priv_ok = ecall | ebreak | mret | wfi_req;
     assign illegal_instr = cu_illegal & ~sys_priv_ok;
 
-    main_control_unit MCU (
+    main_control_unit #(
+        .ENABLE_F_EXTENSION(ENABLE_F_EXTENSION)
+    ) MCU (
         .opcode(opcode),
         .funct7(funct7),
         .funct3(funct3),
@@ -638,6 +662,11 @@ module instruction_decode (
         .f_to_x(f_to_x),
         .x_to_f(x_to_f),
         .fpu_operation(fpu_operation),
+        .uses_fs1(uses_fs1),
+        .uses_fs2(uses_fs2),
+        .uses_fs3(uses_fs3),
+        .fs_off(fs_off),
+        .frm_i(frm_i),
         .fence_op(fence_op),
         .illegal_instr(cu_illegal)
     );
@@ -682,13 +711,16 @@ module execute #(
     input [4:0] id_ex_fpu_operation,
     input [31:0] id_ex_read_f_data1,
     input [31:0] id_ex_read_f_data2,
+    input [31:0] id_ex_read_f_data3,   // f[rs3] - chi nhom FMA dung
     input id_ex_f_to_x,
     input id_ex_x_to_f,
+    input [2:0]  frm_i,                // fcsr.frm, cho che do lam tron DYN
     output reg [31:0] alu_result,
     output reg branch_taken,
     output reg [31:0] csr_write_data,
     output mf_alu_stall,
     output [31:0] fpu_result_out,
+    output [4:0]  fpu_fflags,          // co ngoai le, chot cung luc voi ket qua
     // R2 - dia chi dich cua JALR, tinh o EX. Xem ghi chu ngay duoi.
     output [31:0] jalr_target
 );  
@@ -734,8 +766,13 @@ module execute #(
     wire fpu_stall;
     wire fpu_done;
     wire [31:0] fpu_result;
-    
+    wire [4:0]  fpu_fflags_w;
+
+    // FCVT.S.W / FCVT.S.WU / FMV.W.X doc thanh ghi SO NGUYEN x[rs1] chu khong
+    // phai f[rs1], nen toan hang thu nhat cua chung phai lay tu duong ALU (da
+    // qua forwarding cua x) chu khong tu duong f.
     wire [31:0] fpu_operand_a = id_ex_x_to_f ? alu_in1 : id_ex_read_f_data1;
+    wire [31:0] fpu_operand_b = id_ex_read_f_data2;
 
     generate
         if (ENABLE_MULDIV) begin : gen_muldiv
@@ -780,20 +817,29 @@ module execute #(
                 .stall_id_ex(stall_id_ex),
                 .fpu_start(id_ex_fpu_en),
                 .fpu_op(id_ex_fpu_operation),
+                // id_ex_funct3 CHINH LA instr[14:12], tuc truong rm. Dung thang
+                // no thay vi them mot truong rieng vao ID/EX: hai cai se la hai
+                // ban sao cua cung mot day bit va co the lech nhau.
+                .fpu_rm(id_ex_funct3),
+                .frm_i(frm_i),
                 .operand_a(fpu_operand_a),
-                .operand_b(id_ex_read_f_data2),
+                .operand_b(fpu_operand_b),
+                .operand_c(id_ex_read_f_data3),
                 .result(fpu_result),
+                .fflags(fpu_fflags_w),
                 .fpu_stall(fpu_stall),
                 .fpu_done(fpu_done)
             );
         end else begin : no_fpu
             assign fpu_result = 32'd0;
+            assign fpu_fflags_w = 5'd0;
             assign fpu_stall = 1'b0;
             assign fpu_done = 1'b0;
         end
     endgenerate
 
     assign fpu_result_out = fpu_result;
+    assign fpu_fflags     = fpu_fflags_w;
     assign mf_alu_stall = mul_alu_stall || div_alu_stall || fpu_stall;
 
     wire [31:0] csr_rs1_val = id_ex_funct3[2] ? {27'b0, id_ex_rs1} : alu_in1;

@@ -52,11 +52,11 @@ puts "Manufacturing grid $MFG_GRID um | SITE: $KNOWN_SITES"
 
 # Hai master SRAM: 80 x 256x4x32 (RAM, cache data, TCM) + 4 x 128x4x20 (tag).
 # Kich thuoc LEF duoc ghim vi floorplan (tcl/manual/soc_fp_procs.tcl) tinh luoi tu chung.
-foreach {master expected lib lef size_pattern} [list \
+foreach {master expected lib lef size_pattern size_text} [list \
     $SRAM_MASTER     $SRAM_EXPECTED_COUNT     $SRAM_LIB     $SRAM_LEF \
-        {SIZE[ \t]+121\.392[ \t]+BY[ \t]+172\.8} \
+        {SIZE[ \t]+121\.392[ \t]+BY[ \t]+172\.8} {121.392 BY 172.8} \
     $SRAM_TAG_MASTER $SRAM_TAG_EXPECTED_COUNT $SRAM_TAG_LIB $SRAM_TAG_LEF \
-        {SIZE[ \t]+64[ \t]+BY[ \t]+120\.96}] {
+        {SIZE[ \t]+64[ \t]+BY[ \t]+120\.96} {64 BY 120.96}] {
     check_mapped_sram_count $SYN_NETLIST $master $expected
 
     set lib_text [read_binary_file $lib "SRAM Liberty"]
@@ -65,9 +65,29 @@ foreach {master expected lib lef size_pattern} [list \
     }
 
     set lef_text [read_binary_file $lef "SRAM 4x LEF"]
-    if {![regexp [format {MACRO[ \t]+%s} $master] $lef_text] ||
-        ![regexp $size_pattern $lef_text]} {
-        error "SRAM 4x LEF master or geometry is unexpected for $master"
+    # Bao loi phai noi RO file nao va doc duoc gi.  Run 2026-09-18 16:59 chet o
+    # day voi moi mot dong "master or geometry is unexpected" - khong biet la
+    # sai ten macro, sai duong dan, hay tro nham ban 1x.
+    if {![regexp [format {MACRO[ \t]+%s} $master] $lef_text]} {
+        set macros {}
+        foreach m [regexp -all -inline -line {^MACRO[ \t]+(\S+)} $lef_text] {
+            if {![string match "MACRO*" $m]} {
+                lappend macros $m
+            }
+        }
+        error "LEF [file normalize $lef] khong chua MACRO $master.\
+ MACRO co trong file: [expr {[llength $macros] ? $macros : {(khong co)}}].\
+ Kiem tra ASAP7_SRAM_LEF_FILE / ASAP7_SRAM_TAG_LEF_FILE."
+    }
+    if {![regexp $size_pattern $lef_text]} {
+        set found {}
+        foreach m [regexp -all -inline -line {^[ \t]*SIZE[ \t]+[^;]*} $lef_text] {
+            lappend found [string trim $m]
+        }
+        error "LEF [file normalize $lef]: kich thuoc macro khac voi floorplan.\
+ Doi 'SIZE $size_text', doc duoc: [expr {[llength $found] ? [join [lrange $found 0 2] { | }] : {(khong co dong SIZE nao)}}].\
+ Thuong la tro nham ban 1x (SIZE nho di 4 lan) thay vi thu muc 4xLEF, hoac\
+ nham file macro khac."
     }
     if {![regexp {SYMMETRY[ \t]+[^;\n]*Y} $lef_text]} {
         error "SRAM 4x LEF of $master does not advertise Y symmetry; macro floorplan uses MY orientation"
