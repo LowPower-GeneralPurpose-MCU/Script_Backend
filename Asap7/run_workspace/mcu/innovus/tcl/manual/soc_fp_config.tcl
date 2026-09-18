@@ -109,6 +109,18 @@ set SOC_TAP_INTERVAL 50.0
 set SOC_TAP_OFFSET   1.08
 set SOC_TAP_RULE     120.0
 
+# ---- Filler cell ----------------------------------------------------------
+# Run 2026-09-18 liet ke ca 4 cell (R truoc, L sau) va Innovus dat 100% ban _L:
+# 2044453 FILLER_ASAP7_75t_L + 76331 FILLERxp5_ASAP7_75t_L, 0 cell _R.  Hai ban
+# rong bang nhau nen addFiller pha the theo thu tu nap LEF (LEF _L nap sau).
+# Logic that lai ~126 k cell RVT / ~23 k LVT, nen filler nen la _R cho khop lop
+# implant LVT o bien cell.  Deck calibreDRC.rul cua ASAP7 khong kiem implant nen
+# day khong phai loi DRC - doi de dung ban dai dien hon.
+# Neu addFiller bao khong dat duoc cell nao (kiem trong log: "Added 0 filler
+# inst" cho CA hai cell) thi tra lai danh sach 4 cell o dong duoi.
+set SOC_FILLER_CELLS {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R}
+#   ca hai Vt: {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L}
+
 # ---- Metal fill (09_PnR tr.26) --------------------------------------------
 # Tech LEF asap7_tech_4x_201209.lef chi co luat mat do o M5 (MINIMUMDENSITY 15,
 # MAXIMUMDENSITY 90, DENSITYCHECKWINDOW 80 80, STEP 40) va Pad (khong dung);

@@ -32,6 +32,24 @@ if {[llength $missing] > 0} {
 
 check_top_io_handoff $SYN_NETLIST $SYN_SDC
 
+# MANUFACTURINGGRID va danh sach SITE hop le, doc thang tu LEF dang dung - de
+# check khong troi ra khi doi PDK.  Tech LEF ASAP7 khong dinh nghia SITE nao,
+# site 'asap7sc7p5t' nam trong LEF cell.
+set tech_lef_text [read_binary_file $TECH_LEF "tech LEF"]
+if {![regexp {MANUFACTURINGGRID[ \t]+([0-9.]+)} $tech_lef_text -> MFG_GRID]} {
+    error "Tech LEF khong khai MANUFACTURINGGRID: [file normalize $TECH_LEF]"
+}
+set KNOWN_SITES [lef_defined_sites $tech_lef_text]
+foreach cell_lef $CELL_LEFS {
+    set KNOWN_SITES [concat $KNOWN_SITES \
+        [lef_defined_sites [read_binary_file $cell_lef "cell LEF"]]]
+}
+set KNOWN_SITES [lsort -unique $KNOWN_SITES]
+if {[llength $KNOWN_SITES] == 0} {
+    error "Khong tim thay dinh nghia SITE nao trong tech LEF hay CELL_LEFS"
+}
+puts "Manufacturing grid $MFG_GRID um | SITE: $KNOWN_SITES"
+
 # Hai master SRAM: 80 x 256x4x32 (RAM, cache data, TCM) + 4 x 128x4x20 (tag).
 # Kich thuoc LEF duoc ghim vi floorplan (tcl/manual/soc_fp_procs.tcl) tinh luoi tu chung.
 foreach {master expected lib lef size_pattern} [list \
@@ -53,6 +71,31 @@ foreach {master expected lib lef size_pattern} [list \
     }
     if {![regexp {SYMMETRY[ \t]+[^;\n]*Y} $lef_text]} {
         error "SRAM 4x LEF of $master does not advertise Y symmetry; macro floorplan uses MY orientation"
+    }
+
+    # Toa do lech grid / SITE khong ton tai: CANH BAO o day (van chay duoc het
+    # PnR), CHAN o KHOI 16 - LEF la nguon hinh SRAM duy nhat cho streamOut.
+    lassign [check_lef_grid_site $lef_text $MFG_GRID $KNOWN_SITES] \
+        lef_offgrid lef_bad_sites
+    if {$lef_offgrid > 0 || [llength $lef_bad_sites] > 0} {
+        puts "WARNING: ===================================================="
+        puts "WARNING: [file tail $lef]"
+        if {$lef_offgrid > 0} {
+            puts "WARNING:   $lef_offgrid toa do KHONG tren manufacturing grid $MFG_GRID"
+            puts "WARNING:   -> init_design se bao IMPLF-82, sroute bao IMPSR-552"
+        }
+        if {[llength $lef_bad_sites] > 0} {
+            puts "WARNING:   tham chieu SITE khong duoc dinh nghia: $lef_bad_sites"
+            puts "WARNING:   -> init_design se bao IMPLF-40"
+        }
+        puts "WARNING: Sua truoc khi xuat GDS:"
+        puts "WARNING:   python3 scripts/fix_sram_lef.py [file normalize $lef] \\"
+        puts "WARNING:       --fix -o <file>.fixed.lef --site [lindex $lef_bad_sites 0]=[lindex $KNOWN_SITES 0]"
+        puts "WARNING:   roi export ASAP7_SRAM_TAG_LEF_FILE=<file>.fixed.lef (hoac"
+        puts "WARNING:   ASAP7_SRAM_LEF_FILE) va chay lai tu KHOI 0."
+        puts "WARNING: ===================================================="
+    } else {
+        puts "[file tail $lef]: toa do tren grid, SITE hop le"
     }
 }
 if {[file size $SRAM_GDS] == 0} {
