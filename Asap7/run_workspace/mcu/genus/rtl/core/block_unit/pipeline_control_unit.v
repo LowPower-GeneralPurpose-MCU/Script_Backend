@@ -14,6 +14,16 @@ module pipeline_control_unit (
     // G4 - interlock phai dua tren mem_to_reg, KHONG phai mem_read. Xem ghi chu
     // o khoi load_use_hazard ben duoi.
     input id_ex_mem_to_reg,
+    // ---- RV32F ---------------------------------------------------------------
+    // Khong gian ten f va x TACH BIET nen phai co interlock RIENG. `flw` la lenh
+    // F DUY NHAT lay ket qua tu duong bo nho, va no khong co duong forward (xem
+    // ghi chu fwd_ex_ok trong forwarding_unit.v), nen nguoi tieu thu PHAI dung.
+    input id_ex_f_mem_to_reg,   // lenh o ID/EX la `flw` -> f[rd] chua san sang
+    input uses_fs1,             // lenh o ID doc f[rs1]?
+    input uses_fs2,             //                f[rs2]?
+    input uses_fs3,             //                f[rs3]?  (chi nhom FMA)
+    input [4:0] fs3,            // instr[31:27] cua lenh o ID
+    input id_x_to_f,            // lenh o ID la FCVT.S.W[U] / FMV.W.X -> doc x[rs1]
     input id_ex_jal,
     // R2 - JALR khong con lam flush tu ID/EX. No duoc phan giai o EX/MEM giong
     // nhanh dieu kien, nen tin hieu flush cua no la `ex_mem_jalr` chu khong phai
@@ -91,6 +101,13 @@ module pipeline_control_unit (
     localparam [6:0] OP_BRANCH = 7'b1100011;
     localparam [6:0] OP_JALR   = 7'b1100111;
     localparam [6:0] OP_SYSTEM = 7'b1110011;   // <== F2: truoc day bi bo sot
+    // RV32F. Ba dong nay tung THIEU hoan toan khoi bang, nen:
+    //   lw   a0, 0(sp)        // LOAD dang o EX
+    //   flw  ft0, 0(a0)       // doc a0 -> KHONG bi interlock
+    // se lay dia chi thay vi du lieu, y het loi F2 cua SYSTEM.
+    localparam [6:0] OP_LOADFP  = 7'b0000111;  // flw
+    localparam [6:0] OP_STOREFP = 7'b0100111;  // fsw
+    localparam [6:0] OP_FP      = 7'b1010011;  // OP-FP
 
     // csrrw/csrrs/csrrc doc x[rs1]; ba bien the ...i thi khong (funct3[2] = 1).
     wire system_reads_rs1 = (funct3 != 3'b000) && (funct3[2] == 1'b0);
@@ -108,6 +125,18 @@ module pipeline_control_unit (
             end
             OP_OPIMM, OP_LOAD, OP_JALR: begin
                 uses_rs1 = 1'b1;
+            end
+            // flw / fsw doc x[rs1] lam DIA CHI CO SO. Voi fsw thi rs2 la mot
+            // thanh ghi F chu khong phai x - khoa theo x[rs2] se dung gia va
+            // dong thoi BO SOT hazard that (no duoc bat boi uses_fs2 ben duoi).
+            OP_LOADFP, OP_STOREFP: begin
+                uses_rs1 = 1'b1;
+            end
+            // Trong nhom OP-FP chi FCVT.S.W / FCVT.S.WU / FMV.W.X doc thanh ghi
+            // so nguyen. Moi lenh OP-FP khac chi doc thanh ghi f, nen khoa theo
+            // x[rs1] se la stall gia (rs1 khi do la fs1).
+            OP_FP: begin
+                uses_rs1 = id_x_to_f;
             end
             OP_SYSTEM: begin
                 uses_rs1 = system_reads_rs1;
@@ -134,8 +163,34 @@ module pipeline_control_unit (
     //     bne   t6, zero, fail   //   vi rd nhan MA TRANG THAI 0/1 tu duong bo nho
     // mem_read = 0 nen interlock cu khong bat -> bne nhan dia chi thay vi 0/1.
     // -------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
+    // RV32F - interlock cho thanh ghi f.
+    //
+    // Chi `flw` can den no: moi lenh F khac lay ket qua tu FPU, va ket qua do
+    // DA co o EX/MEM nen forwarding_unit bypass duoc (FPU giu lenh lai o EX cho
+    // toi khi tinh xong, y het multiplier / divider).
+    //
+    // HAI diem khac ben x, ca hai deu de viet sai neu chep nguyen:
+    //   * KHONG co dieu kien `id_ex_rd != 5'd0`. f0 la thanh ghi THAT.
+    //   * Phai dung uses_fs* chu khong dung uses_rs*: `fsw ft0, 0(a0)` doc
+    //     f[rs2] CHU KHONG x[rs2], con `fmv.w.x ft0, a0` doc x[rs1] chu khong
+    //     f[rs1]. Mot bang chung se sai theo ca hai chieu.
+    // -------------------------------------------------------------------------
+    reg f_load_use_hazard;
+
     always @(*) begin
-        load_use_hazard = 1'b0;
+        f_load_use_hazard = 1'b0;
+        if (id_ex_f_mem_to_reg) begin
+            if ((uses_fs1 && (id_ex_rd == rs1)) ||
+                (uses_fs2 && (id_ex_rd == rs2)) ||
+                (uses_fs3 && (id_ex_rd == fs3))) begin
+                f_load_use_hazard = 1'b1;
+            end
+        end
+    end
+
+    always @(*) begin
+        load_use_hazard = f_load_use_hazard;
         if (id_ex_mem_to_reg && (id_ex_rd != 5'd0)) begin
             if ((uses_rs1 && (id_ex_rd == rs1)) ||
                 (uses_rs2 && (id_ex_rd == rs2))) begin

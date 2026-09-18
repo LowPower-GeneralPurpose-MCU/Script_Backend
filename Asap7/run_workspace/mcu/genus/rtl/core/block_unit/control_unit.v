@@ -2,6 +2,7 @@
 // File: control_unit.v
 //==================================================================================================
 `timescale 1ns / 1ps
+`include "core/fpu_defines.vh"
 
 module main_control_unit #(
     // AMO*.W bat DONG THOI mem_read va mem_write, nhung FSM cua data_cache o
@@ -19,6 +20,16 @@ module main_control_unit #(
     input [6:0] funct7,
     input [2:0] funct3,
     input [4:0] rs2,
+    // ---- trang thai F, can de giai ma DUNG (xem nhanh OP-FP ben duoi) -------
+    // fs_off  : mstatus.FS == 00 (Off). Dac ta bat buoc MOI lenh dung don vi F -
+    //           ke ca flw / fsw - phai raise illegal-instruction khi FS = Off.
+    //           Nho vay phan mem khong the lam ban thanh ghi f ma bo dieu phoi
+    //           ngu canh khong biet.
+    // frm_i   : fcsr.frm. Can o TANG GIAI MA chu khong chi trong FPU, vi
+    //           rm = DYN (111) voi frm khong hop le (101/110/111) la mot ma lenh
+    //           BAT HOP LE, phai bao TRUOC khi lenh chay.
+    input       fs_off,
+    input [2:0] frm_i,
     output reg reg_write,
     output reg alu_src,
     output reg mem_write,
@@ -40,6 +51,16 @@ module main_control_unit #(
     output reg f_to_x,
     output reg x_to_f,
     output reg [4:0] fpu_operation,
+    // ---- lenh nay DOC thanh ghi f nao? -------------------------------------
+    // Khong gian ten f va x TACH BIET, nen mot interlock chung tren `rd` la sai:
+    //   fsw  ft0, 0(a0)   doc x[rs1] VA f[rs2] - khong duoc khoa theo x[rs2]
+    //   fmv.w.x ft0, a0   doc x[rs1], KHONG doc f[rs1]
+    // Ba bit nay noi chinh xac cong doc f nao dang duoc dung, de
+    // pipeline_control_unit khoa dung cai can khoa. f0 la thanh ghi THAT nen
+    // KHONG co ngoai le "khac 0" nhu ben x.
+    output reg uses_fs1,
+    output reg uses_fs2,
+    output reg uses_fs3,
     // P2c - `fence` (opcode 0001111, funct3 000) khong con la NOP thuan.
     // Bit nay chay xuyen ID/EX -> EX/MEM roi ra chan `dcache_fence`, noi no bat
     // D-cache giu core lai cho toi khi store buffer xa het (`sb_drained`).
@@ -51,7 +72,28 @@ module main_control_unit #(
     output reg illegal_instr
 );
 
-    always @(*) begin 
+    // =========================================================================
+    // Ba dieu kien chan chung cua toan bo nhom F. Tach ra day de KHONG phai lap
+    // lai o 13 nhanh ben duoi - lap lai la cach chac chan de quen mot nhanh.
+    // =========================================================================
+
+    // F tat hoan toan, hoac phan mem chua bat mstatus.FS. Ca hai truong hop moi
+    // lenh F deu phai la illegal-instruction chu khong duoc chay im lang.
+    wire fp_blocked = (ENABLE_F_EXTENSION == 0) || fs_off;
+
+    // funct7[1:0] = instr[26:25] la truong KIEU DU LIEU:
+    //   00 = .S (don)   01 = .D (kep)   10 = .H (nua)   11 = .Q (bon)
+    // Chi .S duoc hien thuc. Truoc day mot `fadd.d` se chay nhu `fadd.s` va tra
+    // ve rac ma khong ai biet.
+    wire fmt_bad = (funct7[1:0] != 2'b00);
+
+    // instr[14:12] cua lenh CO lam tron:
+    //   101 va 110 la ma DU TRU -> luon illegal
+    //   111 (DYN) chi hop le khi fcsr.frm hop le; frm >= 101 cung la du tru.
+    wire rm_bad = (funct3 == 3'b101) || (funct3 == 3'b110) ||
+                  ((funct3 == 3'b111) && (frm_i >= 3'b101));
+
+    always @(*) begin
         reg_write = 1'b0;
         alu_src = 1'b0;
         mem_write = 1'b0;
@@ -73,6 +115,9 @@ module main_control_unit #(
         f_to_x = 1'b0;
         x_to_f = 1'b0;
         fpu_operation = 5'b00000;
+        uses_fs1 = 1'b0;
+        uses_fs2 = 1'b0;
+        uses_fs3 = 1'b0;
         fence_op = 1'b0;
         illegal_instr = 1'b1;      // fail-safe: nhanh hop le phai tu ha xuong
 
@@ -224,144 +269,193 @@ module main_control_unit #(
                 end
             end
             
+            // =================================================================
+            // RV32F - TOAN BO tap lenh dau phay dong don chinh xac.
+            //
+            // Truoc 2026-09-18 nhom nay chi gan f_reg_write / fpu_operation ma
+            // KHONG BAO GIO ha illegal_instr. Vi vay ngay ca khi bat
+            // ENABLE_F_EXTENSION = 1 thi MOI lenh F van nem illegal-instruction:
+            // duong F chua tung chay duoc mot lan nao. Day la cho sua do.
+            //
+            // BA dieu kien chan chung cho ca nhom (wire ben duoi khoi always):
+            //   fp_blocked : F tat (tham so) HOAC mstatus.FS = Off
+            //   fmt_bad    : funct7[1:0] (instr[26:25]) la truong KIEU. Chi 00
+            //                (.S) ton tai; 01 = .D, 10 = .H, 11 = .Q deu chua
+            //                duoc hien thuc -> illegal chu khong chay nhu .S.
+            //   rm_bad     : instr[14:12] = 101 / 110 la ma DU TRU, va 111 (DYN)
+            //                chi hop le khi fcsr.frm hop le. CHI ap dung cho
+            //                lenh CO lam tron; nhung lenh dung funct3 lam ma phu
+            //                (FSGNJ, FMIN/FMAX, so sanh, FCLASS, FMV) thi khong.
+            // =================================================================
+
+            // ---- FLW: f[rd] <- mem[x[rs1] + imm] ----------------------------
+            // ext_imm cua opcode nay duoc them trong instruction_decode. Truoc
+            // day no roi vao nhanh 32'b0, tuc MOI flw tinh dia chi voi offset 0.
             7'b0000111: begin
-                if (ENABLE_F_EXTENSION) begin
-                    alu_src = 1'b1;
-                    mem_read = 1'b1;
-                    f_mem_to_reg = 1'b1;
-                    f_reg_write = 1'b1;
-                    alu_op = 2'b00;
-                    mem_size = 2'b10;
+                if (!fp_blocked && funct3 == 3'b010) begin
+                    alu_src       = 1'b1;
+                    mem_read      = 1'b1;
+                    f_mem_to_reg  = 1'b1;
+                    f_reg_write   = 1'b1;
+                    alu_op        = 2'b00;
+                    mem_size      = 2'b10;
+                    illegal_instr = 1'b0;
                 end
+                // funct3 = 011 la FLD (D), 100 = FLQ (Q): chua co.
             end
-            
+
+            // ---- FSW: mem[x[rs1] + imm] <- f[rs2] ---------------------------
             7'b0100111: begin
-                if (ENABLE_F_EXTENSION) begin
-                    alu_src = 1'b1;
-                    mem_write = 1'b1;
-                    f_mem_write = 1'b1;
-                    alu_op = 2'b00;
-                    mem_size = 2'b10;
+                if (!fp_blocked && funct3 == 3'b010) begin
+                    alu_src       = 1'b1;
+                    mem_write     = 1'b1;
+                    f_mem_write   = 1'b1;
+                    uses_fs2      = 1'b1;   // du lieu ghi la f[rs2], KHONG x[rs2]
+                    alu_op        = 2'b00;
+                    mem_size      = 2'b10;
+                    illegal_instr = 1'b0;
                 end
             end
-            
+
+            // ---- OP-FP (R-type) ---------------------------------------------
             7'b1010011: begin
-                if (ENABLE_F_EXTENSION) begin
+                if (!fp_blocked && !fmt_bad) begin
                     fpu_en = 1'b1;
-                    case (funct7)
-                        7'b0000000: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b00000;
-                        end
-                        7'b0000100: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b00001;
-                        end
-                        7'b0001000: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b00010;
-                        end
-                        7'b0001100: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b01000;
-                        end
-                        7'b0101100: begin
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b01001;
-                        end
-                        7'b0010000: begin
-                            f_reg_write = 1'b1;
-                            case (funct3)
-                                3'b000: fpu_operation = 5'b01100;
-                                3'b001: fpu_operation = 5'b01101;
-                                3'b010: fpu_operation = 5'b01110;
-                                default: fpu_operation = 5'b01100;
-                            endcase
-                        end
-                        7'b0010100: begin
-                            f_reg_write = 1'b1;
-                            case (funct3)
-                                3'b000: fpu_operation = 5'b01010;
-                                3'b001: fpu_operation = 5'b01011;
-                                default: fpu_operation = 5'b01010;
-                            endcase
-                        end
-                        7'b1010000: begin
-                            f_to_x = 1'b1;
-                            reg_write = 1'b1;
-                            case (funct3)
-                                3'b010: fpu_operation = 5'b00101;
-                                3'b001: fpu_operation = 5'b00110;
-                                3'b000: fpu_operation = 5'b00111;
-                                default: fpu_operation = 5'b00101;
-                            endcase
-                        end
-                        7'b1100000: begin
-                            f_to_x = 1'b1;
-                            reg_write = 1'b1;
-                            if (rs2[0]) begin
-                                fpu_operation = 5'b10010;
-                            end else begin
-                                fpu_operation = 5'b00011;
-                            end
-                        end
-                        7'b1101000: begin
-                            x_to_f = 1'b1;
-                            f_reg_write = 1'b1;
-                            if (rs2[0]) begin
-                                fpu_operation = 5'b10011;
-                            end else begin
-                                fpu_operation = 5'b00100;
-                            end
-                        end
-                        7'b1110000: begin
-                            f_to_x = 1'b1;
-                            reg_write = 1'b1;
-                            case (funct3)
-                                3'b000: fpu_operation = 5'b01111;
-                                3'b001: fpu_operation = 5'b10001;
-                                default: fpu_operation = 5'b01111;
-                            endcase
-                        end
-                        7'b1111000: begin
-                            x_to_f = 1'b1;
-                            f_reg_write = 1'b1;
-                            fpu_operation = 5'b10000;
-                        end
-                        default: fpu_en = 1'b0;
+                    case (funct7[6:2])
+
+                    5'b00000: begin   // FADD.S
+                        f_reg_write = 1'b1; uses_fs1 = 1'b1; uses_fs2 = 1'b1;
+                        fpu_operation = `FPOP_ADD;
+                        illegal_instr = rm_bad;
+                    end
+                    5'b00001: begin   // FSUB.S
+                        f_reg_write = 1'b1; uses_fs1 = 1'b1; uses_fs2 = 1'b1;
+                        fpu_operation = `FPOP_SUB;
+                        illegal_instr = rm_bad;
+                    end
+                    5'b00010: begin   // FMUL.S
+                        f_reg_write = 1'b1; uses_fs1 = 1'b1; uses_fs2 = 1'b1;
+                        fpu_operation = `FPOP_MUL;
+                        illegal_instr = rm_bad;
+                    end
+                    5'b00011: begin   // FDIV.S
+                        f_reg_write = 1'b1; uses_fs1 = 1'b1; uses_fs2 = 1'b1;
+                        fpu_operation = `FPOP_DIV;
+                        illegal_instr = rm_bad;
+                    end
+                    5'b01011: begin   // FSQRT.S - mot toan hang, rs2 PHAI bang 0
+                        f_reg_write = 1'b1; uses_fs1 = 1'b1;
+                        fpu_operation = `FPOP_SQRT;
+                        illegal_instr = rm_bad || (rs2 != 5'd0);
+                    end
+
+                    // FSGNJ / FSGNJN / FSGNJX: thuan bit; funct3 la MA LENH chu
+                    // khong phai rm, nen KHONG kiem rm_bad.
+                    5'b00100: begin
+                        f_reg_write = 1'b1; uses_fs1 = 1'b1; uses_fs2 = 1'b1;
+                        case (funct3)
+                            3'b000: begin fpu_operation = `FPOP_SGNJ;  illegal_instr = 1'b0; end
+                            3'b001: begin fpu_operation = `FPOP_SGNJN; illegal_instr = 1'b0; end
+                            3'b010: begin fpu_operation = `FPOP_SGNJX; illegal_instr = 1'b0; end
+                            default: begin fpu_en = 1'b0; f_reg_write = 1'b0;
+                                           uses_fs1 = 1'b0; uses_fs2 = 1'b0; end
+                        endcase
+                    end
+
+                    5'b00101: begin   // FMIN.S / FMAX.S
+                        f_reg_write = 1'b1; uses_fs1 = 1'b1; uses_fs2 = 1'b1;
+                        case (funct3)
+                            3'b000: begin fpu_operation = `FPOP_MIN; illegal_instr = 1'b0; end
+                            3'b001: begin fpu_operation = `FPOP_MAX; illegal_instr = 1'b0; end
+                            default: begin fpu_en = 1'b0; f_reg_write = 1'b0;
+                                           uses_fs1 = 1'b0; uses_fs2 = 1'b0; end
+                        endcase
+                    end
+
+                    // FEQ / FLT / FLE: ket qua la SO NGUYEN 0/1 -> ghi x[rd].
+                    5'b10100: begin
+                        f_to_x = 1'b1; reg_write = 1'b1;
+                        uses_fs1 = 1'b1; uses_fs2 = 1'b1;
+                        case (funct3)
+                            3'b010: begin fpu_operation = `FPOP_EQ; illegal_instr = 1'b0; end
+                            3'b001: begin fpu_operation = `FPOP_LT; illegal_instr = 1'b0; end
+                            3'b000: begin fpu_operation = `FPOP_LE; illegal_instr = 1'b0; end
+                            default: begin fpu_en = 1'b0; f_to_x = 1'b0; reg_write = 1'b0;
+                                           uses_fs1 = 1'b0; uses_fs2 = 1'b0; end
+                        endcase
+                    end
+
+                    5'b11000: begin   // FCVT.W.S / FCVT.WU.S -> x[rd]
+                        f_to_x = 1'b1; reg_write = 1'b1; uses_fs1 = 1'b1;
+                        fpu_operation = rs2[0] ? `FPOP_CVT_WU_S : `FPOP_CVT_W_S;
+                        // rs2 = 00000 / 00001 la hai ma duy nhat cua RV32
+                        // (00010 / 00011 la .L / .LU cua RV64).
+                        illegal_instr = rm_bad || (rs2[4:1] != 4'd0);
+                    end
+
+                    5'b11010: begin   // FCVT.S.W / FCVT.S.WU <- x[rs1]
+                        x_to_f = 1'b1; f_reg_write = 1'b1;
+                        fpu_operation = rs2[0] ? `FPOP_CVT_S_WU : `FPOP_CVT_S_W;
+                        illegal_instr = rm_bad || (rs2[4:1] != 4'd0);
+                    end
+
+                    5'b11100: begin   // FMV.X.W (funct3 000) / FCLASS.S (001)
+                        f_to_x = 1'b1; reg_write = 1'b1; uses_fs1 = 1'b1;
+                        case (funct3)
+                            3'b000: begin fpu_operation = `FPOP_MV_X_W; illegal_instr = (rs2 != 5'd0); end
+                            3'b001: begin fpu_operation = `FPOP_CLASS;  illegal_instr = (rs2 != 5'd0); end
+                            default: begin fpu_en = 1'b0; f_to_x = 1'b0; reg_write = 1'b0;
+                                           uses_fs1 = 1'b0; end
+                        endcase
+                    end
+
+                    5'b11110: begin   // FMV.W.X <- x[rs1]
+                        x_to_f = 1'b1; f_reg_write = 1'b1;
+                        fpu_operation = `FPOP_MV_W_X;
+                        illegal_instr = (funct3 != 3'b000) || (rs2 != 5'd0);
+                    end
+
+                    // Moi funct7 con lai chua duoc dinh nghia. Truoc day chung
+                    // roi vao `default: fpu_en = 0` roi CHAY IM LANG nhu NOP.
+                    default: fpu_en = 1'b0;
                     endcase
                 end
             end
-            
-            7'b1000011: begin
-                if (ENABLE_F_EXTENSION) begin
-                    fpu_en = 1'b1;
-                    f_reg_write = 1'b1;
-                    fpu_operation = 5'b10100;
+
+            // ---- R4-type: FMADD / FMSUB / FNMSUB / FNMADD --------------------
+            // Ba toan hang f[rs1], f[rs2], f[rs3] voi f[rs3] = instr[31:27].
+            // Lam tron DUNG MOT LAN tren tich-cong - day la ly do FPU co duong
+            // FMA rieng chu khong ghep mot phep nhan roi mot phep cong.
+            7'b1000011: begin        // FMADD.S  =   (a*b) + c
+                if (!fp_blocked && !fmt_bad) begin
+                    fpu_en = 1'b1; f_reg_write = 1'b1;
+                    uses_fs1 = 1'b1; uses_fs2 = 1'b1; uses_fs3 = 1'b1;
+                    fpu_operation = `FPOP_MADD;
+                    illegal_instr = rm_bad;
                 end
             end
-            
-            7'b1000111: begin
-                if (ENABLE_F_EXTENSION) begin
-                    fpu_en = 1'b1;
-                    f_reg_write = 1'b1;
-                    fpu_operation = 5'b10101;
+            7'b1000111: begin        // FMSUB.S  =   (a*b) - c
+                if (!fp_blocked && !fmt_bad) begin
+                    fpu_en = 1'b1; f_reg_write = 1'b1;
+                    uses_fs1 = 1'b1; uses_fs2 = 1'b1; uses_fs3 = 1'b1;
+                    fpu_operation = `FPOP_MSUB;
+                    illegal_instr = rm_bad;
                 end
             end
-            
-            7'b1001011: begin
-                if (ENABLE_F_EXTENSION) begin
-                    fpu_en = 1'b1;
-                    f_reg_write = 1'b1;
-                    fpu_operation = 5'b10110;
+            7'b1001011: begin        // FNMSUB.S = -(a*b) + c
+                if (!fp_blocked && !fmt_bad) begin
+                    fpu_en = 1'b1; f_reg_write = 1'b1;
+                    uses_fs1 = 1'b1; uses_fs2 = 1'b1; uses_fs3 = 1'b1;
+                    fpu_operation = `FPOP_NMSUB;
+                    illegal_instr = rm_bad;
                 end
             end
-            
-            7'b1001111: begin
-                if (ENABLE_F_EXTENSION) begin
-                    fpu_en = 1'b1;
-                    f_reg_write = 1'b1;
-                    fpu_operation = 5'b10111;
+            7'b1001111: begin        // FNMADD.S = -(a*b) - c
+                if (!fp_blocked && !fmt_bad) begin
+                    fpu_en = 1'b1; f_reg_write = 1'b1;
+                    uses_fs1 = 1'b1; uses_fs2 = 1'b1; uses_fs3 = 1'b1;
+                    fpu_operation = `FPOP_NMADD;
+                    illegal_instr = rm_bad;
                 end
             end
             

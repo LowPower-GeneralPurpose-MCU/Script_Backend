@@ -98,6 +98,11 @@ module id_ex_register #(
     input fpu_en, f_reg_write, f_mem_to_reg, f_mem_write, f_to_x, x_to_f,
     input [4:0] fpu_operation,
     input [31:0] read_f_data1, read_f_data2,
+    // RV32F - toan hang thu BA cua nhom FMA. fs3 = instr[31:27], KHONG trung vi
+    // tri voi rs1 / rs2 nen phai mang rieng qua ID/EX (forwarding_unit can no de
+    // so voi ex_mem_rd / mem_wb_rd).
+    input [4:0] fs3,
+    input [31:0] read_f_data3,
   
     // Outputs giữ nguyên tên như cũ
     output reg [31:0] id_ex_pc_plus_4, id_ex_pc_in,
@@ -119,7 +124,8 @@ module id_ex_register #(
     output reg id_ex_fpu_en, id_ex_f_reg_write, id_ex_f_mem_to_reg, id_ex_f_mem_write,
     output reg id_ex_f_to_x, id_ex_x_to_f,
     output reg [4:0] id_ex_fpu_operation,
-    output reg [31:0] id_ex_read_f_data1, id_ex_read_f_data2,
+    output reg [31:0] id_ex_read_f_data1, id_ex_read_f_data2, id_ex_read_f_data3,
+    output reg [4:0] id_ex_fs3,
     output reg [ROB_TAG_W-1:0] id_ex_rob_tag,
     output reg id_ex_rob_valid,
     output reg id_ex_valid,
@@ -221,6 +227,7 @@ module id_ex_register #(
                 id_ex_f_to_x <= f_to_x; id_ex_x_to_f <= x_to_f;
                 id_ex_fpu_operation <= fpu_operation;
                 id_ex_read_f_data1 <= read_f_data1; id_ex_read_f_data2 <= read_f_data2;
+                id_ex_read_f_data3 <= read_f_data3; id_ex_fs3 <= fs3;
             end
         end
     end
@@ -254,7 +261,12 @@ module ex_mem_register #(
     input [11:0] id_ex_csr_addr, input [1:0] id_ex_csr_op, input id_ex_csr_we,
     input [31:0] csr_write_data_in, id_ex_instr, fpu_result, id_ex_read_f_data2,
     input id_ex_f_reg_write, id_ex_f_mem_to_reg, id_ex_f_mem_write,
-    
+    // RV32F - co ngoai le di CUNG lenh xuong tang MEM, noi duy nhat duoc phep
+    // sua trang thai kien truc. Dat chung ngang hang voi csr_write_data la co y:
+    // ca hai deu phai bi commit_kill / flush chan lai khi lenh bi huy.
+    input [4:0] fpu_fflags,
+    input id_ex_fpu_en,
+
     // Outputs
     output reg [31:0] ex_mem_alu_result, ex_mem_branch_target, ex_mem_pc_plus_4, ex_mem_pc_in,
     output reg [4:0] ex_mem_rd,
@@ -272,6 +284,8 @@ module ex_mem_register #(
     output reg ex_mem_csr_we,
     output reg [31:0] ex_mem_csr_write_data, ex_mem_instr, ex_mem_fpu_result, ex_mem_f_store_data,
     output reg ex_mem_f_reg_write, ex_mem_f_mem_to_reg, ex_mem_f_mem_write,
+    output reg [4:0] ex_mem_fflags,
+    output reg ex_mem_fp_active,       // cho phep gop fflags vao fcsr o tang MEM
     output reg [ROB_TAG_W-1:0] ex_mem_rob_tag,
     output reg ex_mem_rob_valid,
     // ex_mem_valid la dieu kien BAT BUOC cua irq_ok va cua instret_pulse trong
@@ -295,6 +309,7 @@ module ex_mem_register #(
             ex_mem_ecall <= 1'b0; ex_mem_ebreak <= 1'b0; ex_mem_mret <= 1'b0;
             ex_mem_fence_op <= 1'b0;
             ex_mem_f_reg_write <= 1'b0; ex_mem_f_mem_to_reg <= 1'b0; ex_mem_f_mem_write <= 1'b0;
+            ex_mem_fp_active <= 1'b0; ex_mem_fflags <= 5'd0;
             ex_mem_valid <= 1'b0; ex_mem_illegal <= 1'b0; ex_mem_fault <= 1'b0;
         end else if (riscv_start && !riscv_done) begin
             if (flush) begin
@@ -320,6 +335,9 @@ module ex_mem_register #(
                 ex_mem_csr_we <= 1'b0;
                 ex_mem_f_reg_write <= 1'b0;
                 ex_mem_f_mem_write <= 1'b0;
+                // Lenh F bi huy KHONG duoc lam ban fflags - bo dieu phoi ngu
+                // canh doc fcsr sau do se thay mot co ngoai le khong ai gay ra.
+                ex_mem_fp_active <= 1'b0;
             end else if (stall) begin
                 // Đóng băng
             end else begin
@@ -343,6 +361,7 @@ module ex_mem_register #(
                 ex_mem_csr_addr <= id_ex_csr_addr; ex_mem_csr_op <= id_ex_csr_op; 
                 ex_mem_csr_we <= id_ex_csr_we; ex_mem_csr_write_data <= csr_write_data_in;
                 ex_mem_fpu_result <= fpu_result; ex_mem_f_store_data <= id_ex_read_f_data2;
+                ex_mem_fflags <= fpu_fflags; ex_mem_fp_active <= id_ex_fpu_en;
                 ex_mem_f_reg_write <= id_ex_f_reg_write; ex_mem_f_mem_to_reg <= id_ex_f_mem_to_reg;
                 ex_mem_f_mem_write <= id_ex_f_mem_write;
             end
