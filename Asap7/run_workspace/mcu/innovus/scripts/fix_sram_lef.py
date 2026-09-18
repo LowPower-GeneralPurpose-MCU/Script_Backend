@@ -74,6 +74,8 @@ def fmt(value, decimals):
 
 def process(lines, grid, mode, site_map, drop_site):
     out = []
+    # so chu so thap phan toi thieu de ghi duoc mot boi so cua grid
+    grid_decimals = max(0, -grid.normalize().as_tuple().exponent)
     stats = collections.Counter()
     residuals = collections.Counter()
     offenders = collections.Counter()   # (macro, context) -> so toa do lech
@@ -137,7 +139,10 @@ def process(lines, grid, mode, site_map, drop_site):
                 return text
             changed[0] = True
             stats["coords_fixed"] += 1
-            return fmt(new, len(text.split(".")[1]))
+            # Giu so chu so thap phan cua so goc cho diff de doc, nhung KHONG
+            # duoc it hon so chu so ma grid can: 'RECT 0.01 ...' voi grid 0.004
+            # ma ghi lai 2 chu so thi 0.012 bi lam tron ve dung 0.01 cu.
+            return fmt(new, max(len(text.split(".")[1]), grid_decimals))
 
         new_line = NUMBER_RE.sub(repl, line)
         if changed[0]:
@@ -152,10 +157,22 @@ def process(lines, grid, mode, site_map, drop_site):
                     new_wh = (new_n[2] - new_n[0], new_n[3] - new_n[1])
                     if old_wh != new_wh:
                         stats["rect_resized"] += 1
-                        resized.append((macro, context, old_wh, new_wh))
+                        resized.append((macro, context, old_wh, new_wh,
+                                        stripped, new_line.strip()))
                     else:
                         stats["rect_moved_only"] += 1
         out.append(new_line + "\n")
+
+    # Tu kiem tra lai ket qua: moi toa do trong file ghi ra phai nam tren grid.
+    # Bat duoc truong hop fmt() lam tron nguoc ve vi tri cu khi so goc it chu so
+    # thap phan hon grid (vd grid 0.004 can 3 chu so, so goc chi co 2).
+    for text_line in out:
+        s2 = text_line.strip()
+        if not any(s2.upper().startswith(k) for k in GEOMETRY_KEYWORDS):
+            continue
+        for t in NUMBER_RE.findall(s2):
+            if "." in t and not is_on_grid(Decimal(t), grid):
+                stats["still_offgrid"] += 1
 
     return out, stats, residuals, offenders, resized
 
@@ -180,6 +197,9 @@ def main(argv=None):
                          " doi moi SITE gap duoc sang NEW")
     ap.add_argument("--drop-site", action="store_true",
                     help="bo han dong SITE (MACRO CLASS BLOCK khong can SITE)")
+    ap.add_argument("--show-resize", type=int, default=0, metavar="N",
+                    help="in nguyen van N dong RECT bi doi kich thuoc, ca ban goc"
+                         " lan ban da sua - de xem tan mat chuyen gi xay ra")
     args = ap.parse_args(argv)
 
     site_map = {}
@@ -234,16 +254,44 @@ def main(argv=None):
     print("  chi dich cho, giu nguyen kich thuoc : %d" % stats["rect_moved_only"])
     print("  DOI kich thuoc                      : %d" % stats["rect_resized"])
     if resized:
+        dw = [new_wh[0] - old_wh[0] for _m, _c, old_wh, new_wh, _o, _n in resized]
+        dh = [new_wh[1] - old_wh[1] for _m, _c, old_wh, new_wh, _o, _n in resized]
+        n_w = sum(1 for d in dw if d != 0)
+        n_h = sum(1 for d in dh if d != 0)
+        print("  trong do doi BE RONG (canh ngan)  : %d  (lon nhat %s um)"
+              % (n_w, max([abs(d) for d in dw]) if dw else 0))
+        print("           doi CHIEU DAI (canh dai) : %d  (lon nhat %s um)"
+              % (n_h, max([abs(d) for d in dh]) if dh else 0))
         print("  (kich thuoc cu -> moi, um)")
-        for macro_name, ctx, old_wh, new_wh in resized[:20]:
+        for macro_name, ctx, old_wh, new_wh, _o, _n in resized[:20]:
             print("    %-26s %-16s %s x %s  ->  %s x %s"
                   % (macro_name, ctx, old_wh[0], old_wh[1], new_wh[0], new_wh[1]))
         if len(resized) > 20:
             print("    ... con %d hinh nua" % (len(resized) - 20))
         print("  -> xem lai nhung hinh nay. Doi 1 grid tren OBS hoac chan nguon")
         print("     thuong vo hai; doi tren chan tin hieu hep thi phai kiem tra ky.")
+        print("     Them --show-resize N de xem N dong LEF goc va dong sau khi sua.")
     else:
         print("  -> khong hinh nao doi kich thuoc: snap an toan.")
+
+    if args.show_resize:
+        print("")
+        print("%d dong RECT doi kich thuoc (nguyen van):"
+              % min(args.show_resize, len(resized)))
+        for macro_name, ctx, old_wh, new_wh, old_line, new_line in \
+                resized[:args.show_resize]:
+            print("  %s / %s" % (macro_name, ctx))
+            print("    cu  : %s" % old_line)
+            print("    moi : %s" % new_line)
+            print("    kich thuoc %s x %s -> %s x %s"
+                  % (old_wh[0], old_wh[1], new_wh[0], new_wh[1]))
+
+    if stats["still_offgrid"]:
+        print("")
+        print("CANH BAO: sau khi sua van con %d toa do NGOAI grid."
+              % stats["still_offgrid"])
+        print("  Thuong la do so goc it chu so thap phan hon grid can.")
+        print("  Bao lai cho nguoi viet script - dung file ket qua nay.")
 
     if offenders:
         print("\nnoi lech nhieu nhat:")
