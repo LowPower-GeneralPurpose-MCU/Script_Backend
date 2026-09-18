@@ -314,7 +314,7 @@ soc_block "KHOI 8: verify + saveDesign" {
     verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet \
         -error 100000 -warning 1000 \
         -report ./verify_rpt/connectivity_powerplan.rpt
-    verify_drc -limit 100000 -report ./verify_rpt/drc_powerplan.rpt
+    soc_verify_drc ./verify_rpt/drc_powerplan.rpt -limit 500000
     checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_powerplan.rpt
     report_clocks > ./reports/clocks_floorplan.rpt
     report_analysis_views > ./reports/analysis_views.rpt
@@ -432,7 +432,7 @@ soc_block "KHOI 10: rail M1 + stripe M5 std cell" {
     verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet \
         -error 100000 -warning 1000 \
         -report ./verify_rpt/connectivity_place.rpt
-    verify_drc -limit 100000 -report ./verify_rpt/drc_place.rpt
+    soc_verify_drc ./verify_rpt/drc_place.rpt -limit 500000
     checkPlace ./verify_rpt/checkPlace_place_pg.rpt
     # Rail ho thi dung o day, khong luu placed_pg.  Run 2026-09-17 22:13: tech LEF
     # bat LEF58_ENCLOSURE o V3/V4 -> via M1->M5 chi con 3/8 (moi rail VSS + rail VDD
@@ -546,8 +546,7 @@ soc_block "KHOI 13: routeDesign" {
         -route_detail_end_iteration 20
     routeDesign -globalDetail
     routeDesign -viaOpt -wireOpt
-    clearDrc
-    verify_drc -limit 100000 -report ./verify_rpt/drc_route.rpt
+    soc_verify_drc ./verify_rpt/drc_route.rpt -limit 500000
     saveDesign ./saved/${TOP}_routed.enc
 }
 # Xem: verify_rpt/drc_route.rpt.  Con loi thi: ecoRoute -fix_drc roi verify_drc lai.
@@ -567,6 +566,14 @@ soc_block "KHOI 14: optDesign postRoute" {
     soc_fix_cg_hold 0.020
     ecoRoute
     ecoRoute -fix_drc
+    # optDesign/ecoRoute doi day va chen cell -> phai kiem tra lai DRC o day.
+    # Truoc 2026-09-18 khoi nay khong verify: DRC ke tiep la drc_final (sau metal
+    # fill), va fill lech track da nhan chim bao cao do.  Day moi la so DRC that
+    # cua design.
+    set soc_drc_postroute [soc_verify_drc ./verify_rpt/drc_postRoute.rpt -limit 500000]
+    if {$soc_drc_postroute > 0} {
+        error "Con $soc_drc_postroute vi pham DRC sau ecoRoute - xem verify_rpt/drc_postRoute.rpt truoc khi sang KHOI 15"
+    }
     timeDesign -postRoute       -outDir ./reports/timing_postRoute      -prefix postRoute
     timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold -prefix postRoute
     saveDesign ./saved/${TOP}_postRoute.enc
@@ -578,6 +585,15 @@ soc_block "KHOI 14: optDesign postRoute" {
 # ==========================================================================
 # Filler them SAU moi buoc toi uu (sram_axi: filler som lam row day 100%, het
 # cho chen buffer sua hold).
+#
+# THU TU (doi 2026-09-18).  Truoc day: filler -> metal fill -> verify_drc.  Metal
+# fill lech track sinh 100000 OFFGRID, verify_drc cham -limit va dung giua chung
+# (IMPVFG-1103) -> bao cao DRC cuoi cung vo nghia, khong biet co DRC that bi che.
+# Nay tach lam hai lan do:
+#   drc_final.rpt : design THAT (filler, chua co metal fill) - phai 0
+#   drc_fill.rpt  : sau metal fill - phai 0 ke ca tren net _FILLS_RESERVED
+# Checkpoint _prefill.enc luu truoc metal fill: chinh so fill trong
+# soc_fp_config.tcl roi restore tu day, khong phai chay lai ca run 14 tieng.
 soc_block "KHOI 15: filler + verify" {
     set fillers {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L}
     setFillerMode -reset
@@ -586,14 +602,14 @@ soc_block "KHOI 15: filler + verify" {
     addFiller -cell $fillers -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
     # Filler/buffer moi chen (CTS, optDesign, filler) phai noi chan VDD/VSS vao net
     soc_global_pg_connect
-    # Metal fill (09_PnR tr.26) truoc verify va timing cuoi
-    soc_metal_fill
     checkPlace ./verify_rpt/checkPlace_final.rpt
-    # Luu truoc khi verify: lenh verify nao loi thi soc_block dung, van con checkpoint
-    saveDesign ./saved/${TOP}_final.enc
+    saveDesign ./saved/${TOP}_prefill.enc
 
-    clearDrc
-    verify_drc -limit 100000 -report ./verify_rpt/drc_final.rpt
+    # --- 1. DRC cua design that (chua co metal fill) -----------------------
+    set soc_drc_real [soc_verify_drc ./verify_rpt/drc_final.rpt -limit 500000]
+    if {$soc_drc_real > 0} {
+        error "Con $soc_drc_real vi pham DRC that - xem verify_rpt/drc_final.rpt"
+    }
     verifyConnectivity -type all -error 1000 -warning 1000 \
         -report ./verify_rpt/connectivity_final.rpt
     # Moi std cell cach tap <= SOC_TAP_RULE (deck ACTIVE.LUP.1, LEF 4x).  Chua
@@ -602,11 +618,36 @@ soc_block "KHOI 15: filler + verify" {
             -report ./verify_rpt/welltap_final.rpt} err]} {
         puts "WARNING: verifyWellTap: $err"
     }
-    # Luat mat do M5 trong tech LEF (15-90%, cua so 80x80 buoc 40)
-    if {[catch {verifyMetalDensity -report ./verify_rpt/density_final.rpt} err]} {
-        puts "WARNING: verifyMetalDensity: $err"
+
+    # --- 2. Metal fill roi DRC lai ----------------------------------------
+    # soc_metal_fill tu kiem tra gap/activeSpacing co roi dung track khong.
+    soc_metal_fill
+    set soc_drc_fill [soc_verify_drc ./verify_rpt/drc_fill.rpt -limit 500000]
+    if {$soc_drc_fill > 0} {
+        error "Metal fill sinh $soc_drc_fill vi pham DRC - xem\
+verify_rpt/drc_fill.rpt.  Sua so trong SOC_FILL_LAYERS roi restore\
+saved/${TOP}_prefill.enc.dat, khong can chay lai tu dau."
     }
-    # Khong kiem antenna: tech LEF ASAP7 khong co luat antenna
+    # Luat mat do chi co o layer trong SOC_DENSITY_LAYERS: tech LEF khai
+    # MINIMUMDENSITY o M5 (15%) va Pad (20%), khong co layer nao khac.  Layer
+    # con lai Innovus ap mac dinh 20% - run 2026-09-18 co 8863 vi pham mat do,
+    # 7719 trong so do la cua luat KHONG ton tai trong PDK nay.
+    # Chua thu -layer tren Innovus 23.14: loi thi chay ban day du.
+    if {[catch {verifyMetalDensity -layer $SOC_DENSITY_LAYERS \
+            -report ./verify_rpt/density_final.rpt} err]} {
+        puts "verifyMetalDensity -layer: $err"
+        if {[catch {verifyMetalDensity \
+                -report ./verify_rpt/density_final.rpt} err2]} {
+            puts "WARNING: verifyMetalDensity: $err2"
+        } else {
+            puts "WARNING: density_final.rpt gom ca layer khong co\
+MINIMUMDENSITY trong tech LEF - chi doc phan $SOC_DENSITY_LAYERS."
+        }
+    }
+    saveDesign ./saved/${TOP}_final.enc
+
+    # --- 3. Timing / power sau khi da co fill (fill lam tang C ghep) -------
+    # Khong kiem tra antenna: tech LEF ASAP7 khong co luat antenna
     # (run 2026-09-17: verifyProcessAntenna -> ERROR IMPVPA-22).
     timeDesign -postRoute       -outDir ./reports/timing_final      -prefix final
     timeDesign -postRoute -hold -outDir ./reports/timing_final_hold -prefix final
@@ -619,11 +660,13 @@ soc_block "KHOI 15: filler + verify" {
     summaryReport -noHtml -outfile ./reports/summary_final.rpt
 
     soc_banner "PNR XONG - saved/${TOP}_final.enc
-  verify_rpt/drc_final.rpt           : 0 vi pham
+  verify_rpt/drc_final.rpt           : DRC design that, phai 0
+  verify_rpt/drc_fill.rpt            : DRC sau metal fill, phai 0
   verify_rpt/connectivity_final.rpt  : 0 open/short
   verify_rpt/welltap_final.rpt       : 0 cell xa tap qua ${SOC_TAP_RULE} um
-  reports/timing_final/final.tran.gz : khong con chan clk SRAM (max 46 ps)
-  reports/timing_final*/             : WNS setup/hold >= 0
+  verify_rpt/density_final.rpt       : chi layer $SOC_DENSITY_LAYERS co luat
+  reports/timing_final*/             : WNS setup/hold >= 0, DRV Real = 0
+  reports/timing_final/final.tran.gz : con bao nhieu chan clk SRAM > 46 ps?
 Tiep theo: KHOI 16 (xuat file)"
 }
 
@@ -640,6 +683,10 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
             error "Khong co GDS std cell $gds - dat ASAP7_RVT_GDS_FILE / ASAP7_LVT_GDS_FILE"
         }
     }
+    # streamOut day het hinh hien co vao GDS, ke ca metal fill lech track.  Run
+    # 2026-09-18 vao KHOI 16 voi 100000 OFFGRID chua ai doc -> chan o day.
+    soc_require_drc_clean ./verify_rpt/drc_final.rpt ./verify_rpt/drc_fill.rpt
+    soc_report_escaped_names ./reports/escaped_names.rpt
     extractRC
     foreach rc {rc_typ rc_ss rc_ff} {
         rcOut -spef ./outputs/${TOP}_pnr_${rc}.spef -rc_corner $rc
@@ -703,6 +750,9 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
 #   saved/top_soc_postCTS.enc.dat   -> KHOI 13
 #   saved/top_soc_routed.enc.dat    -> KHOI 14
 #   saved/top_soc_postRoute.enc.dat -> KHOI 15, 16
+#   saved/top_soc_prefill.enc.dat   -> chi chay lai metal fill + verify cuoi
+#     (filler da co, chua co metal fill): sua SOC_FILL_LAYERS roi paste
+#     phan tu 'soc_metal_fill' den het KHOI 15.
 #   Luu y: derate SRAM, set_max_fanout SRAM, dont_touch TRNG dat o KHOI 0; neu
 #   report_timing_derate sau restore khong con x1.30/x0.75 thi source lai
 #   ./tcl/init_common.tcl KHONG duoc (no goi init_design) - chay lai tu KHOI 0.

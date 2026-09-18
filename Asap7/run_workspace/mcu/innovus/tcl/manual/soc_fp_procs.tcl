@@ -1250,11 +1250,147 @@ proc soc_global_pg_connect {} {
     applyGlobalNets
 }
 
+# Pitch track cua mot layer (um), doc tu LEF da nap.  Ten thuoc tinh dbGet doi
+# giua cac ban Innovus nen thu lan luot; khong doc duoc thi tra 0.
+proc soc_layer_pitch {layer} {
+    if {[catch {dbGetLayerByName $layer} ptr] || $ptr eq "" || $ptr eq "0x0"} {
+        return 0
+    }
+    foreach attr {pitchX pitch} {
+        if {[catch {dbGet $ptr.$attr} v]} {
+            continue
+        }
+        set v [lindex $v 0]
+        if {[string is double -strict $v] && $v > 0} {
+            return $v
+        }
+    }
+    return 0
+}
+
+# Mieng metal fill phai roi dung track, neu khong verify_drc bao OFFGRID hang
+# tram nghin lan (run 2026-09-18).  Xem giai thich so trong soc_fp_config.tcl.
+#   tam fill - tam day that = activeSpacing + width  -> phai chia het cho pitch
+#   tam fill - tam fill ke  = gapSpacing    + width  -> phai chia het cho pitch
+proc soc_fill_check_track {layer w gap active} {
+    set pitch [soc_layer_pitch $layer]
+    if {$pitch <= 0} {
+        puts "  $layer: khong doc duoc pitch tu LEF - bo qua kiem tra on-track"
+        return
+    }
+    foreach {what value} [list activeSpacing $active gapSpacing $gap] {
+        set step [expr {double($value) + $w}]
+        set n    [expr {$step / $pitch}]
+        if {abs($n - round($n)) > 1.0e-6} {
+            set fix [expr {(floor($n) + 1) * $pitch - $w}]
+            error [format {soc_metal_fill %s: %s %.4f + width %.4f = %.4f = %.3f track (pitch %.4f) -> mieng fill lech track, verify_drc se bao OFFGRID. Dat %s = %.4f (hoac n*%.4f - %.4f).} \
+                $layer $what $value $w $step $n $pitch $what $fix $pitch $w]
+        }
+    }
+    puts [format {  %s: pitch %.4f | buoc fill %.4f (%d track) | cach day that %.4f (%d track) | mat do toi da %.1f%%} \
+        $layer $pitch \
+        [expr {$gap + $w}]    [expr {round(($gap + $w) / $pitch)}] \
+        [expr {$active + $w}] [expr {round(($active + $w) / $pitch)}] \
+        [expr {100.0 * $w / ($gap + $w)}]]
+}
+
+# verify_drc + doc lai bao cao va phan loai.
+#   soc_verify_drc <file> ?-limit N? ?-allow-nets {pattern ...}?
+# verify_drc DUNG GIUA CHUNG khi so vi pham cham -limit va chi ghi mot dong
+# WARN IMPVFG-1103 o cuoi log - rat de bo sot.  Run 2026-09-18 dinh dung loi do:
+# 100000 OFFGRID cua metal fill nuot het bao cao, khong biet con DRC that nao bi
+# che.  Proc nay bien truong hop do thanh loi dung khoi.
+# -allow-nets: net khop pattern (vd _FILLS_RESERVED) dem rieng, khong tinh vao
+# so vi pham that -> tra ve so vi pham THAT de cho goi tu quyet dinh.
+proc soc_verify_drc {report args} {
+    set limit 1000000
+    set allow {}
+    foreach {opt val} $args {
+        switch -- $opt {
+            -limit      { set limit $val }
+            -allow-nets { set allow $val }
+            default     { error "soc_verify_drc: tuy chon la '$opt'" }
+        }
+    }
+    clearDrc
+    verify_drc -limit $limit -report $report
+
+    set total 0
+    set real  0
+    set truncated 0
+    array set bytype {}
+    array set bynet  {}
+    set fp [open $report r]
+    while {[gets $fp line] >= 0} {
+        if {[regexp {^\s*Total Violations\s*:\s*([0-9]+)} $line -> n]} {
+            if {$n >= $limit} {
+                set truncated $n
+            }
+            continue
+        }
+        if {![regexp {^([A-Z][A-Za-z_ ]*?)\s*:\s*(.*)$} $line -> type rest]} {
+            continue
+        }
+        if {$type eq "Bounds"} {
+            continue
+        }
+        incr total
+        incr bytype($type)
+        set net "-"
+        regexp {of Net (\S+)} $rest -> net
+        incr bynet($net)
+        set skip 0
+        foreach pat $allow {
+            if {[string match $pat $net]} {
+                set skip 1
+                break
+            }
+        }
+        if {!$skip} {
+            incr real
+        }
+    }
+    close $fp
+
+    puts "--- $report"
+    if {$total == 0} {
+        puts "  0 vi pham"
+    } else {
+        foreach t [lsort [array names bytype]] {
+            puts [format "  loai %-24s %8d" $t $bytype($t)]
+        }
+        set nets {}
+        foreach n [array names bynet] {
+            lappend nets [list $n $bynet($n)]
+        }
+        set nets [lsort -integer -decreasing -index 1 $nets]
+        foreach item [lrange $nets 0 9] {
+            puts [format "  net  %-24s %8d" [lindex $item 0] [lindex $item 1]]
+        }
+        if {[llength $nets] > 10} {
+            puts "  ... con [expr {[llength $nets] - 10}] net nua"
+        }
+        puts [format "  -> %d vi pham that (%d bo qua theo -allow-nets {%s})" \
+            $real [expr {$total - $real}] $allow]
+    }
+    if {$truncated} {
+        error "verify_drc bi cat o -limit $limit (IMPVFG-1103): $report khong day\
+du, KHONG ket luan duoc design sach DRC. Nang -limit, hoac xoa metal fill\
+(deleteMetalFill) roi chay lai."
+    }
+    return $real
+}
+
 # Metal fill (09_PnR tr.26) tren cac layer SOC_FILL_LAYERS, bo rong co dinh =
 # min width, gap/active/density theo tung dong (xem soc_fp_config.tcl).  Goi sau
-# filler, truoc verify va timing cuoi (fill lam tang C ghep).
+# filler, truoc timing cuoi (fill lam tang C ghep) va SAU khi da verify_drc
+# design that - fill sai track co the nhan chim bao cao DRC.
 proc soc_metal_fill {} {
     set layers {}
+    puts "soc_metal_fill: kiem tra on-track"
+    foreach {layer w gap active dmin dmax dpref} $::SOC_FILL_LAYERS {
+        soc_fill_check_track $layer $w $gap $active
+    }
     foreach {layer w gap active dmin dmax dpref} $::SOC_FILL_LAYERS {
         setMetalFill -layer $layer -minWidth $w -maxWidth $w \
             -minLength $::SOC_FILL_MIN_LEN -maxLength $::SOC_FILL_MAX_LEN \
@@ -1263,6 +1399,52 @@ proc soc_metal_fill {} {
         lappend layers $layer
     }
     addMetalFill -layer $layers -snap
+}
+
+# Bao cao DRC phai ton tai va sach truoc khi xuat GDS.  Goi dau KHOI 16.
+proc soc_require_drc_clean {args} {
+    foreach report $args {
+        if {![file isfile $report]} {
+            error "Chua co $report - chay KHOI 15 truoc khi xuat file"
+        }
+        set fp [open $report r]
+        set text [read $fp]
+        close $fp
+        if {[regexp {Total Violations\s*:\s*([0-9]+)} $text -> n]} {
+            if {$n > 0} {
+                error "$report con $n vi pham - khong xuat GDS"
+            }
+        } elseif {![regexp {No DRC violations were found} $text]} {
+            error "$report khong co dong ket luan nao (bao cao hong hoacverify_drc chua chay xong) - khong xuat GDS"
+        }
+        puts "  $report: sach"
+    }
+}
+
+# Ten LEF/DEF co ky tu sau bus-bit (vd 'G_SRAM_BANK[31].u_sram' tu generate
+# block) khong phai ten Verilog hop le: saveNetlist ghi thanh escaped name
+# '\G_SRAM_BANK[31].u_sram ' (co dau cach cuoi).  Innovus bao IMPDB-2125, run
+# 2026-09-18 bi vuot muc hien thi 20 message nen so that lon hon nhieu.
+# Khong phai loi, nhung deck LVS/LEC phai biet truoc -> ghi ra file.
+proc soc_report_escaped_names {file} {
+    set fp [open $file w]
+    set total 0
+    foreach kind {insts nets} {
+        foreach name [dbGet -e top.$kind.name] {
+            if {[regexp {\[[0-9]+\][^ ]} $name]} {
+                puts $fp "$kind $name"
+                incr total
+            }
+        }
+    }
+    close $fp
+    puts "Ten se bi escape khi ghi netlist: $total (xem $file)"
+    if {$total > 0} {
+        puts "  -> ten trong .v bi escape (them backslash o dau, them mot dau"
+        puts "     cach o cuoi) nen khong khop truc tiep ten trong DEF/GDS."
+        puts "     Khai bao cho LVS / Conformal truoc khi so netlist."
+    }
+    return $total
 }
 
 # File map layer cho streamOut (09_PnR tr.11 A2GDS.map), so lay tu SOC_GDS_LAYERS.

@@ -115,18 +115,39 @@ set SOC_TAP_RULE     120.0
 # deck calibreDRC.rul khong co luat mat do.  -> mac dinh chi fill M5.  M2-M7 co
 # RIGHTWAYONGRIDONLY + RECTONLY + WIDTHTABLE (SADP): fill them layer la them rui
 # ro DRC ma khong co luat nao doi.
-# Bo rong = min width (dong dau WIDTHTABLE); gap giua 2 mieng fill >= EOL
-# ENDTOEND 0.160 -> 1 pitch; cach day that 2 pitch.  Fill 0.096 cach 0.192 +
-# snap track -> toi da ~25% nen density uu tien 25.
+#
+# LUAT ON-TRACK.  Run 2026-09-18: drc_final.rpt co 100000 OFFGRID, 100% tren net
+# _FILLS_RESERVED lop M5, va verify_drc bi cat vi cham limit (IMPVFG-1103).
+# M5 trong tech LEF: PITCH 0.192, WIDTH 0.096, DIRECTION VERTICAL.
+# Tam mieng fill phai roi dung track.  Tinh tu tam day that ben canh:
+#   tam-den-tam = activeSpacing + width/2 + width_day/2
+#               = activeSpacing + 0.096   (day M5 trong design deu rong 0.096)
+#   -> activeSpacing + 0.096 phai chia het cho 0.192
+# Giua hai mieng fill lien tiep:
+#   buoc = gapSpacing + width -> gapSpacing + 0.096 phai chia het cho 0.192
+# So cu active 0.384 / gap 0.192 cho 0.480 va 0.288 = 2.5 va 1.5 track -> lech
+# nua track.  Do lai tren 100000 shape: bin lech 0.096 um co 21575 mieng, bin 0
+# co 21097 - dung nhu hai buoc xen ke 2.5 / 4 track.
+# So moi 0.288 / 0.288 cho dung 2 track ca hai chieu, mat do = 0.096/0.384 = 25%
+# (bang preferredDensity) va van >= EOL ENDTOEND 0.160.  Gap 0.096 (1 track, mat
+# do 50%) khong dung duoc: pham LEF58_SPACING ENDOFLINE 0.1 WITHIN 0.160.
+# -> 25% la mat do on-track cao nhat lam duoc o M5.
+# soc_metal_fill kiem tra lai hai phep chia nay truoc khi chay.
 #   layer width gap   active minD maxD prefD
 set SOC_FILL_LAYERS {
-    M5    0.096 0.192 0.384  15   90   25
+    M5    0.096 0.288 0.288  15   90   25
 }
-# Muon fill them cho giong slide (khong co luat LEF, tu chiu DRC):
-#   M4 0.096 0.192 0.384 15 90 25   M6 0.128 0.256 0.512 15 90 25
-#   M7 0.128 0.256 0.512 15 90 25   M8 0.160 0.320 0.640 15 90 25
+# Muon fill them cho giong slide (khong co luat LEF, tu chiu DRC).  Phai giu
+# quy tac on-track o tren: gap va active deu = (n * pitch - width).
+#   M4 (pitch 0.192) 0.096 0.288 0.288 15 90 25
+#   M6 (pitch 0.256) 0.128 0.384 0.384 15 90 25
+#   M7 (pitch 0.256) 0.128 0.384 0.384 15 90 25
 set SOC_FILL_MIN_LEN     1.0     ;# > AREA/width (M5: 0.032 / 0.096 = 0.33)
 set SOC_FILL_MAX_LEN    16.8
+# Layer co MINIMUMDENSITY that trong tech LEF -> chi kiem tra mat do o do.
+# Cac layer khac Innovus ap mac dinh 20%: run 2026-09-18 co 8863 vi pham mat do,
+# 7719 trong so do la cua luat KHONG ton tai trong PDK nay (M1-M4, M6-M9).
+set SOC_DENSITY_LAYERS {M5}
 
 # ---- GDS (09_PnR tr.28) ---------------------------------------------------
 # So layer lay tu calibreDRC.rul; text chan = datatype 251 (calibreLVS.rul
