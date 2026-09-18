@@ -122,19 +122,44 @@ def process(lines, grid, mode, site_map, drop_site):
 
         changed = [False]
 
+        # Mode 'grow': canh duoi/trai lam tron XUONG, canh tren/phai lam tron LEN
+        # -> hinh chi no ra, khong bao gio co lai.  Dung khi co hinh rong dung
+        # min width: co lai 1 grid la thanh loi min-width that.  Chi ap dung cho
+        # RECT 4 so; cac lenh hinh hoc khac quay ve 'nearest'.
+        per_coord_mode = None
+        if mode == "grow":
+            nums = [t for t in NUMBER_RE.findall(stripped) if "." in t]
+            if upper.startswith("RECT") and len(nums) == 4:
+                x1, y1, x2, y2 = (Decimal(t) for t in nums)
+                per_coord_mode = ["down" if x1 <= x2 else "up",
+                                  "down" if y1 <= y2 else "up",
+                                  "up" if x1 <= x2 else "down",
+                                  "up" if y1 <= y2 else "down"]
+            else:
+                per_coord_mode = None
+        seen = [0]
+
         def repl(m):
             text = m.group(0)
             if "." not in text:          # BY / so nguyen trong FOREIGN: bo qua
                 return text
             value = Decimal(text)
             stats["coords_seen"] += 1
+            idx = seen[0]
+            seen[0] += 1
             if is_on_grid(value, grid):
                 return text
             stats["coords_offgrid"] += 1
             offenders[(macro, context)] += 1
             # do lech so voi diem grid ngay duoi, tinh bang nm cho de doc
             residuals[float((value - snap(value, grid, "down")) * 1000)] += 1
-            new = snap(value, grid, mode)
+            if per_coord_mode is not None:
+                this_mode = per_coord_mode[idx]
+            elif mode == "grow":
+                this_mode = "nearest"
+            else:
+                this_mode = mode
+            new = snap(value, grid, this_mode)
             if abs(new - value) > grid:            # khong bao gio nhay qua 1 grid
                 return text
             changed[0] = True
@@ -187,11 +212,13 @@ def main(argv=None):
     ap.add_argument("-o", "--out", help="file LEF ket qua")
     ap.add_argument("--grid", type=Decimal, default=Decimal("0.004"),
                     help="MANUFACTURINGGRID, um (mac dinh 0.004 = tech LEF 4x)")
-    ap.add_argument("--mode", choices=("nearest", "down", "up"),
+    ap.add_argument("--mode", choices=("nearest", "down", "up", "grow"),
                     default="nearest",
-                    help="huong snap.  nearest: gan nhat.  down/up: dich moi"
-                         " toa do cung mot huong, giu nguyen kich thuoc hinh"
-                         " khi do lech dong nhat.")
+                    help="huong snap.  nearest: gan nhat (mac dinh).  down/up:"
+                         " dich moi toa do cung mot huong.  grow: canh duoi/trai"
+                         " lam tron xuong, canh tren/phai lam tron len - hinh chi"
+                         " no ra, khong bao gio co lai (dung khi co hinh rong"
+                         " dung min width).")
     ap.add_argument("--site", action="append", default=[], metavar="OLD=NEW|NEW",
                     help="doi ten SITE: 'coreSite=asap7sc7p5t', hoac chi NEW de"
                          " doi moi SITE gap duoc sang NEW")
@@ -258,10 +285,28 @@ def main(argv=None):
         dh = [new_wh[1] - old_wh[1] for _m, _c, old_wh, new_wh, _o, _n in resized]
         n_w = sum(1 for d in dw if d != 0)
         n_h = sum(1 for d in dh if d != 0)
-        print("  trong do doi BE RONG (canh ngan)  : %d  (lon nhat %s um)"
+        print("  trong do doi be ngang X : %d  (lon nhat %s um)"
               % (n_w, max([abs(d) for d in dw]) if dw else 0))
-        print("           doi CHIEU DAI (canh dai) : %d  (lon nhat %s um)"
+        print("           doi be doc   Y : %d  (lon nhat %s um)"
               % (n_h, max([abs(d) for d in dh]) if dh else 0))
+
+        # Hinh doi be ngang X thuong it, ma lai la cho nguy hiem nhat: mot hinh
+        # rong dung min width ma co lai 1 grid la thanh loi min-width that.
+        # In HET ra, kem dong LEF nguyen van, de xem tan mat.
+        narrow = [r for r in resized if r[3][0] != r[2][0]]
+        if narrow:
+            print("")
+            print("  %d hinh doi BE NGANG X - xem ky tung cai:" % len(narrow))
+            for macro_name, ctx, old_wh, new_wh, old_line, new_line in narrow[:40]:
+                delta = new_wh[0] - old_wh[0]
+                print("    %s / %s   be ngang %s -> %s  (%s%s um)"
+                      % (macro_name, ctx, old_wh[0], new_wh[0],
+                         "+" if delta > 0 else "", delta))
+                print("      cu  : %s" % old_line)
+                print("      moi : %s" % new_line)
+            if len(narrow) > 40:
+                print("    ... con %d hinh nua" % (len(narrow) - 40))
+            print("")
         print("  (kich thuoc cu -> moi, um)")
         for macro_name, ctx, old_wh, new_wh, _o, _n in resized[:20]:
             print("    %-26s %-16s %s x %s  ->  %s x %s"
