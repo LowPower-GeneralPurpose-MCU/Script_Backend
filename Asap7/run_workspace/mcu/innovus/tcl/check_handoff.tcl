@@ -77,3 +77,60 @@ proc check_top_io_handoff {netlist sdc} {
 
     puts "Validated split top-level I/O handoff"
 }
+
+# LEF cua macro SRAM la nguon DUY NHAT cua hinh SRAM khi streamOut -outputMacros
+# (asap7_sram_0p0 khong co GDS rieng tung macro), nen toa do lech manufacturing
+# grid o day se di thang vao GDS.  Run 2026-09-18 co 3908 loi ngay o init_design,
+# tat ca tu srambank_128x4x20_6t122.lef.4x.lef:
+#   IMPLF-82 x3907  toa do lech 0.002 um = nua MANUFACTURINGGRID 0.004
+#   IMPLF-40 x1     macro tham chieu SITE 'coreSite' khong duoc dinh nghia o dau
+# Keo theo IMPSR-552 luc sroute va IMPPP-133 (OBS V3 ngoai boundary macro).
+# Sua bang scripts/fix_sram_lef.py (xem thong bao cua proc nay).
+#
+# Tra ve {so_toa_do_lech {site_khong_dinh_nghia ...}}.
+proc check_lef_grid_site {text grid known_sites} {
+    set offgrid 0
+    set bad_sites {}
+    # Trong LEF, "SITE ten ;" (co dau ;) la macro THAM CHIEU mot site, con
+    # "SITE ten" (khong co ;) la dong mo mot dinh nghia site.  Chi tham chieu
+    # moi doi hoi site phai da ton tai.
+    foreach raw [split $text "\n"] {
+        set raw [string trim $raw]
+        if {[regexp {^SITE[ \t]+(\S+)[ \t]*;} $raw -> site]} {
+            if {[lsearch -exact $known_sites $site] < 0 &&
+                [lsearch -exact $bad_sites $site] < 0} {
+                lappend bad_sites $site
+            }
+            continue
+        }
+        set line [string trim [string map {";" " "} $raw]]
+        if {![regexp {^(RECT|POLYGON|PATH|ORIGIN|SIZE|FOREIGN)[ \t]} $line]} {
+            continue
+        }
+        # Chi nhan token la so THUAN: bo qua 'BY', 'MASK', 'ITERATE' va ten macro
+        # trong FOREIGN (vd srambank_128x4x20_6t122 co chu so ben trong).
+        foreach token [lrange [split $line] 1 end] {
+            if {![regexp {^-?[0-9]+(\.[0-9]+)?$} $token]} {
+                continue
+            }
+            set q [expr {double($token) / $grid}]
+            if {abs($q - round($q)) > 1.0e-6} {
+                incr offgrid
+            }
+        }
+    }
+    return [list $offgrid $bad_sites]
+}
+
+# Ten SITE duoc dinh nghia trong mot LEF (tech hoac cell).
+proc lef_defined_sites {text} {
+    set sites {}
+    foreach line [split $text "\n"] {
+        set line [string trim $line]
+        # Dong mo dinh nghia site khong co dau ; (tham chieu thi co).
+        if {[regexp {^SITE[ \t]+(\S+)$} $line -> site]} {
+            lappend sites $site
+        }
+    }
+    return $sites
+}

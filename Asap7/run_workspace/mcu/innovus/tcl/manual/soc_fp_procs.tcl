@@ -11,7 +11,26 @@ proc soc_banner {text} {
 
 # Chay mot khoi lenh o muc global.  Lenh nao loi thi ca khoi dung ngay, ke ca
 # khi khoi duoc paste vao console (paste tung dong thi lenh sau van chay).
+# Session Innovus chi source config/procs MOT LAN, o KHOI 0; moi khoi sau do
+# chay ban da nam trong RAM.  Run 2026-09-18 mat ca run 14 tieng vi dieu nay: so
+# metal fill duoc sua luc 14:02, KHOI 15 paste luc 15:05 van dung so cu ->
+# 100000 OFFGRID.  Moi soc_block nap lai hai file truoc khi chay, nen sua file la
+# co hieu luc ngay o khoi ke tiep.  Hai file nay chi co proc va set, khong co
+# lenh Innovus nao, nen nap lai giua chung la an toan; cac bien duoc tinh luc
+# chay (SOC_LAYOUT, SOC_CORE_RING_OFFSET, SOC_SRAM_BOXES, SOC_ISLANDS,
+# SOC_STD_*) khong nam trong soc_fp_config.tcl nen khong bi ghi de.
+proc soc_reload {} {
+    foreach f {./tcl/manual/soc_fp_config.tcl ./tcl/manual/soc_fp_procs.tcl} {
+        if {![file isfile $f]} {
+            error "soc_reload: khong thay $f - phai cd vao .../mcu/innovus (dang o [pwd])"
+        }
+        uplevel #0 [list source $f]
+    }
+}
+
 proc soc_block {title body} {
+    # File loi cu phap thi dung o day, TRUOC khi chay lenh Innovus nao.
+    soc_reload
     soc_banner ">>> $title"
     uplevel #0 $body
     puts ">>> XONG: $title"
@@ -1387,6 +1406,10 @@ du, KHONG ket luan duoc design sach DRC. Nang -limit, hoac xoa metal fill\
 # design that - fill sai track co the nhan chim bao cao DRC.
 proc soc_metal_fill {} {
     set layers {}
+    # In ra so THUC SU dang dung: run 2026-09-18 chay so cu con trong RAM trong
+    # khi file da sua, va tu log khong co cach nao biet dieu do.
+    puts "soc_metal_fill: SOC_FILL_LAYERS = $::SOC_FILL_LAYERS"
+    puts "soc_metal_fill: do dai $::SOC_FILL_MIN_LEN - $::SOC_FILL_MAX_LEN um"
     puts "soc_metal_fill: kiem tra on-track"
     foreach {layer w gap active dmin dmax dpref} $::SOC_FILL_LAYERS {
         soc_fill_check_track $layer $w $gap $active
@@ -1421,6 +1444,114 @@ proc soc_require_drc_clean {args} {
     }
 }
 
+
+# verifyMetalDensity kiem CA layer khong khai MINIMUMDENSITY trong tech LEF
+# (Innovus ap mac dinh 20%).  Run 2026-09-18: 8863 "vi pham", 7719 la cua luat
+# KHONG TON TAI trong PDK nay - chi M5 (15%) va Pad (20%) co luat that.
+#
+# 1144 window M5 con lai duoi 15% la that, nhung do voi 84 hop SRAM thi CA 1144
+# deu de len macro (991 bi che >=75%, 150 che 50-75%, 3 che 25-50%, va KHONG
+# window nao nam trong vung std cell thuan): addMetalFill khong dat mot mieng
+# fill nao len tren macro.  Do tren LEF 4x that (2026-09-18): OBS cua SRAM phu
+# kin M1/M2/M3/V1/V2/V3 nhung M5 CHI 0.9% dien tich macro o tag (bbox 27.6-44.1
+# x 41.6-78.2) va 0.4% o ban 256x4x32 - nghia la M5 tren than SRAM gan nhu trong
+# va OBS khong phai ly do.  addMetalFill tu coi ranh gioi block instance la vung
+# cam.  Doi gapSpacing/activeSpacing khong lam giam con so nay.
+# -> tach hai nhom.  Chi nhom "vung logic" moi la loi cua metal fill.
+proc soc_density_report {report {macro_overlap 0.25}} {
+    if {![file isfile $report]} {
+        puts "WARNING: chua co $report - bo qua doc mat do"
+        return -1
+    }
+    set fp [open $report r]
+    set text [read $fp]
+    close $fp
+
+    set boxes {}
+    foreach b [soc_sram_boxes] {
+        lassign $b name group x0 y0 x1 y1
+        lappend boxes [list $x0 $y0 $x1 $y1]
+    }
+
+    set skipped 0
+    array set n_macro {}
+    array set n_logic {}
+    array set worst  {}
+    foreach line [split $text "\n"] {
+        if {![regexp {^\s*(\S+)\s+([0-9.]+)\s+\(([-0-9.]+)\s+([-0-9.]+)\)\s+\(([-0-9.]+)\s+([-0-9.]+)\)} \
+                $line -> layer dens wx0 wy0 wx1 wy1]} {
+            continue
+        }
+        if {[lsearch -exact $::SOC_DENSITY_LAYERS $layer] < 0} {
+            incr skipped
+            continue
+        }
+        set area [expr {($wx1 - $wx0) * ($wy1 - $wy0)}]
+        set cover 0.0
+        foreach box $boxes {
+            lassign $box bx0 by0 bx1 by1
+            set ix [expr {min($wx1, $bx1) - max($wx0, $bx0)}]
+            set iy [expr {min($wy1, $by1) - max($wy0, $by0)}]
+            if {$ix > 0 && $iy > 0} {
+                set cover [expr {$cover + $ix * $iy}]
+            }
+        }
+        if {$area > 0 && $cover / $area >= $macro_overlap} {
+            incr n_macro($layer)
+        } else {
+            incr n_logic($layer)
+            if {![info exists worst($layer)] || $dens < $worst($layer)} {
+                set worst($layer) $dens
+            }
+        }
+    }
+
+    set total_logic 0
+    puts "Mat do (chi layer co MINIMUMDENSITY that: $::SOC_DENSITY_LAYERS)"
+    foreach layer $::SOC_DENSITY_LAYERS {
+        set m [expr {[info exists n_macro($layer)] ? $n_macro($layer) : 0}]
+        set l [expr {[info exists n_logic($layer)] ? $n_logic($layer) : 0}]
+        incr total_logic $l
+        set tail ""
+        if {$l > 0} {
+            set tail [format " (thap nhat %.2f%%)" $worst($layer)]
+        }
+        puts [format {  %-4s duoi nguong: %d tren macro SRAM + %d trong vung logic%s} \
+            $layer $m $l $tail]
+    }
+    if {$skipped > 0} {
+        puts "  bo qua $skipped window cua layer khong co luat mat do trong tech LEF"
+    }
+    if {$total_logic > 0} {
+        puts "WARNING: $total_logic window vung logic duoi nguong - metal fill chua du,\
+ xem lai gapSpacing / preferredDensity trong SOC_FILL_LAYERS"
+    } else {
+        puts "  vung logic: dat nguong o moi window"
+    }
+    return $total_logic
+}
+
+# LEF SRAM lech grid / SITE khong ton tai di THANG vao GDS (streamOut
+# -outputMacros lay hinh macro tu LEF vi asap7_sram_0p0 khong co GDS rieng).
+# preflight.tcl chi canh bao; cho nay chan.  Goi dau KHOI 16.
+proc soc_require_sram_lef_clean {} {
+    foreach v {MFG_GRID KNOWN_SITES} {
+        if {![info exists ::$v]} {
+            error "soc_require_sram_lef_clean: thieu ::$v - preflight.tcl chua chay (KHOI 0)"
+        }
+    }
+    foreach lef [list $::SRAM_LEF $::SRAM_TAG_LEF] {
+        lassign [check_lef_grid_site [read_binary_file $lef "SRAM 4x LEF"] \
+            $::MFG_GRID $::KNOWN_SITES] offgrid bad_sites
+        if {$offgrid > 0 || [llength $bad_sites] > 0} {
+            error "[file tail $lef]: $offgrid toa do lech manufacturing grid\
+ $::MFG_GRID, SITE khong dinh nghia ([join $bad_sites {, }]) - hinh nay se di\
+ thang vao GDS.  Chay scripts/fix_sram_lef.py --fix, tro\
+ ASAP7_SRAM_TAG_LEF_FILE / ASAP7_SRAM_LEF_FILE sang ban da sua, roi chay lai tu KHOI 0."
+        }
+        puts "  [file tail $lef]: toa do tren grid, SITE hop le"
+    }
+}
 # Ten LEF/DEF co ky tu sau bus-bit (vd 'G_SRAM_BANK[31].u_sram' tu generate
 # block) khong phai ten Verilog hop le: saveNetlist ghi thanh escaped name
 # '\G_SRAM_BANK[31].u_sram ' (co dau cach cuoi).  Innovus bao IMPDB-2125, run

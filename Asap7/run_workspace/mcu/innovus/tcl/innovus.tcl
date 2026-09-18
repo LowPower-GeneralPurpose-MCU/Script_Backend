@@ -595,7 +595,8 @@ soc_block "KHOI 14: optDesign postRoute" {
 # Checkpoint _prefill.enc luu truoc metal fill: chinh so fill trong
 # soc_fp_config.tcl roi restore tu day, khong phai chay lai ca run 14 tieng.
 soc_block "KHOI 15: filler + verify" {
-    set fillers {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R FILLER_ASAP7_75t_L FILLERxp5_ASAP7_75t_L}
+    set fillers $SOC_FILLER_CELLS
+    puts "Filler cell: $fillers"
     setFillerMode -reset
     setFillerMode -core $fillers -add_fillers_with_drc false -fitGap true \
         -honorPrerouteAsObs true -diffCellViol true
@@ -644,6 +645,10 @@ saved/${TOP}_prefill.enc.dat, khong can chay lai tu dau."
 MINIMUMDENSITY trong tech LEF - chi doc phan $SOC_DENSITY_LAYERS."
         }
     }
+    # Doc lai bao cao: bo layer khong co luat, va tach window de len macro SRAM
+    # (metal fill khong vao duoc do) khoi window vung logic - chi nhom sau moi
+    # la loi cua metal fill.  Run 2026-09-18: 1144 tren macro, 0 vung logic.
+    soc_density_report ./verify_rpt/density_final.rpt
     saveDesign ./saved/${TOP}_final.enc
 
     # --- 3. Timing / power sau khi da co fill (fill lam tang C ghep) -------
@@ -686,6 +691,9 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     # streamOut day het hinh hien co vao GDS, ke ca metal fill lech track.  Run
     # 2026-09-18 vao KHOI 16 voi 100000 OFFGRID chua ai doc -> chan o day.
     soc_require_drc_clean ./verify_rpt/drc_final.rpt ./verify_rpt/drc_fill.rpt
+    # LEF SRAM lech manufacturing grid / SITE khong ton tai di thang vao GDS vi
+    # -outputMacros lay hinh macro tu LEF (khong co GDS rieng cho SRAM).
+    soc_require_sram_lef_clean
     soc_report_escaped_names ./reports/escaped_names.rpt
     extractRC
     foreach rc {rc_typ rc_ss rc_ff} {
