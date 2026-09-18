@@ -62,17 +62,24 @@ def enc_s(op, f3, rs2, rs1, imm):
            (f3 << 12) | ((imm & 0x1F) << 7) | op
 
 
-# Doi chieu voi ma da biet (objdump cua GNU as):
-#   fadd.s  f8, f0, f1     = 0x00100427     fmv.w.x f0, a0   = 0xf0050053
-#   flw     f8, 0(a0)      = 0x00052407     fsw     f8, 0(a0) = 0x00852027
-#   fmadd.s f8, f2, f3, f0 = 0x00317443
-assert enc_r(0x00, 1, 0, 0, 8, 0x53) == 0x00100427
+# Doi chieu voi ma trai tay tu BANG BIT cua dac ta (chuong 11, RV32F):
+#   OP-FP  : funct7[31:25] rs2[24:20] rs1[19:15] rm[14:12] rd[11:7] 1010011
+#   R4-type: rs3[31:27] fmt[26:25] rs2 rs1 rm rd  100xx11
+#
+#   fadd.s  f8, f0, f1     0000000 00001 00000 000 01000 1010011 = 0x00100453
+#   fmv.w.x f0, a0         1111000 00000 01010 000 00000 1010011 = 0xF0050053
+#   flw     f8, 0(a0)      000000000000 01010 010 01000 0000111  = 0x00052407
+#   fsw     f8, 0(a0)      0000000 01000 01010 010 00000 0100111 = 0x00852027
+#   fmadd.s f8, f2, f3, f0 00000 00 00011 00010 000 01000 1000011 = 0x00310443
+assert enc_r(0x00, 1, 0, 0, 8, 0x53) == 0x00100453
 assert enc_r(0x78, 0, x("a0"), 0, 0, 0x53) == 0xF0050053
 assert enc_i(0x07, 2, 8, x("a0"), 0) == 0x00052407
 assert enc_s(0x27, 2, 8, x("a0"), 0) == 0x00852027
-assert enc_r4(0, 3, 2, 0, 8, 0x43) == 0x00317443
+assert enc_r4(0, 3, 2, 0, 8, 0x43) == 0x00310443
 
 # funct7[6:2] cua nhom OP-FP; funct7[1:0] = fmt = 00 (.S)
+# funct7 DAY DU (7 bit). Decoder chia no ra bang `case (funct7[6:2])`,
+# nhung o day giu nguyen 7 bit vi do la cai di vao ma lenh.
 F7 = {"add": 0x00, "sub": 0x04, "mul": 0x08, "div": 0x0C, "sqrt": 0x2C,
       "sgnj": 0x10, "minmax": 0x14, "cmp": 0x50, "cvt_w": 0x60,
       "cvt_s": 0x68, "mv_x": 0x70, "mv_f": 0x78}
@@ -110,55 +117,55 @@ def csrr(rd, csr):
 
 # ---- lenh F ---------------------------------------------------------------
 def fop(name, fd, fs1, fs2, rm=RM_RNE):
-    emit(enc_r((F7[name] << 2), f(fs2), f(fs1), rm, f(fd), 0x53),
+    emit(enc_r(F7[name], f(fs2), f(fs1), rm, f(fd), 0x53),
          "f%s.s f%d, f%d, f%d" % (name, fd, fs1, fs2))
 
 
 def fsqrt(fd, fs1, rm=RM_RNE):
-    emit(enc_r((F7["sqrt"] << 2), 0, f(fs1), rm, f(fd), 0x53),
+    emit(enc_r(F7["sqrt"], 0, f(fs1), rm, f(fd), 0x53),
          "fsqrt.s f%d, f%d" % (fd, fs1))
 
 
 def fsgnj(kind, fd, fs1, fs2):
     f3 = {"": 0, "n": 1, "x": 2}[kind]
-    emit(enc_r((F7["sgnj"] << 2), f(fs2), f(fs1), f3, f(fd), 0x53),
+    emit(enc_r(F7["sgnj"], f(fs2), f(fs1), f3, f(fd), 0x53),
          "fsgnj%s.s f%d, f%d, f%d" % (kind, fd, fs1, fs2))
 
 
 def fminmax(kind, fd, fs1, fs2):
     f3 = 0 if kind == "min" else 1
-    emit(enc_r((F7["minmax"] << 2), f(fs2), f(fs1), f3, f(fd), 0x53),
+    emit(enc_r(F7["minmax"], f(fs2), f(fs1), f3, f(fd), 0x53),
          "f%s.s f%d, f%d, f%d" % (kind, fd, fs1, fs2))
 
 
 def fcmp(kind, rd, fs1, fs2):
     f3 = {"le": 0, "lt": 1, "eq": 2}[kind]
-    emit(enc_r((F7["cmp"] << 2), f(fs2), f(fs1), f3, x(rd), 0x53),
+    emit(enc_r(F7["cmp"], f(fs2), f(fs1), f3, x(rd), 0x53),
          "f%s.s %s, f%d, f%d" % (kind, rd, fs1, fs2))
 
 
 def fcvt_w(rd, fs1, unsigned=False, rm=RM_RNE):
-    emit(enc_r((F7["cvt_w"] << 2), 1 if unsigned else 0, f(fs1), rm, x(rd), 0x53),
+    emit(enc_r(F7["cvt_w"], 1 if unsigned else 0, f(fs1), rm, x(rd), 0x53),
          "fcvt.w%s.s %s, f%d (rm=%d)" % ("u" if unsigned else "", rd, fs1, rm))
 
 
 def fcvt_s(fd, rs1, unsigned=False, rm=RM_RNE):
-    emit(enc_r((F7["cvt_s"] << 2), 1 if unsigned else 0, x(rs1), rm, f(fd), 0x53),
+    emit(enc_r(F7["cvt_s"], 1 if unsigned else 0, x(rs1), rm, f(fd), 0x53),
          "fcvt.s.w%s f%d, %s" % ("u" if unsigned else "", fd, rs1))
 
 
 def fmv_x_w(rd, fs1):
-    emit(enc_r((F7["mv_x"] << 2), 0, f(fs1), 0, x(rd), 0x53),
+    emit(enc_r(F7["mv_x"], 0, f(fs1), 0, x(rd), 0x53),
          "fmv.x.w %s, f%d" % (rd, fs1))
 
 
 def fclass(rd, fs1):
-    emit(enc_r((F7["mv_x"] << 2), 0, f(fs1), 1, x(rd), 0x53),
+    emit(enc_r(F7["mv_x"], 0, f(fs1), 1, x(rd), 0x53),
          "fclass.s %s, f%d" % (rd, fs1))
 
 
 def fmv_w_x(fd, rs1):
-    emit(enc_r((F7["mv_f"] << 2), 0, x(rs1), 0, f(fd), 0x53),
+    emit(enc_r(F7["mv_f"], 0, x(rs1), 0, f(fd), 0x53),
          "fmv.w.x f%d, %s" % (fd, rs1))
 
 
@@ -264,16 +271,23 @@ fconst(30, 0x00800000, "2^-126 (so binh thuong nho nhat)")
 fop("mul", 31, 30, 3)                # f31 = 2^-127 = 0x00400000 (subnormal)
 
 # ---- co ngoai le ----------------------------------------------------------
-# Tu day tro di khong con f de chua ket qua, nen chi kiem fcsr va vai gia tri.
+# Tu day tro di f8..f31 DA GIU ket qua can kiem, nen cac phep thu con lai chi
+# duoc dung f4 / f5 lam nhap - hai thanh ghi hang so (-1.5 va 10.0) khong con
+# can den nua. Ket qua dau phay dong duoc chep ngay sang thanh ghi x bang
+# fmv.x.w; neu khong, phep thu sau se de len phep thu truoc va testbench chi
+# thay gia tri cuoi cung.
+#
+# f0 (1.0), f1 (2.0), f2 (3.0), f6 (+0.0), f7 (qNaN) PHAI giu nguyen - chung
+# van la toan hang cua cac phep thu duoi day.
 csrrw("zero", 0x003, "zero")         # xoa fflags
-fop("div", 8, 0, 6)                  # 1.0 / 0.0 -> +inf, DZ
+fop("div", 4, 0, 6)                  # 1.0 / 0.0 -> +inf, DZ
 csrr("s4", 0x001)                    # s4 = 0x08 (DZ)
-fmv_x_w("s5", 8)                     # s5 = 0x7F800000
+fmv_x_w("s5", 4)                     # s5 = 0x7F800000
 
 csrrw("zero", 0x003, "zero")
-fop("div", 9, 6, 6)                  # 0.0 / 0.0 -> qNaN, NV
+fop("div", 4, 6, 6)                  # 0.0 / 0.0 -> qNaN, NV
 csrr("s6", 0x001)                    # s6 = 0x10 (NV)
-fmv_x_w("s7", 9)                     # s7 = 0x7FC00000
+fmv_x_w("s7", 4)                     # s7 = 0x7FC00000
 
 csrrw("zero", 0x003, "zero")
 fcmp("lt", "s8", 7, 0)               # flt voi qNaN -> 0 VA NV (so sanh signal)
@@ -284,14 +298,18 @@ csrr("s11", 0x001)                   # s11 = 0x00
 
 # Tran tren: so huu han lon nhat * 2.0 -> +inf, OF + NX
 csrrw("zero", 0x003, "zero")
-fconst(10, 0x7F7FFFFF, "so huu han lon nhat")
-fop("mul", 11, 10, 1)
+fconst(5, 0x7F7FFFFF, "so huu han lon nhat")
+fop("mul", 4, 5, 1)
 csrr("t3", 0x001)                    # t3 = 0x05 (OF | NX)
+fmv_x_w("t4", 4)                     # t4 = 0x7F800000
 
-# Che do lam tron DONG: frm = RTZ roi chia 1/3 -> phai NHO hon ket qua RNE.
+# Che do lam tron DONG: frm = RTZ roi chia 1/3. RTZ cat duoi nen ket qua phai
+# NHO HON ket qua RNE dung mot ulp - day la phep thu bat ban FPU cu, vi no bo
+# qua instr[14:12] hoan toan va luon lam tron RNE.
 li("t0", RM_RTZ << 5)
 csrrw("zero", 0x003, "t0")           # fcsr = {frm = RTZ, fflags = 0}
-fop("div", 12, 0, 2, rm=RM_DYN)      # f12 = 0x3EAAAAAA  (RNE cho ra ...AB)
+fop("div", 4, 0, 2, rm=RM_DYN)       # = 0x3EAAAAAA  (RNE cho ra ...AB)
+fmv_x_w("t5", 4)
 li("t0", 0)
 csrrw("zero", 0x003, "t0")
 

@@ -544,12 +544,35 @@ soc_block "KHOI 13: routeDesign" {
         -route_with_via_only_for_stdcell_pin true \
         -route_detail_fix_antenna true \
         -route_detail_end_iteration 20
+    # Chan M4 cua SRAM lech track M4 (pitch 0.192, offset 0.012): 78/78 chan
+    # signal cua srambank_256x4x32 co tam M4 mod 0.192 roi vao
+    # {0.032 0.072 0.092 0.128 0.188}, khong cai nao = 0.012 -> KHONG vi tri dat
+    # macro nao dua duoc chan len track.  Router vao chan bang V4 tu M5 thi
+    # khong sao (verify_drc chi bat "Regular Wire", khong bat via), nhung neu no
+    # chay them mot doan M4 tren dung cao do cua chan thi thanh OFFGRID.  Run
+    # 2026-09-18 22:00 dinh dung mot ca: net u_itcm/u_mem/FE_OFN19657_n_271,
+    # day M4 8.012 um o y 333.26 vao chan wd[26] cua
+    # u_itcm/u_mem/G_SRAM_BANK[1].u_sram (track gan nhat 333.132 / 333.324).
+    # ecoRoute -fix_drc khong go duoc: ca 3 lan verify (route, postRoute, final)
+    # deu con dung mot loi do.  Ep DAY dung track, VIA van duoc lech -> giu
+    # nguyen duong vao chan macro.
+    # Ten option doi giua cac ban Innovus.  Go thu mot dong nay trong session
+    # dang mo truoc, sai ten thi no bao loi ngay, roi hay chay lai ca khoi.
+    setNanoRouteMode -drouteOnGridOnly wire
     routeDesign -globalDetail
     routeDesign -viaOpt -wireOpt
     soc_verify_drc ./verify_rpt/drc_route.rpt -limit 500000
+    # -drouteOnGridOnly qua chat thi bieu hien KHONG phai DRC ma la ho mach:
+    # router bo net nao no khong vao duoc chan bang day dung track.  Xem
+    # connectivity ngay day, truoc khi optDesign lam nhoe nguyen nhan.
+    verifyConnectivity -type all -error 1000 -warning 1000 \
+        -report ./verify_rpt/connectivity_route.rpt
     saveDesign ./saved/${TOP}_routed.enc
 }
-# Xem: verify_rpt/drc_route.rpt.  Con loi thi: ecoRoute -fix_drc roi verify_drc lai.
+# Xem: verify_rpt/drc_route.rpt va verify_rpt/connectivity_route.rpt.
+#   con DRC            -> ecoRoute -fix_drc roi verify_drc lai.
+#   con open/dangling  -> -drouteOnGridOnly qua chat: bo dong do, chay lai KHOI
+#                         13, roi va tay rieng net OFFGRID tren checkpoint.
 
 
 # ==========================================================================
