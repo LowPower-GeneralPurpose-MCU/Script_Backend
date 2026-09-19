@@ -13,6 +13,8 @@
 #   ./run_soc_sim.sh irq    - tb_irq_pmp.sv    : PMP + CLIC bang CPU that (anh ROM
 #                             tests/irq_pmp.mem, sinh boi gen_irq_pmp_mem.py)
 #   ./run_soc_sim.sh per    - tb_periph.sv     : pinmux, UART1, TIM0/TIM1, ID CLIC
+#   ./run_soc_sim.sh dma    - tb_dma.sv        : dma_align / dma_iopmp /
+#                             dma_channel (DMA v2), co mo hinh slave rieng
 #   ./run_soc_sim.sh all    - tat ca (mac dinh)
 #
 # Bien moi truong ghi de duoc:
@@ -228,6 +230,19 @@ quit
     grep -E '\[TB\]|PASS COUNT|RESULT' xsim_pmp.log || true
 }
 
+run_dma() {
+    echo "=== dma testbench: dma_align / dma_iopmp / dma_channel (DMA v2) ==="
+    # Chi bien dich dung cac file can thiet, KHONG dung rtl_files.f: dma_core.v
+    # van giu ban `dma_channel` CU nen se de len ban moi (VRFC 10-3609).
+    xvlog.bat -sv -work dma -i "$RTL/interrupt/dma"         "$RTL/utils/fifo_sync.v"         "$RTL/utils/utils_dma.v"         "$RTL/interrupt/dma/dma_align.v"         "$RTL/interrupt/dma/dma_iopmp.v"         "$RTL/interrupt/dma/dma_channel.v"         "$HERE/tb_dma.sv" > xvlog_dma.log
+    xelab.bat -relax -s dma_sim -timescale 1ns/1ps dma.tb_dma -L dma > xelab_dma.log
+    printf 'run all
+quit
+' > run.tcl
+    xsim.bat dma_sim -tclbatch run.tcl > xsim_dma.log
+    grep -E '^\[FAIL\]|^=== |PASS COUNT|FAIL COUNT|RESULT' xsim_dma.log || true
+}
+
 case "$MODE" in
     apb)   run_apb ;;
     fw)    run_fw ;;
@@ -241,6 +256,7 @@ case "$MODE" in
     amo)   run_amo ;;
     fpu)   run_fpu ;;
     fpuv)  run_fpuv ;;
-    all)   run_apb; run_fw; run_mem; run_ascon; run_core; run_sys; run_irq; run_per; run_pmp; run_amo; run_fpu; run_fpuv ;;
-    *)     echo "cach dung: $0 [apb|fw|mem|ascon|core|sys|irq|per|pmp|amo|all]"; exit 1 ;;
+    dma)   run_dma ;;
+    all)   run_apb; run_fw; run_mem; run_ascon; run_core; run_sys; run_irq; run_per; run_pmp; run_amo; run_fpu; run_fpuv; run_dma ;;
+    *)     echo "cach dung: $0 [apb|fw|mem|ascon|core|sys|irq|per|pmp|amo|fpu|fpuv|dma|all]"; exit 1 ;;
 esac
