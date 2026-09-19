@@ -181,6 +181,23 @@ set SOC_DENSITY_LAYERS {M5}
 # flow error tro lai - fail-safe, khong im lang bo qua loi moi.
 set SOC_DRC_WAIVE_NETS {u_itcm/u_mem/FE_OFN19657_n_271}
 
+# Loai vi pham duoc waive.  Chi OFFGRID - ca hai ca duoi deu la "hinh nam dung
+# tren MANUFACTURINGGRID 0.004 nhung khong roi track cua Innovus".  SHORT,
+# SPACING, EndOfLine... van chan flow nhu cu, ke ca tren chinh nhung net nay.
+set SOC_DRC_WAIVE_TYPES {OFFGRID}
+
+# Metal fill (_FILLS_RESERVED) chi waive o cong drc_fill.  Run 2026-09-19
+# 14:51: 279674 OFFGRID M5, 100% la fill, khong mot SHORT/SPACING nao.  Moi
+# mieng rong dung 0.096 = min width M5 -> hinh dung, chi sai vi tri:
+# x-center mod 0.192 don o 0.096 (59%, dung nua pitch) va 0.168 (= 1468.584
+# mod 0.192, dung do lech goc x cua macro SRAM), tat ca deu la boi cua 0.024.
+# addMetalFill neo mieng fill vao HINH KE BEN chu khong vao track M5.  Dieu
+# kien "gap+width va active+width chia het pitch" trong soc_metal_fill chi giu
+# duoc track NEU mieng dau hang da dung track - no khong kiem duoc diem moi,
+# nen check pass ma ca hang van lech.  Fill la kim loai tro, khong mang tin
+# hieu, off-track khong phai luat foundry nao.
+set SOC_DRC_WAIVE_FILL_NETS [concat $SOC_DRC_WAIVE_NETS {_FILLS_RESERVED}]
+
 # ---- GDS (09_PnR tr.28) ---------------------------------------------------
 # So layer lay tu calibreDRC.rul; text chan = datatype 251 (calibreLVS.rul
 # LAYER MAP <n> TEXTTYPE == 251).
