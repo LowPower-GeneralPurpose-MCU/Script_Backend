@@ -2,7 +2,7 @@
 *	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
 *	
 *
-* 	Date & Time:	2026-Sep-18 15:09:29 (2026-Sep-18 06:09:29 GMT)
+* 	Date & Time:	2026-Sep-19 18:18:34 (2026-Sep-19 09:18:34 GMT)
 *
 *----------------------------------------------------------------------------------------
 *
@@ -54,79 +54,64 @@
 
 Total Power 
 -----------------------------------------------------------------------------------------
-Total Internal Power:       87.80105933 	   95.3908%
-Total Switching Power:       4.20425512 	    4.5677%
-Total Leakage Power:         0.03819468 	    0.0415%
-Total Power:                92.04350912 
+Total Internal Power:       87.79484313 	   95.3773%
+Total Switching Power:       4.21682145 	    4.5810%
+Total Leakage Power:         0.03840833 	    0.0417%
+Total Power:                92.05007292 
 -----------------------------------------------------------------------------------------
 
 
 Group                           Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-Sequential                         3.222      0.4936     0.01002       3.726       4.048 
-Macro                              82.21        0.21           0       82.42       89.54 
+Sequential                         3.222      0.4942     0.01001       3.726       4.048 
+Macro                              82.21      0.2093           0       82.42       89.53 
 IO                                     0           0           0           0           0 
-Combinational                      1.246       2.357     0.02241       3.626       3.939 
-Clock (Combinational)             0.8754       1.043    0.001126        1.92       2.086 
-Clock (Sequential)                0.2486      0.1007    0.004634       0.354      0.3846 
+Combinational                      1.248       2.355     0.02248       3.626       3.939 
+Clock (Combinational)             0.8646       1.056    0.001107       1.922       2.088 
+Clock (Sequential)                0.2522       0.102    0.004812      0.3589      0.3899 
 -----------------------------------------------------------------------------------------
-Total                               87.8       4.204     0.03819       92.04         100 
+Total                              87.79       4.217     0.03841       92.05         100 
 -----------------------------------------------------------------------------------------
 
 
 Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-VDD                       0.7       87.8       4.204     0.03819       92.04         100 
+VDD                       0.7      87.79       4.217     0.03841       92.05         100 
 
 
 Clock                           Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-CLK_TCK                        0.0004596   0.0003703   3.149e-05   0.0008614   0.0009359 
-CLK_CORDIC                       0.01052     0.01063   5.477e-05      0.0212     0.02303 
-CLK_CPU                           0.1289      0.1255   0.0006015       0.255      0.2771 
-CLK_UART                         0.02539     0.02179   0.0001644     0.04734     0.05143 
-CLK_GPIO                         0.01308     0.01358   3.982e-05      0.0267     0.02901 
-CLK_TIM1                        0.008908    0.009841    4.34e-05     0.01879     0.02042 
-CLK_SYS                           0.8332       0.841    0.004103       1.678       1.823 
-CLK_UART1                        0.01818     0.02094   0.0001555     0.03927     0.04267 
-CLK_TIM0                        0.009541     0.01015   4.557e-05     0.01974     0.02144 
-CLK_ASCON                        0.02741     0.03671   0.0001128     0.06423     0.06978 
-CLK_SPI                          0.01722     0.01936    0.000169     0.03675     0.03993 
-CLK_DBG                          0.01047     0.01107   6.542e-05      0.0216     0.02347 
-CLK_PWM                         0.003907    0.004247   1.432e-05    0.008168    0.008874 
-CLK_I2C                          0.01685     0.01866   0.0001594     0.03567     0.03876 
+CLK_TCK                        0.0003489   0.0003084   2.996e-05   0.0006872   0.0007466 
+CLK_TIM1                        0.009293     0.01001    5.41e-05     0.01936     0.02103 
+CLK_CORDIC                      0.008338     0.01069   5.885e-05     0.01908     0.02073 
+CLK_SYS                            0.833      0.8542     0.00422       1.691       1.838 
+CLK_UART1                        0.01785     0.02131   0.0001527     0.03931     0.04271 
+CLK_UART                         0.02099     0.02098   0.0001566     0.04213     0.04577 
+CLK_GPIO                         0.01065     0.01396   4.401e-05     0.02465     0.02678 
+CLK_TIM0                        0.007763    0.009981   4.157e-05     0.01779     0.01932 
+CLK_ASCON                        0.02679     0.03693   0.0001078     0.06383     0.06935 
+CLK_SPI                          0.01694     0.01923   0.0001652     0.03633     0.03947 
+CLK_DBG                          0.01035     0.01028   5.253e-05     0.02068     0.02247 
+CLK_CPU                           0.1334      0.1268   0.0006519      0.2608      0.2833 
+CLK_PWM                         0.004107    0.004631   2.384e-05    0.008762    0.009518 
+CLK_I2C                          0.01693     0.01865   0.0001604     0.03574     0.03883 
 -----------------------------------------------------------------------------------------
-Total (excluding duplicates)       1.124       1.144    0.005761       2.274        2.47 
+Total (excluding duplicates)       1.117       1.158    0.005919       2.281       2.478 
 -----------------------------------------------------------------------------------------
 Clock: CLK_TCK
 Clock Period: 0.100000 usec 
 Clock Toggle Rate:    20.0000 Mhz 
 Clock Static Probability:  0.5000
 
-Clock: CLK_CORDIC
-Clock Period: 0.004000 usec 
-Clock Toggle Rate:   500.0000 Mhz 
-Clock Static Probability:  0.5000
-
-Clock: CLK_CPU
-Clock Period: 0.004000 usec 
-Clock Toggle Rate:   500.0000 Mhz 
-Clock Static Probability:  0.5000
-
-Clock: CLK_UART
-Clock Period: 0.004000 usec 
-Clock Toggle Rate:   500.0000 Mhz 
-Clock Static Probability:  0.5000
-
-Clock: CLK_GPIO
-Clock Period: 0.004000 usec 
-Clock Toggle Rate:   500.0000 Mhz 
-Clock Static Probability:  0.5000
-
 Clock: CLK_TIM1
+Clock Period: 0.004000 usec 
+Clock Toggle Rate:   500.0000 Mhz 
+Clock Static Probability:  0.5000
+
+Clock: CLK_CORDIC
 Clock Period: 0.004000 usec 
 Clock Toggle Rate:   500.0000 Mhz 
 Clock Static Probability:  0.5000
@@ -137,6 +122,16 @@ Clock Toggle Rate:   500.0000 Mhz
 Clock Static Probability:  0.5000
 
 Clock: CLK_UART1
+Clock Period: 0.004000 usec 
+Clock Toggle Rate:   500.0000 Mhz 
+Clock Static Probability:  0.5000
+
+Clock: CLK_UART
+Clock Period: 0.004000 usec 
+Clock Toggle Rate:   500.0000 Mhz 
+Clock Static Probability:  0.5000
+
+Clock: CLK_GPIO
 Clock Period: 0.004000 usec 
 Clock Toggle Rate:   500.0000 Mhz 
 Clock Static Probability:  0.5000
@@ -161,6 +156,11 @@ Clock Period: 0.004000 usec
 Clock Toggle Rate:   500.0000 Mhz 
 Clock Static Probability:  0.5000
 
+Clock: CLK_CPU
+Clock Period: 0.004000 usec 
+Clock Toggle Rate:   500.0000 Mhz 
+Clock Static Probability:  0.5000
+
 Clock: CLK_PWM
 Clock Period: 0.004000 usec 
 Clock Toggle Rate:   500.0000 Mhz 
@@ -176,9 +176,9 @@ Clock Static Probability:  0.5000
 -----------------------------------------------------------------------------------------
 *	Power Distribution Summary: 
 *                Highest Average Power: u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram (srambank_128x4x20_6t122):            1.082 
-*                Highest Leakage Power:    u_dcache/FE_OFC12056_n (BUFx24_ASAP7_75t_L):        1.409e-05 
-*          Total Cap:      3.13924e-10 F
-*          Total instances in design: 148967
+*                Highest Leakage Power:    u_dcache/FE_OFC12155_n (BUFx24_ASAP7_75t_L):        1.409e-05 
+*          Total Cap:      3.14113e-10 F
+*          Total instances in design: 149198
 *          Total instances in design with no power:     0
 *          Total instances in design with no activity:     0
 *          Total Fillers and Decap:     0
