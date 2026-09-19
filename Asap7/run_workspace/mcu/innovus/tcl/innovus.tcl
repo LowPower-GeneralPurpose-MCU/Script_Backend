@@ -728,7 +728,12 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     }
     # streamOut day het hinh hien co vao GDS, ke ca metal fill lech track.  Run
     # 2026-09-18 vao KHOI 16 voi 100000 OFFGRID chua ai doc -> chan o day.
-    soc_require_drc_clean ./verify_rpt/drc_final.rpt ./verify_rpt/drc_fill.rpt
+    # Cung bo waiver voi KHOI 15 (soc_verify_drc): OFFGRID cua _FILLS_RESERVED
+    # va cua net SRAM trong SOC_DRC_WAIVE_NETS.  Moi loai khac - va moi net
+    # khac - van chan xuat GDS.
+    soc_require_drc_clean -allow-nets $SOC_DRC_WAIVE_FILL_NETS \
+        -allow-types $SOC_DRC_WAIVE_TYPES \
+        ./verify_rpt/drc_final.rpt ./verify_rpt/drc_fill.rpt
     # LEF SRAM lech manufacturing grid / SITE khong ton tai di thang vao GDS vi
     # -outputMacros lay hinh macro tu LEF (khong co GDS rieng cho SRAM).
     soc_require_sram_lef_clean

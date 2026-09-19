@@ -1450,22 +1450,73 @@ proc soc_metal_fill {} {
 }
 
 # Bao cao DRC phai ton tai va sach truoc khi xuat GDS.  Goi dau KHOI 16.
+#
+# KHONG tin dong "Total Violations" cua verify_drc: no dem CA nhung vi pham da
+# duoc waive co chu dich trong soc_fp_config.tcl (SOC_DRC_WAIVE_*).  Truoc day
+# cong nay doc thang con so do, nen KHOI 15 bao sach ma KHOI 16 van chan
+# (run 2026-09-19 18:14: drc_final.rpt "Total Violations : 1" = dung cai
+# OFFGRID M4 cua u_itcm/u_mem da nam trong SOC_DRC_WAIVE_NETS).
+# Phai dem lai tung dong theo DUNG cach soc_verify_drc dang loc -> doan parse
+# duoi day lap lai soc_verify_drc (dong ~1331): SUA MOT BEN THI SUA CA HAI.
+# Hai kiem tra cu van giu: file phai ton tai, va report phai co dong ket luan
+# (chan report cut vi verify_drc chet giua chung).
 proc soc_require_drc_clean {args} {
-    foreach report $args {
+    set allow       {}
+    set allow_types {}
+    set reports     {}
+    for {set i 0} {$i < [llength $args]} {incr i} {
+        switch -- [lindex $args $i] {
+            -allow-nets  { incr i ; set allow       [lindex $args $i] }
+            -allow-types { incr i ; set allow_types [lindex $args $i] }
+            default      { lappend reports [lindex $args $i] }
+        }
+    }
+    foreach report $reports {
         if {![file isfile $report]} {
             error "Chua co $report - chay KHOI 15 truoc khi xuat file"
         }
+        set verdict 0
+        set real    0
+        set waived  0
         set fp [open $report r]
-        set text [read $fp]
-        close $fp
-        if {[regexp {Total Violations\s*:\s*([0-9]+)} $text -> n]} {
-            if {$n > 0} {
-                error "$report con $n vi pham - khong xuat GDS"
+        while {[gets $fp line] >= 0} {
+            if {[regexp {^\s*Total Violations\s*:\s*[0-9]+} $line] ||
+                [regexp {No DRC violations were found} $line]} {
+                set verdict 1
+                continue
             }
-        } elseif {![regexp {No DRC violations were found} $text]} {
-            error "$report khong co dong ket luan nao (bao cao hong hoacverify_drc chua chay xong) - khong xuat GDS"
+            if {![regexp {^([A-Z][A-Za-z_ ]*?)\s*:\s*(.*)$} $line -> type rest]} {
+                continue
+            }
+            if {$type eq "Bounds"} {
+                continue
+            }
+            set net "-"
+            regexp {of Net (\S+)} $rest -> net
+            set skip 0
+            foreach pat $allow {
+                if {[string match $pat $net]} { set skip 1 ; break }
+            }
+            # Giong soc_verify_drc: -allow-types thu hep waiver, phai khop CA
+            # net LAN loai vi pham.  SHORT/SPACING tren chinh net duoc waive
+            # van chan xuat GDS.
+            if {$skip && [llength $allow_types] > 0} {
+                set type_ok 0
+                foreach tpat $allow_types {
+                    if {[string match $tpat $type]} { set type_ok 1 ; break }
+                }
+                set skip $type_ok
+            }
+            if {$skip} { incr waived } else { incr real }
         }
-        puts "  $report: sach"
+        close $fp
+        if {!$verdict} {
+            error "$report khong co dong ket luan nao (bao cao hong hoac verify_drc chua chay xong) - khong xuat GDS"
+        }
+        if {$real > 0} {
+            error "$report con $real vi pham that (ngoai $waived da waive) - khong xuat GDS"
+        }
+        puts "  $report: sach ($waived vi pham waive theo SOC_DRC_WAIVE_* trong soc_fp_config.tcl)"
     }
 }
 
