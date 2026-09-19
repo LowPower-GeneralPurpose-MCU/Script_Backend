@@ -1294,29 +1294,31 @@ proc soc_layer_pitch {layer} {
     return 0
 }
 
-# Mieng metal fill phai roi dung track, neu khong verify_drc bao OFFGRID hang
-# tram nghin lan (run 2026-09-18).  Xem giai thich so trong soc_fp_config.tcl.
-#   tam fill - tam day that = activeSpacing + width  -> phai chia het cho pitch
-#   tam fill - tam fill ke  = gapSpacing    + width  -> phai chia het cho pitch
+# CHI BAO CAO, KHONG CON CHAN - 2026-09-20.
+#
+# Ban cu bao error khi (gap + width) hoac (activeSpacing + width) khong chia
+# het cho pitch, voi ly thuyet "buoc fill phai la boi cua pitch thi moi
+# on-track".  Ly thuyet do da bi bac bo bang thuc nghiem:
+#   - run 2026-09-19 dung 0.288/0.288 (chia het DUNG 2 pitch, guard PASS) van
+#     ra 279674 OFFGRID -> dieu kien nay KHONG DU.
+#   - run_workspace/sram_axi dung 0.192/0.192 (= 1.5 pitch, guard se BAO LOI)
+#     lai cho drc_after_fill.rpt = "No DRC violations were found" -> dieu kien
+#     nay cung KHONG CAN.
+# Tuc guard dang chan dung bo so chay duoc.  Giu phan in so vi van huu ich khi
+# doi chieu log, nhung bo error di.
+#
+# Cach thuc su tranh OFFGRID nam o -maxWidth / -decrement: M5.AUX.2 cua
+# calibreDRC.rul chi ap cho M5 DUNG min width.  Xem soc_fp_config.tcl.
 proc soc_fill_check_track {layer w gap active} {
     set pitch [soc_layer_pitch $layer]
     if {$pitch <= 0} {
-        puts "  $layer: khong doc duoc pitch tu LEF - bo qua kiem tra on-track"
+        puts "  $layer: khong doc duoc pitch tu LEF - bo qua bao cao on-track"
         return
     }
-    foreach {what value} [list activeSpacing $active gapSpacing $gap] {
-        set step [expr {double($value) + $w}]
-        set n    [expr {$step / $pitch}]
-        if {abs($n - round($n)) > 1.0e-6} {
-            set fix [expr {(floor($n) + 1) * $pitch - $w}]
-            error [format {soc_metal_fill %s: %s %.4f + width %.4f = %.4f = %.3f track (pitch %.4f) -> mieng fill lech track, verify_drc se bao OFFGRID. Dat %s = %.4f (hoac n*%.4f - %.4f).} \
-                $layer $what $value $w $step $n $pitch $what $fix $pitch $w]
-        }
-    }
-    puts [format {  %s: pitch %.4f | buoc fill %.4f (%d track) | cach day that %.4f (%d track) | mat do toi da %.1f%%} \
+    puts [format {  %s: pitch %.4f | buoc fill %.4f (%.2f track) | cach day that %.4f (%.2f track) | mat do toi da %.1f%%} \
         $layer $pitch \
-        [expr {$gap + $w}]    [expr {round(($gap + $w) / $pitch)}] \
-        [expr {$active + $w}] [expr {round(($active + $w) / $pitch)}] \
+        [expr {$gap + $w}]    [expr {($gap + $w) / $pitch}] \
+        [expr {$active + $w}] [expr {($active + $w) / $pitch}] \
         [expr {100.0 * $w / ($gap + $w)}]]
 }
 
@@ -1425,28 +1427,38 @@ du, KHONG ket luan duoc design sach DRC. Nang -limit, hoac xoa metal fill\
     return $real
 }
 
-# Metal fill (09_PnR tr.26) tren cac layer SOC_FILL_LAYERS, bo rong co dinh =
-# min width, gap/active/density theo tung dong (xem soc_fp_config.tcl).  Goi sau
-# filler, truoc timing cuoi (fill lam tang C ghep) va SAU khi da verify_drc
-# design that - fill sai track co the nhan chim bao cao DRC.
+# Metal fill (09_PnR tr.26) tren cac layer SOC_FILL_LAYERS.  Bo so lay nguyen
+# tu run_workspace/sram_axi - bo duy nhat trong repo nay cho drc sach sau fill.
+# Giai thich day du o soc_fp_config.tcl.  Goi sau filler, truoc timing cuoi
+# (fill lam tang C ghep) va SAU khi da verify_drc design that - fill sai co the
+# nhan chim bao cao DRC.
+#
+# -maxWidth va -decrement la hai tham so quyet dinh, DUNG BO DI: chung cho
+# Innovus thu cac be rong lon truoc (wmax, wmax-decr, ... ) roi moi ha xuong
+# min width, nen da so mieng fill KHONG phai min width.  M5.AUX.2 cua
+# calibreDRC.rul ("minimum width M5 tracks must lie along the vertical routing
+# tracks") chi ap cho mieng dung min width, nen cach nay tranh duoc no.  Ban cu
+# ep minWidth = maxWidth = 0.096 -> moi mieng deu min width -> 279674 OFFGRID.
 proc soc_metal_fill {} {
     set layers {}
     # In ra so THUC SU dang dung: run 2026-09-18 chay so cu con trong RAM trong
     # khi file da sua, va tu log khong co cach nao biet dieu do.
     puts "soc_metal_fill: SOC_FILL_LAYERS = $::SOC_FILL_LAYERS"
-    puts "soc_metal_fill: do dai $::SOC_FILL_MIN_LEN - $::SOC_FILL_MAX_LEN um"
-    puts "soc_metal_fill: kiem tra on-track"
-    foreach {layer w gap active dmin dmax dpref} $::SOC_FILL_LAYERS {
-        soc_fill_check_track $layer $w $gap $active
+    puts "soc_metal_fill: bao cao on-track (tham khao, khong con chan)"
+    foreach {layer wmin wmax decr lmin lmax gap active dmin dmax dpref} \
+            $::SOC_FILL_LAYERS {
+        soc_fill_check_track $layer $wmin $gap $active
     }
-    foreach {layer w gap active dmin dmax dpref} $::SOC_FILL_LAYERS {
-        setMetalFill -layer $layer -minWidth $w -maxWidth $w \
-            -minLength $::SOC_FILL_MIN_LEN -maxLength $::SOC_FILL_MAX_LEN \
+    foreach {layer wmin wmax decr lmin lmax gap active dmin dmax dpref} \
+            $::SOC_FILL_LAYERS {
+        setMetalFill -layer $layer \
+            -minWidth $wmin -maxWidth $wmax -decrement $decr \
+            -minLength $lmin -maxLength $lmax \
             -activeSpacing $active -gapSpacing $gap \
             -minDensity $dmin -maxDensity $dmax -preferredDensity $dpref
         lappend layers $layer
     }
-    addMetalFill -layer $layers -snap
+    addMetalFill -layer $layers -snap -squareShape
 }
 
 # Bao cao DRC phai ton tai va sach truoc khi xuat GDS.  Goi dau KHOI 16.

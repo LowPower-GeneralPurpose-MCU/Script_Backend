@@ -657,10 +657,13 @@ soc_block "KHOI 15: filler + verify" {
     }
 
     # --- 2. Metal fill roi DRC lai ----------------------------------------
-    # soc_metal_fill tu kiem tra gap/activeSpacing co roi dung track khong.
+    # soc_metal_fill chi IN bao cao on-track, khong chan nua (2026-09-20): dieu
+    # kien boi-pitch cu vua khong du vua khong can - xem soc_fill_check_track.
     soc_metal_fill
-    # Waive OFFGRID cua fill (xem SOC_DRC_WAIVE_FILL_NETS).  Cong nay bay gio
-    # chi no khi fill SHORT / SPACING vao hinh that - do moi la loi that su.
+    # 2026-09-20: OFFGRID cua _FILLS_RESERVED KHONG con duoc waive.  Bo so fill
+    # moi (maxWidth 1.248 + decrement 0.384, theo sram_axi) khien da so mieng
+    # rong hon min width nen khong dinh M5.AUX.2.  Con OFFGRID tren fill nghia
+    # la fill VAN sai -> phai dung lai chu khong waive.
     set soc_drc_fill [soc_verify_drc ./verify_rpt/drc_fill.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_FILL_NETS -allow-types $SOC_DRC_WAIVE_TYPES]
     if {$soc_drc_fill > 0} {
         error "Metal fill sinh $soc_drc_fill vi pham DRC - xem\
