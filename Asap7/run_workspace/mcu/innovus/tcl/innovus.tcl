@@ -554,25 +554,31 @@ soc_block "KHOI 13: routeDesign" {
     # day M4 8.012 um o y 333.26 vao chan wd[26] cua
     # u_itcm/u_mem/G_SRAM_BANK[1].u_sram (track gan nhat 333.132 / 333.324).
     # ecoRoute -fix_drc khong go duoc: ca 3 lan verify (route, postRoute, final)
-    # deu con dung mot loi do.  Ep DAY dung track, VIA van duoc lech -> giu
-    # nguyen duong vao chan macro.
-    # Ten option doi giua cac ban Innovus.  Go thu mot dong nay trong session
-    # dang mo truoc, sai ten thi no bao loi ngay, roi hay chay lai ca khoi.
-    setNanoRouteMode -drouteOnGridOnly wire
+    # deu con dung mot loi do.
+    #
+    # DA THU, KHONG AN THUA (run 2026-09-19 03:20): setNanoRouteMode
+    # -drouteOnGridOnly wire dat ngay day.  Innovus 23.14 NHAN option (khong bao
+    # loi cu phap), route xong khong ho mach net tin hieu nao (connectivity chi
+    # con 423 dangling M1 cua VDD/VSS, muc info), NHUNG doan day OFFGRID ra
+    # GIONG HET tung chu so: cung net, cung bounds.  NanoRoute khong coi doan
+    # vao chan macro la "day" nen knob do khong quan.  Dung dat lai.
+    # -> Cach con lai: va tay tren checkpoint routed (xoa doan M4 + createRouteBlk
+    #    M4 cuc bo -> ep router ha V4 tu M5 thang xuong chan), hoac waive vi ca 4
+    #    toa do deu chia het MANUFACTURINGGRID 0.004 nen Calibre khong bat.
     routeDesign -globalDetail
     routeDesign -viaOpt -wireOpt
     soc_verify_drc ./verify_rpt/drc_route.rpt -limit 500000
-    # -drouteOnGridOnly qua chat thi bieu hien KHONG phai DRC ma la ho mach:
-    # router bo net nao no khong vao duoc chan bang day dung track.  Xem
-    # connectivity ngay day, truoc khi optDesign lam nhoe nguyen nhan.
+    # Bat ho mach ngay day, truoc khi optDesign/ecoRoute lam nhoe nguyen nhan:
+    # sau route la luc duy nhat phan biet duoc "router bo net" voi "optDesign
+    # doi netlist".  Dangling VDD/VSS tren M1 la muc info, dem rieng.
     verifyConnectivity -type all -error 1000 -warning 1000 \
         -report ./verify_rpt/connectivity_route.rpt
     saveDesign ./saved/${TOP}_routed.enc
 }
 # Xem: verify_rpt/drc_route.rpt va verify_rpt/connectivity_route.rpt.
-#   con DRC            -> ecoRoute -fix_drc roi verify_drc lai.
-#   con open/dangling  -> -drouteOnGridOnly qua chat: bo dong do, chay lai KHOI
-#                         13, roi va tay rieng net OFFGRID tren checkpoint.
+#   con DRC        -> ecoRoute -fix_drc o KHOI 14 roi verify_drc lai.
+#   con OFFGRID    -> khong tu het duoc, xem ghi chu chan M4 SRAM o tren.
+#   dangling VDD/VSS tren M1 la muc info (IMPVFC-94), khong chan flow.
 
 
 # ==========================================================================
@@ -593,7 +599,7 @@ soc_block "KHOI 14: optDesign postRoute" {
     # Truoc 2026-09-18 khoi nay khong verify: DRC ke tiep la drc_final (sau metal
     # fill), va fill lech track da nhan chim bao cao do.  Day moi la so DRC that
     # cua design.
-    set soc_drc_postroute [soc_verify_drc ./verify_rpt/drc_postRoute.rpt -limit 500000]
+    set soc_drc_postroute [soc_verify_drc ./verify_rpt/drc_postRoute.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_NETS]
     if {$soc_drc_postroute > 0} {
         error "Con $soc_drc_postroute vi pham DRC sau ecoRoute - xem verify_rpt/drc_postRoute.rpt truoc khi sang KHOI 15"
     }
@@ -630,7 +636,7 @@ soc_block "KHOI 15: filler + verify" {
     saveDesign ./saved/${TOP}_prefill.enc
 
     # --- 1. DRC cua design that (chua co metal fill) -----------------------
-    set soc_drc_real [soc_verify_drc ./verify_rpt/drc_final.rpt -limit 500000]
+    set soc_drc_real [soc_verify_drc ./verify_rpt/drc_final.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_NETS]
     if {$soc_drc_real > 0} {
         error "Con $soc_drc_real vi pham DRC that - xem verify_rpt/drc_final.rpt"
     }
@@ -646,7 +652,7 @@ soc_block "KHOI 15: filler + verify" {
     # --- 2. Metal fill roi DRC lai ----------------------------------------
     # soc_metal_fill tu kiem tra gap/activeSpacing co roi dung track khong.
     soc_metal_fill
-    set soc_drc_fill [soc_verify_drc ./verify_rpt/drc_fill.rpt -limit 500000]
+    set soc_drc_fill [soc_verify_drc ./verify_rpt/drc_fill.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_NETS]
     if {$soc_drc_fill > 0} {
         error "Metal fill sinh $soc_drc_fill vi pham DRC - xem\
 verify_rpt/drc_fill.rpt.  Sua so trong SOC_FILL_LAYERS roi restore\

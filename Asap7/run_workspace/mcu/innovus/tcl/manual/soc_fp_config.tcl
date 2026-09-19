@@ -161,6 +161,26 @@ set SOC_FILL_MAX_LEN    16.8
 # 7719 trong so do la cua luat KHONG ton tai trong PDK nay (M1-M4, M6-M9).
 set SOC_DENSITY_LAYERS {M5}
 
+# ---- Waive DRC (chi dung khi da chung minh khong phai luat foundry) --------
+# Net trong danh sach nay van bi verify_drc bat va van hien trong bao cao, chi
+# khong tinh vao so vi pham lam dung flow.  soc_verify_drc in ra so bo qua moi
+# lan chay nen khong bao gio im lang.
+#
+# u_itcm/u_mem/FE_OFN19657_n_271: 1 OFFGRID M4, bounds
+# (1520.116 333.212) (1528.128 333.308), doan router chay tren cao do chan
+# wd[26] cua u_itcm/u_mem/G_SRAM_BANK[1].u_sram.  Ly do waive:
+#   1. Ca 4 toa do chia het MANUFACTURINGGRID 0.004 -> khong vi pham luat
+#      foundry nao; deck calibreDRC.rul cua ASAP7 khong co luat off-track.
+#      Day la luat routing-grid rieng cua Innovus.
+#   2. 78/78 chan signal M4 cua srambank_256x4x32 lech track M4 o MOI vi tri
+#      dat macro (5 gia tri mod 0.192 khac nhau) -> khong sua duoc bang
+#      floorplan.  Xem ghi chu day du o KHOI 13 trong innovus.tcl.
+#   3. ecoRoute -fix_drc va setNanoRouteMode -drouteOnGridOnly wire deu da thu
+#      va deu khong go duoc (run 2026-09-18 22:00 va 2026-09-19 03:20).
+# Ten net do Genus sinh: chay lai synthesis thi ten doi, waiver het khop va
+# flow error tro lai - fail-safe, khong im lang bo qua loi moi.
+set SOC_DRC_WAIVE_NETS {u_itcm/u_mem/FE_OFN19657_n_271}
+
 # ---- GDS (09_PnR tr.28) ---------------------------------------------------
 # So layer lay tu calibreDRC.rul; text chan = datatype 251 (calibreLVS.rul
 # LAYER MAP <n> TEXTTYPE == 251).
