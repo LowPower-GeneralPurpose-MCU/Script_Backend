@@ -104883,3 +104883,9 @@ Analyze floorplan/placement ...
 Analysis Routing ...
 Report saved in file ./reports/summary_final.rpt
 ./verify_rpt/drc_final.rpt con 1 vi pham - khong xuat GDS
+<CMD> fit
+
+*** Memory Usage v#2 (Current mem = 13096.867M, initial mem = 839.699M) ***
+*** Message Summary: 276248 warning(s), 12 error(s)
+
+--- Ending "Innovus" (totcpu=4:20:26, real=6:14:16, mem=13096.9M) ---
