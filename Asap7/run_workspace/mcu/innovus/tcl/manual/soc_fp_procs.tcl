@@ -1321,7 +1321,7 @@ proc soc_fill_check_track {layer w gap active} {
 }
 
 # verify_drc + doc lai bao cao va phan loai.
-#   soc_verify_drc <file> ?-limit N? ?-allow-nets {pattern ...}?
+#   soc_verify_drc <file> ?-limit N? ?-allow-nets {pattern ...}? ?-allow-types {pattern ...}?
 # verify_drc DUNG GIUA CHUNG khi so vi pham cham -limit va chi ghi mot dong
 # WARN IMPVFG-1103 o cuoi log - rat de bo sot.  Run 2026-09-18 dinh dung loi do:
 # 100000 OFFGRID cua metal fill nuot het bao cao, khong biet con DRC that nao bi
@@ -1331,10 +1331,12 @@ proc soc_fill_check_track {layer w gap active} {
 proc soc_verify_drc {report args} {
     set limit 1000000
     set allow {}
+    set allow_types {}
     foreach {opt val} $args {
         switch -- $opt {
             -limit      { set limit $val }
-            -allow-nets { set allow $val }
+            -allow-nets  { set allow $val }
+            -allow-types { set allow_types $val }
             default     { error "soc_verify_drc: tuy chon la '$opt'" }
         }
     }
@@ -1372,6 +1374,21 @@ proc soc_verify_drc {report args} {
                 break
             }
         }
+        # -allow-types thu hep waiver: phai khop CA net LAN loai vi pham moi bo
+        # qua.  Run 2026-09-19 14:51: 279674 OFFGRID cua _FILLS_RESERVED.  Neu
+        # waive ca net thi lan sau fill SHORT vao net that cung bi nuot theo -
+        # dung cai nguy hiem that su.  Co -allow-types thi fill lech track duoc
+        # bo qua con fill short / spacing van chan flow.
+        if {$skip && [llength $allow_types] > 0} {
+            set type_ok 0
+            foreach tpat $allow_types {
+                if {[string match $tpat $type]} {
+                    set type_ok 1
+                    break
+                }
+            }
+            set skip $type_ok
+        }
         if {!$skip} {
             incr real
         }
@@ -1396,8 +1413,9 @@ proc soc_verify_drc {report args} {
         if {[llength $nets] > 10} {
             puts "  ... con [expr {[llength $nets] - 10}] net nua"
         }
-        puts [format "  -> %d vi pham that (%d bo qua theo -allow-nets {%s})" \
-            $real [expr {$total - $real}] $allow]
+        set soc_waived [expr {$total - $real}]
+        set soc_tdesc [expr {[llength $allow_types] ? $allow_types : {moi loai}}]
+        puts "  -> $real vi pham that ($soc_waived bo qua: net {$allow}, loai {$soc_tdesc})"
     }
     if {$truncated} {
         error "verify_drc bi cat o -limit $limit (IMPVFG-1103): $report khong day\

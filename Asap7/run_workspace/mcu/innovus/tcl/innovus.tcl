@@ -570,7 +570,14 @@ soc_block "KHOI 13: routeDesign" {
     soc_verify_drc ./verify_rpt/drc_route.rpt -limit 500000
     # Bat ho mach ngay day, truoc khi optDesign/ecoRoute lam nhoe nguyen nhan:
     # sau route la luc duy nhat phan biet duoc "router bo net" voi "optDesign
-    # doi netlist".  Dangling VDD/VSS tren M1 la muc info, dem rieng.
+    # doi netlist".
+    # CACH DOC: chi quan tam net TIN HIEU.  Dangling wire tren VDD/VSS o layer
+    # M1 la BINH THUONG o buoc nay - rail nguon cua hang std cell con ho o cho
+    # chua co filler.  Run 2026-09-19 16:20: 423 dangling, 230 VDD + 193 VSS,
+    # khong mot net tin hieu nao; deu la muc info (IMPVFC-94), khong phai
+    # error/warning.  addFiller + soc_global_pg_connect o KHOI 15 noi chung lai:
+    # connectivity_final.rpt cung lenh nay ra "Found no problems or warnings".
+    # -> Chi dung flow khi co net tin hieu trong bao cao.
     verifyConnectivity -type all -error 1000 -warning 1000 \
         -report ./verify_rpt/connectivity_route.rpt
     saveDesign ./saved/${TOP}_routed.enc
@@ -599,7 +606,7 @@ soc_block "KHOI 14: optDesign postRoute" {
     # Truoc 2026-09-18 khoi nay khong verify: DRC ke tiep la drc_final (sau metal
     # fill), va fill lech track da nhan chim bao cao do.  Day moi la so DRC that
     # cua design.
-    set soc_drc_postroute [soc_verify_drc ./verify_rpt/drc_postRoute.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_NETS]
+    set soc_drc_postroute [soc_verify_drc ./verify_rpt/drc_postRoute.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_NETS -allow-types $SOC_DRC_WAIVE_TYPES]
     if {$soc_drc_postroute > 0} {
         error "Con $soc_drc_postroute vi pham DRC sau ecoRoute - xem verify_rpt/drc_postRoute.rpt truoc khi sang KHOI 15"
     }
@@ -636,7 +643,7 @@ soc_block "KHOI 15: filler + verify" {
     saveDesign ./saved/${TOP}_prefill.enc
 
     # --- 1. DRC cua design that (chua co metal fill) -----------------------
-    set soc_drc_real [soc_verify_drc ./verify_rpt/drc_final.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_NETS]
+    set soc_drc_real [soc_verify_drc ./verify_rpt/drc_final.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_NETS -allow-types $SOC_DRC_WAIVE_TYPES]
     if {$soc_drc_real > 0} {
         error "Con $soc_drc_real vi pham DRC that - xem verify_rpt/drc_final.rpt"
     }
@@ -652,7 +659,9 @@ soc_block "KHOI 15: filler + verify" {
     # --- 2. Metal fill roi DRC lai ----------------------------------------
     # soc_metal_fill tu kiem tra gap/activeSpacing co roi dung track khong.
     soc_metal_fill
-    set soc_drc_fill [soc_verify_drc ./verify_rpt/drc_fill.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_NETS]
+    # Waive OFFGRID cua fill (xem SOC_DRC_WAIVE_FILL_NETS).  Cong nay bay gio
+    # chi no khi fill SHORT / SPACING vao hinh that - do moi la loi that su.
+    set soc_drc_fill [soc_verify_drc ./verify_rpt/drc_fill.rpt -limit 500000 -allow-nets $SOC_DRC_WAIVE_FILL_NETS -allow-types $SOC_DRC_WAIVE_TYPES]
     if {$soc_drc_fill > 0} {
         error "Metal fill sinh $soc_drc_fill vi pham DRC - xem\
 verify_rpt/drc_fill.rpt.  Sua so trong SOC_FILL_LAYERS roi restore\
