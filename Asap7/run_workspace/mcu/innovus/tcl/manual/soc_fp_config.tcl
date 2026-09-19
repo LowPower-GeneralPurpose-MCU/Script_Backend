@@ -128,34 +128,45 @@ set SOC_FILLER_CELLS {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R}
 # RIGHTWAYONGRIDONLY + RECTONLY + WIDTHTABLE (SADP): fill them layer la them rui
 # ro DRC ma khong co luat nao doi.
 #
-# LUAT ON-TRACK.  Run 2026-09-18: drc_final.rpt co 100000 OFFGRID, 100% tren net
-# _FILLS_RESERVED lop M5, va verify_drc bi cat vi cham limit (IMPVFG-1103).
-# M5 trong tech LEF: PITCH 0.192, WIDTH 0.096, DIRECTION VERTICAL.
-# Tam mieng fill phai roi dung track.  Tinh tu tam day that ben canh:
-#   tam-den-tam = activeSpacing + width/2 + width_day/2
-#               = activeSpacing + 0.096   (day M5 trong design deu rong 0.096)
-#   -> activeSpacing + 0.096 phai chia het cho 0.192
-# Giua hai mieng fill lien tiep:
-#   buoc = gapSpacing + width -> gapSpacing + 0.096 phai chia het cho 0.192
-# So cu active 0.384 / gap 0.192 cho 0.480 va 0.288 = 2.5 va 1.5 track -> lech
-# nua track.  Do lai tren 100000 shape: bin lech 0.096 um co 21575 mieng, bin 0
-# co 21097 - dung nhu hai buoc xen ke 2.5 / 4 track.
-# So moi 0.288 / 0.288 cho dung 2 track ca hai chieu, mat do = 0.096/0.384 = 25%
-# (bang preferredDensity) va van >= EOL ENDTOEND 0.160.  Gap 0.096 (1 track, mat
-# do 50%) khong dung duoc: pham LEF58_SPACING ENDOFLINE 0.1 WITHIN 0.160.
-# -> 25% la mat do on-track cao nhat lam duoc o M5.
-# soc_metal_fill kiem tra lai hai phep chia nay truoc khi chay.
-#   layer width gap   active minD maxD prefD
+# LUAT ON-TRACK - LY THUYET CU DA BI BAC BO 2026-09-20.
+#
+# calibreDRC.rul co luat that cho M5 (nen cau "off-track khong phai luat foundry
+# nao" o phan waiver cu la SAI):
+#   M5.AUX.1  "M5 vertical edges must be at a grid of 24 nm"
+#             VAR_M5_1X_DBU 240 = 0.024 o 1x = 0.096 o LEF 4x
+#   M5.AUX.2  "Minimum width M5 tracks must lie along the vertical routing
+#             tracks"
+# Diem mau chot: M5.AUX.2 chi ap cho M5 DUNG MIN WIDTH.
+#
+# So cu ep -minWidth = -maxWidth = 0.096 nen MOI mieng fill deu la min width,
+# tuc moi mieng deu buoc phai nam tren track -> run 2026-09-19 23:40 ra 279674
+# OFFGRID M5 tren _FILLS_RESERVED.  Do lai CA 38 MB drc_fill.rpt (khong phai
+# lay mau): tam cac mieng trai ra 8+ bucket mod 0.192 - 0.096 (45.4%), 0+0.192
+# (11.9%), 0.048 (9.8%), 0.144 (9.0%), 0.168 (7.4%), 0.120 (5.8%), 0.024
+# (5.1%), 0.072 (4.6%), con 1.1% lech ca luoi 0.024.  Tuc la KHONG phai lech
+# hang so, khong co phep dich nao sua duoc.
+#
+# Bo so duoi day COPY tu run_workspace/sram_axi/innovus/tcl/add_fill_and_verify
+# .tcl - cung ASAP7, cung Innovus 23.14-s088_1, cung duong legacy in-design ->
+# verify_rpt/drc_after_fill.rpt = "No DRC violations were found", va fill co
+# chay that (axi_ram.metalfill.rpt: M5 285 window, keo 285 -> 201 window duoi
+# min).  Cho width chay 0.096 -> 1.248 voi decrement 0.384 (Innovus thu 1.248,
+# 0.864, 0.480 roi moi toi 0.096), nen da so mieng RONG HON min width va khong
+# dinh M5.AUX.2.
+#
+# Bo so nay CO CHU Y pham dieu kien cu "gap + width chia het pitch"
+# (0.192 + 0.096 = 0.288 = 1.5 pitch).  Chinh sram_axi bac bo dieu kien do bang
+# thuc nghiem, nen soc_fill_check_track khong con bao error nua - xem ghi chu o
+# do.
+#   layer wmin  wmax  decr  lmin  lmax gap   active minD maxD prefD
 set SOC_FILL_LAYERS {
-    M5    0.096 0.288 0.288  15   90   25
+    M5    0.096 1.248 0.384 0.384 5.0  0.192 0.192  15   90   25
 }
-# Muon fill them cho giong slide (khong co luat LEF, tu chiu DRC).  Phai giu
-# quy tac on-track o tren: gap va active deu = (n * pitch - width).
-#   M4 (pitch 0.192) 0.096 0.288 0.288 15 90 25
-#   M6 (pitch 0.256) 0.128 0.384 0.384 15 90 25
-#   M7 (pitch 0.256) 0.128 0.384 0.384 15 90 25
-set SOC_FILL_MIN_LEN     1.0     ;# > AREA/width (M5: 0.032 / 0.096 = 0.33)
-set SOC_FILL_MAX_LEN    16.8
+# Muon fill them cho giong slide (khong co luat LEF, tu chiu DRC).  Lay nguyen
+# cac dong tuong ung cua sram_axi, dung thu tu cot o tren:
+#   M4    0.096 1.248 0.384 0.384 5.0  0.192 0.192  10   35   25
+#   M6    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
+#   M7    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
 # Layer co MINIMUMDENSITY that trong tech LEF -> chi kiem tra mat do o do.
 # Cac layer khac Innovus ap mac dinh 20%: run 2026-09-18 co 8863 vi pham mat do,
 # 7719 trong so do la cua luat KHONG ton tai trong PDK nay (M1-M4, M6-M9).
@@ -186,17 +197,23 @@ set SOC_DRC_WAIVE_NETS {u_itcm/u_mem/FE_OFN19657_n_271}
 # SPACING, EndOfLine... van chan flow nhu cu, ke ca tren chinh nhung net nay.
 set SOC_DRC_WAIVE_TYPES {OFFGRID}
 
-# Metal fill (_FILLS_RESERVED) chi waive o cong drc_fill.  Run 2026-09-19
-# 14:51: 279674 OFFGRID M5, 100% la fill, khong mot SHORT/SPACING nao.  Moi
-# mieng rong dung 0.096 = min width M5 -> hinh dung, chi sai vi tri:
-# x-center mod 0.192 don o 0.096 (59%, dung nua pitch) va 0.168 (= 1468.584
-# mod 0.192, dung do lech goc x cua macro SRAM), tat ca deu la boi cua 0.024.
-# addMetalFill neo mieng fill vao HINH KE BEN chu khong vao track M5.  Dieu
-# kien "gap+width va active+width chia het pitch" trong soc_metal_fill chi giu
-# duoc track NEU mieng dau hang da dung track - no khong kiem duoc diem moi,
-# nen check pass ma ca hang van lech.  Fill la kim loai tro, khong mang tin
-# hieu, off-track khong phai luat foundry nao.
-set SOC_DRC_WAIVE_FILL_NETS [concat $SOC_DRC_WAIVE_NETS {_FILLS_RESERVED}]
+# BO WAIVE CHO METAL FILL - 2026-09-20.
+#
+# Truoc day dong nay them {_FILLS_RESERVED} de nuot 279674 OFFGRID M5 cua fill.
+# Ly do ghi kem ("fill la kim loai tro, off-track khong phai luat foundry nao")
+# la SAI: calibreDRC.rul co M5.AUX.1 va M5.AUX.2, va M5.AUX.2 noi nguyen van
+# "Minimum width M5 tracks must lie along the vertical routing tracks" - ap
+# dung len tung mieng fill vi fill cu rong dung min width.
+#
+# Nguyen nhan that nam o tham so fill chu khong o cho verify_drc: xem khoi ghi
+# chu SOC_FILL_LAYERS o tren.  Da doi sang bo so cua sram_axi (co maxWidth
+# 1.248 + decrement 0.384) nen phan lon mieng fill rong hon min width va khong
+# con dinh M5.AUX.2.  Neu van con OFFGRID tren _FILLS_RESERVED thi la fill VAN
+# sai - phai dung flow lai chu khong waive.
+#
+# Ten bien giu nguyen de innovus.tcl (:664, :734) khong phai sua.  Gio no chi
+# con dung mot net SRAM trong SOC_DRC_WAIVE_NETS.
+set SOC_DRC_WAIVE_FILL_NETS $SOC_DRC_WAIVE_NETS
 
 # ---- GDS (09_PnR tr.28) ---------------------------------------------------
 # So layer lay tu calibreDRC.rul; text chan = datatype 251 (calibreLVS.rul
