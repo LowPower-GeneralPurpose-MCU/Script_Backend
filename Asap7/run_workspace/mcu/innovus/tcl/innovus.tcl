@@ -522,7 +522,12 @@ soc_block "KHOI 11: CTS" {
 # ==========================================================================
 soc_block "KHOI 12: optDesign postCTS" {
     setOptMode -fixFanoutLoad true -fixTran true -fixCap true
-    optDesign -postCTS -setup -hold -prefix postCTS
+    # -drv: KHONG bo di.  Ban cu chi ghi '-setup -hold', tuc noi voi optDesign
+    # rang CHI lam hai viec do; setOptMode -fixTran/-fixCap o tren mo ra co che
+    # sua DRV nhung khong duoc goi.  Run 2026-09-20 15:02 vi vay ma net n_21581
+    # (INVx1 keo 16 chan D cua FIFO RX UART, tran 0.151 / gioi han 0.150 ns)
+    # xuat hien ngay o postCTS roi di thang toi cuoi run ma khong ai sua.
+    optDesign -postCTS -setup -hold -drv -prefix postCTS
     # 12 clock gate roi cg_* (latch + AND2): net latch->AND la clock net,
     # optDesign khong sua hold o do (run 2026-09-17: -120 ps postCTS)
     soc_fix_cg_hold 0.020
@@ -632,7 +637,10 @@ soc_block "KHOI 14: optDesign postRoute" {
     } else {
         puts "Net treo con lai: xem reports/dangling_net.rpt"
     }
-    optDesign -postRoute -setup -hold -prefix postRoute
+    # -drv nhu KHOI 12: day la luot toi uu CUOI CUNG cua ca flow, KHOI 15 chi
+    # them filler + metal fill chu khong sua duoc DRV nua.  Thieu -drv thi 1 net
+    # max_tran cua postCTS di nguyen sang GDS (run 2026-09-20: n_21581, -1 ps).
+    optDesign -postRoute -setup -hold -drv -prefix postRoute
     # Hold clock gate roi cg_* (xem KHOI 12) tinh lai voi RC that; buffer moi
     # chua co day -> ecoRoute
     soc_fix_cg_hold 0.020
@@ -648,11 +656,16 @@ soc_block "KHOI 14: optDesign postRoute" {
     }
     timeDesign -postRoute       -outDir ./reports/timing_postRoute      -prefix postRoute
     timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold -prefix postRoute
-    # Tu day tro di khong con buoc toi uu nao nua (KHOI 15 chi them filler +
-    # metal fill) -> con vi pham la DUNG, giong cach DRC dang duoc chan.
+    # LUU TRUOC, CHAN SAU.  Cong o duoi co the dung khoi, va soc_block chet la
+    # chet ca khoi - de saveDesign phia sau thi mat luon checkpoint cua chinh
+    # trang thai vua mat 10 phut toi uu, phai chay lai tu top_soc_routed.
+    saveDesign ./saved/${TOP}_postRoute.enc
+    # Day la buoc toi uu CUOI (KHOI 15 chi them filler + metal fill) nen o day
+    # van chan cung: dung truoc KHOI 15 thi con sua duoc, de lot qua thi KHOI 15
+    # da do filler + metal fill len roi, muon sua phai restore.
+    # Khac voi KHOI 15: paste lai KHOI 14 vo hai (optDesign chay lai duoc).
     soc_check_timing ./reports/timing_postRoute      postRoute -drv
     soc_check_timing ./reports/timing_postRoute_hold postRoute -hold
-    saveDesign ./saved/${TOP}_postRoute.enc
 }
 
 
@@ -747,9 +760,19 @@ MINIMUMDENSITY trong tech LEF - chi doc phan $SOC_DENSITY_LAYERS."
     # (run 2026-09-17: verifyProcessAntenna -> ERROR IMPVPA-22).
     timeDesign -postRoute       -outDir ./reports/timing_final      -prefix final
     timeDesign -postRoute -hold -outDir ./reports/timing_final_hold -prefix final
-    # Bang cuoi cung cua ca run: phai sach thi moi duoc sang KHOI 16 (xuat GDS).
-    soc_check_timing ./reports/timing_final      final -drv
-    soc_check_timing ./reports/timing_final_hold final -hold
+    # CHI CANH BAO o day - cong CUNG nam o KHOI 16, canh soc_require_drc_clean.
+    #
+    # Ban dau hai dong nay la error.  Run 2026-09-20 15:27 dung dung o day vi 1
+    # net max_tran lech 1 ps, va vi soc_block chet la chet ca khoi nen:
+    #   - report_power / report_area / gateCount / summaryReport khong duoc sinh
+    #   - banner khong in -> tren console loi hien ngay sau output cua metal
+    #     fill, doc y nhu metal fill hong
+    #   - ma KHOI 15 KHONG chay lai duoc: paste lai se addFiller lan hai va
+    #     addMetalFill de len fill da co -> DRC/short that o metal fill
+    # Cho nen: o day bao cao that day du, con viec CHAN xuat GDS de KHOI 16 lam,
+    # dung cho ma DRC dang bi chan.  KHOI 16 chi doc file, paste lai vo hai.
+    soc_check_timing ./reports/timing_final      final -drv  -warn-only
+    soc_check_timing ./reports/timing_final_hold final -hold -warn-only
     # Slew chan clk SRAM nam o cot "Total" (remark C) nen cong o tren khong
     # bat; in rieng - day la cau hoi ma banner cuoi KHOI 15 van hoi bang tay.
     soc_sram_clk_slew ./reports/timing_final final
@@ -769,7 +792,8 @@ MINIMUMDENSITY trong tech LEF - chi doc phan $SOC_DENSITY_LAYERS."
   verify_rpt/welltap_final.rpt       : 0 cell xa tap qua ${SOC_TAP_RULE} um
   verify_rpt/density_final.rpt       : chi layer $SOC_DENSITY_LAYERS co luat
   reports/timing_final*/             : WNS setup/hold >= 0, DRV Real = 0
-                                       (soc_check_timing o tren da chan)
+                                       (soc_check_timing o tren moi CANH BAO;
+                                        KHOI 16 moi chan xuat GDS)
   reports/timing_final/final.tran.gz : slew chan clk SRAM - soc_sram_clk_slew
                                        da in so o tren, khong phai mo file
   reports/power_final.rpt            : can tren (chua co VCD), xem ghi chu
@@ -798,6 +822,15 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     soc_require_drc_clean -allow-nets $SOC_DRC_WAIVE_FILL_NETS \
         -allow-types $SOC_DRC_WAIVE_TYPES \
         ./verify_rpt/drc_final.rpt ./verify_rpt/drc_fill.rpt
+    # CONG TIMING CUNG - chuyen tu cuoi KHOI 15 xuong day 2026-09-20.
+    # Cung ly do voi soc_require_drc_clean: thu gi di vao GDS thi chan o cho
+    # xuat GDS.  Hai lenh nay chi DOC bang tom tat cua timeDesign trong KHOI 15
+    # (khong tinh lai gi) nen paste lai KHOI 16 bao nhieu lan cung vo hai - khac
+    # han KHOI 15, noi addFiller/addMetalFill khong chay lai duoc.
+    # Con vi pham -> sua roi chay lai tu saved/top_soc_prefill.enc.dat, DUNG
+    # paste lai KHOI 15 tren database hien tai.
+    soc_check_timing ./reports/timing_final      final -drv
+    soc_check_timing ./reports/timing_final_hold final -hold
     # LEF SRAM lech manufacturing grid / SITE khong ton tai di thang vao GDS vi
     # -outputMacros lay hinh macro tu LEF (khong co GDS rieng cho SRAM).
     soc_require_sram_lef_clean

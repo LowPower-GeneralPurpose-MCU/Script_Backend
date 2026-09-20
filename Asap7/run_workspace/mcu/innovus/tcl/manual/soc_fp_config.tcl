@@ -158,15 +158,47 @@ set SOC_FILLER_CELLS {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R}
 # (0.192 + 0.096 = 0.288 = 1.5 pitch).  Chinh sram_axi bac bo dieu kien do bang
 # thuc nghiem, nen soc_fill_check_track khong con bao error nua - xem ghi chu o
 # do.
+# DANH SACH LAYER - SUA 2026-09-20 (truoc do CHI co M5).
+#
+# So sanh so lieu hai project, cung PDK / cung Innovus 23.14-s088_1:
+#   sram_axi/innovus/axi_ram.metalfill.rpt : M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
+#   mcu/innovus/top_soc.metalfill.rpt      : CHI M5
+# Nen anh chup sau metal fill cua sram_axi phu kin ca die, con MCU nhin khong
+# khac gi vua addFiller xong.  Khoi ghi chu o tren tung viet "bo so COPY tu
+# sram_axi" - thuc te chi copy THAM SO cua dong M5, khong copy danh sach layer.
+#
+# Ly le cu ("tech LEF chi khai MINIMUMDENSITY o M5 nen fill them layer la them
+# rui ro DRC ma khong luat nao doi") KHONG dung tren thuc nghiem: chinh sram_axi
+# fill du 10 layer va verify_rpt/drc_after_fill.rpt van "No DRC violations were
+# found".  Va mat do CMP la luat cua wafer, ap cho MOI lop kim loai - tech LEF
+# giao duc cua ASAP7 khong mo hinh hoa chung, khong co nghia la chung khong ton
+# tai.  sram_axi sau fill: M1/M2/M3/M6/M7/M8/M9 ve 0 window duoi nguong, M4 con
+# 4 - tuc fill o nhung lop nay CO tac dung that.
+#
+# Bo so duoi day lay nguyen van tu
+# run_workspace/sram_axi/innovus/tcl/add_fill_and_verify.tcl (dong 74-140).
+# Bo Pad: MCU khong co vanh pad.
+#
+# LUU Y khi chay lai:
+#   - Fill nhieu lop lam tang dien dung ghep -> timing sau fill se doi.  KHOI 15
+#     da timeDesign SAU fill nen so cuoi la so that, nhung hold dang chi +11 ps.
+#   - KHONG lam giam 1120 window M5 duoi nguong: ca 1120 deu de len macro SRAM,
+#     noi addMetalFill khong dat duoc mieng nao.  sram_axi cung vay (M5 con
+#     201/285).  Do la PENDING_MERGED_GDS_SIGNOFF, khong phai loi cua fill.
+#   - Muon quay lai chi-M5: xoa cac dong khac roi restore
+#     saved/top_soc_prefill.enc.dat, khong phai chay lai ca run.
 #   layer wmin  wmax  decr  lmin  lmax gap   active minD maxD prefD
 set SOC_FILL_LAYERS {
+    M1    0.072 0.936 0.288 0.148 5.0  0.144 0.144  25   60   40
+    M2    0.072 0.936 0.288 0.148 5.0  0.144 0.144  25   60   40
+    M3    0.072 0.936 0.288 0.148 5.0  0.144 0.144  25   60   40
+    M4    0.096 1.248 0.384 0.384 5.0  0.192 0.192  10   35   25
     M5    0.096 1.248 0.384 0.384 5.0  0.192 0.192  15   90   25
+    M6    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
+    M7    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
+    M8    0.160 2.500 0.160 0.960 5.0  0.640 0.640  25   55   40
+    M9    0.160 2.500 0.160 0.960 5.0  0.640 0.640  25   55   40
 }
-# Muon fill them cho giong slide (khong co luat LEF, tu chiu DRC).  Lay nguyen
-# cac dong tuong ung cua sram_axi, dung thu tu cot o tren:
-#   M4    0.096 1.248 0.384 0.384 5.0  0.192 0.192  10   35   25
-#   M6    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
-#   M7    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
 # Layer co MINIMUMDENSITY that trong tech LEF -> chi kiem tra mat do o do.
 # Cac layer khac Innovus ap mac dinh 20%: run 2026-09-18 co 8863 vi pham mat do,
 # 7719 trong so do la cua luat KHONG ton tai trong PDK nay (M1-M4, M6-M9).
