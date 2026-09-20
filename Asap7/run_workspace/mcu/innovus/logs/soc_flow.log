@@ -1045,4 +1045,326 @@ Tiep theo: KHOI 11 (CTS)
 09-21 02:22:32   net  u_itcm/u_mem/FE_OFN19655_n_269        1
 09-21 02:22:32   net  u_itcm/u_mem/FE_OFN19664_n_275        1
 09-21 02:22:32   -> 3 vi pham that (0 bo qua: net {u_itcm/u_mem/FE_OFN19657_n_271}, loai {OFFGRID})
-09-21 02:22:33 innovus 185> 
+09-21 02:22:33 innovus 185> 09-21 02:31:17 ============================================================
+09-21 02:31:17 >>> KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF
+09-21 02:31:17 ============================================================
+09-21 02:35:01 Std cell: 300143.6 um^2 (glue top-level 40300.5 um^2)
+09-21 02:35:01 ============================================================
+09-21 02:35:01 >>> KHOI 1: floorPlan
+09-21 02:35:01 ============================================================
+09-21 02:35:02 Cho danh cho SRAM RAM_LO   524.4 x 1412.6  tai (9.9, 9.9)
+09-21 02:35:02 Cho danh cho SRAM RAM_HI   524.4 x 1412.6  tai (1728.2, 9.9)
+09-21 02:35:02 Cho danh cho SRAM CACHE   1001.4 x 349.9   tai (554.4, 9.9)
+09-21 02:35:02 Cho danh cho SRAM TAG      132.3 x 246.2   tai (1575.8, 9.9)
+09-21 02:35:02 >>> XONG: KHOI 1: floorPlan
+09-21 02:35:02 ============================================================
+09-21 02:35:02 >>> KHOI 2: core ring
+09-21 02:35:02 ============================================================
+09-21 02:35:02 Ring loi: le 9.936 | trong 0.544 | VSS 0.544 | trong 0.544 | VDD 0.544 | trong 7.760 -> loi
+09-21 02:35:03 Ring loi VDD: 2 doan M8, 2 doan M9
+09-21 02:35:03 Ring loi VSS: 2 doan M8, 2 doan M9
+09-21 02:35:03 >>> XONG: KHOI 2: core ring
+09-21 02:35:03 ============================================================
+09-21 02:35:03 >>> KHOI 3: dat mam 84 SRAM
+09-21 02:35:03 ============================================================
+09-21 02:35:03 Nap 84 SRAM tu ./tcl/manual/soc_sram_place.tcl (xoa file de xep mam lai)
+09-21 02:35:03 Kiem tra mam: 0 loi
+09-21 02:35:03 >>> XONG: KHOI 3: dat mam 84 SRAM
+09-21 02:35:03 ============================================================
+09-21 02:35:03 >>> KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp
+09-21 02:35:03 ============================================================
+09-21 02:35:03 Da luu 84 SRAM vao ./tcl/manual/soc_sram_place.tcl
+09-21 02:35:06 >>> XONG: KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp
+09-21 02:35:06 ============================================================
+09-21 02:35:06 >>> KHOI 5: luoi nguon M4/M5 cho tung cum SRAM
+09-21 02:35:06 ============================================================
+09-21 02:35:06 Ring loi VDD: 2 doan M8, 2 doan M9
+09-21 02:35:06 Ring loi VSS: 2 doan M8, 2 doan M9
+09-21 02:35:07 84 SRAM -> 10 cum
+09-21 02:35:07 Cum RAM_LO(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+09-21 02:35:08 Cum RAM_LO(16)        2 cot: M4 ngang  36/36  doan, M5 doc  38/38  doan
+09-21 02:35:08 Cum RAM_LO(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+09-21 02:35:09 Cum RAM_HI(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+09-21 02:35:09 Cum RAM_HI(16)        2 cot: M4 ngang  36/36  doan, M5 doc  38/38  doan
+09-21 02:35:10 Cum RAM_HI(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+09-21 02:35:10 Cum CACHE(4)          2 cot: M4 ngang  12/12  doan, M5 doc  14/14  doan
+09-21 02:35:10 Cum CACHE(4)          2 cot: M4 ngang  12/12  doan, M5 doc  14/14  doan
+09-21 02:35:11 Cum CACHE(8)          4 cot: M4 ngang  24/24  doan, M5 doc  26/26  doan
+09-21 02:35:11 Cum TAG(4)            2 cot: M4 ngang  12/12  doan, M5 doc  14/14  doan
+09-21 02:35:11 >>> XONG: KHOI 5: luoi nguon M4/M5 cho tung cum SRAM
+09-21 02:35:11 ============================================================
+09-21 02:35:11 >>> KHOI 6: luoi M7/M6
+09-21 02:35:11 ============================================================
+09-21 02:35:11 Ring loi VDD: 2 doan M8, 2 doan M9
+09-21 02:35:11 Ring loi VSS: 2 doan M8, 2 doan M9
+09-21 02:35:12 Luoi M7: 18 vung, M6: 26 vung (tranh 10 cum SRAM)
+09-21 02:35:12 >>> XONG: KHOI 6: luoi M7/M6
+09-21 02:35:12 ============================================================
+09-21 02:35:12 >>> KHOI 7: blockage + pin
+09-21 02:35:12 ============================================================
+09-21 02:35:12 INFO: da gan 174 pin top_soc: tren 134, duoi 40, x 558.7..1703.7
+09-21 02:35:12 >>> XONG: KHOI 7: blockage + pin
+09-21 02:35:12 ============================================================
+09-21 02:35:12 >>> KHOI 8: verify + saveDesign
+09-21 02:35:12 ============================================================
+09-21 02:35:12 Ring loi VDD: 2 doan M8, 2 doan M9
+09-21 02:35:12 Ring loi VSS: 2 doan M8, 2 doan M9
+09-21 02:35:13 --- ./verify_rpt/drc_powerplan.rpt
+09-21 02:35:13   0 vi pham
+09-21 02:35:16 ============================================================
+09-21 02:35:16 FLOORPLAN + POWER GRID XONG - saved/top_soc_powerplan.enc
+  verify_rpt/connectivity_powerplan.rpt : moi SRAM phai noi VDD/VSS
+      (open o chan std cell la binh thuong - rail M1 chua lam)
+  verify_rpt/drc_powerplan.rpt          : phai 0 vi pham PG
+  GUI: Tools > Violation Browser de xem tung loi
+Tiep theo: KHOI 9 (placement), KHOI 10 (rail M1 + stripe M5 std cell)
+09-21 02:35:16 ============================================================
+09-21 02:35:16 >>> XONG: KHOI 8: verify + saveDesign
+09-21 02:35:16 ============================================================
+09-21 02:35:16 >>> KHOI 9: placement
+09-21 02:35:16 ============================================================
+09-21 02:35:16 Ring loi VDD: 2 doan M8, 2 doan M9
+09-21 02:35:16 Ring loi VSS: 2 doan M8, 2 doan M9
+09-21 02:35:17 Tap cell: 31100 TAPCELL_ASAP7_75t_R
+09-21 02:35:17 Notch  805.896  260.496  951.264  364.176  (145.37 x 103.68 um)
+09-21 02:35:17 Notch 1853.712    9.936 1862.352 1422.576  (8.64 x 1412.64 um)
+09-21 02:35:17 Notch  400.032    9.936  408.672 1422.576  (8.64 x 1412.64 um)
+09-21 02:35:17 Notch  135.648    9.936  144.288 1422.576  (8.64 x 1412.64 um)
+09-21 02:35:17 Notch 2118.096    9.936 2126.736 1422.576  (8.64 x 1412.64 um)
+09-21 02:35:17 Notch  538.704    9.936  550.152  364.176  (11.45 x 354.24 um)
+09-21 02:35:17 Notch 1207.008    9.936 1212.840  364.176  (5.83 x 354.24 um)
+09-21 02:35:17 Notch 1720.008    9.936 1723.680  364.176  (3.67 x 354.24 um)
+09-21 02:35:17 Doc path group: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus_groups.tcl
+09-21 02:37:06 ***** Total cpu  0:8:32
+09-21 02:37:06 ***** Total real time  0:1:48
+09-21 02:43:32 WARNING: khong doc duoc mat do tu reportUtil_place.rpt: expected floating-point number but got "0.239."
+09-21 02:43:45   place SETUP: WNS 0.292 TNS 0.0, 0 duong vi pham -> DAT
+09-21 02:43:51 >>> XONG: KHOI 9: placement
+09-21 02:43:51 ============================================================
+09-21 02:43:51 >>> KHOI 10: rail M1 + stripe M5 std cell
+09-21 02:43:51 ============================================================
+09-21 02:44:14 Stripe M5 std cell: 20 vung (tranh 10 cum SRAM + khe)
+09-21 02:44:18 --- ./verify_rpt/drc_place.rpt
+09-21 02:44:18   0 vi pham
+09-21 02:44:24 ============================================================
+09-21 02:44:24 PLACEMENT XONG - saved/top_soc_placed_pg.enc
+  verify_rpt/connectivity_place.rpt : phai 'Found no problems' (moi rail M1 co stripe M5)
+  verify_rpt/drc_place.rpt          : phai 0 vi pham
+  reports/timing_preCTS/            : WNS/TNS truoc CTS
+Tiep theo: KHOI 11 (CTS)
+09-21 02:44:24 ============================================================
+09-21 02:44:24 >>> XONG: KHOI 10: rail M1 + stripe M5 std cell
+09-21 02:44:24 ============================================================
+09-21 02:44:24 >>> KHOI 11: CTS
+09-21 02:44:24 ============================================================
+09-21 02:57:27 >>> XONG: KHOI 11: CTS
+09-21 02:57:27 ============================================================
+09-21 02:57:27 >>> KHOI 12: optDesign postCTS
+09-21 02:57:27 ============================================================
+09-21 03:02:42 soc_fix_cg_hold vong 1 (12 s): 12 latch hold < 0.020
+09-21 03:02:42   cg_cpu/en_latch_reg slack -0.050 -> buffer thu 1 truoc cg_cpu/g16__6260/B
+09-21 03:02:44   cg_tim1/en_latch_reg slack -0.043 -> buffer thu 1 truoc cg_tim1/g15__2802/B
+09-21 03:02:45   cg_tim0/en_latch_reg slack -0.050 -> buffer thu 1 truoc cg_tim0/g15__1617/B
+09-21 03:02:45   cg_uart1/en_latch_reg slack -0.057 -> buffer thu 1 truoc cg_uart1/g15__5122/B
+09-21 03:02:45   cg_gpio/en_latch_reg slack -0.054 -> buffer thu 1 truoc cg_gpio/g15__8428/B
+09-21 03:02:45   cg_i2c/en_latch_reg slack -0.040 -> buffer thu 1 truoc cg_i2c/g15__5526/B
+09-21 03:02:45   cg_pwm/en_latch_reg slack -0.060 -> buffer thu 1 truoc cg_pwm/g15__6783/B
+09-21 03:02:45   cg_uart/en_latch_reg slack -0.045 -> buffer thu 1 truoc cg_uart/g15__1705/B
+09-21 03:02:45   cg_ascon/en_latch_reg slack -0.042 -> buffer thu 1 truoc cg_ascon/g15__2398/B
+09-21 03:02:45   cg_spi/en_latch_reg slack -0.042 -> buffer thu 1 truoc cg_spi/g15__3680/B
+09-21 03:02:45   cg_cordic/en_latch_reg slack -0.053 -> buffer thu 1 truoc cg_cordic/g15__5107/B
+09-21 03:02:45   cg_dbg/en_latch_reg slack -0.058 -> buffer thu 1 truoc cg_dbg/g15__4319/B
+09-21 03:03:04 soc_fix_cg_hold vong 2 (34 s): 12 latch hold < 0.020
+09-21 03:03:04   cg_cpu/en_latch_reg slack -0.003 -> buffer thu 2 truoc cg_cpu/g16__6260/B
+09-21 03:03:05   cg_tim1/en_latch_reg slack -0.007 -> buffer thu 2 truoc cg_tim1/g15__2802/B
+09-21 03:03:05   cg_tim0/en_latch_reg slack -0.012 -> buffer thu 2 truoc cg_tim0/g15__1617/B
+09-21 03:03:05   cg_uart1/en_latch_reg slack -0.020 -> buffer thu 2 truoc cg_uart1/g15__5122/B
+09-21 03:03:05   cg_gpio/en_latch_reg slack -0.017 -> buffer thu 2 truoc cg_gpio/g15__8428/B
+09-21 03:03:05   cg_i2c/en_latch_reg slack -0.003 -> buffer thu 2 truoc cg_i2c/g15__5526/B
+09-21 03:03:05   cg_pwm/en_latch_reg slack -0.022 -> buffer thu 2 truoc cg_pwm/g15__6783/B
+09-21 03:03:05   cg_uart/en_latch_reg slack -0.008 -> buffer thu 2 truoc cg_uart/g15__1705/B
+09-21 03:03:05   cg_ascon/en_latch_reg slack -0.005 -> buffer thu 2 truoc cg_ascon/g15__2398/B
+09-21 03:03:05   cg_spi/en_latch_reg slack -0.005 -> buffer thu 2 truoc cg_spi/g15__3680/B
+09-21 03:03:06   cg_cordic/en_latch_reg slack -0.015 -> buffer thu 2 truoc cg_cordic/g15__5107/B
+09-21 03:03:06   cg_dbg/en_latch_reg slack -0.014 -> buffer thu 2 truoc cg_dbg/g15__4319/B
+09-21 03:03:25 soc_fix_cg_hold vong 3 (55 s): 2 latch hold < 0.020
+09-21 03:03:25   cg_uart1/en_latch_reg slack 0.017 -> buffer thu 3 truoc cg_uart1/g15__5122/B
+09-21 03:03:25   cg_pwm/en_latch_reg slack 0.015 -> buffer thu 3 truoc cg_pwm/g15__6783/B
+09-21 03:03:44 soc_fix_cg_hold vong 4 (74 s): 0 latch hold < 0.020
+09-21 03:03:44 soc_fix_cg_hold: them 26 HB4xp67_ASAP7_75t_R sau 74 s
+09-21 03:03:44   cg_cpu/en_latch_reg          hold slack 0.037 sau 2 buffer
+09-21 03:03:44   cg_tim1/en_latch_reg         hold slack 0.031 sau 2 buffer
+09-21 03:03:44   cg_tim0/en_latch_reg         hold slack 0.028 sau 2 buffer
+09-21 03:03:44   cg_uart1/en_latch_reg        hold slack 0.055 sau 3 buffer
+09-21 03:03:44   cg_gpio/en_latch_reg         hold slack 0.021 sau 2 buffer
+09-21 03:03:44   cg_i2c/en_latch_reg          hold slack 0.034 sau 2 buffer
+09-21 03:03:44   cg_pwm/en_latch_reg          hold slack 0.052 sau 3 buffer
+09-21 03:03:44   cg_uart/en_latch_reg         hold slack 0.029 sau 2 buffer
+09-21 03:03:44   cg_ascon/en_latch_reg        hold slack 0.032 sau 2 buffer
+09-21 03:03:44   cg_spi/en_latch_reg          hold slack 0.033 sau 2 buffer
+09-21 03:03:44   cg_cordic/en_latch_reg       hold slack 0.023 sau 2 buffer
+09-21 03:03:44   cg_dbg/en_latch_reg          hold slack 0.024 sau 2 buffer
+09-21 03:04:17 WARNING: postCTS SETUP: WNS 0.315 TNS 0.0, 0 duong vi pham
+  -> max_tran Real 3 net
+  Xem ./reports/timing_postCTS/postCTS.summary(.gz)
+09-21 03:04:17 WARNING: buoc nay chua phai buoc cuoi nen flow chay tiep, nhung con so tren phai ve 0 truoc khi ket luan.
+09-21 03:04:17 WARNING: postCTS HOLD: WNS -0.011 TNS -0.069, 174 duong vi pham
+  -> WNS -0.011 ns < 0.0; TNS -0.069 ns; 174 duong vi pham
+  Xem ./reports/timing_postCTS_hold/postCTS_hold.summary(.gz)
+09-21 03:04:17 WARNING: buoc nay chua phai buoc cuoi nen flow chay tiep, nhung con so tren phai ve 0 truoc khi ket luan.
+09-21 03:04:25 >>> XONG: KHOI 12: optDesign postCTS
+09-21 03:04:25 ============================================================
+09-21 03:04:25 >>> KHOI 13: routeDesign
+09-21 03:04:25 ============================================================
+09-21 03:04:25 srambank_256x4x32_6t122.lef.4x.lef: 0 chan chi co tren M1-M3
+09-21 03:04:25 srambank_128x4x20_6t122.lef.4x.fixed.lef: 0 chan chi co tren M1-M3
+09-21 03:04:25 Chan M3 tren 84 SRAM
+09-21 03:06:27 
+09-21 03:11:41 --- ./verify_rpt/drc_route.rpt
+09-21 03:11:41   loai OFFGRID                         4
+09-21 03:11:41   net  u_itcm/u_mem/FE_OFN32560_n        1
+09-21 03:11:41   net  u_itcm/u_mem/FE_OFN34100_n        1
+09-21 03:11:41   net  u_itcm/u_mem/FE_OFN19666_n_276        1
+09-21 03:11:41   net  u_itcm/u_mem/FE_OFN19664_n_275        1
+09-21 03:11:41   -> 4 vi pham that (0 bo qua: net {}, loai {moi loai})
+09-21 03:11:50 >>> XONG: KHOI 13: routeDesign
+09-21 03:11:50 ============================================================
+09-21 03:11:50 >>> KHOI 14: optDesign postRoute
+09-21 03:11:50 ============================================================
+09-21 03:11:51 Net treo con lai: xem reports/dangling_net.rpt
+09-21 03:20:40 soc_fix_cg_hold vong 1 (30 s): 10 latch hold < 0.020
+09-21 03:20:40   cg_cpu/en_latch_reg slack -0.021 -> buffer thu 1 truoc cg_cpu/g16__6260/B
+09-21 03:20:42   cg_tim1/en_latch_reg slack 0.006 -> buffer thu 1 truoc cg_tim1/g15__2802/B
+09-21 03:20:43   cg_tim0/en_latch_reg slack -0.005 -> buffer thu 1 truoc cg_tim0/g15__1617/B
+09-21 03:20:43   cg_gpio/en_latch_reg slack -0.003 -> buffer thu 1 truoc cg_gpio/g15__8428/B
+09-21 03:20:43   cg_i2c/en_latch_reg slack 0.009 -> buffer thu 1 truoc cg_i2c/g15__5526/B
+09-21 03:20:43   cg_uart/en_latch_reg slack 0.005 -> buffer thu 1 truoc cg_uart/g15__1705/B
+09-21 03:20:43   cg_ascon/en_latch_reg slack 0.008 -> buffer thu 1 truoc cg_ascon/g15__2398/B
+09-21 03:20:43   cg_spi/en_latch_reg slack 0.006 -> buffer thu 1 truoc cg_spi/g15__3680/B
+09-21 03:20:43   cg_cordic/en_latch_reg slack -0.005 -> buffer thu 1 truoc cg_cordic/g15__5107/B
+09-21 03:20:43   cg_dbg/en_latch_reg slack -0.006 -> buffer thu 1 truoc cg_dbg/g15__4319/B
+09-21 03:21:20 soc_fix_cg_hold vong 2 (70 s): 0 latch hold < 0.020
+09-21 03:21:20 soc_fix_cg_hold: them 10 HB4xp67_ASAP7_75t_R sau 70 s
+09-21 03:21:20   cg_cpu/en_latch_reg          hold slack 0.023 sau 1 buffer
+09-21 03:21:20   cg_tim1/en_latch_reg         hold slack 0.045 sau 1 buffer
+09-21 03:21:20   cg_tim0/en_latch_reg         hold slack 0.032 sau 1 buffer
+09-21 03:21:20   cg_uart1/en_latch_reg        hold slack 0.028 sau 0 buffer
+09-21 03:21:20   cg_gpio/en_latch_reg         hold slack 0.038 sau 1 buffer
+09-21 03:21:20   cg_i2c/en_latch_reg          hold slack 0.047 sau 1 buffer
+09-21 03:21:20   cg_pwm/en_latch_reg          hold slack 0.029 sau 0 buffer
+09-21 03:21:20   cg_uart/en_latch_reg         hold slack 0.042 sau 1 buffer
+09-21 03:21:20   cg_ascon/en_latch_reg        hold slack 0.046 sau 1 buffer
+09-21 03:21:20   cg_spi/en_latch_reg          hold slack 0.045 sau 1 buffer
+09-21 03:21:20   cg_cordic/en_latch_reg       hold slack 0.035 sau 1 buffer
+09-21 03:21:20   cg_dbg/en_latch_reg          hold slack 0.036 sau 1 buffer
+09-21 03:22:28 --- ./verify_rpt/drc_postRoute.rpt
+09-21 03:22:28   0 vi pham
+09-21 03:24:14 ============================================================
+09-21 03:24:14 >>> KHOI 15: filler + verify
+09-21 03:24:14 ============================================================
+09-21 03:24:14 Filler cell: FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R
+09-21 03:25:12 --- ./verify_rpt/drc_final.rpt
+09-21 03:25:12   0 vi pham
+09-21 03:25:18 soc_metal_fill: SOC_FILL_LAYERS = 
+    M1    0.072 0.936 0.288 0.148 5.0  0.144 0.144  25   60   40
+    M2    0.072 0.936 0.288 0.148 5.0  0.144 0.144  25   60   40
+    M3    0.072 0.936 0.288 0.148 5.0  0.144 0.144  25   60   40
+    M4    0.096 1.248 0.384 0.384 5.0  0.192 0.192  10   35   25
+    M5    0.096 1.248 0.384 0.384 5.0  0.192 0.192  15   90   25
+    M6    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
+    M7    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
+    M8    0.160 2.500 0.160 0.960 5.0  0.640 0.640  25   55   40
+    M9    0.160 2.500 0.160 0.960 5.0  0.640 0.640  25   55   40
+    Pad   0.800 8.000 0.160 8.960 8.96 8.160 8.160  20   80   25
+
+09-21 03:25:18 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+09-21 03:25:18   M1: pitch 0.1440 | buoc fill 0.2160 (1.50 track) | cach day that 0.2160 (1.50 track) | mat do toi da 33.3%
+09-21 03:25:18   M2: pitch 0.1440 | buoc fill 0.2160 (1.50 track) | cach day that 0.2160 (1.50 track) | mat do toi da 33.3%
+09-21 03:25:18   M3: pitch 0.1440 | buoc fill 0.2160 (1.50 track) | cach day that 0.2160 (1.50 track) | mat do toi da 33.3%
+09-21 03:25:18   M4: pitch 0.1920 | buoc fill 0.2880 (1.50 track) | cach day that 0.2880 (1.50 track) | mat do toi da 33.3%
+09-21 03:25:18   M5: pitch 0.1920 | buoc fill 0.2880 (1.50 track) | cach day that 0.2880 (1.50 track) | mat do toi da 33.3%
+09-21 03:25:18   M6: pitch 0.2560 | buoc fill 0.4280 (1.67 track) | cach day that 0.4280 (1.67 track) | mat do toi da 29.9%
+09-21 03:25:18   M7: pitch 0.2560 | buoc fill 0.4280 (1.67 track) | cach day that 0.4280 (1.67 track) | mat do toi da 29.9%
+09-21 03:25:18   M8: pitch 0.3200 | buoc fill 0.8000 (2.50 track) | cach day that 0.8000 (2.50 track) | mat do toi da 20.0%
+09-21 03:25:18   M9: pitch 0.3200 | buoc fill 0.8000 (2.50 track) | cach day that 0.8000 (2.50 track) | mat do toi da 20.0%
+09-21 03:25:18   Pad: pitch 8.9600 | buoc fill 8.9600 (1.00 track) | cach day that 8.9600 (1.00 track) | mat do toi da 8.9%
+09-21 03:25:18 WARNING: setMetalFill -reset: 
+09-21 03:26:35 # soc_fill_report doc lai ./top_soc.metalfill.rpt
+09-21 03:26:35 Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai M5/Pad la so TU DAT trong SOC_FILL_LAYERS, khong phai luat foundry.
+09-21 03:26:35   layer   duoi min (truoc -> sau)      vuot max (truoc -> sau)
+09-21 03:26:35   M1       514 -> 0      (min 25%)        0 -> 0      (max 60%)   /1260 window
+09-21 03:26:35   M2       517 -> 118    (min 25%)        0 -> 0      (max 60%)   /1260 window
+09-21 03:26:35   M3       489 -> 2      (min 25%)      253 -> 297    (max 60%)   /1260 window   <- fill LAM TANG so window vuot tran
+09-21 03:26:35   M4       858 -> 39     (min 10%)        0 -> 1      (max 35%)   /1260 window   <- fill LAM TANG so window vuot tran
+09-21 03:26:35   M5      1935 -> 1120   (min 15%)        0 -> 0      (max 90%)   /1960 window
+09-21 03:26:35   M6      1259 -> 8      (min 25%)        0 -> 0      (max 55%)   /1260 window
+09-21 03:26:35   M7      1260 -> 0      (min 25%)        0 -> 0      (max 55%)   /1260 window
+09-21 03:26:35   M8      1260 -> 0      (min 25%)        0 -> 0      (max 55%)   /1260 window
+09-21 03:26:35   M9      1260 -> 0      (min 25%)        0 -> 0      (max 55%)   /1260 window
+09-21 03:26:35   Pad       77 -> 0      (min 20%)        0 -> 0      (max 80%)   /77 window
+09-21 03:26:35 WARNING: 5 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).
+09-21 03:26:35   da ghi ./verify_rpt/fill_summary.rpt
+09-21 03:27:13 --- ./verify_rpt/drc_fill.rpt
+09-21 03:27:13   0 vi pham
+09-21 03:27:21 Mat do - layer doc: M5
+09-21 03:27:21   M5   duoi min: 1120 tren macro SRAM + 0 trong vung logic
+09-21 03:27:21   vung logic: dat nguong o moi window
+09-21 03:27:21   1120 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+09-21 03:27:21   da ghi ./verify_rpt/density_summary.rpt
+09-21 03:27:21   density signoff: PENDING_MERGED_GDS_SIGNOFF
+09-21 03:27:39 Mat do - layer doc: M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
+09-21 03:27:39   M1   duoi min: 0 tren macro SRAM + 0 trong vung logic
+09-21 03:27:39   M2   duoi min: 0 tren macro SRAM + 118 trong vung logic (thap nhat 20.44%)
+09-21 03:27:39   M3   duoi min: 0 tren macro SRAM + 2 trong vung logic (thap nhat 24.60%) | 297 window VUOT tran
+09-21 03:27:39   M4   duoi min: 39 tren macro SRAM + 0 trong vung logic | 1 window VUOT tran
+09-21 03:27:39   M5   duoi min: 1120 tren macro SRAM + 0 trong vung logic
+09-21 03:27:39   M6   duoi min: 0 tren macro SRAM + 8 trong vung logic (thap nhat 23.75%)
+09-21 03:27:39   M7   duoi min: 0 tren macro SRAM + 0 trong vung logic
+09-21 03:27:39   M8   duoi min: 0 tren macro SRAM + 0 trong vung logic
+09-21 03:27:39   M9   duoi min: 0 tren macro SRAM + 0 trong vung logic
+09-21 03:27:39   Pad  duoi min: 0 tren macro SRAM + 0 trong vung logic
+09-21 03:27:39   298 window vuot tran mat do: fill do them vao window von da qua tran (cua so chong nhau 50%).  Chi cac layer co MAXIMUMDENSITY that trong tech LEF moi dang lo - ASAP7 chi co M5 (90%) va Pad (80%).
+09-21 03:27:39 WARNING: 128 window vung logic duoi nguong - metal fill chua du, xem lai SOC_FILL_LAYERS (nhat la -maxWidth / -decrement)
+09-21 03:27:39   1159 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+09-21 03:27:39   da ghi ./verify_rpt/density_all_summary.rpt
+09-21 03:30:40 WARNING: final SETUP: WNS 0.342 TNS 0.0, 0 duong vi pham
+  -> max_tran Real 1 net
+  Xem ./reports/timing_final/final.summary(.gz)
+09-21 03:30:40 WARNING: buoc nay chua phai buoc cuoi nen flow chay tiep, nhung con so tren phai ve 0 truoc khi ket luan.
+09-21 03:30:40   final HOLD: WNS 0.013 TNS 0.0, 0 duong vi pham -> DAT
+09-21 03:30:40   Slew chan macro SRAM: 6 chan vuot gioi han Liberty
+09-21 03:30:40       68.0 ps (gioi han 46.0 ps)  u_icache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram/clk
+09-21 03:30:40       66.0 ps (gioi han 46.0 ps)  u_itcm/u_mem/G_SRAM_BANK[0].u_sram/clk
+09-21 03:30:40       59.0 ps (gioi han 46.0 ps)  u_dtcm/u_mem/G_SRAM_BANK[0].u_sram/clk
+09-21 03:30:40       58.0 ps (gioi han 46.0 ps)  u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram/clk
+09-21 03:30:40       55.0 ps (gioi han 46.0 ps)  u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram/clk
+09-21 03:30:40       50.0 ps (gioi han 46.0 ps)  u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram/clk
+09-21 03:30:40   -> CCOpt khong ha them duoc neu chan clk con xa row dat buffer; xem SOC_WALL_CHANNEL trong soc_fp_config.tcl.
+09-21 03:31:25   Cong suat: 91.83 mW, trong do macro SRAM 82.41 mW (89.7%)
+09-21 03:31:25   -> CHUA co VCD/TCF: activity mac dinh 0.2 cho moi chan, tuc coi
+09-21 03:31:25      ca 84 macro SRAM deu bi truy cap cung luc.  RTL chi bat mot
+09-21 03:31:25      bank moi lan doc/ghi -> con so tren la CAN TREN, khong phai
+09-21 03:31:25      cong suat cua thiet ke.  Muon so that: chay mo phong lay VCD
+09-21 03:31:25      roi read_activity_file truoc report_power.
+09-21 03:31:32 ============================================================
+09-21 03:31:32 PNR XONG - saved/top_soc_final.enc
+  verify_rpt/drc_final.rpt           : DRC design that, phai 0
+  verify_rpt/drc_fill.rpt            : DRC sau metal fill, phai 0
+  verify_rpt/connectivity_final.rpt  : 0 open/short
+  verify_rpt/welltap_final.rpt       : 0 cell xa tap qua 120.0 um
+  verify_rpt/density_final.rpt       : chi layer M5 co luat
+  verify_rpt/fill_summary.rpt        : so window duoi min / vuot max CUA
+                                       TUNG layer sau addMetalFill
+  verify_rpt/density_all_summary.rpt : cung so do nhung da tach macro SRAM
+                                       / vung logic - vung logic phai 0
+  reports/timing_final*/             : WNS setup/hold >= 0, DRV Real = 0
+                                       (soc_check_timing o tren moi CANH BAO;
+                                        KHOI 16 moi chan xuat GDS)
+  reports/timing_final/final.tran.gz : slew chan clk SRAM - soc_sram_clk_slew
+                                       da in so o tren, khong phai mo file
+  reports/power_final.rpt            : can tren (chua co VCD), xem ghi chu
+  logs/soc_flow.log                  : toan bo ket luan cua cac cong kiem tra
+Tiep theo: KHOI 16 (xuat file)
+09-21 03:31:32 ============================================================
+09-21 03:31:32 >>> XONG: KHOI 15: filler + verify
+09-21 03:31:37 innovus 191> 

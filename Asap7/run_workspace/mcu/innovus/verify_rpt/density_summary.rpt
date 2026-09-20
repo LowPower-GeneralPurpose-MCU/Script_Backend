@@ -1,6 +1,6 @@
 # soc_density_report doc lai ./verify_rpt/density_final.rpt
 Mat do - layer doc: M5
-  M5   duoi nguong: 1120 tren macro SRAM + 0 trong vung logic
+  M5   duoi min: 1120 tren macro SRAM + 0 trong vung logic
   vung logic: dat nguong o moi window
   1120 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
 
