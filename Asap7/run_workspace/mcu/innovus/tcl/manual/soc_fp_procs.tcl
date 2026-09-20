@@ -1546,7 +1546,7 @@ proc soc_require_drc_clean {args} {
 # va OBS khong phai ly do.  addMetalFill tu coi ranh gioi block instance la vung
 # cam.  Doi gapSpacing/activeSpacing khong lam giam con so nay.
 # -> tach hai nhom.  Chi nhom "vung logic" moi la loi cua metal fill.
-proc soc_density_report {report {macro_overlap 0.25}} {
+proc soc_density_report {report {macro_overlap 0.25} {outfile ./verify_rpt/density_summary.rpt}} {
     if {![file isfile $report]} {
         puts "WARNING: chua co $report - bo qua doc mat do"
         return -1
@@ -1594,27 +1594,83 @@ proc soc_density_report {report {macro_overlap 0.25}} {
         }
     }
 
+    # Ket qua di ca ra man hinh LAN ra file.  puts cua proc KHONG vao
+    # innovus.log, nen truoc day chay xong roi khong co cach nao doc lai phan
+    # loai macro/logic tu log (run 2026-09-19).
     set total_logic 0
-    puts "Mat do (chi layer co MINIMUMDENSITY that: $::SOC_DENSITY_LAYERS)"
+    set total_macro 0
+    set out {}
+    lappend out "Mat do (chi layer co MINIMUMDENSITY that: $::SOC_DENSITY_LAYERS)"
     foreach layer $::SOC_DENSITY_LAYERS {
         set m [expr {[info exists n_macro($layer)] ? $n_macro($layer) : 0}]
         set l [expr {[info exists n_logic($layer)] ? $n_logic($layer) : 0}]
         incr total_logic $l
+        incr total_macro $m
         set tail ""
         if {$l > 0} {
             set tail [format " (thap nhat %.2f%%)" $worst($layer)]
         }
-        puts [format {  %-4s duoi nguong: %d tren macro SRAM + %d trong vung logic%s} \
+        lappend out [format {  %-4s duoi nguong: %d tren macro SRAM + %d trong vung logic%s} \
             $layer $m $l $tail]
     }
     if {$skipped > 0} {
-        puts "  bo qua $skipped window cua layer khong co luat mat do trong tech LEF"
+        lappend out "  bo qua $skipped window cua layer khong co luat mat do trong tech LEF"
     }
     if {$total_logic > 0} {
-        puts "WARNING: $total_logic window vung logic duoi nguong - metal fill chua du,\
- xem lai gapSpacing / preferredDensity trong SOC_FILL_LAYERS"
+        lappend out "WARNING: $total_logic window vung logic duoi nguong - metal fill\
+ chua du, xem lai SOC_FILL_LAYERS (nhat la -maxWidth / -decrement)"
     } else {
-        puts "  vung logic: dat nguong o moi window"
+        lappend out "  vung logic: dat nguong o moi window"
+    }
+    # Window de len macro KHONG ket luan duoc tu day.  ASAP7 khong ship GDS cho
+    # SRAM, Innovus chi thay OBS trong LEF (M5 phu ~0.9% dien tich macro) chu
+    # khong thay metal that ben trong; va addMetalFill khong dat duoc gi len
+    # block instance.  Nen nhom nay luon doc ra thap du fill co tot den dau.
+    # Giong sram_axi/innovus/tcl/add_fill_and_verify.tcl: danh dau tam, de
+    # signoff tren GDS da merge (Calibre/Pegasus) phan xu.
+    if {$total_macro > 0} {
+        set ::SOC_DENSITY_SIGNOFF_STATUS PENDING_MERGED_GDS_SIGNOFF
+        lappend out "  $total_macro window de len macro SRAM:\
+ PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)"
+    } else {
+        set ::SOC_DENSITY_SIGNOFF_STATUS OK
+    }
+    foreach line $out { puts $line }
+    # File nay di kem handoff.  Nguoi doc sau phai hieu duoc con so PENDING ma
+    # khong can mo lai ca flow, nen ghi luon ly do va dieu kien dong.
+    set why {}
+    if {$total_macro > 0} {
+        lappend why ""
+        lappend why "# Vi sao nhom tren macro khong ket luan duoc o day"
+        lappend why "#   - Density la luat CMP tren WAFER, phai signoff tren GDS da merge"
+        lappend why "#     (GDS macro + GDS top) bang Calibre/Pegasus, khong phai tren view"
+        lappend why "#     abstract cua P&R."
+        lappend why "#   - Innovus chi thay LEF cua SRAM: OBS chan kin M1-M3/V1-V3 nhung M4"
+        lappend why "#     chi 0.6% va M5 chi 0.4% dien tich macro.  Ruot macro khong co hinh"
+        lappend why "#     nen mat do doc ra luon thap, du fill co tot den dau."
+        lappend why "#   - ASAP7 KHONG ship GDS cho SRAM, nen lan signoff do hien chua chay"
+        lappend why "#     duoc.  Trang thai trung thuc la PENDING, khong phai PASS/FAIL."
+        lappend why "#   - KHONG nhoi fill len macro de lam xanh con so: do la PASS gia, no"
+        lappend why "#     xoa mat co bao con viec chua kiem, va dat 25% kim loai len mang"
+        lappend why "#     nho la rui ro coupling doi lay mot con so khong kiem chung duoc."
+        lappend why "#     OBS trong tren M4/M5 la giay phep ROUTE qua, khong phai giay phep FILL."
+        lappend why "#   - Ty le window hong bam sat ty le dien tich macro tren die:"
+        lappend why "#     mcu 53.9% macro -> 56.9% window; sram_axi 70.5% macro -> 70.5% window."
+        lappend why "#     Do la dac tinh cua floorplan nhieu macro, khong phai loi cua fill."
+        lappend why "# Dieu kien DONG: co GDS that cua SRAM -> merge -> chay density tren do."
+        lappend why "# Chi so co nghia o buoc nay la vung logic (phan minh dat duoc fill):"
+        lappend why "#   $total_logic window duoi nguong -> phai bang 0 thi flow moi di tiep."
+    }
+    if {[catch {
+        set fp [open $outfile w]
+        puts $fp "# soc_density_report doc lai $report"
+        foreach line $out { puts $fp $line }
+        foreach line $why { puts $fp $line }
+        close $fp
+    } err]} {
+        puts "WARNING: khong ghi duoc $outfile: $err"
+    } else {
+        puts "  da ghi $outfile"
     }
     return $total_logic
 }

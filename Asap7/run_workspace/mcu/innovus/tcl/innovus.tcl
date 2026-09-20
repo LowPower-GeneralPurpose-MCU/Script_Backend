@@ -689,7 +689,17 @@ MINIMUMDENSITY trong tech LEF - chi doc phan $SOC_DENSITY_LAYERS."
     # Doc lai bao cao: bo layer khong co luat, va tach window de len macro SRAM
     # (metal fill khong vao duoc do) khoi window vung logic - chi nhom sau moi
     # la loi cua metal fill.  Run 2026-09-18: 1144 tren macro, 0 vung logic.
-    soc_density_report ./verify_rpt/density_final.rpt
+    # 2026-09-20: gate that su, thay vi chi in ra man hinh.  CHI nhom "vung
+    # logic" moi chan flow - do la phan metal fill dat duoc.  Nhom de len macro
+    # SRAM khong ket luan duoc tu abstract (xem soc_density_report) nen chi ghi
+    # trang thai PENDING_MERGED_GDS_SIGNOFF, giong sram_axi.
+    set soc_density_logic [soc_density_report ./verify_rpt/density_final.rpt]
+    if {$soc_density_logic > 0} {
+        error "Metal fill de lai $soc_density_logic window vung logic duoi nguong\
+ mat do - xem verify_rpt/density_summary.rpt.  Sua SOC_FILL_LAYERS roi restore\
+ saved/${TOP}_prefill.enc.dat, khong can chay lai tu dau."
+    }
+    puts "  density signoff: $::SOC_DENSITY_SIGNOFF_STATUS"
     saveDesign ./saved/${TOP}_final.enc
 
     # --- 3. Timing / power sau khi da co fill (fill lam tang C ghep) -------

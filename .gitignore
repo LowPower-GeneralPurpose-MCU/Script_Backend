@@ -50,7 +50,7 @@
 # roi viet lai commit chua no, neu khong push van bi chan.
 **/outputs/*.v
 **/outputs/*.v.gz
-
+**/outputs/
 # Bao cao DRC sau metal fill: 279675 vi pham = 35.7 MB, va phinh lai sau moi
 # run.  Tao lai bang KHOI 15.  Cac report khac trong verify_rpt van duoc giu.
 # Thu muc tam cua Innovus (rcdb, mmmc copy): 268 MB / 95 file sau mot lan route

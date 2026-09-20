@@ -1,0 +1,25 @@
+# soc_density_report doc lai ./verify_rpt/density_final.rpt
+Mat do (chi layer co MINIMUMDENSITY that: M5)
+  M5   duoi nguong: 1115 tren macro SRAM + 0 trong vung logic
+  vung logic: dat nguong o moi window
+  1115 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+
+# Vi sao nhom tren macro khong ket luan duoc o day
+#   - Density la luat CMP tren WAFER, phai signoff tren GDS da merge
+#     (GDS macro + GDS top) bang Calibre/Pegasus, khong phai tren view
+#     abstract cua P&R.
+#   - Innovus chi thay LEF cua SRAM: OBS chan kin M1-M3/V1-V3 nhung M4
+#     chi 0.6% va M5 chi 0.4% dien tich macro.  Ruot macro khong co hinh
+#     nen mat do doc ra luon thap, du fill co tot den dau.
+#   - ASAP7 KHONG ship GDS cho SRAM, nen lan signoff do hien chua chay
+#     duoc.  Trang thai trung thuc la PENDING, khong phai PASS/FAIL.
+#   - KHONG nhoi fill len macro de lam xanh con so: do la PASS gia, no
+#     xoa mat co bao con viec chua kiem, va dat 25% kim loai len mang
+#     nho la rui ro coupling doi lay mot con so khong kiem chung duoc.
+#     OBS trong tren M4/M5 la giay phep ROUTE qua, khong phai giay phep FILL.
+#   - Ty le window hong bam sat ty le dien tich macro tren die:
+#     mcu 53.9% macro -> 56.9% window; sram_axi 70.5% macro -> 70.5% window.
+#     Do la dac tinh cua floorplan nhieu macro, khong phai loi cua fill.
+# Dieu kien DONG: co GDS that cua SRAM -> merge -> chay density tren do.
+# Chi so co nghia o buoc nay la vung logic (phan minh dat duoc fill):
+#   0 window duoi nguong -> phai bang 0 thi flow moi di tiep.
