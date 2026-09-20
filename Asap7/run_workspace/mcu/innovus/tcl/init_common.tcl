@@ -17,6 +17,28 @@ init_design
 setDesignMode -process 7
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
 
+# ------------------------------------------------------------------------
+# CHE DO PHAN TICH - dat NGAY O DAY, khong doi den KHOI 13
+# ------------------------------------------------------------------------
+# Truoc 2026-09-20 dong nay nam trong KHOI 13 (routeDesign).  Doc innovus.log
+# cua run 2026-09-20: moi header timing truoc dong '<CMD> setAnalysisMode'
+# (line 97801) deu ghi "Analysis Mode: MMMC Non-OCV", tuc la
+# place_opt_design, clock_opt_design VA optDesign -postCTS -setup -hold deu
+# chay khong OCV, khong CPPR.  Hai hau qua:
+#   - hold-fix sau CTS khong duoc tru phan clock dung chung (CPPR).  Duong
+#     hold xau nhat cua run nay co CPPR Adjustment 0.400 ns o postRoute; o
+#     postCTS khoan do bi tinh thanh thieu -> optDesign chen buffer thua.
+#   - con so postCTS va postRoute khac he quy chieu nen khong so sanh duoc.
+# Dat truoc placement thi ca flow dung mot che do.
+setAnalysisMode -analysisType onChipVariation -cppr both
+
+# Glitch: run 2026-09-20 bao IMPOPT-7320 "Glitch fixing has been disabled since
+# glitch reporting is disabled".  Bat bao cao thi optDesign moi duoc phep sua,
+# va co so lieu de doc.
+if {[catch {setSIMode -enable_glitch_report true} si_err]} {
+    puts "WARNING: setSIMode -enable_glitch_report: $si_err"
+}
+
 # License hien tai cho toi da 8 CPU (log Risc_V).
 set MCU_CPUS 1
 if {![catch {open "/proc/cpuinfo" r} cpu_fp]} {
@@ -77,6 +99,51 @@ if {[lsearch -exact $MCU_HOLD_VIEWS view_ff] >= 0} {
     puts "WARNING: ===================================================="
     puts "WARNING: khong co view_ff - hold se chay voi min delay cua goc"
     puts "WARNING: danh dinh cho ca 84 macro SRAM.  Khong dung de sign-off."
+    puts "WARNING: ===================================================="
+}
+
+# ------------------------------------------------------------------------
+# DERATE CHUNG (OCV) CHO STD CELL - MAC DINH TAT
+# ------------------------------------------------------------------------
+# Doc reports/sram_derate.rpt cua run 2026-09-20: file chi co muc "Cell (leaf)"
+# cua 84 macro SRAM, KHONG co dong derate mac dinh nao.  Tuc la
+# setAnalysisMode -analysisType onChipVariation dang bat nhung bien thien
+# tren chip cua std cell bang 0: OCV o day chi con nghia la "duoc tru CPPR",
+# va CPPR tru di mot khoan bi quan CHUA TUNG duoc cong vao.
+# Duong hold xau nhat cua run 2026-09-20 duoc tru CPPR 0.400 ns va con lai
+# +0.021 ns - tuc gan het margin den tu chinh khoan tru do.
+#
+# Vi sao mac dinh de 1.0 (tat): bat len la moi con so timing doi, va hold chi
+# con 21 ps nen gan nhu chac chan se am tro lai -> phai chay lai ca luot
+# optDesign.  Do la viec phai lam CO CHU DICH, khong phai thu lang le doi.
+#
+# Khi nao bat: truoc khi goi ket qua nay la "signoff".  So thuong dung cho 7nm
+# khong co bang AOCV la +/-5%:
+#     export MCU_OCV_DERATE_LATE=1.05  MCU_OCV_DERATE_EARLY=0.95
+# Va khi bat thi phai them DUNG bo so do vao genus/tcl/genus.tcl - Genus hien
+# cung khong co derate chung (grep 'set_timing_derate' chi ra 2 dong SRAM).
+set MCU_OCV_DERATE_LATE  1.0
+set MCU_OCV_DERATE_EARLY 1.0
+foreach {ocv_var ocv_name} {MCU_OCV_DERATE_LATE late MCU_OCV_DERATE_EARLY early} {
+    if {[info exists ::env($ocv_var)] && $::env($ocv_var) ne ""} {
+        if {![string is double -strict $::env($ocv_var)] || $::env($ocv_var) <= 0} {
+            error "$ocv_var phai la so duong, dang la '$::env($ocv_var)'"
+        }
+        set $ocv_var [expr {double($::env($ocv_var))}]
+    }
+}
+if {$MCU_OCV_DERATE_LATE != 1.0 || $MCU_OCV_DERATE_EARLY != 1.0} {
+    set_timing_derate -late  -cell_delay -net_delay -cell_check $MCU_OCV_DERATE_LATE
+    set_timing_derate -early -cell_delay -net_delay -cell_check $MCU_OCV_DERATE_EARLY
+    puts "Derate OCV chung: late x$MCU_OCV_DERATE_LATE / early x$MCU_OCV_DERATE_EARLY"
+    puts "  -> nho dat CUNG bo so nay ben Genus truoc khi so sanh hai ben."
+} else {
+    puts "WARNING: ===================================================="
+    puts "WARNING: KHONG co derate OCV chung cho std cell (dang de 1.0)."
+    puts "WARNING: setAnalysisMode dang o che do onChipVariation nhung bien"
+    puts "WARNING: thien tren chip bang 0, trong khi CPPR VAN duoc tru."
+    puts "WARNING: Ket qua timing la LAC QUAN - khong dung de sign-off."
+    puts "WARNING: Bat: export MCU_OCV_DERATE_LATE=1.05 MCU_OCV_DERATE_EARLY=0.95"
     puts "WARNING: ===================================================="
 }
 

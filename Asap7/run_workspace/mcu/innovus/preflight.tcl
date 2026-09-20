@@ -93,6 +93,53 @@ foreach {master expected lib lef size_pattern size_text} [list \
         error "SRAM 4x LEF of $master does not advertise Y symmetry; macro floorplan uses MY orientation"
     }
 
+    # USE cua chan nguon: LEF 128x4x20 khai VSS la USE POWER trong khi .lib
+    # khai la ground -> IMPVL-536 (run 2026-09-20).  Mach van dung vi
+    # globalNetConnect noi theo ten chan, nhung ban LEF abstract va deck LVS
+    # thi doc theo USE.
+    set pg_bad [check_lef_pg_use $lef_text]
+    if {[llength $pg_bad] > 0} {
+        puts "WARNING: ===================================================="
+        puts "WARNING: [file tail $lef]: USE cua chan nguon khong khop .lib"
+        foreach item $pg_bad {
+            lassign $item pin have want
+            puts "WARNING:   PIN $pin: LEF ghi USE $have, dung ra phai la USE $want"
+        }
+        puts "WARNING:   -> init_design se bao IMPVL-536"
+        puts "WARNING:   Sua: python3 scripts/fix_sram_lef.py [file normalize $lef] \\"
+        puts "WARNING:            --fix -o <file>.fixed.lef"
+        puts "WARNING: ===================================================="
+    }
+
+    # Chan co trong LEF ma .lib khong biet: Innovus bao IMPVL-159 / IMPTS-124
+    # va coi nhu chan khong ton tai -> netlist khong noi gi vao do.  Run
+    # 2026-09-20: sdel[0..4] cua srambank_128x4x20_6t122, va grep netlist
+    # top_soc_pnr.v ra 0 lan xuat hien 'sdel' -> nam chan INPUT tha noi.
+    # Tren silicon that, input tha noi la cong CMOS khong xac dinh.
+    set lef_only {}
+    foreach pin [dict keys [lef_pin_use $lef_text]] {
+        if {[lsearch -exact {VDD VSS} $pin] >= 0} {
+            continue
+        }
+        set base [lindex [split $pin {[}] 0]
+        if {[lsearch -exact $lef_only $base] >= 0} {
+            continue
+        }
+        if {![regexp [format {pin[ \t\r\n]*\([ \t\r\n]*"?%s} $base] $lib_text]} {
+            lappend lef_only $base
+        }
+    }
+    if {[llength $lef_only] > 0} {
+        puts "WARNING: ===================================================="
+        puts "WARNING: [file tail $lef]: chan co trong LEF ma .lib khong khai:"
+        puts "WARNING:   [join $lef_only {, }]"
+        puts "WARNING:   -> init_design bao IMPVL-159 / IMPTS-124, Innovus coi"
+        puts "WARNING:      nhu chan khong ton tai nen netlist khong noi vao do."
+        puts "WARNING:      Phai tie trong RTL (hoac attachTerm) truoc khi coi"
+        puts "WARNING:      day la ban dung duoc tren silicon."
+        puts "WARNING: ===================================================="
+    }
+
     # Toa do lech grid / SITE khong ton tai: CANH BAO o day (van chay duoc het
     # PnR), CHAN o KHOI 16 - LEF la nguon hinh SRAM duy nhat cho streamOut.
     lassign [check_lef_grid_site $lef_text $MFG_GRID $KNOWN_SITES] \

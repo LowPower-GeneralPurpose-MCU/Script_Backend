@@ -122,6 +122,53 @@ proc check_lef_grid_site {text grid known_sites} {
     return [list $offgrid $bad_sites]
 }
 
+# USE cua tung chan trong LEF macro: dict {ten_chan USE}.  Chan khong khai USE
+# thi khong co trong dict (LEF mac dinh USE SIGNAL).
+proc lef_pin_use {text} {
+    set uses [dict create]
+    set pin ""
+    foreach raw [split $text "\n"] {
+        set line [string trim $raw]
+        set w [regexp -inline -all {\S+} $line]
+        switch -- [lindex $w 0] {
+            PIN  { set pin [lindex $w 1] }
+            OBS  { set pin "" }
+            END  { if {[lindex $w 1] eq $pin} { set pin "" } }
+            USE  { if {$pin ne ""} {
+                       dict set uses $pin [string toupper \
+                           [string trimright [lindex $w 1] ";"]]
+                   } }
+        }
+    }
+    return $uses
+}
+
+# Chan nguon trong LEF phai khai dung USE.  Run 2026-09-20:
+#   **WARN: (IMPVL-536): The PG type of pin 'VSS' of cell
+#   'srambank_128x4x20_6t122' doesn't match between the timing library and LEF
+#   file.  In the timing library the pin is defined as 'ground' pin, but in LEF
+#   file it is defined as 'power' pin.
+# globalNetConnect noi theo TEN chan nen mach van dung va verifyConnectivity
+# van sach, nhung moi cong cu doc LEF theo USE (sroute/addRing khi loc theo
+# loai net, deck LVS, ban abstract do write_lef_abstract xuat ra) deu thay VSS
+# la chan nguon duong.
+#
+# Tra ve danh sach {ten_chan use_dang_co use_dung_ra_phai_la}.
+proc check_lef_pg_use {text {expected {VDD POWER VSS GROUND}}} {
+    set bad {}
+    set uses [lef_pin_use $text]
+    foreach {name want} $expected {
+        if {![dict exists $uses $name]} {
+            continue
+        }
+        set have [dict get $uses $name]
+        if {$have ne $want} {
+            lappend bad [list $name $have $want]
+        }
+    }
+    return $bad
+}
+
 # Ten SITE duoc dinh nghia trong mot LEF (tech hoac cell).
 proc lef_defined_sites {text} {
     set sites {}
