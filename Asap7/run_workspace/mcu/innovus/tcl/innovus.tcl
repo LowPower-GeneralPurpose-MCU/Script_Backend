@@ -413,6 +413,33 @@ soc_block "KHOI 9: placement" {
 
     checkPlace ./verify_rpt/checkPlace_place.rpt
     checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_place.rpt
+    # Mat do THAT dat duoc so voi MCU_TARGET_STD_UTIL.  Truoc 2026-09-20 bien do
+    # chi dung de TINH kich thuoc loi (soc_fp_procs.tcl, nhanh logic cua
+    # max(...)) roi khong ai so lai: run 2026-09-20 dat 0.239 trong khi target
+    # la 0.55 - hai tuong RAM cao 1412.6 um thang nhanh logic (~465 um) nen
+    # vung logic duoc cap gap ~2.3 lan dien tich no can.  Hierarchy tr.28 dat
+    # nguong "<80%, ~75% la tot nhat"; script mau cua thay dat Density 0.70.
+    # Mat do thap khong chan flow (thiet ke van chay dung) nhung no la goc cua
+    # day dai hau qua: day dai, 6 chan clk SRAM vuot slew, va metal fill phai
+    # ganh gan nhu toan bo die.  CHI CANH BAO - sua la viec cua floorplan.
+    if {[catch {
+        set fp [open ./verify_rpt/reportUtil_place.rpt r]
+        set rpt [read $fp]
+        close $fp
+        if {[regexp {Density for the design\s*=\s*([0-9.]+)} $rpt -> soc_util]} {
+            set soc_want $::MCU_TARGET_STD_UTIL
+            puts [format "Mat do std cell dat duoc: %.3f (target MCU_TARGET_STD_UTIL %.3f)" \
+                $soc_util $soc_want]
+            if {$soc_util < 0.8 * $soc_want} {
+                puts [format "WARNING: mat do %.3f chi bang %.0f%% target %.3f - loi\
+ dang bi keo cao qua muc (tuong SRAM quyet dinh chieu cao, khong phai logic).\
+ Xem soc_layout trong soc_fp_procs.tcl." \
+                    $soc_util [expr {100.0 * $soc_util / $soc_want}] $soc_want]
+            }
+        }
+    } soc_util_err]} {
+        puts "WARNING: khong doc duoc mat do tu reportUtil_place.rpt: $soc_util_err"
+    }
     timeDesign -preCTS -outDir ./reports/timing_preCTS -prefix place
     # Truoc CTS clock con ly tuong nen chi canh bao: WNS am o day thuong la
     # thieu cho chu khong phai loi that.  DRV max_tran con lai se do CTS +
@@ -598,7 +625,9 @@ soc_block "KHOI 13: routeDesign" {
     #    M4 cuc bo -> ep router ha V4 tu M5 thang xuong chan), hoac waive vi ca 4
     #    toa do deu chia het MANUFACTURINGGRID 0.004 nen Calibre khong bat.
     routeDesign -globalDetail
-    routeDesign -viaOpt -wireOpt
+    # Ban mau cua mon hoc chay 'routeDesign -viaOpt -wireOpt -trackOpt';
+    # -trackOpt truoc day bi thieu (bo mot luot toi uu track).
+    routeDesign -viaOpt -wireOpt -trackOpt
     soc_verify_drc ./verify_rpt/drc_route.rpt -limit 500000
     # Bat ho mach ngay day, truoc khi optDesign/ecoRoute lam nhoe nguyen nhan:
     # sau route la luc duy nhat phan biet duoc "router bo net" voi "optDesign
