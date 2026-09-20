@@ -282,8 +282,19 @@ proc soc_layout {std_area_total} {
     return $L
 }
 
-# Xep mot cum theo cot: cot chan R0, cot le MY, de chan SRAM hai cot ke nhau
-# quay vao nhau (Hierarchy trang 35).  status: placed (keo duoc) | fixed.
+# Xep mot cum theo cot: cot chan R0, cot le MY.  status: placed (keo duoc) |
+# fixed.
+#
+# SUA GHI CHU 2026-09-20: ban cu viet "de chan SRAM hai cot ke nhau quay vao
+# nhau (Hierarchy trang 35)".  Do la SAI voi macro nay.  Do lai LEF
+# srambank_256x4x32: 78 chan signal nam o x 55.636..70.940 tren macro rong
+# 121.392 - tuc GIUA THAN macro, tren stack M3 -> V3 -> M4 (14 chan len M5),
+# trai gan het chieu cao.  MY lat chung thanh 50.452..65.756: van o giua.  Chan
+# khong bao gio quay ra canh nao, nen R0/MY KHONG doi gi ve tiep can chan.
+# Router vao chan tu tren bang V4/V5 (OBS cua macro chan kin M1-M3 nhung M4 chi
+# 0.6% va M5 chi 0.4%), khong di qua khe giua hai macro.
+# Van giu R0/MY vi ca hai deu thoa 10_Macro Priority 8 (chi 0/180 do) va giu
+# rail M1 VDD/VSS cua macro nam ngang; chi bo loi khang dinh ve huong chan.
 proc soc_place_group {group x0 y0 status} {
     lassign [soc_group_dims $group] gw gh w h rows
     set core_llx [dbGet top.fPlan.coreBox_llx]
@@ -1844,20 +1855,29 @@ proc soc_fill_report {report {outfile ./verify_rpt/fill_summary.rpt}} {
     set bad 0
     foreach {layer wmin wmax decr lmin lmax gap active dmin dmax dpref} \
             $::SOC_FILL_LAYERS {
-        if {![info exists thr($layer,total)]} {
+        # addMetalFill goi layer Pad la "M10" trong bao cao (chi so routing
+        # layer), trong khi verifyMetalDensity lai goi dung ten "Pad".  Hai
+        # lenh dat ten khac nhau cho CUNG mot layer.  Khong doi ten o day thi
+        # bao cao ket luan sai "Pad chua duoc fill" trong khi no da fill sach
+        # (run 18:27: M10 0/77 window duoi nguong 20%).
+        set rl $layer
+        if {$layer eq "Pad" && ![info exists thr($layer,total)]                 && [info exists thr(M10,total)]} {
+            set rl M10
+        }
+        if {![info exists thr($rl,total)]} {
             lappend out [format {  %-5s KHONG co trong bao cao - layer nay chua duoc fill} $layer]
             incr bad
             continue
         }
-        set bu [expr {[info exists nunder($layer,before)] ? $nunder($layer,before) : -1}]
-        set au [expr {[info exists nunder($layer,after)]  ? $nunder($layer,after)  : -1}]
-        set bo [expr {[info exists nover($layer,before)]  ? $nover($layer,before)  : -1}]
-        set ao [expr {[info exists nover($layer,after)]   ? $nover($layer,after)   : -1}]
+        set bu [expr {[info exists nunder($rl,before)] ? $nunder($rl,before) : -1}]
+        set au [expr {[info exists nunder($rl,after)]  ? $nunder($rl,after)  : -1}]
+        set bo [expr {[info exists nover($rl,before)]  ? $nover($rl,before)  : -1}]
+        set ao [expr {[info exists nover($rl,after)]   ? $nover($rl,after)   : -1}]
         set note ""
         if {$au > 0 || $ao > 0} { incr bad }
         if {$ao > $bo} { set note "   <- fill LAM TANG so window vuot tran" }
         lappend out [format {  %-5s %6d -> %-6d (min %2d%%)   %6d -> %-6d (max %2d%%)   /%d window%s} \
-            $layer $bu $au $thr($layer,min) $bo $ao $thr($layer,max) $thr($layer,total) $note]
+            $layer $bu $au $thr($rl,min) $bo $ao $thr($rl,max) $thr($rl,total) $note]
     }
     if {$bad > 0} {
         lappend out "WARNING: $bad layer chua dat nguong sau fill.  Doc tiep\
@@ -1939,6 +1959,7 @@ proc soc_require_drc_clean {args} {
                 set skip $type_ok
             }
             if {$skip} { incr waived } else { incr real }
+        # (soc_require_drc_clean dung chung logic loc voi soc_verify_drc)
         }
         close $fp
         if {!$verdict} {
@@ -1999,9 +2020,29 @@ proc soc_density_report {report args} {
         lappend boxes [list $x0 $y0 $x1 $y1]
     }
 
+    # Nguong nam o phan header cua bao cao:
+    #   # Layer       M5 - Min Density      : 15%
+    # Phai doc chung de tach "duoi min" khoi "vuot max".  verifyMetalDensity
+    # liet ke CA HAI loai trong cung mot bang, va truoc 2026-09-20 doan nay dem
+    # gop roi gan nhan "duoi nguong" cho tat ca -> 297 window M3 VUOT tran 60%
+    # bi bao thanh "duoi nguong tren macro SRAM" (density_all_summary.rpt cua
+    # run 18:27).  Hai loai nay nguyen nhan khac han nhau:
+    #   duoi min : fill chua voi toi - dung de hoi "fill du chua"
+    #   vuot max : fill do them vao window von da qua tran (cua so chong nhau
+    #              50% nen fill o window ke van roi vao day) - khong lien quan
+    #              gi den phep chia macro/logic, nen khong dua vao phep do.
+    array set thr_max {}
+    foreach line [split $text "\n"] {
+        if {[regexp {^#\s*Layer\s+(\S+)\s+-\s+Max Density\s*:\s*([0-9.]+)%} \
+                $line -> l v]} {
+            set thr_max($l) $v
+        }
+    }
+
     set skipped 0
     array set n_macro {}
     array set n_logic {}
+    array set n_over  {}
     array set worst  {}
     foreach line [split $text "\n"] {
         if {![regexp {^\s*(\S+)\s+([0-9.]+)\s+\(([-0-9.]+)\s+([-0-9.]+)\)\s+\(([-0-9.]+)\s+([-0-9.]+)\)} \
@@ -2010,6 +2051,10 @@ proc soc_density_report {report args} {
         }
         if {[lsearch -exact $layers $layer] < 0} {
             incr skipped
+            continue
+        }
+        if {[info exists thr_max($layer)] && $dens > $thr_max($layer)} {
+            incr n_over($layer)
             continue
         }
         set area [expr {($wx1 - $wx0) * ($wy1 - $wy0)}]
@@ -2031,7 +2076,6 @@ proc soc_density_report {report args} {
             }
         }
     }
-
     # Ket qua di ca ra man hinh LAN ra file.  puts cua proc KHONG vao
     # innovus.log, nen truoc day chay xong roi khong co cach nao doc lai phan
     # loai macro/logic tu log (run 2026-09-19).
@@ -2039,17 +2083,28 @@ proc soc_density_report {report args} {
     set total_macro 0
     set out {}
     lappend out "Mat do - layer doc: $layers"
+    set total_over 0
     foreach layer $layers {
         set m [expr {[info exists n_macro($layer)] ? $n_macro($layer) : 0}]
         set l [expr {[info exists n_logic($layer)] ? $n_logic($layer) : 0}]
+        set o [expr {[info exists n_over($layer)]  ? $n_over($layer)  : 0}]
         incr total_logic $l
         incr total_macro $m
+        incr total_over  $o
         set tail ""
         if {$l > 0} {
             set tail [format " (thap nhat %.2f%%)" $worst($layer)]
         }
-        lappend out [format {  %-4s duoi nguong: %d tren macro SRAM + %d trong vung logic%s} \
+        if {$o > 0} {
+            set tail "$tail | $o window VUOT tran"
+        }
+        lappend out [format {  %-4s duoi min: %d tren macro SRAM + %d trong vung logic%s} \
             $layer $m $l $tail]
+    }
+    if {$total_over > 0} {
+        lappend out "  $total_over window vuot tran mat do: fill do them vao window\
+ von da qua tran (cua so chong nhau 50%).  Chi cac layer co MAXIMUMDENSITY that\
+ trong tech LEF moi dang lo - ASAP7 chi co M5 (90%) va Pad (80%)."
     }
     if {$skipped > 0} {
         lappend out "  bo qua $skipped window cua layer khong co luat mat do trong tech LEF"

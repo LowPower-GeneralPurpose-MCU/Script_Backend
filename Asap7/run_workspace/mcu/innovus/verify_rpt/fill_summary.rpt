@@ -10,5 +10,5 @@ Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai M5/Pad la so TU DA
   M7      1260 -> 0      (min 25%)        0 -> 0      (max 55%)   /1260 window
   M8      1260 -> 0      (min 25%)        0 -> 0      (max 55%)   /1260 window
   M9      1260 -> 0      (min 25%)        0 -> 0      (max 55%)   /1260 window
-  Pad   KHONG co trong bao cao - layer nay chua duoc fill
-WARNING: 6 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).
+  Pad       77 -> 0      (min 20%)        0 -> 0      (max 80%)   /77 window
+WARNING: 5 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).

@@ -13,6 +13,10 @@ source ./preflight.tcl
 source ./tcl/innovus.globals
 
 set init_design_uniquify 1
+# Script mau cua mon hoc (src/pnr/pnr/tcl/innovus.tcl) dat dong nay ngay truoc
+# init_design.  Thieu no thi Innovus khong tu sinh via cho cac rule khong mac
+# dinh.  Bo sung 2026-09-20 khi doi chieu voi ban mau.
+setGenerateViaMode -auto true
 init_design
 setDesignMode -process 7
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
