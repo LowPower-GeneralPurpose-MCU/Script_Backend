@@ -1766,6 +1766,17 @@ proc soc_metal_fill {} {
             $::SOC_FILL_LAYERS {
         soc_fill_check_track $layer $wmin $gap $active
     }
+    # setMetalFill giu thiet lap trong SESSION, khong phai trong file.  Luong
+    # lam viec o day la paste tung KHOI vao mot phien Innovus dang chay: run
+    # 2026-09-20 chay KHOI 15 luc 15:23 voi danh sach CHI M5, roi chay lai luc
+    # 16:41 voi M1-M9 trong CUNG phien ("innovus 179>" -> "185>").  Khong reset
+    # thi so cua lan paste truoc song sot o nhung layer lan nay khong dat lai -
+    # dung loai bay da dinh voi soc_fp_config/soc_fp_procs (MEMORY: live
+    # Innovus session keeps old tcl).  setFillerMode ngay tren da -reset, cho
+    # nay thi chua.
+    if {[catch {setMetalFill -reset} err]} {
+        puts "WARNING: setMetalFill -reset: $err"
+    }
     foreach {layer wmin wmax decr lmin lmax gap active dmin dmax dpref} \
             $::SOC_FILL_LAYERS {
         setMetalFill -layer $layer \
@@ -1776,6 +1787,97 @@ proc soc_metal_fill {} {
         lappend layers $layer
     }
     addMetalFill -layer $layers -snap -squareShape
+}
+
+# addMetalFill tu ghi <design>.metalfill.rpt: so window duoi min / vuot max cua
+# TUNG layer, truoc va sau khi fill.  Do la nguon so lieu DUY NHAT cho
+# M1-M4/M6-M9, vi verifyMetalDensity chi chay tren SOC_DENSITY_LAYERS.
+#
+# Run 2026-09-20 16:41 khong co doan nao doc file nay, nen flow in "0 vi pham /
+# PENDING" va ket luan sach, trong khi chinh file do ghi: M2 con 118 window
+# duoi nguong, M4 38, M6 8, va M3 297 window VUOT tran (truoc fill 253 - tuc
+# fill de THEM vao 44 window von da qua tran).  Anh chup layout thay thieu fill
+# la dung; bao cao im lang moi la cai sai.
+#
+# Tra ve so layer con van de.  CHI canh bao, KHONG chan flow: bao cao nay khong
+# co toa do window nen khong tach duoc "thap vi de len macro SRAM" (dung -
+# addMetalFill khong dat duoc mieng nao len block instance) khoi "thap vi fill
+# hong".  Viec tach do la cua soc_density_report tren density_all.rpt.
+proc soc_fill_report {report {outfile ./verify_rpt/fill_summary.rpt}} {
+    if {![file isfile $report]} {
+        puts "WARNING: chua co $report - khong doc duoc ket qua addMetalFill"
+        return -1
+    }
+    set fp [open $report r]
+    set text [read $fp]
+    close $fp
+
+    # File co HAI khoi cung dinh dang: "Before filling" roi "After filling".
+    set phase ""
+    array set nunder {}
+    array set nover  {}
+    array set thr    {}
+    foreach line [split $text "\n"] {
+        if {[string match "*Before filling*" $line]} { set phase before ; continue }
+        if {[string match "*After filling*"  $line]} { set phase after  ; continue }
+        if {$phase eq ""} { continue }
+        if {[regexp {^Layer\s+(\S+)\s+-\s+Number of windows under minimum density\s+\(([0-9]+)%\):\s+([0-9]+) out of total ([0-9]+)} \
+                $line -> layer pct n total]} {
+            set nunder($layer,$phase) $n
+            set thr($layer,min)   $pct
+            set thr($layer,total) $total
+            continue
+        }
+        if {[regexp {^Layer\s+(\S+)\s+-\s+Number of windows over maximum density\s+\(([0-9]+)%\):\s+([0-9]+) out of total} \
+                $line -> layer pct n]} {
+            set nover($layer,$phase) $n
+            set thr($layer,max) $pct
+            continue
+        }
+    }
+
+    set out {}
+    lappend out "# soc_fill_report doc lai $report"
+    lappend out "Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai\
+ M5/Pad la so TU DAT trong SOC_FILL_LAYERS, khong phai luat foundry."
+    lappend out "  layer   duoi min (truoc -> sau)      vuot max (truoc -> sau)"
+    set bad 0
+    foreach {layer wmin wmax decr lmin lmax gap active dmin dmax dpref} \
+            $::SOC_FILL_LAYERS {
+        if {![info exists thr($layer,total)]} {
+            lappend out [format {  %-5s KHONG co trong bao cao - layer nay chua duoc fill} $layer]
+            incr bad
+            continue
+        }
+        set bu [expr {[info exists nunder($layer,before)] ? $nunder($layer,before) : -1}]
+        set au [expr {[info exists nunder($layer,after)]  ? $nunder($layer,after)  : -1}]
+        set bo [expr {[info exists nover($layer,before)]  ? $nover($layer,before)  : -1}]
+        set ao [expr {[info exists nover($layer,after)]   ? $nover($layer,after)   : -1}]
+        set note ""
+        if {$au > 0 || $ao > 0} { incr bad }
+        if {$ao > $bo} { set note "   <- fill LAM TANG so window vuot tran" }
+        lappend out [format {  %-5s %6d -> %-6d (min %2d%%)   %6d -> %-6d (max %2d%%)   /%d window%s} \
+            $layer $bu $au $thr($layer,min) $bo $ao $thr($layer,max) $thr($layer,total) $note]
+    }
+    if {$bad > 0} {
+        lappend out "WARNING: $bad layer chua dat nguong sau fill.  Doc tiep\
+ verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh\
+ 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi\
+ cua metal fill)."
+    } else {
+        lappend out "  moi layer dat nguong sau fill"
+    }
+    foreach line $out { puts $line }
+    if {[catch {
+        set fp [open $outfile w]
+        foreach line $out { puts $fp $line }
+        close $fp
+    } err]} {
+        puts "WARNING: khong ghi duoc $outfile: $err"
+    } else {
+        puts "  da ghi $outfile"
+    }
+    return $bad
 }
 
 # Bao cao DRC phai ton tai va sach truoc khi xuat GDS.  Goi dau KHOI 16.
@@ -1863,7 +1965,26 @@ proc soc_require_drc_clean {args} {
 # va OBS khong phai ly do.  addMetalFill tu coi ranh gioi block instance la vung
 # cam.  Doi gapSpacing/activeSpacing khong lam giam con so nay.
 # -> tach hai nhom.  Chi nhom "vung logic" moi la loi cua metal fill.
-proc soc_density_report {report {macro_overlap 0.25} {outfile ./verify_rpt/density_summary.rpt}} {
+# Tham so: soc_density_report <report> ?-overlap f? ?-out file?
+#                             ?-layers {M5 ...}? ?-status 0|1?
+#   -layers  layer duoc doc tu <report> (mac dinh SOC_DENSITY_LAYERS).  Lan goi
+#            bao cao (SOC_DENSITY_REPORT_LAYERS) dung danh sach rong hon.
+#   -status  1 thi dat ::SOC_DENSITY_SIGNOFF_STATUS.  Lan goi bao cao dat 0 de
+#            khong de len ket luan signoff cua lan goi chan (M5).
+proc soc_density_report {report args} {
+    set macro_overlap 0.25
+    set outfile ./verify_rpt/density_summary.rpt
+    set layers  $::SOC_DENSITY_LAYERS
+    set status  1
+    foreach {opt val} $args {
+        switch -- $opt {
+            -overlap { set macro_overlap $val }
+            -out     { set outfile       $val }
+            -layers  { set layers        $val }
+            -status  { set status        $val }
+            default  { error "soc_density_report: tuy chon la '$opt'" }
+        }
+    }
     if {![file isfile $report]} {
         puts "WARNING: chua co $report - bo qua doc mat do"
         return -1
@@ -1887,7 +2008,7 @@ proc soc_density_report {report {macro_overlap 0.25} {outfile ./verify_rpt/densi
                 $line -> layer dens wx0 wy0 wx1 wy1]} {
             continue
         }
-        if {[lsearch -exact $::SOC_DENSITY_LAYERS $layer] < 0} {
+        if {[lsearch -exact $layers $layer] < 0} {
             incr skipped
             continue
         }
@@ -1917,8 +2038,8 @@ proc soc_density_report {report {macro_overlap 0.25} {outfile ./verify_rpt/densi
     set total_logic 0
     set total_macro 0
     set out {}
-    lappend out "Mat do (chi layer co MINIMUMDENSITY that: $::SOC_DENSITY_LAYERS)"
-    foreach layer $::SOC_DENSITY_LAYERS {
+    lappend out "Mat do - layer doc: $layers"
+    foreach layer $layers {
         set m [expr {[info exists n_macro($layer)] ? $n_macro($layer) : 0}]
         set l [expr {[info exists n_logic($layer)] ? $n_logic($layer) : 0}]
         incr total_logic $l
@@ -1946,10 +2067,10 @@ proc soc_density_report {report {macro_overlap 0.25} {outfile ./verify_rpt/densi
     # Giong sram_axi/innovus/tcl/add_fill_and_verify.tcl: danh dau tam, de
     # signoff tren GDS da merge (Calibre/Pegasus) phan xu.
     if {$total_macro > 0} {
-        set ::SOC_DENSITY_SIGNOFF_STATUS PENDING_MERGED_GDS_SIGNOFF
+        if {$status} { set ::SOC_DENSITY_SIGNOFF_STATUS PENDING_MERGED_GDS_SIGNOFF }
         lappend out "  $total_macro window de len macro SRAM:\
  PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)"
-    } else {
+    } elseif {$status} {
         set ::SOC_DENSITY_SIGNOFF_STATUS OK
     }
     foreach line $out { puts $line }
