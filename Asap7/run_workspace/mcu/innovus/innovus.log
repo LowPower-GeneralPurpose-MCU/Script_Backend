@@ -105238,3 +105238,9 @@ Output for cells
 <CMD> zoomBox 435.81275 -33.71675 1220.59875 668.83425
 <CMD> zoomBox 342.61725 -111.70475 1428.82625 860.68425
 <CMD> zoomBox 131.59800 -288.28975 1900.30825 1295.08350
+<CMD> fit
+
+*** Memory Usage v#2 (Current mem = 12405.465M, initial mem = 839.699M) ***
+*** Message Summary: 276593 warning(s), 12 error(s)
+
+--- Ending "Innovus" (totcpu=4:27:14, real=8:26:26, mem=12405.5M) ---
