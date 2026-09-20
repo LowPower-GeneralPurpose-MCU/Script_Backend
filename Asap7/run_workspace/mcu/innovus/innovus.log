@@ -105167,3 +105167,5 @@ Report saved in file ./reports/summary_final.rpt
 <CMD> zoomOut
 <CMD> zoomOut
 <CMD> fit
+<CMD> setLayerPreference violation -isSelectable 0
+<CMD> setLayerPreference violation -isVisible 0
