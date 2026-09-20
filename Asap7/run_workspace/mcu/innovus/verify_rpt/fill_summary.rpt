@@ -3,12 +3,12 @@ Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai M5/Pad la so TU DA
   layer   duoi min (truoc -> sau)      vuot max (truoc -> sau)
   M1       514 -> 0      (min 25%)        0 -> 0      (max 60%)   /1260 window
   M2       517 -> 118    (min 25%)        0 -> 0      (max 60%)   /1260 window
-  M3       489 -> 1      (min 25%)      253 -> 297    (max 60%)   /1260 window   <- fill LAM TANG so window vuot tran
-  M4       858 -> 38     (min 10%)        0 -> 0      (max 35%)   /1260 window
-  M5      1935 -> 1121   (min 15%)        0 -> 0      (max 90%)   /1960 window
-  M6      1259 -> 8      (min 25%)        0 -> 3      (max 55%)   /1260 window   <- fill LAM TANG so window vuot tran
-  M7      1260 -> 0      (min 25%)        0 -> 5      (max 55%)   /1260 window   <- fill LAM TANG so window vuot tran
+  M3       489 -> 2      (min 25%)      253 -> 297    (max 60%)   /1260 window   <- fill LAM TANG so window vuot tran
+  M4       858 -> 39     (min 10%)        0 -> 1      (max 35%)   /1260 window   <- fill LAM TANG so window vuot tran
+  M5      1935 -> 1120   (min 15%)        0 -> 0      (max 90%)   /1960 window
+  M6      1259 -> 8      (min 25%)        0 -> 0      (max 55%)   /1260 window
+  M7      1260 -> 0      (min 25%)        0 -> 0      (max 55%)   /1260 window
   M8      1260 -> 0      (min 25%)        0 -> 0      (max 55%)   /1260 window
   M9      1260 -> 0      (min 25%)        0 -> 0      (max 55%)   /1260 window
   Pad   KHONG co trong bao cao - layer nay chua duoc fill
-WARNING: 7 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).
+WARNING: 6 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).
