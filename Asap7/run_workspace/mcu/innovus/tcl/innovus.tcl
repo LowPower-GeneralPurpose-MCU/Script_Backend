@@ -625,9 +625,11 @@ soc_block "KHOI 13: routeDesign" {
     #    M4 cuc bo -> ep router ha V4 tu M5 thang xuong chan), hoac waive vi ca 4
     #    toa do deu chia het MANUFACTURINGGRID 0.004 nen Calibre khong bat.
     routeDesign -globalDetail
-    # Ban mau cua mon hoc chay 'routeDesign -viaOpt -wireOpt -trackOpt';
-    # -trackOpt truoc day bi thieu (bo mot luot toi uu track).
-    routeDesign -viaOpt -wireOpt -trackOpt
+    # DA THU VA DA GO 2026-09-21: them '-trackOpt' theo ban mau cua mon hoc.
+    # Cung voi setGenerateViaMode -auto, run 09-21 02:21 ra 3 vi pham DRC o
+    # postRoute (truoc do 0) -> KHOI 14/15 tat, metal fill khong chay.
+    # Xem ghi chu trong init_common.tcl.
+    routeDesign -viaOpt -wireOpt
     soc_verify_drc ./verify_rpt/drc_route.rpt -limit 500000
     # Bat ho mach ngay day, truoc khi optDesign/ecoRoute lam nhoe nguyen nhan:
     # sau route la luc duy nhat phan biet duoc "router bo net" voi "optDesign
