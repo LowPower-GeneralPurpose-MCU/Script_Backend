@@ -713,6 +713,11 @@ soc_block "KHOI 15: filler + verify" {
     # soc_metal_fill chi IN bao cao on-track, khong chan nua (2026-09-20): dieu
     # kien boi-pitch cu vua khong du vua khong can - xem soc_fill_check_track.
     soc_metal_fill
+    # Doc lai bao cao cua chinh addMetalFill.  Truoc 2026-09-20 khong ai doc
+    # file nay, nen M2 118 / M4 38 / M6 8 window duoi nguong va M3 297 window
+    # vuot tran KHONG BAO GIO ra man hinh: flow ket luan sach trong khi anh
+    # chup layout thi khong.  Canh bao, khong chan - xem soc_fill_report.
+    soc_fill_report ./${TOP}.metalfill.rpt ./verify_rpt/fill_summary.rpt
     # 2026-09-20: OFFGRID cua _FILLS_RESERVED KHONG con duoc waive.  Bo so fill
     # moi (maxWidth 1.248 + decrement 0.384, theo sram_axi) khien da so mieng
     # rong hon min width nen khong dinh M5.AUX.2.  Con OFFGRID tren fill nghia
@@ -753,6 +758,24 @@ MINIMUMDENSITY trong tech LEF - chi doc phan $SOC_DENSITY_LAYERS."
  saved/${TOP}_prefill.enc.dat, khong can chay lai tu dau."
     }
     puts "  density signoff: $::SOC_DENSITY_SIGNOFF_STATUS"
+
+    # --- 2b. Mat do TREN MOI LAYER DUOC FILL (bao cao, khong chan) ---------
+    # verifyMetalDensity o tren chi chay tren SOC_DENSITY_LAYERS (M5) vi chi M5
+    # va Pad co MINIMUMDENSITY that.  Nhung nhu vay khong co CACH NAO tra loi
+    # "layer nao con thieu fill va thieu o dau": bao cao cua addMetalFill dem
+    # duoc so window nhung khong co toa do, nen khong tach duoc window thap vi
+    # de len macro SRAM (P&R khong sua duoc) khoi window thap that trong vung
+    # logic.  Lan chay nay lam dung viec do cho ca SOC_DENSITY_REPORT_LAYERS.
+    # Nguong cua layer ngoai M5/Pad la so tu dat trong SOC_FILL_LAYERS chu
+    # khong phai luat foundry -> KHONG chan flow, chi de doc.
+    if {[catch {verifyMetalDensity -layer $SOC_DENSITY_REPORT_LAYERS \
+            -report ./verify_rpt/density_all.rpt} err]} {
+        puts "WARNING: verifyMetalDensity -layer $SOC_DENSITY_REPORT_LAYERS: $err"
+    } else {
+        soc_density_report ./verify_rpt/density_all.rpt \
+            -layers $SOC_DENSITY_REPORT_LAYERS -status 0 \
+            -out ./verify_rpt/density_all_summary.rpt
+    }
     saveDesign ./saved/${TOP}_final.enc
 
     # --- 3. Timing / power sau khi da co fill (fill lam tang C ghep) -------
@@ -791,6 +814,10 @@ MINIMUMDENSITY trong tech LEF - chi doc phan $SOC_DENSITY_LAYERS."
   verify_rpt/connectivity_final.rpt  : 0 open/short
   verify_rpt/welltap_final.rpt       : 0 cell xa tap qua ${SOC_TAP_RULE} um
   verify_rpt/density_final.rpt       : chi layer $SOC_DENSITY_LAYERS co luat
+  verify_rpt/fill_summary.rpt        : so window duoi min / vuot max CUA
+                                       TUNG layer sau addMetalFill
+  verify_rpt/density_all_summary.rpt : cung so do nhung da tach macro SRAM
+                                       / vung logic - vung logic phai 0
   reports/timing_final*/             : WNS setup/hold >= 0, DRV Real = 0
                                        (soc_check_timing o tren moi CANH BAO;
                                         KHOI 16 moi chan xuat GDS)

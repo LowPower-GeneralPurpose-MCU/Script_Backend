@@ -177,7 +177,21 @@ set SOC_FILLER_CELLS {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R}
 #
 # Bo so duoi day lay nguyen van tu
 # run_workspace/sram_axi/innovus/tcl/add_fill_and_verify.tcl (dong 74-140).
-# Bo Pad: MCU khong co vanh pad.
+#
+# PAD - SUA 2026-09-20 (truoc do bi bo voi ly do "MCU khong co vanh pad").
+# Ly do do KHONG dung: Pad la layer THU HAI va cuoi cung co MINIMUMDENSITY that
+# trong asap7_tech_4x_201209.lef (dong 667: MINIMUMDENSITY 20, MAXIMUMDENSITY
+# 80, DENSITYCHECKWINDOW 400 400, DENSITYCHECKSTEP 200).  Mat do CMP la luat cua
+# WAFER: no doi 20% kim loai o moi cua so 400x400, bat ke thiet ke co vanh pad
+# hay khong.  Khong co vanh pad chi co nghia la layer do TRONG RONG -> MOI
+# window doc ra 0% -> hong 100%, chu khong phai duoc mien.  Chinh khoi ghi chu o
+# tren da viet "mat do CMP ap cho MOI lop kim loai"; bo Pad la tu mau thuan.
+# sram_axi CO fill Pad (bao cao goi no la M10) va drc_after_fill.rpt van sach.
+# Mat do hinh hoc dat duoc: 8.0 / (8.0 + 8.16) = 49.5% mot chieu, voi
+# -squareShape la ~24.5% dien tich > nguong 20% -> window giua die dat duoc;
+# window o mep die van thap vi phan ngoai die tinh la 0 (sram_axi con 7/9).
+# Vi vay Pad KHONG nam trong SOC_DENSITY_LAYERS (cong chan) o duoi, chi nam
+# trong SOC_DENSITY_REPORT_LAYERS (do va bao cao).
 #
 # LUU Y khi chay lai:
 #   - Fill nhieu lop lam tang dien dung ghep -> timing sau fill se doi.  KHOI 15
@@ -198,11 +212,30 @@ set SOC_FILL_LAYERS {
     M7    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
     M8    0.160 2.500 0.160 0.960 5.0  0.640 0.640  25   55   40
     M9    0.160 2.500 0.160 0.960 5.0  0.640 0.640  25   55   40
+    Pad   0.800 8.000 0.160 8.960 8.96 8.160 8.160  20   80   25
 }
-# Layer co MINIMUMDENSITY that trong tech LEF -> chi kiem tra mat do o do.
+# Layer co MINIMUMDENSITY that trong tech LEF -> CHAN flow o do.
 # Cac layer khac Innovus ap mac dinh 20%: run 2026-09-18 co 8863 vi pham mat do,
 # 7719 trong so do la cua luat KHONG ton tai trong PDK nay (M1-M4, M6-M9).
+#
+# Pad co luat that nhung KHONG chan: xem ghi chu PAD o tren - window mep die
+# luon duoi nguong vi phan ngoai die tinh la 0%, do khong phai loi cua fill.
+# No nam trong SOC_DENSITY_REPORT_LAYERS de van co so doc.
 set SOC_DENSITY_LAYERS {M5}
+
+# Layer duoc DO mat do roi tach macro/logic de bao cao (KHONG chan flow).
+# Vi sao phai co danh sach nay: run 2026-09-20 16:41 fill du M1-M9, flow in
+# "0 vi pham / PENDING" va nhin nhu sach, trong khi top_soc.metalfill.rpt -
+# file DUY NHAT co so lieu cua M1-M4/M6-M9 - ghi M2 con 118 window duoi nguong,
+# M4 38, M6 8, va M3 297 window VUOT tran (truoc fill 253).  Khong doan nao
+# trong flow doc file do, nen nhung con so tren khong bao gio ra man hinh:
+# bao cao noi sach ma anh chup layout thi khong.
+# Tu day verifyMetalDensity chay tren ca danh sach nay vao
+# verify_rpt/density_all.rpt, roi soc_density_report tach "tren macro SRAM" /
+# "trong vung logic" cho TUNG layer - chi nhom sau moi la loi cua metal fill.
+# Nguong cua layer ngoai M5/Pad la so TU DAT trong SOC_FILL_LAYERS, KHONG phai
+# luat foundry -> chi doc tham khao, khong dem vao ket luan signoff.
+set SOC_DENSITY_REPORT_LAYERS {M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad}
 
 # ---- Waive DRC (chi dung khi da chung minh khong phai luat foundry) --------
 # Net trong danh sach nay van bi verify_drc bat va van hien trong bao cao, chi
