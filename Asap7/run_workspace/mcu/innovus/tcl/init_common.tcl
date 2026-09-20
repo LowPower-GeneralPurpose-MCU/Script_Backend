@@ -13,10 +13,14 @@ source ./preflight.tcl
 source ./tcl/innovus.globals
 
 set init_design_uniquify 1
-# Script mau cua mon hoc (src/pnr/pnr/tcl/innovus.tcl) dat dong nay ngay truoc
-# init_design.  Thieu no thi Innovus khong tu sinh via cho cac rule khong mac
-# dinh.  Bo sung 2026-09-20 khi doi chieu voi ban mau.
-setGenerateViaMode -auto true
+# DA THU VA DA GO 2026-09-21: 'setGenerateViaMode -auto true' (script mau
+# src/pnr/pnr/tcl/innovus.tcl dat o day).  Run 09-21 02:21 sau khi bat no +
+# routeDesign -trackOpt: drc_postRoute tu 0 -> 3 vi pham (1 EndOfLine tren
+# u_axi_interconnect/FE_PHN26686_..., 2 OFFGRID tren u_itcm/u_mem), KHOI 14 va
+# KHOI 15 deu tat o cong DRC nen metal fill khong chay.  Ban mau chay FreePDK45
+# (khong co SADP/LEF58); ASAP7 co RIGHTWAYONGRIDONLY + WIDTHTABLE nen via tu
+# sinh khong an toan nhu vay.  Muon thu lai thi bat MOT MINH no, khong bat cung
+# -trackOpt, de biet cai nao gay loi.
 init_design
 setDesignMode -process 7
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
