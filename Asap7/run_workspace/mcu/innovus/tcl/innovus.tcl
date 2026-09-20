@@ -376,6 +376,13 @@ soc_block "KHOI 9: placement" {
         createPlaceBlockage -type soft -box $box -name soc_notch
     }
 
+    # LUU Y khi doc bang tom tat sau nay: nhom nay CHI con paths o buoc preCTS.
+    # Tu optDesign -postCTS tro di Innovus tu tao nhom co ban reg2reg /
+    # reg2cgate va chung uu tien hon, nen 14 cot cg_enable_group_CLK_* trong
+    # postCTS.summary / final.summary deu la N/A.  Khong mat duong nao: run
+    # 2026-09-20 preCTS co 1623 duong trong 14 nhom do, postRoute co dung 1635
+    # duong trong reg2cgate (1623 ICG + 12 cg_* roi).  N/A o day nghia la
+    # "nhom rong", khong phai "khong co du lieu".
     if {[file isfile $INNOVUS_PATH_GROUPS]} {
         puts "Doc path group: $INNOVUS_PATH_GROUPS"
         source $INNOVUS_PATH_GROUPS
@@ -407,6 +414,10 @@ soc_block "KHOI 9: placement" {
     checkPlace ./verify_rpt/checkPlace_place.rpt
     checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_place.rpt
     timeDesign -preCTS -outDir ./reports/timing_preCTS -prefix place
+    # Truoc CTS clock con ly tuong nen chi canh bao: WNS am o day thuong la
+    # thieu cho chu khong phai loi that.  DRV max_tran con lai se do CTS +
+    # optDesign postCTS don.
+    soc_check_timing ./reports/timing_preCTS place -warn-only
     report_area > ./reports/area_place.rpt
     saveDesign ./saved/${TOP}_placed.enc
 }
@@ -518,16 +529,32 @@ soc_block "KHOI 12: optDesign postCTS" {
     checkPlace ./verify_rpt/checkPlace_postCTS.rpt
     timeDesign -postCTS       -outDir ./reports/timing_postCTS      -prefix postCTS
     timeDesign -postCTS -hold -outDir ./reports/timing_postCTS_hold -prefix postCTS
+    # Doc lai chinh hai bang vua ghi.  Chi WARNING, khong chan: postRoute con
+    # mot luot setup+hold+DRV nua.  Nhung phai IN RA - run 2026-09-20 den day
+    # co hold WNS -0.001 / TNS -0.011 / 108 duong vi pham va DRV max_tran Real
+    # 5 net, khong ai biet, KHOI 13 route thang.
+    soc_check_timing ./reports/timing_postCTS      postCTS -drv   -warn-only
+    soc_check_timing ./reports/timing_postCTS_hold postCTS -hold  -warn-only
     saveDesign ./saved/${TOP}_postCTS.enc
 }
 # Xem: timing_postCTS/postCTS.summary.gz va timing_postCTS_hold/postCTS_hold.summary.gz
 # - WNS setup va hold phai >= 0, DRV "Real" = 0 truoc khi route.
+# soc_check_timing o tren doc dung hai bang do va in ket luan ra console +
+# logs/soc_flow.log.  Con WARNING thi van route duoc, nhung phai theo doi: neu
+# postRoute khong don het thi KHOI 14/15 se DUNG han.
 
 
 # ==========================================================================
 # KHOI 13 - Route tin hieu   (M2-M7; M8/M9 danh cho ring)
 # ==========================================================================
 soc_block "KHOI 13: routeDesign" {
+    # setAnalysisMode da chuyen len KHOI 0 (init_common.tcl) tu 2026-09-20:
+    # dat o day thi CTS va ca optDesign -postCTS -hold chay trong "MMMC
+    # Non-OCV" (doc innovus.log run 2026-09-20: moi header truoc dong
+    # 'setAnalysisMode' o line 97801 deu ghi Non-OCV).  Khong co CPPR thi
+    # duong hold bi tinh du phan clock dung chung -> hold-fix postCTS chen
+    # thua buffer, va con so postCTS khong so sanh duoc voi postRoute.
+    # Goi lai o day de paste rieng KHOI 13 van dung che do (lenh nay idempotent).
     setAnalysisMode -analysisType onChipVariation -cppr both
     setDelayCalMode -SIAware true -equivalent_waveform_model propagation
     setExtractRCMode -engine postRoute -effortLevel medium
@@ -596,6 +623,15 @@ soc_block "KHOI 14: optDesign postRoute" {
         -setupTargetSlack 0.020 -holdTargetSlack 0.020
     # Xoa doan day treo sau route (09_PnR tr.25) truoc khi toi uu
     deleteDanglingNet
+    # Run 2026-09-20: "dangling nets: 5878 / Removed: 8" - 5870 net con lai
+    # KHONG xoa duoc va log khong noi vi sao.  Chinh Innovus goi y lenh duoi
+    # day; ghi ra file de con doc lai (phan lon la net cua macro/PG, nhung
+    # phai nhin moi biet chac).
+    if {[catch {reportDanglingNet -outfile ./reports/dangling_net.rpt} dn_err]} {
+        puts "WARNING: reportDanglingNet: $dn_err"
+    } else {
+        puts "Net treo con lai: xem reports/dangling_net.rpt"
+    }
     optDesign -postRoute -setup -hold -prefix postRoute
     # Hold clock gate roi cg_* (xem KHOI 12) tinh lai voi RC that; buffer moi
     # chua co day -> ecoRoute
@@ -612,6 +648,10 @@ soc_block "KHOI 14: optDesign postRoute" {
     }
     timeDesign -postRoute       -outDir ./reports/timing_postRoute      -prefix postRoute
     timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold -prefix postRoute
+    # Tu day tro di khong con buoc toi uu nao nua (KHOI 15 chi them filler +
+    # metal fill) -> con vi pham la DUNG, giong cach DRC dang duoc chan.
+    soc_check_timing ./reports/timing_postRoute      postRoute -drv
+    soc_check_timing ./reports/timing_postRoute_hold postRoute -hold
     saveDesign ./saved/${TOP}_postRoute.enc
 }
 
@@ -707,10 +747,17 @@ MINIMUMDENSITY trong tech LEF - chi doc phan $SOC_DENSITY_LAYERS."
     # (run 2026-09-17: verifyProcessAntenna -> ERROR IMPVPA-22).
     timeDesign -postRoute       -outDir ./reports/timing_final      -prefix final
     timeDesign -postRoute -hold -outDir ./reports/timing_final_hold -prefix final
+    # Bang cuoi cung cua ca run: phai sach thi moi duoc sang KHOI 16 (xuat GDS).
+    soc_check_timing ./reports/timing_final      final -drv
+    soc_check_timing ./reports/timing_final_hold final -hold
+    # Slew chan clk SRAM nam o cot "Total" (remark C) nen cong o tren khong
+    # bat; in rieng - day la cau hoi ma banner cuoi KHOI 15 van hoi bang tay.
+    soc_sram_clk_slew ./reports/timing_final final
     # Mac dinh report_power lay view setup dau tien (view_ss 0.63 V); cong suat
     # danh nghia tinh o TT.  Chua co VCD: activity mac dinh 0.2.
     set_power_analysis_mode -analysis_view view_tt
     report_power -outfile ./reports/power_final.rpt
+    soc_power_note ./reports/power_final.rpt
     report_area > ./reports/area_final.rpt
     reportGateCount -limit 0 -level 2 -outfile ./reports/gateCount.rpt
     summaryReport -noHtml -outfile ./reports/summary_final.rpt
@@ -722,7 +769,11 @@ MINIMUMDENSITY trong tech LEF - chi doc phan $SOC_DENSITY_LAYERS."
   verify_rpt/welltap_final.rpt       : 0 cell xa tap qua ${SOC_TAP_RULE} um
   verify_rpt/density_final.rpt       : chi layer $SOC_DENSITY_LAYERS co luat
   reports/timing_final*/             : WNS setup/hold >= 0, DRV Real = 0
-  reports/timing_final/final.tran.gz : con bao nhieu chan clk SRAM > 46 ps?
+                                       (soc_check_timing o tren da chan)
+  reports/timing_final/final.tran.gz : slew chan clk SRAM - soc_sram_clk_slew
+                                       da in so o tren, khong phai mo file
+  reports/power_final.rpt            : can tren (chua co VCD), xem ghi chu
+  logs/soc_flow.log                  : toan bo ket luan cua cac cong kiem tra
 Tiep theo: KHOI 16 (xuat file)"
 }
 

@@ -33,6 +33,9 @@ GEOMETRY_KEYWORDS = ("RECT", "POLYGON", "PATH", "ORIGIN", "SIZE", "FOREIGN")
 
 NUMBER_RE = re.compile(r"-?\d+\.\d+|-?\d+")
 
+# USE dung cua chan nguon, theo TEN chan.  ASAP7 chi co hai net nguon.
+DEFAULT_PG_USE = {"VDD": "POWER", "VSS": "GROUND"}
+
 # PHAI tinh bang Decimal, khong duoc dung float.  LEF 128x4x20 co 3903 toa do
 # lech DUNG nua grid (2 nm tren grid 4 nm), va trong so thuc 0.086/0.004 ra
 # 21.499999999999996 chu khong phai 21.5 -> floor(q+0.5) lam tron XUONG cho
@@ -72,8 +75,10 @@ def fmt(value, decimals):
     return "0" if text.lstrip("-").strip("0.") == "" and text.startswith("-") else text
 
 
-def process(lines, grid, mode, site_map, drop_site):
+def process(lines, grid, mode, site_map, drop_site, pg_use=None):
     out = []
+    pg_use = dict(pg_use or {})
+    pg_use_fixed = []              # (macro, pin, cu, moi)
     # so chu so thap phan toi thieu de ghi duoc mot boi so cua grid
     grid_decimals = max(0, -grid.normalize().as_tuple().exponent)
     stats = collections.Counter()
@@ -112,6 +117,29 @@ def process(lines, grid, mode, site_map, drop_site):
                 continue
             stats["site_kept"] += 1
             stats["site_kept_name_" + name] += 1
+            out.append(raw)
+            continue
+
+        # --- USE cua chan nguon ---------------------------------------------
+        # Run Innovus 2026-09-20 bao:
+        #   IMPVL-536  The PG type of pin 'VSS' of cell 'srambank_128x4x20_6t122'
+        #              doesn't match between the timing library and LEF file.
+        #              In the timing library the pin is defined as 'ground' pin,
+        #              but in LEF file it is defined as 'power' pin.
+        # LEF khai chan VSS la USE POWER.  globalNetConnect noi theo TEN chan
+        # nen mach van dung, nhung moi cong cu doc LEF (sroute/addRing khi loc
+        # theo USE, LVS, ban abstract write_lef_abstract xuat ra) deu thay VSS
+        # la chan nguon duong.  Day la loi trong LEF, sua o day.
+        if upper.startswith("USE ") and context.startswith("PIN "):
+            pin_name = context.split(None, 1)[1]
+            want = pg_use.get(pin_name.upper())
+            have = stripped.split()[1].rstrip(";").strip().upper()
+            if want and have != want:
+                stats["pg_use_fixed"] += 1
+                pg_use_fixed.append((macro, pin_name, have, want))
+                indent = line[:len(line) - len(line.lstrip())]
+                out.append("%sUSE %s ;\n" % (indent, want))
+                continue
             out.append(raw)
             continue
 
@@ -199,7 +227,7 @@ def process(lines, grid, mode, site_map, drop_site):
             if "." in t and not is_on_grid(Decimal(t), grid):
                 stats["still_offgrid"] += 1
 
-    return out, stats, residuals, offenders, resized
+    return out, stats, residuals, offenders, resized, pg_use_fixed
 
 
 def main(argv=None):
@@ -224,6 +252,14 @@ def main(argv=None):
                          " doi moi SITE gap duoc sang NEW")
     ap.add_argument("--drop-site", action="store_true",
                     help="bo han dong SITE (MACRO CLASS BLOCK khong can SITE)")
+    ap.add_argument("--pg-use", action="append", default=[], metavar="TEN=LOAI",
+                    help="ep USE cua chan nguon, vd 'VSS=GROUND'.  Mac dinh da"
+                         " co %s (Innovus 2026-09-20 bao IMPVL-536: LEF khai"
+                         " VSS la USE POWER)."
+                         % ", ".join("%s=%s" % kv
+                                     for kv in sorted(DEFAULT_PG_USE.items())))
+    ap.add_argument("--no-pg-use", action="store_true",
+                    help="khong dung dong USE nao (ke ca mac dinh)")
     ap.add_argument("--show-resize", type=int, default=0, metavar="N",
                     help="in nguyen van N dong RECT bi doi kich thuoc, ca ban goc"
                          " lan ban da sua - de xem tan mat chuyen gi xay ra")
@@ -248,8 +284,15 @@ def main(argv=None):
                 site_map.setdefault(s.split()[1].rstrip(";").strip(),
                                     fallback_site)
 
-    out, stats, residuals, offenders, resized = process(
-        lines, args.grid, args.mode, site_map, args.drop_site)
+    pg_use = {} if args.no_pg_use else dict(DEFAULT_PG_USE)
+    for item in args.pg_use:
+        if "=" not in item:
+            ap.error("--pg-use can dang TEN=POWER|GROUND, vd VSS=GROUND")
+        name, kind = item.split("=", 1)
+        pg_use[name.strip().upper()] = kind.strip().upper()
+
+    out, stats, residuals, offenders, resized, pg_use_fixed = process(
+        lines, args.grid, args.mode, site_map, args.drop_site, pg_use)
 
     print("file        : %s" % args.lef)
     print("grid        : %s um   mode: %s" % (args.grid, args.mode))
@@ -261,6 +304,12 @@ def main(argv=None):
         print("SITE doi ten: %d   %s" % (stats["site_renamed"], site_map))
     if stats["site_removed"]:
         print("SITE bo     : %d" % stats["site_removed"])
+    if pg_use_fixed:
+        print("USE chan nguon sai: %d" % len(pg_use_fixed))
+        for macro_name, pin_name, have, want in pg_use_fixed:
+            print("  %-28s PIN %-6s USE %s -> USE %s"
+                  % (macro_name, pin_name, have, want))
+        print("  -> day la IMPVL-536 cua Innovus (LEF khong khop .lib).")
     if stats["site_kept"]:
         names = sorted(k[len("site_kept_name_"):] for k in stats
                        if k.startswith("site_kept_name_"))
@@ -352,10 +401,12 @@ def main(argv=None):
         print("Tiep theo: tro SRAM_TAG_LEF (hoac SRAM_LEF) trong")
         print("  genus/rtl/flow/project_config.tcl sang file nay,")
         print("  hoac dat bien moi truong ASAP7_SRAM_TAG_LEF_FILE, roi chay lai KHOI 0.")
-    elif stats["coords_offgrid"] or stats["site_kept"]:
+    elif stats["coords_offgrid"] or stats["site_kept"] or pg_use_fixed:
         print("\n(chi kiem tra - them --fix -o <file> de ghi ban da sua)")
 
-    return 1 if (stats["coords_offgrid"] and not args.fix) else 0
+    if args.fix:
+        return 0
+    return 1 if (stats["coords_offgrid"] or pg_use_fixed) else 0
 
 
 if __name__ == "__main__":

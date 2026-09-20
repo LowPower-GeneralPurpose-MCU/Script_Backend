@@ -3,6 +3,69 @@
 ## Can soc_fp_config.tcl va project_config.tcl da source.
 ############################################################
 
+# ==========================================================================
+# GHI LAI MOI DONG SCRIPT IN RA          (them 2026-09-20)
+# ==========================================================================
+# innovus.log cua run 2026-09-20 (9 MB) KHONG chua mot dong nao do cac proc
+# trong file nay in ra.  Da do thu: "Derate SRAM", "Tap cell", "Filler cell",
+# "Analysis views", "Notch", "soc_fix_cg_hold", so vi pham DRC da waive, trang
+# thai density signoff -> dem duoc 0 lan xuat hien.
+#
+# Ly do: cac khoi duoc paste vao console GUI.  Innovus ghi vao innovus.log cac
+# dong <CMD> va message cua chinh no, con 'puts' cua Tcl di thang ra widget
+# console va bien mat khi dong session.
+#
+# Hau qua that: TOAN BO ket luan cua cac cong kiem tra (soc_verify_drc dem bao
+# nhieu vi pham da waive, soc_density_report ket luan PENDING hay FAIL,
+# soc_fix_cg_hold con latch nao chua sua) khong con dau vet nao de doc lai.
+# Do dung la thu can nhat khi doc log sau mot run 14 tieng.
+#
+# Boc lai 'puts': van in ra console y nhu cu, dong thoi noi them vao
+# logs/soc_flow.log kem dau thoi gian.
+#   - Chi boc MOT lan: soc_block goi soc_reload moi khoi nen file nay duoc
+#     source lai rat nhieu lan, boc chong len nhau se lam log nhan doi.
+#   - Chi tee dang 'puts <text>' (mot doi so).  'puts $fh <text>' cua chinh cac
+#     proc o duoi la ghi BAO CAO ra file rieng, phai di nguyen ven.
+#   - Moi thao tac file boc trong catch: log hong khong duoc phep lam hong run.
+# ==========================================================================
+set ::SOC_FLOW_LOG ./logs/soc_flow.log
+
+proc soc_flow_log_write {text} {
+    if {![info exists ::SOC_FLOW_LOG] || $::SOC_FLOW_LOG eq ""} {
+        return
+    }
+    catch {
+        file mkdir [file dirname $::SOC_FLOW_LOG]
+        set fh [open $::SOC_FLOW_LOG a]
+        # 2 doi so -> khong tee lai -> khong de quy
+        puts -nonewline $fh $text
+        close $fh
+    }
+}
+
+# 'info commands' chu KHONG phai 'info procs': puts la lenh dung san cua Tcl,
+# sau rename thi ::soc_puts_orig van khong phai proc nen 'info procs' luon tra
+# ve rong -> lan source thu hai se rename de len va Tcl bao
+# "can't rename to ::soc_puts_orig: command already exists" (thu 2026-09-20).
+if {[llength [info commands ::soc_puts_orig]] == 0} {
+    rename ::puts ::soc_puts_orig
+    proc ::puts {args} {
+        set argv $args
+        set eol "\n"
+        if {[lindex $argv 0] eq "-nonewline"} {
+            set eol ""
+            set argv [lrange $argv 1 end]
+        }
+        if {[llength $argv] == 1} {
+            soc_flow_log_write "[clock format [clock seconds] -format {%m-%d %H:%M:%S}]\
+ [lindex $argv 0]$eol"
+        }
+        eval [linsert $args 0 ::soc_puts_orig]
+    }
+    ::soc_puts_orig "soc_flow_log: moi dong script in ra duoc ghi them vao\
+ $::SOC_FLOW_LOG"
+}
+
 proc soc_banner {text} {
     puts "============================================================"
     puts $text
@@ -1086,6 +1149,243 @@ proc soc_connectivity_problems {report} {
     return $n
 }
 
+# ==========================================================================
+# CONG KIEM TRA TIMING SAU timeDesign        (them 2026-09-20)
+# ==========================================================================
+# Run 2026-09-20 di qua ca hai cho nay ma khong ai biet:
+#   reports/timing_postCTS_hold/postCTS_hold.summary.gz
+#       Hold  WNS -0.001 | TNS -0.011 | Violating Paths 108
+#   reports/timing_postCTS/postCTS.summary.gz
+#       DRV   max_tran Real 5 (78)
+# Chu thich ngay duoi KHOI 12 viet "WNS setup va hold phai >= 0, DRV 'Real' = 0
+# truoc khi route" - nhung khong co mot dong lenh nao kiem dieu do, nen KHOI 13
+# van route binh thuong.  Lan nay postRoute sua het, ket qua cuoi sach; do la
+# may man chu khong phai ket qua cua mot cong kiem tra.
+#
+# Doc thang bang tom tat cua timeDesign (file .summary hoac .summary.gz) - dung
+# bang ma nguoi doc nhin - roi lay cot 'all'.
+# ==========================================================================
+
+# Doc file text, tu giai nen neu chi co ban .gz.  Tra ve "" neu khong co file.
+proc soc_read_text_or_gz {file} {
+    foreach candidate [list $file ${file}.gz] {
+        if {![file isfile $candidate]} {
+            continue
+        }
+        set fh [open $candidate rb]
+        set raw [read $fh]
+        close $fh
+        if {[string match *.gz $candidate]} {
+            # Tcl 8.6 cua Innovus co lenh zlib; neu ban Tcl khong co thi goi gzip.
+            if {[catch {set raw [zlib gunzip $raw]}]} {
+                if {[catch {set raw [exec gzip -dc $candidate]} err]} {
+                    error "khong giai nen duoc $candidate: $err"
+                }
+            }
+        }
+        return $raw
+    }
+    return ""
+}
+
+# Doc mot bang tom tat timeDesign.  Tra ve dict:
+#   wns / tns / viol : cot 'all' cua bang "Setup mode" (hoac "Hold mode")
+#   drv_<ten>        : so net trong cot Real cua bang DRV (chi co o ban setup)
+# Thieu gia tri nao thi khoa do khong co trong dict.
+proc soc_timing_summary {dir prefix {mode setup}} {
+    set file [file join $dir $prefix]
+    if {$mode eq "hold"} {
+        append file _hold.summary
+    } else {
+        append file .summary
+    }
+    set text [soc_read_text_or_gz $file]
+    if {$text eq ""} {
+        return {}
+    }
+    set out [dict create file $file]
+    foreach line [split $text \n] {
+        # |           WNS (ns):|  0.339  |  1.077  | ...   -> cot dau tien = 'all'
+        if {[regexp {^\|\s*(WNS|TNS)\s*\(ns\)\s*:\|([^|]*)\|} $line -> key val]} {
+            set val [string trim $val]
+            if {[string is double -strict $val]} {
+                dict set out [string tolower $key] $val
+            }
+        } elseif {[regexp {^\|\s*Violating Paths\s*:\|([^|]*)\|} $line -> val]} {
+            set val [string trim $val]
+            if {[string is integer -strict $val]} {
+                dict set out viol $val
+            }
+        } elseif {[regexp {^\|\s*(max_\w+)\s*\|\s*([0-9]+)\s*\(} $line -> drv n]} {
+            # Cot dau cua bang DRV la "Real" - cot "Total" gom ca vi pham tren
+            # clock net do CCOpt tao ra (423 max_fanout, 6 max_tran o run
+            # 2026-09-20), khong phai loi cua design.
+            dict set out drv_$drv $n
+        }
+    }
+    return $out
+}
+
+# Kiem tra va bao cao.  Tra ve so van de tim duoc.
+#   -hold        doc bang Hold mode
+#   -drv         bat cot Real cua bang DRV phai = 0
+#   -wns <ns>    nguong WNS (mac dinh 0.0)
+#   -warn-only   chi in WARNING, khong error (dung cho checkpoint giua chung)
+proc soc_check_timing {dir prefix args} {
+    set mode      setup
+    set check_drv 0
+    set min_wns   0.0
+    set warn_only 0
+    for {set i 0} {$i < [llength $args]} {incr i} {
+        switch -- [lindex $args $i] {
+            -hold      { set mode hold }
+            -drv       { set check_drv 1 }
+            -warn-only { set warn_only 1 }
+            -wns       { incr i ; set min_wns [lindex $args $i] }
+            default    { error "soc_check_timing: tuy chon la '[lindex $args $i]'" }
+        }
+    }
+    set sum [soc_timing_summary $dir $prefix $mode]
+    if {[llength $sum] == 0} {
+        puts "WARNING: soc_check_timing: khong doc duoc bang tom tat cua\
+ $prefix ($mode) trong $dir - KHONG ket luan duoc timing"
+        return -1
+    }
+    set label [string toupper $mode]
+    set bad {}
+    if {[dict exists $sum wns] && [dict get $sum wns] < $min_wns} {
+        lappend bad "WNS [dict get $sum wns] ns < $min_wns"
+    }
+    if {[dict exists $sum tns] && [dict get $sum tns] < 0} {
+        lappend bad "TNS [dict get $sum tns] ns"
+    }
+    if {[dict exists $sum viol] && [dict get $sum viol] > 0} {
+        lappend bad "[dict get $sum viol] duong vi pham"
+    }
+    if {$check_drv} {
+        foreach key [lsort [dict keys $sum drv_*]] {
+            if {[dict get $sum $key] > 0} {
+                lappend bad "[string range $key 4 end] Real [dict get $sum $key] net"
+            }
+        }
+    }
+    set head [format "%s %s: WNS %s TNS %s, %s duong vi pham" \
+        $prefix $label \
+        [expr {[dict exists $sum wns] ? [dict get $sum wns] : "?"}] \
+        [expr {[dict exists $sum tns] ? [dict get $sum tns] : "?"}] \
+        [expr {[dict exists $sum viol] ? [dict get $sum viol] : "?"}]]
+    if {[llength $bad] == 0} {
+        puts "  $head -> DAT"
+        return 0
+    }
+    set msg "$head\n  -> [join $bad {; }]\n  Xem [dict get $sum file](.gz)"
+    if {$warn_only} {
+        puts "WARNING: $msg"
+        puts "WARNING: buoc nay chua phai buoc cuoi nen flow chay tiep, nhung\
+ con so tren phai ve 0 truoc khi ket luan."
+        return [llength $bad]
+    }
+    error $msg
+}
+
+
+# Doc lai report_power va noi ro con so do co nghia gi.
+#
+# Run 2026-09-20 ra 92.05 mW, trong do Macro internal 82.21 mW = 89.5%.  Khong
+# co VCD nen report_power dung activity mac dinh 0.2 cho MOI chan - tuc coi ca
+# 84 macro SRAM deu duoc truy cap 0.2 lan moi chu ky, cung luc.  RTL chi bat
+# mot bank moi lan doc/ghi, nen day KHONG phai cong suat cua thiet ke; no la
+# can tren cua truong hop khong bao gio xay ra.
+# In thang ra thay vi de nguoi doc tu suy - de mot so nhu the trong bao cao ma
+# khong ghi chu la cho de hieu sai nhat cua ca flow.
+proc soc_power_note {report} {
+    if {![file isfile $report]} {
+        puts "WARNING: chua co $report"
+        return -1
+    }
+    set fp [open $report r]
+    set text [read $fp]
+    close $fp
+    set total 0.0
+    set macro 0.0
+    set has_vcd 0
+    foreach line [split $text \n] {
+        if {[regexp {^Total Power:\s+([0-9.eE+-]+)} $line -> v]} {
+            set total $v
+        } elseif {[regexp {^Macro\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)\s+([0-9.eE+-]+)} \
+                $line -> mi msw ml mt]} {
+            set macro $mt
+        } elseif {[regexp {Activity File:\s*(\S+)} $line -> af] && $af ne "N.A."} {
+            set has_vcd 1
+        }
+    }
+    if {$total <= 0} {
+        puts "WARNING: khong doc duoc Total Power tu $report"
+        return -1
+    }
+    puts [format "  Cong suat: %.2f mW, trong do macro SRAM %.2f mW (%.1f%%)" \
+        $total $macro [expr {100.0 * $macro / $total}]]
+    if {!$has_vcd} {
+        puts "  -> CHUA co VCD/TCF: activity mac dinh 0.2 cho moi chan, tuc coi"
+        puts "     ca 84 macro SRAM deu bi truy cap cung luc.  RTL chi bat mot"
+        puts "     bank moi lan doc/ghi -> con so tren la CAN TREN, khong phai"
+        puts "     cong suat cua thiet ke.  Muon so that: chay mo phong lay VCD"
+        puts "     roi read_activity_file truoc report_power."
+    }
+    return 0
+}
+
+# Slew tai chan cua macro SRAM.
+#
+# timeDesign danh dau cac vi pham nay remark 'C' (clock net) nen chung nam o
+# cot "Total" chu khong phai "Real": soc_check_timing -drv KHONG bat duoc.
+# Nhung Liberty cua srambank gioi han max_transition 46 ps o chan clk, va run
+# 2026-09-20 con 6 chan 48-69 ps (xau nhat u_dcache/DATA_RAM_G_DATA_WAY[1]
+# -23 ps).  Do la dieu kien ghi/doc RAM dung, khong phai con so trang tri ->
+# in ra man hinh + logs/soc_flow.log thay vi de nam trong file .gz.
+#
+# Tra ve so chan vuot gioi han.
+proc soc_sram_clk_slew {dir prefix} {
+    set text [soc_read_text_or_gz [file join $dir ${prefix}.tran]]
+    if {$text eq ""} {
+        puts "WARNING: khong doc duoc ${prefix}.tran trong $dir"
+        return -1
+    }
+    set rows {}
+    foreach line [split $text \n] {
+        if {![string match *srambank_* $line]} {
+            continue
+        }
+        set w [regexp -inline -all {\S+} $line]
+        if {[llength $w] < 4} {
+            continue
+        }
+        lassign $w pin lim tran
+        if {![regexp {^([0-9.]+)r/([0-9.]+)f$} $lim  -> lr lf]} { continue }
+        if {![regexp {^([0-9.]+)r/([0-9.]+)f$} $tran -> tr tf]} { continue }
+        lappend rows [list $pin [expr {max($lr, $lf)}] [expr {max($tr, $tf)}]]
+    }
+    if {[llength $rows] == 0} {
+        puts "  Slew chan macro SRAM: khong chan nao vuot gioi han Liberty"
+        return 0
+    }
+    set rows [lsort -real -decreasing -index 2 $rows]
+    puts [format "  Slew chan macro SRAM: %d chan vuot gioi han Liberty" \
+        [llength $rows]]
+    foreach r [lrange $rows 0 9] {
+        lassign $r p l t
+        puts [format "    %6.1f ps (gioi han %.1f ps)  %s" \
+            [expr {$t * 1000.0}] [expr {$l * 1000.0}] $p]
+    }
+    if {[llength $rows] > 10} {
+        puts "    ... con [expr {[llength $rows] - 10}] chan nua"
+    }
+    puts "  -> CCOpt khong ha them duoc neu chan clk con xa row dat buffer;\
+ xem SOC_WALL_CHANNEL trong soc_fp_config.tcl."
+    return [llength $rows]
+}
+
+
 # Hold o clock gate roi cg_* (RTL utils/clock_gate.v = latch en_latch_reg + AND2).
 # CCOpt coi en_latch_reg la generator (cay CLK_SYS_generator_for_CLK_*), net
 # latch Q -> AND.B thanh clock net nam trong "4063 clock nets excluded from IPO"
@@ -1128,17 +1428,33 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
         if {[llength $todo] == 0} {
             break
         }
-        setEcoMode -batchMode true -refinePlace false -updateTiming false
+        # -honorFixedNetWire false: day cua net clock do CCOpt route deu bi danh
+        # dau FIXED, ecoAddRepeater tu choi voi IMPOPT-6228.  Chinh dong message
+        # cua Innovus chi ra cach xu ly la tat co nay.
+        #
+        # Ban cu bat loi roi 'editDelete -net' ca net rui chen lai.  Run
+        # 2026-09-20 cho thay day la cach xau:
+        #   - 12 dong **ERROR trong innovus.log (dung 12 error cua ca run)
+        #   - o KHOI 14 (SAU route) no xoa TOAN BO day cua 12 net clock da
+        #     duoc CCOpt route va toi uu, roi de ecoRoute ve lai - ecoRoute
+        #     khong biet gi ve skew/slew target cua CCOpt
+        #   - keo theo 48 canh bao IMPOPT-3706 "RC data ... has been disabled"
+        # Tat co FIXED thi ecoAddRepeater chi sua doan day quanh cho chen, phan
+        # con lai cua cay clock giu nguyen.
+        setEcoMode -batchMode true -refinePlace false -updateTiming false \
+            -honorFixedNetWire false
         set failed [catch {
             foreach item $todo {
                 lassign $item latch pin slack
                 puts "  $latch slack $slack -> buffer thu [expr {[dict get $nbuf $latch] + 1}] truoc $pin"
-                if {[catch {ecoAddRepeater -term [list $pin] -cell $cell}]} {
-                    # Truoc routeDesign net nay do CCOpt route va danh dau FIXED:
-                    # IMPOPT-6228 (run 2026-09-17 15:00 dung KHOI 12).  Xoa day,
-                    # routeDesign route lai.
+                if {[catch {ecoAddRepeater -term [list $pin] -cell $cell} eco_err]} {
+                    # Van hong (ban Innovus khong nhan -honorFixedNetWire, hoac
+                    # day bi khoa vi ly do khac): quay ve cach cu - xoa day roi
+                    # chen.  routeDesign / ecoRoute se route lai net do.
                     set net [get_object_name [get_nets -of_objects [get_pins $pin]]]
-                    puts "  xoa day FIXED cua $net roi chen lai"
+                    puts "  ecoAddRepeater hong ($eco_err)"
+                    puts "  -> xoa day FIXED cua $net roi chen lai (day clock nay\
+ se do ecoRoute ve lai, KHONG phai CCOpt)"
                     editDelete -net $net
                     ecoAddRepeater -term [list $pin] -cell $cell
                 }
@@ -1146,7 +1462,8 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
                 incr added
             }
         } msg opts]
-        setEcoMode -batchMode false -refinePlace true -updateTiming true
+        setEcoMode -batchMode false -refinePlace true -updateTiming true \
+            -honorFixedNetWire true
         if {$failed} {
             return -options $opts $msg
         }
