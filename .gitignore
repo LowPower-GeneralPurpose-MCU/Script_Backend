@@ -41,6 +41,20 @@
 **/outputs/*.sdf.gz
 **/outputs/*.spef.gz
 
+# Netlist gate-level do Genus/Innovus ghi ra.  Push bi tu choi lan 2 ngay
+# 2026-09-20: outputs/top_soc_pnr_pg.v nang 168.95 MB (GH001).  Cac file khac
+# cung dang to dan: top_soc_pnr.v 24 MB, top_soc_syn.v 20 MB,
+# riscv_pipeline_pnr_pg.v 13.5 MB.  Tat ca tao lai duoc - Genus: write_hdl;
+# Innovus: KHOI 16 (ban _pg co ca chan nguon).
+# LUU Y: them dong nay KHONG go duoc file da lo commit.  Phai git rm --cached
+# roi viet lai commit chua no, neu khong push van bi chan.
+**/outputs/*.v
+**/outputs/*.v.gz
+
+# Bao cao DRC sau metal fill: 279675 vi pham = 35.7 MB, va phinh lai sau moi
+# run.  Tao lai bang KHOI 15.  Cac report khac trong verify_rpt van duoc giu.
+**/verify_rpt/drc_fill.rpt
+
 # Thu muc tam cua Innovus (rcdb, mmmc copy): 268 MB / 95 file sau mot lan route
 **/innovus_temp_*/
 **/*.rcdb.d/
