@@ -1,8 +1,17 @@
-# soc_density_report doc lai ./verify_rpt/density_final.rpt
-Mat do - layer doc: M5
+# soc_density_report doc lai ./verify_rpt/density_all.rpt
+Mat do - layer doc: M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
+  M1   duoi nguong: 0 tren macro SRAM + 0 trong vung logic
+  M2   duoi nguong: 0 tren macro SRAM + 118 trong vung logic (thap nhat 20.44%)
+  M3   duoi nguong: 297 tren macro SRAM + 2 trong vung logic (thap nhat 24.60%)
+  M4   duoi nguong: 39 tren macro SRAM + 1 trong vung logic (thap nhat 35.06%)
   M5   duoi nguong: 1120 tren macro SRAM + 0 trong vung logic
-  vung logic: dat nguong o moi window
-  1120 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+  M6   duoi nguong: 0 tren macro SRAM + 8 trong vung logic (thap nhat 23.75%)
+  M7   duoi nguong: 0 tren macro SRAM + 0 trong vung logic
+  M8   duoi nguong: 0 tren macro SRAM + 0 trong vung logic
+  M9   duoi nguong: 0 tren macro SRAM + 0 trong vung logic
+  Pad  duoi nguong: 0 tren macro SRAM + 0 trong vung logic
+WARNING: 129 window vung logic duoi nguong - metal fill chua du, xem lai SOC_FILL_LAYERS (nhat la -maxWidth / -decrement)
+  1456 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
 
 # Vi sao nhom tren macro khong ket luan duoc o day
 #   - Density la luat CMP tren WAFER, phai signoff tren GDS da merge
@@ -22,4 +31,4 @@ Mat do - layer doc: M5
 #     Do la dac tinh cua floorplan nhieu macro, khong phai loi cua fill.
 # Dieu kien DONG: co GDS that cua SRAM -> merge -> chay density tren do.
 # Chi so co nghia o buoc nay la vung logic (phan minh dat duoc fill):
-#   0 window duoi nguong -> phai bang 0 thi flow moi di tiep.
+#   129 window duoi nguong -> phai bang 0 thi flow moi di tiep.
