@@ -26,6 +26,39 @@ Thứ tự power theo slide: ring lõi làm trước; block ring và stripe ch�
 
 Mỗi khối (trừ khối 0) được bọc trong `soc_block`: một lệnh lỗi thì cả khối dừng, không chạy tiếp các lệnh phía sau. Cuối file có hướng dẫn chạy lại từ giữa trong session mới, bằng `loadFPlan FloorPlan.fp` hoặc `FloorPlan_withMacro.fp`.
 
+### Một session Innovus = một lần chạy
+
+**Không bao giờ paste lại KHỐI 0 (hoặc KHỐI 1) vào session đang giữ thiết kế cũ.**
+`init_design` khi đã có thiết kế trong RAM chỉ in ra
+`**ERROR: (IMPSYT-7329): ... This command is skipped.` — đó là message của Innovus,
+không phải lỗi Tcl, nên script vẫn chạy tiếp và đổ cả flow lên thiết kế cũ.
+Đúng lỗi này đã làm hai lần chạy ngày 2026-09-21 ra 407 181 và 500 000 vi phạm DRC:
+diện tích std cell bị đếm cả buffer CTS + filler của lần trước
+(300 143 → 1 325 493 → 3 675 242 um²) nên lõi cao 1412.6 → 2459.2 → 6162.5 um, rồi
+`floorPlan -s` vẽ lại row/track ngay dưới dây đã route.
+
+Từ 2026-09-21 có ba lớp chặn:
+
+- `tcl/init_common.tcl` dừng ngay nếu `dbGet top.name` đã có thiết kế, và kiểm lại
+  sau `init_design` xem còn cell `CTS_`/`FILLER`/`WELLTAP`, stripe, rail hay cell đã đặt không.
+- `soc_require_fresh_design` chặn KHỐI 1 nếu thiết kế đã P&R.
+- KHỐI 8 và KHỐI 10 nay **chặn** khi `drc_powerplan.rpt` / `drc_place.rpt` còn vi phạm
+  (trước đây chỉ in ra con số rồi chạy tiếp).
+
+Chạy lại đúng cách:
+
+- Từ đầu: `exit` Innovus, mở lại, paste KHỐI 0.
+- Từ giữa: `restoreDesign ./saved/<checkpoint>.enc.dat top_soc`, rồi
+  `source ./tcl/manual/soc_fp_config.tcl` và `source ./tcl/manual/soc_fp_procs.tcl`,
+  rồi paste đúng khối cần chạy (**không** paste KHỐI 0/1).
+
+### Cờ "flow đang hỏng"
+
+Một khối lỗi sẽ đặt cờ `SOC_FLOW_BROKEN`; mọi khối sau đó từ chối chạy cho đến khi gõ
+`soc_flow_ok`. Trước đây `soc_block` chỉ dừng được khối đang chạy: ngày 2026-09-21
+KHỐI 10 lỗi 1826 VDD/VSS nhưng KHỐI 11–15 vẫn được paste tiếp và chạy thêm 3 tiếng
+trên thiết kế đã hỏng.
+
 **Cách 2 – chạy một mạch** (không chỉnh tay, dùng vị trí mầm): `innovus -files tcl/innovus.tcl`
 
 Các biến môi trường điều khiển flow:

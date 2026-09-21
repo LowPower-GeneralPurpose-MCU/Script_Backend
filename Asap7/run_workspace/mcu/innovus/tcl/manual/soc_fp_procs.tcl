@@ -91,12 +91,96 @@ proc soc_reload {} {
     }
 }
 
+# Doc db an toan: tra ve "" khi khong khop, khong in message, khong nem loi.
+# dbGet tra "0x0" khi khong co doi tuong nao khop - viet thanh "" cho de kiem.
+proc soc_db_match {args} {
+    set out ""
+    catch {set out [eval [linsert $args 0 dbGet -e]]}
+    if {$out eq "0x0" || $out eq "0"} {
+        set out ""
+    }
+    return $out
+}
+
+# ==========================================================================
+# CO "FLOW DANG HONG"                                  (them 2026-09-21)
+# ==========================================================================
+# soc_block chi dung duoc KHOI DANG chay; no khong ngan duoc lan paste ke
+# tiep.  Run 2026-09-21 03:42: KHOI 10 dung vi 1826 loi VDD/VSS (dong error
+# nam o innovus.log line 149795) nhung KHOI 11, 12, 13, 14, 15 van duoc paste
+# tiep va chay them 3 tieng tren mot thiet ke da hong - ket qua la 407181 vi
+# pham DRC o drc_final.
+# Mot khoi loi -> dat co; moi khoi sau do tu choi chay cho den khi nguoi chay
+# goi 'soc_flow_ok' (tuc la da doc loi va da xu ly).
+# Khoi tao PHAI co dieu kien: soc_reload source lai file nay o dau moi khoi,
+# 'set ::SOC_FLOW_BROKEN ""' vo dieu kien la tu xoa co ngay truoc khi kiem tra.
+if {![info exists ::SOC_FLOW_BROKEN]} {
+    set ::SOC_FLOW_BROKEN ""
+}
+
+proc soc_flow_ok {} {
+    if {$::SOC_FLOW_BROKEN eq ""} {
+        puts "soc_flow_ok: khong co co loi nao dang bat"
+        return
+    }
+    puts "soc_flow_ok: go co loi \"$::SOC_FLOW_BROKEN\" - paste khoi tiep theo duoc"
+    set ::SOC_FLOW_BROKEN ""
+}
+
 proc soc_block {title body} {
     # File loi cu phap thi dung o day, TRUOC khi chay lenh Innovus nao.
     soc_reload
+    if {$::SOC_FLOW_BROKEN ne ""} {
+        error "KHOI TRUOC DA LOI nen khong chay \"$title\".
+  Loi do: $::SOC_FLOW_BROKEN
+  Sua nguyen nhan (hoac restoreDesign checkpoint gan nhat) roi go co: soc_flow_ok"
+    }
     soc_banner ">>> $title"
-    uplevel #0 $body
+    set soc_rc [catch {uplevel #0 $body} soc_err soc_opts]
+    if {$soc_rc} {
+        set ::SOC_FLOW_BROKEN "$title: $soc_err"
+        puts ">>> LOI: $title: $soc_err"
+        return -options $soc_opts $soc_err
+    }
     puts ">>> XONG: $title"
+}
+
+# ==========================================================================
+# CHAN CHAY FLOORPLAN DE LEN MOT THIET KE DA P&R       (them 2026-09-21)
+# ==========================================================================
+# floorPlan -s ve lai die/core/row/track.  Tren netlist vua nap thi vo hai;
+# tren thiet ke da place + CTS + route thi Innovus GIU nguyen cell va day roi
+# ep chung vao he row moi - innovus.log run 2026-09-21 06:27 in hang chuc
+# nghin dong "Flip instance ... to match row orient".  Day cu thanh lech
+# track, SRAM duoc dat lai cho khac trong khi day cu van nam do, addStripe
+# chong len luoi nguon cu:
+#     loi cao       1412.64 -> 2459.16 -> 6162.48 um
+#     drc_powerplan       0 -> 357126  -> 500000 (cham tran -limit)
+#     drc_final           0 -> 407181
+# init_common.tcl da chan tu KHOI 0; day la chan thu hai cho truong hop chi
+# paste rieng KHOI 1 vao mot session dang co thiet ke.
+proc soc_require_fresh_design {what} {
+    set found {}
+    foreach {label query} [list \
+            "cell CTS"     {-p top.insts.name CTS_*} \
+            "filler"       {-p top.insts.name FILLER*} \
+            "tap cell"     {-p top.insts.name WELLTAP*} \
+            "stripe nguon" {top.nets.sWires.shape stripe} \
+            "rail M1"      {top.nets.sWires.shape followpin} \
+            "cell da dat"  {-p top.insts.pStatus placed}] {
+        set hit [eval [linsert $query 0 soc_db_match]]
+        if {$hit ne ""} {
+            lappend found "[llength $hit] $label"
+        }
+    }
+    if {[llength $found] == 0} {
+        return
+    }
+    error "$what tren mot thiet ke DA P&R ([join $found {, }]).
+  Lam vay la ve lai row/track duoi day da route -> OFFGRID + SHORT hang tram
+  nghin (run 2026-09-21: drc_powerplan tu 0 len 500000).
+  Thoat Innovus roi mo lai de chay tu dau, hoac
+  restoreDesign ./saved/<checkpoint>.enc.dat top_soc dung buoc muon chay tiep."
 }
 
 proc soc_snap_up {value grid} {
@@ -212,11 +296,31 @@ proc soc_group_dims {group} {
 }
 
 # Dien tich std cell (khong tinh macro) theo instance cap 1.
+# Cell do chinh P&R sinh ra, KHONG thuoc netlist tong hop.  Neu de chung vao
+# tong dien tich thi soc_layout tinh ra mot loi to hon thuc te: run 2026-09-21
+# 03:42 ra 1325493.2 um^2 va 06:27 ra 3675242.4 um^2 trong khi netlist chi co
+# 300143.6 um^2 (logs/soc_flow.log) - phan chenh la buffer CTS, filler va
+# buffer cua optDesign con lai tu run truoc.
+set ::SOC_PNR_INST_PREFIXES {CTS_* FILLER* WELLTAP* postCTS_* postRoute_*}
+
 proc soc_std_area_by_top_inst {} {
     set ptrs [dbGet -p2 top.insts.cell.baseClass core]
     set areas [dict create]
+    set skipped 0
     # libCell khong co thuoc tinh 'area' (IMPDBTCL-204) -> size_x * size_y
     foreach inst [dbGet $ptrs.name] sx [dbGet $ptrs.cell.size_x] sy [dbGet $ptrs.cell.size_y] {
+        set leaf [lindex [split $inst /] end]
+        set is_pnr 0
+        foreach pat $::SOC_PNR_INST_PREFIXES {
+            if {[string match $pat $leaf]} {
+                set is_pnr 1
+                break
+            }
+        }
+        if {$is_pnr} {
+            incr skipped
+            continue
+        }
         set area [expr {double($sx) * double($sy)}]
         set top [lindex [split $inst /] 0]
         if {$top eq $inst} {
@@ -226,6 +330,10 @@ proc soc_std_area_by_top_inst {} {
             dict set areas $top 0.0
         }
         dict set areas $top [expr {[dict get $areas $top] + double($area)}]
+    }
+    if {$skipped > 0} {
+        puts "WARNING: soc_std_area_by_top_inst bo qua $skipped cell do P&R\
+ tao ($::SOC_PNR_INST_PREFIXES) - thiet ke trong RAM KHONG phai netlist vua nap."
     }
     return $areas
 }
