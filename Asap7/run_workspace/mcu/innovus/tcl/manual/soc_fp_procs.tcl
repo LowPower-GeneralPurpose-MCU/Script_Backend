@@ -1759,6 +1759,12 @@ proc soc_drv_report {dir prefix kinds {detail 1}} {
 # soc_fp_config.tcl).  Mot dong ecoChangeCell go cung ten trong script se chet
 # ngay lan chay ke tiep, nen no khong phai cach sua.
 #
+# LUOT SUA PHAI GIONG HET luot chinh cua KHOI 14 - '-setup -hold -drv' roi
+# soc_fix_cg_hold - chu khong phai '-drv' mot minh.  Ban dau viet '-drv' thoi
+# vi nghi chi can dong vao DRV; run 2026-09-22 00:31 cho thay sai: DRV ve 0
+# that, nhung luot do lam hong mot duong hold reg2cgate va khong con buoc nao
+# sua no, nen KHOI 14 van chet - chi la chet o cong khac.
+#
 # KHONG BAO GIO LAM RUN XAU DI: moi buoc nam trong catch: hong thi in WARNING
 # roi tra ve, de soc_check_timing -drv o cuoi KHOI 14 chan y nhu bay gio.
 # Truong hop xau nhat bang dung hien trang (khoi dung, sua tay), khong te hon.
@@ -1802,12 +1808,23 @@ proc soc_fix_drv {dir prefix {max_round 2}} {
         } else {
             soc_drv_report $dir $prefix $kinds 0
         }
-        puts "soc_fix_drv: chay them optDesign -postRoute -drv (vong\
+        puts "soc_fix_drv: chay lai optDesign -postRoute\
+ -setup -hold -drv + soc_fix_cg_hold (vong\
  [expr {$round + 1}]/$max_round) cho [join $kinds {, }]"
         if {[catch {
-            optDesign -postRoute -drv -prefix ${prefix}_drv[expr {$round + 1}]
+            optDesign -postRoute -setup -hold -drv \
+                -prefix ${prefix}_drv[expr {$round + 1}]
+            # BAT BUOC sau moi luot optDesign, KHONG duoc bo:
+            # hold cua nhom reg2cgate nam NGOAI tam voi cua optDesign -hold
+            # (net clock bi loai khoi IPO - chinh la ly do soc_fix_cg_hold ton
+            # tai).  Run 2026-09-22 00:31 dung dung o day: ban dau cua proc nay
+            # chi goi 'optDesign -postRoute -drv' roi ecoRoute, va luot do day
+            # cg_cpu/en_latch_reg tu +0.023 (soc_fix_cg_hold vua keo len luc
+            # 00:23) xuong -0.005 - KHOI 14 sach DRV nhung chet o cong hold.
+            soc_fix_cg_hold 0.020
             # Cell moi/doi kich thuoc thi chua co day -> ecoRoute, roi don DRC
-            # ma chinh no vua sinh ra.  Giong het doan sau soc_fix_cg_hold.
+            # ma chinh no vua sinh ra.  Giong het doan sau soc_fix_cg_hold o
+            # KHOI 14.
             ecoRoute
             ecoRoute -fix_drc
         } err]} {
