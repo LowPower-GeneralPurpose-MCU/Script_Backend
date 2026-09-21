@@ -1353,9 +1353,9 @@ set ::SOC_DRV_REPORT_SUFFIX {
     max_length  length
 }
 
-# Doc bao cao DRV cua timeDesign, tra ve {{net slack} ...} cua nhung vi pham
-# THAT (remark R), xep tu xau nhat.  Remark C la chan clock do CCOpt tao ra -
-# chinh bao cao ghi "may not be fixable" - nen khong dem o day.
+# Doc bao cao DRV cua timeDesign, tra ve {{net slack pin cell/port} ...} cua
+# nhung vi pham THAT (remark R), xep tu xau nhat.  Remark C la chan clock do
+# CCOpt tao ra - chinh bao cao ghi "may not be fixable" - nen khong dem o day.
 #
 # Vi sao can: run 2026-09-21 12:40 KHOI 14 dung voi dong
 #     postRoute SETUP: WNS 0.342 TNS 0.0, 0 duong vi pham
@@ -1397,13 +1397,19 @@ proc soc_drv_violators {dir prefix kind} {
                 set slack [expr {min(double($sr), double($sf))}]
             }
         }
-        if {![dict exists $worst $net] || $slack < [dict get $worst $net]} {
-            dict set worst $net $slack
+        # Giu them ten chan va cell/port.  Doc bao cao xong la co ngay dong
+        # ecoChangeCell de dan (soc_drv_report in ra), khong phai zcat file
+        # .tran.gz roi do bang tay nhu run 2026-09-21 18:09.
+        if {![dict exists $worst $net] ||
+            $slack < [lindex [dict get $worst $net] 0]} {
+            dict set worst $net [list $slack [lindex $f 0] [lindex $f end-1]]
         }
     }
+    # Moi phan tu: {net slack pin cell/port}.  Hai truong dau GIU NGUYEN vi tri
+    # cu nen soc_check_timing (lindex 0 / lindex 1) khong phai sua theo.
     set out {}
-    dict for {n sl} $worst {
-        lappend out [list $n $sl]
+    dict for {n info} $worst {
+        lappend out [linsert $info 0 $n]
     }
     return [lsort -real -index 1 $out]
 }
@@ -1687,6 +1693,136 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
         }
     }
     return $added
+}
+
+# In ra AI dang vi pham DRV, kem dong lenh va tay neu muon sua tung net.
+#
+# soc_drv_violators tra ve ca ten chan va cell/port nen o day suy nguoc duoc
+# ten instance (cat phan sau dau '/' cuoi cung).  Truoc 2026-09-21 bao cao chi
+# co so luong: 18:09 KHOI 14 dung voi "max_tran Real 1 net" va phai zcat
+# reports/timing_postRoute/postRoute.tran.gz bang tay moi biet la net nao.
+# detail 0 = chi so luong, 1 = liet ke net, 2 = liet ke kem dong lenh va tay.
+# Vong lap goi 1 o lan phat hien dau va 2 o lan bo cuoc; cac vong giua chi can
+# 0, neu khong log KHOI 14 lap lai y nguyen mot khoi ba lan lien.
+proc soc_drv_report {dir prefix kinds {detail 1}} {
+    set total 0
+    foreach kind $kinds {
+        set who [soc_drv_violators $dir $prefix $kind]
+        incr total [llength $who]
+        puts "  $kind: [llength $who] net vi pham that (remark R)"
+        if {$detail < 1} {
+            continue
+        }
+        foreach item [lrange $who 0 4] {
+            lassign $item net slack pin cellport
+            puts [format "    %-44s %+.3f ns" $net $slack]
+            if {$pin eq ""} {
+                continue
+            }
+            puts "      chan $pin ($cellport)"
+            # KHONG dung 'file dirname': ten chan la duong dan cua Innovus chu
+            # khong phai cua he dieu hanh.  Cat thu cong cho chac.
+            set cut [string last / $pin]
+            if {$detail >= 2 && $cut > 0} {
+                puts "      va tay: ecoChangeCell -inst [string range $pin 0 [expr {$cut - 1}]]\
+ -cell <ban drive lon hon>  ;# roi ecoRoute"
+            }
+        }
+        if {[llength $who] > 5} {
+            puts "    ... con [expr {[llength $who] - 5}] net"
+        }
+    }
+    return $total
+}
+
+# Vong tu sua DRV that con lai sau route - cung khuon voi soc_fix_cg_hold:
+# doc bao cao -> sua -> lap -> de cong kiem tra o cuoi khoi ket luan.
+#
+# VI SAO CAN.  KHOI 14 chay optDesign -postRoute -setup -hold -drv MOT lan,
+# roi soc_fix_cg_hold + ecoRoute con chen them buffer va ve lai day.  So DRV ma
+# timeDesign do SAU do la so chua tung duoc toi uu, va khong con luot nao nua.
+# Run 2026-09-21 18:09 khoi dung o dung cho do:
+#     max_tran Real 1 net: u_apb_cordic_state[0] (-0.001 ns)
+#
+# VI SAO CHI GOI LAI optDesign, KHONG DOI CELL.  Hom do da go tay
+#     ecoChangeCell -inst FE_PHC26642_u_apb_cordic_state_0 -cell HB4xp67...
+# roi paste lai ca KHOI 14 va het loi.  Nhung netlist xuat o KHOI 16 cho thay
+# lenh do KHONG phai thu da sua: khong co instance nao ten FE_PHC26642_*
+# cordic (FE_PHC26642_valid_arr_474_0 thi co, va van la HB1xp67), con net
+# u_apb_cordic_state[0] gio chi con DUNG 1 chan tai la
+# FE_PHC20086_u_apb_cordic_state_0 - VAN la HB2xp67, khong doi.  Thu that su
+# sua duoc la LUOT optDesign -postRoute thu hai do paste lai khoi mang lai.
+# Nen vong nay chi lam dung dieu do, khong doan cell nao thay cell nao.
+#
+# Them nua: ten instance kieu FE_PHC26642_* do Innovus sinh theo tung run, lan
+# sau chay lai se khac - y het bai hoc cua SOC_DRC_WAIVE_NETS (xem
+# soc_fp_config.tcl).  Mot dong ecoChangeCell go cung ten trong script se chet
+# ngay lan chay ke tiep, nen no khong phai cach sua.
+#
+# KHONG BAO GIO LAM RUN XAU DI: moi buoc nam trong catch: hong thi in WARNING
+# roi tra ve, de soc_check_timing -drv o cuoi KHOI 14 chan y nhu bay gio.
+# Truong hop xau nhat bang dung hien trang (khoi dung, sua tay), khong te hon.
+#
+# LUU Y phien song: proc nay chi vao bo nho khi source soc_fp_procs.tcl (KHOI
+# 0).  Paste KHOI 14 vao mot phien Innovus mo tu truoc ma chua re-source thi
+# bao "invalid command name soc_fix_drv".
+proc soc_fix_drv {dir prefix {max_round 2}} {
+    set t0 [clock seconds]
+    for {set round 0} {1} {incr round} {
+        set sum [soc_timing_summary $dir $prefix setup]
+        if {[llength $sum] == 0} {
+            puts "WARNING: soc_fix_drv: khong doc duoc bang tom tat cua $prefix\
+ trong $dir - bo qua, de soc_check_timing ket luan"
+            return -1
+        }
+        set kinds {}
+        foreach key [lsort [dict keys $sum drv_*]] {
+            if {[dict get $sum $key] > 0} {
+                lappend kinds [string range $key 4 end]
+            }
+        }
+        if {[llength $kinds] == 0} {
+            if {$round > 0} {
+                puts "soc_fix_drv: het DRV that sau $round vong\
+ ([expr {[clock seconds] - $t0}] s)"
+            }
+            return 0
+        }
+        if {$round >= $max_round} {
+            puts "WARNING: soc_fix_drv: van con DRV that sau $max_round\
+ vong toi uu - KHONG sua them:"
+            set left [soc_drv_report $dir $prefix $kinds 2]
+            puts "WARNING: soc_check_timing -drv o cuoi khoi se dung flow.\
+  Sua theo dong 'va tay' o tren roi paste lai KHOI 14."
+            return $left
+        }
+        if {$round == 0} {
+            puts "soc_fix_drv: optDesign/ecoRoute cua khoi con de lai DRV that:"
+            soc_drv_report $dir $prefix $kinds 1
+        } else {
+            soc_drv_report $dir $prefix $kinds 0
+        }
+        puts "soc_fix_drv: chay them optDesign -postRoute -drv (vong\
+ [expr {$round + 1}]/$max_round) cho [join $kinds {, }]"
+        if {[catch {
+            optDesign -postRoute -drv -prefix ${prefix}_drv[expr {$round + 1}]
+            # Cell moi/doi kich thuoc thi chua co day -> ecoRoute, roi don DRC
+            # ma chinh no vua sinh ra.  Giong het doan sau soc_fix_cg_hold.
+            ecoRoute
+            ecoRoute -fix_drc
+        } err]} {
+            puts "WARNING: soc_fix_drv: optDesign/ecoRoute hong ($err) - giu\
+ nguyen thiet ke, de soc_check_timing ket luan"
+            return -1
+        }
+        # Do lai: soc_check_timing o cuoi khoi doc DUNG file nay, nen bang tom
+        # tat bat buoc phai ta trang thai sau cung.
+        if {[catch {timeDesign -postRoute -outDir $dir -prefix $prefix} err]} {
+            puts "WARNING: soc_fix_drv: timeDesign hong ($err) - bao cao trong\
+ $dir gio la cua trang thai CU, dung tin no"
+            return -1
+        }
+    }
 }
 
 # Layer cua tung chan trong file LEF macro: dict {ten_chan {layer ...}}.
@@ -2105,6 +2241,8 @@ proc soc_fill_report {report {outfile ./verify_rpt/fill_summary.rpt}} {
 # cong nay doc thang con so do, nen KHOI 15 bao sach ma KHOI 16 van chan
 # (run 2026-09-19 18:14: drc_final.rpt "Total Violations : 1" = dung cai
 # OFFGRID M4 cua u_itcm/u_mem da nam trong SOC_DRC_WAIVE_NETS).
+# Tu 2026-09-21 danh sach waive de RONG nen hai con so bang nhau; doan loc van
+# giu vi day la cong cuoi cung truoc GDS.
 # Phai dem lai tung dong theo DUNG cach soc_verify_drc dang loc -> doan parse
 # duoi day lap lai soc_verify_drc (dong ~1331): SUA MOT BEN THI SUA CA HAI.
 # Hai kiem tra cu van giu: file phai ton tai, va report phai co dong ket luan

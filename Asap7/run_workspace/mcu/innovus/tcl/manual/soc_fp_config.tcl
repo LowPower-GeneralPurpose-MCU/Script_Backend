@@ -242,24 +242,39 @@ set SOC_DENSITY_REPORT_LAYERS {M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad}
 # khong tinh vao so vi pham lam dung flow.  soc_verify_drc in ra so bo qua moi
 # lan chay nen khong bao gio im lang.
 #
-# u_itcm/u_mem/FE_OFN19657_n_271: 1 OFFGRID M4, bounds
-# (1520.116 333.212) (1528.128 333.308), doan router chay tren cao do chan
-# wd[26] cua u_itcm/u_mem/G_SRAM_BANK[1].u_sram.  Ly do waive:
-#   1. Ca 4 toa do chia het MANUFACTURINGGRID 0.004 -> khong vi pham luat
-#      foundry nao; deck calibreDRC.rul cua ASAP7 khong co luat off-track.
-#      Day la luat routing-grid rieng cua Innovus.
-#   2. 78/78 chan signal M4 cua srambank_256x4x32 lech track M4 o MOI vi tri
-#      dat macro (5 gia tri mod 0.192 khac nhau) -> khong sua duoc bang
-#      floorplan.  Xem ghi chu day du o KHOI 13 trong innovus.tcl.
-#   3. ecoRoute -fix_drc va setNanoRouteMode -drouteOnGridOnly wire deu da thu
-#      va deu khong go duoc (run 2026-09-18 22:00 va 2026-09-19 03:20).
-# Ten net do Genus sinh: chay lai synthesis thi ten doi, waiver het khop va
-# flow error tro lai - fail-safe, khong im lang bo qua loi moi.
-set SOC_DRC_WAIVE_NETS {u_itcm/u_mem/FE_OFN19657_n_271}
+# DANH SACH NAY DANG RONG - KHONG WAIVE NET NAO (2026-09-21).
+#
+# Ban truoc ghi {u_itcm/u_mem/FE_OFN19657_n_271}, mot OFFGRID M4 o chan SRAM
+# cua run 2026-09-18.  Go di vi hai le:
+#
+#   1. KHONG CHE DUNG THU GI NUA.  Run 2026-09-21 co 4 OFFGRID M4
+#      (verify_rpt/drc_route.rpt): FE_OFN19666_n_276, FE_OFN19664_n_275,
+#      FE_OFN34100_n, FE_OFN32560_n - khong ten nao trung ten da waive.  Ghi
+#      chu cu da luong truoc dieu nay ("ten net do Genus sinh: chay lai
+#      synthesis thi ten doi") va coi do la fail-safe.  Dung mot nua: waiver
+#      het khop thi khong im lang bo qua loi moi THAT, nhung no cung khong con
+#      la tai lieu dung ve design, va neu Genus tinh co sinh lai dung ten cu
+#      cho mot net khac thi no se nuot mot vi pham khong ai xet.  Waiver ghi
+#      cung ten instance/net do cong cu sinh ra chi song duoc mot run.
+#
+#   2. KHONG CAN NUA.  4 OFFGRID tren chi xuat hien o drc_route.rpt (ngay sau
+#      routeDesign, cong nay khong chan flow).  ecoRoute -fix_drc o KHOI 14 go
+#      sach: drc_postRoute.rpt, drc_final.rpt va drc_fill.rpt cua run
+#      2026-09-21 deu ghi "No DRC violations were found".  Ket luan cu
+#      ("ecoRoute -fix_drc khong go duoc", run 2026-09-18 22:00) da bi run nay
+#      bac bo - xem ghi chu chan M4 SRAM o KHOI 13 trong innovus.tcl.
+#
+# De rong thi MOI vi pham deu chan flow.  Do la mac dinh dung.  Muon waive lai
+# thi doc ten net THAT tu verify_rpt/drc_*.rpt cua chinh run do va ghi kem ly
+# do - dung chep lai ten cu o day.
+set SOC_DRC_WAIVE_NETS {}
 
 # Loai vi pham duoc waive.  Chi OFFGRID - ca hai ca duoi deu la "hinh nam dung
 # tren MANUFACTURINGGRID 0.004 nhung khong roi track cua Innovus".  SHORT,
 # SPACING, EndOfLine... van chan flow nhu cu, ke ca tren chinh nhung net nay.
+# Bien nay chi THU HEP waiver chu khong tao ra waiver: SOC_DRC_WAIVE_NETS dang
+# rong nen hien tai no khong co tac dung gi.  Giu lai de lan sau can waive thi
+# co san co che.
 set SOC_DRC_WAIVE_TYPES {OFFGRID}
 
 # BO WAIVE CHO METAL FILL - 2026-09-20.
@@ -276,8 +291,9 @@ set SOC_DRC_WAIVE_TYPES {OFFGRID}
 # con dinh M5.AUX.2.  Neu van con OFFGRID tren _FILLS_RESERVED thi la fill VAN
 # sai - phai dung flow lai chu khong waive.
 #
-# Ten bien giu nguyen de innovus.tcl (:664, :734) khong phai sua.  Gio no chi
-# con dung mot net SRAM trong SOC_DRC_WAIVE_NETS.
+# Ten bien giu nguyen de innovus.tcl khong phai sua.  Tu 2026-09-21
+# SOC_DRC_WAIVE_NETS rong nen bien nay cung rong: khong waive gi ca o
+# drc_fill.rpt lan drc_final.rpt.
 set SOC_DRC_WAIVE_FILL_NETS $SOC_DRC_WAIVE_NETS
 
 # ---- GDS (09_PnR tr.28) ---------------------------------------------------

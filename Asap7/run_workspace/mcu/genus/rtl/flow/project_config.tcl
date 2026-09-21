@@ -196,13 +196,35 @@ set SRAM_CACHE_COLS     2
 set SRAM_TAG_ROWS       4
 set SRAM_TAG_COLS       1
 
+# LEF SRAM goc cua ASAP7 co toa do lech manufacturing grid 0.004 va khong khai
+# SITE.  LEF la nguon DUY NHAT cua hinh SRAM khi streamOut -outputMacros (ASAP7
+# khong ship GDS cho SRAM), nen hinh sai di thang vao GDS -
+# soc_require_sram_lef_clean o KHOI 16 chan lai.  scripts/fix_sram_lef.py --fix
+# xuat ban da sua ra "<ten>.fixed.lef".
+#
+# Vi sao doi mac dinh (2026-09-21): run 18:45 dung o KHOI 16 voi
+#   "srambank_128x4x20_6t122.lef.4x.lef: 3907 toa do lech manufacturing grid
+#    0.004, SITE khong dinh nghia (coreSite)"
+# sau khi da chay sach het KHOI 0-15 (~1.5 tieng).  Lan chay sach 02:34 cung
+# ngay dung ban .fixed.lef - khac biet duy nhat la shell hom do co export
+# ASAP7_SRAM_TAG_LEF_FILE.  Mot bien moi truong phai nho set moi dung thi som
+# muon cung quen; de ban da sua lam MAC DINH khi no ton tai.
+# Bien moi truong van thang, de con ep ve ban goc khi can so sanh.
+proc mcu_prefer_fixed_lef {path} {
+    set fixed "[file rootname $path].fixed[file extension $path]"
+    if {[file isfile $fixed]} {
+        return $fixed
+    }
+    return $path
+}
+
 set SRAM_LIB [mcu_resolve_path SRAM_LIB \
     {ASAP7_SRAM_LIB_FILE ASAP7_SRAM_LIB} \
     [file join $SRAM_ROOT generated LIB "$SRAM_MASTER.lib"]]
 set SRAM_LEF [mcu_resolve_path SRAM_LEF \
     {ASAP7_SRAM_LEF_FILE ASAP7_SRAM_LEF} \
-    [file join $SRAM_ROOT generated LEF 4xLEF \
-        "$SRAM_MASTER.lef.4x.lef"]]
+    [mcu_prefer_fixed_lef [file join $SRAM_ROOT generated LEF 4xLEF \
+        "$SRAM_MASTER.lef.4x.lef"]]]
 set SRAM_GDS [mcu_resolve_path SRAM_GDS \
     {ASAP7_SRAM_GDS_FILE ASAP7_SRAM_GDS} \
     [file join $SRAM_ROOT gds srambank_32b.gds]]
@@ -215,8 +237,8 @@ set SRAM_TAG_LIB [mcu_resolve_path SRAM_TAG_LIB \
     [file join $SRAM_ROOT generated LIB "$SRAM_TAG_MASTER.lib"]]
 set SRAM_TAG_LEF [mcu_resolve_path SRAM_TAG_LEF \
     {ASAP7_SRAM_TAG_LEF_FILE} \
-    [file join $SRAM_ROOT generated LEF 4xLEF \
-        "$SRAM_TAG_MASTER.lef.4x.lef"]]
+    [mcu_prefer_fixed_lef [file join $SRAM_ROOT generated LEF 4xLEF \
+        "$SRAM_TAG_MASTER.lef.4x.lef"]]]
 set SRAM_TAG_SIM_VERILOG [mcu_resolve_path SRAM_TAG_SIM_VERILOG \
     {ASAP7_SRAM_TAG_VERILOG_FILE} \
     [file join $SRAM_ROOT generated verilog "$SRAM_TAG_MASTER.v"]]
