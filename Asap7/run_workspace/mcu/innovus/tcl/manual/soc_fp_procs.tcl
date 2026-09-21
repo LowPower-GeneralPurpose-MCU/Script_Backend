@@ -1345,6 +1345,69 @@ proc soc_timing_summary {dir prefix {mode setup}} {
     return $out
 }
 
+# Ten file bao cao DRV ma timeDesign xuat ra, theo tung loai vi pham.
+set ::SOC_DRV_REPORT_SUFFIX {
+    max_tran    tran
+    max_cap     cap
+    max_fanout  fanout
+    max_length  length
+}
+
+# Doc bao cao DRV cua timeDesign, tra ve {{net slack} ...} cua nhung vi pham
+# THAT (remark R), xep tu xau nhat.  Remark C la chan clock do CCOpt tao ra -
+# chinh bao cao ghi "may not be fixable" - nen khong dem o day.
+#
+# Vi sao can: run 2026-09-21 12:40 KHOI 14 dung voi dong
+#     postRoute SETUP: WNS 0.342 TNS 0.0, 0 duong vi pham
+#       -> max_tran Real 1 net
+# Doc nguyen van thi thay mau thuan (setup sach ma van loi) va khong biet net
+# nao.  Phai zcat postRoute.tran.gz bang tay moi ra u_apb_cordic_state[0],
+# lech dung 1 ps (0.151 so voi 0.150 ns), driver HB2xp67 keo 12 chan.
+proc soc_drv_violators {dir prefix kind} {
+    if {![dict exists $::SOC_DRV_REPORT_SUFFIX $kind]} {
+        return {}
+    }
+    set file [file join $dir "$prefix.[dict get $::SOC_DRV_REPORT_SUFFIX $kind]"]
+    set text [soc_read_text_or_gz $file]
+    if {$text eq ""} {
+        return {}
+    }
+    set net   ""
+    set worst [dict create]
+    foreach line [split $text \n] {
+        if {[string index $line 0] eq "#" || [string trim $line] eq ""} {
+            continue
+        }
+        # Dong ten net bat dau o cot 0; dong chan thi thut vao.
+        if {[string index $line 0] ni [list " " "\t"]} {
+            set net [string trim $line]
+            continue
+        }
+        if {$net eq ""} {
+            continue
+        }
+        set f [regexp -all -inline {\S+} $line]
+        if {[lindex $f end] ne "R"} {
+            continue
+        }
+        # Cot slack la truong <so>r/<so>f CUOI CUNG (truoc no la MaxTran, Tran).
+        set slack 0.0
+        foreach tok $f {
+            if {[regexp {^(-?[0-9.]+)r/(-?[0-9.]+)f$} $tok -> sr sf]} {
+                set slack [expr {min(double($sr), double($sf))}]
+            }
+        }
+        if {![dict exists $worst $net] || $slack < [dict get $worst $net]} {
+            dict set worst $net $slack
+        }
+    }
+    set out {}
+    dict for {n sl} $worst {
+        lappend out [list $n $sl]
+    }
+    return [lsort -real -index 1 $out]
+}
+
 # Kiem tra va bao cao.  Tra ve so van de tim duoc.
 #   -hold        doc bang Hold mode
 #   -drv         bat cot Real cua bang DRV phai = 0
@@ -1381,11 +1444,29 @@ proc soc_check_timing {dir prefix args} {
     if {[dict exists $sum viol] && [dict get $sum viol] > 0} {
         lappend bad "[dict get $sum viol] duong vi pham"
     }
+    # DRV dem RIENG voi timing.  Run 2026-09-21 12:40: setup hoan toan sach
+    # (WNS +0.342, TNS 0.0, 0 duong) ma khoi van dung vi mot net max_tran -
+    # gop chung mot dong lam thong bao doc nhu tu mau thuan.
+    set bad_drv {}
     if {$check_drv} {
         foreach key [lsort [dict keys $sum drv_*]] {
-            if {[dict get $sum $key] > 0} {
-                lappend bad "[string range $key 4 end] Real [dict get $sum $key] net"
+            if {[dict get $sum $key] <= 0} {
+                continue
             }
+            set kind  [string range $key 4 end]
+            set who   [soc_drv_violators $dir $prefix $kind]
+            set names {}
+            foreach item [lrange $who 0 4] {
+                lappend names [format "%s (%+.3f ns)" [lindex $item 0] [lindex $item 1]]
+            }
+            set tail ""
+            if {[llength $names] > 0} {
+                set tail ": [join $names {, }]"
+                if {[llength $who] > 5} {
+                    append tail " ... con [expr {[llength $who] - 5}] net"
+                }
+            }
+            lappend bad_drv "$kind Real [dict get $sum $key] net$tail"
         }
     }
     set head [format "%s %s: WNS %s TNS %s, %s duong vi pham" \
@@ -1393,16 +1474,25 @@ proc soc_check_timing {dir prefix args} {
         [expr {[dict exists $sum wns] ? [dict get $sum wns] : "?"}] \
         [expr {[dict exists $sum tns] ? [dict get $sum tns] : "?"}] \
         [expr {[dict exists $sum viol] ? [dict get $sum viol] : "?"}]]
-    if {[llength $bad] == 0} {
+    if {[llength $bad] == 0 && [llength $bad_drv] == 0} {
         puts "  $head -> DAT"
         return 0
     }
-    set msg "$head\n  -> [join $bad {; }]\n  Xem [dict get $sum file](.gz)"
+    set msg $head
+    if {[llength $bad] == 0} {
+        append msg "\n  -> TIMING DAT"
+    } else {
+        append msg "\n  -> TIMING: [join $bad {; }]"
+    }
+    if {[llength $bad_drv] > 0} {
+        append msg "\n  -> DRV  : [join $bad_drv {; }]"
+    }
+    append msg "\n  Xem [dict get $sum file](.gz)"
     if {$warn_only} {
         puts "WARNING: $msg"
         puts "WARNING: buoc nay chua phai buoc cuoi nen flow chay tiep, nhung\
  con so tren phai ve 0 truoc khi ket luan."
-        return [llength $bad]
+        return [expr {[llength $bad] + [llength $bad_drv]}]
     }
     error $msg
 }
