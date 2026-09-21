@@ -440,7 +440,12 @@ soc_block "KHOI 9: placement" {
         set fp [open ./verify_rpt/reportUtil_place.rpt r]
         set rpt [read $fp]
         close $fp
-        if {[regexp {Density for the design\s*=\s*([0-9.]+)} $rpt -> soc_util]} {
+        # [0-9.]+ an ca DAU CHAM KET CAU o cuoi cau: reportUtil in ra
+        # "Density for the design = 0.239." nen bat duoc "0.239." va format
+        # %.3f nem loi - run 2026-09-21 17:28 mat luon canh bao mat do thap
+        # ("khong doc duoc mat do tu reportUtil_place.rpt: expected
+        # floating-point number but got 0.239.").  Khong lay dau cham cuoi.
+        if {[regexp {Density for the design\s*=\s*([0-9]*\.?[0-9]+)} $rpt -> soc_util]} {
             set soc_want $::MCU_TARGET_STD_UTIL
             puts [format "Mat do std cell dat duoc: %.3f (target MCU_TARGET_STD_UTIL %.3f)" \
                 $soc_util $soc_want]
@@ -633,8 +638,15 @@ soc_block "KHOI 13: routeDesign" {
     # 2026-09-18 22:00 dinh dung mot ca: net u_itcm/u_mem/FE_OFN19657_n_271,
     # day M4 8.012 um o y 333.26 vao chan wd[26] cua
     # u_itcm/u_mem/G_SRAM_BANK[1].u_sram (track gan nhat 333.132 / 333.324).
-    # ecoRoute -fix_drc khong go duoc: ca 3 lan verify (route, postRoute, final)
-    # deu con dung mot loi do.
+    #
+    # SUA LAI KET LUAN 2026-09-21.  Cho nay truoc ghi "ecoRoute -fix_drc khong
+    # go duoc: ca 3 lan verify (route, postRoute, final) deu con dung mot loi
+    # do".  Dung voi run 2026-09-18, KHONG con dung nua: run 2026-09-21
+    # drc_route.rpt co 4 OFFGRID M4 (FE_OFN19666_n_276, FE_OFN19664_n_275,
+    # FE_OFN34100_n, FE_OFN32560_n) nhung sau ecoRoute -fix_drc o KHOI 14 thi
+    # drc_postRoute / drc_final / drc_fill deu "No DRC violations were found".
+    # Vi the SOC_DRC_WAIVE_NETS da duoc de RONG (soc_fp_config.tcl): OFFGRID o
+    # buoc nay la trang thai trung gian, khong phai thu can waive.
     #
     # DA THU, KHONG AN THUA (run 2026-09-19 03:20): setNanoRouteMode
     # -drouteOnGridOnly wire dat ngay day.  Innovus 23.14 NHAN option (khong bao
@@ -668,7 +680,9 @@ soc_block "KHOI 13: routeDesign" {
 }
 # Xem: verify_rpt/drc_route.rpt va verify_rpt/connectivity_route.rpt.
 #   con DRC        -> ecoRoute -fix_drc o KHOI 14 roi verify_drc lai.
-#   con OFFGRID    -> khong tu het duoc, xem ghi chu chan M4 SRAM o tren.
+#   con OFFGRID    -> binh thuong o buoc nay (chan M4 SRAM lech track, xem ghi
+#                     chu o tren): ecoRoute -fix_drc o KHOI 14 go het.  Chi khi
+#                     drc_postRoute.rpt VAN con thi moi la loi that.
 #   dangling VDD/VSS tren M1 la muc info (IMPVFC-94), khong chan flow.
 
 
@@ -698,7 +712,23 @@ soc_block "KHOI 14: optDesign postRoute" {
     soc_fix_cg_hold 0.020
     ecoRoute
     ecoRoute -fix_drc
+    # DO TIMING TRUOC, VERIFY DRC SAU (doi thu tu 2026-09-21).  optDesign o
+    # tren chay TRUOC soc_fix_cg_hold/ecoRoute, nen so DRV trong bang tom tat
+    # duoi day la so CHUA TUNG duoc toi uu - va truoc day khong con luot nao
+    # de sua no.  Run 2026-09-21 18:09 dung dung o cho do:
+    #     max_tran Real 1 net: u_apb_cordic_state[0] (-0.001 ns)
+    # phai go tay roi paste lai ca khoi moi qua.
+    timeDesign -postRoute       -outDir ./reports/timing_postRoute      -prefix postRoute
+    # Vong tu sua DRV: con vi pham THAT thi chay them optDesign -postRoute -drv
+    # + ecoRoute roi do lai, toi da 2 vong (xem soc_fix_drv).  Sach san thi
+    # khong ton mot lenh nao.  Hong o bat cu buoc nao cung chi in WARNING: cong
+    # soc_check_timing -drv o cuoi khoi van chan y nhu cu, nen truong hop xau
+    # nhat bang dung hien trang chu khong te hon.
+    soc_fix_drv ./reports/timing_postRoute postRoute
+    timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold -prefix postRoute
     # optDesign/ecoRoute doi day va chen cell -> phai kiem tra lai DRC o day.
+    # PHAI nam SAU soc_fix_drv: no cung chay optDesign + ecoRoute, verify truoc
+    # no thi bao cao DRC khong con ta trang thai cuoi cung cua khoi.
     # Truoc 2026-09-18 khoi nay khong verify: DRC ke tiep la drc_final (sau metal
     # fill), va fill lech track da nhan chim bao cao do.  Day moi la so DRC that
     # cua design.
@@ -706,8 +736,6 @@ soc_block "KHOI 14: optDesign postRoute" {
     if {$soc_drc_postroute > 0} {
         error "Con $soc_drc_postroute vi pham DRC sau ecoRoute - xem verify_rpt/drc_postRoute.rpt truoc khi sang KHOI 15"
     }
-    timeDesign -postRoute       -outDir ./reports/timing_postRoute      -prefix postRoute
-    timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold -prefix postRoute
     # LUU TRUOC, CHAN SAU.  Cong o duoi co the dung khoi, va soc_block chet la
     # chet ca khoi - de saveDesign phia sau thi mat luon checkpoint cua chinh
     # trang thai vua mat 10 phut toi uu, phai chay lai tu top_soc_routed.
@@ -895,9 +923,9 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     }
     # streamOut day het hinh hien co vao GDS, ke ca metal fill lech track.  Run
     # 2026-09-18 vao KHOI 16 voi 100000 OFFGRID chua ai doc -> chan o day.
-    # Cung bo waiver voi KHOI 15 (soc_verify_drc): OFFGRID cua _FILLS_RESERVED
-    # va cua net SRAM trong SOC_DRC_WAIVE_NETS.  Moi loai khac - va moi net
-    # khac - van chan xuat GDS.
+    # Cung bo waiver voi KHOI 15 (soc_verify_drc).  Tu 2026-09-21 bo do RONG
+    # (SOC_DRC_WAIVE_NETS = {}) nen MOI vi pham deu chan xuat GDS.  Hai tham so
+    # van truyen vao de lan sau can waive thi chi sua soc_fp_config.tcl.
     soc_require_drc_clean -allow-nets $SOC_DRC_WAIVE_FILL_NETS \
         -allow-types $SOC_DRC_WAIVE_TYPES \
         ./verify_rpt/drc_final.rpt ./verify_rpt/drc_fill.rpt
