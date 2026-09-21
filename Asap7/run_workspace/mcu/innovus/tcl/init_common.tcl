@@ -21,7 +21,71 @@ set init_design_uniquify 1
 # (khong co SADP/LEF58); ASAP7 co RIGHTWAYONGRIDONLY + WIDTHTABLE nen via tu
 # sinh khong an toan nhu vay.  Muon thu lai thi bat MOT MINH no, khong bat cung
 # -trackOpt, de biet cai nao gay loi.
+
+# ------------------------------------------------------------------------
+# CHAN NAP DE LEN THIET KE DANG CO TRONG RAM          (them 2026-09-21)
+# ------------------------------------------------------------------------
+# Hai run 2026-09-21 03:42 va 06:27 mat 7 tieng vi dung mot loi nay: KHOI 0
+# duoc paste lai vao DUNG session Innovus cu (innovus.log chi co MOT banner
+# cho ca ba run).  init_design in ra
+#     **ERROR: (IMPSYT-7329): Cannot load design with init_design, after
+#     design is already in memory.  This command is skipped.
+# nhung do la message cua Innovus, KHONG phai loi Tcl, nen 'source' chay tiep
+# binh thuong va ca flow do len thiet ke da route xong cua run truoc:
+#   - soc_std_area_by_top_inst dem ca buffer CTS + filler cua run truoc:
+#       300143.6 -> 1325493.2 -> 3675242.4 um^2  (logs/soc_flow.log)
+#     -> loi cao 1412.64 -> 2459.16 -> 6162.48 um (<CMD> floorPlan trong log).
+#   - floorPlan -s ve lai row/track duoi day da route -> hang chuc nghin dong
+#     "Flip instance ... to match row orient", day cu thanh lech track:
+#     75839 OFFGRID.
+#   - SRAM duoc dat lai toa do moi trong khi day cu van nam do: 133135 SHORT,
+#     ke ca "Regular Wire ... & Blockage of Cell .../u_sram".
+#   - addStripe chong len luoi nguon cu: 78719 Cut Short, 13531 loi VDD/VSS
+#     (connectivity_powerplan.rpt day chan VDD cua CTS_ccl_*).
+#   Tong: drc_powerplan 0 -> 357126 -> 500000 (cham tran -limit),
+#         drc_final     0 -> 407181.
+# Innovus khong co lenh nao go thiet ke khoi RAM; cach duy nhat la thoat han
+# roi mo lai, hoac restoreDesign dung checkpoint muon chay tiep.
+set soc_design_in_mem ""
+catch {set soc_design_in_mem [dbGet -e top.name]}
+if {$soc_design_in_mem eq "0x0" || $soc_design_in_mem eq "0"} {
+    set soc_design_in_mem ""
+}
+if {$soc_design_in_mem ne ""} {
+    error "Da co thiet ke '$soc_design_in_mem' trong RAM.
+  init_design se bi BO QUA (IMPSYT-7329) va ca flow se chay de len thiet ke cu
+  - dung la cach hai run 2026-09-21 ra 407181 va 500000 vi pham DRC.
+  Chay lai tu dau      : thoat Innovus (exit), mo lai, roi paste KHOI 0.
+  Chay tiep giua chung : restoreDesign ./saved/<checkpoint>.enc.dat top_soc
+                         source ./tcl/manual/soc_fp_config.tcl
+                         source ./tcl/manual/soc_fp_procs.tcl
+                         roi paste dung KHOI can chay (KHONG paste KHOI 0/1)."
+}
+
 init_design
+
+# init_design co the bi bo qua ma khong nem loi Tcl (xem tren) -> kiem lai
+# bang vet ma chi P&R moi de lai: netlist vua nap thi moi cell deu unplaced,
+# khong co cell CTS_/FILLER/WELLTAP nao va khong co luoi nguon nao.
+set soc_stale {}
+foreach {soc_label soc_query} [list \
+        "cell CTS"     {-p top.insts.name CTS_*} \
+        "filler"       {-p top.insts.name FILLER*} \
+        "tap cell"     {-p top.insts.name WELLTAP*} \
+        "stripe nguon" {top.nets.sWires.shape stripe} \
+        "rail M1"      {top.nets.sWires.shape followpin} \
+        "cell da dat"  {-p top.insts.pStatus placed}] {
+    set soc_hit ""
+    catch {set soc_hit [eval [linsert $soc_query 0 dbGet -e]]}
+    if {$soc_hit ne "" && $soc_hit ne "0x0" && $soc_hit ne "0"} {
+        lappend soc_stale "[llength $soc_hit] $soc_label"
+    }
+}
+if {[llength $soc_stale] > 0} {
+    error "init_design da chay xong nhung trong RAM van con [join $soc_stale {, }].
+  Tuc la netlist KHONG duoc nap lai - dung chay tiep.  Thoat Innovus roi mo lai."
+}
+
 setDesignMode -process 7
 setDesignMode -bottomRoutingLayer 2 -topRoutingLayer 7
 

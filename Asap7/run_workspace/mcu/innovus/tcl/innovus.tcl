@@ -54,6 +54,9 @@ puts "Std cell: [format %.1f $SOC_STD_TOTAL] um^2 (glue top-level\
 # Khong chia vung (guide) cho module: SoC nho, de placer tu keo std cell lai
 # gan SRAM.  Loi = cho cho 4 cum SRAM + vung logic giua (MCU_TARGET_STD_UTIL).
 soc_block "KHOI 1: floorPlan" {
+    # floorPlan -s ve lai row/track.  Tren thiet ke da place/route thi no pha
+    # nat hinh hoc (run 2026-09-21: drc_powerplan 0 -> 500000).
+    soc_require_fresh_design "KHOI 1 (floorPlan)"
     set SOC_LAYOUT [soc_layout $SOC_STD_TOTAL]
     floorPlan -s [dict get $SOC_LAYOUT core_w] [dict get $SOC_LAYOUT core_h] \
         $SOC_CORE_MARGIN $SOC_CORE_MARGIN $SOC_CORE_MARGIN $SOC_CORE_MARGIN
@@ -314,10 +317,21 @@ soc_block "KHOI 8: verify + saveDesign" {
     verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet \
         -error 100000 -warning 1000 \
         -report ./verify_rpt/connectivity_powerplan.rpt
-    soc_verify_drc ./verify_rpt/drc_powerplan.rpt -limit 500000
+    set soc_drc_pg [soc_verify_drc ./verify_rpt/drc_powerplan.rpt -limit 500000]
     checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_powerplan.rpt
     report_clocks > ./reports/clocks_floorplan.rpt
     report_analysis_views > ./reports/analysis_views.rpt
+    # CONG: 0 vi pham.  Truoc 2026-09-21 cho nay chi IN ra con so roi di tiep,
+    # dung nhu banner ngay duoi viet "phai 0 vi pham PG" nhung khong ai chan.
+    # Run 03:42 co 357126 vi pham NGAY O DAY va van sang KHOI 9-13, chay them
+    # 3 tieng; run 06:27 cham tran 500000.  Luoi nguon la hinh hoc thuan: con
+    # vi pham la floorplan/stripe sai, khong co gi o sau don duoc.
+    # Chan TRUOC saveDesign de khong ghi de checkpoint powerplan tot bang mot
+    # cai hong; bao cao o tren van duoc viet ra de con doc nguyen nhan.
+    if {$soc_drc_pg > 0} {
+        error "$soc_drc_pg vi pham DRC o luoi nguon - xem verify_rpt/drc_powerplan.rpt.
+  KHONG chay KHOI 9: placement, CTS va route deu se chay tren hinh hoc sai."
+    }
     saveDesign ./saved/${TOP}_powerplan.enc
 
     soc_banner "FLOORPLAN + POWER GRID XONG - saved/${TOP}_powerplan.enc
@@ -470,7 +484,7 @@ soc_block "KHOI 10: rail M1 + stripe M5 std cell" {
     verifyConnectivity -type special -net {VDD VSS} -noUnroutedNet \
         -error 100000 -warning 1000 \
         -report ./verify_rpt/connectivity_place.rpt
-    soc_verify_drc ./verify_rpt/drc_place.rpt -limit 500000
+    set soc_drc_place [soc_verify_drc ./verify_rpt/drc_place.rpt -limit 500000]
     checkPlace ./verify_rpt/checkPlace_place_pg.rpt
     # Rail ho thi dung o day, khong luu placed_pg.  Run 2026-09-17 22:13: tech LEF
     # bat LEF58_ENCLOSURE o V3/V4 -> via M1->M5 chi con 3/8 (moi rail VSS + rail VDD
@@ -478,6 +492,13 @@ soc_block "KHOI 10: rail M1 + stripe M5 std cell" {
     set opens [soc_connectivity_problems ./verify_rpt/connectivity_place.rpt]
     if {$opens > 0} {
         error "$opens loi VDD/VSS trong verify_rpt/connectivity_place.rpt (rail M1 khong noi stripe M5) - kiem tra LEF58_ENCLOSURE V3/V4 trong tech LEF.  Sua xong: restoreDesign ./saved/${TOP}_placed.enc.dat $TOP, source 3 file, paste lai KHOI 10"
+    }
+    # Cong DRC, cung ly do voi KHOI 8: run 2026-09-21 03:42 co 415202 vi pham
+    # o day va van chay tiep CTS + route.
+    if {$soc_drc_place > 0} {
+        error "$soc_drc_place vi pham DRC sau rail M1 + stripe M5 - xem\
+ verify_rpt/drc_place.rpt.  Sua xong: restoreDesign\
+ ./saved/${TOP}_placed.enc.dat $TOP, source 3 file, paste lai KHOI 10."
     }
     saveDesign ./saved/${TOP}_placed_pg.enc
 
