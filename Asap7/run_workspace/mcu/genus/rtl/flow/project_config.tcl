@@ -127,26 +127,61 @@ proc mcu_corner_lib_list {libs corner} {
 set STD_LIBS_SS [mcu_corner_lib_list $STD_LIBS SS]
 set STD_LIBS_FF [mcu_corner_lib_list $STD_LIBS FF]
 
+# -----------------------------------------------------------------------------
+# Ti le hinh hoc: 1 = kich thuoc that 7 nm (mac dinh), 4 = ban phong to 4x.
+#
+# ASAP7 ship CA HAI bo: tech LEF, LEF cell, LEF SRAM va QRC deu co ban 1x va
+# ban 4x.  Ban 4x co de cong cu APR ban quyen hoc thuat chay duoc; server nay
+# co license invs_7nm (Innovus_7nm_Opt, smoke_1x.tcl 2026-09-25 lay duoc) nen
+# chay thang 1x.  Giu 4 lam moc doi chieu voi cac run 4x cu (2026-09-17..22).
+#
+# Tech LEF 1x la 1000 dbu/um (1 dbu = 1 nm = MANUFACTURINGGRID), 4x la 4000.
+# Doi bien nay phai chay lai tu Genus: moi so hinh hoc cua floorplan nhan theo.
+#   export MCU_SCALE=4
+# -----------------------------------------------------------------------------
+set MCU_SCALE 1
+if {[info exists ::env(MCU_SCALE)] && $::env(MCU_SCALE) ne ""} {
+    set MCU_SCALE $::env(MCU_SCALE)
+}
+if {$MCU_SCALE ne "1" && $MCU_SCALE ne "4"} {
+    error "MCU_SCALE phai la 1 hoac 4, dang la '$MCU_SCALE'"
+}
+if {$MCU_SCALE == 1} {
+    set mcu_tech_lef_name asap7_tech_1x_201209.lef
+    set mcu_cell_lef_dir  [file join $STDCELL_ROOT LEF]
+    set mcu_cell_lef_tag  1x
+    set mcu_qrc_name      qrcTechFile_typ03_unscaledV02
+} else {
+    set mcu_tech_lef_name asap7_tech_4x_201209.lef
+    set mcu_cell_lef_dir  [file join $STDCELL_ROOT LEF scaled]
+    set mcu_cell_lef_tag  4x
+    set mcu_qrc_name      qrcTechFile_typ03_scaled4xV06
+}
+
 set TECH_LEF [mcu_resolve_path TECH_LEF \
     {ASAP7_TECH_LEF_FILE} \
-    [file join $STDCELL_ROOT techlef_misc asap7_tech_4x_201209.lef]]
+    [file join $STDCELL_ROOT techlef_misc $mcu_tech_lef_name]]
 set RVT_CELL_LEF [mcu_resolve_path RVT_CELL_LEF \
     {ASAP7_RVT_LEF_FILE} \
-    [file join $STDCELL_ROOT LEF scaled asap7sc7p5t_28_R_4x_220121a.lef]]
+    [file join $mcu_cell_lef_dir "asap7sc7p5t_28_R_${mcu_cell_lef_tag}_220121a.lef"]]
 set LVT_CELL_LEF [mcu_resolve_path LVT_CELL_LEF \
     {ASAP7_LVT_LEF_FILE} \
-    [file join $STDCELL_ROOT LEF scaled asap7sc7p5t_28_L_4x_220121a.lef]]
+    [file join $mcu_cell_lef_dir "asap7sc7p5t_28_L_${mcu_cell_lef_tag}_220121a.lef"]]
 set CELL_LEFS [list \
     $RVT_CELL_LEF \
     $LVT_CELL_LEF]
+# QRC 1x la V02, 4x la V06 - hai phien ban khac nhau, khong chi khac ti le.
 set QRC_FILE [mcu_resolve_path QRC_FILE \
     {ASAP7_QRC_FILE} \
-    [file join $STDCELL_ROOT qrc qrcTechFile_typ03_scaled4xV06]]
+    [file join $STDCELL_ROOT qrc $mcu_qrc_name]]
 
 # Two generated SRAM masters (asap7_sram_0p0 @522eecc ships 36 variants,
 # 64/128/256 rows x 4 x 16..80 bits, all with the same pins):
-#   srambank_256x4x32_6t122 : 1024 words x 32 bits = 4 KiB, LEF 121.392 x 172.8
-#   srambank_128x4x20_6t122 :  512 words x 20 bits,         LEF  64.000 x 120.96
+#   srambank_256x4x32_6t122 : 1024 words x 32 bits = 4 KiB, LEF 30.348 x 43.2 (1x)
+#   srambank_128x4x20_6t122 :  512 words x 20 bits,         LEF 16.000 x 30.24 (1x)
+# Ban 4x lon gap 4.  preflight.tcl so SIZE trong LEF voi so nay x MCU_SCALE.
+set SRAM_SIZE_1X     {30.348 43.2}
+set SRAM_TAG_SIZE_1X {16.0 30.24}
 #
 # Macro budget, 256x4x32 (SRAM_MASTER) = 80:
 #   main AXI RAM 256 KiB : 64, as 2 x 128 KiB slave ports of 32
@@ -218,13 +253,24 @@ proc mcu_prefer_fixed_lef {path} {
     return $path
 }
 
+# 1x: generated/LEF/<m>.lef, 4x: generated/LEF/4xLEF/<m>.lef.4x.lef.  Ban 1x goc
+# lech luoi CA HAI macro (256x4x32: 11213, 128x4x20: 3908 toa do nua nm) va
+# tech LEF 1x la 1000 dbu/um nen nua nm khong bieu dien duoc - phai co
+# <m>.fixed.lef (fix_sram_lef.py --grid 0.001).  Ban tag 1x da sua, nhan 4,
+# trung khit ban 4x .fixed.lef da chay sach DRC (5014/5014 dong, 2026-09-25).
+proc mcu_sram_lef_path {sram_root master} {
+    if {$::MCU_SCALE == 1} {
+        return [file join $sram_root generated LEF "$master.lef"]
+    }
+    return [file join $sram_root generated LEF 4xLEF "$master.lef.4x.lef"]
+}
+
 set SRAM_LIB [mcu_resolve_path SRAM_LIB \
     {ASAP7_SRAM_LIB_FILE ASAP7_SRAM_LIB} \
     [file join $SRAM_ROOT generated LIB "$SRAM_MASTER.lib"]]
 set SRAM_LEF [mcu_resolve_path SRAM_LEF \
     {ASAP7_SRAM_LEF_FILE ASAP7_SRAM_LEF} \
-    [mcu_prefer_fixed_lef [file join $SRAM_ROOT generated LEF 4xLEF \
-        "$SRAM_MASTER.lef.4x.lef"]]]
+    [mcu_prefer_fixed_lef [mcu_sram_lef_path $SRAM_ROOT $SRAM_MASTER]]]
 set SRAM_GDS [mcu_resolve_path SRAM_GDS \
     {ASAP7_SRAM_GDS_FILE ASAP7_SRAM_GDS} \
     [file join $SRAM_ROOT gds srambank_32b.gds]]
@@ -237,8 +283,7 @@ set SRAM_TAG_LIB [mcu_resolve_path SRAM_TAG_LIB \
     [file join $SRAM_ROOT generated LIB "$SRAM_TAG_MASTER.lib"]]
 set SRAM_TAG_LEF [mcu_resolve_path SRAM_TAG_LEF \
     {ASAP7_SRAM_TAG_LEF_FILE} \
-    [mcu_prefer_fixed_lef [file join $SRAM_ROOT generated LEF 4xLEF \
-        "$SRAM_TAG_MASTER.lef.4x.lef"]]]
+    [mcu_prefer_fixed_lef [mcu_sram_lef_path $SRAM_ROOT $SRAM_TAG_MASTER]]]
 set SRAM_TAG_SIM_VERILOG [mcu_resolve_path SRAM_TAG_SIM_VERILOG \
     {ASAP7_SRAM_TAG_VERILOG_FILE} \
     [file join $SRAM_ROOT generated verilog "$SRAM_TAG_MASTER.v"]]
