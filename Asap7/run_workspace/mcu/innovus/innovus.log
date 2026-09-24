@@ -108833,3 +108833,16 @@ Output for cells
 <CMD> deselectAll
 <CMD> zoomBox -460.90175 -85.32050 2480.17175 1490.44250
 <CMD> setLayerPreference violation -isVisible 0
+<CMD> zoomBox -170.28025 138.61400 2329.63250 1478.01275
+<CMD> zoomBox 76.74800 325.10125 2201.67400 1463.59025
+<CMD> zoomBox 278.88200 467.93500 2085.06925 1435.65075
+<CMD> zoomBox 450.69575 589.34375 1985.95525 1411.90225
+<CMD> zoomBox 588.29225 665.66050 1893.26300 1364.83525
+<CMD> zoomBox 448.22375 597.89200 1983.48350 1420.45075
+<CMD> fit
+<CMD> zoomBox -889.43025 -248.44375 3181.25950 1932.54300
+
+*** Memory Usage v#2 (Current mem = 13412.074M, initial mem = 839.699M) ***
+*** Message Summary: 276654 warning(s), 1 error(s)
+
+--- Ending "Innovus" (totcpu=7:19:21, real=62:22:43, mem=13412.1M) ---
