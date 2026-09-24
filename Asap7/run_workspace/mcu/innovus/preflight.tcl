@@ -52,11 +52,13 @@ puts "Manufacturing grid $MFG_GRID um | SITE: $KNOWN_SITES"
 
 # Hai master SRAM: 80 x 256x4x32 (RAM, cache data, TCM) + 4 x 128x4x20 (tag).
 # Kich thuoc LEF duoc ghim vi floorplan (tcl/manual/soc_fp_procs.tcl) tinh luoi tu chung.
-foreach {master expected lib lef size_pattern size_text} [list \
-    $SRAM_MASTER     $SRAM_EXPECTED_COUNT     $SRAM_LIB     $SRAM_LEF \
-        {SIZE[ \t]+121\.392[ \t]+BY[ \t]+172\.8} {121.392 BY 172.8} \
-    $SRAM_TAG_MASTER $SRAM_TAG_EXPECTED_COUNT $SRAM_TAG_LIB $SRAM_TAG_LEF \
-        {SIZE[ \t]+64[ \t]+BY[ \t]+120\.96} {64 BY 120.96}] {
+# SIZE mong doi = SIZE 1x (project_config.tcl) x MCU_SCALE.
+foreach {master expected lib lef size_1x} [list \
+    $SRAM_MASTER     $SRAM_EXPECTED_COUNT     $SRAM_LIB     $SRAM_LEF     $SRAM_SIZE_1X \
+    $SRAM_TAG_MASTER $SRAM_TAG_EXPECTED_COUNT $SRAM_TAG_LIB $SRAM_TAG_LEF $SRAM_TAG_SIZE_1X] {
+    set size_w [expr {[lindex $size_1x 0] * $MCU_SCALE}]
+    set size_h [expr {[lindex $size_1x 1] * $MCU_SCALE}]
+    set size_text [format "%g BY %g" $size_w $size_h]
     check_mapped_sram_count $SYN_NETLIST $master $expected
 
     set lib_text [read_binary_file $lib "SRAM Liberty"]
@@ -64,7 +66,7 @@ foreach {master expected lib lef size_pattern size_text} [list \
         error "SRAM Liberty does not contain cell $master"
     }
 
-    set lef_text [read_binary_file $lef "SRAM 4x LEF"]
+    set lef_text [read_binary_file $lef "SRAM LEF (${MCU_SCALE}x)"]
     # Bao loi phai noi RO file nao va doc duoc gi.  Run 2026-09-18 16:59 chet o
     # day voi moi mot dong "master or geometry is unexpected" - khong biet la
     # sai ten macro, sai duong dan, hay tro nham ban 1x.
@@ -79,18 +81,24 @@ foreach {master expected lib lef size_pattern size_text} [list \
  MACRO co trong file: [expr {[llength $macros] ? $macros : {(khong co)}}].\
  Kiem tra ASAP7_SRAM_LEF_FILE / ASAP7_SRAM_TAG_LEF_FILE."
     }
-    if {![regexp $size_pattern $lef_text]} {
-        set found {}
-        foreach m [regexp -all -inline -line {^[ \t]*SIZE[ \t]+[^;]*} $lef_text] {
-            lappend found [string trim $m]
+    # So bang so chu khong bang chuoi: LEF 1x ghi '30.240000000000002'.
+    set size_ok 0
+    set found {}
+    foreach {m w h} [regexp -all -inline -line \
+            {^[ \t]*SIZE[ \t]+([0-9.]+)[ \t]+BY[ \t]+([0-9.]+)} $lef_text] {
+        lappend found "SIZE $w BY $h"
+        if {abs($w - $size_w) < 1e-6 && abs($h - $size_h) < 1e-6} {
+            set size_ok 1
         }
+    }
+    if {!$size_ok} {
         error "LEF [file normalize $lef]: kich thuoc macro khac voi floorplan.\
- Doi 'SIZE $size_text', doc duoc: [expr {[llength $found] ? [join [lrange $found 0 2] { | }] : {(khong co dong SIZE nao)}}].\
- Thuong la tro nham ban 1x (SIZE nho di 4 lan) thay vi thu muc 4xLEF, hoac\
+ Doi 'SIZE $size_text' (MCU_SCALE=$MCU_SCALE), doc duoc: [expr {[llength $found] ? [join [lrange $found 0 2] { | }] : {(khong co dong SIZE nao)}}].\
+ Nho di/lon len dung 4 lan la tro nham ban 1x/4x so voi MCU_SCALE, con lai la\
  nham file macro khac."
     }
     if {![regexp {SYMMETRY[ \t]+[^;\n]*Y} $lef_text]} {
-        error "SRAM 4x LEF of $master does not advertise Y symmetry; macro floorplan uses MY orientation"
+        error "SRAM LEF of $master does not advertise Y symmetry; macro floorplan uses MY orientation"
     }
 
     # USE cua chan nguon: LEF 128x4x20 khai VSS la USE POWER trong khi .lib
@@ -157,7 +165,7 @@ foreach {master expected lib lef size_pattern size_text} [list \
         }
         puts "WARNING: Sua truoc khi xuat GDS:"
         puts "WARNING:   python3 scripts/fix_sram_lef.py [file normalize $lef] \\"
-        puts "WARNING:       --fix -o <file>.fixed.lef --site [lindex $lef_bad_sites 0]=[lindex $KNOWN_SITES 0]"
+        puts "WARNING:       --grid $MFG_GRID --fix -o <file>.fixed.lef --site [lindex $lef_bad_sites 0]=[lindex $KNOWN_SITES 0]"
         puts "WARNING:   roi export ASAP7_SRAM_TAG_LEF_FILE=<file>.fixed.lef (hoac"
         puts "WARNING:   ASAP7_SRAM_LEF_FILE) va chay lai tu KHOI 0."
         puts "WARNING: ===================================================="
