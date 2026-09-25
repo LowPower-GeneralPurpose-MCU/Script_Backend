@@ -300,7 +300,7 @@ soc_block "KHOI 7: blockage + pin" {
     set blk [expr {($SOC_HALO_ROWS + 1) * $SOC_ROW_H}]
     createPlaceBlockage -allMacro -snapToSite -outerRingBySide [list $blk $blk $blk $blk]
 
-    setPinConstraint -cell $TOP -corner_to_pin_distance 8
+    setPinConstraint -cell $TOP -corner_to_pin_distance [soc_len 2.0]
     source ./tcl/manual/soc_pins.tcl
 }
 # [LAM TAY - tuy chon] Doi canh pin: sua 4 danh sach trong tcl/manual/soc_pins.tcl
@@ -965,8 +965,10 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     write_lef_abstract -noCutObs ./outputs/${TOP}.lef
 }
 # Kiem tra GDS (ngoai Innovus): mo outputs/top_soc.gds, do 1 WELLTAP_* phai
-# rong 432 dbu va trung khit o dat trong DEF; log streamOut khong duoc bao
-# cell nao thieu trong GDS merge ngoai 2 master SRAM.
+# rong 0.108 um (1x) = 216 dbu o SOC_GDS_UNITS 2000 va trung khit o dat trong
+# DEF; log streamOut khong duoc bao cell nao thieu trong GDS merge ngoai 2
+# master SRAM.  IMPOGDS-215 (merge file 4000 > 2000) VAN hien o 1x - vo hai vi
+# moi toa do cua GDS std cell la boi cua 2 dbu@4000 (xem SOC_GDS_UNITS).
 
 
 # ==========================================================================

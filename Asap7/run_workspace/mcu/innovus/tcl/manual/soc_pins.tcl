@@ -1,7 +1,7 @@
 ############################################################
 ## Pin top_soc (Hierarchy trang 9-10: khai bao het pin, thu tu nguoc chieu
 ## kim dong ho).  Layer/kich thuoc cua Risc_V: canh tren/duoi M7 doc,
-## canh trai/phai M6 ngang, 0.128 x 0.288 um.
+## canh trai/phai M6 ngang, 0.032 x 0.072 um (1x; 0.128 x 0.288 o 4x).
 ##
 ## Bon danh sach duoi day giu theo nhom chuc nang; khi dat, moi pin chi nam
 ## tren canh tren/duoi trong khoang x vung logic (xem ghi chu cuoi file).
@@ -73,7 +73,7 @@ foreach k [soc_sram_no_std_boxes] {
     # Keepout cham ca mep duoi lan mep tren loi = mot cum cua tuong SRAM.  Tu khi
     # co kenh buffer (SOC_WALL_CHANNEL) moi tuong la 3 cum, cum trong khong cham
     # mep loi -> xet theo nua loi, khong theo mep.
-    if {$ky0 <= $core_y0 + 1.0 && $ky1 >= $core_y1 - 1.0} {
+    if {$ky0 <= $core_y0 + [soc_len 0.25] && $ky1 >= $core_y1 - [soc_len 0.25]} {
         if {($kx0 + $kx1) / 2.0 < $core_xm} {
             set logic_x0 [expr {max($logic_x0, $kx1)}]
         } else {
@@ -81,21 +81,21 @@ foreach k [soc_sram_no_std_boxes] {
         }
     }
 }
-set pin_margin 20.0
+set pin_margin [soc_len 5.0]
 set pin_x0 [expr {$logic_x0 + $pin_margin}]
 set pin_x1 [expr {$logic_x1 - $pin_margin}]
-set need [expr {max([llength $top_side_pins], [llength $bottom_side_pins]) * 2.0}]
+set need [expr {max([llength $top_side_pins], [llength $bottom_side_pins]) * [soc_len 0.5]}]
 if {$pin_x1 - $pin_x0 < $need} {
     error [format "soc_pins.tcl: vung logic %.1f..%.1f qua hep cho %d pin" \
         $pin_x0 $pin_x1 [llength $top_side_pins]]
 }
 
 setPinAssignMode -pinEditInBatch true
-editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 \
+editPin -pinWidth [soc_len 0.032] -pinDepth [soc_len 0.072] -fixOverlap 1 \
     -spreadType range -spreadDirection counterclockwise \
     -start [list $pin_x1 $die_y1] -end [list $pin_x0 $die_y1] \
     -side TOP -layer M7 -honorConstraint 1 -pin $top_side_pins
-editPin -pinWidth 0.128 -pinDepth 0.288 -fixOverlap 1 \
+editPin -pinWidth [soc_len 0.032] -pinDepth [soc_len 0.072] -fixOverlap 1 \
     -spreadType range -spreadDirection counterclockwise \
     -start [list $pin_x0 $die_y0] -end [list $pin_x1 $die_y0] \
     -side BOTTOM -layer M7 -honorConstraint 1 -pin $bottom_side_pins

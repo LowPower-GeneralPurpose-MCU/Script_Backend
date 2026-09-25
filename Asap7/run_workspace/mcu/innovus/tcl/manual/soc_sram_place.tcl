@@ -1,5 +1,7 @@
 # Vi tri SRAM luu boi soc_save_sram_place - KHOI 3 nap lai file nay.
 # Xoa file de KHOI 3 xep lai vi tri mam.
+# Toa do la micron cua database MCU_SCALE=4 (soc_load_sram_place doi ti le).
+set SOC_SRAM_PLACE_SCALE 4
 set SOC_SRAM_PLACE_CORE {9.936 9.936 2252.592 1422.576}
 set SOC_SRAM_PLACE {
     {{u_axi_ram_lo/u_mem/G_SRAM_BANK[0].u_sram} 9.9360 9.9360 R0}

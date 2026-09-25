@@ -66,7 +66,9 @@ set MCU_HOLD_VIEWS  {view_tt}
 # -----------------------------------------------------------------------------
 # GOC RC - MAC DINH KHONG CO BIEN THIEN (he so 1.0)
 #
-# ASAP7 chi ship MOT qrcTechFile (qrcTechFile_typ03_scaled4xV06); ca rc_typ,
+# ASAP7 chi ship MOT GOC qrcTechFile (typ03), o hai ti le: unscaledV02 (1x,
+# MCU_SCALE=1, mac dinh) va scaled4xV06 (4x) - QRC_FILE trong project_config.tcl
+# chon theo MCU_SCALE.  Ca rc_typ,
 # rc_ss va rc_ff deu tro toi no.  Doc reports/analysis_views.rpt cua run
 # 2026-09-20: ba rc_corner chi khac nhau o nhiet do (100 / 25 / 0), con
 # preRoute_res / postRoute_res / preRoute_cap / postRoute_cap / postRoute_xcap
