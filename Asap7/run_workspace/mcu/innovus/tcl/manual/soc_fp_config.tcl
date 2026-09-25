@@ -1,26 +1,44 @@
 ############################################################
-## Thong so floorplan bang tay cho top_soc (ASAP7, LEF 4x)
+## Thong so floorplan bang tay cho top_soc (ASAP7)
 ## Day la file ban sua.  Cac script 01/02/03 chi doc tu day.
 ##
-## Doi chieu slide thay (ROHM 180 nm) -> ASAP7:
-##   gap giua SRAM 20.16 um = 4 row ROHM  -> 4 row ASAP7 = 4.32 um
-##   ring SRAM M5/M4 rong 1.92            -> M4 (ngang) / M5 (doc) rong 0.096
-##   stripe M4/M5 rong 1.92               -> luoi M6 (ngang) / M7 (doc) 0.64
+## MOI DO DAI GHI THEO MICRON 1x (kich thuoc 7 nm that) va di qua soc_len,
+## tuc nhan MCU_SCALE (project_config.tcl, mac dinh 1).  MCU_SCALE=4 cho lai
+## dung tung so cua cac run 4x 2026-09-17..22.  Tech/cell/SRAM LEF 1x deu
+## dung bang ban 4x chia 4 (kiem 2026-09-25), nen chia 4 moi so o day giu
+## nguyen hinh hoc da route sach - khong co so nao duoc "chon lai".
+## Khong nhan: phan tram mat do, so row, so cell, don vi GDS.
+##
+## Doi chieu slide thay (ROHM 180 nm) -> ASAP7 (so 1x):
+##   gap giua SRAM 20.16 um = 4 row ROHM  -> 4 row ASAP7 = 1.08 um
+##   ring SRAM M5/M4 rong 1.92            -> M4 (ngang) / M5 (doc) rong 0.024
+##   stripe M4/M5 rong 1.92               -> luoi M6 (ngang) / M7 (doc) 0.16
 ##   ring loi                              -> M8 (ngang) / M9 (doc)
-## Cac so ASAP7 lay tu flow Risc_V va sram_axi da route sach.
+## Cac so ASAP7 lay tu flow Risc_V va sram_axi da route sach (ban 4x, chia 4).
 ############################################################
 
+# Do dai 1x -> don vi cua database hien tai.  format %.4f: 4 chu so thap phan
+# du cho luoi 0.001 (1x) lan 0.004 (4x), va cat nhieu so thuc
+# (0.054 * 4 = 0.21600000000000003).
+proc soc_len {um_1x} {
+    return [expr {double([format %.4f [expr {$um_1x * $::MCU_SCALE}]])}]
+}
+# Dung sai so sanh toa do (thay 1e-3 cu, = 1/4 luoi 0.004 cua LEF 4x): luon
+# 1/4 manufacturing grid, nho hon moi khoang cach hop le.
+set SOC_EPS [expr {0.00025 * $MCU_SCALE}]
+
 # ---- Luoi ASAP7 -----------------------------------------------------------
-set SOC_SITE_W   0.216
-set SOC_ROW_H    1.080
+set SOC_SITE_W   [soc_len 0.054]
+set SOC_ROW_H    [soc_len 0.270]
 
 # ---- Kich thuoc loi --------------------------------------------------------
 # Mac dinh tu tinh tu nhom SRAM + dien tich std cell.  Dat
-# MCU_CORE_WIDTH_UM / MCU_CORE_HEIGHT_UM (xem project_config.tcl) de ep kich thuoc.
-set SOC_CORE_MARGIN 10.0          ;# loi -> die, du cho ring M8/M9
+# MCU_CORE_WIDTH_UM / MCU_CORE_HEIGHT_UM (xem project_config.tcl) de ep kich
+# thuoc - hai bien nay la micron CUA DATABASE, khong qua soc_len.
+set SOC_CORE_MARGIN [soc_len 2.5] ;# loi -> die, du cho ring M8/M9
 set SOC_EDGE_GAP    0.0           ;# macro -> mep loi (10_Macro Priority 3: sat bien block;
                                   ;#  cap VSS/VDD mep cum nam trong le loi->die)
-set SOC_GROUP_GAP   20.0          ;# giua hai nhom macro / nhom macro va logic
+set SOC_GROUP_GAP   [soc_len 5.0] ;# giua hai nhom macro / nhom macro va logic
 
 # ---- SRAM (10_Macro trang 11-14, Hierarchy trang 34-35) -------------------
 set SOC_MACRO_GAP_ROWS 4          ;# khe giua hai SRAM, du 1 cap VDD/VSS
@@ -29,24 +47,24 @@ set SOC_MACRO_GAP  [expr {$SOC_MACRO_GAP_ROWS * $SOC_ROW_H}]
 set SOC_MACRO_HALO [expr {$SOC_HALO_ROWS * $SOC_ROW_H}]
 
 # Kenh dat buffer trong tuong SRAM RAM_LO/RAM_HI (4 cot, cao het loi), o khe
-# cot 0|1 va cot 2|3.  Run 2026-09-17 khe nao cung 4.32 (row bi cat) -> CTS
-# khong dat duoc buffer trong tuong, chan clk SRAM cach mep tuong 190-440 um:
-# 45 chan clk slew 57-172 ps > 46 ps (Liberty).  Cot sat mep tuong (~65 um) OK.
-# Kenh = 4.32 cap VSS/VDD cum trai + 8.64 row + 4.32 cap VSS/VDD cum phai;
-# phai >= 2 khe de soc_sram_islands tach cum, boi so site 0.216.
-set SOC_WALL_CHANNEL        17.28
+# cot 0|1 va cot 2|3.  Run 2026-09-17 (4x) khe nao cung 4 row (row bi cat) ->
+# CTS khong dat duoc buffer trong tuong, chan clk SRAM cach mep tuong 190-440 um
+# (4x): 45 chan clk slew 57-172 ps > 46 ps (Liberty).  Cot sat mep tuong OK.
+# Kenh = 4 row cap VSS/VDD cum trai + 8 row + 4 row cap VSS/VDD cum phai
+# (1x: 1.08 + 2.16 + 1.08); phai >= 2 khe de soc_sram_islands tach cum, boi so site.
+set SOC_WALL_CHANNEL        [soc_len 4.32]
 set SOC_WALL_CHANNEL_GROUPS {RAM_LO RAM_HI}
 # Notch (10_Macro Priority 7): vung con row kep giua hai cum SRAM (hoac cum va
 # mep loi), hep hon nguong nay -> KHOI 9 dat placement blockage MEM (soft):
 # placer khong dat logic vao, CTS/optDesign van dat buffer/inverter.  Khong dung
 # blockage cung: run 2026-09-17 CTS dat buffer clk SRAM trong hoc tren TAG
 # (837,260) (916,260) (947,264) va khe RAM_LO|dcache (545,97).
-# Vi tri hien tai: hoc tren TAG 145.37, khe RAM_LO|dcache 11.45, dtcm|icache
-# 5.83, itcm|RAM_HI 3.67, 4 kenh buffer trong tuong RAM 8.64.
-set SOC_NOTCH_MAX_W 160.0
-# floorPlan lam tron be rong loi (2190.888 -> 2190.816): KHOI 3 nap file vi tri
-# SRAM van chap nhan loi lech toi nay o mep phai, dich cum sat mep phai theo.
-set SOC_CORE_SNAP_TOL 0.432
+# Vi tri run 4x: hoc tren TAG 145.37, khe RAM_LO|dcache 11.45, dtcm|icache
+# 5.83, itcm|RAM_HI 3.67, 4 kenh buffer trong tuong RAM 8.64 (um 4x; 1x chia 4).
+set SOC_NOTCH_MAX_W [soc_len 40.0]
+# floorPlan lam tron be rong loi (4x: 2190.888 -> 2190.816): KHOI 3 nap file vi
+# tri SRAM van chap nhan loi lech toi nay o mep phai, dich cum sat mep phai theo.
+set SOC_CORE_SNAP_TOL [soc_len 0.108]
 
 # Nhom SRAM = cac macro cung module, dat thanh mot cum va co luoi nguon
 # M4/M5 rieng (soc_island_pg).
@@ -69,30 +87,32 @@ set SOC_SRAM_PLACE_FILE ./tcl/manual/soc_sram_place.tcl
 # Ring loi 2 vong trong le loi->die (tu ngoai vao):
 #   mep die | trong S | VSS rong W | trong S | VDD rong W | trong | mep loi
 # Khoang trong trong cung (con lai) phai >= SOC_MACRO_GAP de chua cap M4/M5 mep cum SRAM.
-# W/S phai la boi CHAN cua manufacturing grid 0.004 (tam day nam tren grid):
+# W/S phai la boi CHAN cua manufacturing grid (tam day nam tren grid): run 4x
 # 0.54 = 135*0.004 le -> Innovus tu nang len 0.544 (IMPPP-152), vong VSS sat
-# mep die lo ra ngoai 4 nm va bi bo (IMPPP-220).
-set SOC_MFG_GRID    0.004
-set SOC_CORE_RING_W 0.544         ;# ~0.5 row, 136*0.004
-set SOC_CORE_RING_S 0.544         ;# khoang trong giua 2 vong va giua VSS - mep die
-set SOC_MESH_W           0.640
-set SOC_MESH_S           0.288
-set SOC_MESH_PITCH      34.560
-set SOC_MESH_OFFSET     17.280
+# mep die lo ra ngoai 4 nm va bi bo (IMPPP-220).  1x: 0.136 = 136*0.001, chan.
+# Luoi 1x la 0.001 = 0.004/4, nen boi chan o 4x van la boi chan o 1x.
+set SOC_MFG_GRID    [soc_len 0.001]
+set SOC_CORE_RING_W [soc_len 0.136] ;# ~0.5 row
+set SOC_CORE_RING_S [soc_len 0.136] ;# khoang trong giua 2 vong va giua VSS - mep die
+set SOC_MESH_W      [soc_len 0.160]
+set SOC_MESH_S      [soc_len 0.072]
+set SOC_MESH_PITCH  [soc_len 8.640]
+set SOC_MESH_OFFSET [soc_len 4.320]
 
 # Luoi nguon rieng cho tung cum SRAM (thay addRing -around shared_cluster, xem
-# soc_island_pg): 1 cap VSS/VDD o moi mep cum va moi khe 4.32 giua SRAM.
+# soc_island_pg): 1 cap VSS/VDD o moi mep cum va moi khe 4 row giua SRAM.
 #   M4 ngang: mep duoi, mep tren, moi khe giua hai hang
 #   M5 doc  : mep trai, mep phai, moi khe giua hai cot
 #   M5 tap  : moi SRAM mot cap o canh phai, tu khe ben duoi an len chan M4
-# So lay tu sram_axi/innovus/tcl/sram_island_power.tcl (da route sach).
-set SOC_ISLAND_PG_W 0.096
-set SOC_ISLAND_PG_S 0.288
+# So lay tu sram_axi/innovus/tcl/sram_island_power.tcl (da route sach, 4x).
+set SOC_ISLAND_PG_W [soc_len 0.024]
+set SOC_ISLAND_PG_S [soc_len 0.072]
 set SOC_PIN_TAP_DEPTH  [expr {8 * $SOC_ROW_H}]     ;# tap an vao than SRAM
 set SOC_PIN_TAP_BORDER [expr {2 * $SOC_ROW_H}]     ;# tap nam trong 2 row sat canh phai
-set SOC_PG_EPS 0.192
-array set SOC_PG_PITCH  {M4 0.192 M5 0.192}
-array set SOC_PG_OFFSET {M4 0.012 M5 0.000}
+set SOC_PG_EPS [soc_len 0.048]
+# Pitch/offset track M4/M5 cua tech LEF (1x: PITCH 0.048, M4 OFFSET 0.003).
+array set SOC_PG_PITCH  [list M4 [soc_len 0.048] M5 [soc_len 0.048]]
+array set SOC_PG_OFFSET [list M4 [soc_len 0.003] M5 0.0]
 
 # Chan PG VDD/VSS cua top (09_PnR tr.21 createPGPin): nam tren doan ring loi
 # phia tren (M8) cua tung net - DEF/GDS/LEF abstract co chan nguon cho LVS.
@@ -100,14 +120,15 @@ array set SOC_PG_OFFSET {M4 0.012 M5 0.000}
 set SOC_PG_PIN_LAYER M8
 
 # ---- Tap cell (10_Macro tr.21 latch-up) -----------------------------------
-# Deck calibreDRC.rul ACTIVE.LUP.1: PMOS cach tap N-well <= 30 um (1x) = 120 um
-# tren LEF 4x.  Cell va khoang cach theo techlef_misc/example_innovus.tcl cua
-# asap7sc7p5t_28 (-cellInterval 50).  Offset 1.08 thay 10.564 cua vi du: row sau
-# cutRow co doan hep 3.67-8.64 um (kenh buffer, khe notch) van phai co tap.
+# Deck calibreDRC.rul ACTIVE.LUP.1: PMOS cach tap N-well <= 30 um (1x; = 120 um
+# tren LEF 4x).  Cell va khoang cach theo techlef_misc/example_innovus.tcl cua
+# asap7sc7p5t_28 (-cellInterval 50 o 4x = 12.5 1x).  Offset 1 row thay 10.564
+# (4x) cua vi du: row sau cutRow co doan hep 3.67-8.64 um (4x; kenh buffer,
+# khe notch) van phai co tap.
 set SOC_TAP_CELL     TAPCELL_ASAP7_75t_R
-set SOC_TAP_INTERVAL 50.0
-set SOC_TAP_OFFSET   1.08
-set SOC_TAP_RULE     120.0
+set SOC_TAP_INTERVAL [soc_len 12.5]
+set SOC_TAP_OFFSET   [soc_len 0.27]
+set SOC_TAP_RULE     [soc_len 30.0]
 
 # ---- Filler cell ----------------------------------------------------------
 # Run 2026-09-18 liet ke ca 4 cell (R truoc, L sau) va Innovus dat 100% ban _L:
@@ -201,19 +222,31 @@ set SOC_FILLER_CELLS {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R}
 #     201/285).  Do la PENDING_MERGED_GDS_SIGNOFF, khong phai loi cua fill.
 #   - Muon quay lai chi-M5: xoa cac dong khac roi restore
 #     saved/top_soc_prefill.enc.dat, khong phai chay lai ca run.
+#   SO 1x = so 4x cua sram_axi chia 4 (ghi chu tren noi so 4x, vd 0.096 ->
+#   1.248 decr 0.384 o 4x = 0.024 -> 0.312 decr 0.096 o day).  Cot wmin..active
+#   la do dai (qua soc_len o duoi), minD/maxD/prefD la phan tram (khong nhan).
 #   layer wmin  wmax  decr  lmin  lmax gap   active minD maxD prefD
-set SOC_FILL_LAYERS {
-    M1    0.072 0.936 0.288 0.148 5.0  0.144 0.144  25   60   40
-    M2    0.072 0.936 0.288 0.148 5.0  0.144 0.144  25   60   40
-    M3    0.072 0.936 0.288 0.148 5.0  0.144 0.144  25   60   40
-    M4    0.096 1.248 0.384 0.384 5.0  0.192 0.192  10   35   25
-    M5    0.096 1.248 0.384 0.384 5.0  0.192 0.192  15   90   25
-    M6    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
-    M7    0.128 1.664 0.512 0.512 5.0  0.300 0.300  25   55   40
-    M8    0.160 2.500 0.160 0.960 5.0  0.640 0.640  25   55   40
-    M9    0.160 2.500 0.160 0.960 5.0  0.640 0.640  25   55   40
-    Pad   0.800 8.000 0.160 8.960 8.96 8.160 8.160  20   80   25
+set SOC_FILL_LAYERS_1X {
+    M1    0.018 0.234 0.072 0.037 1.25 0.036 0.036  25   60   40
+    M2    0.018 0.234 0.072 0.037 1.25 0.036 0.036  25   60   40
+    M3    0.018 0.234 0.072 0.037 1.25 0.036 0.036  25   60   40
+    M4    0.024 0.312 0.096 0.096 1.25 0.048 0.048  10   35   25
+    M5    0.024 0.312 0.096 0.096 1.25 0.048 0.048  15   90   25
+    M6    0.032 0.416 0.128 0.128 1.25 0.075 0.075  25   55   40
+    M7    0.032 0.416 0.128 0.128 1.25 0.075 0.075  25   55   40
+    M8    0.040 0.625 0.040 0.240 1.25 0.160 0.160  25   55   40
+    M9    0.040 0.625 0.040 0.240 1.25 0.160 0.160  25   55   40
+    Pad   0.200 2.000 0.040 2.240 2.24 2.040 2.040  20   80   25
 }
+set SOC_FILL_LAYERS {}
+foreach {layer wmin wmax decr lmin lmax gap active minD maxD prefD} $SOC_FILL_LAYERS_1X {
+    lappend SOC_FILL_LAYERS $layer
+    foreach v [list $wmin $wmax $decr $lmin $lmax $gap $active] {
+        lappend SOC_FILL_LAYERS [soc_len $v]
+    }
+    lappend SOC_FILL_LAYERS $minD $maxD $prefD
+}
+unset layer wmin wmax decr lmin lmax gap active minD maxD prefD v
 # Layer co MINIMUMDENSITY that trong tech LEF -> CHAN flow o do.
 # Cac layer khac Innovus ap mac dinh 20%: run 2026-09-18 co 8863 vi pham mat do,
 # 7719 trong so do la cua luat KHONG ton tai trong PDK nay (M1-M4, M6-M9).
@@ -304,13 +337,26 @@ set SOC_GDS_LAYERS {
     V5 55 M6 60 V6 65 M7 70 V7 75 M8 80 V8 85 M9 90 V9 95 Pad 96
 }
 set SOC_GDS_PIN_TEXT 251
-# LEF 4x, GDS std cell 1x o 4000 dbu/um: TAPCELL LEF 0.432 um = 432 dbu trong
-# GDS -> ghi 1000 dbu/um thi so dbu cua cell va cua layout khop nhau; deck
-# Calibre ep LAYOUT PRECISION 4000 nen doc lai dung ti le 1x.
-set SOC_GDS_UNITS 1000
+# DON VI GDS - SUA 2026-09-25.
+#
+# Ly le cu ("ghi 1000 dbu/um thi so dbu cua cell va cua layout khop nhau") la
+# SAI: streamOut -merge DOI don vi file merge, khong chep nguyen so nguyen.
+# innovus.log run 4x: "IMPOGDS-215 Merge file ...R_220121a.gds has larger units
+# than output file units" va "IMPOGDS-280 Maximum units in merge file is 4000.
+# Use -units 20000".  Nghia la GDS std cell (1x, 4000 dbu/um) duoc doi sang um
+# roi ghi lai - cell giu kich thuoc 1x trong khi layout 4x: GDS cua cac run 4x
+# co std cell NHO 4 LAN so voi cho dat.  O 1x hai ben cung ti le nen het loi.
+#
+# 1x: phai >= 2000.  GDS std cell asap7sc7p5t_28 @f970bd3 co 7117 toa do (R)
+# o NUA nm (layer 7 GATE 6544, 19 M1 412, 16 161) - 1000 dbu/um lam tron hong
+# gate/M1.  2000 bieu dien dung moi toa do (4000 = 2 x 2000) va moi hinh cua
+# Innovus (luoi 0.001).  Innovus chi nhan 100/200/1000/2000/10000/20000 - khong
+# co 4000 cua deck Calibre (LAYOUT PRECISION 4000); 10000 / 2000 = 5 nguyen.
+# 4x: giu 1000 nhu cac run cu de so sanh (xem canh bao tren).
+set SOC_GDS_UNITS [expr {$MCU_SCALE == 1 ? 2000 : 1000}]
 
-# Stripe M5 doc de noi rail M1 cua std cell (Risc_V: pitch 25.92).
-set SOC_M5_W      0.096
-set SOC_M5_S      0.288
-set SOC_M5_PITCH 25.920
-set SOC_M5_OFFSET 12.960
+# Stripe M5 doc de noi rail M1 cua std cell (Risc_V 4x: pitch 25.92).
+set SOC_M5_W      [soc_len 0.024]
+set SOC_M5_S      [soc_len 0.072]
+set SOC_M5_PITCH  [soc_len 6.480]
+set SOC_M5_OFFSET [soc_len 3.240]

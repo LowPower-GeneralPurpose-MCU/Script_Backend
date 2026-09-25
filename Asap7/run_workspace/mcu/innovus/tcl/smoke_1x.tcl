@@ -8,19 +8,26 @@
 ##   cd run_workspace/mcu/innovus
 ##   innovus -no_gui -files ./tcl/smoke_1x.tcl -log ./logs/smoke_1x.log
 ##
-## Them SRAM 1x goc cua ASU vao LEF de xem so loi lech grid (IMPLF-82):
+## Them 2 LEF SRAM 1x (.fixed.lef, phai 0 IMPLF-82) - export TRUOC khi goi innovus:
 ##   export SMOKE_1X_SRAM=1
 ## Session moi cho moi lan chay (xem init_common.tcl ve IMPSYT-7329).
 ############################################################
 source ./tcl/project_config.tcl
 
-set smoke_tech [file join $STDCELL_ROOT techlef_misc asap7_tech_1x_201209.lef]
-set smoke_cell [file join $STDCELL_ROOT LEF asap7sc7p5t_28_R_1x_220121a.lef]
-set smoke_lefs [list $smoke_tech $smoke_cell]
-if {[info exists ::env(SMOKE_1X_SRAM)] && $::env(SMOKE_1X_SRAM)} {
-    lappend smoke_lefs [file join $SRAM_ROOT generated LEF "$SRAM_MASTER.lef"] \
-                       [file join $SRAM_ROOT generated LEF "$SRAM_TAG_MASTER.lef"]
+# Dung DUNG file flow chinh dung (project_config.tcl, MCU_SCALE=1): tech LEF
+# 1x da sua trong repo (asap7_tech_1x_201209.fixed.lef) va LEF SRAM 1x
+# <m>.fixed.lef.  Lan chay 2026-09-25 dung tech 1x goc -> IMPTR-2101 o Pad
+# ("M10"); lan nay phai het.
+# Luu y: log smoke_1x_sram.log 2026-09-25 KHONG nap LEF SRAM nao (khong co dong
+# "Loading LEF file ...srambank") - bien SMOKE_1X_SRAM chua duoc export.
+if {$MCU_SCALE != 1} {
+    error "smoke_1x: MCU_SCALE=$MCU_SCALE - bo 'export MCU_SCALE' roi chay lai"
 }
+set smoke_lefs [list $TECH_LEF $RVT_CELL_LEF]
+if {[info exists ::env(SMOKE_1X_SRAM)] && $::env(SMOKE_1X_SRAM)} {
+    lappend smoke_lefs $SRAM_LEF $SRAM_TAG_LEF
+}
+puts "SMOKE_1X: LEF = $smoke_lefs"
 foreach f $smoke_lefs {
     if {![file isfile $f]} {
         error "smoke_1x: khong co $f - kiem ASAP7_STDCELL_ROOT / ASAP7_SRAM_ROOT"

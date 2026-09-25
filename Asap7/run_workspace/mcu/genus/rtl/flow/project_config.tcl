@@ -158,9 +158,32 @@ if {$MCU_SCALE == 1} {
     set mcu_qrc_name      qrcTechFile_typ03_scaled4xV06
 }
 
+# LEF 1x DA SUA nam trong repo (Asap7/asap7/asap7sc7p5t_28/techlef_misc), sinh
+# boi innovus/scripts/make_1x_lef.py tu nhung file 4x da chay sach:
+#   asap7_tech_1x_201209.fixed.lef   = tech 1x goc + cac sua cua ban 4x repo
+#                                      (tat LEF58_ENCLOSURE V3/V4/V5, V6, M7, Pad)
+#   srambank_<m>.fixed.lef           = LEF SRAM 4x cua repo chia 4
+# Nam trong repo nen git pull la co tren may chay Innovus.  Thieu thi quay ve
+# file goc cua PDK va IN CANH BAO: tech 1x goc co Pad pitch 0.08 (IMPTR-2101)
+# va LEF58_ENCLOSURE V3/V4 lam mat via rail M1->M5.
+set MCU_REPO_LEF_DIR [file normalize \
+    [file join $FLOW_ROOT .. .. asap7 asap7sc7p5t_28 techlef_misc]]
+proc mcu_repo_lef {name fallback} {
+    if {$::MCU_SCALE == 1} {
+        set repo [file join $::MCU_REPO_LEF_DIR $name]
+        if {[file isfile $repo]} {
+            return $repo
+        }
+        puts "WARNING: khong co $repo (sinh bang innovus/scripts/make_1x_lef.py)\
+ - dung file goc $fallback"
+    }
+    return $fallback
+}
+
 set TECH_LEF [mcu_resolve_path TECH_LEF \
     {ASAP7_TECH_LEF_FILE} \
-    [file join $STDCELL_ROOT techlef_misc $mcu_tech_lef_name]]
+    [mcu_repo_lef asap7_tech_1x_201209.fixed.lef \
+        [file join $STDCELL_ROOT techlef_misc $mcu_tech_lef_name]]]
 set RVT_CELL_LEF [mcu_resolve_path RVT_CELL_LEF \
     {ASAP7_RVT_LEF_FILE} \
     [file join $mcu_cell_lef_dir "asap7sc7p5t_28_R_${mcu_cell_lef_tag}_220121a.lef"]]
@@ -253,14 +276,18 @@ proc mcu_prefer_fixed_lef {path} {
     return $path
 }
 
-# 1x: generated/LEF/<m>.lef, 4x: generated/LEF/4xLEF/<m>.lef.4x.lef.  Ban 1x goc
-# lech luoi CA HAI macro (256x4x32: 11213, 128x4x20: 3908 toa do nua nm) va
-# tech LEF 1x la 1000 dbu/um nen nua nm khong bieu dien duoc - phai co
-# <m>.fixed.lef (fix_sram_lef.py --grid 0.001).  Ban tag 1x da sua, nhan 4,
-# trung khit ban 4x .fixed.lef da chay sach DRC (5014/5014 dong, 2026-09-25).
+# 1x: <repo>/<m>.fixed.lef (mcu_repo_lef), roi PDK generated/LEF/<m>.lef.
+# 4x: generated/LEF/4xLEF/<m>.lef.4x.lef.
+# Ban 1x goc lech luoi CA HAI macro (256x4x32: 11213, 128x4x20: 3908 toa do nua
+# nm) va tech LEF 1x la 1000 dbu/um nen nua nm khong bieu dien duoc.  Ban
+# <m>.fixed.lef trong repo = ban 4x da route sach chia 4: tag khop ban 1x goc
+# tung RECT, lech <= 0.0005 um (make_1x_lef.py --ref).  256x4x32 thi KHONG so
+# duoc tung dong vi ban 4x cua repo da doi cau truc (32 wd/dataout, bo sdel;
+# ban goc 64/64/5).
 proc mcu_sram_lef_path {sram_root master} {
     if {$::MCU_SCALE == 1} {
-        return [file join $sram_root generated LEF "$master.lef"]
+        return [mcu_repo_lef "$master.fixed.lef" \
+            [file join $sram_root generated LEF "$master.lef"]]
     }
     return [file join $sram_root generated LEF 4xLEF "$master.lef.4x.lef"]
 }

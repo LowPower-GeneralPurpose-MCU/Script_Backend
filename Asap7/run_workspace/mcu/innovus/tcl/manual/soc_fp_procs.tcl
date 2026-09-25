@@ -498,6 +498,8 @@ proc soc_save_sram_place {{file ""}} {
     set fp [open $file w]
     puts $fp "# Vi tri SRAM luu boi soc_save_sram_place - KHOI 3 nap lai file nay."
     puts $fp "# Xoa file de KHOI 3 xep lai vi tri mam."
+    puts $fp "# Toa do la micron cua database MCU_SCALE=$::MCU_SCALE (soc_load_sram_place doi ti le)."
+    puts $fp "set SOC_SRAM_PLACE_SCALE $::MCU_SCALE"
     puts $fp "set SOC_SRAM_PLACE_CORE {[lindex [dbGet top.fPlan.coreBox] 0]}"
     puts $fp "set SOC_SRAM_PLACE {"
     puts $fp [join $lines \n]
@@ -530,7 +532,31 @@ proc soc_load_sram_place {{file ""}} {
     if {$file eq ""} {
         set file $::SOC_SRAM_PLACE_FILE
     }
+    # File luu truoc 2026-09-25 khong ghi SOC_SRAM_PLACE_SCALE: deu la LEF 4x.
+    # Toa do 4x nam tren luoi site 0.216 nen chia 4 ra dung luoi 0.054 -
+    # doi ti le khong lam tron gi.
+    unset -nocomplain ::SOC_SRAM_PLACE_SCALE
     uplevel #0 [list source $file]
+    if {![info exists ::SOC_SRAM_PLACE_SCALE]} {
+        set ::SOC_SRAM_PLACE_SCALE 4
+    }
+    if {$::SOC_SRAM_PLACE_SCALE != $::MCU_SCALE} {
+        set k [expr {double($::MCU_SCALE) / $::SOC_SRAM_PLACE_SCALE}]
+        set core {}
+        foreach v $::SOC_SRAM_PLACE_CORE {
+            lappend core [format %.4f [expr {$v * $k}]]
+        }
+        set ::SOC_SRAM_PLACE_CORE $core
+        set place {}
+        foreach entry $::SOC_SRAM_PLACE {
+            lassign $entry name x y orient
+            lappend place [list $name [format %.4f [expr {$x * $k}]] \
+                [format %.4f [expr {$y * $k}]] $orient]
+        }
+        set ::SOC_SRAM_PLACE $place
+        puts "soc_load_sram_place: $file luu o MCU_SCALE=$::SOC_SRAM_PLACE_SCALE,\
+ doi x$k sang MCU_SCALE=$::MCU_SCALE (chay soc_save_sram_place de ghi lai)"
+    }
     set saved $::SOC_SRAM_PLACE_CORE
     set now [lindex [dbGet top.fPlan.coreBox] 0]
     # Chua co design trong bo nho thi dbGet tra 0x0; 'expr' doc 0x0 la so 0 nen
@@ -543,7 +569,7 @@ proc soc_load_sram_place {{file ""}} {
     set dx 0.0
     foreach a $saved b $now i {0 1 2 3} {
         set d [expr {$b - $a}]
-        if {abs($d) <= 1e-3} {
+        if {abs($d) <= $::SOC_EPS} {
             continue
         }
         if {$i != 2 || abs($d) > $::SOC_CORE_SNAP_TOL + 1e-6} {
@@ -573,7 +599,7 @@ proc soc_load_sram_place {{file ""}} {
     set shifted {}
     foreach item $entries {
         lassign $item name ptr group x y orient
-        if {$dx != 0.0 && $right($group) > [lindex $saved 2] - 1.0} {
+        if {$dx != 0.0 && $right($group) > [lindex $saved 2] - [soc_len 0.25]} {
             set x [expr {$x + $dx}]
             if {$group ni $shifted} {
                 lappend shifted $group
@@ -610,8 +636,8 @@ proc soc_check_macros {report} {
             }
             lassign [lindex [dbGet $ptr.pt] 0] x y
             set box [list $x $y [expr {$x + $w}] [expr {$y + $h}]]
-            if {$x < $cx0 - 1e-3 || $y < $cy0 - 1e-3 ||
-                [lindex $box 2] > $cx1 + 1e-3 || [lindex $box 3] > $cy1 + 1e-3} {
+            if {$x < $cx0 - $::SOC_EPS || $y < $cy0 - $::SOC_EPS ||
+                [lindex $box 2] > $cx1 + $::SOC_EPS || [lindex $box 3] > $cy1 + $::SOC_EPS} {
                 lappend errors "$name ra ngoai loi: $box"
             }
             lappend boxes [list $name $group $box]
@@ -625,9 +651,9 @@ proc soc_check_macros {report} {
             lassign [lindex $boxes $j] nj gj bj
             lassign $bj bx0 by0 bx1 by1
             set sep [expr {max(max($bx0 - $ax1, $ax0 - $bx1), max($by0 - $ay1, $ay0 - $by1))}]
-            if {$sep < -1e-3} {
+            if {$sep < -$::SOC_EPS} {
                 lappend errors "$ni chong len $nj"
-            } elseif {$sep < $::SOC_MACRO_GAP - 1e-3} {
+            } elseif {$sep < $::SOC_MACRO_GAP - $::SOC_EPS} {
                 lappend errors [format "%s - %s cach %.3f um < %.3f" $ni $nj $sep $::SOC_MACRO_GAP]
             }
         }
@@ -701,7 +727,7 @@ proc soc_merge_intervals {ivs} {
     set out {}
     foreach iv [lsort -real -index 0 $ivs] {
         lassign $iv lo hi
-        if {[llength $out] > 0 && $lo <= [lindex $out end 1] + 1e-3} {
+        if {[llength $out] > 0 && $lo <= [lindex $out end 1] + $::SOC_EPS} {
             lset out end 1 [expr {max([lindex $out end 1], $hi)}]
         } else {
             lappend out [list $lo $hi]
@@ -729,7 +755,7 @@ proc soc_sram_boxes {} {
 # chen giua cac cot CACHE van dung, va hai cum xa nhau khong dung chung day.
 proc soc_sram_islands {boxes} {
     set n [llength $boxes]
-    set limit [expr {2.0 * $::SOC_MACRO_GAP - 1e-3}]
+    set limit [expr {2.0 * $::SOC_MACRO_GAP - $::SOC_EPS}]
     set label [lrepeat $n -1]
     set islands {}
     for {set i 0} {$i < $n} {incr i} {
@@ -770,7 +796,7 @@ proc soc_sram_islands {boxes} {
 proc soc_island_pg {members all_boxes} {
     set G $::SOC_MACRO_GAP
     set E $::SOC_PG_EPS
-    set eps 1e-3
+    set eps $::SOC_EPS
     set pair [expr {2.0 * $::SOC_ISLAND_PG_W + $::SOC_ISLAND_PG_S}]
 
     set groups {}
@@ -1141,7 +1167,7 @@ proc soc_sram_no_std_boxes {} {
 proc soc_notch_boxes {} {
     lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
     set core [list $cx0 $cy0 $cx1 $cy1]
-    set eps 1e-3
+    set eps $::SOC_EPS
     set boxes [soc_sram_no_std_boxes]
     lappend boxes [list [expr {$cx0 - 1}] $cy0 $cx0 $cy1] [list $cx1 $cy0 [expr {$cx1 + 1}] $cy1] \
         [list $cx0 [expr {$cy0 - 1}] $cx1 $cy0] [list $cx0 $cy1 $cx1 [expr {$cy1 + 1}]]
@@ -1904,10 +1930,10 @@ proc soc_sram_route_blk {} {
         puts "WARNING: chan SRAM chi-M3 co net ([lrange $used 0 4]) - KHONG chan M3"
         return 0
     }
-    # Thu vao moi canh 0.288 (4 x M3 min width): route 2026-09-17 23:55 blockage
-    # bang dung than SRAM -> 21 loi Metal Short M3 cao 0.056 ngay mep duoi SRAM
-    # (dau day M3 qua via), NanoRoute khong go duoc.
-    set d 0.288
+    # Thu vao moi canh 4 x M3 min width (0.072 1x / 0.288 4x): route 2026-09-17
+    # 23:55 blockage bang dung than SRAM -> 21 loi Metal Short M3 cao 0.056 (4x)
+    # ngay mep duoi SRAM (dau day M3 qua via), NanoRoute khong go duoc.
+    set d [soc_len 0.072]
     set n 0
     foreach b [soc_sram_boxes] {
         lassign $b name group x0 y0 x1 y1
@@ -2531,7 +2557,7 @@ proc soc_require_sram_lef_clean {} {
         }
     }
     foreach lef [list $::SRAM_LEF $::SRAM_TAG_LEF] {
-        lassign [check_lef_grid_site [read_binary_file $lef "SRAM 4x LEF"] \
+        lassign [check_lef_grid_site [read_binary_file $lef "SRAM LEF (${::MCU_SCALE}x)"] \
             $::MFG_GRID $::KNOWN_SITES] offgrid bad_sites
         if {$offgrid > 0 || [llength $bad_sites] > 0} {
             error "[file tail $lef]: $offgrid toa do lech manufacturing grid\
