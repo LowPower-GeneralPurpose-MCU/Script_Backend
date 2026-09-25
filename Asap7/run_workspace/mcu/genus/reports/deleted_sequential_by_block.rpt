@@ -1,11 +1,11 @@
-constant 0                       8348
-constant 1                        791
+constant 0                       8464
+constant 1                        790
 merged                            375
-unloaded                         5245
-TOTAL                           14759
+unloaded                         5181
+TOTAL                           14810
 
 u_axi_interconnect              13598
-u_core                            533
+u_core                            584
 u_axi_apb_dma                     170
 u_axi_apb_dma_u_dma_engine         96
 u_axi_sdram                        54
