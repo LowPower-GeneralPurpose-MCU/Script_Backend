@@ -283,7 +283,7 @@ MACRO srambank_128x4x20_6t122
   END VDD 
   PIN VSS 
     DIRECTION INOUT ; 
-    USE POWER ; 
+    USE GROUND ; 
     PORT 
       LAYER M4 ; 
         RECT 0.094 1.076 16.437 1.124 ; 

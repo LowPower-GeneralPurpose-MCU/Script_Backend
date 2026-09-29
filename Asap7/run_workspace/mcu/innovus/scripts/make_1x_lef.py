@@ -147,6 +147,13 @@ def do_sram(args):
         sys.exit("%d toa do sau khi chia 4 khong nam tren luoi 0.001 - ban 4x chua sach"
                  " (chay fix_sram_lef.py --fix truoc)" % offgrid)
     text = "\n".join(out_lines)
+    # LEF tag goc khai VSS la USE POWER (Innovus IMPVL-536, Genus PHYS-128 ghi de
+    # lib bang LEF).  fix_sram_lef.py sua o ban 4x nhung ban .fixed.lef 4x cua
+    # tag van con POWER, nen ep lai o day.
+    text, n_use = re.subn(r"(PIN\s+VSS\b(?:(?!\bEND\s+VSS\b).)*?\bUSE\s+)POWER\b",
+                          r"\1GROUND", text, flags=re.S)
+    if n_use:
+        print("  VSS: USE POWER -> USE GROUND")
     m = re.search(r"SIZE\s+(\S+)\s+BY\s+(\S+)", text)
     print("  SIZE %s BY %s" % (m.group(1), m.group(2)))
 
