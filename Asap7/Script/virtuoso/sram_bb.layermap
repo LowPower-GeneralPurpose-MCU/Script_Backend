@@ -1,0 +1,23 @@
+# sram_bb.layermap - chi dung de strmout GDS hop den SRAM (library SRAM_BB,
+# view layout lam tu abstract cua LEF In, xem sram_bb_from_abstract.il).
+#
+# Hinh (drawing va pin) -> datatype 0, nhan (label) -> texttype 251,
+# khung dien tich BOUNDARY -> 100/0.  Layer/purpose khong co o day se bi
+# strmout bo qua (co canh bao trong log), vi du prBoundary.
+# Chan SRAM chi nam tren M3/V3/M4/V4/M5 (M1/M2/V1/V2 chi co trong OBS, da xoa).
+#
+# <layerName> <purpose> <gdsNumber> <gdsDataType>
+BOUNDARY drawing 100 0
+M3       drawing  30 0
+M3       pin      30 0
+M3       label    30 251
+V3       drawing  35 0
+V3       pin      35 0
+M4       drawing  40 0
+M4       pin      40 0
+M4       label    40 251
+V4       drawing  45 0
+V4       pin      45 0
+M5       drawing  50 0
+M5       pin      50 0
+M5       label    50 251

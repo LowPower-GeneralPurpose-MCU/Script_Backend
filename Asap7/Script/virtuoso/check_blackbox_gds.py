@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Kiem GDS hop den (do sram_blackbox.il sinh ra) co khop LEF khong.
 
-  python check_blackbox_gds.py bb_gds/srambank_256x4x32_6t122.gds \\
-         .../srambank_256x4x32_6t122.lef.4x.lef
+  python3 check_blackbox_gds.py sram_gds/srambank_256x4x32_6t122.gds \\
+          .../techlef_misc/srambank_256x4x32_6t122.fixed.lef [scale]
 
-So bang SO NGUYEN dbu (= toa do LEF x 1000), khong theo header UNITS: cung
-day so, doc o 4000 dbu/um la 1x, o 1000 dbu/um la 4x (xem gds_rescale.py).
+scale = ti le LEF so voi 1x: 1 (mac dinh, LEF 1x) hoac 4 (LEF 4x cu).  So
+bang SO NGUYEN dbu: toa do LEF / scale x UNITS trong header GDS.
 Kiem:
   1. dung 1 structure, ten = MACRO trong LEF, khong SREF/AREF (hop den phang)
   2. dung 1 BOUNDARY 100/0 = (0,0)-(W,H) cua SIZE
@@ -113,8 +113,8 @@ def parse_lef(path):
     return macro, size, pins
 
 
-def dbu_int(v):
-    return int(round(v * 1000))
+def dbu_int(v, per_um):
+    return int(round(v * per_um))
 
 
 def clip(r, w, h):
@@ -130,13 +130,16 @@ def rect_of(xy):
 
 
 def main(argv):
-    if len(argv) != 2:
+    if len(argv) not in (2, 3):
         print(__doc__)
         return 2
-    gds, lef = argv
+    gds, lef = argv[:2]
+    scale = float(argv[2]) if len(argv) == 3 else 1.0
     dbu, structs = parse_gds(gds)
+    dbu = round(dbu)
+    per_um = dbu / scale          # so dbu GDS ung voi 1 um toa do LEF
     macro, size, pins = parse_lef(lef)
-    W, H = dbu_int(size[0]), dbu_int(size[1])
+    W, H = dbu_int(size[0], per_um), dbu_int(size[1], per_um)
     fails = []
 
     def check(ok, msg):
@@ -145,10 +148,10 @@ def main(argv):
             fails.append(msg)
 
     print('GDS : %s' % gds)
-    print('LEF : %s  (MACRO %s, SIZE %g x %g um 4x)' % (lef, macro, *size))
-    print('UNITS %g dbu/um -> doc tho: %.4f x %.4f um' % (dbu, W / dbu, H / dbu))
-    print('  (4x = so dbu/1000: %.3f x %.3f um, 1x = %.3f x %.3f um)'
-          % (W / 1000, H / 1000, W / 4000, H / 4000))
+    print('LEF : %s  (MACRO %s, SIZE %g x %g um, scale %g)'
+          % (lef, macro, size[0], size[1], scale))
+    print('UNITS %g dbu/um -> hop den 1x = %.4f x %.4f um (%d x %d dbu)'
+          % (dbu, W / dbu, H / dbu, W, H))
 
     check(list(structs) == [macro],
           '1 structure ten %s (co: %s)' % (macro, ', '.join(structs) or '-'))

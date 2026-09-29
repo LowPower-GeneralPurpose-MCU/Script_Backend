@@ -14,6 +14,15 @@ set STD_GDS_FILES [list \
     [mcu_resolve_path LVT_CELL_GDS {ASAP7_LVT_GDS_FILE} \
         [file join $STDCELL_ROOT GDS asap7sc7p5t_28_L_220121a.gds]]]
 
+# GDS "hop den" cua 2 master SRAM (ASAP7 khong ship GDS cho chung): sinh bang
+# Asap7/Script/virtuoso/sram_blackbox.il tu chinh LEF 1x .fixed Innovus doc,
+# kiem bang check_blackbox_gds.py.  KHOI 16 merge chung thay cho -outputMacros
+# va dung lai neu thieu file.
+set SRAM_BB_GDS_DIR [file join $INNOVUS_DIR sram_gds]
+set SRAM_BB_GDS_FILES [list \
+    [file join $SRAM_BB_GDS_DIR "$SRAM_MASTER.gds"] \
+    [file join $SRAM_BB_GDS_DIR "$SRAM_TAG_MASTER.gds"]]
+
 set INNOVUS_SDC [file join $INNOVUS_DIR outputs \
     [format "%s_syn.innovus.sdc" $TOP]]
 set INNOVUS_PATH_GROUPS \
