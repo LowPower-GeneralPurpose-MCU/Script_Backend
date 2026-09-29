@@ -203983,20 +203983,20 @@
 "object":"/designs/top_soc/instances_seq/u_axi_flash_s_axi_rdata_reg[0]",
 "type":"instance"},
 {"index": "1", 
- "date": "Fri Sep 25 18:14:47 UTC 2026",
- "seconds": 1790360087.95482,
+ "date": "Tue Sep 29 09:26:17 UTC 2026",
+ "seconds": 1790673977.249536,
  "netlist": "fv/top_soc/fv_map.v.gz", 
  "netlist_exists": "1", 
  "netlist_normalize": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/fv/top_soc/fv_map.v.gz", 
- "netlist_mtime": "1790360062", 
- "netlist_timestamp": "Fri Sep 25 18:14:22 UTC 2026", 
- "netlist_size": "1847215", 
- "netlist_cksum": "4038617136", 
+ "netlist_mtime": "1790673952", 
+ "netlist_timestamp": "Tue Sep 29 09:25:52 UTC 2026", 
+ "netlist_size": "1847212", 
+ "netlist_cksum": "2580743854", 
  "design_name": "top_soc", 
  "synth_workdir": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus", 
  "synthesis_command":"",
  "current_label": "fv_map", 
  "previous_label": "rtl", 
- "write_verif_file_runtime": 25.920807 
+ "write_verif_file_runtime": 24.778399999999998 
  }
 ]
