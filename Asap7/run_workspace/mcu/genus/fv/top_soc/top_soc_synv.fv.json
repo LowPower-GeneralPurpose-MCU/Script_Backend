@@ -203489,20 +203489,20 @@
 "object":"/designs/top_soc/instances_seq/u_axi_sdram_ba_reg_reg[0]",
 "type":"instance"},
 {"index": "2", 
- "date": "Fri Sep 25 18:32:44 UTC 2026",
- "seconds": 1790361164.563866,
+ "date": "Tue Sep 29 09:44:19 UTC 2026",
+ "seconds": 1790675059.650533,
  "netlist": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v", 
  "netlist_exists": "1", 
  "netlist_normalize": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v", 
- "netlist_mtime": "1790361110", 
- "netlist_timestamp": "Fri Sep 25 18:31:50 UTC 2026", 
+ "netlist_mtime": "1790675006", 
+ "netlist_timestamp": "Tue Sep 29 09:43:26 UTC 2026", 
  "netlist_size": "20351746", 
- "netlist_cksum": "3713642658", 
+ "netlist_cksum": "144856311", 
  "design_name": "top_soc", 
  "synth_workdir": "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus", 
  "synthesis_command":"",
  "current_label": "top_soc_synv", 
  "previous_label": "fv_map", 
- "write_verif_file_runtime": 23.197602999999997 
+ "write_verif_file_runtime": 23.112536 
  }
 ]
