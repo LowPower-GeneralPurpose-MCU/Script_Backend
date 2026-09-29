@@ -15,24 +15,27 @@
 ;; x=65.768 (bi cat) va 42 M3 + 40 V3 cua VDD/VSS nam han o x=65.41..65.65
 ;; (bi bo).  256x4x32 khong co hinh nao ngoai SIZE.
 ;;
-;; DON VI.  LEF la 4x, asap7_TechLib la 1x.  Script KHONG dung co don vi nao
-;; cua strmout; no ve sao cho SO NGUYEN dbu trong GDS = toa do LEF x 1000:
-;;     toa do ve (um) = toa do LEF x 1000 / DBUPerUU cua techlib
-;; DBUPerUU = 4000 -> ve o 1x (= LEF/4), GDS ghi 4000 dbu/um: dung quy uoc cua
-;; GDS std cell va srambank_*.gds, va cung day so nguyen voi top_soc.gds
-;; (streamOut -units 1000, 4x).  Muon doc o 4x: gds_rescale.py --dbu 1000.
+;; DON VI (sua 2026-09-29, du an da chuyen sang 1x).  asap7_TechLib la 1x, nen
+;; ve THANG toa do LEF / ?scale (um), don vi GDS = DBUPerUU cua techlib (strmout
+;; tu ghi header).  ?scale 1 (mac dinh) cho LEF 1x; ?scale 4 cho LEF 4x cu.
+;; Ban cu ve LEF x 1000 / DBUPerUU - dung cho LEF 4x nhung voi LEF 1x hop den
+;; NHO 4 LAN.  Innovus 1x streamOut -units 2000 -merge doi don vi file nay (vd
+;; 4000 -> 2000, IMPOGDS-215 vo hai: LEF .fixed nam tren luoi 0.001).
 ;;
 ;; CHUAN BI: tao library bang Library Manager > File > New > Library, chon
 ;; "Attach to an existing technology library" -> asap7_TechLib (vd SRAM_BB).
 ;; Phai tao qua GUI de library vao cds.lib - strmout chay ngoai doc cds.lib.
 ;;
-;; CHAY trong CIW (Virtuoso mo tu thu muc co cds.lib):
+;; CHAY trong CIW (Virtuoso mo tu thu muc co cds.lib), dung LEF 1x .fixed cua
+;; repo - CUNG file Innovus 1x doc:
 ;;   load("<repo>/Asap7/Script/virtuoso/sram_blackbox.il")
-;;   bbMakeBlackBox("SRAM_BB" "<lef>/srambank_256x4x32_6t122.lef.4x.lef" "./bb_gds")
-;;   bbMakeBlackBox("SRAM_BB" "<lef>/srambank_128x4x20_6t122.lef.4x.fixed.lef" "./bb_gds")
-;; Ra bb_gds/<macro>.gds, <macro>.layermap, <macro>.strmout.log.
+;;   L = "<repo>/Asap7/asap7/asap7sc7p5t_28/techlef_misc"
+;;   G = "<repo>/Asap7/run_workspace/mcu/innovus/sram_gds"
+;;   bbMakeBlackBox("SRAM_BB" strcat(L "/srambank_256x4x32_6t122.fixed.lef") G)
+;;   bbMakeBlackBox("SRAM_BB" strcat(L "/srambank_128x4x20_6t122.fixed.lef") G)
+;; Ra <G>/<macro>.gds, <macro>.layermap, <macro>.strmout.log.
 ;; KIEM (ngoai Virtuoso):
-;;   python check_blackbox_gds.py bb_gds/<macro>.gds <file lef>
+;;   python3 check_blackbox_gds.py <G>/<macro>.gds <file lef>
 
 ;; So layer GDS - giong SOC_GDS_LAYERS (soc_fp_config.tcl) va calibreDRC.rul
 bbGdsLayers = '(("M1" 19) ("V1" 21) ("M2" 20) ("V2" 25) ("M3" 30) ("V3" 35)
@@ -121,7 +124,7 @@ procedure(bbClip(r w h)
     when(x1 > x0 && y1 > y0 list(x0 y0 x1 y1))))
 
 ;; ------------------------------------------------------- ve + stream out
-procedure(bbMakeBlackBox(libName lefFile outDir @optional macroName)
+procedure(bbMakeBlackBox(libName lefFile outDir @key (scale 1) (macroName nil))
   let((lef rects cell w h cv tf dbu f layers c n best bestA a nRect nClip nDrop
        nLabel lp mapFile op gds cmd ok)
     lef   = bbParseLef(lefFile macroName)
@@ -147,7 +150,7 @@ procedure(bbMakeBlackBox(libName lefFile outDir @optional macroName)
     unless(cv error("Khong mo duoc %s/%s/layout de ghi\n" libName cell))
     tf  = techGetTechFile(cv)
     dbu = cv~>DBUPerUU
-    f   = 1000.0 / dbu
+    f   = 1.0 / scale
     foreach(l cons("BOUNDARY" layers)
       unless(techGetLayerNum(tf l)
         dbClose(cv)
@@ -216,10 +219,10 @@ procedure(bbMakeBlackBox(libName lefFile outDir @optional macroName)
 
     printf("\n==== hop den %s\n" cell)
     printf("  LEF            : %s\n" lefFile)
-    printf("  SIZE LEF (4x)  : %g x %g um\n" w h)
+    printf("  SIZE LEF       : %g x %g um (?scale %g)\n" w h scale)
     printf("  DBUPerUU       : %g  -> ve %g x %g um trong Virtuoso\n" dbu w*f h*f)
     printf("  GDS mong doi   : %d x %d dbu (header %g dbu/um)\n"
-           round(w * 1000) round(h * 1000) dbu)
+           round(w * f * dbu) round(h * f * dbu) dbu)
     printf("  chan           : %d, nhan %d\n" length(lef->pins) nLabel)
     printf("  hinh chan      : %d ve, %d bi cat sat bien, %d bo (han ngoai SIZE)\n"
            nRect nClip nDrop)
@@ -228,5 +231,5 @@ procedure(bbMakeBlackBox(libName lefFile outDir @optional macroName)
            lef->skipped))
     printf("  strmout        : %s - doc %s/%s.strmout.log\n"
            if(ok "xong" "LOI") outDir cell)
-    printf("  kiem           : python check_blackbox_gds.py %s %s\n" gds lefFile)
+    printf("  kiem           : python3 check_blackbox_gds.py %s %s %g\n" gds lefFile scale)
     ok))

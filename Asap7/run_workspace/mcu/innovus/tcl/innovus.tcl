@@ -913,12 +913,19 @@ Tiep theo: KHOI 16 (xuat file)"
 # KHOI 16 - Xuat file cho STA / LEC / ve so do
 # ==========================================================================
 # (09_PnR tr.28) GDS: std cell merge tu GDS cua asap7sc7p5t_28 (STD_GDS_FILES);
-# SRAM khong co GDS rieng tung macro -> -outputMacros ghi hinh chan tu LEF
-# (LVS phai coi SRAM la hop den).
+# SRAM (ASAP7 khong ship GDS) merge tu GDS hop den SRAM_BB_GDS_FILES do
+# sram_blackbox.il ve tu LEF 1x .fixed (LVS phai coi SRAM la hop den).
 soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     foreach gds $STD_GDS_FILES {
         if {![file isfile $gds]} {
             error "Khong co GDS std cell $gds - dat ASAP7_RVT_GDS_FILE / ASAP7_LVT_GDS_FILE"
+        }
+    }
+    # GDS hop den SRAM (sram_blackbox.il) - kiem TRUOC khi chay ca KHOI 16.
+    foreach gds $SRAM_BB_GDS_FILES {
+        if {![file isfile $gds] || [file size $gds] == 0} {
+            error "Khong co GDS hop den SRAM $gds - tao bang\
+ Asap7/Script/virtuoso/sram_blackbox.il roi check_blackbox_gds.py"
         }
     }
     # streamOut day het hinh hien co vao GDS, ke ca metal fill lech track.  Run
@@ -938,8 +945,8 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     # paste lai KHOI 15 tren database hien tai.
     soc_check_timing ./reports/timing_final      final -drv
     soc_check_timing ./reports/timing_final_hold final -hold
-    # LEF SRAM lech manufacturing grid / SITE khong ton tai di thang vao GDS vi
-    # -outputMacros lay hinh macro tu LEF (khong co GDS rieng cho SRAM).
+    # LEF SRAM lech manufacturing grid / SITE khong ton tai thi GDS hop den ve
+    # tu chinh LEF do cung hong.
     soc_require_sram_lef_clean
     soc_report_escaped_names ./reports/escaped_names.rpt
     extractRC
@@ -959,15 +966,17 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     soc_write_gds_map ./outputs/${TOP}_gds.map
     setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic \
         -virtualConnection false -textSize 1
+    # SRAM lay tu GDS hop den (merge), KHONG con -outputMacros: hai nguon cho
+    # cung mot master thi khong ro Innovus lay ban nao.
     streamOut ./outputs/${TOP}.gds -mapFile ./outputs/${TOP}_gds.map \
-        -merge $STD_GDS_FILES -units $SOC_GDS_UNITS \
-        -dieAreaAsBoundary -outputMacros
+        -merge [concat $STD_GDS_FILES $SRAM_BB_GDS_FILES] -units $SOC_GDS_UNITS \
+        -dieAreaAsBoundary
     write_lef_abstract -noCutObs ./outputs/${TOP}.lef
 }
 # Kiem tra GDS (ngoai Innovus): mo outputs/top_soc.gds, do 1 WELLTAP_* phai
 # rong 0.108 um (1x) = 216 dbu o SOC_GDS_UNITS 2000 va trung khit o dat trong
-# DEF; log streamOut khong duoc bao cell nao thieu trong GDS merge ngoai 2
-# master SRAM.  IMPOGDS-215 (merge file 4000 > 2000) VAN hien o 1x - vo hai vi
+# DEF; log streamOut khong duoc bao cell nao thieu trong GDS merge (ca 2
+# master SRAM nay cung co trong merge).  IMPOGDS-215 (merge file 4000 > 2000) VAN hien o 1x - vo hai vi
 # moi toa do cua GDS std cell la boi cua 2 dbu@4000 (xem SOC_GDS_UNITS).
 
 
