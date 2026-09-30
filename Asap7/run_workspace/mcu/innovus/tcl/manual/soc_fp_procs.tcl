@@ -1120,6 +1120,11 @@ proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0} {cgrid 0}} {
             } else {
                 set area [list $b0 $p0 $b1 $p1]
             }
+            # Innovus reset mot so mode sau MOI addStripe -> dat lai tung lan
+            if {[llength $::SOC_STRIPE_VIAPREF] > 0} {
+                setViaGenMode -disable_via_merging true \
+                    -viarule_preference $::SOC_STRIPE_VIAPREF
+            }
             addStripe -nets {VDD VSS} -layer $layer -direction $dir \
                 -width $W -spacing $S \
                 -set_to_set_distance $pitch \
@@ -1292,11 +1297,43 @@ proc soc_stdcell_rails {} {
         lassign $k x0 y0 x1 y1
         lappend keepouts [list $x0 [expr {$y0 + $R}] $x1 [expr {$y1 - $R}]]
     }
-    set n5 [soc_mesh_layer M5 vertical $keepouts \
+    # CHONG VIA M1->M6 PHAI DUNG VIA NHO (sua 2026-09-30).  Tech 1x KHONG co
+    # VIARULE GENERATE mac dinh cho M2-M3 / M3-M4, chi co M3_M2widePWR0p936 /
+    # M4_M3widePWR0p864: cat V2 0.234 x 0.018 -> mieng M3 VDD rong 0.234 quanh
+    # tam stripe (tam 206.640 -> mep trai 206.523).  Run 1x 2026-09-30: 37 roi
+    # 24 EndOfLine M3 (tin hieu vs Special Wire VDD) o KHOI 14 nam dung mep do,
+    # ecoRoute -fix_drc 2 luot khong go duoc.  Ep via co dinh VIA12..VIA56
+    # (M3 rong 0.018) roi dem lai: con widePWR moi -> dung ngay o day (10 phut)
+    # thay vi o KHOI 14 (1 tieng).
+    set wide_pats {M3_M2widePWR* M4_M3widePWR*}
+    set wide0 [soc_count_svias $wide_pats]
+    set ::SOC_STRIPE_VIAPREF {VIA12 VIA23 VIA34 VIA45 VIA56}
+    set rc [catch {soc_mesh_layer M5 vertical $keepouts \
         [list $::SOC_M5_W $::SOC_M5_S $::SOC_M5_PITCH $::SOC_M5_OFFSET] 1 \
-        $::SOC_M5_CGRID]
+        $::SOC_M5_CGRID} n5]
+    set ::SOC_STRIPE_VIAPREF {}
+    setViaGenMode -reset
+    if {$rc} {
+        error $n5
+    }
     puts "Stripe M5 std cell: $n5 vung (tranh [llength $keepouts] cum SRAM + khe)"
     editTrim -nets {VDD VSS}
+    set wide [expr {[soc_count_svias $wide_pats] - $wide0}]
+    puts "Chong via stripe M5: $wide via widePWR M2-M3/M3-M4 moi (phai 0)"
+    if {$wide > 0} {
+        error "KHOI 10 tao $wide via widePWR (mieng M3 rong 0.234 -> EndOfLine M3\
+ o KHOI 14): setViaGenMode -viarule_preference khong an - xem innovus.log"
+    }
+}
+
+# So special via (moi net) co ten via khop mot trong cac pattern.
+proc soc_count_svias {pats} {
+    set names [dbGet -e top.nets.sVias.via.name]
+    set n 0
+    foreach p $pats {
+        incr n [llength [lsearch -all -glob $names $p]]
+    }
+    return $n
 }
 
 # Tong so loi trong report verifyConnectivity (cac dong "N Problem(s)" o Summary);
