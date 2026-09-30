@@ -89710,3 +89710,8 @@ setViaGenMode -optimize_cross_via is reset to default value: false.
 <CMD> setViaGenMode -reset
 <CMD> editTrim -nets {VDD VSS}
 KHOI 10 tao 59267 via widePWR (mieng M3 rong 0.234 -> EndOfLine M3 o KHOI 14): setViaGenMode -viarule_preference khong an - xem innovus.log
+
+*** Memory Usage v#2 (Current mem = 10439.109M, initial mem = 839.699M) ***
+*** Message Summary: 506222 warning(s), 0 error(s)
+
+--- Ending "Innovus" (totcpu=0:27:42, real=0:23:31, mem=10439.1M) ---
