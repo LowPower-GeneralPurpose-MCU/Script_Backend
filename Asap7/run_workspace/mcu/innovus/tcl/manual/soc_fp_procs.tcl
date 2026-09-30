@@ -1302,12 +1302,25 @@ proc soc_stdcell_rails {} {
     # M4_M3widePWR0p864: cat V2 0.234 x 0.018 -> mieng M3 VDD rong 0.234 quanh
     # tam stripe (tam 206.640 -> mep trai 206.523).  Run 1x 2026-09-30: 37 roi
     # 24 EndOfLine M3 (tin hieu vs Special Wire VDD) o KHOI 14 nam dung mep do,
-    # ecoRoute -fix_drc 2 luot khong go duoc.  Ep via co dinh VIA12..VIA56
-    # (M3 rong 0.018) roi dem lai: con widePWR moi -> dung ngay o day (10 phut)
-    # thay vi o KHOI 14 (1 tieng).
-    set wide_pats {M3_M2widePWR* M4_M3widePWR*}
+    # ecoRoute -fix_drc 2 luot khong go duoc.  Ep via co dinh roi dem lai: con
+    # widePWR moi -> dung ngay o day (10 phut) thay vi o KHOI 14 (1 tieng).
+    # Run 2026-10-01: ep VIA12..VIA45 mac dinh thi viaGen bo het (IMPPP-4405,
+    # mieng M2/M3/M4 < AREA) -> 59267 widePWR; nay dung ban *_PG
+    # (SOC_PG_STACK_VIAS, mieng du AREA).
+    set wide_pats {M3_M2widePWR* M4_M3widePWR* M5_M4widePWR*}
+    set pg_pats {}
+    foreach v $::SOC_PG_STACK_VIAS {
+        if {[string match *_PG $v]} {
+            if {[llength [dbGet -e head.vias.name $v]] == 0} {
+                error "KHOI 10: tech LEF khong co via $v - LEF cu? (git pull,\
+ roi mo session moi va restoreDesign)"
+            }
+            lappend pg_pats $v
+        }
+    }
     set wide0 [soc_count_svias $wide_pats]
-    set ::SOC_STRIPE_VIAPREF {VIA12 VIA23 VIA34 VIA45 VIA56}
+    set pg0 [soc_count_svias $pg_pats]
+    set ::SOC_STRIPE_VIAPREF $::SOC_PG_STACK_VIAS
     set rc [catch {soc_mesh_layer M5 vertical $keepouts \
         [list $::SOC_M5_W $::SOC_M5_S $::SOC_M5_PITCH $::SOC_M5_OFFSET] 1 \
         $::SOC_M5_CGRID} n5]
@@ -1319,10 +1332,14 @@ proc soc_stdcell_rails {} {
     puts "Stripe M5 std cell: $n5 vung (tranh [llength $keepouts] cum SRAM + khe)"
     editTrim -nets {VDD VSS}
     set wide [expr {[soc_count_svias $wide_pats] - $wide0}]
-    puts "Chong via stripe M5: $wide via widePWR M2-M3/M3-M4 moi (phai 0)"
-    if {$wide > 0} {
+    set pg [expr {[soc_count_svias $pg_pats] - $pg0}]
+    puts "Chong via stripe M5: $wide via widePWR moi (phai 0), $pg via *_PG moi"
+    if {[llength $pg_pats] > 0 && $wide > 0} {
         error "KHOI 10 tao $wide via widePWR (mieng M3 rong 0.234 -> EndOfLine M3\
- o KHOI 14): setViaGenMode -viarule_preference khong an - xem innovus.log"
+ o KHOI 14): via $::SOC_PG_STACK_VIAS bi viaGen bo - tim IMPPP-4405 trong innovus.log"
+    }
+    if {[llength $pg_pats] > 0 && $pg == 0} {
+        error "KHOI 10 khong tao via *_PG nao - chong via M1->M5 khong duoc tao?"
     }
 }
 

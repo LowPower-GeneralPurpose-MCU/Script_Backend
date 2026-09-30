@@ -28,7 +28,8 @@ from decimal import Decimal
 # tech
 # ---------------------------------------------------------------------------
 # (ten, regex tren file goc, thay the).  So 1x = so 4x / 4.
-# thay the = None: comment khoi LEF58_ENCLOSURE (xem comment_block).
+# thay the = None: comment khoi LEF58_ENCLOSURE (xem comment_block), rieng
+# "PG stack vias" chen PG_STACK_VIAS (xem add_pg_vias).
 TECH_FIXES = [
     ("OVERLAP",
      r"#LAYER OVERLAP\n#  TYPE OVERLAP ;\n#END OVERLAP\n",
@@ -60,7 +61,63 @@ TECH_FIXES = [
     ("Pad pitch",
      r"(LAYER Pad\n(?:(?!END Pad).*\n)*? PITCH )0\.08 0\.08 ;",
      r"\g<1>2.24 2.24 ;"),
+    # Chi co o 1x: via chong M1->M5 cho stripe M5 std cell (KHOI 10).
+    ("PG stack vias",
+     r"END VIA12\n",
+     None),
 ]
+
+# Via cua chong M1->M5 duoi stripe M5 std cell (soc_stdcell_rails, KHOI 10).
+# Mieng dem M2/M3/M4 cua VIA12..VIA45 nho hon AREA cua lop (M2 0.028x0.018 =
+# 0.000504, M3 0.018x0.034 = 0.000612 < 0.000666; M4 0.046x0.024 = 0.0011 <
+# 0.002) -> viaGen bo tat ca (IMPPP-4405 o moi vi tri, run 1x 2026-09-30)
+# roi quay ve M3_M2widePWR0p936 / M4_M3widePWR0p864 (mieng M3 0.234 -> EOL M3
+# o KHOI 14).  Ban _PG: cung cut, mieng dem vua du AREA/MINSIZE, dung huong
+# uu tien cua lop va do rong trong WIDTHTABLE; M1 = cut de khong loi rail
+# 0.018 ra ngoai.
+PG_STACK_VIAS = """
+VIA VIA12_PG
+  LAYER M1 ;
+ RECT -0.009 -0.009 0.009 0.009 ;
+  LAYER M2 ;
+ RECT -0.019 -0.009 0.019 0.009 ;
+  LAYER V1 ;
+ RECT -0.009 -0.009 0.009 0.009 ;
+END VIA12_PG
+
+VIA VIA23_PG
+  LAYER M2 ;
+ RECT -0.019 -0.009 0.019 0.009 ;
+  LAYER M3 ;
+ RECT -0.009 -0.019 0.009 0.019 ;
+  LAYER V2 ;
+ RECT -0.009 -0.009 0.009 0.009 ;
+END VIA23_PG
+
+VIA VIA34_PG
+  LAYER M3 ;
+ RECT -0.009 -0.019 0.009 0.019 ;
+  LAYER M4 ;
+ RECT -0.042 -0.012 0.042 0.012 ;
+  LAYER V3 ;
+ RECT -0.009 -0.012 0.009 0.012 ;
+END VIA34_PG
+
+VIA VIA45_PG
+  LAYER M4 ;
+ RECT -0.042 -0.012 0.042 0.012 ;
+  LAYER M5 ;
+ RECT -0.012 -0.023 0.012 0.023 ;
+  LAYER V4 ;
+ RECT -0.012 -0.012 0.012 0.012 ;
+END VIA45_PG
+"""
+
+
+def add_pg_vias(m):
+    return (m.group(0)
+            + "\n# Via chong PG cho stripe M5 std cell - xem PG_STACK_VIAS trong make_1x_lef.py.\n"
+            + PG_STACK_VIAS)
 
 
 def comment_block(m):
@@ -80,7 +137,9 @@ def do_tech(args):
         if hits != 1:
             sys.exit("sua '%s': khop %d lan, can dung 1 - file goc khac ban @f970bd3" %
                      (name, hits))
-        text = rx.sub(comment_block if repl is None else repl, text, count=1)
+        if repl is None:
+            repl = add_pg_vias if name == "PG stack vias" else comment_block
+        text = rx.sub(repl, text, count=1)
         print("  da sua: %s" % name)
     header = ("# SINH BOI run_workspace/mcu/innovus/scripts/make_1x_lef.py tech - KHONG sua tay.\n"
               "# Nguon: asap7sc7p5t_28 @f970bd3 techlef_misc/asap7_tech_1x_201209.lef\n"
