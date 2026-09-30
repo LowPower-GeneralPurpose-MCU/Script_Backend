@@ -45,6 +45,9 @@ procedure(bbFromAbstract(lib cell @optional w h)
       bb = cv~>prBoundary~>bBox
       w = xCoord(upperRight(bb))
       h = yCoord(upperRight(bb)))
+    ;; strmout xuat prBoundary thanh layer 235/5 du layermap khong co no
+    ;; (checker bao "hinh o datatype khac 0"); hop da co BOUNDARY 100/0
+    when(cv~>prBoundary dbDeleteObject(cv~>prBoundary))
 
     ;; phai con hinh cua chan, khong thi xoa het se ra hop rong
     nPin = length(setof(s cv~>shapes s~>objType == "rect" && s~>pin))
