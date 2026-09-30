@@ -356,7 +356,14 @@ set SOC_GDS_PIN_TEXT 251
 set SOC_GDS_UNITS [expr {$MCU_SCALE == 1 ? 2000 : 1000}]
 
 # Stripe M5 doc de noi rail M1 cua std cell (Risc_V 4x: pitch 25.92).
+# Tam CA VDD lan VSS phai nam tren track M3 (pitch 0.036) VA track M5 (0.048)
+# -> boi so cua 0.144 (SOC_M5_CGRID), nen W + S = 0.144 (S = 0.120, truoc la
+# 0.072).  Run 1x 2026-09-30: S 0.072 -> tam VSS = VDD + 0.096 = 2.67 track M3,
+# chong via M1->M5 cua VDD lech track M3 -> 37 EndOfLine M3 (day tin hieu vs
+# Special Wire VDD) o KHOI 14, ca 37 dung cot stripe VDD, ecoRoute -fix_drc
+# 2 luot khong go duoc.  PITCH 6.48 = 45 x 0.144 nen moi cap giu thang hang.
 set SOC_M5_W      [soc_len 0.024]
-set SOC_M5_S      [soc_len 0.072]
+set SOC_M5_S      [soc_len 0.120]
 set SOC_M5_PITCH  [soc_len 6.480]
 set SOC_M5_OFFSET [soc_len 3.240]
+set SOC_M5_CGRID  [soc_len 0.144]
