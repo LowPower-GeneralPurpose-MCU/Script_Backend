@@ -300,7 +300,10 @@ soc_block "KHOI 7: blockage + pin" {
     set blk [expr {($SOC_HALO_ROWS + 1) * $SOC_ROW_H}]
     createPlaceBlockage -allMacro -snapToSite -outerRingBySide [list $blk $blk $blk $blk]
 
-    setPinConstraint -cell $TOP -corner_to_pin_distance [soc_len 2.0]
+    # -corner_to_pin_distance chi nhan SO NGUYEN (um): soc_len tra "2.0" ->
+    # IMPTCM-4, KHOI 7 dung (run 2026-09-30).  2 um o 1x, 8 um o 4x.
+    setPinConstraint -cell $TOP -corner_to_pin_distance \
+        [expr {int(round([soc_len 2.0]))}]
     source ./tcl/manual/soc_pins.tcl
 }
 # [LAM TAY - tuy chon] Doi canh pin: sua 4 danh sach trong tcl/manual/soc_pins.tcl
