@@ -587,6 +587,10 @@ soc_block "KHOI 12: optDesign postCTS" {
     # 12 clock gate roi cg_* (latch + AND2): net latch->AND la clock net,
     # optDesign khong sua hold o do (run 2026-09-17: -120 ps postCTS)
     soc_fix_cg_hold 0.020
+    # Buffer CTS/optDesign nam ngoai rail M1 da bi editTrim cat o KHOI 10 ->
+    # chan VDD/VSS ho (run 2026-10-01: 14 chan FE_OFC* trong khe 2.16 um).
+    # Noi lai + chan o day, truoc route.
+    soc_reconnect_stdcell_pg postCTS
     checkPlace ./verify_rpt/checkPlace_postCTS.rpt
     timeDesign -postCTS       -outDir ./reports/timing_postCTS      -prefix postCTS
     timeDesign -postCTS -hold -outDir ./reports/timing_postCTS_hold -prefix postCTS
@@ -729,6 +733,9 @@ soc_block "KHOI 14: optDesign postRoute" {
     # nhat bang dung hien trang chu khong te hon.
     soc_fix_drv ./reports/timing_postRoute postRoute
     timeDesign -postRoute -hold -outDir ./reports/timing_postRoute_hold -prefix postRoute
+    # Cell moi cua optDesign/soc_fix_cg_hold/soc_fix_drv: noi chan VDD/VSS vao
+    # rail M1 nhu KHOI 12, TRUOC verify_drc de DRC do ca rail vua ve them.
+    soc_reconnect_stdcell_pg postRoute
     # optDesign/ecoRoute doi day va chen cell -> phai kiem tra lai DRC o day.
     # PHAI nam SAU soc_fix_drv: no cung chay optDesign + ecoRoute, verify truoc
     # no thi bao cao DRC khong con ta trang thai cuoi cung cua khoi.
