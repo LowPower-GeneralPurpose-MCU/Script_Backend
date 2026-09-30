@@ -3192,4 +3192,59 @@ Tiep theo: KHOI 11 (CTS)
 09-24 14:52:01   postRoute SETUP: WNS 0.342 TNS 0.0, 0 duong vi pham -> DAT
 09-24 14:52:01   postRoute HOLD: WNS 0.017 TNS 0.0, 0 duong vi pham -> DAT
 09-24 14:52:01 >>> XONG: KHOI 14: optDesign postRoute
-09-24 14:52:02 innovus 166> 
+09-24 14:52:02 innovus 166> 09-30 14:05:19 Std cell: 18222.0 um^2 (glue top-level 2513.3 um^2)
+09-30 14:05:19 ============================================================
+09-30 14:05:19 >>> KHOI 1: floorPlan
+09-30 14:05:19 ============================================================
+09-30 14:05:19 Cho danh cho SRAM RAM_LO   131.1 x 353.2   tai (2.5, 2.5)
+09-30 14:05:19 Cho danh cho SRAM RAM_HI   131.1 x 353.2   tai (432.1, 2.5)
+09-30 14:05:19 Cho danh cho SRAM CACHE    250.3 x 87.5    tai (138.6, 2.5)
+09-30 14:05:19 Cho danh cho SRAM TAG       33.1 x 61.6    tai (393.9, 2.5)
+09-30 14:05:20 >>> XONG: KHOI 1: floorPlan
+09-30 14:05:20 ============================================================
+09-30 14:05:20 >>> KHOI 2: core ring
+09-30 14:05:20 ============================================================
+09-30 14:05:20 Ring loi: le 2.484 | trong 0.136 | VSS 0.136 | trong 0.136 | VDD 0.136 | trong 1.940 -> loi
+09-30 14:05:21 Ring loi VDD: 2 doan M8, 2 doan M9
+09-30 14:05:21 Ring loi VSS: 2 doan M8, 2 doan M9
+09-30 14:05:21 >>> XONG: KHOI 2: core ring
+09-30 14:05:21 ============================================================
+09-30 14:05:21 >>> KHOI 3: dat mam 84 SRAM
+09-30 14:05:21 ============================================================
+09-30 14:05:21 soc_load_sram_place: ./tcl/manual/soc_sram_place.tcl luu o MCU_SCALE=4, doi x0.25 sang MCU_SCALE=1 (chay soc_save_sram_place de ghi lai)
+09-30 14:05:21 Nap 84 SRAM tu ./tcl/manual/soc_sram_place.tcl (xoa file de xep mam lai)
+09-30 14:05:21 Kiem tra mam: 0 loi
+09-30 14:05:21 >>> XONG: KHOI 3: dat mam 84 SRAM
+09-30 14:05:21 ============================================================
+09-30 14:05:21 >>> KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp
+09-30 14:05:21 ============================================================
+09-30 14:05:21 Da luu 84 SRAM vao ./tcl/manual/soc_sram_place.tcl
+09-30 14:05:27 >>> XONG: KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp
+09-30 14:06:26 ============================================================
+09-30 14:06:26 >>> KHOI 5: luoi nguon M4/M5 cho tung cum SRAM
+09-30 14:06:26 ============================================================
+09-30 14:06:26 Ring loi VDD: 2 doan M8, 2 doan M9
+09-30 14:06:26 Ring loi VSS: 2 doan M8, 2 doan M9
+09-30 14:06:26 84 SRAM -> 10 cum
+09-30 14:06:27 Cum RAM_LO(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+09-30 14:06:28 Cum RAM_LO(16)        2 cot: M4 ngang  36/36  doan, M5 doc  38/38  doan
+09-30 14:06:28 Cum RAM_LO(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+09-30 14:06:29 Cum RAM_HI(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+09-30 14:06:29 Cum RAM_HI(16)        2 cot: M4 ngang  36/36  doan, M5 doc  38/38  doan
+09-30 14:06:30 Cum RAM_HI(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+09-30 14:06:30 Cum CACHE(4)          2 cot: M4 ngang  12/12  doan, M5 doc  14/14  doan
+09-30 14:06:31 Cum CACHE(4)          2 cot: M4 ngang  12/12  doan, M5 doc  14/14  doan
+09-30 14:06:31 Cum CACHE(8)          4 cot: M4 ngang  24/24  doan, M5 doc  26/26  doan
+09-30 14:06:31 Cum TAG(4)            2 cot: M4 ngang  12/12  doan, M5 doc  14/14  doan
+09-30 14:06:31 >>> XONG: KHOI 5: luoi nguon M4/M5 cho tung cum SRAM
+09-30 14:06:31 ============================================================
+09-30 14:06:31 >>> KHOI 6: luoi M7/M6
+09-30 14:06:31 ============================================================
+09-30 14:06:31 Ring loi VDD: 2 doan M8, 2 doan M9
+09-30 14:06:31 Ring loi VSS: 2 doan M8, 2 doan M9
+09-30 14:06:32 Luoi M7: 18 vung, M6: 26 vung (tranh 10 cum SRAM)
+09-30 14:06:33 >>> XONG: KHOI 6: luoi M7/M6
+09-30 14:06:33 ============================================================
+09-30 14:06:33 >>> KHOI 7: blockage + pin
+09-30 14:06:33 ============================================================
+09-30 14:06:33 >>> LOI: KHOI 7: blockage + pin: 
