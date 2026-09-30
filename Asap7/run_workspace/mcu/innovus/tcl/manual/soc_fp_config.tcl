@@ -368,5 +368,12 @@ set SOC_M5_PITCH  [soc_len 6.480]
 set SOC_M5_OFFSET [soc_len 3.240]
 set SOC_M5_CGRID  [soc_len 0.144]
 # Via ep cho chong via cua addStripe trong soc_mesh_layer; {} = de viaGen tu
-# chon.  Chi soc_stdcell_rails (KHOI 10) dat tam thoi thanh VIA12..VIA56.
+# chon.  Chi soc_stdcell_rails (KHOI 10) dat tam thoi thanh SOC_PG_STACK_VIAS.
 set SOC_STRIPE_VIAPREF {}
+# Chong via M1->M6 duoi stripe M5 std cell.  VIA12..VIA45 mac dinh KHONG dung
+# duoc: mieng M2/M3/M4 nho hon AREA cua lop -> viaGen bo het (IMPPP-4405 o moi
+# vi tri, run 1x 2026-10-01) va quay ve widePWR.  Ban *_PG (tech LEF 1x, sinh
+# boi make_1x_lef.py) co mieng vua du AREA.  4x: LEF repo khong co *_PG ->
+# {} = de viaGen tu chon nhu cac run 4x cu.
+set SOC_PG_STACK_VIAS [expr {$MCU_SCALE == 1 ?
+    {VIA12_PG VIA23_PG VIA34_PG VIA45_PG VIA56} : {}}]

@@ -707,6 +707,44 @@ VIA VIA12 Default
  RECT -0.009 -0.009 0.009 0.009 ;
 END VIA12
 
+# Via chong PG cho stripe M5 std cell - xem PG_STACK_VIAS trong make_1x_lef.py.
+
+VIA VIA12_PG
+  LAYER M1 ;
+ RECT -0.009 -0.009 0.009 0.009 ;
+  LAYER M2 ;
+ RECT -0.019 -0.009 0.019 0.009 ;
+  LAYER V1 ;
+ RECT -0.009 -0.009 0.009 0.009 ;
+END VIA12_PG
+
+VIA VIA23_PG
+  LAYER M2 ;
+ RECT -0.019 -0.009 0.019 0.009 ;
+  LAYER M3 ;
+ RECT -0.009 -0.019 0.009 0.019 ;
+  LAYER V2 ;
+ RECT -0.009 -0.009 0.009 0.009 ;
+END VIA23_PG
+
+VIA VIA34_PG
+  LAYER M3 ;
+ RECT -0.009 -0.019 0.009 0.019 ;
+  LAYER M4 ;
+ RECT -0.042 -0.012 0.042 0.012 ;
+  LAYER V3 ;
+ RECT -0.009 -0.012 0.009 0.012 ;
+END VIA34_PG
+
+VIA VIA45_PG
+  LAYER M4 ;
+ RECT -0.042 -0.012 0.042 0.012 ;
+  LAYER M5 ;
+ RECT -0.012 -0.023 0.012 0.023 ;
+  LAYER V4 ;
+ RECT -0.012 -0.012 0.012 0.012 ;
+END VIA45_PG
+
 #################################
 ### VIARULE GENERATE DEFAULTS ###
 #################################
