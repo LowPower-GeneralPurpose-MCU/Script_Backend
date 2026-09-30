@@ -356,14 +356,17 @@ set SOC_GDS_PIN_TEXT 251
 set SOC_GDS_UNITS [expr {$MCU_SCALE == 1 ? 2000 : 1000}]
 
 # Stripe M5 doc de noi rail M1 cua std cell (Risc_V 4x: pitch 25.92).
-# Tam CA VDD lan VSS phai nam tren track M3 (pitch 0.036) VA track M5 (0.048)
-# -> boi so cua 0.144 (SOC_M5_CGRID), nen W + S = 0.144 (S = 0.120, truoc la
-# 0.072).  Run 1x 2026-09-30: S 0.072 -> tam VSS = VDD + 0.096 = 2.67 track M3,
-# chong via M1->M5 cua VDD lech track M3 -> 37 EndOfLine M3 (day tin hieu vs
-# Special Wire VDD) o KHOI 14, ca 37 dung cot stripe VDD, ecoRoute -fix_drc
-# 2 luot khong go duoc.  PITCH 6.48 = 45 x 0.144 nen moi cap giu thang hang.
+# Tam VDD va VSS dat tren boi 0.144 (SOC_M5_CGRID = track M3 0.036 VA track
+# M5 0.048), W + S = 0.144.  Doi tu S 0.072 ngay 2026-09-30 vi tuong 37
+# EndOfLine M3 o KHOI 14 do stripe lech track M3 - SAI: snap track M5 von da
+# dat VDD o 206.640 (dung track M3), loi van nguyen cot sau khi doi.  Nguyen
+# nhan that la via widePWR (xem soc_stdcell_rails / SOC_STRIPE_VIAPREF).  Giu
+# lai vi vo hai (KHOI 10 sach) va giu ca VSS tren track M3.
 set SOC_M5_W      [soc_len 0.024]
 set SOC_M5_S      [soc_len 0.120]
 set SOC_M5_PITCH  [soc_len 6.480]
 set SOC_M5_OFFSET [soc_len 3.240]
 set SOC_M5_CGRID  [soc_len 0.144]
+# Via ep cho chong via cua addStripe trong soc_mesh_layer; {} = de viaGen tu
+# chon.  Chi soc_stdcell_rails (KHOI 10) dat tam thoi thanh VIA12..VIA56.
+set SOC_STRIPE_VIAPREF {}
