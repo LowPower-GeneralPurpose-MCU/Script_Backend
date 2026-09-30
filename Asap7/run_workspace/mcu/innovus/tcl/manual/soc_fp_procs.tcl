@@ -1267,10 +1267,10 @@ proc soc_notch_boxes {} {
 #   2. M5 doc pitch 25.92, KHONG di vao cum SRAM + khe mep cum; them 1 cap sat
 #      moi canh cum de kenh hep giua hai cum van duoc noi.  Via M1->M6 tai
 #      giao diem voi rail M1 va luoi M6 (KHOI 6).
-proc soc_stdcell_rails {} {
-    # Chi ve followpin, KHONG tu via len stripe: sroute ha via M1->M7 roi thieu
-    # VIARULE M6-M7 cho rail 0.072 (IMPPP-610, run 2026-09-17).  Via M1->M6 do
-    # addStripe M5 ben duoi tao.
+# Rail M1 followpin theo row.  Chi ve followpin, KHONG tu via len stripe: sroute
+# ha via M1->M7 roi thieu VIARULE M6-M7 cho rail 0.072 (IMPPP-610, run
+# 2026-09-17).  Via M1->M6 do addStripe M5 (soc_stdcell_rails) tao.
+proc soc_stdcell_followpins {} {
     setSrouteMode -reset
     setSrouteMode -viaConnectToShape {noshape}
     sroute -nets {VDD VSS} \
@@ -1278,6 +1278,10 @@ proc soc_stdcell_rails {} {
         -corePinCheckStdcellGeoms \
         -allowJogging 0 \
         -allowLayerChange 0
+}
+
+proc soc_stdcell_rails {} {
+    soc_stdcell_followpins
 
     setAddStripeMode -reset
     setAddStripeMode \
@@ -1351,6 +1355,54 @@ proc soc_count_svias {pats} {
         incr n [llength [lsearch -all -glob $names $p]]
     }
     return $n
+}
+
+# Tong "N Problem(s) (<code>)" cua cac ma trong 'codes' o Summary cua mot
+# report verifyConnectivity.
+proc soc_vfc_count {report codes} {
+    set fh [open $report r]
+    set text [read $fh]
+    close $fh
+    set n 0
+    foreach code $codes {
+        foreach {line count} [regexp -all -inline "(\\d+) Problem\\(s\\) \\($code\\)" $text] {
+            incr n $count
+        }
+    }
+    return $n
+}
+
+# Noi chan VDD/VSS cua cell chen SAU KHOI 10 (CTS, optDesign, soc_fix_cg_hold,
+# soc_fix_drv) vao rail M1.  editTrim o KHOI 10 cat rail M1 lui ve via cuoi
+# cung / chan cell cuoi cung CO LUC DO.  Run 1x 2026-10-01: khe 2.16 um giua
+# cot SRAM (x 33.9 / 100.0 / 463.4) co cap M5 mep phai VDD tam 35.712 (snap
+# 0.144 lui xa tuong), mep khe 36.072 -> rail VDD dung o 35.724; optDesign
+# postCTS dat buffer FE_OFC* o 35.748..36.018 -> 13 chan VDD + 1 VSS ho
+# (IMPVFC-96) + 2 IMPVFC-200 o connectivity_route.  Truoc khi snap cap do
+# nam sat mep hon, vung bi cat hep hon 1 buffer nen khong lo.
+# Sua: dem chan ho; co thi sroute followpin lai (noi rail cho cell moi) roi
+# dem lai; con thi DUNG (truoc route, khong phai o KHOI 15).  Dangling
+# (IMPVFC-94) khong tinh - muc info, filler o KHOI 15 noi.
+proc soc_reconnect_stdcell_pg {tag} {
+    set codes {IMPVFC-96 IMPVFC-200}
+    set rpt ./verify_rpt/connectivity_${tag}_pg.rpt
+    clearDrc
+    verifyConnectivity -net {VDD VSS} -type all -error 100000 -warning 1000 -report $rpt
+    set n [soc_vfc_count $rpt $codes]
+    if {$n == 0} {
+        puts "Chan VDD/VSS std cell ($tag): 0 ho"
+        return
+    }
+    puts "Chan VDD/VSS std cell ($tag): $n ho ($codes, xem $rpt) -> sroute followpin lai"
+    soc_stdcell_followpins
+    set rpt2 ./verify_rpt/connectivity_${tag}_pg_fix.rpt
+    clearDrc
+    verifyConnectivity -net {VDD VSS} -type all -error 100000 -warning 1000 -report $rpt2
+    set n2 [soc_vfc_count $rpt2 $codes]
+    puts "Chan VDD/VSS std cell ($tag) sau sroute: $n2 ho (phai 0)"
+    if {$n2 > 0} {
+        error "$n2 chan VDD/VSS van ho sau sroute followpin - xem $rpt2 (cell nam ngoai rail M1 bi editTrim cat o KHOI 10)"
+    }
 }
 
 # Tong so loi trong report verifyConnectivity (cac dong "N Problem(s)" o Summary);
