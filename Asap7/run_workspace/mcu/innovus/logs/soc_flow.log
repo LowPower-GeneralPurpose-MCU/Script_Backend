@@ -3719,4 +3719,104 @@ Tiep theo: KHOI 11 (CTS)
 09-30 16:41:07   ... con 21 net nua
 09-30 16:41:07   -> 24 vi pham that (8 bo qua: net {}, loai {OFFGRID}; 8 OFFGRID M4 tai chan macro)
 09-30 16:41:07 >>> LOI: KHOI 14: optDesign postRoute: Con 24 vi pham DRC sau ecoRoute - xem verify_rpt/drc_postRoute.rpt truoc khi sang KHOI 15
-09-30 16:41:12 innovus 166> 
+09-30 16:41:12 innovus 166> 09-30 18:12:21 wire | M3 |  | u_dcache/LTIEHI_127_NET | {206.379 142.875 206.397 143.01} | 
+10-01 01:54:19 wire | M3 |  | u_dcache/LTIEHI_127_NET | {206.379 142.875 206.397 143.01} | 
+10-01 01:58:43 Std cell: 18222.0 um^2 (glue top-level 2513.3 um^2)
+10-01 01:58:43 ============================================================
+10-01 01:58:43 >>> KHOI 1: floorPlan
+10-01 01:58:43 ============================================================
+10-01 01:58:44 Cho danh cho SRAM RAM_LO   131.1 x 353.2   tai (2.5, 2.5)
+10-01 01:58:44 Cho danh cho SRAM RAM_HI   131.1 x 353.2   tai (432.1, 2.5)
+10-01 01:58:44 Cho danh cho SRAM CACHE    250.3 x 87.5    tai (138.6, 2.5)
+10-01 01:58:44 Cho danh cho SRAM TAG       33.1 x 61.6    tai (393.9, 2.5)
+10-01 01:58:44 >>> XONG: KHOI 1: floorPlan
+10-01 01:58:44 ============================================================
+10-01 01:58:44 >>> KHOI 2: core ring
+10-01 01:58:44 ============================================================
+10-01 01:58:44 Ring loi: le 2.484 | trong 0.136 | VSS 0.136 | trong 0.136 | VDD 0.136 | trong 1.940 -> loi
+10-01 01:58:45 Ring loi VDD: 2 doan M8, 2 doan M9
+10-01 01:58:45 Ring loi VSS: 2 doan M8, 2 doan M9
+10-01 01:58:45 >>> XONG: KHOI 2: core ring
+10-01 01:58:45 ============================================================
+10-01 01:58:45 >>> KHOI 3: dat mam 84 SRAM
+10-01 01:58:45 ============================================================
+10-01 01:58:45 Nap 84 SRAM tu ./tcl/manual/soc_sram_place.tcl (xoa file de xep mam lai)
+10-01 01:58:45 Kiem tra mam: 0 loi
+10-01 01:58:45 >>> XONG: KHOI 3: dat mam 84 SRAM
+10-01 01:58:45 ============================================================
+10-01 01:58:45 >>> KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp
+10-01 01:58:45 ============================================================
+10-01 01:58:45 Da luu 84 SRAM vao ./tcl/manual/soc_sram_place.tcl
+10-01 01:58:51 >>> XONG: KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp
+10-01 01:58:52 ============================================================
+10-01 01:58:52 >>> KHOI 5: luoi nguon M4/M5 cho tung cum SRAM
+10-01 01:58:52 ============================================================
+10-01 01:58:52 Ring loi VDD: 2 doan M8, 2 doan M9
+10-01 01:58:52 Ring loi VSS: 2 doan M8, 2 doan M9
+10-01 01:58:52 84 SRAM -> 10 cum
+10-01 01:58:52 Cum RAM_LO(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+10-01 01:58:53 Cum RAM_LO(16)        2 cot: M4 ngang  36/36  doan, M5 doc  38/38  doan
+10-01 01:58:53 Cum RAM_LO(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+10-01 01:58:54 Cum RAM_HI(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+10-01 01:58:55 Cum RAM_HI(16)        2 cot: M4 ngang  36/36  doan, M5 doc  38/38  doan
+10-01 01:58:55 Cum RAM_HI(8)         1 cot: M4 ngang  18/18  doan, M5 doc  20/20  doan
+10-01 01:58:56 Cum CACHE(4)          2 cot: M4 ngang  12/12  doan, M5 doc  14/14  doan
+10-01 01:58:56 Cum CACHE(4)          2 cot: M4 ngang  12/12  doan, M5 doc  14/14  doan
+10-01 01:58:56 Cum CACHE(8)          4 cot: M4 ngang  24/24  doan, M5 doc  26/26  doan
+10-01 01:58:57 Cum TAG(4)            2 cot: M4 ngang  12/12  doan, M5 doc  14/14  doan
+10-01 01:58:57 >>> XONG: KHOI 5: luoi nguon M4/M5 cho tung cum SRAM
+10-01 01:58:57 ============================================================
+10-01 01:58:57 >>> KHOI 6: luoi M7/M6
+10-01 01:58:57 ============================================================
+10-01 01:58:57 Ring loi VDD: 2 doan M8, 2 doan M9
+10-01 01:58:57 Ring loi VSS: 2 doan M8, 2 doan M9
+10-01 01:58:58 Luoi M7: 18 vung, M6: 26 vung (tranh 10 cum SRAM)
+10-01 01:58:58 >>> XONG: KHOI 6: luoi M7/M6
+10-01 01:58:58 ============================================================
+10-01 01:58:58 >>> KHOI 7: blockage + pin
+10-01 01:58:58 ============================================================
+10-01 01:58:58 INFO: da gan 174 pin top_soc: tren 134, duoi 40, x 139.7..425.9
+10-01 01:58:58 >>> XONG: KHOI 7: blockage + pin
+10-01 01:58:58 ============================================================
+10-01 01:58:58 >>> KHOI 8: verify + saveDesign
+10-01 01:58:58 ============================================================
+10-01 01:58:58 Ring loi VDD: 2 doan M8, 2 doan M9
+10-01 01:58:58 Ring loi VSS: 2 doan M8, 2 doan M9
+10-01 01:58:58 --- ./verify_rpt/drc_powerplan.rpt
+10-01 01:58:58   0 vi pham
+10-01 01:59:02 ============================================================
+10-01 01:59:02 FLOORPLAN + POWER GRID XONG - saved/top_soc_powerplan.enc
+  verify_rpt/connectivity_powerplan.rpt : moi SRAM phai noi VDD/VSS
+      (open o chan std cell la binh thuong - rail M1 chua lam)
+  verify_rpt/drc_powerplan.rpt          : phai 0 vi pham PG
+  GUI: Tools > Violation Browser de xem tung loi
+Tiep theo: KHOI 9 (placement), KHOI 10 (rail M1 + stripe M5 std cell)
+10-01 01:59:02 ============================================================
+10-01 01:59:02 >>> XONG: KHOI 8: verify + saveDesign
+10-01 01:59:02 ============================================================
+10-01 01:59:02 >>> KHOI 9: placement
+10-01 01:59:02 ============================================================
+10-01 01:59:02 Ring loi VDD: 2 doan M8, 2 doan M9
+10-01 01:59:02 Ring loi VSS: 2 doan M8, 2 doan M9
+10-01 01:59:03 Tap cell: 31100 TAPCELL_ASAP7_75t_R
+10-01 01:59:03 Notch  201.474   65.124  237.816   91.044  (36.34 x 25.92 um)
+10-01 01:59:03 Notch  463.428    2.484  465.588  355.644  (2.16 x 353.16 um)
+10-01 01:59:03 Notch  100.008    2.484  102.168  355.644  (2.16 x 353.16 um)
+10-01 01:59:03 Notch   33.912    2.484   36.072  355.644  (2.16 x 353.16 um)
+10-01 01:59:03 Notch  529.524    2.484  531.684  355.644  (2.16 x 353.16 um)
+10-01 01:59:03 Notch  134.676    2.484  137.538   91.044  (2.86 x 88.56 um)
+10-01 01:59:03 Notch  301.752    2.484  303.210   91.044  (1.46 x 88.56 um)
+10-01 01:59:03 Notch  430.002    2.484  430.920   91.044  (0.92 x 88.56 um)
+10-01 01:59:03 Doc path group: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus_groups.tcl
+10-01 02:00:23 ***** Total cpu  0:5:13
+10-01 02:00:23 ***** Total real time  0:1:19
+10-01 02:05:02 Mat do std cell dat duoc: 0.238 (target MCU_TARGET_STD_UTIL 0.550)
+10-01 02:05:02 WARNING: mat do 0.238 chi bang 43% target 0.550 - loi dang bi keo cao qua muc (tuong SRAM quyet dinh chieu cao, khong phai logic). Xem soc_layout trong soc_fp_procs.tcl.
+10-01 02:05:16   place SETUP: WNS 0.21 TNS 0.0, 0 duong vi pham -> DAT
+10-01 02:05:22 >>> XONG: KHOI 9: placement
+10-01 02:05:22 innovus 136> 10-01 02:08:15 ============================================================
+10-01 02:08:15 >>> KHOI 10: rail M1 + stripe M5 std cell
+10-01 02:08:15 ============================================================
+10-01 02:08:40 Stripe M5 std cell: 20 vung (tranh 10 cum SRAM + khe)
+10-01 02:08:40 Chong via stripe M5: 59267 via widePWR M2-M3/M3-M4 moi (phai 0)
+10-01 02:08:40 >>> LOI: KHOI 10: rail M1 + stripe M5 std cell: KHOI 10 tao 59267 via widePWR (mieng M3 rong 0.234 -> EndOfLine M3 o KHOI 14): setViaGenMode -viarule_preference khong an - xem innovus.log
