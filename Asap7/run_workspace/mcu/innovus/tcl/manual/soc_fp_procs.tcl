@@ -986,7 +986,21 @@ proc soc_free_intervals {lo hi blocked} {
 # Run 2026-09-17 cap extra chay het chieu cao loi: cap mep phai TAG va mep trai
 # DTCM (hai keepout cach 0.152 um) thanh 2 cap cach 1.1 um suot 1170 um, chong
 # via M1-M5 chiem het track M3/M4 -> 23/35 loi DRC final nam o x~925.
-proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0}} {
+# Dua vi tri canh trai p cua day rong W sao cho TAM nam tren boi cua g
+# (mode round/floor/ceil).  g = 0: giu nguyen.
+proc soc_snap_center {p W g {mode round}} {
+    if {$g <= 0} {
+        return $p
+    }
+    set k [expr {($p + 0.5 * $W) / $g}]
+    set k [expr {$mode eq "floor" ? floor($k + 1e-6) :
+                 $mode eq "ceil"  ? ceil($k - 1e-6)  : round($k)}]
+    return [expr {double([format %.4f [expr {$k * $g - 0.5 * $W}]])}]
+}
+
+# cgrid > 0: tam moi day (VDD, va VSS vi W + S = cgrid) dat tren boi cua cgrid
+# - xem SOC_M5_CGRID.  Vi tri extra canh keepout lui RA XA keepout khi snap.
+proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0} {cgrid 0}} {
     set snap_opts {}
     if {[llength $shape] == 0} {
         set shape [list $::SOC_MESH_W $::SOC_MESH_S $::SOC_MESH_PITCH $::SOC_MESH_OFFSET]
@@ -1016,7 +1030,8 @@ proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0}} {
                 lassign [list $ky0 $ky1 $kx0 $kx1] a0 a1 b0 b1
             }
             set span [list [expr {$b0 - $min_len}] [expr {$b1 + $min_len}]]
-            foreach p [list [expr {$a0 - 2.0 * $E - $pair}] [expr {$a1 + 2.0 * $E}]] {
+            foreach p [list [soc_snap_center [expr {$a0 - 2.0 * $E - $pair}] $W $cgrid floor] \
+                           [soc_snap_center [expr {$a1 + 2.0 * $E}] $W $cgrid ceil]] {
                 if {$p < $c0 || $p + $pair > $c1} {
                     continue
                 }
@@ -1039,7 +1054,9 @@ proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0}} {
         }
     }
     set positions $edge_pos
-    for {set pos [expr {$c0 + $offset}]} {$pos + $pair <= $c1 + 1e-6} \
+    # pitch la boi cua cgrid -> snap vi tri dau la ca luoi thang hang
+    for {set pos [soc_snap_center [expr {$c0 + $offset}] $W $cgrid ceil]} \
+        {$pos + $pair <= $c1 + 1e-6} \
         {set pos [expr {$pos + $pitch}]} {
         set near 0
         foreach q $edge_pos {
@@ -1276,7 +1293,8 @@ proc soc_stdcell_rails {} {
         lappend keepouts [list $x0 [expr {$y0 + $R}] $x1 [expr {$y1 - $R}]]
     }
     set n5 [soc_mesh_layer M5 vertical $keepouts \
-        [list $::SOC_M5_W $::SOC_M5_S $::SOC_M5_PITCH $::SOC_M5_OFFSET] 1]
+        [list $::SOC_M5_W $::SOC_M5_S $::SOC_M5_PITCH $::SOC_M5_OFFSET] 1 \
+        $::SOC_M5_CGRID]
     puts "Stripe M5 std cell: $n5 vung (tranh [llength $keepouts] cum SRAM + khe)"
     editTrim -nets {VDD VSS}
 }
@@ -2027,6 +2045,38 @@ proc soc_fill_check_track {layer w gap active} {
         [expr {100.0 * $w / ($gap + $w)}]]
 }
 
+# OFFGRID M4 tai chan SRAM: chan M4 trong LEF SRAM lech track (ca 78/78), day
+# cham chan thi thanh OFFGRID.  Run 1x 2026-09-30 con 7 cai sau 2 luot ecoRoute
+# -fix_drc, ca 7 tan cung dung canh macro ITCM x=382.020.  Day la luat router
+# (RIGHTWAYONGRIDONLY), khong phai hinh Calibre bat, va khong sua duoc tu phia
+# top.  Chi bo qua khi: loai OFFGRID + layer M4 + hop Bounds cham hop mot
+# instance BLOCK.  OFFGRID o cho khac (fill, day giua logic) van la vi pham that.
+# Dung chung cho soc_verify_drc va soc_require_drc_clean.
+proc soc_macro_boxes {} {
+    set insts [dbGet -e -p2 top.insts.cell.subClass block]
+    if {$insts eq "" || $insts eq "0x0"} {
+        return {}
+    }
+    return [dbGet $insts.box]
+}
+proc soc_offgrid_m4 {type rest} {
+    return [expr {$type eq "OFFGRID" && [regexp {\(\s*M4\s*\)\s*$} $rest]}]
+}
+proc soc_bounds_at_macro {bounds boxes} {
+    if {![regexp {\(\s*([-0-9.]+),\s*([-0-9.]+)\s*\)\s*\(\s*([-0-9.]+),\s*([-0-9.]+)\s*\)} \
+            $bounds -> x0 y0 x1 y1]} {
+        return 0
+    }
+    set e 0.002
+    foreach b $boxes {
+        lassign $b bx0 by0 bx1 by1
+        if {$x0 <= $bx1 + $e && $x1 >= $bx0 - $e && $y0 <= $by1 + $e && $y1 >= $by0 - $e} {
+            return 1
+        }
+    }
+    return 0
+}
+
 # verify_drc + doc lai bao cao va phan loai.
 #   soc_verify_drc <file> ?-limit N? ?-allow-nets {pattern ...}? ?-allow-types {pattern ...}?
 # verify_drc DUNG GIUA CHUNG khi so vi pham cham -limit va chi ghi mot dong
@@ -2055,6 +2105,9 @@ proc soc_verify_drc {report args} {
     set truncated 0
     array set bytype {}
     array set bynet  {}
+    set mboxes  [soc_macro_boxes]
+    set pend    0
+    set mwaived 0
     set fp [open $report r]
     while {[gets $fp line] >= 0} {
         if {[regexp {^\s*Total Violations\s*:\s*([0-9]+)} $line -> n]} {
@@ -2067,6 +2120,15 @@ proc soc_verify_drc {report args} {
             continue
         }
         if {$type eq "Bounds"} {
+            # OFFGRID M4 hoan lai tu dong truoc: gio moi biet no co cham macro
+            if {$pend} {
+                if {[soc_bounds_at_macro $rest $mboxes]} {
+                    incr mwaived
+                } else {
+                    incr real
+                }
+                set pend 0
+            }
             continue
         }
         incr total
@@ -2097,7 +2159,11 @@ proc soc_verify_drc {report args} {
             set skip $type_ok
         }
         if {!$skip} {
-            incr real
+            if {[soc_offgrid_m4 $type $rest]} {
+                set pend 1
+            } else {
+                incr real
+            }
         }
     }
     close $fp
@@ -2122,7 +2188,8 @@ proc soc_verify_drc {report args} {
         }
         set soc_waived [expr {$total - $real}]
         set soc_tdesc [expr {[llength $allow_types] ? $allow_types : {moi loai}}]
-        puts "  -> $real vi pham that ($soc_waived bo qua: net {$allow}, loai {$soc_tdesc})"
+        puts "  -> $real vi pham that ($soc_waived bo qua: net {$allow}, loai {$soc_tdesc};\
+ $mwaived OFFGRID M4 tai chan macro)"
     }
     if {$truncated} {
         error "verify_drc bi cat o -limit $limit (IMPVFG-1103): $report khong day\
@@ -2301,6 +2368,7 @@ proc soc_require_drc_clean {args} {
             default      { lappend reports [lindex $args $i] }
         }
     }
+    set mboxes [soc_macro_boxes]
     foreach report $reports {
         if {![file isfile $report]} {
             error "Chua co $report - chay KHOI 15 truoc khi xuat file"
@@ -2308,6 +2376,7 @@ proc soc_require_drc_clean {args} {
         set verdict 0
         set real    0
         set waived  0
+        set pend    0
         set fp [open $report r]
         while {[gets $fp line] >= 0} {
             if {[regexp {^\s*Total Violations\s*:\s*[0-9]+} $line] ||
@@ -2319,6 +2388,14 @@ proc soc_require_drc_clean {args} {
                 continue
             }
             if {$type eq "Bounds"} {
+                if {$pend} {
+                    if {[soc_bounds_at_macro $rest $mboxes]} {
+                        incr waived
+                    } else {
+                        incr real
+                    }
+                    set pend 0
+                }
                 continue
             }
             set net "-"
@@ -2337,7 +2414,13 @@ proc soc_require_drc_clean {args} {
                 }
                 set skip $type_ok
             }
-            if {$skip} { incr waived } else { incr real }
+            if {$skip} {
+                incr waived
+            } elseif {[soc_offgrid_m4 $type $rest]} {
+                set pend 1
+            } else {
+                incr real
+            }
         # (soc_require_drc_clean dung chung logic loc voi soc_verify_drc)
         }
         close $fp
