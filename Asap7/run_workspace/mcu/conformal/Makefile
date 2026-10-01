@@ -5,7 +5,8 @@
 # Bien doi duoc tu dong lenh:
 #     make all LEC=lec_64            ten lenh Conformal tren may
 #     make all LEC_MODE=flat         so phang thay cho so phan cap
-#     make all LEC_THREADS=8         so thread (mac dinh tran 4)
+#     make all LEC_THREADS=4         so thread (mac dinh 1: nhieu thread lam
+#                                    lec treo tren may nay, xem conformal.tcl)
 
 LEC     ?= lec
 GOLDEN  ?= ../genus/outputs/top_soc_syn.v
@@ -28,5 +29,6 @@ all: $(GOLDEN) $(REVISED)
 	@test -f $(VERDICT) || { echo "LEC khong ghi $(VERDICT) - doc logs/conformal.log"; exit 1; }
 	@head -n 1 $(VERDICT) | grep -qx PASS || { echo "LEC KHONG DAT - xem $(VERDICT) va reports/"; exit 1; }
 
+# LEC.tmp.<pid> la thu muc tam cua lec; chi xoa khi tien trinh do da thoat.
 clean:
-	rm -rf logs reports hier.do *~
+	rm -rf logs reports hier.do LEC.tmp.* *~

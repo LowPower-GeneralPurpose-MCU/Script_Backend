@@ -75,6 +75,10 @@
 # Dofile LEC do Genus tu sinh
 **/fv/
 
+# Thu muc tam cua Conformal (LEC.tmp.<pid>): netlist con ma hoa cua tung
+# thread, chi co nghia khi tien trinh lec do con song.
+**/LEC.tmp.*/
+
 # Kept on purpose: tcl/, scripts/, reports/, verify_rpt/ and the handoff text
 # reports, which are small and are the record of what a run produced.
 
