@@ -155,6 +155,8 @@ def do_tech(args):
 # ---------------------------------------------------------------------------
 GEOMETRY_KEYWORDS = ("RECT", "SIZE", "ORIGIN", "FOREIGN")
 NUMBER_RE = re.compile(r"-?\d+\.\d+|-?\d+")
+# LAYER <ten> SPACING|DESIGNRULEWIDTH <so> ; - ten layer co chu so (M1), chi doi so sau tu khoa
+OBS_SPACING_RE = re.compile(r"(LAYER\s+\S+\s+(?:SPACING|DESIGNRULEWIDTH)\s+)(\S+)(.*)$")
 GRID = Decimal("0.001")
 FACTOR = Decimal(4)
 
@@ -166,8 +168,6 @@ def fmt(d):
 def scale_line(line):
     stripped = line.lstrip()
     word = stripped.split(" ", 1)[0] if stripped else ""
-    if word not in GEOMETRY_KEYWORDS:
-        return line, 0
     offgrid = 0
 
     def repl(m):
@@ -178,6 +178,15 @@ def scale_line(line):
         return fmt(v)
 
     indent = line[:len(line) - len(stripped)]
+    # "LAYER M1 SPACING 0.072 ;" trong OBS cung la do dai.  Truoc 2026-10-01 dong
+    # nay khong duoc chia 4: OBS M1/M2/M3 cua ban 1x doi cach 0.072 (4 lan min
+    # spacing; ban 1x goc cua ASU ghi 0.018) trong khi metal fill dat cach 0.036
+    # -> 33560 SPACING fill-vs-Blockage o KHOI 15 (run 1x 2026-10-01 13:31).
+    m = OBS_SPACING_RE.match(stripped)
+    if m:
+        return indent + m.group(1) + NUMBER_RE.sub(repl, m.group(2)) + m.group(3), offgrid
+    if word not in GEOMETRY_KEYWORDS:
+        return line, 0
     if word == "FOREIGN":
         # FOREIGN <ten> x y ; - ten macro co chu so (256x4x32), chi doi phan sau ten
         head, name, rest = stripped.split(" ", 2)
