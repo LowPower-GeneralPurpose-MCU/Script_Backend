@@ -180,11 +180,11 @@ Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
 // Command: array set ro_golden  [lec_subtree_canon [lec_read_file $GOLDEN_NETLIST]  $RO_MODULE]
 CPU time     : 0.65    seconds
 Elapse time  : 2       seconds
-Memory usage : 67.48   M bytes
+Memory usage : 67.07   M bytes
 // Command: array set ro_revised [lec_subtree_canon [lec_read_file $REVISED_NETLIST] $RO_MODULE]
-CPU time     : 1.28    seconds
-Elapse time  : 3       seconds
-Memory usage : 113.64  M bytes
+CPU time     : 1.29    seconds
+Elapse time  : 2       seconds
+Memory usage : 113.22  M bytes
 // Command: if {![info exists ro_golden($RO_MODULE)] || ![info exists ro_revised($RO_MODULE)]} {
 //              error "Khong thay module $RO_MODULE trong golden hoac revised - TRNG da bi toi uu mat?"
 //          }
@@ -202,27 +202,14 @@ Memory usage : 113.64  M bytes
 //          }
 // Command: puts "Ring oscillator: [array size ro_golden] module duoi $RO_MODULE giong het o golden va revised"
 Ring oscillator: 15 module duoi RingOscillator giong het o golden va revised
-// Command: set CORES 1
+// Command: set LEC_THREADS [lec_env LEC_THREADS 1]
 1
-// Command: if {![catch {open "/proc/cpuinfo"} f]} {
-//              set CORES [regexp -all -line {^processor\s} [read $f]]
-//              close $f
-//          }
-// Command: set LEC_THREADS [lec_env LEC_THREADS 4]
-4
 // Command: if {![string is integer -strict $LEC_THREADS] || $LEC_THREADS < 1} {
 //              error "LEC_THREADS phai la so nguyen >= 1, dang la '$LEC_THREADS'"
 //          }
-// Command: if {$CORES > $LEC_THREADS} {
-//              set CORES $LEC_THREADS
+// Command: if {$LEC_THREADS > 1} {
+//              set_parallel_option -threads $LEC_THREADS -norelease_license
 //          }
-4
-// Command: if {$CORES < 1} {
-//              set CORES 1
-//          }
-// Command: set_parallel_option -threads $CORES -norelease_license
-// Number of threads is set to 4,4.
-0
 // Command: set_mapping_method -sensitive
 0
 // Command: add_notranslate_modules -library -both $SRAM_MASTER $SRAM_TAG_MASTER
@@ -261,16 +248,16 @@ Ring oscillator: 15 module duoi RingOscillator giong het o golden va revised
 // Note: (HRC1.2) Module/entity is not translated (blackboxed) (occurrence:2)
 // Note: Read Liberty library successfully
 0
-CPU time     : 5.41    seconds
-Elapse time  : 7       seconds
-Memory usage : 126.06  M bytes
+CPU time     : 5.29    seconds
+Elapse time  : 6       seconds
+Memory usage : 124.46  M bytes
 // Command: read_design -verilog -sensitive -golden -noelab $GOLDEN_NETLIST
 // Parsing file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v ...sh: 0: Illegal option --
 
 0
-CPU time     : 8.49    seconds
+CPU time     : 8.37    seconds
 Elapse time  : 10      seconds
-Memory usage : 266.74  M bytes
+Memory usage : 265.51  M bytes
 // Command: elaborate_design -golden -root $TOP
 // Golden root module is set to 'top_soc'
 // Warning: (RTL2.5) Net is referenced without an assignment. Design verification will be based on set_undriven_signal setting (occurrence:2040)
@@ -282,16 +269,16 @@ Memory usage : 266.74  M bytes
 // Warning: There are 2093 undriven nets in Golden
 // Warning: There are 2093 undriven pins in Golden
 0
-CPU time     : 10.60   seconds
+CPU time     : 10.56   seconds
 Elapse time  : 12      seconds
-Memory usage : 240.78  M bytes
+Memory usage : 239.37  M bytes
 // Command: read_design -verilog -sensitive -revised -noelab $REVISED_NETLIST
 // Parsing file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v ...sh: 0: Illegal option --
 
 0
-CPU time     : 14.50   seconds
+CPU time     : 14.44   seconds
 Elapse time  : 16      seconds
-Memory usage : 389.78  M bytes
+Memory usage : 388.49  M bytes
 // Command: elaborate_design -revised -root $TOP
 // Revised root module is set to 'top_soc'
 // Warning: (RTL2.5) Net is referenced without an assignment. Design verification will be based on set_undriven_signal setting (occurrence:2040)
@@ -306,9 +293,9 @@ Memory usage : 389.78  M bytes
 // Warning: There are 2096 undriven nets in Revised
 // Warning: There are 2096 undriven pins in Revised
 0
-CPU time     : 17.05   seconds
-Elapse time  : 19      seconds
-Memory usage : 352.23  M bytes
+CPU time     : 17.07   seconds
+Elapse time  : 18      seconds
+Memory usage : 350.75  M bytes
 // Command: report_design_data
 ============================================
 Summary           Golden         Revised
@@ -2127,9 +2114,9 @@ Mapping method    PI     PO     DFF    DLAT   BBOX   Total
 --------------------------------------------------------------------------------
 Name              59     115    34054  1      85     34314 
 ================================================================================
-CPU time     : 38.98   seconds
-Elapse time  : 41      seconds
-Memory usage : 827.95  M bytes
+CPU time     : 39.21   seconds
+Elapse time  : 40      seconds
+Memory usage : 826.65  M bytes
 // Command: report unmapped point -summary
 ================================================================================
 Golden:
@@ -2149,9 +2136,9 @@ Unreachable       1634   5759      7393
 // Warning: There are 44 undriven nets in Golden
 // Warning: There are 44 undriven pins in Golden
 0
-CPU time     : 39.27   seconds
+CPU time     : 39.49   seconds
 Elapse time  : 41      seconds
-Memory usage : 828.20  M bytes
+Memory usage : 826.90  M bytes
 // Command: set_root_module dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 -Revised
 // Warning: There are 44 undriven nets in Revised
 // Warning: There are 44 undriven pins in Revised
@@ -2172,9 +2159,9 @@ Memory usage : 828.20  M bytes
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 3114 gated-clock DFF/DLAT(s)
-CPU time     : 39.80   seconds
+CPU time     : 40.04   seconds
 Elapse time  : 41      seconds
-Memory usage : 828.88  M bytes
+Memory usage : 827.08  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2199,21 +2186,21 @@ Unmapped points   DLAT      Total
 --------------------------------------------------------------------------------
 Unreachable       142       142     
 ================================================================================
-CPU time     : 40.14   seconds
+CPU time     : 40.41   seconds
 Elapse time  : 42      seconds
-Memory usage : 829.00  M bytes
+Memory usage : 827.08  M bytes
 // Running automatic setup...
 // Remodeled 104 DLAT/DFF for inserting sequential redundancy.
 // Remodeled 52 DLAT/DFF (G) and 52 DLAT/DFF (R) for removing sequential redundancy.
 // Automatic setup finished.
 0
-CPU time     : 87.18   seconds
+CPU time     : 88.23   seconds
 Elapse time  : 89      seconds
-Memory usage : 829.91  M bytes
+Memory usage : 828.37  M bytes
 // Command: add_compared_points -all
 // 3346 compared points added to compare list
 0
-// Command: compare -noneq_stop 1  -threads 4,4
+// Command: compare -noneq_stop 1   
 // Compare will stop on the 1st non-equivalent point
 ================================================================================
 Compared points      PO     DFF       Total   
@@ -2227,8 +2214,8 @@ Not-compared         0      3192      3192
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 87.31   seconds
-Memory usage : 830.09  M bytes
+CPU time     : 88.37   seconds
+Memory usage : 828.37  M bytes
 0
 // Modules 'dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4(G) and dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2248,9 +2235,9 @@ Processed 1 out of 46 module pairs	EQ: 0	NEQ: 1	ABORT: 0
 0
 // Command: report_black_box -NOHidden
 0
-CPU time     : 87.46   seconds
-Elapse time  : 89      seconds
-Memory usage : 830.09  M bytes
+CPU time     : 88.53   seconds
+Elapse time  : 90      seconds
+Memory usage : 828.37  M bytes
 // Applying constraints to module boundaries ...
 // 83 Golden and 103 Revised pins marked as unreachable
 // 0 Golden and 78 Revised pin equivalences applied
@@ -2263,9 +2250,9 @@ Memory usage : 830.09  M bytes
 // Modeling Revised ...
 // (F14) Remodeled 4193 gated-clock DFF/DLAT(s)
 // (F28) Converted 7 internal output port(s) to inout port(s)
-CPU time     : 88.41   seconds
-Elapse time  : 90      seconds
-Memory usage : 830.09  M bytes
+CPU time     : 89.50   seconds
+Elapse time  : 91      seconds
+Memory usage : 828.37  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2290,19 +2277,19 @@ Unmapped points   DLAT      Total
 --------------------------------------------------------------------------------
 Unreachable       103       103     
 ================================================================================
-CPU time     : 88.91   seconds
+CPU time     : 89.97   seconds
 Elapse time  : 91      seconds
-Memory usage : 830.09  M bytes
+Memory usage : 828.37  M bytes
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 100.76  seconds
-Elapse time  : 102     seconds
-Memory usage : 830.09  M bytes
+CPU time     : 102.27  seconds
+Elapse time  : 103     seconds
+Memory usage : 828.37  M bytes
 // Command: add_compared_points -all
 // 4351 compared points added to compare list
 0
-// Command: compare -noneq_stop 1  -threads 4,4
+// Command: compare -noneq_stop 1   
 // Compare will stop on the 1st non-equivalent point
 ================================================================================
 Compared points      PO     DFF       Total   
@@ -2316,8 +2303,8 @@ Not-compared         2      34        36
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 100.86  seconds
-Memory usage : 830.09  M bytes
+CPU time     : 102.37  seconds
+Memory usage : 828.37  M bytes
 0
 // Modules 'riscv_pipeline(G) and riscv_pipeline(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2379,7 +2366,7 @@ Unreachable       12        12
 // Command: add_compared_points -all
 // 485 compared points added to compare list
 0
-// Command: compare -noneq_stop 1  -threads 4,4
+// Command: compare -noneq_stop 1   
 // Compare will stop on the 1st non-equivalent point
 ================================================================================
 Compared points      PO     DFF       Total   
@@ -2391,8 +2378,8 @@ Non-equivalent       0      1         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 101.03  seconds
-Memory usage : 830.38  M bytes
+CPU time     : 102.54  seconds
+Memory usage : 828.55  M bytes
 0
 // Modules 'rv_debug_module_sba(G) and rv_debug_module_sba(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2447,7 +2434,7 @@ Unreachable       6         6
 // Command: add_compared_points -all
 // 179 compared points added to compare list
 0
-// Command: compare -noneq_stop 1  -threads 4,4
+// Command: compare -noneq_stop 1   
 // Compare will stop on the 1st non-equivalent point
 ================================================================================
 Compared points      PO     DFF       Total   
@@ -2465,8 +2452,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box rv_jtag_dtm -module -hier -Revised
 0
 // Command: usage
-CPU time     : 101.10  seconds
-Memory usage : 830.63  M bytes
+CPU time     : 102.60  seconds
+Memory usage : 829.55  M bytes
 0
 Processed 4 out of 46 module pairs	EQ: 1	NEQ: 3	ABORT: 0
 // Running Module apb_syscon and apb_syscon
@@ -2519,5 +2506,3373 @@ Unreachable       5         5
 // Command: add_compared_points -all
 // 177 compared points added to compare list
 0
-// Command: compare -noneq_stop 1  -threads 4,4
+// Command: compare -noneq_stop 1   
 // Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           79     93        172     
+--------------------------------------------------------------------------------
+Non-equivalent       0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         0      4         4       
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 102.66  seconds
+Memory usage : 829.55  M bytes
+0
+// Modules 'apb_syscon(G) and apb_syscon(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 5 out of 46 module pairs	EQ: 1	NEQ: 4	ABORT: 0
+// Running Module apb_gpio and apb_gpio
+// Command: set_root_module apb_gpio -Golden
+0
+// Command: set_root_module apb_gpio -Revised
+0
+// Command: set_module_property -instance /u_apb_gpio -Golden
+0
+// Command: set_module_property -instance /u_apb_gpio -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 0 Golden and 89 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 224 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 224 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            81     99     354       534     
+--------------------------------------------------------------------------------
+Revised           81     99     354       534     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       7         7       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       7         7       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 453 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           94     345       439     
+--------------------------------------------------------------------------------
+Non-equivalent       0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         5      8         13      
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 102.82  seconds
+Memory usage : 829.55  M bytes
+0
+// Modules 'apb_gpio(G) and apb_gpio(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 6 out of 46 module pairs	EQ: 1	NEQ: 5	ABORT: 0
+// Running Module clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 and clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864
+// Command: set_root_module clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 -Golden
+// Warning: There are 25 undriven nets in Golden
+// Warning: There are 25 undriven pins in Golden
+0
+// Command: set_root_module clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 -Revised
+// Warning: There are 25 undriven nets in Revised
+// Warning: There are 25 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_clic -Golden
+0
+// Command: set_module_property -instance /u_clic -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 70 Golden and 70 Revised pins marked as unreachable
+// 0 Golden and 39 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 236 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 236 gated-clock DFF/DLAT(s)
+CPU time     : 102.99  seconds
+Elapse time  : 104     seconds
+Memory usage : 829.55  M bytes
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            105    24     312       441     
+--------------------------------------------------------------------------------
+Revised           105    24     312       441     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       35        35      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       35        35      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+CPU time     : 103.67  seconds
+Elapse time  : 105     seconds
+Memory usage : 829.55  M bytes
+// Command: add_compared_points -all
+// 336 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           24     0         24      
+--------------------------------------------------------------------------------
+Non-equivalent       0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         0      311       311     
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 103.70  seconds
+Memory usage : 829.55  M bytes
+0
+// Modules 'clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864(G) and clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 7 out of 46 module pairs	EQ: 1	NEQ: 6	ABORT: 0
+// Running Module ascon_core and ascon_core
+// Command: set_root_module ascon_core -Golden
+0
+// Command: set_root_module ascon_core -Revised
+0
+// Command: set_module_property -instance /u_apb_ascon_u_ascon -Golden
+0
+// Command: set_module_property -instance /u_apb_ascon_u_ascon -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 0 Golden and 83 Revised pin equivalences applied
+// 1 pin bindings applied
+// 0 Golden and 2 Revised renaming rules applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 713 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 713 gated-clock DFF/DLAT(s)
+CPU time     : 103.88  seconds
+Elapse time  : 105     seconds
+Memory usage : 829.55  M bytes
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            328    451    718       1497    
+--------------------------------------------------------------------------------
+Revised           328    451    718       1497    
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       11        11      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       11        11      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+CPU time     : 104.25  seconds
+Elapse time  : 105     seconds
+Memory usage : 830.05  M bytes
+// Command: add_compared_points -all
+// 1169 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           451    718       1169    
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box ascon_core -module -hier -Golden
+0
+// Command: add_black_box ascon_core -module -hier -Revised
+0
+// Command: usage
+CPU time     : 104.27  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 8 out of 46 module pairs	EQ: 2	NEQ: 6	ABORT: 0
+// Running Module apb_watchdog and apb_watchdog
+// Command: set_root_module apb_watchdog -Golden
+0
+// Command: set_root_module apb_watchdog -Revised
+0
+// Command: set_module_property -instance /u_apb_watchdog -Golden
+0
+// Command: set_module_property -instance /u_apb_watchdog -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 4 Golden and 4 Revised pins marked as unreachable
+// 0 Golden and 40 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 99 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 99 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            54     36     104       194     
+--------------------------------------------------------------------------------
+Revised           54     36     104       194     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       4         4       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       4         4       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 140 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           36     93        129     
+--------------------------------------------------------------------------------
+Non-equivalent       0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         0      10        10      
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 104.34  seconds
+Memory usage : 830.05  M bytes
+0
+// Modules 'apb_watchdog(G) and apb_watchdog(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 9 out of 46 module pairs	EQ: 2	NEQ: 7	ABORT: 0
+// Running Module apb_i2c and apb_i2c
+// Command: set_root_module apb_i2c -Golden
+// Warning: There are 18 undriven nets in Golden
+// Warning: There are 18 undriven pins in Golden
+0
+// Command: set_root_module apb_i2c -Revised
+// Warning: There are 18 undriven nets in Revised
+// Warning: There are 18 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_apb_i2c -Golden
+0
+// Command: set_module_property -instance /u_apb_i2c -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 39 Golden and 39 Revised pins marked as unreachable
+// 0 Golden and 34 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 360 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 360 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            55     23     375       453     
+--------------------------------------------------------------------------------
+Revised           55     23     375       453     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       45        45      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       45        45      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 398 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           23     367       390     
+--------------------------------------------------------------------------------
+Non-equivalent       0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         0      7         7       
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 104.51  seconds
+Memory usage : 830.05  M bytes
+0
+// Modules 'apb_i2c(G) and apb_i2c(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 10 out of 46 module pairs	EQ: 2	NEQ: 8	ABORT: 0
+// Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 -Golden
+// Warning: There are 25 undriven nets in Golden
+// Warning: There are 25 undriven pins in Golden
+0
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 -Revised
+// Warning: There are 25 undriven nets in Revised
+// Warning: There are 25 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 28 Golden and 28 Revised pins marked as unreachable
+// 0 Golden and 5 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            25     9      52        86      
+--------------------------------------------------------------------------------
+Revised           25     9      52        86      
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 61 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           9      52        61      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 -module -hier -Golden
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 104.55  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 11 out of 46 module pairs	EQ: 3	NEQ: 8	ABORT: 0
+// Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 -Golden
+// Warning: There are 128 undriven nets in Golden
+// Warning: There are 128 undriven pins in Golden
+0
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 -Revised
+// Warning: There are 128 undriven nets in Revised
+// Warning: There are 128 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_R_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_R_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 135 Golden and 136 Revised pins marked as unreachable
+// 0 Golden and 17 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 273 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 273 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            58     38     279       375     
+--------------------------------------------------------------------------------
+Revised           58     38     279       375     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 317 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           38     279       317     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 -module -hier -Golden
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 104.70  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 12 out of 46 module pairs	EQ: 4	NEQ: 8	ABORT: 0
+// Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 -Golden
+0
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 -Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_AR_channel_arbiter} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_AR_channel_arbiter} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 129 Golden and 129 Revised pins marked as unreachable
+// 0 Golden and 2 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            136    4      10        150     
+--------------------------------------------------------------------------------
+Revised           136    4      10        150     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 14 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           3      10        13      
+--------------------------------------------------------------------------------
+Non-equivalent       1      0         1       
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 104.75  seconds
+Memory usage : 830.05  M bytes
+0
+// Modules 'arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3(G) and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 13 out of 46 module pairs	EQ: 4	NEQ: 9	ABORT: 0
+// Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 -Golden
+// Warning: There are 25 undriven nets in Golden
+// Warning: There are 25 undriven pins in Golden
+0
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 -Revised
+// Warning: There are 25 undriven nets in Revised
+// Warning: There are 25 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_B_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_B_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 28 Golden and 28 Revised pins marked as unreachable
+// 0 Golden and 5 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            25     9      52        86      
+--------------------------------------------------------------------------------
+Revised           25     9      52        86      
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 61 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           9      52        61      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 -module -hier -Golden
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 104.79  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 14 out of 46 module pairs	EQ: 5	NEQ: 9	ABORT: 0
+// Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 -Golden
+// Warning: There are 124 undriven nets in Golden
+// Warning: There are 124 undriven pins in Golden
+0
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 -Revised
+// Warning: There are 124 undriven nets in Revised
+// Warning: There are 124 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_R_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_R_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 127 Golden and 127 Revised pins marked as unreachable
+// 0 Golden and 14 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 289 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 289 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            58     42     295       395     
+--------------------------------------------------------------------------------
+Revised           58     42     295       395     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 337 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           42     295       337     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 -module -hier -Golden
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 104.95  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 15 out of 46 module pairs	EQ: 6	NEQ: 9	ABORT: 0
+// Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 -Golden
+0
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 -Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AR_channel_arbiter} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AR_channel_arbiter} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 129 Golden and 130 Revised pins marked as unreachable
+// 0 Golden and 4 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            136    4      10        150     
+--------------------------------------------------------------------------------
+Revised           136    4      10        150     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 14 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           4      10        14      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 -module -hier -Golden
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 104.99  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 16 out of 46 module pairs	EQ: 7	NEQ: 9	ABORT: 0
+// Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 -Golden
+// Warning: There are 25 undriven nets in Golden
+// Warning: There are 25 undriven pins in Golden
+0
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 -Revised
+// Warning: There are 25 undriven nets in Revised
+// Warning: There are 25 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_B_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_B_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 28 Golden and 28 Revised pins marked as unreachable
+// 0 Golden and 4 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            25     9      52        86      
+--------------------------------------------------------------------------------
+Revised           25     9      52        86      
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 61 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           9      52        61      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 -module -hier -Golden
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.03  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 17 out of 46 module pairs	EQ: 8	NEQ: 9	ABORT: 0
+// Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 -Golden
+0
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 -Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AR_channel_arbiter} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AR_channel_arbiter} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 129 Golden and 130 Revised pins marked as unreachable
+// 0 Golden and 2 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            136    4      10        150     
+--------------------------------------------------------------------------------
+Revised           136    4      10        150     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 14 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           4      10        14      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 -module -hier -Golden
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.08  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 18 out of 46 module pairs	EQ: 9	NEQ: 9	ABORT: 0
+// Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 -Golden
+// Warning: There are 26 undriven nets in Golden
+// Warning: There are 26 undriven pins in Golden
+0
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 -Revised
+// Warning: There are 26 undriven nets in Revised
+// Warning: There are 26 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_B_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_B_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 30 Golden and 30 Revised pins marked as unreachable
+// 0 Golden and 5 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 46 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 46 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            25     8      50        83      
+--------------------------------------------------------------------------------
+Revised           25     8      50        83      
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 58 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           8      50        58      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 -module -hier -Golden
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.12  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 19 out of 46 module pairs	EQ: 10	NEQ: 9	ABORT: 0
+// Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 -Golden
+0
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 -Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AR_channel_arbiter} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AR_channel_arbiter} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 129 Golden and 130 Revised pins marked as unreachable
+// 0 Golden and 5 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            136    4      10        150     
+--------------------------------------------------------------------------------
+Revised           136    4      10        150     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 14 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           4      10        14      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 -module -hier -Golden
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.16  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 20 out of 46 module pairs	EQ: 11	NEQ: 9	ABORT: 0
+// Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 -Golden
+// Warning: There are 1 undriven nets in Golden
+// Warning: There are 1 undriven pins in Golden
+0
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 -Revised
+// Warning: There are 1 undriven nets in Revised
+// Warning: There are 1 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AW_channel_arbiter} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AW_channel_arbiter} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 131 Golden and 131 Revised pins marked as unreachable
+// 0 Golden and 1 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 3 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 3 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            136    3      7         146     
+--------------------------------------------------------------------------------
+Revised           136    3      7         146     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 10 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           3      7         10      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 -module -hier -Golden
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.20  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 21 out of 46 module pairs	EQ: 12	NEQ: 9	ABORT: 0
+// Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 -Golden
+// Warning: There are 25 undriven nets in Golden
+// Warning: There are 25 undriven pins in Golden
+0
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 -Revised
+// Warning: There are 25 undriven nets in Revised
+// Warning: There are 25 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 28 Golden and 28 Revised pins marked as unreachable
+// 0 Golden and 3 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            25     9      52        86      
+--------------------------------------------------------------------------------
+Revised           25     9      52        86      
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 61 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           9      52        61      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 -module -hier -Golden
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.24  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 22 out of 46 module pairs	EQ: 13	NEQ: 9	ABORT: 0
+// Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 -Golden
+// Warning: There are 124 undriven nets in Golden
+// Warning: There are 124 undriven pins in Golden
+0
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 -Revised
+// Warning: There are 124 undriven nets in Revised
+// Warning: There are 124 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_R_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_R_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 127 Golden and 127 Revised pins marked as unreachable
+// 0 Golden and 20 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 289 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 289 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            58     42     295       395     
+--------------------------------------------------------------------------------
+Revised           58     42     295       395     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 337 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           42     295       337     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 -module -hier -Golden
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.39  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 23 out of 46 module pairs	EQ: 14	NEQ: 9	ABORT: 0
+// Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 -Golden
+0
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 -Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_arbiter} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_arbiter} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 129 Golden and 130 Revised pins marked as unreachable
+// 0 Golden and 3 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            136    4      10        150     
+--------------------------------------------------------------------------------
+Revised           136    4      10        150     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 14 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           4      10        14      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 -module -hier -Golden
+0
+// Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.44  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 24 out of 46 module pairs	EQ: 15	NEQ: 9	ABORT: 0
+// Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 -Golden
+// Warning: There are 1 undriven nets in Golden
+// Warning: There are 1 undriven pins in Golden
+0
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 -Revised
+// Warning: There are 1 undriven nets in Revised
+// Warning: There are 1 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AW_channel_arbiter} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AW_channel_arbiter} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 131 Golden and 131 Revised pins marked as unreachable
+// 0 Golden and 2 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 3 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 3 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            136    3      7         146     
+--------------------------------------------------------------------------------
+Revised           136    3      7         146     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 10 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           2      7         9       
+--------------------------------------------------------------------------------
+Non-equivalent       1      0         1       
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 105.48  seconds
+Memory usage : 830.05  M bytes
+0
+// Modules 'arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10(G) and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 25 out of 46 module pairs	EQ: 15	NEQ: 10	ABORT: 0
+// Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 -Golden
+// Warning: There are 25 undriven nets in Golden
+// Warning: There are 25 undriven pins in Golden
+0
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 -Revised
+// Warning: There are 25 undriven nets in Revised
+// Warning: There are 25 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_B_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_B_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 28 Golden and 28 Revised pins marked as unreachable
+// 0 Golden and 4 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            25     9      52        86      
+--------------------------------------------------------------------------------
+Revised           25     9      52        86      
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 61 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           9      52        61      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 -module -hier -Golden
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.52  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 26 out of 46 module pairs	EQ: 16	NEQ: 10	ABORT: 0
+// Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 -Golden
+// Warning: There are 124 undriven nets in Golden
+// Warning: There are 124 undriven pins in Golden
+0
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 -Revised
+// Warning: There are 124 undriven nets in Revised
+// Warning: There are 124 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 127 Golden and 127 Revised pins marked as unreachable
+// 0 Golden and 18 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 289 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 289 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            58     42     295       395     
+--------------------------------------------------------------------------------
+Revised           58     42     295       395     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 337 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           42     295       337     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 -module -hier -Golden
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.68  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 27 out of 46 module pairs	EQ: 17	NEQ: 10	ABORT: 0
+// Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 -Golden
+0
+// Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 -Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_AR_channel_arbiter} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_AR_channel_arbiter} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 129 Golden and 129 Revised pins marked as unreachable
+// 0 Golden and 3 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 6 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            136    4      10        150     
+--------------------------------------------------------------------------------
+Revised           136    4      10        150     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       2         2       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 14 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           3      10        13      
+--------------------------------------------------------------------------------
+Non-equivalent       1      0         1       
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 105.72  seconds
+Memory usage : 830.05  M bytes
+0
+// Modules 'arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13(G) and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 28 out of 46 module pairs	EQ: 17	NEQ: 11	ABORT: 0
+// Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 -Golden
+// Warning: There are 25 undriven nets in Golden
+// Warning: There are 25 undriven pins in Golden
+0
+// Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 -Revised
+// Warning: There are 25 undriven nets in Revised
+// Warning: There are 25 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_B_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_B_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 28 Golden and 28 Revised pins marked as unreachable
+// 0 Golden and 5 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 48 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            25     9      52        86      
+--------------------------------------------------------------------------------
+Revised           25     9      52        86      
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       8         8       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 61 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           9      52        61      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 -module -hier -Golden
+0
+// Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 105.76  seconds
+Memory usage : 830.05  M bytes
+0
+Processed 29 out of 46 module pairs	EQ: 18	NEQ: 11	ABORT: 0
+// Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 -Golden
+// Warning: There are 124 undriven nets in Golden
+// Warning: There are 124 undriven pins in Golden
+0
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 -Revised
+// Warning: There are 124 undriven nets in Revised
+// Warning: There are 124 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 127 Golden and 127 Revised pins marked as unreachable
+// 0 Golden and 5 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 289 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 289 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            58     42     295       395     
+--------------------------------------------------------------------------------
+Revised           58     42     295       395     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+// Running automatic setup...
+// Remodeled 268 DLAT/DFF for inserting sequential redundancy.
+// Remodeled 134 DLAT/DFF (G) and 134 DLAT/DFF (R) for removing sequential redundancy.
+// Automatic setup finished.
+0
+CPU time     : 107.04  seconds
+Elapse time  : 108     seconds
+Memory usage : 830.17  M bytes
+// Command: add_compared_points -all
+// 337 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           41     0         41      
+--------------------------------------------------------------------------------
+Non-equivalent       0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         1      294       295     
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 107.05  seconds
+Memory usage : 830.17  M bytes
+0
+// Modules 'sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6(G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 30 out of 46 module pairs	EQ: 18	NEQ: 12	ABORT: 0
+// Running Module asap7_sram_1rw_ADDR_W11_DATA_W32_2 and asap7_sram_1rw_ADDR_W11_DATA_W32_2
+// Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_2 -Golden
+// Warning: Total black box modules referenced in Golden = 1
+0
+// Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_2 -Revised
+// Warning: Total black box modules referenced in Revised = 1
+0
+// Command: set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram} -Golden
+0
+// Command: set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram} -Revised
+0
+// Command: report_black_box -NOHidden
+SYSTEM: (G R) srambank_256x4x32_6t122
+0
+// Applying constraints to module boundaries ...
+// 0 Golden and 1 Revised pins marked as unreachable
+// 0 Golden and 3 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// Processing Revised ...
+// Modeling Revised ...
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            46     32     1      2         81      
+--------------------------------------------------------------------------------
+Revised           46     32     1      2         81      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 35 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           32     1      2         35      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_2 -module -hier -Golden
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_2 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 107.09  seconds
+Memory usage : 830.17  M bytes
+0
+Processed 31 out of 46 module pairs	EQ: 19	NEQ: 12	ABORT: 0
+// Running Module asap7_sram_1rw_ADDR_W11_DATA_W32_3 and asap7_sram_1rw_ADDR_W11_DATA_W32_3
+// Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_3 -Golden
+// Warning: Total black box modules referenced in Golden = 1
+0
+// Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_3 -Revised
+// Warning: Total black box modules referenced in Revised = 1
+0
+// Command: set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram} -Golden
+0
+// Command: set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram} -Revised
+0
+// Command: report_black_box -NOHidden
+SYSTEM: (G R) srambank_256x4x32_6t122
+0
+// Applying constraints to module boundaries ...
+// 0 Golden and 2 Revised pins marked as unreachable
+// 0 Golden and 7 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// Processing Revised ...
+// Modeling Revised ...
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            46     32     1      2         81      
+--------------------------------------------------------------------------------
+Revised           46     32     1      2         81      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 35 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           32     1      2         35      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_3 -module -hier -Golden
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_3 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 107.12  seconds
+Memory usage : 830.17  M bytes
+0
+Processed 32 out of 46 module pairs	EQ: 20	NEQ: 12	ABORT: 0
+// Running Module data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 and data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4
+// Command: set_root_module data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 -Golden
+// Warning: Total black box modules referenced in Golden = 4
+// Warning: There are 74 undriven nets in Golden
+// Warning: There are 74 undriven pins in Golden
+0
+// Command: set_root_module data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 -Revised
+// Warning: Total black box modules referenced in Revised = 4
+// Warning: There are 74 undriven nets in Revised
+// Warning: There are 74 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_dcache -Golden
+0
+// Command: set_module_property -instance /u_dcache -Revised
+0
+// Command: report_black_box -NOHidden
+HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_2
+HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_3
+SYSTEM: (G R) srambank_128x4x20_6t122
+0
+// Applying constraints to module boundaries ...
+// 87 Golden and 88 Revised pins marked as unreachable
+// 0 Golden and 70 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 1918 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 1918 gated-clock DFF/DLAT(s)
+CPU time     : 107.69  seconds
+Elapse time  : 109     seconds
+Memory usage : 830.67  M bytes
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            127    137    1923   4         2191    
+--------------------------------------------------------------------------------
+Revised           127    137    1923   4         2191    
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       13        13      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       13        13      
+================================================================================
+CPU time     : 107.89  seconds
+Elapse time  : 109     seconds
+Memory usage : 830.67  M bytes
+// Running automatic setup...
+// Automatic setup finished.
+0
+CPU time     : 163.57  seconds
+Elapse time  : 165     seconds
+Memory usage : 830.67  M bytes
+// Command: add_compared_points -all
+// 2064 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           128    0      4         132     
+--------------------------------------------------------------------------------
+Non-equivalent       0      1      0         1       
+--------------------------------------------------------------------------------
+Not-compared         9      1922   0         1931    
+================================================================================
+CPU time     : 163.77  seconds
+Elapse time  : 165     seconds
+Memory usage : 830.67  M bytes
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 163.80  seconds
+Memory usage : 830.67  M bytes
+0
+// Modules 'data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4(G) and data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 33 out of 46 module pairs	EQ: 20	NEQ: 13	ABORT: 0
+// Running Module asap7_sram_1rw_ADDR_W11_DATA_W32 and asap7_sram_1rw_ADDR_W11_DATA_W32
+// Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32 -Golden
+// Warning: Total black box modules referenced in Golden = 1
+0
+// Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32 -Revised
+// Warning: Total black box modules referenced in Revised = 1
+0
+// Command: set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[0].u_sram} -Golden
+0
+// Command: set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[0].u_sram} -Revised
+0
+// Command: report_black_box -NOHidden
+SYSTEM: (G R) srambank_256x4x32_6t122
+0
+// Applying constraints to module boundaries ...
+// 0 Golden and 3 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// Processing Revised ...
+// Modeling Revised ...
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            46     32     1      2         81      
+--------------------------------------------------------------------------------
+Revised           46     32     1      2         81      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 35 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           32     1      2         35      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32 -module -hier -Golden
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 163.85  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 34 out of 46 module pairs	EQ: 21	NEQ: 13	ABORT: 0
+// Running Module asap7_sram_1rw_ADDR_W11_DATA_W32_1 and asap7_sram_1rw_ADDR_W11_DATA_W32_1
+// Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_1 -Golden
+// Warning: Total black box modules referenced in Golden = 1
+0
+// Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_1 -Revised
+// Warning: Total black box modules referenced in Revised = 1
+0
+// Command: set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[1].u_sram} -Golden
+0
+// Command: set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[1].u_sram} -Revised
+0
+// Command: report_black_box -NOHidden
+SYSTEM: (G R) srambank_256x4x32_6t122
+0
+// Applying constraints to module boundaries ...
+// 0 Golden and 2 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// Processing Revised ...
+// Modeling Revised ...
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            46     32     1      2         81      
+--------------------------------------------------------------------------------
+Revised           46     32     1      2         81      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 35 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           32     1      2         35      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_1 -module -hier -Golden
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_1 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 163.89  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 35 out of 46 module pairs	EQ: 22	NEQ: 13	ABORT: 0
+// Running Module instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 and instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2
+// Command: set_root_module instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 -Golden
+// Warning: Total black box modules referenced in Golden = 4
+// Warning: There are 140 undriven nets in Golden
+// Warning: There are 140 undriven pins in Golden
+0
+// Command: set_root_module instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 -Revised
+// Warning: Total black box modules referenced in Revised = 4
+// Warning: There are 140 undriven nets in Revised
+// Warning: There are 140 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_icache -Golden
+0
+// Command: set_module_property -instance /u_icache -Revised
+0
+// Command: report_black_box -NOHidden
+HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32
+HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_1
+SYSTEM: (G R) srambank_128x4x20_6t122
+0
+// Applying constraints to module boundaries ...
+// 156 Golden and 156 Revised pins marked as unreachable
+// 0 Golden and 22 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 1604 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 1604 gated-clock DFF/DLAT(s)
+CPU time     : 164.40  seconds
+Elapse time  : 166     seconds
+Memory usage : 830.67  M bytes
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            88     69     1607   4         1768    
+--------------------------------------------------------------------------------
+Revised           88     69     1607   4         1768    
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       6         6       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       6         6       
+================================================================================
+CPU time     : 164.58  seconds
+Elapse time  : 166     seconds
+Memory usage : 830.67  M bytes
+// Running automatic setup...
+// Automatic setup finished.
+0
+CPU time     : 165.15  seconds
+Elapse time  : 166     seconds
+Memory usage : 830.67  M bytes
+// Command: add_compared_points -all
+// 1680 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           67     1607   4         1678    
+--------------------------------------------------------------------------------
+Non-equivalent       1      0      0         1       
+--------------------------------------------------------------------------------
+Not-compared         1      0      0         1       
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 165.18  seconds
+Memory usage : 830.67  M bytes
+0
+// Modules 'instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2(G) and instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 36 out of 46 module pairs	EQ: 22	NEQ: 14	ABORT: 0
+// Running Module axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d and axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d
+// Command: set_root_module axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d -Golden
+// Warning: There are 8 undriven nets in Golden
+// Warning: There are 8 undriven pins in Golden
+0
+// Command: set_root_module axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d -Revised
+// Warning: There are 8 undriven nets in Revised
+// Warning: There are 8 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_axi_rom -Golden
+0
+// Command: set_module_property -instance /u_axi_rom -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 147 Golden and 147 Revised pins marked as unreachable
+// 0 Golden and 8 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 70 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 70 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            180    48     81        309     
+--------------------------------------------------------------------------------
+Revised           180    48     81        309     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       3         3       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       3         3       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 129 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           48     81        129     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d -module -hier -Golden
+0
+// Command: add_black_box axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d -module -hier -Revised
+0
+// Command: usage
+CPU time     : 165.27  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 37 out of 46 module pairs	EQ: 23	NEQ: 14	ABORT: 0
+// Running Module asap7_sram_1rw_ADDR_W15_DATA_W32_1 and asap7_sram_1rw_ADDR_W15_DATA_W32_1
+// Command: set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32_1 -Golden
+// Warning: Total black box modules referenced in Golden = 1
+0
+// Command: set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32_1 -Revised
+// Warning: Total black box modules referenced in Revised = 1
+0
+// Command: set_module_property -instance /u_axi_ram_hi/u_mem -Golden
+0
+// Command: set_module_property -instance /u_axi_ram_hi/u_mem -Revised
+0
+// Command: report_black_box -NOHidden
+SYSTEM: (G R) srambank_256x4x32_6t122
+0
+// Applying constraints to module boundaries ...
+// 0 Golden and 1 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 5 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 5 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            50     32     5      32        119     
+--------------------------------------------------------------------------------
+Revised           50     32     5      32        119     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+CPU time     : 165.56  seconds
+Elapse time  : 167     seconds
+Memory usage : 830.67  M bytes
+// Command: add_compared_points -all
+// 69 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           32     5      32        69      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W15_DATA_W32_1 -module -hier -Golden
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W15_DATA_W32_1 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 165.57  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 38 out of 46 module pairs	EQ: 24	NEQ: 14	ABORT: 0
+// Running Module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 and axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1
+// Command: set_root_module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 -Golden
+// Warning: Total black box modules referenced in Golden = 2
+// Warning: There are 5 undriven nets in Golden
+// Warning: There are 5 undriven pins in Golden
+0
+// Command: set_root_module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 -Revised
+// Warning: Total black box modules referenced in Revised = 2
+// Warning: There are 5 undriven nets in Revised
+// Warning: There are 5 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_axi_ram_hi -Golden
+0
+// Command: set_module_property -instance /u_axi_ram_hi -Revised
+0
+// Command: report_black_box -NOHidden
+HIER: (G R) asap7_sram_1rw_ADDR_W15_DATA_W32_1
+0
+// Applying constraints to module boundaries ...
+// 83 Golden and 84 Revised pins marked as unreachable
+// 0 Golden and 23 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 151 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 151 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            180    51     158    1         390     
+--------------------------------------------------------------------------------
+Revised           180    51     158    1         390     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       10        10      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       10        10      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 210 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           51     158    1         210     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 -module -hier -Golden
+0
+// Command: add_black_box axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 165.68  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 39 out of 46 module pairs	EQ: 25	NEQ: 14	ABORT: 0
+// Running Module asap7_sram_1rw_ADDR_W15_DATA_W32 and asap7_sram_1rw_ADDR_W15_DATA_W32
+// Command: set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32 -Golden
+// Warning: Total black box modules referenced in Golden = 1
+0
+// Command: set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32 -Revised
+// Warning: Total black box modules referenced in Revised = 1
+0
+// Command: set_module_property -instance /u_axi_ram_lo/u_mem -Golden
+0
+// Command: set_module_property -instance /u_axi_ram_lo/u_mem -Revised
+0
+// Command: report_black_box -NOHidden
+SYSTEM: (G R) srambank_256x4x32_6t122
+0
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 5 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 5 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            50     32     5      32        119     
+--------------------------------------------------------------------------------
+Revised           50     32     5      32        119     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+CPU time     : 165.98  seconds
+Elapse time  : 167     seconds
+Memory usage : 830.67  M bytes
+// Command: add_compared_points -all
+// 69 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           32     5      32        69      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W15_DATA_W32 -module -hier -Golden
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W15_DATA_W32 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 165.98  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 40 out of 46 module pairs	EQ: 26	NEQ: 14	ABORT: 0
+// Running Module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 and axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768
+// Command: set_root_module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 -Golden
+// Warning: Total black box modules referenced in Golden = 2
+// Warning: There are 5 undriven nets in Golden
+// Warning: There are 5 undriven pins in Golden
+0
+// Command: set_root_module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 -Revised
+// Warning: Total black box modules referenced in Revised = 2
+// Warning: There are 5 undriven nets in Revised
+// Warning: There are 5 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_axi_ram_lo -Golden
+0
+// Command: set_module_property -instance /u_axi_ram_lo -Revised
+0
+// Command: report_black_box -NOHidden
+HIER: (G R) asap7_sram_1rw_ADDR_W15_DATA_W32
+0
+// Applying constraints to module boundaries ...
+// 83 Golden and 83 Revised pins marked as unreachable
+// 0 Golden and 28 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 151 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 151 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            180    51     158    1         390     
+--------------------------------------------------------------------------------
+Revised           180    51     158    1         390     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       10        10      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       10        10      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 210 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           51     158    1         210     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 -module -hier -Golden
+0
+// Command: add_black_box axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 166.10  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 41 out of 46 module pairs	EQ: 27	NEQ: 14	ABORT: 0
+// Running Module asap7_sram_1rw_ADDR_W12_DATA_W32 and asap7_sram_1rw_ADDR_W12_DATA_W32
+// Command: set_root_module asap7_sram_1rw_ADDR_W12_DATA_W32 -Golden
+// Warning: Total black box modules referenced in Golden = 1
+0
+// Command: set_root_module asap7_sram_1rw_ADDR_W12_DATA_W32 -Revised
+// Warning: Total black box modules referenced in Revised = 1
+0
+// Command: set_module_property -instance /u_itcm/u_mem -Golden
+0
+// Command: set_module_property -instance /u_itcm/u_mem -Revised
+0
+// Command: report_black_box -NOHidden
+SYSTEM: (G R) srambank_256x4x32_6t122
+0
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// Processing Revised ...
+// Modeling Revised ...
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            47     32     2      4         85      
+--------------------------------------------------------------------------------
+Revised           47     32     2      4         85      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 38 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           32     2      4         38      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W12_DATA_W32 -module -hier -Golden
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W12_DATA_W32 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 166.17  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 42 out of 46 module pairs	EQ: 28	NEQ: 14	ABORT: 0
+// Running Module tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 and tcm_SIZE_BYTES16384_HAS_FETCH_PORT1
+// Command: set_root_module tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 -Golden
+// Warning: Total black box modules referenced in Golden = 2
+// Warning: There are 2 undriven nets in Golden
+// Warning: There are 2 undriven pins in Golden
+0
+// Command: set_root_module tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 -Revised
+// Warning: Total black box modules referenced in Revised = 2
+// Warning: There are 2 undriven nets in Revised
+// Warning: There are 2 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_itcm -Golden
+0
+// Command: set_module_property -instance /u_itcm -Revised
+0
+// Command: report_black_box -NOHidden
+HIER: (G R) asap7_sram_1rw_ADDR_W12_DATA_W32
+0
+// Applying constraints to module boundaries ...
+// 38 Golden and 38 Revised pins marked as unreachable
+// 0 Golden and 6 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 52 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 52 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            105    66     55     1         227     
+--------------------------------------------------------------------------------
+Revised           105    66     55     1         227     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 122 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           66     55     1         122     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 -module -hier -Golden
+0
+// Command: add_black_box tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 166.23  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 43 out of 46 module pairs	EQ: 29	NEQ: 14	ABORT: 0
+// Running Module asap7_sram_1rw_ADDR_W12_DATA_W32_1 and asap7_sram_1rw_ADDR_W12_DATA_W32_1
+// Command: set_root_module asap7_sram_1rw_ADDR_W12_DATA_W32_1 -Golden
+// Warning: Total black box modules referenced in Golden = 1
+0
+// Command: set_root_module asap7_sram_1rw_ADDR_W12_DATA_W32_1 -Revised
+// Warning: Total black box modules referenced in Revised = 1
+0
+// Command: set_module_property -instance /u_dtcm/u_mem -Golden
+0
+// Command: set_module_property -instance /u_dtcm/u_mem -Revised
+0
+// Command: report_black_box -NOHidden
+SYSTEM: (G R) srambank_256x4x32_6t122
+0
+// Applying constraints to module boundaries ...
+// 0 Golden and 5 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// Processing Revised ...
+// Modeling Revised ...
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            47     32     2      4         85      
+--------------------------------------------------------------------------------
+Revised           47     32     2      4         85      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 38 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           32     2      4         38      
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W12_DATA_W32_1 -module -hier -Golden
+0
+// Command: add_black_box asap7_sram_1rw_ADDR_W12_DATA_W32_1 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 166.29  seconds
+Memory usage : 830.67  M bytes
+0
+Processed 44 out of 46 module pairs	EQ: 30	NEQ: 14	ABORT: 0
+// Running Module tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 and tcm_SIZE_BYTES16384_HAS_FETCH_PORT0
+// Command: set_root_module tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 -Golden
+// Warning: Total black box modules referenced in Golden = 2
+// Warning: There are 35 undriven nets in Golden
+// Warning: There are 35 undriven pins in Golden
+0
+// Command: set_root_module tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 -Revised
+// Warning: Total black box modules referenced in Revised = 2
+// Warning: There are 35 undriven nets in Revised
+// Warning: There are 35 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_dtcm -Golden
+0
+// Command: set_module_property -instance /u_dtcm -Revised
+0
+// Command: report_black_box -NOHidden
+HIER: (G R) asap7_sram_1rw_ADDR_W12_DATA_W32_1
+0
+// Applying constraints to module boundaries ...
+// 86 Golden and 86 Revised pins marked as unreachable
+// 0 Golden and 8 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 52 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 52 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            105    33     54     1         193     
+--------------------------------------------------------------------------------
+Revised           105    33     54     1         193     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       1         1       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 88 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           33     0      1         34      
+--------------------------------------------------------------------------------
+Non-equivalent       0      1      0         1       
+--------------------------------------------------------------------------------
+Not-compared         0      53     0         53      
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 166.36  seconds
+Memory usage : 830.67  M bytes
+0
+// Modules 'tcm_SIZE_BYTES16384_HAS_FETCH_PORT0(G) and tcm_SIZE_BYTES16384_HAS_FETCH_PORT0(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 45 out of 46 module pairs	EQ: 30	NEQ: 15	ABORT: 0
+// Running Module top_soc and top_soc
+// Command: set_root_module top_soc -Golden
+// Warning: Total black box modules referenced in Golden = 33
+// Warning: There are 1396 undriven nets in Golden
+// Warning: There are 1396 undriven pins in Golden
+0
+// Command: set_root_module top_soc -Revised
+// Warning: Total black box modules referenced in Revised = 33
+// Warning: There are 1399 undriven nets in Revised
+// Warning: There are 1399 undriven pins in Revised
+0
+// Command: set_module_property -instance / -Golden
+0
+// Command: set_module_property -instance / -Revised
+0
+// Command: report_black_box -NOHidden
+HIER: (G R) arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11
+HIER: (G R) arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5
+HIER: (G R) arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7
+HIER: (G R) arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8
+HIER: (G R) arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9
+HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32
+HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_1
+HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_2
+HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_3
+HIER: (G R) asap7_sram_1rw_ADDR_W12_DATA_W32_1
+HIER: (G R) ascon_core
+HIER: (G R) axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768
+HIER: (G R) axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1
+HIER: (G R) axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d
+SYSTEM: (G R) RingOscillator
+HIER: (G R) rv_jtag_dtm
+HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2
+HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1
+HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2
+HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3
+HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4
+HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5
+HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6
+HIER: (G R) sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5
+HIER: (G R) sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1
+HIER: (G R) sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4
+HIER: (G R) sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5
+SYSTEM: (G R) srambank_128x4x20_6t122
+HIER: (G R) tcm_SIZE_BYTES16384_HAS_FETCH_PORT1
+0
+// Applying constraints to module boundaries ...
+// 8 Golden and 8 Revised pins constrained to constant value
+// 3 Golden and 3 Revised pins marked as unreachable
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 30573 gated-clock DFF/DLAT(s)
+// (F32) Created 1018 Z gate(s) for floating net(s) and floating pin(s)
+// (F28) Converted 1396 internal output port(s) to inout port(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 30573 gated-clock DFF/DLAT(s)
+// (F32) Created 1018 Z gate(s) for floating net(s) and floating pin(s)
+// (F28) Converted 1399 internal output port(s) to inout port(s)
+CPU time     : 179.69  seconds
+Elapse time  : 181     seconds
+Memory usage : 837.30  M bytes
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    DLAT   BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            59     115    31157  2      32        31365   
+--------------------------------------------------------------------------------
+Revised           59     115    31157  2      32        31365   
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1441   1018      2459    
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1441   1018      2459    
+================================================================================
+CPU time     : 184.60  seconds
+Elapse time  : 186     seconds
+Memory usage : 837.30  M bytes
+// Running automatic setup...
+// Automatic setup finished.
+0
+CPU time     : 235.19  seconds
+Elapse time  : 236     seconds
+Memory usage : 837.55  M bytes
+// Command: add_compared_points -all
+// 31306 compared points added to compare list
+0
+CPU time     : 235.37  seconds
+Elapse time  : 237     seconds
+Memory usage : 837.55  M bytes
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF    DLAT   BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           115    31157  2      32        31306   
+================================================================================
+CPU time     : 236.26  seconds
+Elapse time  : 238     seconds
+Memory usage : 837.55  M bytes
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+CPU time     : 236.78  seconds
+Elapse time  : 238     seconds
+Memory usage : 837.55  M bytes
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 236.82  seconds
+Memory usage : 837.55  M bytes
+0
+Processed 46 out of 46 module pairs	EQ: 31	NEQ: 15	ABORT: 0
+
+// Note: 15 module pair(s) are dynamically flattened for hierarchical comparison
+  Usage: 124.00 secs.
+  (15 dynamically flattened module pair(s) were non-equivalent)
+// Use "REPort HIer_compare Result -DYNamicflattened" to report them
+
+================================================================================
+Module Comparison Results
+--------------------------------------------------------------------------------
+Equivalent                     31
+--------------------------------------------------------------------------------
+Total                          31
+--------------------------------------------------------------------------------
+Hierarchical compare : Equivalent 
+================================================================================
+Status          Golden                            Revised                          CPU / Elapsed Time
+-----------------------------------------------------------------------------------------------------
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 0.03 sec  0 sec
+Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 0.14 sec  0 sec
+Equivalent    : tcm_SIZE_BYTES16384_HAS_FETCH_PORT1  tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 0.06 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_1  asap7_sram_1rw_ADDR_W11_DATA_W32_1 0.02 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 0.03 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 0.04 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W15_DATA_W32  asap7_sram_1rw_ADDR_W15_DATA_W32 0.27 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W12_DATA_W32  asap7_sram_1rw_ADDR_W12_DATA_W32 0.06 sec  0 sec
+Equivalent    : ascon_core                        ascon_core                       0.52 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_3  asap7_sram_1rw_ADDR_W11_DATA_W32_3 0.02 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 0.03 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 0.03 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 0.03 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 0.03 sec  0 sec
+Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 0.13 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_2  asap7_sram_1rw_ADDR_W11_DATA_W32_2 0.02 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32  asap7_sram_1rw_ADDR_W11_DATA_W32 0.02 sec  0 sec
+Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 0.14 sec  0 sec
+Equivalent    : axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768  axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 0.10 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 0.03 sec  0 sec
+Equivalent    : rv_jtag_dtm                       rv_jtag_dtm                      0.06 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 0.03 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 0.03 sec  0 sec
+Equivalent    : axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1  axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 0.09 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 0.03 sec  0 sec
+Equivalent    : axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d  axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d 0.07 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 0.03 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W12_DATA_W32_1  asap7_sram_1rw_ADDR_W12_DATA_W32_1 0.04 sec  1 sec
+Equivalent    : asap7_sram_1rw_ADDR_W15_DATA_W32_1  asap7_sram_1rw_ADDR_W15_DATA_W32_1 0.26 sec  1 sec
+Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 0.13 sec  1 sec
+Equivalent    : top_soc                           top_soc                          68.79 sec  70 sec
+Dyn-flattened (NEQ): data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4  data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 55.22 sec 57 sec
+Dyn-flattened (NEQ): apb_gpio                          apb_gpio                         0.15 sec 0 sec
+Dyn-flattened (NEQ): apb_watchdog                      apb_watchdog                     0.05 sec 1 sec
+Dyn-flattened (NEQ): instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2  instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 1.23 sec 1 sec
+Dyn-flattened (NEQ): apb_i2c                           apb_i2c                          0.15 sec 0 sec
+Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 0.03 sec 0 sec
+Dyn-flattened (NEQ): rv_debug_module_sba               rv_debug_module_sba              0.13 sec 0 sec
+Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 0.03 sec 0 sec
+Dyn-flattened (NEQ): dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4  dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 47.76 sec 49 sec
+Dyn-flattened (NEQ): clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864  clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 0.83 sec 1 sec
+Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 0.03 sec 0 sec
+Dyn-flattened (NEQ): riscv_pipeline                    riscv_pipeline                   13.79 sec 14 sec
+Dyn-flattened (NEQ): sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 1.26 sec 1 sec
+Dyn-flattened (NEQ): apb_syscon                        apb_syscon                       0.05 sec 0 sec
+Dyn-flattened (NEQ): tcm_SIZE_BYTES16384_HAS_FETCH_PORT0  tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 0.06 sec 0 sec
+================================================================================
+
+Hierarchical compare : Equivalent 
+
+================================================================================
+                            Verification Report
+--------------------------------------------------------------------------------
+Category                                                                  Count
+--------------------------------------------------------------------------------
+1. Non-standard modeling options used:                                      0
+     Tri-stated output:                                        checked
+     Revised X signals set to E:                               yes
+     Floating signals tied to Z:                               yes
+     Command "add clock" for clock-gating:                     not used
+--------------------------------------------------------------------------------
+2. Incomplete verification:                                                 0
+     All primary outputs are mapped:                           yes
+     Not-mapped DFF/DLAT is detected:                          no
+     All mapped points are added as compare points:            yes
+     All compared points are compared:                         yes
+     User added black box:                                     no
+     Black box mapped with different module name:              no
+     Empty module is not black boxed:                          no
+     Command "add ignore outputs" used:                        no
+     Always false constraints detected:                        no
+     Verified pin-equivalent outputs are unmapped:             no
+--------------------------------------------------------------------------------
+3. User modification to design:                                             0
+     Change gate type:                                         no
+     Change wire:                                              no
+     Primary input added by user:                              no
+--------------------------------------------------------------------------------
+4. Conformal Constraint Designer clock domain crossing checks recommended:  1
+     Multiple clocks in the design:                            yes *
+--------------------------------------------------------------------------------
+5. Design ambiguity:                                                        0
+     Duplicate module definition:                              no
+     Black box due to undefined cells:                         no
+     Golden design has abnormal ratio of unreachable gates:    no
+     Ratio of golden unreachable gates:                        3%
+     Revised design has abnormal ratio of unreachable gates:   no
+     Ratio of revised unreachable gates:                       3%
+     All primary input bus ordering is consistent:             yes
+     All primary output bus ordering is consistent:            yes
+     DFF/DLAT not compared due to disabled clock port(s):        0
+     Always X compared point is detected:                      not checked
+--------------------------------------------------------------------------------
+6. Compare Results:                                                        PASS
+     Total Equivalent modules  = 31
+     Total Dynamic-flattened modules = 15
+================================================================================
+
+0
+CPU time     : 236.93  seconds
+Elapse time  : 238     seconds
+Memory usage : 837.67  M bytes
+// Command: lec_capture ./reports/lec_unmapped.rpt {report_unmapped_points -summary}
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1441   1018      2459    
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1441   1018      2459    
+================================================================================
+
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1441   1018      2459    
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1441   1018      2459    
+================================================================================
+
+// Command: lec_capture ./reports/lec_noneq.rpt \
+//              {report_compare_data -class nonequivalent -class abort -class notcompared}
+0 Non-equivalent point(s) reported
+0 Abort point(s) reported
+0 Not-compared point(s) reported
+0 compared point(s) reported
+================================================================================
+Compared points      PO     DFF    DLAT   BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           115    31157  2      32        31306   
+================================================================================
+
+0 Non-equivalent point(s) reported
+0 Abort point(s) reported
+0 Not-compared point(s) reported
+0 compared point(s) reported
+================================================================================
+Compared points      PO     DFF    DLAT   BBOX      Total   
+--------------------------------------------------------------------------------
+Equivalent           115    31157  2      32        31306   
+================================================================================
+
+// Command: report_statistics
+Mapping and compare statistics
+================================================================================
+                     Compare Result       Golden            Revised
+--------------------------------------------------------------------------------
+Root module name                          top_soc           top_soc           
+
+Primary inputs                                59                 59
+   Mapped                                     59                 59
+
+Tri-state (Z) key points                    1018               1018
+   Unmapped                                 1018               1018
+      Unreachable                           1018               1018
+
+Primary outputs                              115                115
+   Mapped                                    115                115
+      Equivalent                115
+
+Black-box key points                          32                 32
+   Mapped                                     32                 32
+      Equivalent                 32
+
+State key points                           32600              32600
+   Mapped                                  31159              31159
+      Equivalent              31159
+   Unmapped                                 1441               1441
+      Unreachable                           1441               1441
+================================================================================
+0
+// Command: set n_total   [get_compare_points -count]
+31306
+// Command: set n_noneq   [get_compare_points -NONequivalent -count]
+0
+// Command: set n_abort   [get_compare_points -abort -count]
+0
+// Command: set n_unknown [get_compare_points -unknown -count]
+0
+// Command: set lec_pass  [regexp {Compare Results:\s+PASS} $verification_rpt]
+1
+// Command: if {$n_noneq > 0 || $n_abort > 0} {
+//              set verdict FAIL
+//          } elseif {$LEC_MODE eq "flat" && ($n_unknown > 0 || $n_total == 0)} {
+//              set verdict FAIL
+//          } elseif {$lec_pass} {
+//              set verdict PASS
+//          } elseif {[regexp {Compare Results:\s+(\S+)} $verification_rpt -> lec_result]} {
+//              set verdict FAIL
+//          } else {
+//              set verdict UNKNOWN
+//          }
+PASS
+// Command: set fp [open $VERDICT_FILE w]
+file14
+// Command: puts $fp $verdict
+// Command: puts $fp "LEC $TOP: netlist tong hop vs netlist sau P&R (che do $LEC_MODE)"
+// Command: puts $fp "  golden  : $GOLDEN_NETLIST"
+// Command: puts $fp "  revised : $REVISED_NETLIST"
+// Command: puts $fp "  Genus   : $golden_stamp"
+// Command: puts $fp "  diem so sanh $n_total, khac $n_noneq, abort $n_abort, chua so $n_unknown"
+// Command: if {$LEC_MODE eq "hier"} {
+//              puts $fp "  (so diem la cua module top; tung module: reports/lec_hier_result.rpt)"
+//          }
+// Command: if {$verdict eq "UNKNOWN"} {
+//              puts $fp "  Khong thay dong 'Compare Results' trong reports/lec_verification.rpt - doc tay."
+//          }
+// Command: foreach msg $LEC_WARNINGS {
+//              puts $fp "  WARNING: $msg"
+//          }
+// Command: close $fp
+// Command: set fp [open $VERDICT_FILE r]
+file14
+// Command: puts "============================================================"
+============================================================
+// Command: puts -nonewline [read $fp]
+PASS
+LEC top_soc: netlist tong hop vs netlist sau P&R (che do hier)
+  golden  : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v
+  revised : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v
+  Genus   : Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
+  diem so sanh 31306, khac 0, abort 0, chua so 0
+  (so diem la cua module top; tung module: reports/lec_hier_result.rpt)
+// Command: puts "============================================================"
+============================================================
+// Command: close $fp
+// Command: vpxmode
+// Command: exit -f
