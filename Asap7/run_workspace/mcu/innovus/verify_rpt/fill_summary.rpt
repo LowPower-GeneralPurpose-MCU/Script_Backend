@@ -5,7 +5,7 @@ Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai M5/Pad la so TU DA
   M2        41 -> 1      (min 25%)        0 -> 0      (max 60%)   /77 window
   M3        31 -> 0      (min 25%)        0 -> 2      (max 60%)   /77 window   <- fill LAM TANG so window vuot tran
   M4        36 -> 0      (min 10%)        0 -> 0      (max 35%)   /77 window
-  M5      1913 -> 1111   (min 15%)        0 -> 0      (max 90%)   /1960 window
+  M5      1913 -> 1109   (min 15%)        0 -> 0      (max 90%)   /1960 window
   M6        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
   M7        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
   M8        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
