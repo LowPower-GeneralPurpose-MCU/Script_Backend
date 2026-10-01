@@ -681,7 +681,7 @@ soc_block "KHOI 13: routeDesign" {
     # error/warning.  addFiller + soc_global_pg_connect o KHOI 15 noi chung lai:
     # connectivity_final.rpt cung lenh nay ra "Found no problems or warnings".
     # -> Chi dung flow khi co net tin hieu trong bao cao.
-    verifyConnectivity -type all -error 1000 -warning 1000 \
+    verifyConnectivity -type all -error 100000 -warning 1000 \
         -report ./verify_rpt/connectivity_route.rpt
     saveDesign ./saved/${TOP}_routed.enc
 }
@@ -790,7 +790,7 @@ soc_block "KHOI 15: filler + verify" {
     if {$soc_drc_real > 0} {
         error "Con $soc_drc_real vi pham DRC that - xem verify_rpt/drc_final.rpt"
     }
-    verifyConnectivity -type all -error 1000 -warning 1000 \
+    verifyConnectivity -type all -error 100000 -warning 1000 \
         -report ./verify_rpt/connectivity_final.rpt
     # Moi std cell cach tap <= SOC_TAP_RULE (deck ACTIVE.LUP.1, LEF 4x).  Chua
     # chay thu tren Innovus 23.14: loi cu phap thi chi bao, khong dung khoi.
