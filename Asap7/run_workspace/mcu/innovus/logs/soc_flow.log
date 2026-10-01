@@ -4700,4 +4700,106 @@ Tiep theo: KHOI 11 (CTS)
 10-01 14:35:54   postRoute HOLD: WNS 0.016 TNS 0.0, 0 duong vi pham -> DAT
 10-01 14:35:54 >>> XONG: KHOI 14: optDesign postRoute
 10-01 14:35:54 >>> LOI: KHOI 3: dat mam 84 SRAM: wrong # args: should be "soc_block title body"
-10-01 14:35:56 innovus 187> 
+10-01 14:35:56 innovus 187> 10-01 15:14:08 soc_flow_ok: go co loi "KHOI 3: dat mam 84 SRAM: wrong # args: should be "soc_block title body"" - paste khoi tiep theo duoc
+10-01 15:14:37 ============================================================
+10-01 15:14:37 >>> KHOI 15: filler + verify
+10-01 15:14:37 ============================================================
+10-01 15:14:37 Filler cell: FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R
+10-01 15:15:33 --- ./verify_rpt/drc_final.rpt
+10-01 15:15:33   loai OFFGRID                         6
+10-01 15:15:33   net  u_itcm/u_mem/FE_OFN7471_n_257        1
+10-01 15:15:33   net  u_itcm/u_mem/FE_OFN7469_n_255        1
+10-01 15:15:33   net  u_itcm/u_mem/FE_OFN7470_n_256        1
+10-01 15:15:33   net  u_itcm/u_mem/FE_OFN7475_n_261        1
+10-01 15:15:33   net  u_itcm/u_mem/FE_OFN7468_n_254        1
+10-01 15:15:33   net  u_itcm/u_mem/FE_OFN7466_n_252        1
+10-01 15:15:33   -> 0 vi pham that (6 bo qua: net {}, loai {OFFGRID}; 6 OFFGRID M4 tai chan macro)
+10-01 15:15:39 soc_metal_fill: SOC_FILL_LAYERS = M1 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M2 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M3 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M4 0.024 0.312 0.096 0.096 1.25 0.048 0.048 10 35 25 M5 0.024 0.312 0.096 0.096 1.25 0.048 0.048 15 90 25 M6 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M7 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M8 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 M9 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 Pad 0.2 2.0 0.04 2.24 2.24 2.04 2.04 20 80 25
+10-01 15:15:39 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+10-01 15:15:39   M1: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-01 15:15:39   M2: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-01 15:15:39   M3: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-01 15:15:39   M4: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-01 15:15:39   M5: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-01 15:15:39   M6: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-01 15:15:39   M7: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-01 15:15:39   M8: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-01 15:15:39   M9: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-01 15:15:39   Pad: pitch 2.2400 | buoc fill 2.2400 (1.00 track) | cach day that 2.2400 (1.00 track) | mat do toi da 8.9%
+10-01 15:15:39 WARNING: setMetalFill -reset: 
+10-01 15:17:16 # soc_fill_report doc lai ./top_soc.metalfill.rpt
+10-01 15:17:16 Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai M5/Pad la so TU DAT trong SOC_FILL_LAYERS, khong phai luat foundry.
+10-01 15:17:16   layer   duoi min (truoc -> sau)      vuot max (truoc -> sau)
+10-01 15:17:16   M1        35 -> 0      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-01 15:17:16   M2        41 -> 1      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-01 15:17:16   M3        31 -> 0      (min 25%)        0 -> 2      (max 60%)   /77 window   <- fill LAM TANG so window vuot tran
+10-01 15:17:16   M4        36 -> 0      (min 10%)        0 -> 0      (max 35%)   /77 window
+10-01 15:17:16   M5      1913 -> 1109   (min 15%)        0 -> 0      (max 90%)   /1960 window
+10-01 15:17:16   M6        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-01 15:17:16   M7        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-01 15:17:16   M8        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-01 15:17:16   M9        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-01 15:17:16   Pad       77 -> 0      (min 20%)        0 -> 0      (max 80%)   /77 window
+10-01 15:17:16 WARNING: 3 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).
+10-01 15:17:16   da ghi ./verify_rpt/fill_summary.rpt
+10-01 15:17:42 --- ./verify_rpt/drc_fill.rpt
+10-01 15:17:42   loai OFFGRID                         6
+10-01 15:17:42   net  u_itcm/u_mem/FE_OFN7471_n_257        1
+10-01 15:17:42   net  u_itcm/u_mem/FE_OFN7469_n_255        1
+10-01 15:17:42   net  u_itcm/u_mem/FE_OFN7470_n_256        1
+10-01 15:17:42   net  u_itcm/u_mem/FE_OFN7475_n_261        1
+10-01 15:17:42   net  u_itcm/u_mem/FE_OFN7468_n_254        1
+10-01 15:17:42   net  u_itcm/u_mem/FE_OFN7466_n_252        1
+10-01 15:17:42   -> 0 vi pham that (6 bo qua: net {}, loai {OFFGRID}; 6 OFFGRID M4 tai chan macro)
+10-01 15:17:48 Mat do - layer doc: M5
+10-01 15:17:48   M5   duoi min: 1109 tren macro SRAM + 0 trong vung logic
+10-01 15:17:48   vung logic: dat nguong o moi window
+10-01 15:17:48   1109 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+10-01 15:17:48   da ghi ./verify_rpt/density_summary.rpt
+10-01 15:17:48   density signoff: PENDING_MERGED_GDS_SIGNOFF
+10-01 15:18:19 Mat do - layer doc: M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
+10-01 15:18:19   M1   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-01 15:18:19   M2   duoi min: 0 tren macro SRAM + 1 trong vung logic (thap nhat 22.45%)
+10-01 15:18:19   M3   duoi min: 0 tren macro SRAM + 0 trong vung logic | 2 window VUOT tran
+10-01 15:18:19   M4   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-01 15:18:19   M5   duoi min: 1109 tren macro SRAM + 0 trong vung logic
+10-01 15:18:19   M6   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-01 15:18:19   M7   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-01 15:18:19   M8   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-01 15:18:19   M9   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-01 15:18:19   Pad  duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-01 15:18:19   2 window vuot tran mat do: fill do them vao window von da qua tran (cua so chong nhau 50%).  Chi cac layer co MAXIMUMDENSITY that trong tech LEF moi dang lo - ASAP7 chi co M5 (90%) va Pad (80%).
+10-01 15:18:19 WARNING: 1 window vung logic duoi nguong - metal fill chua du, xem lai SOC_FILL_LAYERS (nhat la -maxWidth / -decrement)
+10-01 15:18:19   1109 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+10-01 15:18:19   da ghi ./verify_rpt/density_all_summary.rpt
+10-01 15:20:50   final SETUP: WNS 0.274 TNS 0.0, 0 duong vi pham -> DAT
+10-01 15:20:50   final HOLD: WNS 0.016 TNS 0.0, 0 duong vi pham -> DAT
+10-01 15:20:50   Slew chan macro SRAM: khong chan nao vuot gioi han Liberty
+10-01 15:21:33   Cong suat: 91.95 mW, trong do macro SRAM 82.48 mW (89.7%)
+10-01 15:21:33   -> CHUA co VCD/TCF: activity mac dinh 0.2 cho moi chan, tuc coi
+10-01 15:21:33      ca 84 macro SRAM deu bi truy cap cung luc.  RTL chi bat mot
+10-01 15:21:33      bank moi lan doc/ghi -> con so tren la CAN TREN, khong phai
+10-01 15:21:33      cong suat cua thiet ke.  Muon so that: chay mo phong lay VCD
+10-01 15:21:33      roi read_activity_file truoc report_power.
+10-01 15:21:39 ============================================================
+10-01 15:21:39 PNR XONG - saved/top_soc_final.enc
+  verify_rpt/drc_final.rpt           : DRC design that, phai 0
+  verify_rpt/drc_fill.rpt            : DRC sau metal fill, phai 0
+  verify_rpt/connectivity_final.rpt  : 0 open/short
+  verify_rpt/welltap_final.rpt       : 0 cell xa tap qua 30.0 um
+  verify_rpt/density_final.rpt       : chi layer M5 co luat
+  verify_rpt/fill_summary.rpt        : so window duoi min / vuot max CUA
+                                       TUNG layer sau addMetalFill
+  verify_rpt/density_all_summary.rpt : cung so do nhung da tach macro SRAM
+                                       / vung logic - vung logic phai 0
+  reports/timing_final*/             : WNS setup/hold >= 0, DRV Real = 0
+                                       (soc_check_timing o tren moi CANH BAO;
+                                        KHOI 16 moi chan xuat GDS)
+  reports/timing_final/final.tran.gz : slew chan clk SRAM - soc_sram_clk_slew
+                                       da in so o tren, khong phai mo file
+  reports/power_final.rpt            : can tren (chua co VCD), xem ghi chu
+  logs/soc_flow.log                  : toan bo ket luan cua cac cong kiem tra
+Tiep theo: KHOI 16 (xuat file)
+10-01 15:21:39 ============================================================
+10-01 15:21:39 >>> XONG: KHOI 15: filler + verify
+10-01 15:21:40 innovus 189> 
