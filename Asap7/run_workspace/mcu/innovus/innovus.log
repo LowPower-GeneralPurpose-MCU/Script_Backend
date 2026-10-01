@@ -106366,3 +106366,334 @@ Analysis Routing ...
 Report saved in file ./reports/summary_final.rpt
 <CMD> setLayerPreference violation -isVisible 0
 <CMD> fit
+<CMD> extractRC
+#Start Design Signature (0)
+#Finish Inst Signature in MT(33474940)
+#Finish Net Signature in MT(78245502)
+#Finish SNet Signature in MT (87271830)
+#Run time and memory report for RC extraction:
+#RC extraction running on  2.81GHz 1024KB Cache 12CPU.
+#Run Statistics for snet signature:
+#   Cpu time = 00:00:05, elapsed time = 00:00:05 , scale factor =  1.00/8, scale score = 0.13.
+#    Increased memory =     0.00 (MB), total memory =  6749.64 (MB), peak memory =  8294.09 (MB)
+#Run Statistics for Net Final Signature:
+#   Cpu time = 00:00:00, elapsed time = 00:00:00 .
+#   Increased memory =     0.00 (MB), total memory =  6750.75 (MB), peak memory =  8294.09 (MB)
+#Run Statistics for Net launch:
+#   Cpu time = 00:00:01, elapsed time = 00:00:00 , scale factor =  7.74/8, scale score = 0.97.
+#    Increased memory =     0.00 (MB), total memory =  6750.75 (MB), peak memory =  8294.09 (MB)
+#Run Statistics for Net init_dbsNet_slist:
+#   Cpu time = 00:00:00, elapsed time = 00:00:00 .
+#   Increased memory =     1.11 (MB), total memory =  6750.75 (MB), peak memory =  8294.09 (MB)
+#Run Statistics for net signature:
+#   Cpu time = 00:00:01, elapsed time = 00:00:00 , scale factor =  6.43/8, scale score = 0.80.
+#    Increased memory =     0.00 (MB), total memory =  6749.64 (MB), peak memory =  8294.09 (MB)
+#Run Statistics for inst signature:
+#   Cpu time = 00:00:09, elapsed time = 00:00:03 , scale factor =  3.30/8, scale score = 0.41.
+#    Increased memory =  -109.14 (MB), total memory =  6749.64 (MB), peak memory =  8294.09 (MB)
+The design is extracted. Skipping TQuantus.
+<CMD> rcOut -spef ./outputs/top_soc_pnr_rc_typ.spef -rc_corner rc_typ
+Reading RCDB with compressed RC data.
+RC Out has the following PVT Info:
+   RC:rc_typ
+Dumping Spef file.....
+Printing D_NET...
+RC Out from RCDB Completed (CPU Time= 0:00:03.8  MEM= 13536.8M)
+<CMD> rcOut -spef ./outputs/top_soc_pnr_rc_ss.spef -rc_corner rc_ss
+Reading RCDB with compressed RC data.
+RC Out has the following PVT Info:
+   RC:rc_ss
+Dumping Spef file.....
+Printing D_NET...
+RC Out from RCDB Completed (CPU Time= 0:00:03.9  MEM= 13536.8M)
+<CMD> rcOut -spef ./outputs/top_soc_pnr_rc_ff.spef -rc_corner rc_ff
+Reading RCDB with compressed RC data.
+RC Out has the following PVT Info:
+   RC:rc_ff
+Dumping Spef file.....
+Printing D_NET...
+RC Out from RCDB Completed (CPU Time= 0:00:03.9  MEM= 13536.8M)
+<CMD> write_sdf -view view_ss ./outputs/${TOP}_pnr_ss.sdf
+**WARN: (SDF-808):	The software is currently operating in a high performance mode which optimizes the handling of multiple timing arcs between input and output pin pairs. With the current settings, the SDF file generated will contain the same delay information for all of these arcs. To have the SDF recalculated with explicit pin pair data, you should use the option '-recompute_delay_calc'. This setting is recommended for generating SDF for functional  simulation applications.
+AAE_INFO: opIsDesignInPostRouteState() is 1
+AAE_INFO: resetNetProps viewIdx 0 
+AAE_INFO: resetNetProps viewIdx 1 
+AAE_INFO: resetNetProps viewIdx 2 
+Starting SI iteration 1 using Infinite Timing Windows
+Total CPU(s) requested: 8
+Total CPU(s) enabled with current License(s): 8
+Current free CPU(s): 1
+Additional license(s) checked out: 1 Innovus_CPU_Opt license(s) for 8 CPU(s)
+[15:25:29.042120] Periodic Lic check successful
+[15:25:29.566434] Feature usage summary:
+[15:25:29.566435] Innovus_Impl_System
+[15:25:29.566442] Innovus_CPU_Opt
+[15:25:29.566442] Innovus_7nm_Opt
+
+Total CPU(s) now enabled: 16
+#################################################################################
+# Design Stage: PostRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC OCV 
+# Parasitics Mode: SPEF/RCDB 
+# Signoff Settings: SI On (EWM-WFP)
+#################################################################################
+Start delay calculation (fullDC) (8 T). (MEM=6754.08)
+ Report initialization with DMWrite ... (0, Worst)
+Reading RCDB with compressed RC data.
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  92.6 percent of the nets selected for SI analysis
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  92.5 percent of the nets selected for SI analysis
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  92.5 percent of the nets selected for SI analysis
+End delay calculation. (MEM=6953.11 CPU=0:03:58 REAL=0:00:29.0)
+End delay calculation (fullDC). (MEM=6953.11 CPU=0:04:04 REAL=0:00:31.0)
+Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1898855_6f27edcb-3c7a-4fbe-84e7-db4595fe69cc_user1-EliteMini_user1_1pjPlz/.AAE_aVKPO3/.AAE_1898855_6f27edcb-3c7a-4fbe-84e7-db4595fe69cc/waveform.data...
+Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 6887.5M)
+Add other clocks and setupCteToAAEClockMapping during iter 1
+Loading CTE timing window is completed (CPU = 0:00:03.1, REAL = 0:00:00.0, MEM = 6887.6M)
+Starting SI iteration 2
+Start delay calculation (fullDC) (8 T). (MEM=6851.48)
+Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1898855_6f27edcb-3c7a-4fbe-84e7-db4595fe69cc_user1-EliteMini_user1_1pjPlz/.AAE_aVKPO3/.AAE_1898855_6f27edcb-3c7a-4fbe-84e7-db4595fe69cc/waveform.data...
+ Report initialization with DMUpdate ... (1, Worst)
+Glitch Analysis: View view_ss -- Total Number of Nets Skipped = 0. 
+Glitch Analysis: View view_ss -- Total Number of Nets Analyzed = 0. 
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  6.5 percent of the nets selected for SI analysis
+Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 0. 
+Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 0. 
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  14.0 percent of the nets selected for SI analysis
+Glitch Analysis: View view_ff -- Total Number of Nets Skipped = 2340. 
+Glitch Analysis: View view_ff -- Total Number of Nets Analyzed = 146684. 
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  22.4 percent of the nets selected for SI analysis
+End delay calculation. (MEM=6986.46 CPU=0:00:49.0 REAL=0:00:07.0)
+End delay calculation (fullDC). (MEM=6986.46 CPU=0:00:49.2 REAL=0:00:07.0)
+<CMD> write_sdf -view view_ff ./outputs/${TOP}_pnr_ff.sdf
+**WARN: (SDF-808):	The software is currently operating in a high performance mode which optimizes the handling of multiple timing arcs between input and output pin pairs. With the current settings, the SDF file generated will contain the same delay information for all of these arcs. To have the SDF recalculated with explicit pin pair data, you should use the option '-recompute_delay_calc'. This setting is recommended for generating SDF for functional  simulation applications.
+AAE_INFO: opIsDesignInPostRouteState() is 1
+AAE_INFO: resetNetProps viewIdx 0 
+AAE_INFO: resetNetProps viewIdx 1 
+AAE_INFO: resetNetProps viewIdx 2 
+Starting SI iteration 1 using Infinite Timing Windows
+#################################################################################
+# Design Stage: PostRoute
+# Design Name: top_soc
+# Design Mode: 7nm
+# Analysis Mode: MMMC OCV 
+# Parasitics Mode: SPEF/RCDB 
+# Signoff Settings: SI On (EWM-WFP)
+#################################################################################
+Start delay calculation (fullDC) (8 T). (MEM=6958.36)
+ Report initialization with DMWrite ... (0, Worst)
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  92.6 percent of the nets selected for SI analysis
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  92.5 percent of the nets selected for SI analysis
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  92.5 percent of the nets selected for SI analysis
+End delay calculation. (MEM=7077.56 CPU=0:03:54 REAL=0:00:30.0)
+End delay calculation (fullDC). (MEM=7077.56 CPU=0:04:00 REAL=0:00:31.0)
+Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1898855_6f27edcb-3c7a-4fbe-84e7-db4595fe69cc_user1-EliteMini_user1_1pjPlz/.AAE_aVKPO3/.AAE_1898855_6f27edcb-3c7a-4fbe-84e7-db4595fe69cc/waveform.data...
+Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 7034.4M)
+Add other clocks and setupCteToAAEClockMapping during iter 1
+Loading CTE timing window is completed (CPU = 0:00:03.1, REAL = 0:00:01.0, MEM = 7034.5M)
+Starting SI iteration 2
+Start delay calculation (fullDC) (8 T). (MEM=6873.4)
+Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1898855_6f27edcb-3c7a-4fbe-84e7-db4595fe69cc_user1-EliteMini_user1_1pjPlz/.AAE_aVKPO3/.AAE_1898855_6f27edcb-3c7a-4fbe-84e7-db4595fe69cc/waveform.data...
+ Report initialization with DMUpdate ... (1, Worst)
+Glitch Analysis: View view_ss -- Total Number of Nets Skipped = 0. 
+Glitch Analysis: View view_ss -- Total Number of Nets Analyzed = 0. 
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  6.5 percent of the nets selected for SI analysis
+Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 0. 
+Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 0. 
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  14.0 percent of the nets selected for SI analysis
+Glitch Analysis: View view_ff -- Total Number of Nets Skipped = 2340. 
+Glitch Analysis: View view_ff -- Total Number of Nets Analyzed = 146684. 
+Total number of fetched objects 146674
+AAE_INFO-618: Total number of nets in the design is 159926,  22.4 percent of the nets selected for SI analysis
+End delay calculation. (MEM=7011.09 CPU=0:00:47.9 REAL=0:00:06.0)
+End delay calculation (fullDC). (MEM=7011.09 CPU=0:00:48.1 REAL=0:00:07.0)
+<CMD> writeTimingCon ./outputs/top_soc_pnr.sdc
+<CMD> saveNetlist ./outputs/top_soc_pnr.v -excludeLeafCell
+Writing Netlist "./outputs/top_soc_pnr.v" ...
+<CMD> saveNetlist ./outputs/top_soc_pnr_pg.v -includePowerGround -includePhysicalInst -excludeLeafCell
+Writing Netlist "./outputs/top_soc_pnr_pg.v" ...
+Pwr name (VDD).
+Gnd name (VSS).
+1 Pwr names and 1 Gnd names.
+net UNCONNECTED1195
+<CMD> createPGPin VDD -geom M8 0.416 357.648 565.176 357.784
+<CMD> createPGPin VSS -geom M8 0.176 357.888 565.416 358.024
+<CMD> defOut -floorplan -netlist -routing ./outputs/top_soc_pnr.def
+Writing DEF file './outputs/top_soc_pnr.def', current time is Thu Oct  1 15:27:03 2026 ...
+unitPerMicron=1000, dbgMicronPerDBU=0.001000, unitPerDBU=1.000000
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[3].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[3].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[3].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[3].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[3].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[3].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[3].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[3].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[2].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[2].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[2].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[2].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[2].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[2].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[2].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[2].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[1].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[1].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[1].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[1].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[0].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[0].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[0].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dtcm/u_mem/\G_SRAM_BANK[0].u_sram '. Check if 'u_dtcm/u_mem/\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' after mapping to verilog name becomes 'u_itcm/u_mem/\G_SRAM_BANK[3].u_sram '. Check if 'u_itcm/u_mem/\G_SRAM_BANK[3].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' after mapping to verilog name becomes 'u_itcm/u_mem/\G_SRAM_BANK[3].u_sram '. Check if 'u_itcm/u_mem/\G_SRAM_BANK[3].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' after mapping to verilog name becomes 'u_itcm/u_mem/\G_SRAM_BANK[3].u_sram '. Check if 'u_itcm/u_mem/\G_SRAM_BANK[3].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' after mapping to verilog name becomes 'u_itcm/u_mem/\G_SRAM_BANK[3].u_sram '. Check if 'u_itcm/u_mem/\G_SRAM_BANK[3].u_sram ' is what you expected.
+**WARN: (EMS-27):	Message (IMPDB-2125) has exceeded the current message display limit of 20.
+To increase the message display limit, refer to the product command reference manual.
+DEF file './outputs/top_soc_pnr.def' is written, current time is Thu Oct  1 15:27:09 2026 ...
+<CMD> setStreamOutMode -labelAllPinShape true -pinTextOrientation automatic -virtualConnection false -textSize 1
+<CMD> streamOut ./outputs/top_soc.gds -mapFile ./outputs/top_soc_gds.map -merge {/home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_256x4x32_6t122.gds /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_128x4x20_6t122.gds} -units 2000 -dieAreaAsBoundary
+Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds has version number: 5
+Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds has version number: 5
+Merge file: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_256x4x32_6t122.gds has version number: 5
+Merge file: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_128x4x20_6t122.gds has version number: 5
+Parse flat map file './outputs/top_soc_gds.map'
+Writing GDSII file ...
+	****** db unit per micron = 1000 ******
+	****** output gds2 file unit per micron = 2000 ******
+	****** unit scaling factor = 2 ******
+Output for instance
+Output for bump
+Output for physical terminals
+Output for logical terminals
+Output for regular nets
+Output for special nets and metal fills
+Convert 0 swires and 0 svias from compressed groups
+Output for via structure generation total number 20
+Statistics for GDS generated (version 5)
+----------------------------------------
+Stream Out Layer Mapping Information:
+GDS Layer Number          GDS Layer Name
+----------------------------------------
+    96                               Pad
+    95                                V9
+    90                                M9
+    85                                V8
+    80                                M8
+    75                                V7
+    70                                M7
+    40                                M4
+    60                                M6
+    20                                M2
+    30                                M3
+    35                                V3
+    25                                V2
+    50                                M5
+    21                                V1
+    19                                M1
+    65                                V6
+    45                                V4
+    55                                V5
+
+
+Stream Out Information Processed for GDS version 5:
+Units: 2000 DBU
+
+Object                             Count
+----------------------------------------
+Instances                        2323433
+
+Ports/Pins                           176
+    metal layer M7                   174
+    metal layer M8                     2
+
+Nets                             1044486
+    metal layer M2                499032
+    metal layer M3                368040
+    metal layer M4                113451
+    metal layer M5                 48195
+    metal layer M6                 13123
+    metal layer M7                  2645
+
+    Via Instances                1167153
+
+Special Nets                       14654
+    metal layer M1                 13477
+    metal layer M4                   204
+    metal layer M5                   346
+    metal layer M6                   456
+    metal layer M7                   163
+    metal layer M8                     4
+    metal layer M9                     4
+
+    Via Instances                 245411
+
+Metal Fills                      5272433
+    metal layer M1               1060165
+    metal layer M2                951162
+    metal layer M3                791962
+    metal layer M4                404505
+    metal layer M5                356460
+    metal layer M6                604916
+    metal layer M7                586905
+    metal layer M8                251577
+    metal layer M9                253150
+    metal layer Pad                11631
+
+    Via Instances                      0
+
+Metal FillOPCs                         0
+
+    Via Instances                      0
+
+Metal FillDRCs                         0
+
+    Via Instances                      0
+
+Text                                 176
+    metal layer M7                   174
+    metal layer M8                     2
+
+
+Blockages                              0
+
+
+Custom Text                            0
+
+
+Custom Box                             0
+
+Trim Metal                             0
+
+Scanning GDS file /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds to register cell name ......
+Scanning GDS file /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds to register cell name ......
+Scanning GDS file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_256x4x32_6t122.gds to register cell name ......
+Scanning GDS file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_128x4x20_6t122.gds to register cell name ......
+Merging GDS file /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds ......
+	****** Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds has version number: 5.
+	****** Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds has units: 4000 per micron.
+	****** unit scaling factor = 0.5 ******
+**WARN: (IMPOGDS-215):	Merge file : /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_R_220121a.gds has larger units than output file units. You may have rounding problem.
+Merging GDS file /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds ......
+	****** Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds has version number: 5.
+	****** Merge file: /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds has units: 4000 per micron.
+	****** unit scaling factor = 0.5 ******
+**WARN: (IMPOGDS-215):	Merge file : /home/user1/Desktop/asap7/asap7sc7p5t_28/GDS/asap7sc7p5t_28_L_220121a.gds has larger units than output file units. You may have rounding problem.
+Merging GDS file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_256x4x32_6t122.gds ......
+	****** Merge file: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_256x4x32_6t122.gds has version number: 5.
+	****** Merge file: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_256x4x32_6t122.gds has units: 4000 per micron.
+	****** unit scaling factor = 0.5 ******
+**WARN: (IMPOGDS-215):	Merge file : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_256x4x32_6t122.gds has larger units than output file units. You may have rounding problem.
+Merging GDS file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_128x4x20_6t122.gds ......
+	****** Merge file: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_128x4x20_6t122.gds has version number: 5.
+	****** Merge file: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_128x4x20_6t122.gds has units: 4000 per micron.
+	****** unit scaling factor = 0.5 ******
+**WARN: (IMPOGDS-215):	Merge file : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/sram_gds/srambank_128x4x20_6t122.gds has larger units than output file units. You may have rounding problem.
+**WARN: (IMPOGDS-280):	Maximum units in merge file is 4000. Use -units 20000 to avoid rounding issue.
+######Streamout is finished!
+<CMD> write_lef_abstract -noCutObs ./outputs/top_soc.lef
