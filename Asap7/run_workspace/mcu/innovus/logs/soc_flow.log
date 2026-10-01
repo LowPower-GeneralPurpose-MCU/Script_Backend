@@ -4357,4 +4357,67 @@ Tiep theo: KHOI 11 (CTS)
   Xem ./reports/timing_postCTS_hold/postCTS_hold.summary(.gz)
 10-01 12:47:01 WARNING: buoc nay chua phai buoc cuoi nen flow chay tiep, nhung con so tren phai ve 0 truoc khi ket luan.
 10-01 12:47:09 >>> XONG: KHOI 12: optDesign postCTS
-10-01 12:47:09 innovus 144> 
+10-01 12:47:09 innovus 144> 10-01 12:53:52 ============================================================
+10-01 12:53:52 >>> KHOI 13: routeDesign
+10-01 12:53:52 ============================================================
+10-01 12:53:52 srambank_256x4x32_6t122.fixed.lef: 0 chan chi co tren M1-M3
+10-01 12:53:52 srambank_128x4x20_6t122.fixed.lef: 0 chan chi co tren M1-M3
+10-01 12:53:52 Chan M3 tren 84 SRAM
+10-01 12:55:52 
+10-01 13:01:12 --- ./verify_rpt/drc_route.rpt
+10-01 13:01:12   loai OFFGRID                        26
+10-01 13:01:12   net  u_itcm/u_mem/FE_OFN7469_n_255        2
+10-01 13:01:12   net  u_itcm/u_mem/FE_OFN6614_n_242        2
+10-01 13:01:12   net  u_itcm/u_mem/FE_OFN7468_n_254        2
+10-01 13:01:12   net  u_itcm/u_mem/bank_rdata[1][6]        1
+10-01 13:01:12   net  u_itcm/u_mem/FE_OFN7453_n_235        1
+10-01 13:01:12   net  u_itcm/u_mem/FE_OFN6617_n_262        1
+10-01 13:01:12   net  u_itcm/u_mem/FE_OFN7470_n_256        1
+10-01 13:01:12   net  u_itcm/u_mem/FE_OFN7471_n_257        1
+10-01 13:01:12   net  u_itcm/u_mem/FE_OFN7462_n_248        1
+10-01 13:01:12   net  u_itcm/u_mem/FE_OFN7455_n_237        1
+10-01 13:01:12   ... con 13 net nua
+10-01 13:01:12   -> 0 vi pham that (26 bo qua: net {}, loai {moi loai}; 26 OFFGRID M4 tai chan macro)
+10-01 13:01:21 >>> XONG: KHOI 13: routeDesign
+10-01 13:01:21 ============================================================
+10-01 13:01:21 >>> KHOI 14: optDesign postRoute
+10-01 13:01:21 ============================================================
+10-01 13:01:21 Net treo con lai: xem reports/dangling_net.rpt
+10-01 13:11:56 soc_fix_cg_hold vong 1 (29 s): 8 latch hold < 0.020
+10-01 13:11:56   cg_cpu/en_latch_reg slack 0.008 -> buffer thu 1 truoc cg_cpu/g16__6260/B
+10-01 13:11:58   cg_dbg/en_latch_reg slack 0.006 -> buffer thu 1 truoc cg_dbg/g15__4319/B
+10-01 13:11:59   cg_spi/en_latch_reg slack 0.018 -> buffer thu 1 truoc cg_spi/g15__3680/B
+10-01 13:11:59   cg_gpio/en_latch_reg slack 0.011 -> buffer thu 1 truoc cg_gpio/g15__8428/B
+10-01 13:11:59   cg_uart1/en_latch_reg slack 0.015 -> buffer thu 1 truoc cg_uart1/g15__5122/B
+10-01 13:11:59   cg_ascon/en_latch_reg slack 0.003 -> buffer thu 1 truoc cg_ascon/g15__2398/B
+10-01 13:12:00   cg_uart/en_latch_reg slack 0.008 -> buffer thu 1 truoc cg_uart/g15__1705/B
+10-01 13:12:00   cg_cordic/en_latch_reg slack 0.002 -> buffer thu 1 truoc cg_cordic/g15__5107/B
+10-01 13:12:36 soc_fix_cg_hold vong 2 (69 s): 0 latch hold < 0.020
+10-01 13:12:36 soc_fix_cg_hold: them 8 HB4xp67_ASAP7_75t_R sau 69 s
+10-01 13:12:36   cg_cpu/en_latch_reg          hold slack 0.057 sau 1 buffer
+10-01 13:12:36   cg_dbg/en_latch_reg          hold slack 0.046 sau 1 buffer
+10-01 13:12:36   cg_pwm/en_latch_reg          hold slack 0.024 sau 0 buffer
+10-01 13:12:36   cg_spi/en_latch_reg          hold slack 0.056 sau 1 buffer
+10-01 13:12:36   cg_gpio/en_latch_reg         hold slack 0.050 sau 1 buffer
+10-01 13:12:36   cg_tim0/en_latch_reg         hold slack 0.039 sau 0 buffer
+10-01 13:12:36   cg_uart1/en_latch_reg        hold slack 0.058 sau 1 buffer
+10-01 13:12:36   cg_tim1/en_latch_reg         hold slack 0.038 sau 0 buffer
+10-01 13:12:36   cg_ascon/en_latch_reg        hold slack 0.043 sau 1 buffer
+10-01 13:12:36   cg_i2c/en_latch_reg          hold slack 0.034 sau 0 buffer
+10-01 13:12:36   cg_uart/en_latch_reg         hold slack 0.046 sau 1 buffer
+10-01 13:12:36   cg_cordic/en_latch_reg       hold slack 0.043 sau 1 buffer
+10-01 13:15:07 Chan VDD/VSS std cell (postRoute): 0 ho
+10-01 13:15:15 --- ./verify_rpt/drc_postRoute.rpt
+10-01 13:15:15   loai OFFGRID                         7
+10-01 13:15:15   net  u_itcm/u_mem/FE_OFN7471_n_257        1
+10-01 13:15:15   net  u_itcm/u_mem/FE_OFN6617_n_262        1
+10-01 13:15:15   net  u_itcm/u_mem/FE_OFN7469_n_255        1
+10-01 13:15:15   net  u_itcm/u_mem/FE_OFN7470_n_256        1
+10-01 13:15:15   net  u_itcm/u_mem/FE_OFN7475_n_261        1
+10-01 13:15:15   net  u_itcm/u_mem/FE_OFN7468_n_254        1
+10-01 13:15:15   net  u_itcm/u_mem/FE_OFN7466_n_252        1
+10-01 13:15:15   -> 0 vi pham that (7 bo qua: net {}, loai {OFFGRID}; 7 OFFGRID M4 tai chan macro)
+10-01 13:15:26   postRoute SETUP: WNS 0.272 TNS 0.0, 0 duong vi pham -> DAT
+10-01 13:15:26   postRoute HOLD: WNS 0.016 TNS 0.0, 0 duong vi pham -> DAT
+10-01 13:15:26 >>> XONG: KHOI 14: optDesign postRoute
+10-01 13:15:26 innovus 158> 
