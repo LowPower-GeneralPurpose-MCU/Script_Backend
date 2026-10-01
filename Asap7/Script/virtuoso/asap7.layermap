@@ -1,117 +1,77 @@
-# asap7.layermap - map layer GDS <-> Virtuoso cho strmin / strmout
+# asap7.layermap - map layer GDS -> Virtuoso cho strmin (mo top_soc.gds)
 #
 # BAN DU PHONG.  PDK asap7_pdk_r1p7 da co san ban CHINH THUC, uu tien dung:
-#   $PDK_DIR/cdslib/asap7_TechLib_10/asap7_fromAPR.layermap  <- cho GDS do
-#                                       Innovus/APR xuat (top_soc.gds)
-#   $PDK_DIR/cdslib/asap7_TechLib_10/asap7_TechLib.layermap  <- cho GDS cua PDK
-# Chi dung file nay khi chua cai PDK, hoac de tra cuu nhanh so layer.
+#   $PDK_DIR/cdslib/asap7_TechLib_10/asap7_TechLib.layermap
+# File nay chep dung ten layer/purpose cua ban do (kiem 2026-10-01 voi
+# asap7_TechLib_08.layermap tren GitHub) - chi dung khi khong tim thay PDK.
 #
-# Nguon: bang 'layer <ten> <so>' trong asap7sc7p5t_28/rul/calibreDRC.rul (36 layer).
-# Datatype 251 cho pin khop voi outputs/top_soc_gds.map do soc_write_gds_map sinh ra.
+# KHONG dung asap7_fromAPR.layermap cho strmin: do la map cua Innovus
+# (streamOut -mapFile, cu phap 'M1 NET 19 0'), khong phai map cua Virtuoso.
+#
+# Ten layer PHAN BIET hoa/thuong va khac ten trong calibreDRC.rul: well, fin,
+# Gate, GCut, Active, Nselect, Pselect, Dummy (ban truoc 2026-10-01 ghi WELL,
+# FIN, GATE... nen strmin bo het FEOL).
+#
+# top_soc.gds (soc_write_gds_map): moi hinh kim loai/via/fill o datatype 0,
+# ten chan o texttype 251 -> purpose 'pin'.  Pad (96/0, chi co metal fill)
+# khong co trong ban chinh thuc -> strmin bao 96/0 khong map va bo qua, vo hai.
 #
 # <layerName> <purpose> <gdsNumber> <gdsDataType>
 
-# ---- FEOL (chi co trong GDS, LEF khong mang) ----
-WELL       drawing    1     0
-FIN        drawing    2     0
-GATE       drawing    7     0
-GCUT       drawing    10    0
-ACTIVE     drawing    11    0
+# ---- FEOL (chi co trong GDS std cell, LEF khong mang) ----
+well       drawing    1     0
+fin        drawing    2     0
+Gate       drawing    7     0
+Dummy      drawing    8     0
+GCut       drawing    10    0
+Active     drawing    11    0
+Nselect    drawing    12    0
+Pselect    drawing    13    0
+LIG        drawing    16    0
+LISD       drawing    17    0
 SDT        drawing    88    0
-NSELECT    drawing    12    0
-PSELECT    drawing    13    0
 SLVT       drawing    97    0
 LVT        drawing    98    0
 SRAMDRC    drawing    99    0
 SRAMVT     drawing    110   0
-DUMMY      drawing    8     0
-LIG        drawing    16    0
-LISD       drawing    17    0
 
-# ---- BEOL: metal ----
-M1         drawing    19    0
-M1         pin        19    0
-M1         net        19    0
-M1         fill       19    0
-M1         label      19    251
-M1         text       19    251
-M2         drawing    20    0
-M2         pin        20    0
-M2         net        20    0
-M2         fill       20    0
-M2         label      20    251
-M2         text       20    251
-M3         drawing    30    0
-M3         pin        30    0
-M3         net        30    0
-M3         fill       30    0
-M3         label      30    251
-M3         text       30    251
-M4         drawing    40    0
-M4         pin        40    0
-M4         net        40    0
-M4         fill       40    0
-M4         label      40    251
-M4         text       40    251
-M5         drawing    50    0
-M5         pin        50    0
-M5         net        50    0
-M5         fill       50    0
-M5         label      50    251
-M5         text       50    251
-M6         drawing    60    0
-M6         pin        60    0
-M6         net        60    0
-M6         fill       60    0
-M6         label      60    251
-M6         text       60    251
-M7         drawing    70    0
-M7         pin        70    0
-M7         net        70    0
-M7         fill       70    0
-M7         label      70    251
-M7         text       70    251
-M8         drawing    80    0
-M8         pin        80    0
-M8         net        80    0
-M8         fill       80    0
-M8         label      80    251
-M8         text       80    251
-M9         drawing    90    0
-M9         pin        90    0
-M9         net        90    0
-M9         fill       90    0
-M9         label      90    251
-M9         text       90    251
-Pad        drawing    96    0
-Pad        pin        96    0
-Pad        net        96    0
-Pad        fill       96    0
-Pad        label      96    251
-Pad        text       96    251
-
-# ---- BEOL: via ----
+# ---- BEOL ----
 V0         drawing    18    0
-V0         net        18    0
+M1         drawing    19    0
 V1         drawing    21    0
-V1         net        21    0
+M2         drawing    20    0
 V2         drawing    25    0
-V2         net        25    0
+M3         drawing    30    0
 V3         drawing    35    0
-V3         net        35    0
+M4         drawing    40    0
 V4         drawing    45    0
-V4         net        45    0
+M5         drawing    50    0
 V5         drawing    55    0
-V5         net        55    0
+M6         drawing    60    0
 V6         drawing    65    0
-V6         net        65    0
+M7         drawing    70    0
 V7         drawing    75    0
-V7         net        75    0
+M8         drawing    80    0
 V8         drawing    85    0
-V8         net        85    0
+M9         drawing    90    0
 V9         drawing    95    0
-V9         net        95    0
 
-# ---- Bien cell ----
-prBoundary drawing    100   0
+# ---- Ten chan (texttype 251) ----
+well       pin        1     251
+P_SUB      pin        3     251
+Gate       pin        7     251
+LIG        pin        16    251
+LISD       pin        17    251
+M1         pin        19    251
+M2         pin        20    251
+M3         pin        30    251
+M4         pin        40    251
+M5         pin        50    251
+M6         pin        60    251
+M7         pin        70    251
+M8         pin        80    251
+M9         pin        90    251
+
+# ---- Bien cell / text ----
 BOUNDARY   drawing    100   0
+TEXT       drawing    101   0

@@ -33,7 +33,8 @@ mcu/
 │   ├── tcl/                 # Genus Tcl, SDC và filelist
 │   ├── outputs/             # Netlist/SDC của lần chạy gần nhất (đang được commit)
 │   └── reports/             # Report của lần chạy gần nhất (đang được commit)
-└── innovus/                 # Nhận handoff từ genus/outputs
+├── innovus/                 # Nhận handoff từ genus/outputs
+└── conformal/               # LEC: genus/outputs/top_soc_syn.v vs innovus/outputs/top_soc_pnr.v
 ```
 
 `outputs/` và `reports/` là sản phẩm của Genus nhưng hiện **có trong git** để
@@ -217,6 +218,37 @@ export MCU_TARGET_STD_UTIL=0.55
 export MCU_CORE_WIDTH_UM=0
 export MCU_CORE_HEIGHT_UM=0
 ```
+
+## Chạy Conformal LEC sau Innovus
+
+Sau khi KHỐI 16 của `innovus/tcl/innovus.tcl` ghi `outputs/top_soc_pnr.v`:
+
+```bash
+cd Asap7/run_workspace/mcu/conformal
+make all
+```
+
+`conformal.tcl` so netlist Genus (golden) với netlist sau P&R (revised) theo
+kiểu phân cấp (`write_hier_compare_dofile` + `run_hier_compare`), dùng chung
+`genus/rtl/flow/project_config.tcl` để lấy thư viện. Hai master SRAM và
+`RingOscillator` (vòng tổ hợp của TRNG) là hộp đen ở cả hai bên; bên trong
+`RingOscillator` được so cấu trúc bằng Tcl trước khi LEC chạy. Script dừng ngay
+nếu hai netlist không cùng một lần tổng hợp Genus.
+
+Kết luận nằm ở dòng đầu `reports/lec_verdict.txt` (`PASS` / `FAIL` /
+`UNKNOWN`); `make` trả lỗi nếu không phải `PASS`. Chi tiết:
+`reports/lec_hier_result.rpt`, `lec_verification.rpt`, `lec_noneq.rpt`,
+`lec_unmapped.rpt`, `lec_black_box.rpt` và `logs/conformal.log`.
+
+| Biến `make` | Mặc định | Ý nghĩa |
+|---|---|---|
+| `LEC` | `lec` | tên lệnh Conformal (mẫu môn học dùng `lec_64`) |
+| `LEC_MODE` | `hier` | `flat` = so phẳng cả thiết kế |
+| `LEC_THREADS` | `4` | trần số thread |
+| `GOLDEN` / `REVISED` | hai file ở trên | đổi netlist đem so |
+
+RTL → netlist tổng hợp là bước riêng, dùng dofile Genus tự sinh
+(`genus/outputs/genus_mapping_hints.do`).
 
 ## Giả định timing cần xác nhận
 
