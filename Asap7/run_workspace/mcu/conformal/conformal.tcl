@@ -230,24 +230,24 @@ puts "Ring oscillator: [array size ro_golden] module duoi $RO_MODULE giong het o
 # ------------------------------------------------------------------------
 # 3. THU VIEN + HOP DEN
 # ------------------------------------------------------------------------
-# So luong thread: nhu mau (dem /proc/cpuinfo), nhung tran 4 - dung muc Genus
-# tu ghi trong genus_mapping_hints.do cho license nay.  Doi bang LEC_THREADS.
-set CORES 1
-if {![catch {open "/proc/cpuinfo"} f]} {
-    set CORES [regexp -all -line {^processor\s} [read $f]]
-    close $f
-}
-set LEC_THREADS [lec_env LEC_THREADS 4]
+# MAC DINH 1 THREAD - khong goi set_parallel_option.
+# Hai run 2026-10-01 20:03 va 20:12 (4 thread nhu mau) deu dung im o
+#     compare -noneq_stop 1 -threads 4,4      (module apb_syscon, 177 diem)
+# sau ~100 s CPU.  LEC chia viec cho 4 tien trinh con trong
+# LEC.tmp.<pid>/LEC.COMPARE/para0..3; moi thu muc co dofile + g.v + r.v nhung
+# KHONG co lec.log (dong dau tien cua dofile la 'set log file lec.log'), tuc
+# tien trinh con khong he chay va tien trinh cha cho mai.  Run 20:03 dung nhu
+# vay it nhat 9 phut.  Cung may nay Genus cung chet khi bat super-thread
+# (max_cpus_per_server).  Log con in "sh: 0: Illegal option --" moi lan LEC goi
+# shell (/bin/sh la dash) - nhieu kha nang la cung mot nguyen nhan, chua kiem.
+# Thu lai nhieu thread: make all LEC_THREADS=4.
+set LEC_THREADS [lec_env LEC_THREADS 1]
 if {![string is integer -strict $LEC_THREADS] || $LEC_THREADS < 1} {
     error "LEC_THREADS phai la so nguyen >= 1, dang la '$LEC_THREADS'"
 }
-if {$CORES > $LEC_THREADS} {
-    set CORES $LEC_THREADS
+if {$LEC_THREADS > 1} {
+    set_parallel_option -threads $LEC_THREADS -norelease_license
 }
-if {$CORES < 1} {
-    set CORES 1
-}
-set_parallel_option -threads $CORES -norelease_license
 
 set_mapping_method -sensitive
 

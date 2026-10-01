@@ -244,7 +244,7 @@ Kết luận nằm ở dòng đầu `reports/lec_verdict.txt` (`PASS` / `FAIL` /
 |---|---|---|
 | `LEC` | `lec` | tên lệnh Conformal (mẫu môn học dùng `lec_64`) |
 | `LEC_MODE` | `hier` | `flat` = so phẳng cả thiết kế |
-| `LEC_THREADS` | `4` | trần số thread |
+| `LEC_THREADS` | `1` | số thread; >1 làm `lec` treo ở `compare` trên máy này (2026-10-01) |
 | `GOLDEN` / `REVISED` | hai file ở trên | đổi netlist đem so |
 
 RTL → netlist tổng hợp là bước riêng, dùng dofile Genus tự sinh
