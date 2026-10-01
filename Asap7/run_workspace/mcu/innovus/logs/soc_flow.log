@@ -4802,4 +4802,19 @@ Tiep theo: KHOI 11 (CTS)
 Tiep theo: KHOI 16 (xuat file)
 10-01 15:21:39 ============================================================
 10-01 15:21:39 >>> XONG: KHOI 15: filler + verify
-10-01 15:21:40 innovus 189> 
+10-01 15:21:40 innovus 189> 10-01 15:25:15 ============================================================
+10-01 15:25:15 >>> KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF
+10-01 15:25:15 ============================================================
+10-01 15:25:15   ./verify_rpt/drc_final.rpt: sach (6 vi pham waive theo SOC_DRC_WAIVE_* trong soc_fp_config.tcl)
+10-01 15:25:15   ./verify_rpt/drc_fill.rpt: sach (6 vi pham waive theo SOC_DRC_WAIVE_* trong soc_fp_config.tcl)
+10-01 15:25:15   final SETUP: WNS 0.274 TNS 0.0, 0 duong vi pham -> DAT
+10-01 15:25:15   final HOLD: WNS 0.016 TNS 0.0, 0 duong vi pham -> DAT
+10-01 15:25:15   srambank_256x4x32_6t122.fixed.lef: toa do tren grid, SITE hop le
+10-01 15:25:15   srambank_128x4x20_6t122.fixed.lef: toa do tren grid, SITE hop le
+10-01 15:25:17 Ten se bi escape khi ghi netlist: 86407 (xem ./reports/escaped_names.rpt)
+10-01 15:25:17   -> ten trong .v bi escape (them backslash o dau, them mot dau
+10-01 15:25:17      cach o cuoi) nen khong khop truc tiep ten trong DEF/GDS.
+10-01 15:25:17      Khai bao cho LVS / Conformal truoc khi so netlist.
+10-01 15:27:03 Chan PG VDD: M8 {0.416 357.648 565.176 357.784}
+10-01 15:27:03 Chan PG VSS: M8 {0.176 357.888 565.416 358.024}
+10-01 15:27:17 >>> XONG: KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF
