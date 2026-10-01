@@ -1,0 +1,2523 @@
+                          CONFORMAL (R)
+                   Version 23.10-s300 (30-Aug-2023) (64 bit executable)
+   Copyright (c) Cadence Design Systems, Inc., 1997-2023. All Rights Reserved
+
+
+This program is proprietary and confidential information belonging to
+Cadence Design Systems, Inc., and may be used and disclosed only as authorized
+in a license agreement controlling such use and disclosure.
+
+// Warning: This version is 1127 days old. You can download the latest version from http://downloads.cadence.com.
+
+// Command: set_dofile_abort exit
+0
+// Command: foreach dir {logs reports} {
+//              file mkdir $dir
+//          }
+// Command: set VERDICT_FILE ./reports/lec_verdict.txt
+./reports/lec_verdict.txt
+// Command: file delete -force $VERDICT_FILE
+// Command: proc lec_env {name default_value} {
+//              if {[info exists ::env($name)] && $::env($name) ne ""} {
+//                  return $::env($name)
+//              }
+//              return $default_value
+//          }
+// Command: set LEC_WARNINGS {}
+// Command: proc lec_warn {msg} {
+//              lappend ::LEC_WARNINGS $msg
+//              puts "WARNING: $msg"
+//          }
+// Command: proc lec_capture {rpt_file lec_cmd} {
+//              redirect -variable lec_out $lec_cmd
+//              puts $lec_out
+//              set fp [open $rpt_file w]
+//              puts $fp $lec_out
+//              close $fp
+//              return $lec_out
+//          }
+// Command: set FLOW_ROOT [file dirname [file normalize [pwd]]]
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu
+// Command: set mcu_config [file join $FLOW_ROOT genus rtl flow project_config.tcl]
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/flow/project_config.tcl
+// Command: if {![file isfile $mcu_config]} {
+//              error "Khong thay $mcu_config - phai chay tu thu muc mcu/conformal (make all)"
+//          }
+// Command: source $mcu_config
+============================================================
+MCU ASAP7 CONFIGURATION
+ - Root source  : auto-detected complete collateral
+ - ASAP7 root   : /home/user1/Desktop/asap7
+ - Stdcell root : /home/user1/Desktop/asap7/asap7sc7p5t_28
+ - SRAM root    : /home/user1/Desktop/asap7/asap7_sram_0p0
+ - Top          : top_soc
+============================================================
+// Command: set GOLDEN_NETLIST  [lec_env LEC_GOLDEN \
+//              [file join $FLOW_ROOT genus outputs [format "%s_syn.v" $TOP]]]
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v
+// Command: set REVISED_NETLIST [lec_env LEC_REVISED \
+//              [file join $FLOW_ROOT innovus outputs [format "%s_pnr.v" $TOP]]]
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v
+// Command: set LEC_MODE [lec_env LEC_MODE hier]
+hier
+// Command: if {$LEC_MODE ne "hier" && $LEC_MODE ne "flat"} {
+//              error "LEC_MODE phai la hier hoac flat, dang la '$LEC_MODE'"
+//          }
+// Command: set HIER_DOFILE ./hier.do
+./hier.do
+// Command: set RO_MODULE   RingOscillator
+RingOscillator
+// Command: foreach {label netlist} [list golden $GOLDEN_NETLIST revised $REVISED_NETLIST] {
+//              if {![file isfile $netlist] || [file size $netlist] == 0} {
+//                  error "Khong co netlist $label: $netlist"
+//              }
+//          }
+// Command: proc lec_genus_stamp {netlist} {
+//              set fp [open $netlist r]
+//              set head [read $fp 4096]
+//              close $fp
+//              if {[regexp -line {^// Generated on: (.*)$} $head -> stamp]} {
+//                  return [string trim $stamp]
+//              }
+//              return ""
+//          }
+// Command: set golden_stamp  [lec_genus_stamp $GOLDEN_NETLIST]
+Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
+// Command: set revised_stamp [lec_genus_stamp $REVISED_NETLIST]
+Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
+// Command: if {$golden_stamp eq "" || $revised_stamp eq ""} {
+//              lec_warn "khong doc duoc dau thoi gian Genus trong netlist - khong kiem duoc golden/revised co cung mot lan tong hop"
+//          } elseif {$golden_stamp ne $revised_stamp} {
+//              error "Golden va revised khong cung mot lan tong hop:
+//            golden  : $golden_stamp  ($GOLDEN_NETLIST)
+//            revised : $revised_stamp  ($REVISED_NETLIST)
+//            Chay lai Innovus tren netlist Genus hien tai, hoac dat LEC_GOLDEN dung file."
+//          }
+// Command: foreach lib $ALL_TIMING_LIBS {
+//              if {![file isfile $lib]} {
+//                  error "Khong co Liberty $lib - dat ASAP7_ROOT / ASAP7_STD_LIB_DIR"
+//              }
+//          }
+// Command: proc lec_read_file {path} {
+//              set fp [open $path r]
+//              fconfigure $fp -translation binary
+//              set text [read $fp]
+//              close $fp
+//              return $text
+//          }
+// Command: proc lec_module_body {text name} {
+//              if {![regexp {^\w+$} $name]} {
+//                  return ""
+//              }
+//              set re [format {(?n)^[ \t]*module[ \t]+%s[ \t]*\(} $name]
+//              if {![regexp -indices -- $re $text hit]} {
+//                  return ""
+//              }
+//              set from [expr {[lindex $hit 1] + 1}]
+//              set to [string first "endmodule" $text $from]
+//              if {$to < 0} {
+//                  return ""
+//              }
+//              return [string range $text $from [expr {$to - 1}]]
+//          }
+// Command: proc lec_module_canon {body children_var} {
+//              upvar 1 $children_var children
+//              set canon {}
+//              set first 1
+//              foreach stmt [split $body ";"] {
+//                  if {$first} {
+//                      set first 0
+//                      continue
+//                  }
+//                  regsub -all {\s+} $stmt " " stmt
+//                  set stmt [string trim $stmt]
+//                  if {$stmt eq ""} {
+//                      continue
+//                  }
+//                  if {[regexp {^(input|output|inout) ?(\[[^\]]*\])? ?(.*)$} $stmt -> dir range names]} {
+//                      foreach port [split $names ","] {
+//                          lappend canon "P $dir [string map {{ } {}} $range] [string trim $port]"
+//                      }
+//                      continue
+//                  }
+//                  if {[regexp {^(wire|tri|supply0|supply1) } $stmt]} {
+//                      continue
+//                  }
+//                  if {![regexp {^(\S+) ([^\s(]+) ?\((.*)\)$} $stmt -> type inst pins]} {
+//                      lappend canon "? $stmt"
+//                      continue
+//                  }
+//                  set conn {}
+//                  foreach {all pin net} [regexp -all -inline {\.(\w+) ?\(([^()]*)\)} $pins] {
+//                      lappend conn "$pin=[string map {{ } {}} $net]"
+//                  }
+//                  lappend canon "I $type $inst [join [lsort $conn] ,]"
+//                  lappend children $type
+//              }
+//              return [lsort $canon]
+//          }
+// Command: proc lec_subtree_canon {text root} {
+//              array set seen {}
+//              set todo [list $root]
+//              while {[llength $todo] > 0} {
+//                  set name [lindex $todo 0]
+//                  set todo [lrange $todo 1 end]
+//                  if {[info exists seen($name)]} {
+//                      continue
+//                  }
+//                  set body [lec_module_body $text $name]
+//                  if {$body eq ""} {
+//                      continue
+//                  }
+//                  set children {}
+//                  set seen($name) [lec_module_canon $body children]
+//                  foreach child $children {
+//                      lappend todo $child
+//                  }
+//              }
+//              return [array get seen]
+//          }
+// Command: array set ro_golden  [lec_subtree_canon [lec_read_file $GOLDEN_NETLIST]  $RO_MODULE]
+CPU time     : 0.65    seconds
+Elapse time  : 2       seconds
+Memory usage : 67.48   M bytes
+// Command: array set ro_revised [lec_subtree_canon [lec_read_file $REVISED_NETLIST] $RO_MODULE]
+CPU time     : 1.28    seconds
+Elapse time  : 3       seconds
+Memory usage : 113.64  M bytes
+// Command: if {![info exists ro_golden($RO_MODULE)] || ![info exists ro_revised($RO_MODULE)]} {
+//              error "Khong thay module $RO_MODULE trong golden hoac revised - TRNG da bi toi uu mat?"
+//          }
+// Command: if {[lsort [array names ro_golden]] ne [lsort [array names ro_revised]]} {
+//              error "$RO_MODULE: cay module khac nhau
+//            golden  : [lsort [array names ro_golden]]
+//            revised : [lsort [array names ro_revised]]"
+//          }
+// Command: foreach ro_name [lsort [array names ro_golden]] {
+//              if {$ro_golden($ro_name) ne $ro_revised($ro_name)} {
+//                  error "$RO_MODULE: module $ro_name khac nhau giua golden va revised
+//            golden  : [join $ro_golden($ro_name) "\n            "]
+//            revised : [join $ro_revised($ro_name) "\n            "]"
+//              }
+//          }
+// Command: puts "Ring oscillator: [array size ro_golden] module duoi $RO_MODULE giong het o golden va revised"
+Ring oscillator: 15 module duoi RingOscillator giong het o golden va revised
+// Command: set CORES 1
+1
+// Command: if {![catch {open "/proc/cpuinfo"} f]} {
+//              set CORES [regexp -all -line {^processor\s} [read $f]]
+//              close $f
+//          }
+// Command: set LEC_THREADS [lec_env LEC_THREADS 4]
+4
+// Command: if {![string is integer -strict $LEC_THREADS] || $LEC_THREADS < 1} {
+//              error "LEC_THREADS phai la so nguyen >= 1, dang la '$LEC_THREADS'"
+//          }
+// Command: if {$CORES > $LEC_THREADS} {
+//              set CORES $LEC_THREADS
+//          }
+4
+// Command: if {$CORES < 1} {
+//              set CORES 1
+//          }
+// Command: set_parallel_option -threads $CORES -norelease_license
+// Number of threads is set to 4,4.
+0
+// Command: set_mapping_method -sensitive
+0
+// Command: add_notranslate_modules -library -both $SRAM_MASTER $SRAM_TAG_MASTER
+0
+// Command: add_notranslate_modules -both $RO_MODULE
+0
+// Command: eval read_library -liberty -replace -both $ALL_TIMING_LIBS
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib ...sh: 0: Illegal option --
+
+// Parsing file /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib ...sh: 0: Illegal option --
+
+// Warning: bit_width is not consistently specified
+//          near token 'true' on line 58 in file '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib'
+// Warning: (RTL9.21) Liberty cell with interface_timing attribute set to true was not an empty cell (occurrence:2)
+// Note: (RTL9.26) Liberty pin with internal_node use default input_map (occurrence:20)
+// Note: (HRC1.2) Module/entity is not translated (blackboxed) (occurrence:2)
+// Note: Read Liberty library successfully
+0
+CPU time     : 5.41    seconds
+Elapse time  : 7       seconds
+Memory usage : 126.06  M bytes
+// Command: read_design -verilog -sensitive -golden -noelab $GOLDEN_NETLIST
+// Parsing file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v ...sh: 0: Illegal option --
+
+0
+CPU time     : 8.49    seconds
+Elapse time  : 10      seconds
+Memory usage : 266.74  M bytes
+// Command: elaborate_design -golden -root $TOP
+// Golden root module is set to 'top_soc'
+// Warning: (RTL2.5) Net is referenced without an assignment. Design verification will be based on set_undriven_signal setting (occurrence:2040)
+// Warning: (RTL2.13) Undriven pin is detected (occurrence:2093)
+// Warning: (RTL14) Signal has input but it has no output (occurrence:2524)
+// Note: (HRC1.2) Module/entity is not translated (blackboxed) (occurrence:1)
+// Warning: (HRC3.10a) An input port is declared, but it is not completely used in the module (occurrence:2043)
+// Warning: Total black box modules referenced in Golden = 3
+// Warning: There are 2093 undriven nets in Golden
+// Warning: There are 2093 undriven pins in Golden
+0
+CPU time     : 10.60   seconds
+Elapse time  : 12      seconds
+Memory usage : 240.78  M bytes
+// Command: read_design -verilog -sensitive -revised -noelab $REVISED_NETLIST
+// Parsing file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v ...sh: 0: Illegal option --
+
+0
+CPU time     : 14.50   seconds
+Elapse time  : 16      seconds
+Memory usage : 389.78  M bytes
+// Command: elaborate_design -revised -root $TOP
+// Revised root module is set to 'top_soc'
+// Warning: (RTL2.5) Net is referenced without an assignment. Design verification will be based on set_undriven_signal setting (occurrence:2040)
+// Warning: (RTL2.13) Undriven pin is detected (occurrence:2096)
+// Warning: (RTL14) Signal has input but it has no output (occurrence:2526)
+// Note: (HRC1.2) Module/entity is not translated (blackboxed) (occurrence:1)
+// Warning: (HRC3.5a) Open input/inout port connection is detected (occurrence:1623)
+// Note: (HRC3.5b) Open output port connection is detected (occurrence:1)
+// Warning: (HRC3.10a) An input port is declared, but it is not completely used in the module (occurrence:3678)
+// Warning: (HRC3.16) A wire is declared, but not used in the module (occurrence:1)
+// Warning: Total black box modules referenced in Revised = 3
+// Warning: There are 2096 undriven nets in Revised
+// Warning: There are 2096 undriven pins in Revised
+0
+CPU time     : 17.05   seconds
+Elapse time  : 19      seconds
+Memory usage : 352.23  M bytes
+// Command: report_design_data
+============================================
+Summary           Golden         Revised
+============================================
+Design-modules      1690            1690
+Library-cells     116092          141797
+============================================
+Primitives      Golden              Revised
+============================================
+INPUT               59                   59
+OUTPUT             115                  115
+--------------------------------------------
+AND        *    133345               133343
+BUF        *      3718                27991
+DFF              34054                34054
+DLAT              1635                 1635
+INV        *    352354               350377
+OR         *     55092                55088
+TIE0       *         0                 1632
+TIE1       *         0                 1766
+WIRE       *         0                    1
+------ word-level --------------------------
+BBOX                85                   85
+--------------------------------------------
+Total           580283               605972
+
+0
+// Command: set bbox_rpt [lec_capture ./reports/lec_black_box.rpt {report_black_box}]
+SYSTEM: (G R) RingOscillator
+SYSTEM: (G R) srambank_128x4x20_6t122
+SYSTEM: (G R) srambank_256x4x32_6t122
+
+SYSTEM: (G R) RingOscillator
+SYSTEM: (G R) srambank_128x4x20_6t122
+SYSTEM: (G R) srambank_256x4x32_6t122
+
+// Command: set bbox_expected [list $SRAM_MASTER $SRAM_TAG_MASTER $RO_MODULE]
+srambank_256x4x32_6t122 srambank_128x4x20_6t122 RingOscillator
+// Command: set bbox_seen {}
+// Command: foreach line [split $bbox_rpt "\n"] {
+//              if {[regexp {^\s*(SYSTEM|USER)\s*:\s*\(([GR ]+)\)\s+(\S+)} $line -> kind sides name]} {
+//                  lappend bbox_seen $name
+//                  if {[lsearch -exact $bbox_expected $name] < 0} {
+//                      lec_warn "hop den ngoai du kien: $name ($kind, [string trim $sides]) - xem reports/lec_black_box.rpt"
+//                  } elseif {![string match "*G*" $sides] || ![string match "*R*" $sides]} {
+//                      lec_warn "hop den $name chi co o mot ben ([string trim $sides])"
+//                  }
+//              }
+//          }
+// Command: if {[llength $bbox_seen] == 0} {
+//              lec_warn "khong doc duoc dinh dang report_black_box - tu kiem reports/lec_black_box.rpt: chi duoc co $bbox_expected"
+//          } else {
+//              foreach name $bbox_expected {
+//                  if {[lsearch -exact $bbox_seen $name] < 0} {
+//                      lec_warn "$name khong nam trong danh sach hop den - xem reports/lec_black_box.rpt"
+//                  }
+//              }
+//          }
+// Command: set_flatten_model -gated_clock
+0
+// Command: set_analyze_option -auto
+0
+// Command: if {$LEC_MODE eq "hier"} {
+//              write_hier_compare_dofile $HIER_DOFILE -replace -usage -verbose -noexact_pin_match \
+//                  -constraint -threshold 50 -balanced_extraction -input_output_pin_equivalence
+//              run_hier_compare $HIER_DOFILE -dynamic_hierarchy
+//              lec_capture ./reports/lec_hier_result.rpt {report_hier_compare_result -all -usage}
+//              set verification_rpt [lec_capture ./reports/lec_verification.rpt \
+//                  {report_verification -hier -verbose}]
+//              set_system_mode lec
+//          } else {
+//              set_system_mode lec
+//              add_compared_points -all
+//              compare
+//              set verification_rpt [lec_capture ./reports/lec_verification.rpt \
+//                  {report_verification -verbose}]
+//          }
+// The following settings are used for hierarchical dofile generation:
+// Modeling Options:
+    Auto setup disabled
+// Mapping Method:
+    Name Only
+--------------------------------------------------------------------------------
+// Flattening Golden and Revised designs ...
+--------------------------------------------------------------------------------
+// Processing Golden ...
+// Modeling Golden ...
+// Processing Revised ...
+// Modeling Revised ...
+// Balanced modeling mapped 71378 out of 71378 DFF/DLATs
+// (F14) Remodeled 33361 gated-clock DFF/DLAT(s)
+// (F32) Created 4133 Z gate(s) for floating net(s) and floating pin(s)
+// (F28) Converted 2093 internal output port(s) to inout port(s)
+// (F14) Remodeled 33361 gated-clock DFF/DLAT(s)
+// (F32) Created 5759 Z gate(s) for floating net(s) and floating pin(s)
+// (F28) Converted 2096 internal output port(s) to inout port(s)
+// Warning: Golden and Revised have different numbers of key points:
+// Golden  key points = 40081
+// Revised key points = 41707
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    DLAT   BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            59     115    34054  1      85        34314   
+--------------------------------------------------------------------------------
+Revised           59     115    34054  1      85        34314   
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1634   4133      5767    
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1634   5759      7393    
+================================================================================
+--------------------------------------------------------------------------------
+// Starting hierarchical dofile generation ...
+--------------------------------------------------------------------------------
+// Total Matching Module Instance Pairs =  1689
+// Module Instantiation Ratio in Golden = 1.00
+// Module Instantiation Ratio in Revised = 1.00
+// Gathering Instance Boundary Information ...
+// Extracting Constraints in Golden ...
+// Extracting Constraints in Revised ...
+// Pins mapped using EQ pin mapping
+// Extracting logic-cone properties of pins ...
+// Balancing Constraints ...
+// Resolving Constraints ...
+// Writing hierarchical dofile ...
+# The following modules are not written  because they have been added as black box:
+# RingOscillator (G)
+# RingOscillator (R)
+# The following module pairs are not written because of number of primitive
+# instances less than 50:
+# asap7_sram_tag_512x20_ADDR_W9_DATA_W19, prim-cnt = 2 (G) and asap7_sram_tag_512x20_ADDR_W9_DATA_W19, prim-cnt = 5 (R)
+# asap7_sram_tag_512x20_ADDR_W9_DATA_W19_1, prim-cnt = 2 (G) and asap7_sram_tag_512x20_ADDR_W9_DATA_W19_1, prim-cnt = 3 (R)
+# asap7_sram_tag_512x20_ADDR_W9_DATA_W19_2, prim-cnt = 2 (G) and asap7_sram_tag_512x20_ADDR_W9_DATA_W19_2, prim-cnt = 4 (R)
+# asap7_sram_tag_512x20_ADDR_W9_DATA_W19_3, prim-cnt = 2 (G) and asap7_sram_tag_512x20_ADDR_W9_DATA_W19_3, prim-cnt = 3 (R)
+# cg_icg__RC_CG_MOD, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_10, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_10, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1000, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1000, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1001, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1001, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1002, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1002, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1003, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1003, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1004, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1004, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1005, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1005, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1006, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1006, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1007, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1007, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1008, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1008, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1009, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1009, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1010, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1010, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1011, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1011, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1012, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1012, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1013, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1013, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1014, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1014, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1015, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1015, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1016, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1016, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1017, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1017, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1018, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1018, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1019, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1019, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1020, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1020, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1027, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1027, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1028, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1028, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1029, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1029, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_103, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_103, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1030, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1030, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1031, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1031, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1032, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1032, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1033, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1033, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1034, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1034, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1035, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1035, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1036, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1036, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1037, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1037, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1038, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1038, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1039, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1039, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_104, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_104, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1040, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1040, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1041, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1041, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1042, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1042, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1043, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1043, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1044, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1044, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1045, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1045, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1046, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1046, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1047, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1047, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1048, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1048, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1049, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1049, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1050, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1050, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1051, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1051, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1052, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1052, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1053, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1053, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1054, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1054, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1055, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1055, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1056, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1056, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1057, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1057, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1058, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1058, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1059, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1059, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1060, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1060, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1061, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1061, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1062, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1062, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1063, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1063, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1064, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1064, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1065, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1065, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1066, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1066, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1067, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1067, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1068, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1068, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1069, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1069, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_107, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_107, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1070, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1070, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1071, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1071, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1072, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1072, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1073, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1073, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1074, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1074, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1075, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1075, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1076, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1076, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1077, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1077, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1078, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1078, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1079, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1079, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1080, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1080, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1081, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1081, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1083, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1083, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1084, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1084, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1085, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1085, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1086, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1086, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1087, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1087, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1088, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1088, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1089, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1089, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1090, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1090, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1091, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1091, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1092, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1092, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1093, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1093, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1094, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1094, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1095, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1095, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1096, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1096, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1097, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1097, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1098, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1098, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1099, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1099, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_11, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_11, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1100, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1100, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1101, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1101, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1102, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1102, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1103, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1103, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1104, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1104, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1105, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1105, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1106, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1106, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1107, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1107, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1108, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1108, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1109, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1109, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_111, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_111, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1110, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1110, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1111, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1111, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1112, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1112, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1113, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1113, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1114, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1114, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1115, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1115, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1116, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1116, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1117, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1117, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1118, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1118, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1119, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1119, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_112, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_112, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1120, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1120, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1121, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1121, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1122, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1122, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1123, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1123, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1124, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1124, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1125, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1125, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1126, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1126, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1127, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1127, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1128, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1128, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1129, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1129, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1130, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1130, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1131, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1131, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1132, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1132, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1133, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1133, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1135, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1135, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1136, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1136, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1137, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1137, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1138, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1138, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1139, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1139, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1140, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1140, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1141, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1141, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1142, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1142, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1143, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1143, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1144, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1144, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1145, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1145, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1146, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1146, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1147, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1147, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1148, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1148, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1149, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1149, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_115, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_115, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1150, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1150, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1151, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1151, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1152, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1152, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1153, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1153, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1154, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1154, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1155, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1155, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1156, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1156, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1157, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1157, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1158, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1158, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1159, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1159, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1160, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1160, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1161, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1161, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1162, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1162, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1163, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1163, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1164, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1164, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1165, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1165, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1167, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1167, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1168, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1168, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1169, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1169, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1170, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1170, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1171, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1171, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1172, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1172, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1173, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1173, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1174, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1174, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1175, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1175, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1176, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1176, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1177, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1177, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1178, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1178, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1179, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1179, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1180, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1180, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1181, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1181, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1182, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1182, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1183, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1183, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1184, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1184, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1185, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1186, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1186, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1187, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1187, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1188, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1188, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1189, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1189, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_119, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_119, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1190, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1190, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1191, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1191, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1192, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1192, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1193, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1193, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1194, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1194, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1195, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1195, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1196, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1196, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1197, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1197, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1198, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1198, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1199, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1199, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_12, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_12, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_120, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_120, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1200, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1200, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1201, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1201, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1202, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1202, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1203, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1203, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1204, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1204, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1205, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1205, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1206, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1206, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1207, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1207, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1208, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1208, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1209, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1209, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1210, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1210, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1211, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1211, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1212, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1212, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1213, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1213, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1214, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1214, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1215, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1215, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1216, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1216, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1217, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1217, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1218, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1219, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1219, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1220, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1220, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1221, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1221, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1222, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1222, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1223, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1223, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1224, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1224, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1225, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1225, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1226, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1226, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1227, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1227, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1228, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1228, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1229, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1229, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_123, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_123, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1230, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1230, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1231, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1231, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1232, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1232, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1233, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1233, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1234, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1234, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1236, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1236, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1241, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1241, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1242, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1242, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1247, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1247, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1248, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1248, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1253, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1253, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1254, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1254, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1259, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1259, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1260, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1260, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1265, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1265, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1266, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1266, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_127, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_127, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1271, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1271, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1272, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1272, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1277, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1277, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1278, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1278, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_128, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_128, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1283, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1283, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1284, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1284, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1289, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1289, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1290, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1290, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1295, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1295, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1296, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1296, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1298, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1298, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_13, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_13, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1303, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1303, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1304, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1304, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1305, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1305, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1306, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1306, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1307, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1307, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1308, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1308, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1309, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1309, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_131, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_131, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1310, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1310, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1311, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1311, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1312, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1312, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1313, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1313, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1314, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1314, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1315, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1315, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1316, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1316, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1317, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1317, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1318, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1318, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1319, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1319, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1320, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1320, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1321, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1321, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1322, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1322, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1327, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1327, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1328, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1328, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1329, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1329, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1330, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1330, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1331, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1331, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1332, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1332, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1333, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1333, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1334, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1334, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1335, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1335, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1336, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1336, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1337, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1337, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1338, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1338, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1339, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1339, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1340, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1340, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1341, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1341, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1342, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1342, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1343, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1343, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1344, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1344, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1345, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1345, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1346, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1346, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1348, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1348, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_135, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_135, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1350, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1350, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1352, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1352, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1354, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1354, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1359, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1359, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_136, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_136, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1360, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1360, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1365, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1365, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1366, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1366, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1371, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1371, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1372, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1372, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1373, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1373, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1374, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1374, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1375, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1375, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1376, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1376, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1377, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1377, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1378, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1378, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1379, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1379, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1380, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1380, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1381, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1381, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1382, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1382, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1383, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1383, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1384, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1384, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1385, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1385, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1386, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1386, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1387, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1387, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1388, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1388, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1389, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1389, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_139, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_139, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1390, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1390, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1391, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1391, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1392, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1392, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1393, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1393, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1394, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1394, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1395, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1395, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1396, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1396, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1397, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1397, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1398, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1398, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1399, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1399, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_14, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_14, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1400, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1400, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1401, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1401, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1402, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1402, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1403, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1403, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1404, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1404, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1405, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1405, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1406, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1406, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1407, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1407, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1408, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1408, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1409, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1409, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1410, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1410, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1411, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1411, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1412, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1412, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1413, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1413, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1414, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1414, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1421, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1421, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1422, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1422, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1423, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1423, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1424, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1424, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1425, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1425, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1426, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1426, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1427, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1427, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1428, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1428, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1429, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1429, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_143, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_143, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1430, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1430, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1431, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1431, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1432, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1432, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1433, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1433, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1434, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1434, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1435, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1435, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1436, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1436, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1437, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1437, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1438, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1438, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_144, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_144, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1445, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1445, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1446, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1446, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1447, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1447, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1448, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1448, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1449, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1449, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1450, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1450, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1451, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1451, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1452, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1452, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1453, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1453, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1454, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1454, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1455, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1455, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1456, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1456, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1457, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1457, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1458, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1458, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1459, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1459, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1460, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1460, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1461, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1461, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1462, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1462, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1463, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1463, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1464, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1464, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1465, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1465, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1466, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1466, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1467, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1467, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1468, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1468, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1469, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1469, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_147, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_147, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1470, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1470, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1471, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1471, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1472, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1472, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1473, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1473, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1474, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1474, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1475, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1475, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1476, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1476, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1477, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1477, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1478, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1478, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1479, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1479, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1480, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1480, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1481, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1481, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1482, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1482, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1489, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1489, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1490, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1490, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1495, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1495, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1496, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1496, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1497, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1497, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1498, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1498, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1499, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1499, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_15, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_15, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1500, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1500, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1501, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1501, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1502, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1502, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1507, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1507, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1508, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1508, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1509, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1509, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_151, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_151, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1510, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1510, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1511, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1511, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1512, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1512, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1513, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1513, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1514, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1514, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1515, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1515, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1516, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1516, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1517, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1517, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1518, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1518, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1519, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1519, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_152, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_152, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1520, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1520, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1521, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1521, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1522, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1522, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1523, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1523, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1524, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1524, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1525, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1525, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1526, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1526, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1527, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1527, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1528, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1528, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1529, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1529, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1530, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1530, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1531, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1531, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1532, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1532, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1535, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1535, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1536, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1536, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1537, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1537, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1538, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1538, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1539, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1539, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1540, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1540, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1541, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1541, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1542, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1542, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1543, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1543, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1544, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1544, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1545, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1545, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1546, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1546, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1547, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1547, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1548, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1548, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1549, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1549, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_155, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_155, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1550, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1550, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1551, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1551, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1552, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1552, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1553, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1553, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1554, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1554, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1555, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1555, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1556, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1556, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1557, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1557, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1558, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1558, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1559, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1559, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_156, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_156, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1560, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1560, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1561, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1561, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1562, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1562, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1563, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1563, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1564, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1564, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1565, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1565, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1566, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1566, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1567, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1567, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1568, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1568, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1569, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1569, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_157, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_157, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1570, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1570, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1571, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1571, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1572, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1572, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1573, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1573, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1574, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1574, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1575, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1575, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1576, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1576, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1577, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1577, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1578, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1578, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1579, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1579, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_158, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_158, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1580, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1580, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1581, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1581, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1582, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1582, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1585, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1585, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1586, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1586, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1587, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1587, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1588, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1588, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1589, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1589, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_159, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_159, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1590, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1590, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1591, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1591, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1592, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1592, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1593, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1593, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1594, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1594, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1595, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1595, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1596, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1596, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1597, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1597, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1598, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1598, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1599, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1599, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_16, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_16, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_160, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_160, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1600, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1600, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1601, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1601, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1602, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1602, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1603, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1603, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1604, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1604, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1605, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1605, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1606, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1606, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1607, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1607, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1608, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1608, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1609, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1609, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_161, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_161, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1610, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1610, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1611, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1611, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1612, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1612, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1613, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1613, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1614, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1614, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1615, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1615, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1616, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1616, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1617, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1617, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1618, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1618, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1619, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1619, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_162, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_162, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1620, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1620, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1621, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1621, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1622, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1622, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1623, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1623, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1624, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1624, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1625, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1625, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1626, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1626, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1627, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1627, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1628, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1628, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1629, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1629, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_163, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_163, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1630, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1630, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1631, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1631, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1632, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1632, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1635, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1635, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1636, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1636, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1637, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1637, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1638, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1638, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1639, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1639, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_164, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_164, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1640, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1640, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1641, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1641, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1642, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1642, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1643, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1643, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1644, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1644, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1645, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1645, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1646, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1646, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1647, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1647, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1648, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1648, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1649, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1649, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_165, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_165, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1650, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1650, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1651, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1651, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1652, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1652, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1653, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1653, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1654, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1654, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1655, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1655, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1656, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1656, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1657, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1657, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1658, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1658, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1659, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1659, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_166, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_166, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1660, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1660, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1661, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1661, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1662, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1662, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1663, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1663, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1664, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1664, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1665, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1665, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1666, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1666, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1667, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1667, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1668, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1668, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1669, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1669, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_167, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_167, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1670, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1670, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1671, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1671, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1672, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1672, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1673, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1673, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1674, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1674, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1675, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1675, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1676, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1676, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1679, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1679, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_168, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_168, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1680, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1680, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1681, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1681, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1682, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1682, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1683, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1683, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1684, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1684, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1685, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1685, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1686, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1686, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1687, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1687, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1688, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1688, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1689, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1689, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_169, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_169, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1690, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1690, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1691, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1691, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1692, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1692, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1693, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1693, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1694, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1694, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1695, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1695, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1696, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1696, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1697, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1697, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1698, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1698, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1699, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1699, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_17, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_17, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_170, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_170, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1700, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1700, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1701, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1701, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1702, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1702, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1703, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1703, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1704, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1704, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1705, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1705, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1706, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1706, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1707, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1707, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1708, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1708, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1709, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1709, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_171, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_171, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1710, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1710, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1711, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1711, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1712, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1712, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1713, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1713, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1714, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1714, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1715, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1715, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1716, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1716, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1717, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1717, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1718, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1718, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1719, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1719, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_172, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_172, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1720, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1720, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1721, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1721, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1722, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1722, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1723, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1723, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1724, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1724, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1725, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1725, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1726, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1726, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1727, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1727, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1728, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1728, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1729, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1729, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_173, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_173, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1730, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1730, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1731, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1731, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1732, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1732, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1733, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1733, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1734, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1734, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1735, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1735, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1736, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1736, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1737, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1737, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1738, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1738, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_174, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_174, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1741, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1741, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1742, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1742, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1743, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1743, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1744, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1744, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1745, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1745, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1746, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1746, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1747, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1747, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1748, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1748, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1749, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1749, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_175, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_175, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1750, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1750, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1751, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1751, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1752, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1752, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1753, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1753, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1754, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1754, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1755, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1755, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1756, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1756, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1757, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1757, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1758, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1758, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1759, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1759, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_176, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_176, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1760, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1760, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1761, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1761, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1762, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1762, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1763, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1763, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1764, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1764, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1765, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1765, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1767, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1767, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1768, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1768, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_177, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_177, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1770, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1770, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1771, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1771, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1772, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1772, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1773, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1773, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1774, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1774, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1775, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1775, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_178, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_178, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1791, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1791, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1792, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1792, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_18, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_18, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_180, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_180, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_181, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_181, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_182, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_182, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_183, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_183, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_184, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_184, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_185, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_186, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_186, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_187, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_187, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_188, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_188, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_189, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_189, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_19, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_19, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_190, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_190, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_191, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_191, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_192, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_192, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_193, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_193, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_194, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_194, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_195, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_195, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_196, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_196, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_197, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_197, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_198, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_198, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_199, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_199, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_2, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_2, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_20, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_20, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_200, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_200, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_201, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_201, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_203, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_203, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_204, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_204, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_205, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_205, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_206, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_206, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_207, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_207, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_208, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_208, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_209, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_209, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_21, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_21, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_210, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_210, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_211, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_211, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_212, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_212, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_213, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_213, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_214, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_214, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_215, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_215, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_216, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_216, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_217, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_217, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_218, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_219, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_219, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_22, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_22, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_220, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_220, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_221, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_221, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_222, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_222, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_223, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_223, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_224, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_224, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_225, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_225, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_226, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_226, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_227, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_227, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_228, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_228, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_229, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_229, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_23, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_23, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_230, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_230, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_231, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_231, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_232, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_232, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_233, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_233, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_234, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_234, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_235, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_235, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_236, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_236, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_237, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_237, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_238, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_238, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_239, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_239, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_24, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_24, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_240, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_240, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_241, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_241, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_242, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_242, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_243, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_243, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_244, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_244, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_245, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_245, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_246, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_246, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_247, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_247, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_248, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_248, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_249, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_249, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_25, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_25, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_250, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_250, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_251, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_251, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_252, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_252, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_253, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_253, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_254, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_254, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_255, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_255, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_256, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_256, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_257, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_257, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_258, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_258, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_259, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_259, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_26, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_26, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_260, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_260, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_261, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_261, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_262, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_262, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_263, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_263, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_264, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_264, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_265, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_265, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_266, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_266, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_267, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_267, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_268, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_268, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_269, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_269, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_27, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_27, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_270, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_270, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_271, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_271, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_272, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_272, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_273, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_273, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_274, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_274, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_275, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_275, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_276, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_276, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_277, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_277, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_278, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_278, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_279, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_279, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_28, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_28, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_280, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_280, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_281, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_281, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_282, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_282, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_283, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_283, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_284, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_284, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_285, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_285, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_286, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_286, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_287, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_287, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_288, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_288, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_289, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_289, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_29, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_29, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_290, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_290, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_291, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_291, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_292, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_292, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_293, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_293, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_294, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_294, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_295, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_295, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_296, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_296, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_297, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_297, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_298, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_298, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_299, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_299, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_3, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_3, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_30, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_30, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_300, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_300, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_301, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_301, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_302, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_302, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_303, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_303, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_304, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_304, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_305, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_305, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_306, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_306, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_307, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_307, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_308, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_308, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_309, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_309, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_31, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_31, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_310, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_310, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_311, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_311, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_312, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_312, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_313, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_313, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_314, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_314, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_316, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_316, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_317, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_317, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_318, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_318, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_319, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_319, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_32, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_32, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_320, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_320, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_321, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_321, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_322, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_322, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_323, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_323, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_324, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_324, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_325, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_325, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_326, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_326, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_327, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_327, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_328, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_328, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_329, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_329, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_33, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_33, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_330, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_330, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_332, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_332, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_333, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_333, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_334, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_334, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_335, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_335, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_336, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_336, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_337, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_337, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_338, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_338, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_339, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_339, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_34, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_34, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_340, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_340, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_341, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_341, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_342, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_342, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_343, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_343, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_344, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_344, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_345, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_345, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_346, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_346, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_347, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_347, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_348, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_348, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_349, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_349, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_35, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_35, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_350, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_350, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_351, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_351, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_352, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_352, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_353, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_353, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_354, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_354, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_355, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_355, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_356, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_356, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_357, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_357, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_358, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_358, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_359, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_359, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_36, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_36, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_360, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_360, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_361, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_361, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_362, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_362, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_363, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_363, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_364, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_364, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_365, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_365, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_366, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_366, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_367, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_367, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_368, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_368, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_369, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_369, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_37, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_37, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_370, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_370, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_371, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_371, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_372, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_372, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_373, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_373, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_374, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_374, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_375, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_375, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_376, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_376, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_377, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_377, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_378, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_378, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_379, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_379, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_38, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_38, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_380, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_380, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_381, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_381, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_382, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_382, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_383, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_383, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_384, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_384, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_385, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_385, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_386, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_386, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_387, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_387, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_388, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_388, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_389, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_389, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_39, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_39, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_390, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_390, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_391, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_391, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_392, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_392, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_393, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_393, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_394, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_394, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_395, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_395, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_396, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_396, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_397, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_397, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_398, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_398, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_399, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_399, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_4, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_4, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_40, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_40, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_400, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_400, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_401, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_401, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_404, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_404, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_405, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_405, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_406, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_406, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_408, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_408, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_409, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_409, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_41, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_41, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_410, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_410, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_412, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_412, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_414, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_414, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_415, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_415, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_416, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_416, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_417, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_417, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_418, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_418, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_419, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_419, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_42, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_42, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_420, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_420, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_421, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_421, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_422, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_422, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_423, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_423, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_424, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_424, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_425, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_425, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_426, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_426, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_427, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_427, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_428, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_428, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_429, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_429, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_43, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_43, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_430, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_430, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_431, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_431, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_432, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_432, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_433, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_433, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_434, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_434, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_435, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_435, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_436, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_436, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_437, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_437, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_438, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_438, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_439, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_439, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_44, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_44, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_440, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_440, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_441, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_441, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_442, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_442, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_443, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_443, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_444, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_444, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_445, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_445, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_446, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_446, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_447, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_447, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_448, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_448, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_449, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_449, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_45, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_45, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_450, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_450, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_451, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_451, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_452, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_452, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_453, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_453, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_454, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_454, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_455, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_455, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_456, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_456, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_457, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_457, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_458, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_458, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_46, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_46, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_460, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_460, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_461, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_461, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_462, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_462, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_463, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_463, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_464, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_464, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_465, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_465, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_466, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_466, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_467, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_467, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_468, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_468, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_469, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_469, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_47, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_47, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_470, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_470, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_471, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_471, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_472, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_472, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_473, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_473, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_474, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_474, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_475, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_475, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_476, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_476, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_477, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_477, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_478, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_478, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_479, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_479, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_48, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_48, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_480, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_480, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_481, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_481, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_482, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_482, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_483, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_483, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_484, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_484, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_485, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_485, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_486, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_486, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_487, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_487, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_488, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_488, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_489, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_489, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_49, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_49, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_491, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_491, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_492, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_492, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_493, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_493, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_494, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_494, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_495, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_495, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_496, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_496, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_497, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_497, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_498, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_498, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_499, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_499, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_5, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_5, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_50, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_50, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_500, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_500, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_501, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_501, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_502, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_502, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_503, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_503, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_504, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_504, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_505, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_505, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_506, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_506, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_507, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_507, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_508, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_508, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_509, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_509, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_51, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_51, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_510, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_510, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_511, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_511, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_512, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_512, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_513, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_513, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_514, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_514, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_515, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_515, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_516, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_516, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_517, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_517, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_518, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_518, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_519, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_519, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_52, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_52, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_520, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_520, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_521, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_521, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_522, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_522, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_523, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_523, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_524, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_524, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_525, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_525, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_526, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_526, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_527, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_527, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_528, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_528, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_529, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_529, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_53, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_53, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_530, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_530, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_531, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_531, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_532, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_532, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_533, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_533, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_534, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_534, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_535, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_535, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_536, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_536, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_537, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_537, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_538, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_538, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_539, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_539, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_54, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_54, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_540, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_540, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_541, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_541, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_542, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_542, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_543, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_543, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_544, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_544, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_545, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_545, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_546, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_546, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_547, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_547, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_548, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_548, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_549, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_549, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_55, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_55, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_550, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_550, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_551, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_551, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_552, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_552, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_553, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_553, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_554, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_554, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_555, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_555, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_556, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_556, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_557, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_557, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_558, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_558, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_559, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_559, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_560, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_560, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_561, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_561, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_562, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_562, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_563, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_563, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_564, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_564, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_565, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_565, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_566, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_566, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_567, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_567, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_1, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_1, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_10, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_10, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_12, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_12, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_2, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_2, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_3, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_3, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_4, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_4, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_5, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_5, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_6, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_6, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_7, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_7, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_8, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_8, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_56769_9, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_9, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_568, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_568, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_569, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_569, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_57, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_57, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_570, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_570, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_571, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_571, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_572, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_572, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_573, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_573, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_574, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_574, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_575, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_575, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_576, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_576, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_577, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_577, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_578, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_578, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_579, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_579, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_58, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_58, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_580, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_580, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_581, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_581, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_582, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_582, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_583, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_583, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_584, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_584, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_585, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_585, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_586, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_586, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_587, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_587, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_588, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_588, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_589, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_589, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_59, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_59, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_590, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_590, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_591, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_591, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_592, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_592, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_593, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_593, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_594, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_594, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_595, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_595, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_596, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_596, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_597, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_597, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_598, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_598, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_599, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_599, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_6, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_6, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_60, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_60, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_600, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_600, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_601, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_601, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_602, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_602, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_603, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_603, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_604, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_604, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_605, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_605, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_606, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_606, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_607, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_607, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_608, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_608, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_609, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_609, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_61, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_61, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_610, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_610, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_611, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_611, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_612, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_612, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_613, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_613, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_614, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_614, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_615, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_615, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_616, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_616, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_617, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_617, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_618, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_618, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_619, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_619, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_62, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_62, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_620, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_620, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_621, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_621, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_622, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_622, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_623, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_623, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_624, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_624, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_625, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_625, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_626, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_626, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_627, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_627, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_628, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_628, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_629, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_629, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_63, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_63, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_630, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_630, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_631, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_631, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_632, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_632, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_633, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_633, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_634, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_634, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_635, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_635, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_636, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_636, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_637, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_637, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_638, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_638, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_639, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_639, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_64, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_64, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_640, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_640, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_641, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_641, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_642, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_642, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_643, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_643, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_644, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_644, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_645, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_645, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_646, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_646, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_647, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_647, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_648, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_648, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_649, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_649, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_65, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_65, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_650, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_650, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_651, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_651, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_652, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_652, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_653, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_653, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_654, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_654, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_655, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_655, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_656, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_656, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_657, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_657, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_658, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_658, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_659, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_659, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_66, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_66, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_660, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_660, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_661, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_661, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_662, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_662, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_663, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_663, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_664, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_664, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_665, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_665, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_666, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_666, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_667, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_667, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_668, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_668, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_669, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_669, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_67, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_67, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_670, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_670, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_671, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_671, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_672, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_672, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_673, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_673, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_674, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_674, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_675, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_675, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_676, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_676, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_677, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_677, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_678, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_678, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_679, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_679, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_68, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_68, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_680, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_680, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_681, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_681, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_682, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_682, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_683, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_683, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_684, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_684, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_685, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_685, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_686, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_686, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_687, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_687, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_688, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_688, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_689, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_689, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_69, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_69, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_690, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_690, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_691, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_691, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_692, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_692, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_693, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_693, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_694, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_694, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_695, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_695, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_696, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_696, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_697, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_697, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_698, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_698, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_699, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_699, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_7, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_7, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_70, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_70, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_700, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_700, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_701, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_701, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_702, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_702, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_703, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_703, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_704, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_704, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_705, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_705, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_706, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_706, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_707, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_707, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_708, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_708, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_709, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_709, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_71, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_71, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_710, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_710, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_711, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_711, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_712, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_712, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_713, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_713, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_714, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_714, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_715, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_715, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_716, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_716, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_717, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_717, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_718, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_718, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_719, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_719, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_72, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_72, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_720, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_720, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_721, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_721, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_722, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_722, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_723, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_723, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_724, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_724, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_725, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_725, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_726, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_726, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_727, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_727, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_728, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_728, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_729, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_729, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_73, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_73, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_730, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_730, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_731, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_731, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_732, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_732, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_733, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_733, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_734, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_734, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_735, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_735, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_736, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_736, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_737, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_737, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_738, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_738, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_739, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_739, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_74, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_74, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_740, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_740, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_741, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_741, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_742, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_742, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_743, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_743, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_744, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_744, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_745, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_745, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_746, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_746, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_747, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_747, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_748, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_748, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_749, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_749, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_75, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_75, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_750, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_750, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_751, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_751, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_752, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_752, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_753, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_753, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_754, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_754, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_755, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_755, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_756, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_756, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_757, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_757, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_758, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_758, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_759, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_759, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_76, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_76, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_760, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_760, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_761, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_761, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_762, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_762, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_763, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_763, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_764, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_764, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_765, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_765, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_766, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_766, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_767, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_767, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_768, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_768, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_769, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_769, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_77, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_77, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_770, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_770, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_771, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_771, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_772, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_772, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_773, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_773, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_774, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_774, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_775, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_775, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_776, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_776, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_777, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_777, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_778, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_778, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_779, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_779, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_78, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_78, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_780, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_780, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_781, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_781, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_782, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_782, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_783, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_783, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_784, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_784, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_785, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_785, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_786, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_786, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_787, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_787, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_788, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_788, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_789, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_789, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_79, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_79, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_790, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_790, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_791, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_791, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_792, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_792, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_793, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_793, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_794, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_794, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_795, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_795, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_796, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_796, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_797, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_797, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_798, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_798, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_799, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_799, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_8, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_8, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_80, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_80, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_800, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_800, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_801, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_801, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_802, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_802, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_803, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_803, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_804, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_804, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_805, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_805, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_806, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_806, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_807, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_807, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_808, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_808, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_809, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_809, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_81, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_81, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_810, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_810, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_811, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_811, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_812, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_812, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_813, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_813, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_814, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_814, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_815, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_815, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_816, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_816, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_817, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_817, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_818, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_818, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_819, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_819, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_82, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_82, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_820, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_820, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_821, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_821, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_822, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_822, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_823, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_823, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_824, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_824, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_825, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_825, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_826, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_826, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_827, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_827, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_828, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_828, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_829, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_829, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_83, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_83, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_830, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_830, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_831, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_831, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_832, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_832, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_833, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_833, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_834, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_834, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_835, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_835, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_836, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_836, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_837, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_837, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_838, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_838, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_839, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_839, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_84, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_84, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_840, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_840, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_841, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_841, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_842, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_842, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_843, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_843, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_844, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_844, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_845, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_845, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_846, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_846, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_847, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_847, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_848, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_848, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_849, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_849, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_85, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_85, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_850, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_850, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_851, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_851, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_852, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_852, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_853, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_853, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_854, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_854, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_855, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_855, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_856, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_856, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_857, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_857, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_858, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_858, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_859, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_859, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_86, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_86, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_860, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_860, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_861, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_861, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_862, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_862, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_863, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_863, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_864, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_864, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_865, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_865, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_866, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_866, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_867, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_867, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_868, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_868, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_869, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_869, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_87, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_87, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_870, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_870, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_871, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_871, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_872, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_872, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_873, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_873, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_874, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_874, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_875, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_875, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_876, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_876, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_877, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_877, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_878, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_878, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_879, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_879, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_88, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_88, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_880, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_880, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_881, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_881, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_882, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_882, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_883, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_883, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_884, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_884, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_885, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_885, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_886, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_886, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_887, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_887, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_888, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_888, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_889, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_889, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_89, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_89, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_890, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_890, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_891, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_891, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_892, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_892, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_893, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_893, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_894, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_894, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_895, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_895, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_896, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_896, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_897, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_897, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_898, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_898, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_899, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_899, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_9, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_9, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_90, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_90, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_900, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_900, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_901, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_901, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_902, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_902, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_903, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_903, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_904, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_904, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_905, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_905, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_906, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_906, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_907, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_907, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_908, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_908, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_909, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_909, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_91, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_91, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_910, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_910, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_911, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_911, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_912, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_912, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_913, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_913, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_914, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_914, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_915, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_915, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_916, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_916, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_917, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_917, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_918, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_918, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_919, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_919, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_920, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_920, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_921, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_921, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_922, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_922, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_923, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_923, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_924, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_924, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_925, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_925, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_926, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_926, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_927, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_927, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_928, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_928, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_929, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_929, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_930, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_930, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_931, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_931, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_932, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_932, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_933, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_933, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_934, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_934, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_935, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_935, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_936, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_936, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_937, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_937, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_938, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_938, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_939, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_939, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_940, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_940, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_941, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_941, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_942, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_942, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_943, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_943, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_944, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_944, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_945, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_945, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_946, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_946, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_947, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_947, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_948, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_948, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_949, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_949, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_950, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_950, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_951, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_951, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_952, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_952, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_953, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_953, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_954, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_954, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_955, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_955, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_956, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_956, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_957, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_957, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_958, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_958, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_959, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_959, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_960, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_960, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_961, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_961, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_962, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_962, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_963, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_963, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_964, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_964, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_965, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_965, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_966, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_966, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_967, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_967, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_968, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_968, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_969, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_969, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_970, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_970, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_971, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_971, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_972, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_972, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_973, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_973, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_974, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_974, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_975, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_975, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_976, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_976, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_977, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_977, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_978, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_978, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_979, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_979, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_980, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_980, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_981, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_981, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_982, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_982, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_983, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_983, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_984, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_984, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_985, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_985, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_986, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_986, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_987, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_987, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_988, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_988, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_989, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_989, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_990, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_990, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_991, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_991, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_992, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_992, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_993, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_993, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_994, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_994, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_995, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_995, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_996, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_996, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_997, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_997, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_998, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_998, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_999, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_999, prim-cnt = 5 (R)
+# clock_gate, prim-cnt = 3 (G) and clock_gate, prim-cnt = 7 (R)
+# clock_gate_1, prim-cnt = 3 (G) and clock_gate_1, prim-cnt = 8 (R)
+# clock_gate_10, prim-cnt = 3 (G) and clock_gate_10, prim-cnt = 5 (R)
+# clock_gate_11, prim-cnt = 3 (G) and clock_gate_11, prim-cnt = 6 (R)
+# clock_gate_2, prim-cnt = 3 (G) and clock_gate_2, prim-cnt = 7 (R)
+# clock_gate_3, prim-cnt = 3 (G) and clock_gate_3, prim-cnt = 7 (R)
+# clock_gate_4, prim-cnt = 3 (G) and clock_gate_4, prim-cnt = 6 (R)
+# clock_gate_5, prim-cnt = 3 (G) and clock_gate_5, prim-cnt = 7 (R)
+# clock_gate_6, prim-cnt = 3 (G) and clock_gate_6, prim-cnt = 6 (R)
+# clock_gate_7, prim-cnt = 3 (G) and clock_gate_7, prim-cnt = 6 (R)
+# clock_gate_8, prim-cnt = 3 (G) and clock_gate_8, prim-cnt = 6 (R)
+# clock_gate_9, prim-cnt = 3 (G) and clock_gate_9, prim-cnt = 8 (R)
+# The following module pairs are not written because of mismatched ports:
+# Module Pair: pipeline_control_unit (G) and pipeline_control_unit (R)
+# Cause for mismatched ports is pin unreachables
+# OUT (G) stall_ID (REP)  =    (R) stall_ID UZ (KP<--)(REP) 
+# Module Pair: sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_2 (G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_2 (R)
+# Cause for mismatched ports is extra ports
+# IN (R) n_24300 (REP) 
+# Module Pair: sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 (G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 (R)
+# Cause for mismatched ports is extra ports
+# IN (R) n_23043 (REP) 
+# Module Pair: axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff8000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_DSP_RDATA_DEPTH2_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0 (G) and axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff8000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_DSP_RDATA_DEPTH2_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0 (R)
+# Cause for mismatched ports is extra ports
+# IN (R) n_23095 (REP) 
+# IN (R) n_23043 (REP) 
+# IN (R) n_24300 (REP) 
+2 modules are not written because they have been added as black box
+1639 module pairs are not written because of primitive instances less than 50
+// Note: Use the option '-threshold' to allow writing out modules with primitive instances less than 50
+4 module pairs are not written because of mismatched ports
+  3 modules have extra ports
+  1 modules have mismatched pin unreachables
+46 module pairs are written for hierarchical comparison
+// Command: report mapped point -summary -method
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF    DLAT   BBOX      Total   
+--------------------------------------------------------------------------------
+Golden            59     115    34054  1      85        34314   
+--------------------------------------------------------------------------------
+Revised           59     115    34054  1      85        34314   
+================================================================================
+================================================================================
+Mapping method    PI     PO     DFF    DLAT   BBOX   Total 
+--------------------------------------------------------------------------------
+Name              59     115    34054  1      85     34314 
+================================================================================
+CPU time     : 38.98   seconds
+Elapse time  : 41      seconds
+Memory usage : 827.95  M bytes
+// Command: report unmapped point -summary
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1634   4133      5767    
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT   Z         Total   
+--------------------------------------------------------------------------------
+Unreachable       1634   5759      7393    
+================================================================================
+// Running Module dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 and dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4
+// Command: set_root_module dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 -Golden
+// Warning: There are 44 undriven nets in Golden
+// Warning: There are 44 undriven pins in Golden
+0
+CPU time     : 39.27   seconds
+Elapse time  : 41      seconds
+Memory usage : 828.20  M bytes
+// Command: set_root_module dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 -Revised
+// Warning: There are 44 undriven nets in Revised
+// Warning: There are 44 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_axi_apb_dma_u_dma_engine -Golden
+0
+// Command: set_module_property -instance /u_axi_apb_dma_u_dma_engine -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 71 Golden and 71 Revised pins marked as unreachable
+// 0 Golden and 60 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 3114 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 3114 gated-clock DFF/DLAT(s)
+CPU time     : 39.80   seconds
+Elapse time  : 41      seconds
+Memory usage : 828.88  M bytes
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            132    153    3193      3478    
+--------------------------------------------------------------------------------
+Revised           132    153    3193      3478    
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       142       142     
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       142       142     
+================================================================================
+CPU time     : 40.14   seconds
+Elapse time  : 42      seconds
+Memory usage : 829.00  M bytes
+// Running automatic setup...
+// Remodeled 104 DLAT/DFF for inserting sequential redundancy.
+// Remodeled 52 DLAT/DFF (G) and 52 DLAT/DFF (R) for removing sequential redundancy.
+// Automatic setup finished.
+0
+CPU time     : 87.18   seconds
+Elapse time  : 89      seconds
+Memory usage : 829.91  M bytes
+// Command: add_compared_points -all
+// 3346 compared points added to compare list
+0
+// Command: compare -noneq_stop 1  -threads 4,4
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           153    0         153     
+--------------------------------------------------------------------------------
+Non-equivalent       0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         0      3192      3192    
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 87.31   seconds
+Memory usage : 830.09  M bytes
+0
+// Modules 'dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4(G) and dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 1 out of 46 module pairs	EQ: 0	NEQ: 1	ABORT: 0
+// Running Module riscv_pipeline and riscv_pipeline
+// Command: set_root_module riscv_pipeline -Golden
+// Warning: There are 46 undriven nets in Golden
+// Warning: There are 46 undriven pins in Golden
+0
+// Command: set_root_module riscv_pipeline -Revised
+// Warning: There are 49 undriven nets in Revised
+// Warning: There are 49 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_core -Golden
+0
+// Command: set_module_property -instance /u_core -Revised
+0
+// Command: report_black_box -NOHidden
+0
+CPU time     : 87.46   seconds
+Elapse time  : 89      seconds
+Memory usage : 830.09  M bytes
+// Applying constraints to module boundaries ...
+// 83 Golden and 103 Revised pins marked as unreachable
+// 0 Golden and 78 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 4193 gated-clock DFF/DLAT(s)
+// (F28) Converted 6 internal output port(s) to inout port(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 4193 gated-clock DFF/DLAT(s)
+// (F28) Converted 7 internal output port(s) to inout port(s)
+CPU time     : 88.41   seconds
+Elapse time  : 90      seconds
+Memory usage : 830.09  M bytes
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            225    139    4212      4576    
+--------------------------------------------------------------------------------
+Revised           225    139    4212      4576    
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       103       103     
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       103       103     
+================================================================================
+CPU time     : 88.91   seconds
+Elapse time  : 91      seconds
+Memory usage : 830.09  M bytes
+// Running automatic setup...
+// Automatic setup finished.
+0
+CPU time     : 100.76  seconds
+Elapse time  : 102     seconds
+Memory usage : 830.09  M bytes
+// Command: add_compared_points -all
+// 4351 compared points added to compare list
+0
+// Command: compare -noneq_stop 1  -threads 4,4
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           136    4178      4314    
+--------------------------------------------------------------------------------
+Non-equivalent       1      0         1       
+--------------------------------------------------------------------------------
+Not-compared         2      34        36      
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 100.86  seconds
+Memory usage : 830.09  M bytes
+0
+// Modules 'riscv_pipeline(G) and riscv_pipeline(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 2 out of 46 module pairs	EQ: 0	NEQ: 2	ABORT: 0
+// Running Module rv_debug_module_sba and rv_debug_module_sba
+// Command: set_root_module rv_debug_module_sba -Golden
+// Warning: There are 3 undriven nets in Golden
+// Warning: There are 3 undriven pins in Golden
+0
+// Command: set_root_module rv_debug_module_sba -Revised
+// Warning: There are 3 undriven nets in Revised
+// Warning: There are 3 undriven pins in Revised
+0
+// Command: set_module_property -instance /u_debug_module -Golden
+0
+// Command: set_module_property -instance /u_debug_module -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 3 Golden and 4 Revised pins marked as unreachable
+// 0 Golden and 4 Revised pin equivalences applied
+// 1 pin bindings applied
+// 0 Golden and 2 Revised renaming rules applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 303 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 303 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            112    174    311       597     
+--------------------------------------------------------------------------------
+Revised           112    174    311       597     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       12        12      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       12        12      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 485 compared points added to compare list
+0
+// Command: compare -noneq_stop 1  -threads 4,4
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           174    310       484     
+--------------------------------------------------------------------------------
+Non-equivalent       0      1         1       
+================================================================================
+// Command: set_system_mode setup
+0
+// Command: usage
+CPU time     : 101.03  seconds
+Memory usage : 830.38  M bytes
+0
+// Modules 'rv_debug_module_sba(G) and rv_debug_module_sba(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 3 out of 46 module pairs	EQ: 0	NEQ: 3	ABORT: 0
+// Running Module rv_jtag_dtm and rv_jtag_dtm
+// Command: set_root_module rv_jtag_dtm -Golden
+0
+// Command: set_root_module rv_jtag_dtm -Revised
+0
+// Command: set_module_property -instance /u_jtag_dtm -Golden
+0
+// Command: set_module_property -instance /u_jtag_dtm -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 3 Golden and 3 Revised pins marked as unreachable
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 124 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 124 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            40     43     136       219     
+--------------------------------------------------------------------------------
+Revised           40     43     136       219     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       6         6       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       6         6       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 179 compared points added to compare list
+0
+// Command: compare -noneq_stop 1  -threads 4,4
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           43     136       179     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box rv_jtag_dtm -module -hier -Golden
+0
+// Command: add_black_box rv_jtag_dtm -module -hier -Revised
+0
+// Command: usage
+CPU time     : 101.10  seconds
+Memory usage : 830.63  M bytes
+0
+Processed 4 out of 46 module pairs	EQ: 1	NEQ: 3	ABORT: 0
+// Running Module apb_syscon and apb_syscon
+// Command: set_root_module apb_syscon -Golden
+0
+// Command: set_root_module apb_syscon -Revised
+0
+// Command: set_module_property -instance /u_apb_syscon -Golden
+0
+// Command: set_module_property -instance /u_apb_syscon -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 0 Golden and 51 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 90 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 90 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            57     79     98        234     
+--------------------------------------------------------------------------------
+Revised           57     79     98        234     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       5         5       
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       5         5       
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 177 compared points added to compare list
+0
+// Command: compare -noneq_stop 1  -threads 4,4
+// Compare will stop on the 1st non-equivalent point
