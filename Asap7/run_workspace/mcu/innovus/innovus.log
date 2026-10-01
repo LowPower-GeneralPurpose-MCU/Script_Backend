@@ -104193,3 +104193,332 @@ Severity  ID               Count  Summary
 WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
 *** Message Summary: 1 warning(s), 0 error(s)
 
+<CMD> setFillerMode -reset
+<CMD> setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R} -add_fillers_with_drc false -fitGap true -honorPrerouteAsObs true -diffCellViol true
+<CMD> addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true
+**WARN: (IMPSP-5217):	addFiller command is running on a postRoute database. It is recommended to be followed by ecoRoute -target command to make the DRC clean.
+Type 'man IMPSP-5217' for more detail.
+**Info: (IMPSP-2055): Transparent Filler Flow is OFF !
+
+INFO: No filler could be restored
+*INFO: Adding fillers to top-module.
+*INFO:   Added 2073201 filler insts (cell FILLER_ASAP7_75t_R / prefix FILLER).
+*INFO:   Added 77377 filler insts (cell FILLERxp5_ASAP7_75t_R / prefix FILLER).
+*INFO: Total 2150578 filler insts added - prefix FILLER (CPU: 0:01:28).
+For 2150578 new insts, <CMD> globalNetConnect VDD -type pgpin -pin VDD -inst * -override
+<CMD> globalNetConnect VSS -type pgpin -pin VSS -inst * -override
+<CMD> globalNetConnect VDD -type tiehi -inst * -override
+<CMD> globalNetConnect VSS -type tielo -inst * -override
+<CMD> applyGlobalNets
+*** Checked 4 GNC rules.
+*** Applying global-net connections...
+*** Applied 4 GNC rules (cpu = 0:00:00.4)
+<CMD> checkPlace ./verify_rpt/checkPlace_final.rpt
+Begin checking placement ... (start mem=11888.8M, init mem=11947.8M)
+*info: Placed = 2323469        (Fixed = 34617)
+*info: Unplaced = 0           
+Placement Density:100.00%(81936/81936)
+Placement Density (including fixed std cells):100.00%(82843/82843)
+Finished checkPlace (total: cpu=0:01:03, real=0:00:13.0; vio checks: cpu=0:01:01, real=0:00:11.0; mem=11995.3M)
+<CMD> saveDesign ./saved/top_soc_prefill.enc
+The in-memory database contained RC information but was not saved. To save 
+the RC information, use saveDesign's -rc option. Note: Saving RC information can be quite large, 
+so it should only be saved when it is really desired.
+#% Begin save design ... (date=10/01 13:29:25, mem=7418.7M)
+INFO: Current data have to be saved into a temporary db: 'top_soc_prefill.enc.dat.tmp' first. It will be renamed to the correct name 'top_soc_prefill.enc.dat' after the old db was deleted.
+% Begin Save ccopt configuration ... (date=10/01 13:29:25, mem=7418.7M)
+% End Save ccopt configuration ... (date=10/01 13:29:27, total cpu=0:00:01.0, real=0:00:01.0, peak res=7418.8M, current mem=7418.8M)
+% Begin Save netlist data ... (date=10/01 13:29:27, mem=7418.8M)
+Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/vbin/top_soc.v.bin in multi-threaded mode...
+% End Save netlist data ... (date=10/01 13:29:27, total cpu=0:00:00.5, real=0:00:00.0, peak res=7421.8M, current mem=7421.8M)
+Saving symbol-table file in separate thread ...
+Saving congestion map file in separate thread ...
+Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.route.congmap.gz ...
+% Begin Save AAE data ... (date=10/01 13:29:27, mem=7432.6M)
+Saving AAE Data ...
+% End Save AAE data ... (date=10/01 13:29:27, total cpu=0:00:00.2, real=0:00:00.0, peak res=7432.6M, current mem=7432.6M)
+Saving preference file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/gui.pref.tcl ...
+Saving mode setting ...
+**WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+Saving global file ...
+*info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.bbox.lef
+Saving Drc markers ...
+... 7 markers are saved ...
+... 7 geometry drc markers are saved ...
+... 0 antenna drc markers are saved ...
+Saving special route data file in separate thread ...
+Saving PG file in separate thread ...
+Saving placement file in separate thread ...
+Saving route file in separate thread ...
+Saving property file in separate thread ...
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Thu Oct  1 13:29:29 2026)
+** Saving stdCellPlacement_binary (version# 2) ...
+TAT_INFO: ::saveSpecialRoute REAL = 1 : CPU = 0 : MEM = 0.
+Save Adaptive View Pruning View Names to Binary file
+view_ss
+*** Completed saveProperty (cpu=0:00:03.6 real=0:00:01.0 mem=12075.3M) ***
+*** Completed savePGFile (cpu=0:00:03.9 real=0:00:01.0 mem=12075.3M) ***
+TAT_INFO: ::savePGFile REAL = 1 : CPU = 1 : MEM = 0.
+TAT_INFO: ::savePlace REAL = 1 : CPU = 0 : MEM = 0.
+*** Completed saveRoute (cpu=0:00:04.6 real=0:00:02.0 mem=12059.3M) ***
+TAT_INFO: ::saveRoute REAL = 2 : CPU = 1 : MEM = 0.
+TAT_INFO: ::db::saveAnnotationAndProp REAL = 1 : CPU = 0 : MEM = 0.
+#Saving pin access data to file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.apa ...
+#
+Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.techData.gz' ...
+Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/extraction/' ...
+TAT_INFO: ::db::saveSymbolTable REAL = 1 : CPU = 0 : MEM = 0.
+TAT_INFO: ::saveCongMap REAL = 0 : CPU = 0 : MEM = 0.
+% Begin Save power constraints data ... (date=10/01 13:29:33, mem=7453.3M)
+% End Save power constraints data ... (date=10/01 13:29:33, total cpu=0:00:00.2, real=0:00:00.0, peak res=7453.3M, current mem=7453.1M)
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+rc_typ rc_ff rc_ss
+Generated self-contained design top_soc_prefill.enc.dat.tmp
+libset_ss libset_tt libset_ff
+rc_typ rc_ff rc_ss
+mode_func
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus.sdc
+#% End save design ... (date=10/01 13:29:35, total cpu=0:00:11.0, real=0:00:10.0, peak res=7453.3M, current mem=7442.9M)
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
+*** Message Summary: 1 warning(s), 0 error(s)
+
+<CMD> clearDrc
+<CMD> verify_drc -limit 500000 -report ./verify_rpt/drc_final.rpt
+#-limit 500000                           # int, default=500000, user setting
+#-check_same_via_cell true               # bool, default=false, user setting
+#-report ./verify_rpt/drc_final.rpt      # string, default="", user setting
+ *** Starting Verify DRC (MEM: 12027.3) ***
+
+  VERIFY DRC ...... Starting Verification
+  VERIFY DRC ...... Initializing
+  VERIFY DRC ...... Deleting Existing Violations
+  VERIFY DRC ...... Creating Sub-Areas
+ VERIFY_DRC: checking all layers except Pad to Pad ...
+  VERIFY DRC ...... Using new threading
+ VERIFY DRC ...... Thread : 3 finished.
+ VERIFY DRC ...... Thread : 6 finished.
+ VERIFY DRC ...... Thread : 2 finished.
+ VERIFY DRC ...... Thread : 5 finished.
+ VERIFY DRC ...... Thread : 0 finished.
+ VERIFY DRC ...... Thread : 4 finished.
+ VERIFY DRC ...... Thread : 7 finished.
+ VERIFY DRC ...... Thread : 1 finished.
+ VERIFY_DRC: checking layers from Pad to Pad ...
+**WARN: (IMPVFG-1198):	The number of CPUs requested 8 is larger than that verify_drc used 1. In Multithreading mode, the number of CPUs verify_drc used is not larger than the number of subareas.
+ Use 'setMultiCpuUsage -localCpu' to specify the less cup number if the verify area is not large.
+  VERIFY DRC ...... Using new threading
+
+  Verification Complete : 7 Viols.
+
+ Violation Summary By Layer and Type:
+
+	         OffGrd   Totals
+	M4            7        7
+	Totals        7        7
+
+ *** End Verify DRC (CPU TIME: 0:01:05  ELAPSED TIME: 0:00:12.0  MEM: 256.1M) ***
+
+<CMD> verifyConnectivity -type all -error 100000 -warning 1000 -report ./verify_rpt/connectivity_final.rpt
+VERIFY_CONNECTIVITY use new engine.
+
+******** Start: VERIFY CONNECTIVITY ********
+Start Time: Thu Oct  1 13:29:47 2026
+
+Design Name: top_soc
+Database Units: 1000
+Design Boundary: (0.0000, 0.0000) (565.6320, 358.1280)
+Error Limit = 100000; Warning Limit = 1000
+Check all nets
+Use 8 pthreads
+
+Begin Summary 
+  Found no problems or warnings.
+End Summary
+
+End Time: Thu Oct  1 13:29:52 2026
+Time Elapsed: 0:00:05.0
+
+******** End: VERIFY CONNECTIVITY ********
+  Verification Complete : 0 Viols.  0 Wrngs.
+  (CPU Time: 0:00:12.9  MEM: 412.000M)
+
+<CMD> verifyWellTap -cell TAPCELL_ASAP7_75t_R -rule 30.0 -report ./verify_rpt/welltap_final.rpt
+INFO: running in 7nm design.
+Begin to run verifyWellTap...
+init: done
+checking rule
+Finished verifyWellTap, 0 violations found.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+
+Usage: setMetalFill [-help] [-activeSpacing <float>] [-borderSpacing <float>] [-decrement <float>] [-diagOffset {x y}] [-externalDensity <float>] [-gapSpacing <float>] [-honorLefValue]
+                    [-iterationName <string>] [-layer <string>] [-maxDensity <float>] [-maxLength <float>] [-maxUnionDensityToAboveLayer <float>] [-maxWidth <float>] [-minDensity <float>]
+                    [-minLength <float>] [-minUnionDensityToAboveLayer <float>] [-minWidth <float>] [-opc] [-opcActiveSpacing <float>] [-preferredDensity <float>] [-regular]
+                    [-windowSize {x y}] [-windowStep {x y}]
+
+**ERROR: (IMPTCM-48):	"-reset" is not a legal option for command "setMetalFill". Either the current option or an option prior to it is not specified correctly.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
+**WARN: (IMPMF-5045):	addMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use add_metal_fill_signoff which is the replacement tool for addMetalFill.
+**WARN: (IMPMF-5045):	addMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use add_metal_fill_signoff which is the replacement tool for addMetalFill.
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.1'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.1'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.3'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.3'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.4'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.4'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.5'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.5'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.6'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.6'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.7'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.7'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.8'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.8'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.9'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.9'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.10'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '2'!
+**WARN: (from .metalfill_1416265.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.10'!
+**WARN: (from .metalfill_1416265.conf) Unknown option '0'!
+************************
+Timing Aware on 
+P/G Nets: 2
+Signal Nets: 156417
+Clock Nets: 3493
+************************
+Multi-CPU acceleration using 8 CPU(s).
+Density calculation ...... Slot :   0 of   1 Thread : 0
+
+Multi-CPU acceleration using 8 CPU(s).
+Density calculation ...... Slot :   0 of   1 Thread : 0
+
+End of Density Calculation : cpu time : 0:00:49.2, real time : 0:00:49.0, peak mem : 13572.79 megs
+Multi-CPU acceleration using 8 CPU(s).
+Thread/Slave: 0  process data during iteration  1  in region 0 of 24
+
+Thread/Slave: 3  process data during iteration  1  in region 0 of 24
+
+Thread/Slave: 2  process data during iteration  1  in region 0 of 24
+
+Thread/Slave: 1  process data during iteration  1  in region 0 of 24
+
+Thread/Slave: 5  process data during iteration  1  in region 0 of 24
+
+Thread/Slave: 4  process data during iteration  1  in region 0 of 24
+
+Multi-CPU acceleration using 8 CPU(s).
+Thread/Slave: 2  process data during iteration  1  in region 6 of 24
+
+Thread/Slave: 0  process data during iteration  1  in region 6 of 24
+
+Thread/Slave: 1  process data during iteration  1  in region 6 of 24
+
+Thread/Slave: 5  process data during iteration  1  in region 6 of 24
+
+Thread/Slave: 3  process data during iteration  1  in region 6 of 24
+
+Thread/Slave: 4  process data during iteration  1  in region 6 of 24
+
+Multi-CPU acceleration using 8 CPU(s).
+Thread/Slave: 0  process data during iteration  1  in region 12 of 24
+
+Thread/Slave: 3  process data during iteration  1  in region 12 of 24
+
+Thread/Slave: 5  process data during iteration  1  in region 12 of 24
+
+Thread/Slave: 2  process data during iteration  1  in region 12 of 24
+
+Thread/Slave: 4  process data during iteration  1  in region 12 of 24
+
+Thread/Slave: 1  process data during iteration  1  in region 12 of 24
+
+Multi-CPU acceleration using 8 CPU(s).
+Thread/Slave: 2  process data during iteration  1  in region 18 of 24
+
+Thread/Slave: 5  process data during iteration  1  in region 18 of 24
+
+Thread/Slave: 3  process data during iteration  1  in region 18 of 24
+
+Thread/Slave: 0  process data during iteration  1  in region 18 of 24
+
+Thread/Slave: 4  process data during iteration  1  in region 18 of 24
+
+Thread/Slave: 1  process data during iteration  1  in region 18 of 24
+
+End metal filling: cpu:  0:02:30,  real:  0:01:36,  peak mem:  13049.79  megs.
+<CMD> clearDrc
+<CMD> verify_drc -limit 500000 -report ./verify_rpt/drc_fill.rpt
+#-limit 500000                           # int, default=500000, user setting
+#-check_same_via_cell true               # bool, default=false, user setting
+#-report ./verify_rpt/drc_fill.rpt       # string, default="", user setting
+ *** Starting Verify DRC (MEM: 12890.8) ***
+
+  VERIFY DRC ...... Starting Verification
+  VERIFY DRC ...... Initializing
+  VERIFY DRC ...... Deleting Existing Violations
+  VERIFY DRC ...... Creating Sub-Areas
+ VERIFY_DRC: checking all layers except Pad to Pad ...
+  VERIFY DRC ...... Using new threading
+ VERIFY DRC ...... Thread : 7 finished.
+ VERIFY DRC ...... Thread : 1 finished.
+ VERIFY DRC ...... Thread : 0 finished.
+ VERIFY DRC ...... Thread : 3 finished.
+ VERIFY DRC ...... Thread : 2 finished.
+ VERIFY DRC ...... Thread : 6 finished.
+ VERIFY DRC ...... Thread : 5 finished.
+ VERIFY DRC ...... Thread : 4 finished.
+ VERIFY_DRC: checking layers from Pad to Pad ...
+**WARN: (IMPVFG-1198):	The number of CPUs requested 8 is larger than that verify_drc used 1. In Multithreading mode, the number of CPUs verify_drc used is not larger than the number of subareas.
+ Use 'setMultiCpuUsage -localCpu' to specify the less cup number if the verify area is not large.
+  VERIFY DRC ...... Using new threading
+
+  Verification Complete : 33567 Viols.
+
+ Violation Summary By Layer and Type:
+
+	         MetSpc   OffGrd   Totals
+	M1        17198        0    17198
+	M2        15937        0    15937
+	M3          425        0      425
+	M4            0        7        7
+	Totals    33560        7    33567
+
+ *** End Verify DRC (CPU TIME: 0:01:41  ELAPSED TIME: 0:00:24.0  MEM: 0.0M) ***
+
+Metal fill sinh 33560 vi pham DRC - xem verify_rpt/drc_fill.rpt.  Sua so trong SOC_FILL_LAYERS roi restore saved/top_soc_prefill.enc.dat, khong can chay lai tu dau.

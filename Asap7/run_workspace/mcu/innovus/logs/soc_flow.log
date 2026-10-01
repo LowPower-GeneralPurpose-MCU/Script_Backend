@@ -4420,4 +4420,58 @@ Tiep theo: KHOI 11 (CTS)
 10-01 13:15:26   postRoute SETUP: WNS 0.272 TNS 0.0, 0 duong vi pham -> DAT
 10-01 13:15:26   postRoute HOLD: WNS 0.016 TNS 0.0, 0 duong vi pham -> DAT
 10-01 13:15:26 >>> XONG: KHOI 14: optDesign postRoute
-10-01 13:15:26 innovus 158> 
+10-01 13:15:26 innovus 158> 10-01 13:28:51 ============================================================
+10-01 13:28:51 >>> KHOI 15: filler + verify
+10-01 13:28:51 ============================================================
+10-01 13:28:51 Filler cell: FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R
+10-01 13:29:47 --- ./verify_rpt/drc_final.rpt
+10-01 13:29:47   loai OFFGRID                         7
+10-01 13:29:47   net  u_itcm/u_mem/FE_OFN7471_n_257        1
+10-01 13:29:47   net  u_itcm/u_mem/FE_OFN6617_n_262        1
+10-01 13:29:47   net  u_itcm/u_mem/FE_OFN7469_n_255        1
+10-01 13:29:47   net  u_itcm/u_mem/FE_OFN7470_n_256        1
+10-01 13:29:47   net  u_itcm/u_mem/FE_OFN7475_n_261        1
+10-01 13:29:47   net  u_itcm/u_mem/FE_OFN7468_n_254        1
+10-01 13:29:47   net  u_itcm/u_mem/FE_OFN7466_n_252        1
+10-01 13:29:47   -> 0 vi pham that (7 bo qua: net {}, loai {OFFGRID}; 7 OFFGRID M4 tai chan macro)
+10-01 13:29:53 soc_metal_fill: SOC_FILL_LAYERS = M1 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M2 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M3 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M4 0.024 0.312 0.096 0.096 1.25 0.048 0.048 10 35 25 M5 0.024 0.312 0.096 0.096 1.25 0.048 0.048 15 90 25 M6 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M7 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M8 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 M9 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 Pad 0.2 2.0 0.04 2.24 2.24 2.04 2.04 20 80 25
+10-01 13:29:53 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+10-01 13:29:53   M1: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-01 13:29:53   M2: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-01 13:29:53   M3: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-01 13:29:53   M4: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-01 13:29:53   M5: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-01 13:29:53   M6: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-01 13:29:53   M7: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-01 13:29:53   M8: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-01 13:29:53   M9: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-01 13:29:53   Pad: pitch 2.2400 | buoc fill 2.2400 (1.00 track) | cach day that 2.2400 (1.00 track) | mat do toi da 8.9%
+10-01 13:29:53 WARNING: setMetalFill -reset: 
+10-01 13:31:29 # soc_fill_report doc lai ./top_soc.metalfill.rpt
+10-01 13:31:29 Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai M5/Pad la so TU DAT trong SOC_FILL_LAYERS, khong phai luat foundry.
+10-01 13:31:29   layer   duoi min (truoc -> sau)      vuot max (truoc -> sau)
+10-01 13:31:29   M1        35 -> 0      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-01 13:31:29   M2        41 -> 1      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-01 13:31:29   M3        31 -> 0      (min 25%)        0 -> 2      (max 60%)   /77 window   <- fill LAM TANG so window vuot tran
+10-01 13:31:29   M4        36 -> 0      (min 10%)        0 -> 0      (max 35%)   /77 window
+10-01 13:31:29   M5      1913 -> 1111   (min 15%)        0 -> 0      (max 90%)   /1960 window
+10-01 13:31:29   M6        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-01 13:31:29   M7        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-01 13:31:29   M8        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-01 13:31:29   M9        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-01 13:31:29   Pad       77 -> 0      (min 20%)        0 -> 0      (max 80%)   /77 window
+10-01 13:31:29 WARNING: 3 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).
+10-01 13:31:29   da ghi ./verify_rpt/fill_summary.rpt
+10-01 13:31:55 --- ./verify_rpt/drc_fill.rpt
+10-01 13:31:55   loai OFFGRID                         7
+10-01 13:31:55   loai SPACING                     33560
+10-01 13:31:55   net  _FILLS_RESERVED             33560
+10-01 13:31:55   net  u_itcm/u_mem/FE_OFN7471_n_257        1
+10-01 13:31:55   net  u_itcm/u_mem/FE_OFN6617_n_262        1
+10-01 13:31:55   net  u_itcm/u_mem/FE_OFN7469_n_255        1
+10-01 13:31:55   net  u_itcm/u_mem/FE_OFN7470_n_256        1
+10-01 13:31:55   net  u_itcm/u_mem/FE_OFN7475_n_261        1
+10-01 13:31:55   net  u_itcm/u_mem/FE_OFN7468_n_254        1
+10-01 13:31:55   net  u_itcm/u_mem/FE_OFN7466_n_252        1
+10-01 13:31:55   -> 33560 vi pham that (7 bo qua: net {}, loai {OFFGRID}; 7 OFFGRID M4 tai chan macro)
+10-01 13:31:55 >>> LOI: KHOI 15: filler + verify: Metal fill sinh 33560 vi pham DRC - xem verify_rpt/drc_fill.rpt.  Sua so trong SOC_FILL_LAYERS roi restore saved/top_soc_prefill.enc.dat, khong can chay lai tu dau.
