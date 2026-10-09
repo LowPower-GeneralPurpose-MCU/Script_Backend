@@ -1,0 +1,59 @@
+
+
+  Cadence Quantus Extraction - 64-bit Parasitic Extractor - Version
+23.1.1-s336 Mon Jan 20 22:24:34 PST 2025
+---------------------------------------------------------------------------------------------------------------
+                                  Copyright 2025 Cadence Design Systems,
+Inc.
+
+
+
+INFO (EXTQRCXLOG-128) : Quantus command line:
+ Started at: 2026-Oct-09 21:22:00 (2026-Oct-09 12:22:00 GMT)
+ Executable: /Cadence/DDI/INNOVUS231/tools.lnx86/extraction/bin/64bit/qrc
+ Options:     -cmd
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3/qrc.cmd
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3/qrc.def.gz
+ Current working directory:
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus
+
+
+INFO (EXTQRCXLOG-103) : The Command File Options for the current Quantus run are as follows:
+
+distributed_processing \
+	 -multi_cpu 8
+extract \
+	 -selection "all" \
+	 -type "rc_coupled"
+extraction_setup \
+	 -promote_pin_pad "LOGICAL"
+filter_coupling_cap \
+	 -cap_filtering_mode "absolute_and_relative" \
+	 -coupling_cap_threshold_absolute 0.1 \
+	 -coupling_cap_threshold_relative 1.0 \
+	 -total_cap_threshold 0.0
+input_db -type def \
+	 -lef_file_list_file "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3/qrc.leflist"
+log_file \
+	 -dump_options true \
+	 -file_name "qrc_3148336_20261009_21:21:51_448.log"
+output_db -type spef \
+	 -short_incomplete_net_pins true \
+	 -subtype "STARN"
+output_setup \
+	 -compressed true \
+	 -directory_name "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3" \
+	 -file_name "top_soc" \
+	 -temporary_directory_name "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3"
+process_technology \
+	 -technology_corner \
+		"rc_typ" \
+		"rc_typ" \
+		"rc_typ" \
+	 -technology_library_file "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3/_qrc_techlib.defs" \
+	 -technology_name "_qrc_tech_" \
+	 -temperature \
+		"25" \
+		"0" \
+		"100"
+
