@@ -1305,3 +1305,38 @@ num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) tot
  (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
  (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
 num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
+ (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
+ (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
+ (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+ (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
+**INFO (INTERRUPT): The current script will stop before next command.
+**INFO (INTERRUPT): One more Ctrl-C to exit Innovus ...
+Innovus terminated by user interrupt.
+
+*** Memory Usage v#2 (Current mem = 5180.504M, initial mem = 847.699M) ***
+*** Message Summary: 48 warning(s), 0 error(s)
+
+--- Ending "Innovus" (totcpu=0:01:55, real=0:48:44, mem=5180.5M) ---
