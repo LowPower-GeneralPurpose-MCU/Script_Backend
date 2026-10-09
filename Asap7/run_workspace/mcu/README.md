@@ -34,7 +34,8 @@ mcu/
 │   ├── outputs/             # Netlist/SDC của lần chạy gần nhất (đang được commit)
 │   └── reports/             # Report của lần chạy gần nhất (đang được commit)
 ├── innovus/                 # Nhận handoff từ genus/outputs
-└── conformal/               # LEC: genus/outputs/top_soc_syn.v vs innovus/outputs/top_soc_pnr.v
+├── conformal/               # LEC: genus/outputs/top_soc_syn.v vs innovus/outputs/top_soc_pnr.v
+└── quantus/                 # Trích RC signoff từ innovus/saved/top_soc_final.enc.dat -> SPEF
 ```
 
 `outputs/` và `reports/` là sản phẩm của Genus nhưng hiện **có trong git** để
@@ -249,6 +250,34 @@ Kết luận nằm ở dòng đầu `reports/lec_verdict.txt` (`PASS` / `FAIL` /
 
 RTL → netlist tổng hợp là bước riêng, dùng dofile Genus tự sinh
 (`genus/outputs/genus_mapping_hints.do`).
+
+## Chạy Quantus (trích RC signoff) sau Conformal
+
+Cả flow Innovus trích RC bằng tQuantus (`-effortLevel medium`), kể cả SPEF mà
+KHỐI 16 xuất ra. Bước này trích lại bằng Quantus QRC có tụ ghép để STA signoff
+dùng RC độc lập với công cụ đã tối ưu thiết kế:
+
+```bash
+cd Asap7/run_workspace/mcu/quantus
+make all
+```
+
+`quantus.tcl` chạy trong Innovus (batch, thư mục `mcu/innovus`): nạp
+`saved/top_soc_final.enc.dat`, xoá metal fill lớp `Pad` **trong RAM** (QRC tech
+file không có lớp Pad), `extractRC` ở `-effortLevel signoff -coupled true`, rồi
+`rcOut` ba góc ra `quantus/outputs/top_soc_quantus_{rc_typ,rc_ss,rc_ff}.spef`.
+Script không `saveDesign`.
+
+`quantus/reports/quantus_summary.rpt` có dòng đầu `DONE` khi xong, kèm số net
+và tổng điện dung từng góc, đối chiếu với SPEF tQuantus của KHỐI 16
+(`innovus/outputs/top_soc_pnr_<rc>.spef`).
+
+| Biến `make` | Mặc định | Ý nghĩa |
+|---|---|---|
+| `QUANTUS_EFFORT` | `signoff` | `high` = IQuantus tích hợp, dùng khi máy không có lệnh `qrc` |
+| `QRC_BIN` | tìm trong `PATH` | đường dẫn đầy đủ tới lệnh `qrc` |
+| `QUANTUS_CPUS` | `8` | đặt `1` nếu `qrc` treo khi chạy nhiều tiến trình |
+| `INNOVUS` | `innovus` | tên lệnh Innovus |
 
 ## Giả định timing cần xác nhận
 
