@@ -1,0 +1,70 @@
+
+
+  Cadence Quantus Extraction - 64-bit Parasitic Extractor - Version
+23.1.1-s336 Mon Jan 20 22:24:34 PST 2025
+---------------------------------------------------------------------------------------------------------------
+                                  Copyright 2025 Cadence Design Systems,
+Inc.
+
+
+
+INFO (EXTQRCXLOG-128) : Quantus command line:
+ Started at: 2026-Oct-09 21:32:33 (2026-Oct-09 12:32:33 GMT)
+ Executable: /Cadence/DDI/INNOVUS231/tools.lnx86/extraction/bin/64bit/qrc
+ Options:     -cmd
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3200689_d4a6af25-ef9a-495c-968d-997d81e0071d_user1-EliteMini_user1_NvatpI/tmp_qrc_9cVO6w/qrc.cmd
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3200689_d4a6af25-ef9a-495c-968d-997d81e0071d_user1-EliteMini_user1_NvatpI/tmp_qrc_9cVO6w/qrc.def.gz
+ Current working directory:
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus
+
+
+INFO (EXTQRCXLOG-103) : The Command File Options for the current Quantus run are as follows:
+
+extract \
+	 -selection "all" \
+	 -type "rc_coupled"
+extraction_setup \
+	 -promote_pin_pad "LOGICAL"
+filter_coupling_cap \
+	 -cap_filtering_mode "absolute_and_relative" \
+	 -coupling_cap_threshold_absolute 0.1 \
+	 -coupling_cap_threshold_relative 1.0 \
+	 -total_cap_threshold 0.0
+input_db -type def \
+	 -lef_file_list_file "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3200689_d4a6af25-ef9a-495c-968d-997d81e0071d_user1-EliteMini_user1_NvatpI/tmp_qrc_9cVO6w/qrc.leflist"
+log_file \
+	 -dump_options true \
+	 -file_name "qrc_3200689_20261009_21:32:23_303.log"
+output_db -type spef \
+	 -short_incomplete_net_pins true \
+	 -subtype "STARN"
+output_setup \
+	 -compressed true \
+	 -directory_name "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3200689_d4a6af25-ef9a-495c-968d-997d81e0071d_user1-EliteMini_user1_NvatpI/tmp_qrc_9cVO6w" \
+	 -file_name "top_soc" \
+	 -temporary_directory_name "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3200689_d4a6af25-ef9a-495c-968d-997d81e0071d_user1-EliteMini_user1_NvatpI/tmp_qrc_9cVO6w"
+process_technology \
+	 -technology_corner \
+		"rc_typ" \
+		"rc_typ" \
+		"rc_typ" \
+	 -technology_library_file "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3200689_d4a6af25-ef9a-495c-968d-997d81e0071d_user1-EliteMini_user1_NvatpI/tmp_qrc_9cVO6w/_qrc_techlib.defs" \
+	 -technology_name "_qrc_tech_" \
+	 -temperature \
+		"25" \
+		"0" \
+		"100"
+
+
+ERROR (EXTQRCXLOG-111) : Execution interrupted by the user.  Exiting.
+
+Ending at 2026-Oct-09 23:33:05 (2026-Oct-09 14:33:05 GMT).
+  Executed by:           user1
+  Execution host:        user1-EliteMini
+  Run duration:          00:00:05 CPU time, 02:00:32 clock time
+  Memory used:           213M
+  Warning messages:      0
+  Error messages:        1
+
+Exit code 10.
+Cadence Quantus Extraction exited unsuccessfully.
