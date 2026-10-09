@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Fri Oct  9 21:19:47 2026                
+#  Created on Fri Oct  9 23:34:09 2026                
 #                                                     
 #######################################################
 
@@ -21,6 +21,5 @@ getVersion
 restoreDesign ./saved/top_soc_final.enc.dat top_soc
 setMultiCpuUsage -acquireLicense 8 -localCpu 8
 setDistributeHost -local
-setExtractRCMode -engine postRoute -effortLevel signoff -coupled true
-setExtractRCMode -qrcCmdType auto
+setExtractRCMode -engine postRoute -effortLevel high -coupled true
 extractRC
