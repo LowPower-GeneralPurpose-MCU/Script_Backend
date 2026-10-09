@@ -126,10 +126,14 @@ if {[catch {
     set quantus_t0 [clock seconds]
     restoreDesign $QUANTUS_CHECKPOINT $TOP
 
-    # Cung tran 8 CPU voi init_common.tcl (license).  QUANTUS_CPUS=1 neu qrc
-    # treo khi chay nhieu tien trinh (Genus va Conformal tren may nay deu da
-    # treo o che do nhieu tien trinh).
-    set quantus_cpus [quantus_env QUANTUS_CPUS 8]
+    # MAC DINH 1 TIEN TRINH.  Run 2026-10-09 23:33 (effortLevel high, 8 CPU):
+    #     Creating 8 parallel subjobs for IQuantus extraction...
+    #     num of slaves (8) totalRss(0.000000) ... totalCpuTime (0.000000)
+    # lap lai 45 phut (23:37 -> 00:22), Innovus chi dung them 7 s CPU: 8 tien
+    # trinh con khong he chay.  Chung duoc goi bang script '#!/bin/csh'
+    # (.user1_launch_<pid>_<n>).  Genus va Conformal tren may nay cung treo o
+    # che do nhieu tien trinh.  Thu lai: make all QUANTUS_CPUS=8.
+    set quantus_cpus [quantus_env QUANTUS_CPUS 1]
     if {![string is integer -strict $quantus_cpus] || $quantus_cpus < 1} {
         error "QUANTUS_CPUS phai la so nguyen >= 1, dang la '$quantus_cpus'"
     }

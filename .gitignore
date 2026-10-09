@@ -59,6 +59,19 @@
 **/extLogDir/
 **/.cadence/
 
+# File tam cua Quantus / IQuantus khi extractRC chay tu Innovus (mcu/quantus).
+# Chung nam trong thu muc chay Innovus, ten gan pid nen moi lan chay mot bo moi.
+#   qrc_<pid>_<ngay>_HH:MM:SS_<n>.log   log rieng cua lenh qrc.  Ten co dau ':'
+#       -> Windows khong tao duoc file, 'git pull' bao "invalid path" (commit
+#       37a941e4 ngay 2026-10-09).  Noi dung da co trong quantus/logs/quantus.log.
+#   .<pid>_<uuid>_soce_slave_<n>        script khoi tao cua tung tien trinh con
+#   .<user>_launch_<pid>_<uuid>_<n>     script csh goi tien trinh con do
+#   .cce.env.<pid>.<xxxxxx>             bien moi truong cua phien trich RC
+**/qrc_*.log
+**/.[0-9]*_soce_slave_[0-9]*
+**/.*_launch_[0-9]*
+**/.cce.env.*
+
 # optDesign/timeDesign khong co -outDir tu ghi vao day (hang tram file um*/)
 **/timingReports/
 
@@ -90,7 +103,3 @@
 # Tat ca deu tao lai duoc bang cach chay lai script.
 # ---------------------------------------------------------------------------
 **/tests/sim_work/
-**/qrc_*.log
-**/.*_soce_slave_*
-**/.*_launch_*
-**/.cce.env.*
