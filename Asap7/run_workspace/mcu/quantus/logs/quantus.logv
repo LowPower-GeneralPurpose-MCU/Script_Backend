@@ -1731,3 +1731,51 @@ Setting -viarule_preference to default order. ViaGen will consider via rule prio
 [10/10 00:20:25    114s]  (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
 [10/10 00:20:26    114s]  (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
 [10/10 00:20:27    114s] num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
+[10/10 00:20:57    114s]  (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:20:58    114s]  (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:20:59    114s]  (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:00    114s]  (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:01    114s]  (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:02    114s]  (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:03    114s]  (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:04    114s]  (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:05    114s] num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
+[10/10 00:21:35    114s]  (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:36    114s]  (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:37    114s]  (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:38    114s]  (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:39    114s]  (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:40    114s]  (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:41    114s]  (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:42    114s]  (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:21:43    114s] num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
+[10/10 00:22:13    114s]  (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:22:14    114s]  (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:22:15    114s]  (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:22:16    114s]  (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:22:17    114s]  (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:22:18    114s]  (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:22:19    114s]  (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:22:20    114s]  (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
+[10/10 00:22:21    114s] num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
+[10/10 00:22:33    114s] **INFO (INTERRUPT): The current script will stop before next command.
+[10/10 00:22:33    114s] **INFO (INTERRUPT): One more Ctrl-C to exit Innovus ...
+[10/10 00:22:34    114s] Innovus terminated by user interrupt.
+[10/10 00:22:34    114s] 
+[10/10 00:22:34    114s] *** Memory Usage v#2 (Current mem = 5180.504M, initial mem = 847.699M) ***
+[10/10 00:22:34    114s] 
+[10/10 00:22:34    114s] *** Summary of all messages that are not suppressed in this session:
+[10/10 00:22:34    114s] Severity  ID               Count  Summary                                  
+[10/10 00:22:34    114s] WARNING   IMPTS-124            5  Timing library description of pin '%s' i...
+[10/10 00:22:34    114s] WARNING   IMPEXT-1221          1  No poly layer found in the technology fi...
+[10/10 00:22:34    114s] WARNING   IMPEXT-1222          1  No CUT layer defined between the poly LA...
+[10/10 00:22:34    114s] WARNING   IMPVL-159            5  Pin '%s' of cell '%s' is defined in LEF ...
+[10/10 00:22:34    114s] WARNING   IMPESI-3505          1  setDelayCalMode -eng_%s (default=%s) wil...
+[10/10 00:22:34    114s] WARNING   IMPMF-5047           2  deleteMetalFill command is obsolete and ...
+[10/10 00:22:34    114s] WARNING   IMPOPT-3602         19  The specified path group name %s is not ...
+[10/10 00:22:34    114s] WARNING   IMPCTE-107           1  The following globals have been obsolete...
+[10/10 00:22:34    114s] WARNING   IMPTCM-77            1  Option "%s" for command %s is obsolete a...
+[10/10 00:22:34    114s] WARNING   TECHLIB-1277        12  The %s '%s' has been defined for %s %s '...
+[10/10 00:22:34    114s] *** Message Summary: 48 warning(s), 0 error(s)
+[10/10 00:22:34    114s] 
+[10/10 00:22:34    114s] --- Ending "Innovus" (totcpu=0:01:55, real=0:48:44, mem=5180.5M) ---
