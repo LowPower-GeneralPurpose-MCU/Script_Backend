@@ -1,0 +1,647 @@
+
+Cadence Innovus(TM) Implementation System.
+Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+
+Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
+Options:	-no_gui -files ../quantus/quantus.tcl -log ../quantus/logs/quantus 
+Date:		Fri Oct  9 21:19:27 2026
+Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
+OS:		Ubuntu 26.04.1 LTS
+
+License:
+		[21:19:32.206226] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+		invs	Innovus Implementation System	23.1	checkout succeeded
+		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
+Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
+Info: Process UID = 3148336 / 250b78ff-07dd-475e-97e8-431d37a1cdcb / 1LcylF6xuB
+
+**INFO:  MMMC transition support version v31-84 
+
+<CMD> set_global _enable_mmmc_by_default_flow      $CTE::mmmc_default
+<CMD> suppressMessage ENCEXT-2799
+<CMD> getVersion
+<CMD> getVersion
+<CMD> getVersion
+[INFO] Loading PVS 21.12 fill procedures
+**WARN: Tk package not loaded. The PVS fill DRC monitor is disabled.
+Sourcing file "../quantus/quantus.tcl" ...
+source ../quantus/quantus.tcl
+<CMD> restoreDesign ./saved/top_soc_final.enc.dat top_soc
+#% Begin load design ... (date=10/09 21:19:48, mem=1707.5M)
+Loading design 'top_soc' saved by 'Innovus' '23.14-s088_1' on 'Thu Oct 1 15:18:32 2026'.
+% Begin Load MMMC data ... (date=10/09 21:19:50, mem=1709.6M)
+% End Load MMMC data ... (date=10/09 21:19:50, total cpu=0:00:00.0, real=0:00:00.0, peak res=1711.2M, current mem=1711.2M)
+rc_typ rc_ff rc_ss
+
+Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/asap7_tech_1x_201209.fixed.lef ...
+
+Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/asap7sc7p5t_28_R_1x_220121a.lef ...
+Set DBUPerIGU to M1 pitch 36.
+[21:20:00.316456] Periodic Lic check successful
+[21:20:00.316467] Feature usage summary:
+[21:20:00.316467] Innovus_Impl_System
+[21:20:00.316472] Innovus_7nm_Opt
+
+(#124) This command "restoreDesign ./saved/top_soc_final.enc.dat top_soc" required an extra checkout of license invs_7nm.
+Additional license(s) checked out: 1 'invs_7nm' (Innovus_7nm_Opt; INVS07; 23.1) license(s)
+
+Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/asap7sc7p5t_28_L_1x_220121a.lef ...
+
+Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/srambank_256x4x32_6t122.fixed.lef ...
+
+Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/srambank_128x4x20_6t122.fixed.lef ...
+
+##  Check design process and node:  
+##  Both design process and tech node are not set.
+
+Loading view definition file from /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/viewDefinition.tcl
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib, Line 46704)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib, Line 75658)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_SS_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_SS_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_RVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_SS_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_RVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_SS_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_SS_ccs_220123' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib, Line 46704)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib, Line 75658)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_SS_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_SS_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_LVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_SS_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_LVT_SS_ccs_211120' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_SS_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_SS_ccs_220123' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib' ...
+Read 1 cells in library 'srambank_256x4x32_6t122' 
+Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib' ...
+Read 1 cells in library 'srambank_128x4x20_6t122' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib, Line 46726)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib, Line 75682)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_FF_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_FF_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_RVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_FF_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_RVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_FF_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_FF_ccs_220123' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120.lib, Line 46704)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120.lib, Line 75658)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_FF_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_FF_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_LVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_FF_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120' 
+Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
+*** End library_loading (cpu=0.48min, real=0.48min, mem=544.1M, fe_cpu=0.73min, fe_real=1.03min, fe_mem=2250.5M) ***
+% Begin Load netlist data ... (date=10/09 21:20:29, mem=1741.9M)
+*** Begin netlist parsing (mem=2250.5M) ***
+**WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+**WARN: (IMPVL-159):	Pin 'sdel[1]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+**WARN: (IMPVL-159):	Pin 'sdel[2]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+**WARN: (IMPVL-159):	Pin 'sdel[3]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+**WARN: (IMPVL-159):	Pin 'sdel[4]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Type 'man IMPVL-159' for more detail.
+Created 406 new cells from 22 timing libraries.
+Reading netlist ...
+Backslashed names will retain backslash and a trailing blank character.
+Reading verilogBinary netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/vbin/top_soc.v.bin'
+
+*** Memory Usage v#2 (Current mem = 2250.492M, initial mem = 839.699M) ***
+*** End netlist parsing (cpu=0:00:00.2, real=0:00:00.0, mem=2250.5M) ***
+% End Load netlist data ... (date=10/09 21:20:29, total cpu=0:00:00.3, real=0:00:00.0, peak res=1869.7M, current mem=1869.7M)
+Set top cell to top_soc.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[3]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[2]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[1]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[0]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Type 'man IMPTS-124' for more detail.
+Hooked 810 DB cells to tlib cells.
+Starting recursive module instantiation check.
+No recursion found.
+Building hierarchical netlist for Cell top_soc ...
+***** UseNewTieNetMode *****.
+*** Netlist is unique.
+Set DBUPerIGU to techSite asap7sc7p5t width 54.
+** info: there are 2534 modules.
+** info: there are 141720 stdCell insts.
+** info: there are 141720 stdCell insts with at least one signal pin.
+** info: there are 84 macros.
+
+*** Memory Usage v#2 (Current mem = 2274.504M, initial mem = 839.699M) ***
+*info: set bottom ioPad orient R0
+
+Honor LEF defined pitches for advanced node
+Start create_tracks
+##  Process: 7             (User Set)               
+##     Node: (not set)                           
+
+##  Check design process and node:  
+##  Design tech node is not set.
+
+Applying the recommended capacitance filtering threshold values for 7nm process node: total_c_th=0, relative_c_th=1 and coupling_c_th=0.1.
+	These values will be used by all post-route extraction engines, including TQuantus, IQuantus and Quantus QRC extraction.
+	Capacitance filtering mode(-capFilterMode option of the setExtractRCMode) is 'relAndCoup' for all engines.
+	The accuracy mode for postRoute effortLevel low extraction will be set to 'high'.
+	Default value for EffortLevel(-effortLevel option of the setExtractRCMode) in postRoute extraction mode will be 'medium' if Quantus QRC technology file is specified else 'low'.
+**WARN: (IMPOPT-3602):	The specified path group name reg2reg is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Effort level <high> specified for reg2reg path_group
+Slack adjustment of -0 applied on reg2reg path_group
+**WARN: (IMPOPT-3602):	The specified path group name reg2cgate is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Effort level <high> specified for reg2cgate path_group
+Slack adjustment of -0 applied on reg2cgate path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_UART1 is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_UART1 path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_UART is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_UART path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_TIM1 is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_TIM1 path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_TIM0 is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_TIM0 path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_TCK is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_TCK path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_SYS is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_SYS path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_SPI is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_SPI path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_PWM is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_PWM path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_I2C is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_I2C path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_GPIO is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_GPIO path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_DBG is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_DBG path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_CPU is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_CPU path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_CORDIC is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_CORDIC path_group
+**WARN: (IMPOPT-3602):	The specified path group name cg_enable_group_CLK_ASCON is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on cg_enable_group_CLK_ASCON path_group
+**WARN: (IMPOPT-3602):	The specified path group name I2O is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on I2O path_group
+**WARN: (IMPOPT-3602):	The specified path group name I2C is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on I2C path_group
+**WARN: (IMPOPT-3602):	The specified path group name C2O is not defined.
+Type 'man IMPOPT-3602' for more detail.
+Slack adjustment of -0 applied on C2O path_group
+**WARN: (IMPTCM-77):	Option "-drouteStartIteration" for command setNanoRouteMode is obsolete and will be removed in a future release. The obsolete option still works in this release but to avoid this warning and to ensure compatibility with future releases, remove the obsolete option from your script.
+
+viaInitial starts at Fri Oct  9 21:20:30 2026
+viaInitial ends at Fri Oct  9 21:20:30 2026
+Setting -viarule_preference to default order. ViaGen will consider via rule priority based on the order of appearance in the technology file.
+AAE_INFO: switching setDelayCal -siAware from false to true ...
+AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
+addStripe will not allow jog to connect padcore ring and block ring.
+
+Stripes will use preferred direction when jogging to make connections.
+Change floorplan default-technical-site to 'asap7sc7p5t'.
+*Info: initialize multi-corner CTS.
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 46726)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 75682)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_RVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_RVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_TT_ccs_220123' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 46726)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 75682)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_LVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120' 
+Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
+Total number of combinational cells: 338
+Total number of sequential cells: 66
+Total number of tristate cells: 0
+Total number of level shifter cells: 0
+Total number of power gating cells: 0
+Total number of isolation cells: 0
+Total number of power switch cells: 0
+Total number of pulse generator cells: 0
+Total number of always on buffers: 0
+Total number of retention cells: 0
+Total number of physical cells: 0
+List of usable buffers: BUFx10_ASAP7_75t_L BUFx12_ASAP7_75t_L BUFx12f_ASAP7_75t_L BUFx16f_ASAP7_75t_L BUFx24_ASAP7_75t_L BUFx2_ASAP7_75t_L BUFx3_ASAP7_75t_L BUFx4_ASAP7_75t_L BUFx5_ASAP7_75t_L BUFx4f_ASAP7_75t_L BUFx6f_ASAP7_75t_L BUFx8_ASAP7_75t_L HB1xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx2_ASAP7_75t_R BUFx3_ASAP7_75t_R BUFx5_ASAP7_75t_R BUFx4f_ASAP7_75t_R BUFx6f_ASAP7_75t_R BUFx8_ASAP7_75t_R HB1xp67_ASAP7_75t_R
+Total number of usable buffers: 25
+List of unusable buffers:
+Total number of unusable buffers: 0
+List of usable inverters: CKINVDCx10_ASAP7_75t_L CKINVDCx12_ASAP7_75t_L CKINVDCx11_ASAP7_75t_L CKINVDCx14_ASAP7_75t_L CKINVDCx16_ASAP7_75t_L CKINVDCx20_ASAP7_75t_L CKINVDCx8_ASAP7_75t_L CKINVDCx5p33_ASAP7_75t_L CKINVDCx6p67_ASAP7_75t_L CKINVDCx9p33_ASAP7_75t_L INVx11_ASAP7_75t_L INVx13_ASAP7_75t_L INVx1_ASAP7_75t_L INVx2_ASAP7_75t_L INVx3_ASAP7_75t_L INVx4_ASAP7_75t_L INVx5_ASAP7_75t_L INVx6_ASAP7_75t_L INVx8_ASAP7_75t_L INVxp67_ASAP7_75t_L INVxp33_ASAP7_75t_L CKINVDCx10_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx11_ASAP7_75t_R CKINVDCx14_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx20_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R CKINVDCx5p33_ASAP7_75t_R CKINVDCx6p67_ASAP7_75t_R CKINVDCx9p33_ASAP7_75t_R INVx11_ASAP7_75t_R INVx13_ASAP7_75t_R INVx1_ASAP7_75t_R INVx2_ASAP7_75t_R INVx3_ASAP7_75t_R INVx4_ASAP7_75t_R INVx5_ASAP7_75t_R INVx6_ASAP7_75t_R INVx8_ASAP7_75t_R INVxp67_ASAP7_75t_R INVxp33_ASAP7_75t_R
+Total number of usable inverters: 42
+List of unusable inverters:
+Total number of unusable inverters: 0
+List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L BUFx24_ASAP7_75t_R BUFx4_ASAP7_75t_R HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_R
+Total number of identified usable delay cells: 7
+List of identified unusable delay cells:
+Total number of identified unusable delay cells: 0
+Reading floorplan file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.fp.gz (mem = 2685.6M).
+% Begin Load floorplan data ... (date=10/09 21:20:44, mem=2367.9M)
+*info: reset 159925 existing net BottomPreferredLayer and AvoidDetour
+Deleting old partition specification.
+Set FPlanBox to (0 0 565632 358128)
+ ... processed partition successfully.
+Reading binary special route file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.fp.spr.gz (Created by Innovus v23.14-s088_1 on Thu Oct  1 15:18:28 2026, version: 1)
+Convert 0 swires and 0 svias from compressed groups
+1970 swires and 126881 svias were compressed
+1970 swires and 7041 svias were decompressed from small or sparse groups
+Ending "Read special route file" (total cpu=0:00:01.7, real=0:00:01.0, peak res=2735.9M, current mem=2735.9M)
+There are 3493 nets with weight being set
+There are 3526 nets with bottomPreferredRoutingLayer being set
+There are 3493 nets with avoidDetour being set
+Extracting standard cell pins and blockage ...... 
+Pin and blockage extraction finished
+% End Load floorplan data ... (date=10/09 21:20:46, total cpu=0:00:01.9, real=0:00:02.0, peak res=2736.4M, current mem=2734.2M)
+Reading congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.route.congmap.gz ...
+Suppress "**WARN ..." messages.
+Un-suppress "**WARN ..." messages.
+% Begin Load SymbolTable ... (date=10/09 21:20:46, mem=2758.5M)
+% End Load SymbolTable ... (date=10/09 21:20:47, total cpu=0:00:01.0, real=0:00:01.0, peak res=2896.5M, current mem=2896.5M)
+Loading place ...
+% Begin Load placement data ... (date=10/09 21:20:47, mem=2896.5M)
+Reading placement file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.place.gz.
+** Reading stdCellPlacement_binary (Created by Innovus v23.14-s088_1 on Thu Oct  1 15:18:27 2026, version# 2) ...
+Read Views for adaptive view pruning ...
+Read 1 views from Binary DB for adaptive view pruning
+view_ss
+*** applyConnectGlobalNets disabled.
+*** Completed restorePlace (cpu=0:00:03.4 real=0:00:03.0 mem=3669.3M) ***
+Total net length = 1.059e+06 (5.172e+05 5.421e+05) (ext = 1.525e+04)
+% End Load placement data ... (date=10/09 21:20:51, total cpu=0:00:03.5, real=0:00:03.0, peak res=3394.9M, current mem=3393.0M)
+Reading PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on       Thu Oct  1 15:18:27 2026)
+*** Completed restorePGFile (cpu=0:00:00.3 real=0:00:00.0 mem=3701.3M) ***
+% Begin Load routing data ... (date=10/09 21:20:52, mem=3428.9M)
+Reading routing file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.route.gz.
+Reading Innovus routing data (Created by Innovus v23.14-s088_1 on Thu Oct  1 15:18:27 2026 Format: 23.1) ...
+*** Total 145057 nets are successfully restored.
+*** Completed restoreRoute (cpu=0:00:00.9 real=0:00:00.0 mem=3859.3M) ***
+% End Load routing data ... (date=10/09 21:20:52, total cpu=0:00:01.0, real=0:00:01.0, peak res=3590.1M, current mem=3590.1M)
+Loading Drc markers ...
+... 1118 markers are loaded ...
+... 6 geometry drc markers are loaded ...
+... 0 antenna drc markers are loaded ...
+TAT_INFO: ::restoreCongMap REAL = 0 : CPU = 0 : MEM = 0.
+Reading property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.prop
+*** Completed restoreProperty (cpu=0:00:00.4 real=0:00:00.0 mem=3868.4M) ***
+Reading dirtyarea snapshot file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.db.da.gz (Create by Innovus v23.14-s088_1 on Thu Oct  1 15:18:29 2026, version: 7).
+Loading preRoute extraction data from directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/extraction/' ...
+Extraction setup Started for TopCell top_soc 
+Initializing multi-corner RC extraction with 3 active RC Corners ...
+Generating auto layer map file.
+Importing multi-corner technology file(s) for preRoute extraction...
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02
+Generating auto layer map file.
+
+Completed (cpu: 0:00:07.1 real: 0:00:34.0)
+Set Shrink Factor to 1.00000
+Summary of Active RC-Corners : 
+ 
+ Analysis View: view_ss
+    RC-Corner Name        : rc_ss
+    RC-Corner Index       : 0
+    RC-Corner Temperature : 100 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PreRoute Res Factor         : 1
+    RC-Corner PreRoute Cap Factor         : 1
+    RC-Corner PostRoute Res Factor        : 1 {1 1 1}
+    RC-Corner PostRoute Cap Factor        : 1 {1 1 1}
+    RC-Corner PostRoute XCap Factor       : 1 {1 1 1}
+    RC-Corner PreRoute Clock Res Factor   : 1	[Derived from postRoute_res (effortLevel low)]
+    RC-Corner PreRoute Clock Cap Factor   : 1	[Derived from postRoute_cap (effortLevel low)]
+    RC-Corner PostRoute Clock Cap Factor  : 1 {1 1 1} 	[Derived from postRoute_cap (effortLevel medium)]
+    RC-Corner PostRoute Clock Res Factor  : 1 {1 1 1} 	[Derived from postRoute_res (effortLevel medium)]
+    RC-Corner PostRoute Clock coupling capacitance Factor : 1 {1 1 1} 	[Derived from postRoute_xcap (effortLevel medium)]
+    RC-Corner Technology file: '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02'
+ 
+ Analysis View: view_tt
+    RC-Corner Name        : rc_typ
+    RC-Corner Index       : 1
+    RC-Corner Temperature : 25 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PreRoute Res Factor         : 1
+    RC-Corner PreRoute Cap Factor         : 1
+    RC-Corner PostRoute Res Factor        : 1 {1 1 1}
+    RC-Corner PostRoute Cap Factor        : 1 {1 1 1}
+    RC-Corner PostRoute XCap Factor       : 1 {1 1 1}
+    RC-Corner PreRoute Clock Res Factor   : 1	[Derived from postRoute_res (effortLevel low)]
+    RC-Corner PreRoute Clock Cap Factor   : 1	[Derived from postRoute_cap (effortLevel low)]
+    RC-Corner PostRoute Clock Cap Factor  : 1 {1 1 1} 	[Derived from postRoute_cap (effortLevel medium)]
+    RC-Corner PostRoute Clock Res Factor  : 1 {1 1 1} 	[Derived from postRoute_res (effortLevel medium)]
+    RC-Corner PostRoute Clock coupling capacitance Factor : 1 {1 1 1} 	[Derived from postRoute_xcap (effortLevel medium)]
+    RC-Corner Technology file: '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02'
+ 
+ Analysis View: view_ff
+    RC-Corner Name        : rc_ff
+    RC-Corner Index       : 2
+    RC-Corner Temperature : 0 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PreRoute Res Factor         : 1
+    RC-Corner PreRoute Cap Factor         : 1
+    RC-Corner PostRoute Res Factor        : 1 {1 1 1}
+    RC-Corner PostRoute Cap Factor        : 1 {1 1 1}
+    RC-Corner PostRoute XCap Factor       : 1 {1 1 1}
+    RC-Corner PreRoute Clock Res Factor   : 1	[Derived from postRoute_res (effortLevel low)]
+    RC-Corner PreRoute Clock Cap Factor   : 1	[Derived from postRoute_cap (effortLevel low)]
+    RC-Corner PostRoute Clock Cap Factor  : 1 {1 1 1} 	[Derived from postRoute_cap (effortLevel medium)]
+    RC-Corner PostRoute Clock Res Factor  : 1 {1 1 1} 	[Derived from postRoute_res (effortLevel medium)]
+    RC-Corner PostRoute Clock coupling capacitance Factor : 1 {1 1 1} 	[Derived from postRoute_xcap (effortLevel medium)]
+    RC-Corner Technology file: '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02'
+Initializing multi-corner resistance tables ...
+Default value for postRoute extraction mode's effortLevel (-effortLevel option of setExtractRCMode) changed to 'medium'.
+dc_ss dc_tt dc_ff
+Start generating vias ..
+Extracting standard cell pins and blockage ...... 
+Pin and blockage extraction finished
+Via generation completed successfully.
+Generating auto layer map file.
+Initializing preRoute extraction patterns for new vias...
+Generating auto layer map file.
+
+Completed (cpu: 0:00:00.5 real: 0:00:01.0)
+% Begin Load power constraints ... (date=10/09 21:21:34, mem=512.3M)
+'set_default_switching_activity' finished successfully.
+% End Load power constraints ... (date=10/09 21:21:35, total cpu=0:00:00.1, real=0:00:01.0, peak res=526.2M, current mem=526.2M)
+dc_ss dc_tt dc_ff
+% Begin load AAE data ... (date=10/09 21:21:35, mem=645.6M)
+**WARN: (IMPESI-3505):	setDelayCalMode -eng_enablePrePlacedFlow false (default=false) will be obsoleted along with its sgs2set equivalent.  This parameter will continue to be supported in the current release, but will be removed in the next major release of the software.
+AAE DB initialization (MEM=711.878906 CPU=0:00:00.1 REAL=0:00:00.0) 
+% End load AAE data ... (date=10/09 21:21:36, total cpu=0:00:00.4, real=0:00:01.0, peak res=713.1M, current mem=713.1M)
+Restoring CCOpt config...
+  Extracting original clock gating for CLK_TCK...
+    clock_tree CLK_TCK contains 136 sinks and 6 clock gates.
+  Extracting original clock gating for CLK_TCK done.
+  Extracting original clock gating for CLK_SYS...
+    clock_tree CLK_SYS contains 34015 sinks and 1629 clock gates.
+  Extracting original clock gating for CLK_SYS done.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_CORDIC<1>...
+    clock_tree CLK_SYS_generator_for_CLK_CORDIC<1> contains 362 sinks and 8 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_CORDIC<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_CORDIC<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_UART1<1>...
+    clock_tree CLK_SYS_generator_for_CLK_UART1<1> contains 427 sinks and 47 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_UART1<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_UART1<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_UART<1>...
+    clock_tree CLK_SYS_generator_for_CLK_UART<1> contains 427 sinks and 47 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_UART<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_UART<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_TIM1<1>...
+    clock_tree CLK_SYS_generator_for_CLK_TIM1<1> contains 346 sinks and 12 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_TIM1<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_TIM1<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_TIM0<1>...
+    clock_tree CLK_SYS_generator_for_CLK_TIM0<1> contains 346 sinks and 12 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_TIM0<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_TIM0<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_SPI<1>...
+    clock_tree CLK_SYS_generator_for_CLK_SPI<1> contains 410 sinks and 44 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_SPI<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_SPI<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_PWM<1>...
+    clock_tree CLK_SYS_generator_for_CLK_PWM<1> contains 163 sinks and 4 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_PWM<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_PWM<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_I2C<1>...
+    clock_tree CLK_SYS_generator_for_CLK_I2C<1> contains 375 sinks and 45 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_I2C<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_I2C<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_GPIO<1>...
+    clock_tree CLK_SYS_generator_for_CLK_GPIO<1> contains 354 sinks and 7 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_GPIO<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_GPIO<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_DBG<1>...
+    clock_tree CLK_SYS_generator_for_CLK_DBG<1> contains 450 sinks and 17 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_DBG<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_DBG<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_CPU<1>...
+    clock_tree CLK_SYS_generator_for_CLK_CPU<1> contains 7881 sinks and 124 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_CPU<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_CPU<1>.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_ASCON<1>...
+    clock_tree CLK_SYS_generator_for_CLK_ASCON<1> contains 1272 sinks and 24 clock gates.
+  Extracting original clock gating for CLK_SYS_generator_for_CLK_ASCON<1> done.
+  Found 1 generator input for clock tree CLK_SYS_generator_for_CLK_ASCON<1>.
+  The skew group CLK_ASCON/mode_func was created. It contains 1272 sinks and 1 sources.
+  The skew group CLK_CORDIC/mode_func was created. It contains 362 sinks and 1 sources.
+  The skew group CLK_CPU/mode_func was created. It contains 7881 sinks and 1 sources.
+  The skew group CLK_DBG/mode_func was created. It contains 450 sinks and 1 sources.
+  The skew group CLK_GPIO/mode_func was created. It contains 354 sinks and 1 sources.
+  The skew group CLK_I2C/mode_func was created. It contains 375 sinks and 1 sources.
+  The skew group CLK_PWM/mode_func was created. It contains 163 sinks and 1 sources.
+  The skew group CLK_SPI/mode_func was created. It contains 410 sinks and 1 sources.
+  The skew group CLK_SYS/mode_func was created. It contains 34003 sinks and 1 sources.
+  The skew group CLK_TCK/mode_func was created. It contains 136 sinks and 1 sources.
+  The skew group CLK_TIM0/mode_func was created. It contains 346 sinks and 1 sources.
+  The skew group CLK_TIM1/mode_func was created. It contains 346 sinks and 1 sources.
+  The skew group CLK_UART/mode_func was created. It contains 427 sinks and 1 sources.
+  The skew group CLK_UART1/mode_func was created. It contains 427 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_01/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_02/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_03/mode_func was created. It contains 2 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_04/mode_func was created. It contains 6 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_05/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_06/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_07/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_08/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_09/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_10/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_11/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_12/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group CLK_SYS/mode_func was created. It contains 34003 sinks and 1 sources.
+  The skew group CLK_TCK/mode_func was created. It contains 136 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_01/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_02/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_03/mode_func was created. It contains 2 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_04/mode_func was created. It contains 6 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_05/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_06/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_07/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_08/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_09/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_10/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_11/mode_func was created. It contains 25 sinks and 1 sources.
+  The skew group _clock_gen_CLK_SYS_en_latch_reg_12/mode_func was created. It contains 25 sinks and 1 sources.
+Restoring CCOpt config done.
+Total number of combinational cells: 338
+Total number of sequential cells: 66
+Total number of tristate cells: 0
+Total number of level shifter cells: 0
+Total number of power gating cells: 0
+Total number of isolation cells: 0
+Total number of power switch cells: 0
+Total number of pulse generator cells: 0
+Total number of always on buffers: 0
+Total number of retention cells: 0
+Total number of physical cells: 0
+List of usable buffers: BUFx10_ASAP7_75t_L BUFx12_ASAP7_75t_L BUFx12f_ASAP7_75t_L BUFx16f_ASAP7_75t_L BUFx24_ASAP7_75t_L BUFx2_ASAP7_75t_L BUFx3_ASAP7_75t_L BUFx4_ASAP7_75t_L BUFx5_ASAP7_75t_L BUFx4f_ASAP7_75t_L BUFx6f_ASAP7_75t_L BUFx8_ASAP7_75t_L HB1xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx2_ASAP7_75t_R BUFx3_ASAP7_75t_R BUFx5_ASAP7_75t_R BUFx4f_ASAP7_75t_R BUFx6f_ASAP7_75t_R BUFx8_ASAP7_75t_R HB1xp67_ASAP7_75t_R
+Total number of usable buffers: 25
+List of unusable buffers:
+Total number of unusable buffers: 0
+List of usable inverters: CKINVDCx10_ASAP7_75t_L CKINVDCx12_ASAP7_75t_L CKINVDCx11_ASAP7_75t_L CKINVDCx14_ASAP7_75t_L CKINVDCx16_ASAP7_75t_L CKINVDCx20_ASAP7_75t_L CKINVDCx8_ASAP7_75t_L CKINVDCx5p33_ASAP7_75t_L CKINVDCx6p67_ASAP7_75t_L CKINVDCx9p33_ASAP7_75t_L INVx11_ASAP7_75t_L INVx13_ASAP7_75t_L INVx1_ASAP7_75t_L INVx2_ASAP7_75t_L INVx3_ASAP7_75t_L INVx4_ASAP7_75t_L INVx5_ASAP7_75t_L INVx6_ASAP7_75t_L INVx8_ASAP7_75t_L INVxp67_ASAP7_75t_L INVxp33_ASAP7_75t_L CKINVDCx10_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx11_ASAP7_75t_R CKINVDCx14_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx20_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R CKINVDCx5p33_ASAP7_75t_R CKINVDCx6p67_ASAP7_75t_R CKINVDCx9p33_ASAP7_75t_R INVx11_ASAP7_75t_R INVx13_ASAP7_75t_R INVx1_ASAP7_75t_R INVx2_ASAP7_75t_R INVx3_ASAP7_75t_R INVx4_ASAP7_75t_R INVx5_ASAP7_75t_R INVx6_ASAP7_75t_R INVx8_ASAP7_75t_R INVxp67_ASAP7_75t_R INVxp33_ASAP7_75t_R
+Total number of usable inverters: 42
+List of unusable inverters:
+Total number of unusable inverters: 0
+List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L BUFx24_ASAP7_75t_R BUFx4_ASAP7_75t_R HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_R
+Total number of identified usable delay cells: 7
+List of identified unusable delay cells:
+Total number of identified unusable delay cells: 0
+**WARN: (IMPCTE-107):	The following globals have been obsoleted since version (null). They will be removed in the next release. 
+timing_aocv_enable_gba_combine_launch_capture
+timing_enable_backward_compatible_latch_thru_mt_mode
+timing_enable_separate_device_slew_effect_sensitivities
+#% End load design ... (date=10/09 21:21:39, total cpu=0:01:09, real=0:01:51, peak res=12241.1M, current mem=895.3M)
+
+*** Summary of all messages that are not suppressed in this session:
+Severity  ID               Count  Summary                                  
+WARNING   IMPTS-124            5  Timing library description of pin '%s' i...
+WARNING   IMPVL-159            5  Pin '%s' of cell '%s' is defined in LEF ...
+WARNING   IMPESI-3505          1  setDelayCalMode -eng_%s (default=%s) wil...
+WARNING   IMPOPT-3602         19  The specified path group name %s is not ...
+WARNING   IMPCTE-107           1  The following globals have been obsolete...
+WARNING   IMPTCM-77            1  Option "%s" for command %s is obsolete a...
+WARNING   TECHLIB-1277        12  The %s '%s' has been defined for %s %s '...
+*** Message Summary: 44 warning(s), 0 error(s)
+
+<CMD> setMultiCpuUsage -acquireLicense 8 -localCpu 8
+<CMD> setDistributeHost -local
+The timeout for a remote job to respond is 3600 seconds.
+Submit command for task runs will be: local
+**WARN: (IMPMF-5047):	deleteMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use "dbDeleteObj [dbGet top.nets.sWires.shape fillwire -p]" and "dbDeleteObj [dbGet top.nets.sWires.shape fillwireopc -p]" to delete metal fill.
+**WARN: (IMPMF-5047):	deleteMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use "dbDeleteObj [dbGet top.nets.sWires.shape fillwire -p]" and "dbDeleteObj [dbGet top.nets.sWires.shape fillwireopc -p]" to delete metal fill.
+<CMD> setExtractRCMode -engine postRoute -effortLevel signoff -coupled true
+<CMD> setExtractRCMode -qrcCmdType auto
+<CMD> extractRC
+Extraction called for design 'top_soc' of instances=2323433 and nets=159926 using extraction engine 'postRoute' at effort level 'signoff' .
+rc_typ rc_ff rc_ss
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' after mapping to verilog name becomes 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram'. Check if 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' after mapping to verilog name becomes 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram'. Check if 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' after mapping to verilog name becomes 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram'. Check if 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram' is what you expected.
+**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' after mapping to verilog name becomes 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram'. Check if 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram' is what you expected.
+**WARN: (EMS-27):	Message (IMPDB-2125) has exceeded the current message display limit of 20.
+To increase the message display limit, refer to the product command reference manual.
+
+
+  Cadence Quantus Extraction - 64-bit Parasitic Extractor - Version
+23.1.1-s336 Mon Jan 20 22:24:34 PST 2025
+---------------------------------------------------------------------------------------------------------------
+                                  Copyright 2025 Cadence Design Systems,
+Inc.
+
+
+
+INFO (EXTQRCXLOG-128) : Quantus command line:
+ Started at: 2026-Oct-09 21:22:00 (2026-Oct-09 12:22:00 GMT)
+ Executable: /Cadence/DDI/INNOVUS231/tools.lnx86/extraction/bin/64bit/qrc
+ Options:     -cmd
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3/qrc.cmd
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3/qrc.def.gz
+ Current working directory:
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus
+
+
+INFO (EXTQRCXLOG-103) : The Command File Options for the current Quantus run are as follows:
+
+distributed_processing \
+	 -multi_cpu 8
+extract \
+	 -selection "all" \
+	 -type "rc_coupled"
+extraction_setup \
+	 -promote_pin_pad "LOGICAL"
+filter_coupling_cap \
+	 -cap_filtering_mode "absolute_and_relative" \
+	 -coupling_cap_threshold_absolute 0.1 \
+	 -coupling_cap_threshold_relative 1.0 \
+	 -total_cap_threshold 0.0
+input_db -type def \
+	 -lef_file_list_file "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3/qrc.leflist"
+log_file \
+	 -dump_options true \
+	 -file_name "qrc_3148336_20261009_21:21:51_448.log"
+output_db -type spef \
+	 -short_incomplete_net_pins true \
+	 -subtype "STARN"
+output_setup \
+	 -compressed true \
+	 -directory_name "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3" \
+	 -file_name "top_soc" \
+	 -temporary_directory_name "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3"
+process_technology \
+	 -technology_corner \
+		"rc_typ" \
+		"rc_typ" \
+		"rc_typ" \
+	 -technology_library_file "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3148336_250b78ff-07dd-475e-97e8-431d37a1cdcb_user1-EliteMini_user1_3nNSN3/tmp_qrc_cM7aO3/_qrc_techlib.defs" \
+	 -technology_name "_qrc_tech_" \
+	 -temperature \
+		"25" \
+		"0" \
+		"100"
+

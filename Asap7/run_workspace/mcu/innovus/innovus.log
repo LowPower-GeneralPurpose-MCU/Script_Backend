@@ -106697,3 +106697,8 @@ Merging GDS file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/inno
 **WARN: (IMPOGDS-280):	Maximum units in merge file is 4000. Use -units 20000 to avoid rounding issue.
 ######Streamout is finished!
 <CMD> write_lef_abstract -noCutObs ./outputs/top_soc.lef
+
+*** Memory Usage v#2 (Current mem = 13141.688M, initial mem = 839.699M) ***
+*** Message Summary: 274147 warning(s), 1 error(s)
+
+--- Ending "Innovus" (totcpu=11:19:07, real=199:35:11, mem=13141.7M) ---
