@@ -90,3 +90,7 @@
 # Tat ca deu tao lai duoc bang cach chay lai script.
 # ---------------------------------------------------------------------------
 **/tests/sim_work/
+**/qrc_*.log
+**/.*_soce_slave_*
+**/.*_launch_*
+**/.cce.env.*
