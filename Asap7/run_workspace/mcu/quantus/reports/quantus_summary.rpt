@@ -1,0 +1,6 @@
+DONE
+Quantus top_soc: effortLevel high, coupled, checkpoint ./saved/top_soc_final.enc.dat
+  thoi gian 252 s, QRC tech qrcTechFile_typ03_unscaledV02
+  rc_typ    144620 net        151567.6 fF   tQuantus KHOI 16:   144620 net        139933.5 fF   ti le 1.083   top_soc_quantus_rc_typ.spef
+  rc_ss     144620 net        151567.6 fF   tQuantus KHOI 16:   144620 net        139933.5 fF   ti le 1.083   top_soc_quantus_rc_ss.spef
+  rc_ff     144620 net        151567.6 fF   tQuantus KHOI 16:   144620 net        139933.5 fF   ti le 1.083   top_soc_quantus_rc_ff.spef
