@@ -4,17 +4,17 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
 Options:	-no_gui -files ../quantus/quantus.tcl -log ../quantus/logs/quantus 
-Date:		Fri Oct  9 23:33:50 2026
+Date:		Sat Oct 10 00:45:53 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04.1 LTS
 
 License:
-		[23:33:54.206242] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[00:45:57.206250] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		invs	Innovus Implementation System	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 3815855 / 97a97337-5f2c-4737-b38d-033c071439e1 / 3hYSROsbzw
+Info: Process UID = 4167797 / 2f397557-f89b-4a38-bfad-c367125624f0 / lScBLp4fRO
 
 **INFO:  MMMC transition support version v31-84 
 
@@ -28,20 +28,20 @@ Info: Process UID = 3815855 / 97a97337-5f2c-4737-b38d-033c071439e1 / 3hYSROsbzw
 Sourcing file "../quantus/quantus.tcl" ...
 source ../quantus/quantus.tcl
 <CMD> restoreDesign ./saved/top_soc_final.enc.dat top_soc
-#% Begin load design ... (date=10/09 23:34:10, mem=1712.1M)
+#% Begin load design ... (date=10/10 00:46:12, mem=1710.3M)
 Loading design 'top_soc' saved by 'Innovus' '23.14-s088_1' on 'Thu Oct 1 15:18:32 2026'.
-% Begin Load MMMC data ... (date=10/09 23:34:12, mem=1714.3M)
-% End Load MMMC data ... (date=10/09 23:34:12, total cpu=0:00:00.0, real=0:00:00.0, peak res=1715.8M, current mem=1715.8M)
+% Begin Load MMMC data ... (date=10/10 00:46:13, mem=1712.4M)
+% End Load MMMC data ... (date=10/10 00:46:13, total cpu=0:00:00.0, real=0:00:00.0, peak res=1713.9M, current mem=1713.9M)
 rc_typ rc_ff rc_ss
 
 Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/asap7_tech_1x_201209.fixed.lef ...
 
 Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/asap7sc7p5t_28_R_1x_220121a.lef ...
 Set DBUPerIGU to M1 pitch 36.
-[23:34:22.277635] Periodic Lic check successful
-[23:34:22.277642] Feature usage summary:
-[23:34:22.277642] Innovus_Impl_System
-[23:34:22.277643] Innovus_7nm_Opt
+[00:46:23.478715] Periodic Lic check successful
+[00:46:23.478730] Feature usage summary:
+[00:46:23.478731] Innovus_Impl_System
+[00:46:23.478731] Innovus_7nm_Opt
 
 (#124) This command "restoreDesign ./saved/top_soc_final.enc.dat top_soc" required an extra checkout of license invs_7nm.
 Additional license(s) checked out: 1 'invs_7nm' (Innovus_7nm_Opt; INVS07; 23.1) license(s)
@@ -108,9 +108,9 @@ Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/C
 Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120' 
 Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
-*** End library_loading (cpu=0.45min, real=0.47min, mem=544.1M, fe_cpu=0.70min, fe_real=1.00min, fe_mem=2250.8M) ***
-% Begin Load netlist data ... (date=10/09 23:34:50, mem=1749.7M)
-*** Begin netlist parsing (mem=2250.8M) ***
+*** End library_loading (cpu=0.48min, real=0.50min, mem=544.1M, fe_cpu=0.73min, fe_real=1.00min, fe_mem=2250.5M) ***
+% Begin Load netlist data ... (date=10/10 00:46:53, mem=1744.6M)
+*** Begin netlist parsing (mem=2250.5M) ***
 **WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
 Type 'man IMPVL-159' for more detail.
 **WARN: (IMPVL-159):	Pin 'sdel[1]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
@@ -126,9 +126,9 @@ Reading netlist ...
 Backslashed names will retain backslash and a trailing blank character.
 Reading verilogBinary netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/vbin/top_soc.v.bin'
 
-*** Memory Usage v#2 (Current mem = 2250.773M, initial mem = 847.699M) ***
-*** End netlist parsing (cpu=0:00:00.2, real=0:00:00.0, mem=2250.8M) ***
-% End Load netlist data ... (date=10/09 23:34:50, total cpu=0:00:00.2, real=0:00:00.0, peak res=1877.5M, current mem=1877.5M)
+*** Memory Usage v#2 (Current mem = 2250.523M, initial mem = 847.699M) ***
+*** End netlist parsing (cpu=0:00:00.2, real=0:00:00.0, mem=2250.5M) ***
+% End Load netlist data ... (date=10/10 00:46:53, total cpu=0:00:00.2, real=0:00:00.0, peak res=1872.3M, current mem=1872.3M)
 Set top cell to top_soc.
 **WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
 Type 'man IMPTS-124' for more detail.
@@ -152,7 +152,7 @@ Set DBUPerIGU to techSite asap7sc7p5t width 54.
 ** info: there are 141720 stdCell insts with at least one signal pin.
 ** info: there are 84 macros.
 
-*** Memory Usage v#2 (Current mem = 2274.785M, initial mem = 847.699M) ***
+*** Memory Usage v#2 (Current mem = 2274.535M, initial mem = 847.699M) ***
 *info: set bottom ioPad orient R0
 
 Honor LEF defined pitches for advanced node
@@ -229,8 +229,8 @@ Type 'man IMPOPT-3602' for more detail.
 Slack adjustment of -0 applied on C2O path_group
 **WARN: (IMPTCM-77):	Option "-drouteStartIteration" for command setNanoRouteMode is obsolete and will be removed in a future release. The obsolete option still works in this release but to avoid this warning and to ensure compatibility with future releases, remove the obsolete option from your script.
 
-viaInitial starts at Fri Oct  9 23:34:50 2026
-viaInitial ends at Fri Oct  9 23:34:50 2026
+viaInitial starts at Sat Oct 10 00:46:54 2026
+viaInitial ends at Sat Oct 10 00:46:54 2026
 Setting -viarule_preference to default order. ViaGen will consider via rule priority based on the order of appearance in the technology file.
 AAE_INFO: switching setDelayCal -siAware from false to true ...
 AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
@@ -286,8 +286,8 @@ List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L B
 Total number of identified usable delay cells: 7
 List of identified unusable delay cells:
 Total number of identified unusable delay cells: 0
-Reading floorplan file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.fp.gz (mem = 2685.8M).
-% Begin Load floorplan data ... (date=10/09 23:35:05, mem=2375.2M)
+Reading floorplan file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.fp.gz (mem = 2692.8M).
+% Begin Load floorplan data ... (date=10/10 00:47:10, mem=2204.4M)
 *info: reset 159925 existing net BottomPreferredLayer and AvoidDetour
 Deleting old partition specification.
 Set FPlanBox to (0 0 565632 358128)
@@ -296,44 +296,44 @@ Reading binary special route file /home/user1/Desktop/Script_Backend/Asap7/run_w
 Convert 0 swires and 0 svias from compressed groups
 1970 swires and 126881 svias were compressed
 1970 swires and 7041 svias were decompressed from small or sparse groups
-Ending "Read special route file" (total cpu=0:00:01.7, real=0:00:02.0, peak res=2743.1M, current mem=2743.1M)
+Ending "Read special route file" (total cpu=0:00:01.7, real=0:00:02.0, peak res=2569.3M, current mem=2569.3M)
 There are 3493 nets with weight being set
 There are 3526 nets with bottomPreferredRoutingLayer being set
 There are 3493 nets with avoidDetour being set
 Extracting standard cell pins and blockage ...... 
 Pin and blockage extraction finished
-% End Load floorplan data ... (date=10/09 23:35:07, total cpu=0:00:01.8, real=0:00:02.0, peak res=2743.1M, current mem=2741.5M)
+% End Load floorplan data ... (date=10/10 00:47:12, total cpu=0:00:01.9, real=0:00:02.0, peak res=2569.5M, current mem=2567.7M)
 Reading congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.route.congmap.gz ...
 Suppress "**WARN ..." messages.
 Un-suppress "**WARN ..." messages.
-% Begin Load SymbolTable ... (date=10/09 23:35:07, mem=2765.6M)
-% End Load SymbolTable ... (date=10/09 23:35:08, total cpu=0:00:00.9, real=0:00:01.0, peak res=2903.7M, current mem=2903.7M)
+% Begin Load SymbolTable ... (date=10/10 00:47:12, mem=2591.9M)
+% End Load SymbolTable ... (date=10/10 00:47:13, total cpu=0:00:00.9, real=0:00:01.0, peak res=2729.9M, current mem=2729.9M)
 Loading place ...
-% Begin Load placement data ... (date=10/09 23:35:08, mem=2903.7M)
+% Begin Load placement data ... (date=10/10 00:47:13, mem=2729.9M)
 Reading placement file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.place.gz.
 ** Reading stdCellPlacement_binary (Created by Innovus v23.14-s088_1 on Thu Oct  1 15:18:27 2026, version# 2) ...
 Read Views for adaptive view pruning ...
 Read 1 views from Binary DB for adaptive view pruning
 view_ss
 *** applyConnectGlobalNets disabled.
-*** Completed restorePlace (cpu=0:00:03.2 real=0:00:03.0 mem=3670.6M) ***
+*** Completed restorePlace (cpu=0:00:03.3 real=0:00:03.0 mem=3668.6M) ***
 Total net length = 1.059e+06 (5.172e+05 5.421e+05) (ext = 1.525e+04)
-% End Load placement data ... (date=10/09 23:35:11, total cpu=0:00:03.3, real=0:00:03.0, peak res=3401.5M, current mem=3400.3M)
+% End Load placement data ... (date=10/10 00:47:16, total cpu=0:00:03.4, real=0:00:03.0, peak res=3231.0M, current mem=3229.5M)
 Reading PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on       Thu Oct  1 15:18:27 2026)
-*** Completed restorePGFile (cpu=0:00:00.3 real=0:00:00.0 mem=3701.6M) ***
-% Begin Load routing data ... (date=10/09 23:35:11, mem=3436.1M)
+*** Completed restorePGFile (cpu=0:00:00.3 real=0:00:01.0 mem=3700.6M) ***
+% Begin Load routing data ... (date=10/10 00:47:17, mem=3265.3M)
 Reading routing file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.route.gz.
 Reading Innovus routing data (Created by Innovus v23.14-s088_1 on Thu Oct  1 15:18:27 2026 Format: 23.1) ...
 *** Total 145057 nets are successfully restored.
-*** Completed restoreRoute (cpu=0:00:00.9 real=0:00:00.0 mem=3860.6M) ***
-% End Load routing data ... (date=10/09 23:35:12, total cpu=0:00:01.0, real=0:00:01.0, peak res=3600.3M, current mem=3600.3M)
+*** Completed restoreRoute (cpu=0:00:00.9 real=0:00:01.0 mem=3858.6M) ***
+% End Load routing data ... (date=10/10 00:47:18, total cpu=0:00:01.0, real=0:00:01.0, peak res=3426.7M, current mem=3426.7M)
 Loading Drc markers ...
 ... 1118 markers are loaded ...
 ... 6 geometry drc markers are loaded ...
 ... 0 antenna drc markers are loaded ...
 TAT_INFO: ::restoreCongMap REAL = 0 : CPU = 0 : MEM = 0.
 Reading property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.prop
-*** Completed restoreProperty (cpu=0:00:00.4 real=0:00:00.0 mem=3869.6M) ***
+*** Completed restoreProperty (cpu=0:00:00.4 real=0:00:00.0 mem=3867.6M) ***
 Reading dirtyarea snapshot file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.db.da.gz (Create by Innovus v23.14-s088_1 on Thu Oct  1 15:18:29 2026, version: 7).
 Loading preRoute extraction data from directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/extraction/' ...
 Extraction setup Started for TopCell top_soc 
@@ -343,7 +343,7 @@ Importing multi-corner technology file(s) for preRoute extraction...
 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02
 Generating auto layer map file.
 
-Completed (cpu: 0:00:07.1 real: 0:00:30.0)
+Completed (cpu: 0:00:07.0 real: 0:00:30.0)
 Set Shrink Factor to 1.00000
 Summary of Active RC-Corners : 
  
@@ -409,14 +409,14 @@ Initializing preRoute extraction patterns for new vias...
 Generating auto layer map file.
 
 Completed (cpu: 0:00:00.4 real: 0:00:01.0)
-% Begin Load power constraints ... (date=10/09 23:35:50, mem=512.9M)
+% Begin Load power constraints ... (date=10/10 00:47:55, mem=625.1M)
 'set_default_switching_activity' finished successfully.
-% End Load power constraints ... (date=10/09 23:35:50, total cpu=0:00:00.1, real=0:00:00.0, peak res=526.8M, current mem=526.8M)
+% End Load power constraints ... (date=10/10 00:47:55, total cpu=0:00:00.1, real=0:00:00.0, peak res=637.8M, current mem=637.8M)
 dc_ss dc_tt dc_ff
-% Begin load AAE data ... (date=10/09 23:35:51, mem=646.2M)
+% Begin load AAE data ... (date=10/10 00:47:56, mem=754.6M)
 **WARN: (IMPESI-3505):	setDelayCalMode -eng_enablePrePlacedFlow false (default=false) will be obsoleted along with its sgs2set equivalent.  This parameter will continue to be supported in the current release, but will be removed in the next major release of the software.
-AAE DB initialization (MEM=712.488281 CPU=0:00:00.1 REAL=0:00:01.0) 
-% End load AAE data ... (date=10/09 23:35:52, total cpu=0:00:00.4, real=0:00:01.0, peak res=713.7M, current mem=713.7M)
+AAE DB initialization (MEM=819.687500 CPU=0:00:00.1 REAL=0:00:00.0) 
+% End load AAE data ... (date=10/10 00:47:56, total cpu=0:00:00.4, real=0:00:01.0, peak res=820.8M, current mem=820.8M)
 Restoring CCOpt config...
   Extracting original clock gating for CLK_TCK...
     clock_tree CLK_TCK contains 136 sinks and 6 clock gates.
@@ -540,7 +540,7 @@ Total number of identified unusable delay cells: 0
 timing_aocv_enable_gba_combine_launch_capture
 timing_enable_backward_compatible_latch_thru_mt_mode
 timing_enable_separate_device_slew_effect_sensitivities
-#% End load design ... (date=10/09 23:35:55, total cpu=0:01:06, real=0:01:45, peak res=14332.6M, current mem=895.8M)
+#% End load design ... (date=10/10 00:47:59, total cpu=0:01:10, real=0:01:47, peak res=11028.8M, current mem=985.8M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -553,7 +553,7 @@ WARNING   IMPTCM-77            1  Option "%s" for command %s is obsolete a...
 WARNING   TECHLIB-1277        12  The %s '%s' has been defined for %s %s '...
 *** Message Summary: 44 warning(s), 0 error(s)
 
-<CMD> setMultiCpuUsage -acquireLicense 8 -localCpu 8
+<CMD> setMultiCpuUsage -acquireLicense 1 -localCpu 1
 <CMD> setDistributeHost -local
 The timeout for a remote job to respond is 3600 seconds.
 Submit command for task runs will be: local
@@ -565,7 +565,7 @@ Extraction called for design 'top_soc' of instances=2323433 and nets=159926 usin
 Integrated QRC (IQuantus) Extraction in Multi-Corner mode called for design 'top_soc'. Number of corners is 3.
 No IQuantus parasitic data in Innovus. Going for full-chip extraction.
  Min pitch recieved = 144 
-IQuantus Extraction invoked in multi (8) processes mode on local host.
+IQuantus Extraction invoked in single CPU mode. Commands setDistributeHost/setMultiCpuUsage can be used to activate multiCPU extraction.
 
 IQuantus Extraction engine initialization using 3 tech files:
 	/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02 at temperature 100C , 
@@ -580,13 +580,13 @@ INFO (EXTIQUANTUS-101) :
                Copyright 2025 Cadence Design Systems, Inc.
 
 
-INFO (EXTIQUANTUS-103) : Starting at 2026-Oct-09 23:36:11 (2026-Oct-09 14:36:11 GMT).
+INFO (EXTIQUANTUS-103) : Starting at 2026-Oct-10 00:48:15 (2026-Oct-09 15:48:15 GMT).
 
 INFO (EXTIQUANTUS-104) : Starting extraction session...
 
 INFO (EXTIQUANTUS-159) : Loading technology data from file:
  
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3815855_97a97337-5f2c-4737-b38d-033c071439e1_user1-EliteMini_user1_Vm9dtM/iqrc_tmp_3815855_lFPnGG/.qrctemp/CceRCGEN0tch3815855
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_4167797_2f397557-f89b-4a38-bfad-c367125624f0_user1-EliteMini_user1_dHLuNb/iqrc_tmp_4167797_2SrYJG/.qrctemp/CceRCGEN0tch4167797
 
 INFO (EXTIQUANTUS-159) : Loading technology data from file:
  
@@ -594,18 +594,18 @@ INFO (EXTIQUANTUS-159) : Loading technology data from file:
 
 INFO (EXTIQUANTUS-289) : Loading RCgen extraction models from file:
  
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3815855_97a97337-5f2c-4737-b38d-033c071439e1_user1-EliteMini_user1_Vm9dtM/iqrc_tmp_3815855_lFPnGG/.qrctemp/CceRCGEN0tch3815855
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_4167797_2f397557-f89b-4a38-bfad-c367125624f0_user1-EliteMini_user1_dHLuNb/iqrc_tmp_4167797_2SrYJG/.qrctemp/CceRCGEN0tch4167797
 
 INFO (EXTIQUANTUS-345) : Checking Command/Tech/License Files. 
 
 INFO (EXTIQUANTUS-383) : Summary of license(s) checkout :
-	4 count of QTS300
+	1 count of QTS300
 	1 count of QTS310
 	1 count of QTS320
 	1 count of QTS530
 
 INFO (EXTIQUANTUS-105) : Starting design extraction....
-No layermap file specified. Automatically mapping tech and lef layers. Log file is 'extLogDir/IQuantus_09-Oct-2026_23:36:07_3815855_t5ddw7/extr.top_soc.layermap.log'.
+No layermap file specified. Automatically mapping tech and lef layers. Log file is 'extLogDir/IQuantus_10-Oct-2026_00:48:11_4167797_s9waUx/extr.top_soc.layermap.log'.
 Layer Gate with id 67 --> gate  1
 **WARN: (IMPEXT-1221):	No poly layer found in the technology file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02'.
 Type 'man IMPEXT-1221' for more detail.
@@ -643,11 +643,11 @@ db Layer Pad with id 10 --> m9  20
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 IQuantus Extraction engine initialized successfully.
 
-Dumping IQuantus extraction options in file 'extLogDir/IQuantus_09-Oct-2026_23:36:07_3815855_t5ddw7/extr.top_soc.extraction_options.log'.
-Initialization for IQuantus Fullchip Extraction DONE (CPU Time: 0:00:06.3  Real Time: 0:00:14.0  MEM: 4235.953M)
+Dumping IQuantus extraction options in file 'extLogDir/IQuantus_10-Oct-2026_00:48:11_4167797_s9waUx/extr.top_soc.extraction_options.log'.
+Initialization for IQuantus Fullchip Extraction DONE (CPU Time: 0:00:06.3  Real Time: 0:00:13.0  MEM: 4236.961M)
 
-Geometry processing of Gray and Metal fill STARTED.................... DONE (CPU Time: 0:00:05.4  Real Time: 0:00:09.0  MEM: 4395.953M)
-Geometry processing of nets STARTED******** DONE (NETS: 144620  Geometries: 2926221  CPU Time: 0:00:10.1  Real Time: 0:00:06.0  MEM: 5122.516M)
+Geometry processing of Gray and Metal fill STARTED.................... DONE (CPU Time: 0:00:05.3  Real Time: 0:00:08.0  MEM: 4396.961M)
+Geometry processing of nets STARTED.................... DONE (NETS: 144620  Geometries: 2926221  CPU Time: 0:00:04.7  Real Time: 0:00:06.0  MEM: 4553.461M)
 
 Extraction of Geometries STARTED.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -681,662 +681,245 @@ INFO (EXTIQUANTUS-286) : RCs effects computed for this session include :-
  TC(w) Effects     : n/a 
 Some effects indicate n/a because of non-availability of relevantinput data
 (or) requested to be off (and/or) usage of older Icecaps models.
-Creating 8 parallel subjobs for IQuantus extraction...
-EDP: start server on user1-EliteMini:35811
-EDP: start server on user1-EliteMini:52471
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
- (0) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (1) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (2) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (3) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (4) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (5) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (6) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
- (7) rss(0.000000) virt(0.000000) drt(0.000000) des(0.000000) cpuTime(0.000000) realTime (0.000000)
-num of slaves (8) totalRss(0.000000) totalVirt (0.000000) totalDrt(0.000000) totalDes(0.000000) totalCpuTime (0.000000) totalRealTime(0.000000) 
-**INFO (INTERRUPT): The current script will stop before next command.
-**INFO (INTERRUPT): One more Ctrl-C to exit Innovus ...
-Innovus terminated by user interrupt.
 
-*** Memory Usage v#2 (Current mem = 5180.504M, initial mem = 847.699M) ***
+INFO (EXTHPY-103) : Extracting capacitance values.
+
+INFO (EXTHPY-267) :  
+ DESIGN                       : 
+ DEF/OA DIEAREA BBOX          : 2147483647 2147483647 -2147483648
+-2147483648
+ DEF/OA UNITS                 : 10000
+ FINAL SCALE FACTOR           : 1
+ 
+ ESTIMATED COMPRESSED DEF SIZE: 0
+ TILE SIZE                    : 50x50 squm
+ TILE COUNT                   : 96
+ CLUSTER SIZE                 : 257
+ CAPDB PARTITIONS             : 16
+
+INFO (EXTHPY-104) :    0%
+
+INFO (EXTHPY-104) :    1%
+
+INFO (EXTHPY-104) :    2%
+
+INFO (EXTHPY-104) :    3%
+
+INFO (EXTHPY-104) :    4%
+
+INFO (EXTHPY-104) :    5%
+
+INFO (EXTHPY-104) :    6%
+
+INFO (EXTHPY-104) :    7%
+
+INFO (EXTHPY-104) :    8%
+
+INFO (EXTHPY-104) :    9%
+
+INFO (EXTHPY-104) :    11%
+
+INFO (EXTHPY-104) :    12%
+
+INFO (EXTHPY-104) :    13%
+
+INFO (EXTHPY-104) :    14%
+
+INFO (EXTHPY-104) :    15%
+
+INFO (EXTHPY-104) :    16%
+
+INFO (EXTHPY-104) :    17%
+
+INFO (EXTHPY-104) :    18%
+
+INFO (EXTHPY-104) :    19%
+
+INFO (EXTHPY-104) :    20%
+
+INFO (EXTHPY-104) :    21%
+
+INFO (EXTHPY-104) :    22%
+
+INFO (EXTHPY-104) :    23%
+
+INFO (EXTHPY-104) :    24%
+
+INFO (EXTHPY-104) :    25%
+
+INFO (EXTHPY-104) :    26%
+
+INFO (EXTHPY-104) :    27%
+
+INFO (EXTHPY-104) :    28%
+
+INFO (EXTHPY-104) :    29%
+
+INFO (EXTHPY-104) :    31%
+
+INFO (EXTHPY-104) :    32%
+
+INFO (EXTHPY-104) :    33%
+
+INFO (EXTHPY-104) :    34%
+
+INFO (EXTHPY-104) :    35%
+
+INFO (EXTHPY-104) :    36%
+
+INFO (EXTHPY-104) :    37%
+
+INFO (EXTHPY-104) :    38%
+
+INFO (EXTHPY-104) :    39%
+
+INFO (EXTHPY-104) :    40%
+
+INFO (EXTHPY-104) :    41%
+
+INFO (EXTHPY-104) :    42%
+
+INFO (EXTHPY-104) :    43%
+
+INFO (EXTHPY-104) :    44%
+
+INFO (EXTHPY-104) :    45%
+
+INFO (EXTHPY-104) :    46%
+
+INFO (EXTHPY-104) :    47%
+
+INFO (EXTHPY-104) :    48%
+
+INFO (EXTHPY-104) :    49%
+
+INFO (EXTHPY-104) :    51%
+
+INFO (EXTHPY-104) :    52%
+
+INFO (EXTHPY-104) :    53%
+
+INFO (EXTHPY-104) :    54%
+
+INFO (EXTHPY-104) :    55%
+
+INFO (EXTHPY-104) :    56%
+
+INFO (EXTHPY-104) :    57%
+
+INFO (EXTHPY-104) :    58%
+
+INFO (EXTHPY-104) :    59%
+
+INFO (EXTHPY-104) :    60%
+
+INFO (EXTHPY-104) :    61%
+
+INFO (EXTHPY-104) :    62%
+
+INFO (EXTHPY-104) :    63%
+
+INFO (EXTHPY-104) :    64%
+
+INFO (EXTHPY-104) :    65%
+
+INFO (EXTHPY-104) :    66%
+
+INFO (EXTHPY-104) :    67%
+
+INFO (EXTHPY-104) :    68%
+
+INFO (EXTHPY-104) :    69%
+
+INFO (EXTHPY-104) :    71%
+
+INFO (EXTHPY-104) :    72%
+
+INFO (EXTHPY-104) :    73%
+
+INFO (EXTHPY-104) :    74%
+
+INFO (EXTHPY-104) :    75%
+
+INFO (EXTHPY-104) :    76%
+
+INFO (EXTHPY-104) :    77%
+
+INFO (EXTHPY-104) :    78%
+
+INFO (EXTHPY-104) :    79%
+
+INFO (EXTHPY-104) :    80%
+
+INFO (EXTHPY-104) :    81%
+
+INFO (EXTHPY-104) :    82%
+
+INFO (EXTHPY-104) :    83%
+
+INFO (EXTHPY-104) :    84%
+
+INFO (EXTHPY-104) :    85%
+
+INFO (EXTHPY-104) :    86%
+
+INFO (EXTHPY-104) :    87%
+
+INFO (EXTHPY-104) :    88%
+
+INFO (EXTHPY-104) :    89%
+
+INFO (EXTHPY-104) :    91%
+
+INFO (EXTHPY-104) :    92%
+
+INFO (EXTHPY-104) :    93%
+
+INFO (EXTHPY-104) :    94%
+
+INFO (EXTHPY-104) :    95%
+
+INFO (EXTHPY-104) :    96%
+
+INFO (EXTHPY-104) :    97%
+
+INFO (EXTHPY-104) :    98%
+
+INFO (EXTHPY-104) :    99%
+
+INFO (EXTHPY-104) :    100%
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Extraction of Geometries DONE (NETS: 144620  CPU Time: 0:01:22  Real Time: 0:01:23  MEM: 5039.953M)
+
+Parasitic Network Creation STARTED
+....................
+Number of Extracted Resistors     : 1652793
+Number of Extracted Ground Caps   : 1807212
+Number of Extracted Coupling Caps : 106508
+Parasitic Network Creation DONE (Nets: 144620  CPU Time: 0:00:04.2  Real Time: 0:00:04.0  MEM: 5039.953M)
+
+IQuantus Extraction engine is being closed... 
+IQuantus Fullchip Extraction DONE (CPU Time: 0:01:45  Real Time: 0:01:56  MEM: 5039.953M)
+<CMD> rcOut -spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef -rc_corner rc_typ
+RC Out has the following PVT Info:
+   RC:rc_typ
+Dumping Spef file.....
+Printing D_NET...
+RC Out from RCDB Completed (CPU Time= 0:00:04.5  MEM= 5040.0M)
+<CMD> rcOut -spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef -rc_corner rc_ss
+RC Out has the following PVT Info:
+   RC:rc_ss
+Dumping Spef file.....
+Printing D_NET...
+RC Out from RCDB Completed (CPU Time= 0:00:04.5  MEM= 5040.0M)
+<CMD> rcOut -spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef -rc_corner rc_ff
+RC Out has the following PVT Info:
+   RC:rc_ff
+Dumping Spef file.....
+Printing D_NET...
+RC Out from RCDB Completed (CPU Time= 0:00:04.6  MEM= 5040.0M)
+
+*** Memory Usage v#2 (Current mem = 5039.953M, initial mem = 847.699M) ***
 *** Message Summary: 48 warning(s), 0 error(s)
 
---- Ending "Innovus" (totcpu=0:01:55, real=0:48:44, mem=5180.5M) ---
+--- Ending "Innovus" (totcpu=0:03:38, real=0:04:31, mem=5040.0M) ---
