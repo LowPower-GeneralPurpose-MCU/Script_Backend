@@ -4,7 +4,8 @@
 # Bien doi duoc tu dong lenh:
 #     make all QUANTUS_EFFORT=high   IQuantus tich hop (may khong co lenh qrc)
 #     make all QRC_BIN=/duong/dan/qrc
-#     make all QUANTUS_CPUS=1        neu qrc treo khi chay nhieu tien trinh
+#     make all QUANTUS_CPUS=8        mac dinh 1: nhieu tien trinh lam extractRC
+#                                    treo tren may nay (xem quantus.tcl)
 
 INNOVUS    ?= innovus
 RUN_DIR    := ../innovus
