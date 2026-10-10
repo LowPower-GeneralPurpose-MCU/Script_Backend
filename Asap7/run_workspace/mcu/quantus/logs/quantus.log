@@ -4,17 +4,17 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
 Options:	-no_gui -files ../quantus/quantus.tcl -log ../quantus/logs/quantus 
-Date:		Sat Oct 10 16:43:22 2026
+Date:		Sat Oct 10 17:01:26 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04.1 LTS
 
 License:
-		[16:43:27.206266] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[17:01:31.206186] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		invs	Innovus Implementation System	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 489995 / 5eca9d40-2b96-40cf-9896-6fd001323402 / wQlSYvNaNe
+Info: Process UID = 577652 / e034b3f9-a143-493b-b004-95b769d58832 / LxBSBHwd6T
 
 **INFO:  MMMC transition support version v31-84 
 
@@ -28,20 +28,20 @@ Info: Process UID = 489995 / 5eca9d40-2b96-40cf-9896-6fd001323402 / wQlSYvNaNe
 Sourcing file "../quantus/quantus.tcl" ...
 source ../quantus/quantus.tcl
 <CMD> restoreDesign ./saved/top_soc_final.enc.dat top_soc
-#% Begin load design ... (date=10/10 16:43:44, mem=1647.1M)
+#% Begin load design ... (date=10/10 17:01:45, mem=1654.1M)
 Loading design 'top_soc' saved by 'Innovus' '23.14-s088_1' on 'Thu Oct 1 15:18:32 2026'.
-% Begin Load MMMC data ... (date=10/10 16:43:46, mem=1649.4M)
-% End Load MMMC data ... (date=10/10 16:43:46, total cpu=0:00:00.0, real=0:00:00.0, peak res=1650.9M, current mem=1650.9M)
+% Begin Load MMMC data ... (date=10/10 17:01:47, mem=1655.6M)
+% End Load MMMC data ... (date=10/10 17:01:47, total cpu=0:00:00.1, real=0:00:00.0, peak res=1657.1M, current mem=1657.1M)
 rc_typ rc_ff rc_ss
 
 Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/asap7_tech_1x_201209.fixed.lef ...
 
 Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/asap7sc7p5t_28_R_1x_220121a.lef ...
 Set DBUPerIGU to M1 pitch 36.
-[16:43:56.187307] Periodic Lic check successful
-[16:43:56.187322] Feature usage summary:
-[16:43:56.187323] Innovus_Impl_System
-[16:43:56.187323] Innovus_7nm_Opt
+[17:01:57.455963] Periodic Lic check successful
+[17:01:57.455977] Feature usage summary:
+[17:01:57.455978] Innovus_Impl_System
+[17:01:57.455978] Innovus_7nm_Opt
 
 (#124) This command "restoreDesign ./saved/top_soc_final.enc.dat top_soc" required an extra checkout of license invs_7nm.
 Additional license(s) checked out: 1 'invs_7nm' (Innovus_7nm_Opt; INVS07; 23.1) license(s)
@@ -108,9 +108,9 @@ Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/C
 Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120' 
 Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
-*** End library_loading (cpu=0.45min, real=0.45min, mem=544.1M, fe_cpu=0.71min, fe_real=1.02min, fe_mem=2250.8M) ***
-% Begin Load netlist data ... (date=10/10 16:44:23, mem=1681.7M)
-*** Begin netlist parsing (mem=2250.8M) ***
+*** End library_loading (cpu=0.46min, real=0.47min, mem=544.1M, fe_cpu=0.71min, fe_real=0.98min, fe_mem=2250.5M) ***
+% Begin Load netlist data ... (date=10/10 17:02:25, mem=1686.4M)
+*** Begin netlist parsing (mem=2250.5M) ***
 **WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
 Type 'man IMPVL-159' for more detail.
 **WARN: (IMPVL-159):	Pin 'sdel[1]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
@@ -126,9 +126,9 @@ Reading netlist ...
 Backslashed names will retain backslash and a trailing blank character.
 Reading verilogBinary netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/vbin/top_soc.v.bin'
 
-*** Memory Usage v#2 (Current mem = 2250.797M, initial mem = 839.699M) ***
-*** End netlist parsing (cpu=0:00:00.2, real=0:00:00.0, mem=2250.8M) ***
-% End Load netlist data ... (date=10/10 16:44:23, total cpu=0:00:00.2, real=0:00:00.0, peak res=1809.5M, current mem=1809.5M)
+*** Memory Usage v#2 (Current mem = 2250.531M, initial mem = 847.699M) ***
+*** End netlist parsing (cpu=0:00:00.2, real=0:00:00.0, mem=2250.5M) ***
+% End Load netlist data ... (date=10/10 17:02:25, total cpu=0:00:00.2, real=0:00:00.0, peak res=1813.8M, current mem=1813.8M)
 Set top cell to top_soc.
 **WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
 Type 'man IMPTS-124' for more detail.
@@ -152,7 +152,7 @@ Set DBUPerIGU to techSite asap7sc7p5t width 54.
 ** info: there are 141720 stdCell insts with at least one signal pin.
 ** info: there are 84 macros.
 
-*** Memory Usage v#2 (Current mem = 2274.809M, initial mem = 839.699M) ***
+*** Memory Usage v#2 (Current mem = 2274.543M, initial mem = 847.699M) ***
 *info: set bottom ioPad orient R0
 
 Honor LEF defined pitches for advanced node
@@ -229,8 +229,8 @@ Type 'man IMPOPT-3602' for more detail.
 Slack adjustment of -0 applied on C2O path_group
 **WARN: (IMPTCM-77):	Option "-drouteStartIteration" for command setNanoRouteMode is obsolete and will be removed in a future release. The obsolete option still works in this release but to avoid this warning and to ensure compatibility with future releases, remove the obsolete option from your script.
 
-viaInitial starts at Sat Oct 10 16:44:24 2026
-viaInitial ends at Sat Oct 10 16:44:24 2026
+viaInitial starts at Sat Oct 10 17:02:26 2026
+viaInitial ends at Sat Oct 10 17:02:26 2026
 Setting -viarule_preference to default order. ViaGen will consider via rule priority based on the order of appearance in the technology file.
 AAE_INFO: switching setDelayCal -siAware from false to true ...
 AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
@@ -286,8 +286,8 @@ List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L B
 Total number of identified usable delay cells: 7
 List of identified unusable delay cells:
 Total number of identified unusable delay cells: 0
-Reading floorplan file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.fp.gz (mem = 2685.9M).
-% Begin Load floorplan data ... (date=10/10 16:44:38, mem=2312.3M)
+Reading floorplan file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.fp.gz (mem = 2676.6M).
+% Begin Load floorplan data ... (date=10/10 17:02:41, mem=2309.5M)
 *info: reset 159925 existing net BottomPreferredLayer and AvoidDetour
 Deleting old partition specification.
 Set FPlanBox to (0 0 565632 358128)
@@ -296,44 +296,44 @@ Reading binary special route file /home/user1/Desktop/Script_Backend/Asap7/run_w
 Convert 0 swires and 0 svias from compressed groups
 1970 swires and 126881 svias were compressed
 1970 swires and 7041 svias were decompressed from small or sparse groups
-Ending "Read special route file" (total cpu=0:00:01.7, real=0:00:02.0, peak res=2677.2M, current mem=2677.2M)
+Ending "Read special route file" (total cpu=0:00:01.7, real=0:00:01.0, peak res=2677.3M, current mem=2677.3M)
 There are 3493 nets with weight being set
 There are 3526 nets with bottomPreferredRoutingLayer being set
 There are 3493 nets with avoidDetour being set
 Extracting standard cell pins and blockage ...... 
 Pin and blockage extraction finished
-% End Load floorplan data ... (date=10/10 16:44:40, total cpu=0:00:02.0, real=0:00:02.0, peak res=2677.2M, current mem=2675.5M)
+% End Load floorplan data ... (date=10/10 17:02:42, total cpu=0:00:01.9, real=0:00:01.0, peak res=2677.3M, current mem=2675.7M)
 Reading congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.route.congmap.gz ...
 Suppress "**WARN ..." messages.
 Un-suppress "**WARN ..." messages.
-% Begin Load SymbolTable ... (date=10/10 16:44:40, mem=2699.6M)
-% End Load SymbolTable ... (date=10/10 16:44:41, total cpu=0:00:00.9, real=0:00:01.0, peak res=2837.8M, current mem=2837.8M)
+% Begin Load SymbolTable ... (date=10/10 17:02:42, mem=2699.8M)
+% End Load SymbolTable ... (date=10/10 17:02:43, total cpu=0:00:00.9, real=0:00:00.0, peak res=2837.8M, current mem=2837.8M)
 Loading place ...
-% Begin Load placement data ... (date=10/10 16:44:41, mem=2837.8M)
+% Begin Load placement data ... (date=10/10 17:02:43, mem=2837.8M)
 Reading placement file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.place.gz.
 ** Reading stdCellPlacement_binary (Created by Innovus v23.14-s088_1 on Thu Oct  1 15:18:27 2026, version# 2) ...
 Read Views for adaptive view pruning ...
 Read 1 views from Binary DB for adaptive view pruning
 view_ss
 *** applyConnectGlobalNets disabled.
-*** Completed restorePlace (cpu=0:00:03.4 real=0:00:04.0 mem=3669.6M) ***
+*** Completed restorePlace (cpu=0:00:03.3 real=0:00:04.0 mem=3670.4M) ***
 Total net length = 1.059e+06 (5.172e+05 5.421e+05) (ext = 1.525e+04)
-% End Load placement data ... (date=10/10 16:44:45, total cpu=0:00:03.4, real=0:00:04.0, peak res=3338.7M, current mem=3337.4M)
+% End Load placement data ... (date=10/10 17:02:47, total cpu=0:00:03.4, real=0:00:04.0, peak res=3335.8M, current mem=3334.4M)
 Reading PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on       Thu Oct  1 15:18:27 2026)
-*** Completed restorePGFile (cpu=0:00:00.3 real=0:00:00.0 mem=3701.6M) ***
-% Begin Load routing data ... (date=10/10 16:44:45, mem=3373.2M)
+*** Completed restorePGFile (cpu=0:00:00.3 real=0:00:00.0 mem=3701.4M) ***
+% Begin Load routing data ... (date=10/10 17:02:47, mem=3370.2M)
 Reading routing file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.route.gz.
 Reading Innovus routing data (Created by Innovus v23.14-s088_1 on Thu Oct  1 15:18:27 2026 Format: 23.1) ...
 *** Total 145057 nets are successfully restored.
-*** Completed restoreRoute (cpu=0:00:00.9 real=0:00:01.0 mem=3859.6M) ***
-% End Load routing data ... (date=10/10 16:44:46, total cpu=0:00:00.9, real=0:00:01.0, peak res=3534.5M, current mem=3534.5M)
+*** Completed restoreRoute (cpu=0:00:00.9 real=0:00:01.0 mem=3860.4M) ***
+% End Load routing data ... (date=10/10 17:02:48, total cpu=0:00:01.0, real=0:00:01.0, peak res=3534.5M, current mem=3534.5M)
 Loading Drc markers ...
 ... 1118 markers are loaded ...
 ... 6 geometry drc markers are loaded ...
 ... 0 antenna drc markers are loaded ...
-TAT_INFO: ::restoreCongMap REAL = 0 : CPU = 0 : MEM = 0.
+TAT_INFO: ::restoreCongMap REAL = 1 : CPU = 0 : MEM = 0.
 Reading property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.prop
-*** Completed restoreProperty (cpu=0:00:00.4 real=0:00:00.0 mem=3868.7M) ***
+*** Completed restoreProperty (cpu=0:00:00.4 real=0:00:01.0 mem=3869.4M) ***
 Reading dirtyarea snapshot file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.db.da.gz (Create by Innovus v23.14-s088_1 on Thu Oct  1 15:18:29 2026, version: 7).
 Loading preRoute extraction data from directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/extraction/' ...
 Extraction setup Started for TopCell top_soc 
@@ -343,7 +343,7 @@ Importing multi-corner technology file(s) for preRoute extraction...
 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02
 Generating auto layer map file.
 
-Completed (cpu: 0:00:07.0 real: 0:00:30.0)
+Completed (cpu: 0:00:07.2 real: 0:00:36.0)
 Set Shrink Factor to 1.00000
 Summary of Active RC-Corners : 
  
@@ -409,14 +409,14 @@ Initializing preRoute extraction patterns for new vias...
 Generating auto layer map file.
 
 Completed (cpu: 0:00:00.4 real: 0:00:01.0)
-% Begin Load power constraints ... (date=10/10 16:45:23, mem=1000.8M)
+% Begin Load power constraints ... (date=10/10 17:03:32, mem=512.3M)
 'set_default_switching_activity' finished successfully.
-% End Load power constraints ... (date=10/10 16:45:23, total cpu=0:00:00.1, real=0:00:00.0, peak res=1010.6M, current mem=1010.6M)
+% End Load power constraints ... (date=10/10 17:03:32, total cpu=0:00:00.1, real=0:00:00.0, peak res=526.3M, current mem=526.3M)
 dc_ss dc_tt dc_ff
-% Begin load AAE data ... (date=10/10 16:45:24, mem=1123.8M)
+% Begin load AAE data ... (date=10/10 17:03:33, mem=645.7M)
 **WARN: (IMPESI-3505):	setDelayCalMode -eng_enablePrePlacedFlow false (default=false) will be obsoleted along with its sgs2set equivalent.  This parameter will continue to be supported in the current release, but will be removed in the next major release of the software.
-AAE DB initialization (MEM=1184.789062 CPU=0:00:00.1 REAL=0:00:00.0) 
-% End load AAE data ... (date=10/10 16:45:24, total cpu=0:00:00.4, real=0:00:01.0, peak res=1184.9M, current mem=1184.9M)
+AAE DB initialization (MEM=712.117188 CPU=0:00:00.1 REAL=0:00:00.0) 
+% End load AAE data ... (date=10/10 17:03:34, total cpu=0:00:00.4, real=0:00:01.0, peak res=713.4M, current mem=713.4M)
 Restoring CCOpt config...
   Extracting original clock gating for CLK_TCK...
     clock_tree CLK_TCK contains 136 sinks and 6 clock gates.
@@ -540,7 +540,7 @@ Total number of identified unusable delay cells: 0
 timing_aocv_enable_gba_combine_launch_capture
 timing_enable_backward_compatible_latch_thru_mt_mode
 timing_enable_separate_device_slew_effect_sensitivities
-#% End load design ... (date=10/10 16:45:27, total cpu=0:01:06, real=0:01:43, peak res=10965.7M, current mem=1308.6M)
+#% End load design ... (date=10/10 17:03:37, total cpu=0:01:07, real=0:01:52, peak res=13968.3M, current mem=895.6M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -581,13 +581,13 @@ INFO (EXTIQUANTUS-101) :
                Copyright 2025 Cadence Design Systems, Inc.
 
 
-INFO (EXTIQUANTUS-103) : Starting at 2026-Oct-10 16:45:43 (2026-Oct-10 07:45:43 GMT).
+INFO (EXTIQUANTUS-103) : Starting at 2026-Oct-10 17:03:53 (2026-Oct-10 08:03:53 GMT).
 
 INFO (EXTIQUANTUS-104) : Starting extraction session...
 
 INFO (EXTIQUANTUS-159) : Loading technology data from file:
  
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_489995_5eca9d40-2b96-40cf-9896-6fd001323402_user1-EliteMini_user1_L7hwAL/iqrc_tmp_489995_VBYXn3/.qrctemp/CceRCGEN0tch489995
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_577652_e034b3f9-a143-493b-b004-95b769d58832_user1-EliteMini_user1_tf5kjU/iqrc_tmp_577652_Nc0BRP/.qrctemp/CceRCGEN0tch577652
 
 INFO (EXTIQUANTUS-159) : Loading technology data from file:
  
@@ -595,7 +595,7 @@ INFO (EXTIQUANTUS-159) : Loading technology data from file:
 
 INFO (EXTIQUANTUS-289) : Loading RCgen extraction models from file:
  
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_489995_5eca9d40-2b96-40cf-9896-6fd001323402_user1-EliteMini_user1_L7hwAL/iqrc_tmp_489995_VBYXn3/.qrctemp/CceRCGEN0tch489995
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_577652_e034b3f9-a143-493b-b004-95b769d58832_user1-EliteMini_user1_tf5kjU/iqrc_tmp_577652_Nc0BRP/.qrctemp/CceRCGEN0tch577652
 
 INFO (EXTIQUANTUS-345) : Checking Command/Tech/License Files. 
 
@@ -607,304 +607,32 @@ INFO (EXTIQUANTUS-383) : Summary of license(s) checkout :
 
 INFO (EXTIQUANTUS-105) : Starting design extraction....
 Reading layer map file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map'.
-**ERROR: (IMPEXT-1438):	Error reading layermap file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map'. Only CCL style syntax of layer map file is supported using "setExtractRCMode -lefTechFileMap". Correct the input specified and run again.
-No layermap file specified. Automatically mapping tech and lef layers. Log file is 'extLogDir/IQuantus_10-Oct-2026_16:45:39_489995_MKa79T/extr.top_soc.layermap.log'.
-Layer Gate with id 67 --> gate  1
-**WARN: (IMPEXT-1221):	No poly layer found in the technology file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02'.
-Type 'man IMPEXT-1221' for more detail.
-**WARN: (IMPEXT-1222):	No CUT layer defined between the poly LAYER and first routing metal LAYER in LEF technology file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02'.
-Type 'man IMPEXT-1222' for more detail.
-db Layer M1 with id 1 --> lisd  2
-db Layer V1 with id 34 --> v0  3
-db Layer M2 with id 2 --> m1  4
-db Layer V2 with id 35 --> v1  5
-db Layer M3 with id 3 --> m2  6
-db Layer V3 with id 36 --> v2  7
-db Layer M4 with id 4 --> m3  8
-db Layer V4 with id 37 --> v3  9
-db Layer M5 with id 5 --> m4  10
-db Layer V5 with id 38 --> v4  11
-db Layer M6 with id 6 --> m5  12
-db Layer V6 with id 39 --> v5  13
-db Layer M7 with id 7 --> m6  14
-db Layer V7 with id 40 --> v6  15
-db Layer M8 with id 8 --> m7  16
-db Layer V8 with id 41 --> v7  17
-db Layer M9 with id 9 --> m8  18
-db Layer V9 with id 42 --> v8  19
-db Layer Pad with id 10 --> m9  20
- Prefered direction 1 set on layer no 1 
- Prefered direction 0 set on layer no 2 
- Prefered direction 1 set on layer no 3 
- Prefered direction 0 set on layer no 4 
- Prefered direction 1 set on layer no 5 
- Prefered direction 0 set on layer no 6 
- Prefered direction 1 set on layer no 7 
- Prefered direction 0 set on layer no 8 
- Prefered direction 1 set on layer no 9 
- Prefered direction 0 set on layer no 10 
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-IQuantus Extraction engine initialized successfully.
-
-Dumping IQuantus extraction options in file 'extLogDir/IQuantus_10-Oct-2026_16:45:39_489995_MKa79T/extr.top_soc.extraction_options.log'.
-Initialization for IQuantus Fullchip Extraction DONE (CPU Time: 0:00:06.3  Real Time: 0:00:14.0  MEM: 4235.977M)
-
-Geometry processing of Gray and Metal fill STARTED.................... DONE (CPU Time: 0:00:05.3  Real Time: 0:00:09.0  MEM: 4395.977M)
-Geometry processing of nets STARTED.................... DONE (NETS: 144620  Geometries: 2926221  CPU Time: 0:00:04.8  Real Time: 0:00:06.0  MEM: 4545.477M)
-
-Extraction of Geometries STARTED.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 3: '"M1"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 4: '"M2"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 5: '"M3"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 6: '"M4"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 7: '"M5"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 8: '"M6"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 9: '"M7"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 10: '"M8"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 11: '"M9"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 12: '"V1"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 13: '"V2"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 14: '"V3"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 15: '"V4"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 16: '"V5"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 17: '"V6"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 18: '"V7"' not defined in LEF file.
+**WARN: (IMPEXT-1235):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 19: '"V8"' not defined in LEF file.
+**ERROR: (IMPEXT-1239):	No leftech map for metal LEF layer 'Pad' in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map'.
+**ERROR: (IMPEXT-1240):	No leftech map for via LEF layer 'V9' in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map'.
+**WARN: (IMPEXT-1241):	No poly layer found in the layermap file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map'.
+Type 'man IMPEXT-1241' for more detail.
+**WARN: (IMPEXT-1242):	No cut layer found between poly layer and first metal layer in layermap file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map'.
+**ERROR: (IMPEXT-1243):	Some of LEF names mapping are missing in technology file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02. Provide complete mapping information in layermap file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map'.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-INFO (EXTIQUANTUS-282) : Checking Command/Tech Files. 
+*** Memory Usage v#2 (Current mem = 4233.711M, initial mem = 847.699M) ***
+*** Message Summary: 65 warning(s), 3 error(s)
 
-INFO (EXTIQUANTUS-277) : Manufacturing Data Information :- 
-  DEF/GDS file 
-    does     contain MetalFill data. 
-  Techfile  
-    does NOT contain WEE data.     
-    does NOT contain Erosion data t=f( density ) 
-    does     contain R(w) data.    
-    does NOT contain R(w, s) data.  
-    does NOT contain TC(w) data.    
-    does     contain T/B enlargement data. 
-    does     contain Floating Metal Fill models. 
-
-INFO (EXTIQUANTUS-287) : Capacitance Models Information :- 
- ICECAPS models are not available. 
- RCgen   models are     available. 
- This IQuantus session uses RCgen models.
-
-INFO (EXTIQUANTUS-286) : RCs effects computed for this session include :- 
- MetalFill        : floating 
- WEE Effects      : n/a 
- Erosion Effects  : n/a t=f( density ) 
- T/B Enlargements : ON 
- R(w) Effects     : ON 
- R(w,s) Effects   : n/a 
- TC(w) Effects     : n/a 
-Some effects indicate n/a because of non-availability of relevantinput data
-(or) requested to be off (and/or) usage of older Icecaps models.
-
-INFO (EXTHPY-103) : Extracting capacitance values.
-
-INFO (EXTHPY-267) :  
- DESIGN                       : 
- DEF/OA DIEAREA BBOX          : 2147483647 2147483647 -2147483648
--2147483648
- DEF/OA UNITS                 : 10000
- FINAL SCALE FACTOR           : 1
- 
- ESTIMATED COMPRESSED DEF SIZE: 0
- TILE SIZE                    : 50x50 squm
- TILE COUNT                   : 96
- CLUSTER SIZE                 : 257
- CAPDB PARTITIONS             : 16
-
-INFO (EXTHPY-104) :    0%
-
-INFO (EXTHPY-104) :    1%
-
-INFO (EXTHPY-104) :    2%
-
-INFO (EXTHPY-104) :    3%
-
-INFO (EXTHPY-104) :    4%
-
-INFO (EXTHPY-104) :    5%
-
-INFO (EXTHPY-104) :    6%
-
-INFO (EXTHPY-104) :    7%
-
-INFO (EXTHPY-104) :    8%
-
-INFO (EXTHPY-104) :    9%
-
-INFO (EXTHPY-104) :    11%
-
-INFO (EXTHPY-104) :    12%
-
-INFO (EXTHPY-104) :    13%
-
-INFO (EXTHPY-104) :    14%
-
-INFO (EXTHPY-104) :    15%
-
-INFO (EXTHPY-104) :    16%
-
-INFO (EXTHPY-104) :    17%
-
-INFO (EXTHPY-104) :    18%
-
-INFO (EXTHPY-104) :    19%
-
-INFO (EXTHPY-104) :    20%
-
-INFO (EXTHPY-104) :    21%
-
-INFO (EXTHPY-104) :    22%
-
-INFO (EXTHPY-104) :    23%
-
-INFO (EXTHPY-104) :    24%
-
-INFO (EXTHPY-104) :    25%
-
-INFO (EXTHPY-104) :    26%
-
-INFO (EXTHPY-104) :    27%
-
-INFO (EXTHPY-104) :    28%
-
-INFO (EXTHPY-104) :    29%
-
-INFO (EXTHPY-104) :    31%
-
-INFO (EXTHPY-104) :    32%
-
-INFO (EXTHPY-104) :    33%
-
-INFO (EXTHPY-104) :    34%
-
-INFO (EXTHPY-104) :    35%
-
-INFO (EXTHPY-104) :    36%
-
-INFO (EXTHPY-104) :    37%
-
-INFO (EXTHPY-104) :    38%
-
-INFO (EXTHPY-104) :    39%
-
-INFO (EXTHPY-104) :    40%
-
-INFO (EXTHPY-104) :    41%
-
-INFO (EXTHPY-104) :    42%
-
-INFO (EXTHPY-104) :    43%
-
-INFO (EXTHPY-104) :    44%
-
-INFO (EXTHPY-104) :    45%
-
-INFO (EXTHPY-104) :    46%
-
-INFO (EXTHPY-104) :    47%
-
-INFO (EXTHPY-104) :    48%
-
-INFO (EXTHPY-104) :    49%
-
-INFO (EXTHPY-104) :    51%
-
-INFO (EXTHPY-104) :    52%
-
-INFO (EXTHPY-104) :    53%
-
-INFO (EXTHPY-104) :    54%
-
-INFO (EXTHPY-104) :    55%
-
-INFO (EXTHPY-104) :    56%
-
-INFO (EXTHPY-104) :    57%
-
-INFO (EXTHPY-104) :    58%
-
-INFO (EXTHPY-104) :    59%
-
-INFO (EXTHPY-104) :    60%
-
-INFO (EXTHPY-104) :    61%
-
-INFO (EXTHPY-104) :    62%
-
-INFO (EXTHPY-104) :    63%
-
-INFO (EXTHPY-104) :    64%
-
-INFO (EXTHPY-104) :    65%
-
-INFO (EXTHPY-104) :    66%
-
-INFO (EXTHPY-104) :    67%
-
-INFO (EXTHPY-104) :    68%
-
-INFO (EXTHPY-104) :    69%
-
-INFO (EXTHPY-104) :    71%
-
-INFO (EXTHPY-104) :    72%
-
-INFO (EXTHPY-104) :    73%
-
-INFO (EXTHPY-104) :    74%
-
-INFO (EXTHPY-104) :    75%
-
-INFO (EXTHPY-104) :    76%
-
-INFO (EXTHPY-104) :    77%
-
-INFO (EXTHPY-104) :    78%
-
-INFO (EXTHPY-104) :    79%
-
-INFO (EXTHPY-104) :    80%
-
-INFO (EXTHPY-104) :    81%
-
-INFO (EXTHPY-104) :    82%
-
-INFO (EXTHPY-104) :    83%
-
-INFO (EXTHPY-104) :    84%
-
-INFO (EXTHPY-104) :    85%
-
-INFO (EXTHPY-104) :    86%
-
-INFO (EXTHPY-104) :    87%
-
-INFO (EXTHPY-104) :    88%
-
-INFO (EXTHPY-104) :    89%
-
-INFO (EXTHPY-104) :    91%
-
-INFO (EXTHPY-104) :    92%
-
-INFO (EXTHPY-104) :    93%
-
-INFO (EXTHPY-104) :    94%
-
-INFO (EXTHPY-104) :    95%
-
-INFO (EXTHPY-104) :    96%
-
-INFO (EXTHPY-104) :    97%
-
-INFO (EXTHPY-104) :    98%
-
-INFO (EXTHPY-104) :    99%
-
-INFO (EXTHPY-104) :    100%
-+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Extraction of Geometries DONE (NETS: 144620  CPU Time: 0:01:23  Real Time: 0:01:24  MEM: 5037.938M)
-
-Parasitic Network Creation STARTED
-....................
-Number of Extracted Resistors     : 1652793
-Number of Extracted Ground Caps   : 1807212
-Number of Extracted Coupling Caps : 106508
-Parasitic Network Creation DONE (Nets: 144620  CPU Time: 0:00:04.2  Real Time: 0:00:03.0  MEM: 5037.938M)
-
-IQuantus Extraction engine is being closed... 
-IQuantus Fullchip Extraction DONE (CPU Time: 0:01:46  Real Time: 0:01:57  MEM: 5037.938M)
-
-*** Memory Usage v#2 (Current mem = 5037.938M, initial mem = 839.699M) ***
-*** Message Summary: 48 warning(s), 1 error(s)
-
---- Ending "Innovus" (totcpu=0:03:12, real=0:04:14, mem=5037.9M) ---
+--- Ending "Innovus" (totcpu=0:01:32, real=0:02:37, mem=4233.7M) ---
