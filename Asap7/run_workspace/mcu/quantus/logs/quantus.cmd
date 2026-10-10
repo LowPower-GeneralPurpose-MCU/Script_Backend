@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Sat Oct 10 00:46:10 2026                
+#  Created on Sat Oct 10 16:43:42 2026                
 #                                                     
 #######################################################
 
@@ -22,7 +22,5 @@ restoreDesign ./saved/top_soc_final.enc.dat top_soc
 setMultiCpuUsage -acquireLicense 1 -localCpu 1
 setDistributeHost -local
 setExtractRCMode -engine postRoute -effortLevel high -coupled true
+setExtractRCMode -lefTechFileMap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map
 extractRC
-rcOut -spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef -rc_corner rc_typ
-rcOut -spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef -rc_corner rc_ss
-rcOut -spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef -rc_corner rc_ff
