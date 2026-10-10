@@ -145,6 +145,15 @@ if {[catch {
     # Ghep lop LEF <-> QRC theo TEN.  Run 2026-10-10 00:48 khong co file nay:
     # Innovus ghep theo vi tri (M1 --> lisd, M2 --> m1, ... Pad --> m9), SPEF
     # ra van bao DONE nhung moi lop duoc trich bang thong so cua lop ben duoi.
+    #   LEF : M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
+    #   QRC : LISD M1 M2 M3 M4 M5 M6 M7 M8 M9
+    # Flow Innovus chinh cung lech nhu vay (innovus.log: "#LISD -> M1 (1)").
+    # File map phai la cu phap CCL cua Quantus (extraction_setup
+    # -technology_layer_map "LEF" "QRC" ...): run 16:43 dung dinh dang 3 cot
+    # "metal M1 M1" va bi IMPEXT-1438 "Only CCL style syntax ... is supported",
+    # Innovus quay ve ghep tu dong.  File map KHONG co dong chu thich nao vi
+    # chua biet CCL nhan ky tu chu thich nao.  Pad va V9 khong co lop tuong
+    # ung trong QRC tech file nen khong nam trong map.
     set QUANTUS_LAYER_MAP [file normalize ./tcl/asap7_lef_to_qrc_layers.map]
     if {![file isfile $QUANTUS_LAYER_MAP]} {
         error "Khong co file ghep lop $QUANTUS_LAYER_MAP"
@@ -318,8 +327,19 @@ if {[catch {
     puts "============================================================"
     close $fp
 } quantus_err]} {
+    set quantus_trace $::errorInfo
     puts "ERROR: quantus.tcl: $quantus_err"
-    puts $::errorInfo
+    puts $quantus_trace
+    # 'puts' khong vao file log cua Innovus (run 16:43: cong ghep lop dung
+    # flow nhung log khong co dong nao noi vi sao).  Ghi ly do ra file tom tat.
+    if {[info exists QUANTUS_SUMMARY]} {
+        catch {
+            set fp [open $QUANTUS_SUMMARY w]
+            puts $fp "FAIL"
+            puts $fp "quantus.tcl: $quantus_err"
+            close $fp
+        }
+    }
     exit 1
 }
 exit 0

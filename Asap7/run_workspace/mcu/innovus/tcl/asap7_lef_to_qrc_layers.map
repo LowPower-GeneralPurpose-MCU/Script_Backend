@@ -1,36 +1,19 @@
-# Lop LEF -> lop trong QRC tech file, dinh dang cua Innovus
-# (setExtractRCMode -lefTechFileMap):   <loai> <ten lop LEF> <ten lop QRC>
-#
-# Hai ben deu co 10 lop di day nhung KHONG phai cung 10 lop:
-#   LEF : M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
-#   QRC : LISD M1 M2 M3 M4 M5 M6 M7 M8 M9
-# Khong co file nay Innovus ghep theo VI TRI, lech mot bac:
-#   quantus.log 2026-10-10:  db Layer M1 --> lisd, M2 --> m1, ... Pad --> m9
-#   innovus.log (NanoRoute): #LISD -> M1 (1), #M1 -> M2 (2), ... #M9 -> Pad (10)
-# tuc la M4 (pitch 48 nm) duoc trich bang thong so cua m3 (36 nm), M6 bang m5,
-# M8 bang m7, va M1 bang lop LISD.  Genus da gap dung loi nay va sua tu
-# 2026-09-12 bang genus/tcl/asap7_lef_to_qrc_layers.map (dinh dang cua Genus).
-#
-# Pad va V9 khong co lop tuong ung trong QRC tech file nen de trong.
-#
-# CHUA KIEM TREN TOOL: dinh dang 3 cot viet theo tai lieu, chua chay lan nao.
-# quantus.tcl doc lai bang ghep lop trong log sau extractRC va DUNG neu
-# M1..M9 / V1..V8 khong ghep dung ten - sai dinh dang thi mat 4 phut, khong
-# ra SPEF sai.
-metal M1 M1
-metal M2 M2
-metal M3 M3
-metal M4 M4
-metal M5 M5
-metal M6 M6
-metal M7 M7
-metal M8 M8
-metal M9 M9
-via V1 V1
-via V2 V2
-via V3 V3
-via V4 V4
-via V5 V5
-via V6 V6
-via V7 V7
-via V8 V8
+extraction_setup \
+	 -technology_layer_map \
+		"M1" "M1" \
+		"M2" "M2" \
+		"M3" "M3" \
+		"M4" "M4" \
+		"M5" "M5" \
+		"M6" "M6" \
+		"M7" "M7" \
+		"M8" "M8" \
+		"M9" "M9" \
+		"V1" "V1" \
+		"V2" "V2" \
+		"V3" "V3" \
+		"V4" "V4" \
+		"V5" "V5" \
+		"V6" "V6" \
+		"V7" "V7" \
+		"V8" "V8"
