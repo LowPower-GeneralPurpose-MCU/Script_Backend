@@ -38,33 +38,85 @@ proc quantus_env {name default_value} {
     return $default_value
 }
 
-# Dem net va cong tong dien dung cua mot file SPEF.  Tra ve {so_net tong_fF}.
+# Dem net, cong tong dien dung va tong dien tro cua mot file SPEF.
+# Tra ve {so_net tong_fF tong_ohm}.  Can ca R: ba goc RC dung chung mot QRC
+# tech file, chi khac nhiet do, nen C giong het nhau va chi R moi cho thay ba
+# goc co khac nhau that hay khong.
 proc quantus_spef_stats {path} {
     set fp [open $path r]
     fconfigure $fp -translation binary -buffersize 1048576
     set nets 0
     set cap 0.0
+    set res 0.0
     set to_ff 1.0
+    set to_ohm 1.0
+    set in_res 0
     while {[gets $fp line] >= 0} {
         if {[string index $line 0] ne "*"} {
+            # Trong muc *RES moi dong la "<so> <nut> <nut> <R>".
+            if {$in_res} {
+                set r [lindex [split [string trimright $line]] end]
+                if {[string is double -strict $r]} {
+                    set res [expr {$res + $r}]
+                }
+            }
             continue
         }
+        set in_res 0
         if {[string range $line 0 6] eq "*D_NET "} {
             if {[regexp {^\*D_NET\s+\S+\s+(\S+)} $line -> net_cap] &&
                 [string is double -strict $net_cap]} {
                 incr nets
                 set cap [expr {$cap + $net_cap}]
             }
+        } elseif {[string range $line 0 3] eq "*RES"} {
+            set in_res 1
         } elseif {[regexp {^\*C_UNIT\s+(\S+)\s+(\S+)} $line -> scale unit]} {
             switch -- [string toupper $unit] {
                 PF      { set to_ff [expr {$scale * 1000.0}] }
                 FF      { set to_ff [expr {$scale * 1.0}] }
                 default { error "$path: *C_UNIT la '$unit' - chi biet PF va FF" }
             }
+        } elseif {[regexp {^\*R_UNIT\s+(\S+)\s+(\S+)} $line -> scale unit]} {
+            switch -- [string toupper $unit] {
+                OHM     { set to_ohm [expr {$scale * 1.0}] }
+                KOHM    { set to_ohm [expr {$scale * 1000.0}] }
+                default { error "$path: *R_UNIT la '$unit' - chi biet OHM va KOHM" }
+            }
         }
     }
     close $fp
-    return [list $nets [expr {$cap * $to_ff}]]
+    return [list $nets [expr {$cap * $to_ff}] [expr {$res * $to_ohm}]]
+}
+
+# Bang ghep lop ma IQuantus in ra log cua chinh phien nay:
+#     db Layer M2 with id 2 --> m1  4
+# Tra ve dict {lop_LEF lop_QRC}; rong neu engine khong in bang nay.
+proc quantus_layer_pairs {log_file} {
+    set pairs [dict create]
+    if {![file isfile $log_file]} {
+        return $pairs
+    }
+    set fp [open $log_file r]
+    while {[gets $fp line] >= 0} {
+        if {[regexp {^db Layer (\S+) with id \d+ --> (\S+)} $line -> lef tech]} {
+            dict set pairs $lef $tech
+        }
+    }
+    close $fp
+    return $pairs
+}
+
+# Cac cap ghep sai trong bang tren: M1..M9 va V1..V8 phai ghep dung ten.
+proc quantus_layer_mismatches {pairs} {
+    set bad {}
+    dict for {lef tech} $pairs {
+        if {[regexp {^(M[1-9]|V[1-8])$} $lef] &&
+            [string tolower $lef] ne [string tolower $tech]} {
+            lappend bad "$lef->$tech"
+        }
+    }
+    return $bad
 }
 
 # Innovus chay -no_gui: loi Tcl giua chung se dung o dau nhac va treo make.
@@ -90,6 +142,16 @@ if {[catch {
     if {![file isfile $QRC_FILE]} {
         error "Khong co QRC tech file $QRC_FILE"
     }
+    # Ghep lop LEF <-> QRC theo TEN.  Run 2026-10-10 00:48 khong co file nay:
+    # Innovus ghep theo vi tri (M1 --> lisd, M2 --> m1, ... Pad --> m9), SPEF
+    # ra van bao DONE nhung moi lop duoc trich bang thong so cua lop ben duoi.
+    set QUANTUS_LAYER_MAP [file normalize ./tcl/asap7_lef_to_qrc_layers.map]
+    if {![file isfile $QUANTUS_LAYER_MAP]} {
+        error "Khong co file ghep lop $QUANTUS_LAYER_MAP"
+    }
+    # Log cua chinh phien nay (Makefile: -log ../quantus/logs/quantus).
+    set QUANTUS_LOG [file join $QUANTUS_DIR logs quantus.log]
+    set quantus_warn {}
 
     # signoff = Quantus QRC rieng (can lenh 'qrc' + license Quantus).
     # high    = IQuantus tich hop trong Innovus: dung khi may khong co qrc.
@@ -152,7 +214,30 @@ if {[catch {
     if {$QUANTUS_EFFORT eq "signoff"} {
         setExtractRCMode -qrcCmdType auto
     }
+    setExtractRCMode -lefTechFileMap $QUANTUS_LAYER_MAP
     extractRC
+
+    # CONG GHEP LOP - truoc rcOut, de ghep sai thi khong co SPEF nao duoc ghi.
+    # File map chua tung chay tren tool; neu Innovus bo qua no hoac hieu sai
+    # dinh dang thi bang 'db Layer ... -->' trong log van lech bac nhu cu.
+    set layer_pairs [quantus_layer_pairs $QUANTUS_LOG]
+    set layer_bad [quantus_layer_mismatches $layer_pairs]
+    if {[llength $layer_bad] > 0} {
+        error "Ghep lop LEF/QRC sai: $layer_bad
+  File map $QUANTUS_LAYER_MAP khong duoc ap dung hoac sai dinh dang.
+  Xem bang 'db Layer ... -->' trong $QUANTUS_LOG.  Khong ghi SPEF."
+    }
+    if {[dict size $layer_pairs] == 0} {
+        set layer_note "KHONG KIEM DUOC - log khong co bang 'db Layer ... -->'"
+        lappend quantus_warn "khong doc duoc bang ghep lop trong $QUANTUS_LOG -\
+ tu kiem truoc khi dung SPEF"
+    } else {
+        set layer_note {}
+        dict for {lef tech} $layer_pairs {
+            lappend layer_note "$lef->$tech"
+        }
+        set layer_note [join $layer_note " "]
+    }
 
     # Mot goc hong khong duoc lam mat SPEF cua hai goc con lai.
     set rc_failed {}
@@ -175,19 +260,22 @@ if {[catch {
     # RC khac voi RC signoff).
     # --------------------------------------------------------------------
     set summary {}
-    set quantus_warn {}
+    set corner_res {}
     foreach {rc spef} $quantus_spef {
-        foreach {nets cap} [quantus_spef_stats $spef] break
+        foreach {nets cap res} [quantus_spef_stats $spef] break
         if {$nets == 0} {
             error "$spef khong co dong *D_NET nao"
         }
-        set line [format "%-7s %8d net  %14.1f fF" $rc $nets $cap]
+        lappend corner_res [format "%.1f" $res]
+        set line [format "%-7s %8d net  %14.1f fF  %12.1f kOhm" \
+            $rc $nets $cap [expr {$res / 1000.0}]]
         set ref [format "./outputs/%s_pnr_%s.spef" $TOP $rc]
         if {[file isfile $ref]} {
-            foreach {ref_nets ref_cap} [quantus_spef_stats $ref] break
-            if {$ref_cap > 0} {
-                append line [format "   tQuantus KHOI 16: %8d net  %14.1f fF   ti le %.3f" \
-                    $ref_nets $ref_cap [expr {$cap / $ref_cap}]]
+            foreach {ref_nets ref_cap ref_res} [quantus_spef_stats $ref] break
+            if {$ref_cap > 0 && $ref_res > 0} {
+                append line [format "   tQuantus KHOI 16: %8d net  %14.1f fF  %12.1f kOhm   ti le C %.3f R %.3f" \
+                    $ref_nets $ref_cap [expr {$ref_res / 1000.0}] \
+                    [expr {$cap / $ref_cap}] [expr {$res / $ref_res}]]
             }
             if {$ref_nets != $nets} {
                 lappend quantus_warn "$rc: $nets net, SPEF KHOI 16 co $ref_nets net -\
@@ -200,10 +288,22 @@ if {[catch {
         lappend summary $line
     }
 
+    # Ba goc dung chung mot QRC tech file (chi khac nhiet do): C bang nhau la
+    # dung, nhung R ma cung bang nhau thi ba goc thuc ra la mot.
+    if {[llength [lsort -unique $corner_res]] < [llength $corner_res]} {
+        lappend quantus_warn "tong R cua cac goc trung nhau ($corner_res ohm) -\
+ nhiet do goc RC khong co tac dung?"
+    }
+
+    set quantus_engine [expr {$QUANTUS_EFFORT eq "signoff" ?
+        "Quantus QRC (lenh qrc)" : "IQuantus tich hop trong Innovus - CHUA phai signoff"}]
     set fp [open $QUANTUS_SUMMARY w]
     puts $fp "DONE"
-    puts $fp "Quantus $TOP: effortLevel $QUANTUS_EFFORT, coupled, checkpoint $QUANTUS_CHECKPOINT"
+    puts $fp "Quantus $TOP: effortLevel $QUANTUS_EFFORT = $quantus_engine, coupled, checkpoint $QUANTUS_CHECKPOINT"
     puts $fp "  thoi gian [expr {[clock seconds] - $quantus_t0}] s, QRC tech [file tail $QRC_FILE]"
+    puts $fp "  ghep lop: $layer_note"
+    puts $fp "  (SPEF KHOI 16 de doi chieu duoc trich khi lop con ghep lech bac -\
+ ti le gom ca khac engine lan khac lop)"
     foreach line $summary {
         puts $fp "  $line"
     }
