@@ -222,6 +222,16 @@ if {[catch {
     setExtractRCMode -engine postRoute -effortLevel $QUANTUS_EFFORT -coupled true
     if {$QUANTUS_EFFORT eq "signoff"} {
         setExtractRCMode -qrcCmdType auto
+        # Mau Mul32 (Asap7/Script/quantus/quantus.tcl, da chay duoc tren may
+        # DDI221) chi ro file chay qrc cho Innovus.  Ban dau bo dong nay vi
+        # tuong khong phai option hop le; run 2026-10-09 21:32 khong co no thi
+        # qrc dung 2 tieng voi 5 s CPU.  Chua biet no co phai nguyen nhan
+        # khong, nen option bi tu choi thi chi canh bao.
+        set quantus_qrc_exe [lindex [auto_execok qrc] 0]
+        if {[catch {setExtractRCMode -extract_rc_quantus_executable $quantus_qrc_exe} exe_err]} {
+            lappend quantus_warn "setExtractRCMode -extract_rc_quantus_executable\
+ $quantus_qrc_exe bi tu choi: $exe_err"
+        }
     }
     setExtractRCMode -lefTechFileMap $QUANTUS_LAYER_MAP
     extractRC
