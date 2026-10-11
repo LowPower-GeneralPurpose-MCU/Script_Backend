@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Sat Oct 10 17:19:25 2026                
+#  Created on Sun Oct 11 11:51:52 2026                
 #                                                     
 #######################################################
 
@@ -21,8 +21,6 @@ getVersion
 restoreDesign ./saved/top_soc_final.enc.dat top_soc
 setMultiCpuUsage -acquireLicense 1 -localCpu 1
 setDistributeHost -local
-setExtractRCMode -engine postRoute -effortLevel signoff -coupled true
-setExtractRCMode -qrcCmdType auto
-setExtractRCMode -extract_rc_quantus_executable /Cadence/DDI/INNOVUS231/bin/qrc
+setExtractRCMode -engine postRoute -effortLevel high -coupled true
 setExtractRCMode -lefTechFileMap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map
 extractRC

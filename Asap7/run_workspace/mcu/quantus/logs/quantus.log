@@ -4,17 +4,17 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
 Options:	-no_gui -files ../quantus/quantus.tcl -log ../quantus/logs/quantus 
-Date:		Sat Oct 10 17:19:06 2026
+Date:		Sun Oct 11 11:51:33 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04.1 LTS
 
 License:
-		[17:19:10.206234] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[11:51:37.206226] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		invs	Innovus Implementation System	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 662720 / 9bc72a82-2c0e-46e2-aeb3-15282ce98bd1 / nYwMgzI9uy
+Info: Process UID = 1939028 / e9e9122a-d462-48da-98d5-f098c8825c56 / VjSgDJtPdz
 
 **INFO:  MMMC transition support version v31-84 
 
@@ -28,20 +28,20 @@ Info: Process UID = 662720 / 9bc72a82-2c0e-46e2-aeb3-15282ce98bd1 / nYwMgzI9uy
 Sourcing file "../quantus/quantus.tcl" ...
 source ../quantus/quantus.tcl
 <CMD> restoreDesign ./saved/top_soc_final.enc.dat top_soc
-#% Begin load design ... (date=10/10 17:19:27, mem=1714.9M)
+#% Begin load design ... (date=10/11 11:51:53, mem=1715.2M)
 Loading design 'top_soc' saved by 'Innovus' '23.14-s088_1' on 'Thu Oct 1 15:18:32 2026'.
-% Begin Load MMMC data ... (date=10/10 17:19:28, mem=1717.2M)
-% End Load MMMC data ... (date=10/10 17:19:28, total cpu=0:00:00.1, real=0:00:00.0, peak res=1718.7M, current mem=1718.7M)
+% Begin Load MMMC data ... (date=10/11 11:51:55, mem=1717.3M)
+% End Load MMMC data ... (date=10/11 11:51:55, total cpu=0:00:00.0, real=0:00:00.0, peak res=1718.8M, current mem=1718.8M)
 rc_typ rc_ff rc_ss
 
 Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/asap7_tech_1x_201209.fixed.lef ...
 
 Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/lef/asap7sc7p5t_28_R_1x_220121a.lef ...
 Set DBUPerIGU to M1 pitch 36.
-[17:19:38.265761] Periodic Lic check successful
-[17:19:38.790065] Feature usage summary:
-[17:19:38.790065] Innovus_Impl_System
-[17:19:38.790066] Innovus_7nm_Opt
+[11:52:05.386642] Periodic Lic check successful
+[11:52:05.386656] Feature usage summary:
+[11:52:05.386657] Innovus_Impl_System
+[11:52:05.386657] Innovus_7nm_Opt
 
 (#124) This command "restoreDesign ./saved/top_soc_final.enc.dat top_soc" required an extra checkout of license invs_7nm.
 Additional license(s) checked out: 1 'invs_7nm' (Innovus_7nm_Opt; INVS07; 23.1) license(s)
@@ -108,9 +108,9 @@ Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/C
 Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120' 
 Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
-*** End library_loading (cpu=0.46min, real=0.47min, mem=544.1M, fe_cpu=0.71min, fe_real=1.00min, fe_mem=2250.6M) ***
-% Begin Load netlist data ... (date=10/10 17:20:06, mem=1749.6M)
-*** Begin netlist parsing (mem=2250.6M) ***
+*** End library_loading (cpu=0.46min, real=0.47min, mem=544.1M, fe_cpu=0.72min, fe_real=1.00min, fe_mem=2250.8M) ***
+% Begin Load netlist data ... (date=10/11 11:52:33, mem=1749.9M)
+*** Begin netlist parsing (mem=2250.8M) ***
 **WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
 Type 'man IMPVL-159' for more detail.
 **WARN: (IMPVL-159):	Pin 'sdel[1]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
@@ -126,9 +126,9 @@ Reading netlist ...
 Backslashed names will retain backslash and a trailing blank character.
 Reading verilogBinary netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/vbin/top_soc.v.bin'
 
-*** Memory Usage v#2 (Current mem = 2250.609M, initial mem = 847.699M) ***
-*** End netlist parsing (cpu=0:00:00.2, real=0:00:00.0, mem=2250.6M) ***
-% End Load netlist data ... (date=10/10 17:20:06, total cpu=0:00:00.2, real=0:00:00.0, peak res=1877.2M, current mem=1877.2M)
+*** Memory Usage v#2 (Current mem = 2250.773M, initial mem = 847.699M) ***
+*** End netlist parsing (cpu=0:00:00.2, real=0:00:00.0, mem=2250.8M) ***
+% End Load netlist data ... (date=10/11 11:52:33, total cpu=0:00:00.2, real=0:00:00.0, peak res=1877.6M, current mem=1877.6M)
 Set top cell to top_soc.
 **WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
 Type 'man IMPTS-124' for more detail.
@@ -152,7 +152,7 @@ Set DBUPerIGU to techSite asap7sc7p5t width 54.
 ** info: there are 141720 stdCell insts with at least one signal pin.
 ** info: there are 84 macros.
 
-*** Memory Usage v#2 (Current mem = 2274.621M, initial mem = 847.699M) ***
+*** Memory Usage v#2 (Current mem = 2274.785M, initial mem = 847.699M) ***
 *info: set bottom ioPad orient R0
 
 Honor LEF defined pitches for advanced node
@@ -229,8 +229,8 @@ Type 'man IMPOPT-3602' for more detail.
 Slack adjustment of -0 applied on C2O path_group
 **WARN: (IMPTCM-77):	Option "-drouteStartIteration" for command setNanoRouteMode is obsolete and will be removed in a future release. The obsolete option still works in this release but to avoid this warning and to ensure compatibility with future releases, remove the obsolete option from your script.
 
-viaInitial starts at Sat Oct 10 17:20:07 2026
-viaInitial ends at Sat Oct 10 17:20:07 2026
+viaInitial starts at Sun Oct 11 11:52:34 2026
+viaInitial ends at Sun Oct 11 11:52:34 2026
 Setting -viarule_preference to default order. ViaGen will consider via rule priority based on the order of appearance in the technology file.
 AAE_INFO: switching setDelayCal -siAware from false to true ...
 AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
@@ -286,8 +286,8 @@ List of identified usable delay cells: HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_L B
 Total number of identified usable delay cells: 7
 List of identified unusable delay cells:
 Total number of identified unusable delay cells: 0
-Reading floorplan file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.fp.gz (mem = 2693.7M).
-% Begin Load floorplan data ... (date=10/10 17:20:21, mem=2379.9M)
+Reading floorplan file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.fp.gz (mem = 2692.8M).
+% Begin Load floorplan data ... (date=10/11 11:52:48, mem=2379.6M)
 *info: reset 159925 existing net BottomPreferredLayer and AvoidDetour
 Deleting old partition specification.
 Set FPlanBox to (0 0 565632 358128)
@@ -296,44 +296,44 @@ Reading binary special route file /home/user1/Desktop/Script_Backend/Asap7/run_w
 Convert 0 swires and 0 svias from compressed groups
 1970 swires and 126881 svias were compressed
 1970 swires and 7041 svias were decompressed from small or sparse groups
-Ending "Read special route file" (total cpu=0:00:01.7, real=0:00:01.0, peak res=2744.8M, current mem=2744.8M)
+Ending "Read special route file" (total cpu=0:00:01.7, real=0:00:02.0, peak res=2744.4M, current mem=2744.4M)
 There are 3493 nets with weight being set
 There are 3526 nets with bottomPreferredRoutingLayer being set
 There are 3493 nets with avoidDetour being set
 Extracting standard cell pins and blockage ...... 
 Pin and blockage extraction finished
-% End Load floorplan data ... (date=10/10 17:20:23, total cpu=0:00:01.9, real=0:00:02.0, peak res=2745.1M, current mem=2743.2M)
+% End Load floorplan data ... (date=10/11 11:52:50, total cpu=0:00:01.8, real=0:00:02.0, peak res=2744.9M, current mem=2742.9M)
 Reading congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.route.congmap.gz ...
 Suppress "**WARN ..." messages.
 Un-suppress "**WARN ..." messages.
-% Begin Load SymbolTable ... (date=10/10 17:20:23, mem=2767.3M)
-% End Load SymbolTable ... (date=10/10 17:20:24, total cpu=0:00:00.9, real=0:00:01.0, peak res=2905.3M, current mem=2905.3M)
+% Begin Load SymbolTable ... (date=10/11 11:52:50, mem=2767.1M)
+% End Load SymbolTable ... (date=10/11 11:52:51, total cpu=0:00:00.9, real=0:00:01.0, peak res=2905.1M, current mem=2905.1M)
 Loading place ...
-% Begin Load placement data ... (date=10/10 17:20:24, mem=2905.3M)
+% Begin Load placement data ... (date=10/11 11:52:51, mem=2905.1M)
 Reading placement file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.place.gz.
 ** Reading stdCellPlacement_binary (Created by Innovus v23.14-s088_1 on Thu Oct  1 15:18:27 2026, version# 2) ...
 Read Views for adaptive view pruning ...
 Read 1 views from Binary DB for adaptive view pruning
 view_ss
 *** applyConnectGlobalNets disabled.
-*** Completed restorePlace (cpu=0:00:03.4 real=0:00:04.0 mem=3671.5M) ***
+*** Completed restorePlace (cpu=0:00:03.4 real=0:00:04.0 mem=3672.6M) ***
 Total net length = 1.059e+06 (5.172e+05 5.421e+05) (ext = 1.525e+04)
-% End Load placement data ... (date=10/10 17:20:28, total cpu=0:00:03.4, real=0:00:04.0, peak res=3406.5M, current mem=3404.9M)
+% End Load placement data ... (date=10/11 11:52:55, total cpu=0:00:03.5, real=0:00:04.0, peak res=3406.0M, current mem=3404.6M)
 Reading PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on       Thu Oct  1 15:18:27 2026)
-*** Completed restorePGFile (cpu=0:00:00.3 real=0:00:00.0 mem=3702.5M) ***
-% Begin Load routing data ... (date=10/10 17:20:28, mem=3440.8M)
+*** Completed restorePGFile (cpu=0:00:00.3 real=0:00:00.0 mem=3703.6M) ***
+% Begin Load routing data ... (date=10/11 11:52:55, mem=3440.5M)
 Reading routing file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.route.gz.
 Reading Innovus routing data (Created by Innovus v23.14-s088_1 on Thu Oct  1 15:18:27 2026 Format: 23.1) ...
 *** Total 145057 nets are successfully restored.
-*** Completed restoreRoute (cpu=0:00:00.9 real=0:00:01.0 mem=3861.5M) ***
-% End Load routing data ... (date=10/10 17:20:29, total cpu=0:00:01.0, real=0:00:01.0, peak res=3602.0M, current mem=3602.0M)
+*** Completed restoreRoute (cpu=0:00:00.9 real=0:00:01.0 mem=3862.6M) ***
+% End Load routing data ... (date=10/11 11:52:56, total cpu=0:00:01.0, real=0:00:01.0, peak res=3601.7M, current mem=3601.7M)
 Loading Drc markers ...
 ... 1118 markers are loaded ...
 ... 6 geometry drc markers are loaded ...
 ... 0 antenna drc markers are loaded ...
 TAT_INFO: ::restoreCongMap REAL = 0 : CPU = 0 : MEM = 0.
 Reading property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.prop
-*** Completed restoreProperty (cpu=0:00:00.4 real=0:00:01.0 mem=3870.5M) ***
+*** Completed restoreProperty (cpu=0:00:00.4 real=0:00:01.0 mem=3871.6M) ***
 Reading dirtyarea snapshot file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/top_soc.db.da.gz (Create by Innovus v23.14-s088_1 on Thu Oct  1 15:18:29 2026, version: 7).
 Loading preRoute extraction data from directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/extraction/' ...
 Extraction setup Started for TopCell top_soc 
@@ -409,14 +409,14 @@ Initializing preRoute extraction patterns for new vias...
 Generating auto layer map file.
 
 Completed (cpu: 0:00:00.4 real: 0:00:01.0)
-% Begin Load power constraints ... (date=10/10 17:21:08, mem=512.1M)
+% Begin Load power constraints ... (date=10/11 11:53:35, mem=512.7M)
 'set_default_switching_activity' finished successfully.
-% End Load power constraints ... (date=10/10 17:21:08, total cpu=0:00:00.1, real=0:00:00.0, peak res=526.1M, current mem=526.1M)
+% End Load power constraints ... (date=10/11 11:53:36, total cpu=0:00:00.1, real=0:00:01.0, peak res=526.5M, current mem=526.5M)
 dc_ss dc_tt dc_ff
-% Begin load AAE data ... (date=10/10 17:21:09, mem=645.6M)
+% Begin load AAE data ... (date=10/11 11:53:36, mem=646.0M)
 **WARN: (IMPESI-3505):	setDelayCalMode -eng_enablePrePlacedFlow false (default=false) will be obsoleted along with its sgs2set equivalent.  This parameter will continue to be supported in the current release, but will be removed in the next major release of the software.
-AAE DB initialization (MEM=711.929688 CPU=0:00:00.1 REAL=0:00:01.0) 
-% End load AAE data ... (date=10/10 17:21:10, total cpu=0:00:00.4, real=0:00:01.0, peak res=713.2M, current mem=713.2M)
+AAE DB initialization (MEM=712.300781 CPU=0:00:00.1 REAL=0:00:00.0) 
+% End load AAE data ... (date=10/11 11:53:37, total cpu=0:00:00.4, real=0:00:01.0, peak res=713.5M, current mem=713.5M)
 Restoring CCOpt config...
   Extracting original clock gating for CLK_TCK...
     clock_tree CLK_TCK contains 136 sinks and 6 clock gates.
@@ -540,7 +540,7 @@ Total number of identified unusable delay cells: 0
 timing_aocv_enable_gba_combine_launch_capture
 timing_enable_backward_compatible_latch_thru_mt_mode
 timing_enable_separate_device_slew_effect_sensitivities
-#% End load design ... (date=10/10 17:21:13, total cpu=0:01:07, real=0:01:46, peak res=13341.4M, current mem=895.5M)
+#% End load design ... (date=10/11 11:53:40, total cpu=0:01:07, real=0:01:47, peak res=13446.1M, current mem=895.4M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -559,107 +559,371 @@ The timeout for a remote job to respond is 3600 seconds.
 Submit command for task runs will be: local
 **WARN: (IMPMF-5047):	deleteMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use "dbDeleteObj [dbGet top.nets.sWires.shape fillwire -p]" and "dbDeleteObj [dbGet top.nets.sWires.shape fillwireopc -p]" to delete metal fill.
 **WARN: (IMPMF-5047):	deleteMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use "dbDeleteObj [dbGet top.nets.sWires.shape fillwire -p]" and "dbDeleteObj [dbGet top.nets.sWires.shape fillwireopc -p]" to delete metal fill.
-<CMD> setExtractRCMode -engine postRoute -effortLevel signoff -coupled true
-<CMD> setExtractRCMode -qrcCmdType auto
-<CMD> setExtractRCMode -extract_rc_quantus_executable /Cadence/DDI/INNOVUS231/bin/qrc
+<CMD> setExtractRCMode -engine postRoute -effortLevel high -coupled true
 <CMD> setExtractRCMode -lefTechFileMap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map
 <CMD> extractRC
-Extraction called for design 'top_soc' of instances=2323433 and nets=159926 using extraction engine 'postRoute' at effort level 'signoff' .
-rc_typ rc_ff rc_ss
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[0].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[0].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[0].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram' after mapping to verilog name becomes 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram '. Check if 'u_dcache/\DATA_RAM_G_DATA_WAY[1].u_sram /\G_SRAM_BANK[1].u_sram ' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' after mapping to verilog name becomes 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram'. Check if 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' after mapping to verilog name becomes 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram'. Check if 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' after mapping to verilog name becomes 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram'. Check if 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram' is what you expected.
-**WARN: (IMPDB-2125):	lef/def Name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' is not a legal verilog name because there are characters after bus bits. The lef/def name 'u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram' after mapping to verilog name becomes 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram'. Check if 'u_dcache/\TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram /u_sram' is what you expected.
-**WARN: (EMS-27):	Message (IMPDB-2125) has exceeded the current message display limit of 20.
-To increase the message display limit, refer to the product command reference manual.
+Extraction called for design 'top_soc' of instances=2323433 and nets=159926 using extraction engine 'postRoute' at effort level 'high' .
+Integrated QRC (IQuantus) Extraction in Multi-Corner mode called for design 'top_soc'. Number of corners is 3.
+No IQuantus parasitic data in Innovus. Going for full-chip extraction.
+ Min pitch recieved = 144 
+IQuantus Extraction invoked in single CPU mode. Commands setDistributeHost/setMultiCpuUsage can be used to activate multiCPU extraction.
+
+IQuantus Extraction engine initialization using 3 tech files:
+	/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02 at temperature 100C , 
+	/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02 at temperature 25C & 
+	/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02 at temperature 0C . 
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+INFO (EXTIQUANTUS-101) : 
+  Integrated Quantus - 64-bit Parasitic Extractor - Version 23.1.1-s336
+-------------------------------------------------------------------------
+               Copyright 2025 Cadence Design Systems, Inc.
 
 
-  Cadence Quantus Extraction - 64-bit Parasitic Extractor - Version
-23.1.1-s336 Mon Jan 20 22:24:34 PST 2025
----------------------------------------------------------------------------------------------------------------
-                                  Copyright 2025 Cadence Design Systems,
-Inc.
+INFO (EXTIQUANTUS-103) : Starting at 2026-Oct-11 11:53:55 (2026-Oct-11 02:53:55 GMT).
 
+INFO (EXTIQUANTUS-104) : Starting extraction session...
 
+INFO (EXTIQUANTUS-159) : Loading technology data from file:
+ 
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1939028_e9e9122a-d462-48da-98d5-f098c8825c56_user1-EliteMini_user1_AJHjPN/iqrc_tmp_1939028_aXaE2u/.qrctemp/CceRCGEN0tch1939028
 
-INFO (EXTQRCXLOG-128) : Quantus command line:
- Started at: 2026-Oct-10 17:21:35 (2026-Oct-10 08:21:35 GMT)
- Executable: /Cadence/DDI/INNOVUS231/tools.lnx86/extraction/bin/64bit/qrc
- Options:     -cmd
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_662720_9bc72a82-2c0e-46e2-aeb3-15282ce98bd1_user1-EliteMini_user1_3peMzz/tmp_qrc_Tjt0r8/qrc.cmd
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_662720_9bc72a82-2c0e-46e2-aeb3-15282ce98bd1_user1-EliteMini_user1_3peMzz/tmp_qrc_Tjt0r8/qrc.def.gz
- Current working directory:
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus
+INFO (EXTIQUANTUS-159) : Loading technology data from file:
+ 
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02
 
+INFO (EXTIQUANTUS-289) : Loading RCgen extraction models from file:
+ 
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_1939028_e9e9122a-d462-48da-98d5-f098c8825c56_user1-EliteMini_user1_AJHjPN/iqrc_tmp_1939028_aXaE2u/.qrctemp/CceRCGEN0tch1939028
 
-INFO (EXTQRCXLOG-103) : The Command File Options for the current Quantus run are as follows:
+INFO (EXTIQUANTUS-345) : Checking Command/Tech/License Files. 
 
-extract \
-	 -selection "all" \
-	 -type "rc_coupled"
-extraction_setup \
-	 -promote_pin_pad "LOGICAL" \
-	 -technology_layer_map \
-		"M1  M1  " \
-		"M2  M2  " \
-		"M3  M3  " \
-		"M4  M4  " \
-		"M5  M5  " \
-		"M6  M6  " \
-		"M7  M7  " \
-		"M8  M8  " \
-		"M9  M9  " \
-		"V1  V1  " \
-		"V2  V2  " \
-		"V3  V3  " \
-		"V4  V4  " \
-		"V5  V5  " \
-		"V6  V6  " \
-		"V7  V7  " \
-		"V8  V8  "
-filter_coupling_cap \
-	 -cap_filtering_mode "absolute_and_relative" \
-	 -coupling_cap_threshold_absolute 0.1 \
-	 -coupling_cap_threshold_relative 1.0 \
-	 -total_cap_threshold 0.0
-input_db -type def \
-	 -lef_file_list_file "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_662720_9bc72a82-2c0e-46e2-aeb3-15282ce98bd1_user1-EliteMini_user1_3peMzz/tmp_qrc_Tjt0r8/qrc.leflist"
-log_file \
-	 -dump_options true \
-	 -file_name "qrc_662720_20261010_17:21:26_345.log"
-output_db -type spef \
-	 -short_incomplete_net_pins true \
-	 -subtype "STARN"
-output_setup \
-	 -compressed true \
-	 -directory_name "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_662720_9bc72a82-2c0e-46e2-aeb3-15282ce98bd1_user1-EliteMini_user1_3peMzz/tmp_qrc_Tjt0r8" \
-	 -file_name "top_soc" \
-	 -temporary_directory_name "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_662720_9bc72a82-2c0e-46e2-aeb3-15282ce98bd1_user1-EliteMini_user1_3peMzz/tmp_qrc_Tjt0r8"
-process_technology \
-	 -technology_corner \
-		"rc_typ" \
-		"rc_typ" \
-		"rc_typ" \
-	 -technology_library_file "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_662720_9bc72a82-2c0e-46e2-aeb3-15282ce98bd1_user1-EliteMini_user1_3peMzz/tmp_qrc_Tjt0r8/_qrc_techlib.defs" \
-	 -technology_name "_qrc_tech_" \
-	 -temperature \
-		"25" \
-		"0" \
-		"100"
+INFO (EXTIQUANTUS-383) : Summary of license(s) checkout :
+	1 count of QTS300
+	1 count of QTS310
+	1 count of QTS320
+	1 count of QTS530
 
+INFO (EXTIQUANTUS-105) : Starting design extraction....
+Reading layer map file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map'.
+**ERROR: (IMPEXT-1237):	Error in layermap File '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map' Line 21: via techLayerName 'V9' not defined in tech file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02.
+**ERROR: (IMPEXT-1238):	1 error(s) in layermap file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map'.
+No layermap file specified. Automatically mapping tech and lef layers. Log file is 'extLogDir/IQuantus_11-Oct-2026_11:53:52_1939028_eDOuzU/extr.top_soc.layermap.log'.
+Layer Gate with id 67 --> gate  1
+**WARN: (IMPEXT-1221):	No poly layer found in the technology file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02'.
+Type 'man IMPEXT-1221' for more detail.
+**WARN: (IMPEXT-1222):	No CUT layer defined between the poly LAYER and first routing metal LAYER in LEF technology file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat/libs/mmmc/rc_typ/qrcTechFile_typ03_unscaledV02'.
+Type 'man IMPEXT-1222' for more detail.
+**WARN: (IMPEXT-7127):	Layer M1 redefined in layer-mapping file.
+db Layer M1 with id 1 --> lisd  2
+**WARN: (IMPEXT-7128):	Via V1 redefined in layer-mapping file.
+db Layer V1 with id 34 --> v0  3
+**WARN: (IMPEXT-7127):	Layer M2 redefined in layer-mapping file.
+db Layer M2 with id 2 --> m1  4
+**WARN: (IMPEXT-7128):	Via V2 redefined in layer-mapping file.
+db Layer V2 with id 35 --> v1  5
+**WARN: (IMPEXT-7127):	Layer M3 redefined in layer-mapping file.
+db Layer M3 with id 3 --> m2  6
+**WARN: (IMPEXT-7128):	Via V3 redefined in layer-mapping file.
+db Layer V3 with id 36 --> v2  7
+**WARN: (IMPEXT-7127):	Layer M4 redefined in layer-mapping file.
+db Layer M4 with id 4 --> m3  8
+**WARN: (IMPEXT-7128):	Via V4 redefined in layer-mapping file.
+db Layer V4 with id 37 --> v3  9
+**WARN: (IMPEXT-7127):	Layer M5 redefined in layer-mapping file.
+db Layer M5 with id 5 --> m4  10
+**WARN: (IMPEXT-7128):	Via V5 redefined in layer-mapping file.
+db Layer V5 with id 38 --> v4  11
+**WARN: (IMPEXT-7127):	Layer M6 redefined in layer-mapping file.
+db Layer M6 with id 6 --> m5  12
+**WARN: (IMPEXT-7128):	Via V6 redefined in layer-mapping file.
+db Layer V6 with id 39 --> v5  13
+**WARN: (IMPEXT-7127):	Layer M7 redefined in layer-mapping file.
+db Layer M7 with id 7 --> m6  14
+**WARN: (IMPEXT-7128):	Via V7 redefined in layer-mapping file.
+db Layer V7 with id 40 --> v6  15
+**WARN: (IMPEXT-7127):	Layer M8 redefined in layer-mapping file.
+db Layer M8 with id 8 --> m7  16
+**WARN: (IMPEXT-7128):	Via V8 redefined in layer-mapping file.
+db Layer V8 with id 41 --> v7  17
+**WARN: (IMPEXT-7127):	Layer M9 redefined in layer-mapping file.
+db Layer M9 with id 9 --> m8  18
+db Layer V9 with id 42 --> v8  19
+**WARN: (IMPEXT-7127):	Layer Pad redefined in layer-mapping file.
+db Layer Pad with id 10 --> m9  20
+ Prefered direction 1 set on layer no 1 
+ Prefered direction 0 set on layer no 2 
+ Prefered direction 1 set on layer no 3 
+ Prefered direction 0 set on layer no 4 
+ Prefered direction 1 set on layer no 5 
+ Prefered direction 0 set on layer no 6 
+ Prefered direction 1 set on layer no 7 
+ Prefered direction 0 set on layer no 8 
+ Prefered direction 1 set on layer no 9 
+ Prefered direction 0 set on layer no 10 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+IQuantus Extraction engine initialized successfully.
+
+Dumping IQuantus extraction options in file 'extLogDir/IQuantus_11-Oct-2026_11:53:52_1939028_eDOuzU/extr.top_soc.extraction_options.log'.
+Initialization for IQuantus Fullchip Extraction DONE (CPU Time: 0:00:06.4  Real Time: 0:00:13.0  MEM: 4233.953M)
+
+Geometry processing of Gray and Metal fill STARTED.................... DONE (CPU Time: 0:00:05.4  Real Time: 0:00:09.0  MEM: 4395.953M)
+Geometry processing of nets STARTED.................... DONE (NETS: 144620  Geometries: 2926221  CPU Time: 0:00:04.9  Real Time: 0:00:07.0  MEM: 4553.453M)
+
+Extraction of Geometries STARTED.
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+INFO (EXTIQUANTUS-282) : Checking Command/Tech Files. 
+
+INFO (EXTIQUANTUS-277) : Manufacturing Data Information :- 
+  DEF/GDS file 
+    does     contain MetalFill data. 
+  Techfile  
+    does NOT contain WEE data.     
+    does NOT contain Erosion data t=f( density ) 
+    does     contain R(w) data.    
+    does NOT contain R(w, s) data.  
+    does NOT contain TC(w) data.    
+    does     contain T/B enlargement data. 
+    does     contain Floating Metal Fill models. 
+
+INFO (EXTIQUANTUS-287) : Capacitance Models Information :- 
+ ICECAPS models are not available. 
+ RCgen   models are     available. 
+ This IQuantus session uses RCgen models.
+
+INFO (EXTIQUANTUS-286) : RCs effects computed for this session include :- 
+ MetalFill        : floating 
+ WEE Effects      : n/a 
+ Erosion Effects  : n/a t=f( density ) 
+ T/B Enlargements : ON 
+ R(w) Effects     : ON 
+ R(w,s) Effects   : n/a 
+ TC(w) Effects     : n/a 
+Some effects indicate n/a because of non-availability of relevantinput data
+(or) requested to be off (and/or) usage of older Icecaps models.
+
+INFO (EXTHPY-103) : Extracting capacitance values.
+
+INFO (EXTHPY-267) :  
+ DESIGN                       : 
+ DEF/OA DIEAREA BBOX          : 2147483647 2147483647 -2147483648
+-2147483648
+ DEF/OA UNITS                 : 10000
+ FINAL SCALE FACTOR           : 1
+ 
+ ESTIMATED COMPRESSED DEF SIZE: 0
+ TILE SIZE                    : 50x50 squm
+ TILE COUNT                   : 96
+ CLUSTER SIZE                 : 257
+ CAPDB PARTITIONS             : 16
+
+INFO (EXTHPY-104) :    0%
+
+INFO (EXTHPY-104) :    1%
+
+INFO (EXTHPY-104) :    2%
+
+INFO (EXTHPY-104) :    3%
+
+INFO (EXTHPY-104) :    4%
+
+INFO (EXTHPY-104) :    5%
+
+INFO (EXTHPY-104) :    6%
+
+INFO (EXTHPY-104) :    7%
+
+INFO (EXTHPY-104) :    8%
+
+INFO (EXTHPY-104) :    9%
+
+INFO (EXTHPY-104) :    11%
+
+INFO (EXTHPY-104) :    12%
+
+INFO (EXTHPY-104) :    13%
+
+INFO (EXTHPY-104) :    14%
+
+INFO (EXTHPY-104) :    15%
+
+INFO (EXTHPY-104) :    16%
+
+INFO (EXTHPY-104) :    17%
+
+INFO (EXTHPY-104) :    18%
+
+INFO (EXTHPY-104) :    19%
+
+INFO (EXTHPY-104) :    20%
+
+INFO (EXTHPY-104) :    21%
+
+INFO (EXTHPY-104) :    22%
+
+INFO (EXTHPY-104) :    23%
+
+INFO (EXTHPY-104) :    24%
+
+INFO (EXTHPY-104) :    25%
+
+INFO (EXTHPY-104) :    26%
+
+INFO (EXTHPY-104) :    27%
+
+INFO (EXTHPY-104) :    28%
+
+INFO (EXTHPY-104) :    29%
+
+INFO (EXTHPY-104) :    31%
+
+INFO (EXTHPY-104) :    32%
+
+INFO (EXTHPY-104) :    33%
+
+INFO (EXTHPY-104) :    34%
+
+INFO (EXTHPY-104) :    35%
+
+INFO (EXTHPY-104) :    36%
+
+INFO (EXTHPY-104) :    37%
+
+INFO (EXTHPY-104) :    38%
+
+INFO (EXTHPY-104) :    39%
+
+INFO (EXTHPY-104) :    40%
+
+INFO (EXTHPY-104) :    41%
+
+INFO (EXTHPY-104) :    42%
+
+INFO (EXTHPY-104) :    43%
+
+INFO (EXTHPY-104) :    44%
+
+INFO (EXTHPY-104) :    45%
+
+INFO (EXTHPY-104) :    46%
+
+INFO (EXTHPY-104) :    47%
+
+INFO (EXTHPY-104) :    48%
+
+INFO (EXTHPY-104) :    49%
+
+INFO (EXTHPY-104) :    51%
+
+INFO (EXTHPY-104) :    52%
+
+INFO (EXTHPY-104) :    53%
+
+INFO (EXTHPY-104) :    54%
+
+INFO (EXTHPY-104) :    55%
+
+INFO (EXTHPY-104) :    56%
+
+INFO (EXTHPY-104) :    57%
+
+INFO (EXTHPY-104) :    58%
+
+INFO (EXTHPY-104) :    59%
+
+INFO (EXTHPY-104) :    60%
+
+INFO (EXTHPY-104) :    61%
+
+INFO (EXTHPY-104) :    62%
+
+INFO (EXTHPY-104) :    63%
+
+INFO (EXTHPY-104) :    64%
+
+INFO (EXTHPY-104) :    65%
+
+INFO (EXTHPY-104) :    66%
+
+INFO (EXTHPY-104) :    67%
+
+INFO (EXTHPY-104) :    68%
+
+INFO (EXTHPY-104) :    69%
+
+INFO (EXTHPY-104) :    71%
+
+INFO (EXTHPY-104) :    72%
+
+INFO (EXTHPY-104) :    73%
+
+INFO (EXTHPY-104) :    74%
+
+INFO (EXTHPY-104) :    75%
+
+INFO (EXTHPY-104) :    76%
+
+INFO (EXTHPY-104) :    77%
+
+INFO (EXTHPY-104) :    78%
+
+INFO (EXTHPY-104) :    79%
+
+INFO (EXTHPY-104) :    80%
+
+INFO (EXTHPY-104) :    81%
+
+INFO (EXTHPY-104) :    82%
+
+INFO (EXTHPY-104) :    83%
+
+INFO (EXTHPY-104) :    84%
+
+INFO (EXTHPY-104) :    85%
+
+INFO (EXTHPY-104) :    86%
+
+INFO (EXTHPY-104) :    87%
+
+INFO (EXTHPY-104) :    88%
+
+INFO (EXTHPY-104) :    89%
+
+INFO (EXTHPY-104) :    91%
+
+INFO (EXTHPY-104) :    92%
+
+INFO (EXTHPY-104) :    93%
+
+INFO (EXTHPY-104) :    94%
+
+INFO (EXTHPY-104) :    95%
+
+INFO (EXTHPY-104) :    96%
+
+INFO (EXTHPY-104) :    97%
+
+INFO (EXTHPY-104) :    98%
+
+INFO (EXTHPY-104) :    99%
+
+INFO (EXTHPY-104) :    100%
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Extraction of Geometries DONE (NETS: 144620  CPU Time: 0:01:23  Real Time: 0:01:23  MEM: 5040.406M)
+
+Parasitic Network Creation STARTED
+....................
+Number of Extracted Resistors     : 1652793
+Number of Extracted Ground Caps   : 1807212
+Number of Extracted Coupling Caps : 106508
+Parasitic Network Creation DONE (Nets: 144620  CPU Time: 0:00:04.2  Real Time: 0:00:04.0  MEM: 5040.406M)
+
+IQuantus Extraction engine is being closed... 
+IQuantus Fullchip Extraction DONE (CPU Time: 0:01:46  Real Time: 0:01:56  MEM: 5040.406M)
+
+*** Memory Usage v#2 (Current mem = 5040.406M, initial mem = 847.699M) ***
+*** Message Summary: 66 warning(s), 2 error(s)
+
+--- Ending "Innovus" (totcpu=0:03:13, real=0:04:15, mem=5040.4M) ---
