@@ -1,14 +1,17 @@
 PASS
 Tempus top_soc: SPEF quantus (top_soc_quantus_rc_*.spef), OCV + CPPR, SI bat, 1 CPU
-  update_timing + bao cao 165 s; don vi 1ns / 1pf
+  update_timing + bao cao 177 s; don vi 1ns / 1pf
+  logs/top_soc_pnr.tempus.sdc: bo 4 dong source latency tren generated clock (CLK_SDRAM_OUT), doi 2 set_max/min_delay ps -> ns
   derate SRAM: 84 macro, dc_ss late x1.30, dc_ff early x0.75; OCV chung late x1.0 / early x1.0
-  setup view_ss  WNS    0.3170 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_ss.rpt
-  setup view_tt  WNS    0.5390 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_tt.rpt
+  setup view_ss  WNS    0.2050 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_ss.rpt
+  setup view_tt  WNS    0.3390 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_tt.rpt
   hold  view_ff  WNS    0.0100 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_ff.rpt
   hold  view_tt  WNS    0.0320 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_tt.rpt
   max_transition / max_capacitance : reports/all_violators.rpt
   net chua gan ky sinh             : reports/annotated_parasitics.rpt
   duong khong rang buoc            : reports/check_timing.rpt, analysis_coverage.rpt
   glitch                           : reports/glitch.rpt
+  WARNING: libset_ff: asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib khai bao 0.7 V, cac lib con lai 0.77 V - cell cua lib nay bi tinh sai dien ap o view_ff
+  WARNING: SDC PnR con 2 set_max/min_delay chua doi don vi: Innovus da toi uu CDC JTAG <-> SYS voi 4000 ns - chay lai preflight + Innovus (prepare_innovus_sdc.tcl da sua)
   WARNING: khong co derate OCV chung cho std cell (1.0) trong khi CPPR van duoc tru - giong Innovus; bat: MCU_OCV_DERATE_LATE=1.05 MCU_OCV_DERATE_EARLY=0.95
   WARNING: ba goc RC dung chung mot qrcTechFile typical (chi khac nhiet do) va .lib SRAM chi co goc TT (bu bang derate x1.30 / x0.75)
