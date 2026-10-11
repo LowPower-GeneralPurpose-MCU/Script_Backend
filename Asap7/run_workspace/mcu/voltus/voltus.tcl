@@ -108,9 +108,45 @@ proc voltus_power_pads {how} {
     }
 }
 
+# analyze_rail KHONG nem loi Tcl khi hong va van de lai era_work/ (thu vien PGV)
+# trong thu muc ket qua: run 2026-10-11 dung o VOLTUS_RAIL-1152 ma tom tat van
+# ghi DONE.  Hai dau hieu that cua mot lan hong: voltus_rail.log o thu muc chay
+# ghi "unsuccessful", va thu muc ket qua khong co gi ngoai era_work/.
+proc voltus_rail_check {net out} {
+    set log [file join $::VOLTUS_DIR voltus_rail.log]
+    set why {}
+    if {[file isfile $log]} {
+        # Lan VSS ghi de lan VDD: giu moi net mot ban.
+        file copy -force $log [file join $::VOLTUS_DIR logs "voltus_rail_$net.log"]
+        set fp [open $log r]
+        set text [read $fp]
+        close $fp
+        if {[regexp {Rail Analysis is unsuccessful|exited unsuccessfully} $text]} {
+            foreach line [split $text "\n"] {
+                if {[regexp {ERROR} $line]} {
+                    lappend why [string trim $line]
+                }
+            }
+            if {[llength $why] == 0} {
+                lappend why "voltus_rail.log bao unsuccessful"
+            }
+        }
+    }
+    set results {}
+    foreach path [glob -nocomplain -directory $out *] {
+        if {[file tail $path] ne "era_work"} {
+            lappend results $path
+        }
+    }
+    if {[llength $why] == 0 && [llength $results] == 0} {
+        lappend why "khong co ket qua nao trong $out ngoai era_work"
+    }
+    if {[llength $why] > 0} {
+        error "analyze_rail $net: [join $why { | }]"
+    }
+}
+
 # Mot lan phan tich luoi nguon.  layer_map rong = khong truyen file ghep lop.
-# analyze_rail co the in loi ma khong nem loi Tcl (extractRC cua Innovus da
-# tung nhu vay), nen kiem ca viec thu muc ket qua co file hay khong.
 proc voltus_rail {layer_map pads} {
     set mode_cmd [list set_rail_analysis_mode \
         -method era_static \
@@ -119,21 +155,26 @@ proc voltus_rail {layer_map pads} {
         -em_temperature 110 \
         -extraction_tech_file $::QRC_FILE]
     if {$layer_map ne ""} {
-        lappend mode_cmd -lef_layermap $layer_map
+        # -lef_layermap bi tu choi (IMPTCM-48, run 2026-10-11); usage cua lenh
+        # co -era_lef_layermap.
+        lappend mode_cmd -era_lef_layermap $layer_map
     }
     {*}$mode_cmd
 
     set_pg_nets -net VDD -voltage $::VOLTUS_VDD -threshold $::VOLTUS_VDD_MIN
     set_pg_nets -net VSS -voltage 0.0 -threshold $::VOLTUS_VSS_MAX
     voltus_power_pads $pads
+    # Dong cua tung instance tu report_power.  Thieu lenh nay thi analyze_rail
+    # dung o VOLTUS_RAIL-1152 (che do khong XP khong tu lay).
+    catch {set_power_data -reset}
+    set_power_data -format current -scale 1 $::VOLTUS_POWER_DATA
 
     foreach net {VDD VSS} {
         set out [file join $::VOLTUS_DIR outputs "rail_$net"]
         file delete -force $out
+        file delete -force [file join $::VOLTUS_DIR voltus_rail.log]
         analyze_rail -type net -output $out $net
-        if {[llength [voltus_files_under $out 4]] == 0} {
-            error "analyze_rail $net khong ghi gi vao $out"
-        }
+        voltus_rail_check $net $out
     }
 }
 
