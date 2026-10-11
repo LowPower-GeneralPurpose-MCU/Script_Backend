@@ -107,6 +107,43 @@ proc quantus_layer_pairs {log_file} {
     return $pairs
 }
 
+# Bang ghep ma Innovus doc duoc tu file map; chi co trong .logv:
+#     lef metal layer M1 (1) mapped to tech layer M1 (4)
+# Nhung dong nay duoc in TRUOC khi file map bi tu choi (run 2026-10-11 11:51),
+# nen chi co gia tri khi quantus_ext_errors rong.
+proc quantus_map_pairs {logv_file} {
+    set pairs [dict create]
+    if {![file isfile $logv_file]} {
+        return $pairs
+    }
+    set fp [open $logv_file r]
+    while {[gets $fp line] >= 0} {
+        if {[regexp {lef (?:metal|via) layer (\S+) \(\d+\) mapped to tech layer (\S+)} \
+                $line -> lef tech]} {
+            dict set pairs $lef $tech
+        }
+    }
+    close $fp
+    return $pairs
+}
+
+# Cac dong "**ERROR: (IMPEXT-nnnn): ..." trong log: extractRC KHONG nem loi Tcl
+# khi file map hong, no chi in loi roi quay ve ghep tu dong.
+proc quantus_ext_errors {log_file} {
+    set errs {}
+    if {![file isfile $log_file]} {
+        return $errs
+    }
+    set fp [open $log_file r]
+    while {[gets $fp line] >= 0} {
+        if {[regexp {^\*\*ERROR: \((IMPEXT-\d+)\):\s*(.*)$} $line -> id msg]} {
+            lappend errs "$id: $msg"
+        }
+    }
+    close $fp
+    return $errs
+}
+
 # Cac cap ghep sai trong bang tren: M1..M9 va V1..V8 phai ghep dung ten.
 proc quantus_layer_mismatches {pairs} {
     set bad {}
@@ -159,6 +196,12 @@ if {[catch {
     # va IMPEXT-1240 cho V9: MOI lop LEF deu phai co trong map.  QRC tech file
     # khong co Pad, nen Pad ghep vao LISD - lop QRC duy nhat con trong.  Vo
     # hai vi sau deleteMetalFill -layer Pad khong con hinh nao tren Pad.
+    # Run 2026-10-11 11:51: 18 dong M1..M9, Pad, V1..V8 duoc nhan dung ten
+    # (quantus.logv: "lef metal layer M1 (1) mapped to tech layer M1 (4)"),
+    # chi dong "V9 V9" bi IMPEXT-1237 "via techLayerName 'V9' not defined in
+    # tech file" va Innovus bo CA file.  QRC tech file chi co via V0..V8; V0
+    # (LISD-M1, chi so 3) la via duy nhat con trong nen V9 ghep vao V0, cung
+    # ly do voi Pad -> LISD.
     set QUANTUS_LAYER_MAP [file normalize ./tcl/asap7_lef_to_qrc_layers.map]
     if {![file isfile $QUANTUS_LAYER_MAP]} {
         error "Khong co file ghep lop $QUANTUS_LAYER_MAP"
@@ -245,10 +288,20 @@ if {[catch {
     # File map chua tung chay tren tool; neu Innovus bo qua no hoac hieu sai
     # dinh dang thi bang 'db Layer ... -->' trong log van lech bac nhu cu.
     set layer_pairs [quantus_layer_pairs $QUANTUS_LOG]
+    set layer_src "bang 'db Layer ... -->'"
+    set ext_errs [quantus_ext_errors $QUANTUS_LOG]
+    if {[dict size $layer_pairs] == 0 && [llength $ext_errs] == 0} {
+        # File map duoc nhan va Innovus khong in bang ghep tu dong: lay bang
+        # ma no doc tu file map (chi co trong .logv).
+        set layer_pairs [quantus_map_pairs "${QUANTUS_LOG}v"]
+        set layer_src "file map, theo quantus.logv"
+    }
     set layer_bad [quantus_layer_mismatches $layer_pairs]
-    if {[llength $layer_bad] > 0} {
+    if {[llength $layer_bad] > 0 || [llength $ext_errs] > 0} {
         error "Ghep lop LEF/QRC sai: $layer_bad
   File map $QUANTUS_LAYER_MAP khong duoc ap dung hoac sai dinh dang.
+  Loi IMPEXT trong log:
+    [join $ext_errs "\n    "]
   Xem bang 'db Layer ... -->' trong $QUANTUS_LOG.  Khong ghi SPEF."
     }
     if {[dict size $layer_pairs] == 0} {
@@ -260,7 +313,7 @@ if {[catch {
         dict for {lef tech} $layer_pairs {
             lappend layer_note "$lef->$tech"
         }
-        set layer_note [join $layer_note " "]
+        set layer_note "[join $layer_note " "]   (nguon: $layer_src)"
     }
 
     # Mot goc hong khong duoc lam mat SPEF cua hai goc con lai.
