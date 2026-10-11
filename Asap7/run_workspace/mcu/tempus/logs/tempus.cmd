@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Tempus Timing Solution Command Logging File                     
-#  Created on Sun Oct 11 12:35:16 2026                
+#  Created on Sun Oct 11 13:15:58 2026                
 #                                                     
 #######################################################
 
@@ -16,6 +16,7 @@ set_multi_cpu_usage -localCpu 1
 read_view_definition /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/tempus_views.tcl
 read_verilog /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v
 set_top_module top_soc
+set_design_mode -process 7
 read_spef -rc_corner rc_ss /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef
 read_spef -rc_corner rc_typ /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef
 read_spef -rc_corner rc_ff /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef

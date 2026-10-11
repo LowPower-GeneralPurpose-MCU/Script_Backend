@@ -4,12 +4,12 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.15-s108_1, built Tue Jul 22 11:26:13 PDT 2025
 Options:	-nowin -init tempus.tcl -log logs/tempus 
-Date:		Sun Oct 11 12:35:00 2026
+Date:		Sun Oct 11 13:15:46 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04.1 LTS
 
 License:
-		[12:35:00.206170] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[13:15:46.206242] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		tpsxl	Tempus Timing Signoff Solution XL	23.1	checkout succeeded
 		16 CPU jobs allowed with the current license(s). Use set_multi_cpu_usage to set your required CPU count.
@@ -19,7 +19,7 @@ Type 'man IMPOAX-124' for more detail.
 Type 'man IMPOAX-332' for more detail.
 INFO: OA features are disabled in this session.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-environment variable TMPDIR is '/tmp/ssv_tmpdir_2148655_8e143076-f461-4691-9a86-897dace370bf_CffRgh'.
+environment variable TMPDIR is '/tmp/ssv_tmpdir_2348020_e62dcc2a-8797-47a9-b3c9-ae9915027ba7_uxdG6C'.
 #@ Processing -files option
 Sourcing tcl/tk file 'tempus.tcl' ...
 <CMD> set_multi_cpu_usage -localCpu 1
@@ -28,9 +28,9 @@ Sourcing tcl/tk file 'tempus.tcl' ...
 <CMD> set_top_module top_soc
 **ERROR: (IMPOAX-124):	OpenAccess (OA) shared library installation is older than the one that was used to build this Tempus Timing Solution version. For using the OA installation built and tested with this Tempus Timing Solution version, unset the shell variable OA_HOME. For using 'p025' or higher version of OA, reset OA_HOME to point to that installation.
 **ERROR: (IMPOAX-332):	Failed to initialize OpenAccess (OA) database. OA related commands cannot be run in this session. Confirm that the OA shared library is installed and OA_HOME is set correctly. Typically the OA_HOME environment variable should not be set.
-#% Begin Load MMMC data ... (date=10/11 12:35:16, mem=1600.9M)
+#% Begin Load MMMC data ... (date=10/11 13:15:58, mem=1620.5M)
 Number of views requested 2 are allowed with the current licenses... continuing with set_analysis_view.
-#% End Load MMMC data ... (date=10/11 12:35:16, total cpu=0:00:00.1, real=0:00:01.0, peak res=1602.2M, current mem=1602.2M)
+#% End Load MMMC data ... (date=10/11 13:15:58, total cpu=0:00:00.1, real=0:00:00.0, peak res=1621.8M, current mem=1621.8M)
 rc_typ rc_ff rc_ss
 Loading view definition file from /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/tempus_views.tcl
 Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib' ...
@@ -85,14 +85,14 @@ Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/C
 Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120' 
 Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
-*** End library_loading (cpu=0.38min, real=0.38min, mem=310.0M, fe_cpu=0.59min, fe_real=0.67min, fe_mem=1900.6M) ***
-#% Begin Load netlist data ... (date=10/11 12:35:40, mem=1628.9M)
-*** Begin netlist parsing (mem=1900.6M) ***
+*** End library_loading (cpu=0.37min, real=0.37min, mem=311.0M, fe_cpu=0.58min, fe_real=0.57min, fe_mem=1904.6M) ***
+#% Begin Load netlist data ... (date=10/11 13:16:20, mem=1647.7M)
+*** Begin netlist parsing (mem=1904.6M) ***
 Reading verilog netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v'
 
-*** Memory Usage v#1 (Current mem = 2236.629M, initial mem = 844.656M) ***
-*** End netlist parsing (cpu=0:00:00.7, real=0:00:01.0, mem=2236.6M) ***
-#% End Load netlist data ... (date=10/11 12:35:41, total cpu=0:00:01.0, real=0:00:01.0, peak res=1847.1M, current mem=1847.1M)
+*** Memory Usage v#1 (Current mem = 2240.637M, initial mem = 836.656M) ***
+*** End netlist parsing (cpu=0:00:00.7, real=0:00:01.0, mem=2240.6M) ***
+#% End Load netlist data ... (date=10/11 13:16:21, total cpu=0:00:01.0, real=0:00:01.0, peak res=1865.7M, current mem=1865.7M)
 Set top cell to top_soc.
 Building hierarchical netlist for Cell top_soc ...
 ***** UseNewTieNetMode *****.
@@ -101,9 +101,9 @@ Building hierarchical netlist for Cell top_soc ...
 ** info: there are 141804 stdCell insts.
 ** info: there are 141720 stdCell insts with at least one signal pin.
 
-*** Memory Usage v#1 (Current mem = 2595.656M, initial mem = 844.656M) ***
+*** Memory Usage v#1 (Current mem = 2599.664M, initial mem = 836.656M) ***
 Set Default Input Pin Transition as 0.1 ps.
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc
 Extraction setup Started for TopCell top_soc 
 Summary of Active RC-Corners : 
  
@@ -157,32 +157,32 @@ Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/C
 Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120' 
 Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
-Reading timing constraints file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc' ...
-Current (total cpu=0:00:49.2, real=0:00:53.0, peak res=2674.2M, current mem=2674.2M)
+Reading timing constraints file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc' ...
+Current (total cpu=0:00:48.0, real=0:00:47.0, peak res=2692.8M, current mem=2692.8M)
 top_soc
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cpu/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 36).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cpu/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 37).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_dbg/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 37).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_dbg/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 38).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_pwm/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 38).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_pwm/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 39).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_gpio/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 39).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_gpio/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 40).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cordic/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 40).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cordic/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 41).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_ascon/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 41).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_ascon/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 42).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 42).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 43).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_spi/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 43).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_spi/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 44).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_i2c/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 44).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_i2c/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 45).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 45).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 46).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim0/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 46).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim0/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 47).
 
-**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 47).
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 48).
 
 ------------------------------------------------------------------------------------
 CONSTRAINT READING SUMMARY                                                          
@@ -199,9 +199,9 @@ set_max_fanout                                    | 2693           | 0
 current_design                                    | 1              | 0              
 set_output_delay                                  | 228            | 0              
 set_clock_gating_check                            | 26             | 0              
-set_clock_latency                                 | 28             | 0              
+set_clock_latency                                 | 24             | 0              
 create_clock                                      | 2              | 0              
-get_clocks                                        | 465            | 0              
+get_clocks                                        | 461            | 0              
 get_ports                                         | 718            | 0              
 get_cells                                         | 1              | 0              
 get_lib_pins                                      | 52             | 0              
@@ -214,9 +214,9 @@ get_pins                                          | 2665           | 0
 set_disable_timing                                | 1              | 0              
 ------------------------------------------------------------------------------------
 Number of path exceptions in the constraint file = 10
-INFO (CTE): Reading of timing constraints file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc completed, with 12 WARNING
-Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:01.0, peak res=2717.1M, current mem=2717.1M)
-Current (total cpu=0:00:49.4, real=0:00:54.0, peak res=2717.1M, current mem=2717.1M)
+INFO (CTE): Reading of timing constraints file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc completed, with 12 WARNING
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2735.2M, current mem=2735.2M)
+Current (total cpu=0:00:48.2, real=0:00:47.0, peak res=2735.2M, current mem=2735.2M)
 Total number of combinational cells: 338
 Total number of sequential cells: 66
 Total number of tristate cells: 0
@@ -240,6 +240,13 @@ List of identified usable delay cells: HB4xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R H
 Total number of identified usable delay cells: 7
 List of identified unusable delay cells:
 Total number of identified unusable delay cells: 0
+<CMD> set_design_mode -process 7
+##  Process: 7             (User Set)               
+##     Node: (not set)                           
+
+##  Check design process and node:  
+##  Design tech node is not set.
+
 <CMD> read_spef -rc_corner rc_ss /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef
 <CMD> read_spef -rc_corner rc_typ /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef
 <CMD> read_spef -rc_corner rc_ff /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef
@@ -252,7 +259,7 @@ Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/
 
 SPEF files for RC Corner rc_ff:
 Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef'.
-Start spef parsing (MEM=3085.03).
+Start spef parsing (MEM=3081.04).
 The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef', has encountered the error/warning message(s) during its reading.
 **WARN: (SPEF-1152):	Net 'flash_io_i[3] ( having pins flash_io_i[3] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 **WARN: (SPEF-1152):	Net 'flash_io_i[2] ( having pins flash_io_i[2] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
@@ -280,7 +287,7 @@ Number of Resistors     : 1652793
 Number of Ground Caps   : 1170669
 Number of Coupling Caps : 116540
 
-End spef parsing (MEM=3218.89 CPU=0:00:22.0 REAL=0:00:08.0).
+End spef parsing (MEM=3222.9 CPU=0:00:23.3 REAL=0:00:09.0).
 431 nets are missing in SPEF file. The names of these nets are saved in ./rc_ss.missing_nets.rpt.gz.
 431 nets are missing in SPEF file. The names of these nets are saved in ./rc_typ.missing_nets.rpt.gz.
 431 nets are missing in SPEF file. The names of these nets are saved in ./rc_ff.missing_nets.rpt.gz.
@@ -294,7 +301,7 @@ AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
 <CMD> update_timing -full
 AAE_INFO: opIsDesignInPostRouteState() is 1
 AAE_INFO: deleting AAE DB in update_timing -full ...
-AAE DB initialization (MEM=2853.410156 CPU=0:00:00.0 REAL=0:00:01.0) 
+AAE DB initialization (MEM=2875.191406 CPU=0:00:00.0 REAL=0:00:00.0) 
 AAE_INFO: resetNetProps viewIdx 0 
 AAE_INFO: resetNetProps viewIdx 1 
 AAE_INFO: resetNetProps viewIdx 2 
@@ -302,35 +309,35 @@ Starting SI iteration 1 using Infinite Timing Windows
 Start slew iteration 
 #################################################################################
 # Design Name: top_soc
-# Design Mode: 65nm
+# Design Mode: 7nm
 # Analysis Mode: MMMC OCV 
 # Parasitics Mode: SPEF/RCDB 
 # Signoff Settings: SI On 
 #################################################################################
-Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_ff'
-Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'view_ff'
-Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_ff'
-Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_ff'
-Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'view_ff'
 Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_ss'
 Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_ff'
 Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'view_tt'
 Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'view_ss'
 Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'view_ff'
+Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_ff'
+Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_ff'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'view_ff'
+Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'view_ff'
+Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'view_ss'
 Message <TCLCMD-1005> has exceeded the message display limit of '20'. Use 'set_message -no_limit -id list_of_msgIDs' to reset the message limit.
-Start delay calculation (fullDC) (1 T). (MEM=2781.27)
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc
+Start delay calculation (fullDC) (1 T). (MEM=2802.29)
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc
 **WARN: (IMPMSMV-1810):	Net tms, driver tms (cell top_soc) voltage 0.77 does not match receiver u_jtag_dtm/g4640/B (cell NOR2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
 **WARN: (IMPMSMV-1810):	Net tms, driver tms (cell top_soc) voltage 0.77 does not match receiver u_jtag_dtm/g4639/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
 **WARN: (IMPMSMV-1810):	Net tms, driver tms (cell top_soc) voltage 0.77 does not match receiver u_jtag_dtm/g4612/A (cell NAND3xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
@@ -359,11 +366,11 @@ Note that setting a very large number using the set_message -limit command
 or removing the message limit using the set_message -no_limit command can
 significantly increase the log file size.
 To suppress a message, use the set_message -suppress command.
-End delay calculation. (MEM=3036.47 CPU=0:00:15.4 REAL=0:00:16.0)
-End delay calculation (fullDC). (MEM=2992.55 CPU=0:00:17.0 REAL=0:00:18.0)
+End delay calculation. (MEM=3054.45 CPU=0:00:15.9 REAL=0:00:16.0)
+End delay calculation (fullDC). (MEM=3010.53 CPU=0:00:17.5 REAL=0:00:17.0)
 update aggressor slew in non distributed run
 End Slew iteration 
-Start delay calculation (fullDC) (1 T). (MEM=2992.93)
+Start delay calculation (fullDC) (1 T). (MEM=3010.79)
 **WARN: (IMPESI-3140):	Bumpy transitions may exist in the design which may lead to inaccurate delay computation. To report/analyze the nets having bumpy transition, please enable delay report and use command 'report_noise -bumpy_waveform -threshold 0' after timing analysis. Delay report is enabled by setting 'set_si_mode -enable_delay_report true' before timing analysis.
 Total number of fetched objects 146674
 AAE_INFO-618: Total number of nets in the design is 159923,  92.7 percent of the nets selected for SI analysis
@@ -371,15 +378,15 @@ Total number of fetched objects 146674
 AAE_INFO-618: Total number of nets in the design is 159923,  92.7 percent of the nets selected for SI analysis
 Total number of fetched objects 146674
 AAE_INFO-618: Total number of nets in the design is 159923,  92.6 percent of the nets selected for SI analysis
-End delay calculation. (MEM=3161.43 CPU=0:01:43 REAL=0:01:43)
-End delay calculation (fullDC). (MEM=3161.43 CPU=0:01:43 REAL=0:01:43)
+End delay calculation. (MEM=1492.98 CPU=0:01:51 REAL=0:01:51)
+End delay calculation (fullDC). (MEM=1493.01 CPU=0:01:51 REAL=0:01:51)
 esiiDumpWaveformsThread is successfull 1 
-Save waveform /tmp/ssv_tmpdir_2148655_8e143076-f461-4691-9a86-897dace370bf_CffRgh/.AAE_4E9fCN/.AAE_2148655_8e143076-f461-4691-9a86-897dace370bf/waveform.data in separate thread...
+Save waveform /tmp/ssv_tmpdir_2348020_e62dcc2a-8797-47a9-b3c9-ae9915027ba7_uxdG6C/.AAE_9imTzI/.AAE_2348020_e62dcc2a-8797-47a9-b3c9-ae9915027ba7/waveform.data in separate thread...
 Finish pthread dumping compressed waveforms.
-Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 3126.4M)
-Loading CTE timing window is completed (CPU = 0:00:00.9, REAL = 0:00:00.0, MEM = 3159.3M)
+Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 1177.4M)
+Loading CTE timing window is completed (CPU = 0:00:00.9, REAL = 0:00:01.0, MEM = 1211.6M)
 Starting SI iteration 2
-Start delay calculation (fullDC) (1 T). (MEM=3142.27)
+Start delay calculation (fullDC) (1 T). (MEM=1591.89)
 Glitch Analysis: View view_ss -- Total Number of Nets Skipped = 0. 
 Glitch Analysis: View view_ss -- Total Number of Nets Analyzed = 0. 
 Total number of fetched objects 146674
@@ -392,10 +399,10 @@ Glitch Analysis: View view_ff -- Total Number of Nets Skipped = 2694.
 Glitch Analysis: View view_ff -- Total Number of Nets Analyzed = 146687. 
 Total number of fetched objects 146674
 AAE_INFO-618: Total number of nets in the design is 159923,  4.0 percent of the nets selected for SI analysis
-End delay calculation. (MEM=3177.22 CPU=0:00:12.9 REAL=0:00:13.0)
-End delay calculation (fullDC). (MEM=3087.09 CPU=0:00:13.1 REAL=0:00:13.0)
-Save and delete waveform data /tmp/ssv_tmpdir_2148655_8e143076-f461-4691-9a86-897dace370bf_CffRgh/.AAE_4E9fCN/.AAE_2148655_8e143076-f461-4691-9a86-897dace370bf/waveform.data ...
-Swap out waveforms (MEM=3061.41 CPU=0:00:00.0 REAL=0:00:00.0) 
+End delay calculation. (MEM=1631.71 CPU=0:00:14.0 REAL=0:00:14.0)
+End delay calculation (fullDC). (MEM=1553.27 CPU=0:00:14.3 REAL=0:00:14.0)
+Swap out waveforms (MEM=1532.38 CPU=0:00:00.0 REAL=0:00:00.0) 
+Save and delete waveform data /tmp/ssv_tmpdir_2348020_e62dcc2a-8797-47a9-b3c9-ae9915027ba7_uxdG6C/.AAE_9imTzI/.AAE_2348020_e62dcc2a-8797-47a9-b3c9-ae9915027ba7/waveform.data ...
 Finish pthread dumping timing data and compressed waveforms.
 <CMD> check_timing -verbose > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/check_timing.rpt
 <CMD> report_annotated_parasitics > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/annotated_parasitics.rpt
@@ -432,5 +439,5 @@ WARNING   TECHLIB-1277        12  The %s '%s' has been defined for %s %s '...
 *** Message Summary: 116316 warning(s), 4 error(s)
 
 
-*** Memory Usage v#1 (Current mem = 4257.988M, initial mem = 844.656M) ***
---- Ending "Tempus Timing Solution" (totcpu=0:03:56, real=0:03:47, mem=4258.0M) ---
+*** Memory Usage v#1 (Current mem = 4261.027M, initial mem = 836.656M) ***
+--- Ending "Tempus Timing Solution" (totcpu=0:04:07, real=0:03:53, mem=4261.0M) ---

@@ -2,7 +2,7 @@
 if {[catch {set_library_unit -time 1ns -cap 1pf}]} {
     setLibraryUnit -time 1ns -cap 1pf
 }
-create_constraint_mode -name mode_func -sdc_files /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc
+create_constraint_mode -name mode_func -sdc_files /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc
 create_library_set -name libset_ss -timing {/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_SS_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_SS_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_SS_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_SS_ccs_220123.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_SS_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_SS_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_SS_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_SS_ccs_220123.lib /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib}
 create_rc_corner -name rc_ss -T 100
 create_delay_corner -name dc_ss -library_set libset_ss -rc_corner rc_ss
