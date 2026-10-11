@@ -1,0 +1,4 @@
+FAIL
+quantus.tcl: Ghep lop LEF/QRC sai: M1->lisd V1->v0 M2->m1 V2->v1 M3->m2 V3->v2 M4->m3 V4->v3 M5->m4 V5->v4 M6->m5 V6->v5 M7->m6 V7->v6 M8->m7 V8->v7 M9->m8
+  File map /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map khong duoc ap dung hoac sai dinh dang.
+  Xem bang 'db Layer ... -->' trong /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/logs/quantus.log.  Khong ghi SPEF.
