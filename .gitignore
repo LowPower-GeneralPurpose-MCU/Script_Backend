@@ -72,6 +72,16 @@
 **/.*_launch_[0-9]*
 **/.cce.env.*
 
+# Thu muc / file tam cua Tempus va Voltus (mcu/tempus, mcu/voltus).  Ten doan
+# theo kieu innovus_temp_<pid>_...; ket qua rail va power cua Voltus nam trong
+# outputs/ (da bi chan o tren).  Truoc khi commit lan dau sau khi chay hai tool
+# nay: 'git status' xem co file tam nao ten co dau ':' khong (Windows khong
+# pull duoc, xem qrc_*.log o tren).
+**/tempus_temp_*/
+**/voltus_temp_*/
+**/ssv_tmpdir_*/
+**/.ssv_emulate_view_definition*
+
 # optDesign/timeDesign khong co -outDir tu ghi vao day (hang tram file um*/)
 **/timingReports/
 
