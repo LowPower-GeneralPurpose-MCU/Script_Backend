@@ -22,8 +22,10 @@
 ##   - -enable_xp mac dinh TAT, 1 CPU: may nay treo o moi che do nhieu tien trinh
 ##   - diem cap nguon lay tu chan PG trong DEF, roi moi den cach cua mau
 ##   - thu truyen file ghep lop LEF/QRC (asap7_lefdef.layermap)
-## CHUA chay tren tool: lenh nao Voltus khong nhan thi ly do nam trong
-## reports/voltus_summary.rpt.
+##   - them set_power_data (file dong .ptiavg cua report_power): mau khong co
+## Run dau 2026-10-11: cong suat chay, luoi nguon hong (thieu set_power_data,
+## sai ten option ghep lop).  Ban nay CHUA chay lai tren tool: lenh nao Voltus
+## khong nhan thi ly do nam trong reports/voltus_summary.rpt.
 ############################################################
 
 proc voltus_env {name default_value} {
@@ -211,9 +213,11 @@ if {[catch {
 
     # File ghep lop cho phan trich luoi nguon.  LEF co M1..M9 + Pad, QRC co
     # LISD M1..M9: khong co file nay thi Innovus/IQuantus ghep theo vi tri
-    # (M8 -> m7, M9 -> m8), va luoi nguon nam chinh tren M8/M9.  Dinh dang
-    # "metal <QRC> lefdef <LEF>" va ten option -lef_layermap CHUA duoc kiem tren
-    # tool, nen hong thi voltus.tcl tu chay lai khong co no va ghi WARNING.
+    # (M8 -> m7, M9 -> m8), va luoi nguon nam chinh tren M8/M9.  Run 2026-10-11
+    # chay khong co file nay va Voltus tu ghep dung nhu vay (VOLTUS_LGEN-4286).
+    # Dinh dang "metal <QRC> lefdef <LEF>" va option -era_lef_layermap CHUA duoc
+    # kiem tren tool, nen hong thi voltus.tcl tu chay lai khong co no va ghi
+    # WARNING; con dong VOLTUS_LGEN-3611 trong log = file chua duoc dung.
     set VOLTUS_LAYER_MAP ""
     if {[voltus_env_flag VOLTUS_LAYERMAP 1]} {
         set VOLTUS_LAYER_MAP [file join $VOLTUS_DIR asap7_lefdef.layermap]
@@ -250,12 +254,30 @@ if {[catch {
     # --------------------------------------------------------------------
     set VOLTUS_POWER_RPT [file join $VOLTUS_DIR reports power_static.rpt]
     file delete -force $VOLTUS_POWER_RPT
-    set_power_analysis_mode -method static -corner max -create_binary_db true
-    set_power_output_dir [file join $VOLTUS_DIR outputs power]
+    # -write_static_currents: file dong static_<net>.ptiavg cho analyze_rail.
+    # Run 2026-10-11 chi bat -create_binary_db nen outputs/power chi co
+    # power.db, khong co file .ptiavg nao.
+    set VOLTUS_POWER_DIR [file join $VOLTUS_DIR outputs power]
+    file delete -force $VOLTUS_POWER_DIR
+    if {[catch {set_power_analysis_mode -method static -corner max \
+            -create_binary_db true -write_static_currents true} mode_err]} {
+        voltus_warn "set_power_analysis_mode -write_static_currents bi tu choi: $mode_err"
+        set_power_analysis_mode -method static -corner max -create_binary_db true
+    }
+    set_power_output_dir $VOLTUS_POWER_DIR
     report_power -outfile $VOLTUS_POWER_RPT
     set power_totals [voltus_power_totals $VOLTUS_POWER_RPT]
     if {[llength $power_totals] == 0} {
         error "report_power khong ghi dong 'Total Power:' nao vao $VOLTUS_POWER_RPT"
+    }
+    set VOLTUS_POWER_DATA [lsort [glob -nocomplain -directory $VOLTUS_POWER_DIR *.ptiavg]]
+    if {[llength $VOLTUS_POWER_DATA] == 0} {
+        # Cach trao power.db cho set_power_data CHUA duoc kiem tren tool.
+        set power_db [file join $VOLTUS_POWER_DIR power.db]
+        if {[file isfile $power_db]} {
+            voltus_warn "report_power khong ghi file .ptiavg nao vao $VOLTUS_POWER_DIR - thu power.db"
+            set VOLTUS_POWER_DATA [list $power_db]
+        }
     }
 
     # --------------------------------------------------------------------
@@ -273,11 +295,19 @@ if {[catch {
             }
         }
         set rail_note ""
+        if {[llength $VOLTUS_POWER_DATA] == 0} {
+            voltus_warn "khong co file dong (.ptiavg / power.db) trong $VOLTUS_POWER_DIR - bo analyze_rail"
+            set attempts {}
+        }
         foreach attempt $attempts {
             foreach {map pads} $attempt break
             set label "ghep lop [expr {$map eq "" ? "THEO VI TRI" : [file tail $map]}],\
  diem cap nguon $pads"
             if {[catch {voltus_rail $map $pads} rail_err]} {
+                # Option bi tu choi (IMPTCM-48) nem loi Tcl KHONG co noi dung.
+                if {[string trim $rail_err] eq ""} {
+                    set rail_err "lenh bi tu choi, Tcl khong tra noi dung - xem logs/voltus.log"
+                }
                 voltus_warn "analyze_rail ($label) hong: $rail_err"
                 continue
             }
@@ -309,6 +339,11 @@ if {[catch {
             lappend lines "    $line"
         }
     }
+    set power_data_names {}
+    foreach path $VOLTUS_POWER_DATA {
+        lappend power_data_names [file tail $path]
+    }
+    lappend lines "  file dong cho luoi nguon: [expr {[llength $power_data_names] ? [join $power_data_names { }] : "KHONG CO"}]"
     lappend lines "  luoi nguon: $rail_note"
     if {$VOLTUS_RAIL && $rail_ok} {
         lappend lines "    nguong: VDD >= $VOLTUS_VDD_MIN V (danh dinh $VOLTUS_VDD V), VSS <= $VOLTUS_VSS_MAX V;\

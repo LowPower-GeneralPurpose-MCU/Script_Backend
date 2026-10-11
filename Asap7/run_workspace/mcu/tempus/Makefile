@@ -8,6 +8,8 @@
 #     make all TEMPUS_SI=0         tat SI (khong co license SI / de so voi so
 #                                  khong SI)
 #     make all TEMPUS_CPUS=4       mac dinh 1 (xem tempus.tcl)
+#     make all TEMPUS_SDC_PATCH=0  doc SDC goc cua writeTimingCon thay cho ban
+#                                  va logs/top_soc_pnr.tempus.sdc (de doi chieu)
 #     MCU_OCV_DERATE_LATE / MCU_OCV_DERATE_EARLY: cung ten bien voi Innovus.
 
 TEMPUS  ?= tempus
@@ -18,6 +20,7 @@ SUMMARY := reports/tempus_summary.rpt
 export TEMPUS_SPEF
 export TEMPUS_SI
 export TEMPUS_CPUS
+export TEMPUS_SDC_PATCH
 
 .PHONY: all clean
 
