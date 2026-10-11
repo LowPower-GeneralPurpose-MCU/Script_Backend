@@ -35,7 +35,10 @@ mcu/
 │   └── reports/             # Report của lần chạy gần nhất (đang được commit)
 ├── innovus/                 # Nhận handoff từ genus/outputs
 ├── conformal/               # LEC: genus/outputs/top_soc_syn.v vs innovus/outputs/top_soc_pnr.v
-└── quantus/                 # Trích RC signoff từ innovus/saved/top_soc_final.enc.dat -> SPEF
+├── quantus/                 # Trích RC signoff từ innovus/saved/top_soc_final.enc.dat -> SPEF
+├── tempus/                  # STA signoff trên SPEF Quantus
+├── voltus/                  # Công suất + IR drop
+└── eco/                     # ECO sửa DRV mà Tempus báo, rồi chạy lại KHỐI 15 + 16
 ```
 
 `outputs/` và `reports/` là sản phẩm của Genus nhưng hiện **có trong git** để
@@ -278,6 +281,38 @@ và tổng điện dung từng góc, đối chiếu với SPEF tQuantus của KH
 | `QRC_BIN` | tìm trong `PATH` | đường dẫn đầy đủ tới lệnh `qrc` |
 | `QUANTUS_CPUS` | `8` | đặt `1` nếu `qrc` treo khi chạy nhiều tiến trình |
 | `INNOVUS` | `innovus` | tên lệnh Innovus |
+
+## ECO sửa DRV mà Tempus báo (sau Tempus)
+
+Innovus tối ưu trên RC tQuantus với lớp LEF/QRC ghép lệch một bậc, nên nó không
+thấy các chân `max_transition` mà Tempus báo trên SPEF Quantus (C ×1.084). Bước
+này mở lại checkpoint cuối KHỐI 14, trích RC bằng đúng engine đã sinh SPEF
+signoff rồi chạy lại lượt tối ưu của KHỐI 14 (setup + hold + DRV):
+
+```bash
+cd Asap7/run_workspace/mcu/eco
+make all       # saved/top_soc_postRoute.enc.dat -> top_soc_postRoute_eco.enc.dat
+make finish    # KHỐI 15 + 16 trên checkpoint đó, GHI ĐÈ innovus/outputs/
+```
+
+Dòng đầu của `eco/reports/eco_summary.rpt` là `PASS`/`FAIL`, của
+`eco_finish_summary.rpt` là `DONE`/`FAIL`. `PASS` chỉ nói Innovus sạch trên RC
+như signoff; kết luận là của Tempus, nên sau `make finish` phải chạy lại
+`conformal`, `quantus`, `tempus` (netlist đã đổi).
+
+`eco_drv.tcl` từ chối chạy khi checkpoint còn `.lib` sai điện áp: `saveDesign`
+chép `.lib` vào `<tên>.enc.dat/libs/mmmc/` và `restoreDesign` nạp bản sao đó,
+không phải file của PDK. `innovus/scripts/fix_ff_lib.py` kiểm tra điện áp mọi
+`.lib` std cell, tìm bản đúng (file nén / git của PDK) và với `--apply` thay cả
+file trong PDK lẫn các bản sao trong `innovus/saved/*.enc.dat`.
+
+| Biến `make` | Mặc định | Ý nghĩa |
+|---|---|---|
+| `ECO_EXTRACT` | `high` | `flow` = giữ chế độ trích RC của checkpoint (Innovus sẽ không thấy vi phạm) |
+| `ECO_DRV_MARGIN` | `0.05` | `setOptMode -drcMargin`: siết giới hạn DRV khi sửa |
+| `ECO_CPUS` | `1` | IQuantus nhiều tiến trình đã treo trên máy đang dùng |
+| `ECO_CHECKPOINT` | `./saved/top_soc_postRoute.enc.dat` | tính từ `mcu/innovus` |
+| `ECO_ALLOW_BAD_LIB` | *(trống)* | `1` = vẫn chạy khi checkpoint còn `.lib` sai điện áp |
 
 ## Giả định timing cần xác nhận
 
