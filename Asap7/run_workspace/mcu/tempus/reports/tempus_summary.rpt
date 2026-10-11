@@ -1,0 +1,14 @@
+PASS
+Tempus top_soc: SPEF quantus (top_soc_quantus_rc_*.spef), OCV + CPPR, SI bat, 1 CPU
+  update_timing + bao cao 165 s; don vi 1ns / 1pf
+  derate SRAM: 84 macro, dc_ss late x1.30, dc_ff early x0.75; OCV chung late x1.0 / early x1.0
+  setup view_ss  WNS    0.3170 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_ss.rpt
+  setup view_tt  WNS    0.5390 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_tt.rpt
+  hold  view_ff  WNS    0.0100 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_ff.rpt
+  hold  view_tt  WNS    0.0320 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_tt.rpt
+  max_transition / max_capacitance : reports/all_violators.rpt
+  net chua gan ky sinh             : reports/annotated_parasitics.rpt
+  duong khong rang buoc            : reports/check_timing.rpt, analysis_coverage.rpt
+  glitch                           : reports/glitch.rpt
+  WARNING: khong co derate OCV chung cho std cell (1.0) trong khi CPPR van duoc tru - giong Innovus; bat: MCU_OCV_DERATE_LATE=1.05 MCU_OCV_DERATE_EARLY=0.95
+  WARNING: ba goc RC dung chung mot qrcTechFile typical (chi khac nhiet do) va .lib SRAM chi co goc TT (bu bang derate x1.30 / x0.75)
