@@ -1,0 +1,1064 @@
+[10/11 12:53:38      0s] 
+[10/11 12:53:38      0s] Cadence Voltus(TM) IC Power Integrity Solution.
+[10/11 12:53:38      0s] Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+[10/11 12:53:38      0s] 
+[10/11 12:53:38      0s] Version:	v23.15-s108_1, built Tue Jul 22 11:26:13 PDT 2025
+[10/11 12:53:38      0s] Options:	-nowin -init voltus.tcl -log logs/voltus 
+[10/11 12:53:38      0s] Date:		Sun Oct 11 12:53:38 2026
+[10/11 12:53:38      0s] Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
+[10/11 12:53:38      0s] OS:		Ubuntu 26.04.1 LTS
+[10/11 12:53:38      0s] 
+[10/11 12:53:38      0s] License:
+[10/11 12:53:38      0s] 		[12:53:38.206258] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+[10/11 12:53:39      0s] 		vtsxl	Voltus Power Integrity Solution XL	23.1	checkout succeeded
+[10/11 12:53:39      0s] 		8 CPU jobs allowed with the current license(s). Use set_multi_cpu_usage to set your required CPU count.
+[10/11 12:53:39      0s] **ERROR: (IMPOAX-124):	OpenAccess (OA) shared library installation is older than the one that was used to build this Voltus IC Power Integrity Solution version. For using the OA installation built and tested with this Voltus IC Power Integrity Solution version, unset the shell variable OA_HOME. For using 'p025' or higher version of OA, reset OA_HOME to point to that installation.
+Type 'man IMPOAX-124' for more detail.
+[10/11 12:53:39      0s] **ERROR: (IMPOAX-332):	Failed to initialize OpenAccess (OA) database. OA related commands cannot be run in this session. Confirm that the OA shared library is installed and OA_HOME is set correctly. Typically the OA_HOME environment variable should not be set.
+Type 'man IMPOAX-332' for more detail.
+[10/11 12:53:39      0s] INFO: OA features are disabled in this session.
+[10/11 12:53:48      9s] Memory management switch to non-aggressive memory release mode.
+[10/11 12:53:48      9s] 
+[10/11 12:53:48      9s] OS Mmap count monitoring thread starts. Limit of OS Mmap count is 1048576
+[10/11 12:53:48      9s] 
+[10/11 12:53:49      9s] Reset Parastics called with the command setExtractRCMode -reset@(#)CDS: Voltus IC Power Integrity Solution v23.15-s108_1 (64bit) 07/22/2025 11:26 (Linux 3.10.0-693.el7.x86_64)
+[10/11 12:53:50     11s] @(#)CDS: NanoRoute 23.15-s108_1 NR250707-2219/23_15-UB (database version 18.20.674) {superthreading v2.20}
+[10/11 12:53:50     11s] @(#)CDS: AAE 23.15-s032 (64bit) 07/22/2025 (Linux 3.10.0-693.el7.x86_64)
+[10/11 12:53:50     11s] @(#)CDS: CTE 23.15-s037_1 () Jul 16 2025 02:46:10 ( )
+[10/11 12:53:50     11s] @(#)CDS: SYNTECH 23.15-s011_1 () Jun 23 2025 00:02:58 ( )
+[10/11 12:53:50     11s] @(#)CDS: CPE v23.15-s090
+[10/11 12:53:50     11s] @(#)CDS: OA 22.61-p025 Mon Mar 17 14:41:06 2025
+[10/11 12:53:50     11s] @(#)CDS: SGN 23.10-d005 (03-Oct-2023) (64 bit executable, TkQt5.15.9)
+[10/11 12:53:50     11s] @(#)CDS: RCDB 11.15.0
+[10/11 12:53:50     11s] @(#)CDS: STYLUS 23.16-s001_1 (07/11/2025 08:51 PDT)
+[10/11 12:53:50     11s] Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
+[10/11 12:53:50     11s] **INFO: (TMPDIR-1001): The environment variable TMPDIR is not set.
+Create and set the environment variable TMPDIR to '/tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y'.
+environment variable TMPDIR is '/tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y'.
+[10/11 12:53:50     11s] #@ Processing -files option
+[10/11 12:53:50     11s] Sourcing tcl/tk file 'voltus.tcl' ...
+[10/11 12:53:50     11s] <CMD> set_multi_cpu_usage -localCpu 1
+[10/11 12:53:50     11s] <CMD> set_library_unit -time 1ns -cap 1pf
+[10/11 12:53:50     11s] <CMD> read_lib -lef {/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef}
+[10/11 12:53:51     11s] <CMD> read_lib {/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib}
+[10/11 12:53:51     12s] <CMD> read_verilog /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v
+[10/11 12:53:51     12s] <CMD> set_top_module top_soc
+[10/11 12:53:51     12s] **ERROR: (IMPOAX-124):	OpenAccess (OA) shared library installation is older than the one that was used to build this Voltus IC Power Integrity Solution version. For using the OA installation built and tested with this Voltus IC Power Integrity Solution version, unset the shell variable OA_HOME. For using 'p025' or higher version of OA, reset OA_HOME to point to that installation.
+**ERROR: (IMPOAX-332):	Failed to initialize OpenAccess (OA) database. OA related commands cannot be run in this session. Confirm that the OA shared library is installed and OA_HOME is set correctly. Typically the OA_HOME environment variable should not be set.
+#% Begin Load MMMC data ... (date=10/11 12:53:51, mem=1609.2M)
+[10/11 12:53:51     12s] Number of views requested 1 are allowed with the current licenses... continuing with set_analysis_view.
+[10/11 12:53:51     12s] #% End Load MMMC data ... (date=10/11 12:53:51, total cpu=0:00:00.0, real=0:00:00.0, peak res=1610.4M, current mem=1610.4M)
+[10/11 12:53:51     12s] 
+[10/11 12:53:51     12s] Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef ...
+[10/11 12:53:51     12s] 
+[10/11 12:53:51     12s] Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef ...
+[10/11 12:53:51     12s] Set DBUPerIGU to M1 pitch 36.
+[10/11 12:53:51     12s] 
+[10/11 12:53:51     12s] Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef ...
+[10/11 12:53:51     12s] 
+[10/11 12:53:51     12s] Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef ...
+[10/11 12:53:51     12s] 
+[10/11 12:53:51     12s] Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef ...
+[10/11 12:53:51     12s] 
+##  Check design process and node:  
+##  Both design process and tech node are not set.
+
+[10/11 12:53:51     12s] Loading view definition file from .ssv_emulate_view_definition_2240156_2669a1ca-5154-4963-848d-fd07d95685f6.tcl
+[10/11 12:53:51     12s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib' ...
+[10/11 12:53:52     12s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 46726)
+[10/11 12:53:52     12s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 75682)
+[10/11 12:53:52     12s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120' 
+[10/11 12:53:52     12s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib' ...
+[10/11 12:53:52     12s] Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_TT_ccs_211120' 
+[10/11 12:53:52     12s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib' ...
+[10/11 12:53:55     16s] Read 42 cells in library 'asap7sc7p5t_AO_RVT_TT_ccs_211120' 
+[10/11 12:53:55     16s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib' ...
+[10/11 12:53:58     19s] Read 34 cells in library 'asap7sc7p5t_OA_RVT_TT_ccs_211120' 
+[10/11 12:53:58     19s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib' ...
+[10/11 12:53:58     19s] Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_TT_ccs_220123' 
+[10/11 12:53:58     19s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib' ...
+[10/11 12:53:58     19s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 46726)
+[10/11 12:53:58     19s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 75682)
+[10/11 12:53:59     19s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120' 
+[10/11 12:53:59     19s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib' ...
+[10/11 12:53:59     19s] Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_TT_ccs_211120' 
+[10/11 12:53:59     19s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib' ...
+[10/11 12:54:02     23s] Read 42 cells in library 'asap7sc7p5t_AO_LVT_TT_ccs_211120' 
+[10/11 12:54:02     23s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib' ...
+[10/11 12:54:05     26s] Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120' 
+[10/11 12:54:05     26s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
+[10/11 12:54:05     26s] Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
+[10/11 12:54:05     26s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib' ...
+[10/11 12:54:05     26s] Read 1 cells in library 'srambank_256x4x32_6t122' 
+[10/11 12:54:05     26s] Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib' ...
+[10/11 12:54:05     26s] Read 1 cells in library 'srambank_128x4x20_6t122' 
+[10/11 12:54:05     26s] Ending "PreSetAnalysisView" (total cpu=0:00:13.9, real=0:00:14.0, peak res=2051.2M, current mem=1695.0M)
+[10/11 12:54:05     26s] *** End library_loading (cpu=0.23min, real=0.23min, mem=365.0M, fe_cpu=0.44min, fe_real=0.45min, fe_mem=2063.6M) ***
+[10/11 12:54:05     26s] #% Begin Load netlist data ... (date=10/11 12:54:05, mem=1695.0M)
+[10/11 12:54:05     26s] *** Begin netlist parsing (mem=2063.6M) ***
+[10/11 12:54:05     26s] **WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+[10/11 12:54:05     26s] **WARN: (IMPVL-159):	Pin 'sdel[1]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+[10/11 12:54:05     26s] **WARN: (IMPVL-159):	Pin 'sdel[2]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+[10/11 12:54:05     26s] **WARN: (IMPVL-159):	Pin 'sdel[3]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+[10/11 12:54:05     26s] **WARN: (IMPVL-159):	Pin 'sdel[4]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+[10/11 12:54:05     26s] Reading verilog netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v'
+[10/11 12:54:06     27s] 
+[10/11 12:54:06     27s] *** Memory Usage v#1 (Current mem = 2307.605M, initial mem = 836.656M) ***
+[10/11 12:54:06     27s] *** End netlist parsing (cpu=0:00:00.7, real=0:00:01.0, mem=2307.6M) ***
+[10/11 12:54:06     27s] #% End Load netlist data ... (date=10/11 12:54:06, total cpu=0:00:01.0, real=0:00:01.0, peak res=1901.3M, current mem=1901.3M)
+[10/11 12:54:06     27s] Set top cell to top_soc.
+[10/11 12:54:06     27s] **WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+[10/11 12:54:06     27s] **WARN: (IMPTS-124):	Timing library description of pin 'sdel[3]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+[10/11 12:54:06     27s] **WARN: (IMPTS-124):	Timing library description of pin 'sdel[2]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+[10/11 12:54:06     27s] **WARN: (IMPTS-124):	Timing library description of pin 'sdel[1]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+[10/11 12:54:06     27s] **WARN: (IMPTS-124):	Timing library description of pin 'sdel[0]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+[10/11 12:54:06     27s] Starting consistency checks on late and early library sets of delay corner 'default_emulate_delay_corner'
+[10/11 12:54:06     27s] late library set: default_emulate_libset_max
+[10/11 12:54:06     27s] early library set: default_emulate_libset_min
+[10/11 12:54:06     27s] Completed consistency checks. Status: Successful
+[10/11 12:54:06     27s] Starting consistency checks on late and early library sets of delay corner 'default_emulate_delay_corner'
+[10/11 12:54:06     27s] late library set: default_emulate_libset_max
+[10/11 12:54:06     27s] early library set: default_emulate_libset_min
+[10/11 12:54:06     27s] Completed consistency checks. Status: Successful
+[10/11 12:54:06     27s] Ending "BindLib:" (total cpu=0:00:00.1, real=0:00:00.0, peak res=1976.3M, current mem=1976.3M)
+[10/11 12:54:06     27s] *** Estimate the number of flat objects and h-objects before Flatten ***
+[10/11 12:54:06     27s] 	flat insts : 141805
+[10/11 12:54:06     27s] 	flat terms : 483814
+[10/11 12:54:06     27s] 	HNets : 150745
+[10/11 12:54:06     27s] 	HInsts : 1703
+[10/11 12:54:06     27s] 	HTerms : 18441
+[10/11 12:54:06     27s] Building hierarchical netlist for Cell top_soc ...
+[10/11 12:54:06     27s] ***** UseNewTieNetMode *****.
+[10/11 12:54:06     28s] *** Netlist is unique.
+[10/11 12:54:06     28s] Set DBUPerIGU to techSite asap7sc7p5t width 54.
+[10/11 12:54:06     28s] Setting Std. cell height to 270 DBU (smallest netlist inst).
+[10/11 12:54:06     28s] ** info: there are 2130 modules.
+[10/11 12:54:06     28s] ** info: there are 141720 stdCell insts.
+[10/11 12:54:06     28s] ** info: there are 141720 stdCell insts with at least one signal pin.
+[10/11 12:54:06     28s] ** info: there are 84 macros.
+[10/11 12:54:06     28s] 
+[10/11 12:54:06     28s] *** Memory Usage v#1 (Current mem = 2649.617M, initial mem = 836.656M) ***
+[10/11 12:54:07     28s] 
+[10/11 12:54:07     28s] Honor LEF defined pitches for advanced node
+[10/11 12:54:07     28s] Start create_tracks
+[10/11 12:54:07     28s] Set Default Input Pin Transition as 0.1 ps.
+[10/11 12:54:07     28s] Extraction setup Started for TopCell top_soc 
+[10/11 12:54:07     28s] Summary of Active RC-Corners : 
+[10/11 12:54:07     28s]  
+[10/11 12:54:07     28s]  Analysis View: default_emulate_view
+[10/11 12:54:07     28s]     RC-Corner Name        : default_emulate_rc_corner
+[10/11 12:54:07     28s]     RC-Corner Index       : 0
+[10/11 12:54:07     28s]     RC-Corner Temperature : 25 Celsius
+[10/11 12:54:07     28s]     RC-Corner Cap Table   : ''
+[10/11 12:54:07     28s]     RC-Corner PostRoute Res Factor        : 1
+[10/11 12:54:07     28s]     RC-Corner PostRoute Cap Factor        : 1
+[10/11 12:54:07     28s]     RC-Corner PostRoute XCap Factor       : 1
+[10/11 12:54:07     28s] eee: RC Grid memory allocated = 3033720 (159 X 159 X 10 X 12b)
+[10/11 12:54:07     28s] eee: pegSigSF=1.070000
+[10/11 12:54:07     28s] Initializing multi-corner resistance tables ...
+[10/11 12:54:07     28s] eee: Grid unit RC data computation started
+[10/11 12:54:07     28s] eee: Grid unit RC data computation completed
+[10/11 12:54:07     28s] eee: l=1 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: l=2 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: l=3 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: l=4 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: l=5 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: l=6 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: l=7 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: l=8 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: l=9 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: l=10 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:07     28s] eee: LAM-FP: thresh=1 ; dimX=11844.694444 ; dimY=11835.000000 ; multX=1.000000 ; multY=1.000000 ; minP=36 ; fpMult=1.000000 ;
+[10/11 12:54:07     28s] eee: LAM: n=7 LLS=2-3 HLS=3-5 rDens=0.000000 uaWl=0.000000 uaWlH=0.000000 aWlH=0.000000 lMod=0 pMax=0.850000 pMod=82 pModAss=50 wcR=0.639100 crit=0.000000 siPrev=0 newSi=0.000000 wHLS=1.597800 viaL=0.000000 shortMod=0.000000 fModUnas=0.000000 fModAs=0.000000 pDens=0.500000 
+[10/11 12:54:07     28s] eee: NetCapCache creation started. (Current Mem: 2831.305M) 
+[10/11 12:54:07     28s] eee: NetCapCache completed. (CPU Time: 0:00:00.0  Real Time: 0:00:00.0  Curr Mem: 2831.305M) 
+[10/11 12:54:07     28s] eee: dbu = 1000, Design = [ll(0.000000, 0.000000) ur(426.409000, 426.060000)], Layers = [f(10) b(0)], Grid size = 2.700000 um, Grid Dim = (158 X 158)
+[10/11 12:54:07     28s] eee: Metal Layers Info:
+[10/11 12:54:07     28s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:07     28s] eee: |   Layer  |  Id |    W    |    S    |    P    |   uC   |   uR   | D | T | wS |
+[10/11 12:54:07     28s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:07     28s] eee: |       M1 |   1 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | V | 0 |  1 |
+[10/11 12:54:07     28s] eee: |       M2 |   2 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | H | 0 |  1 |
+[10/11 12:54:07     28s] eee: |       M3 |   3 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | V | 0 |  1 |
+[10/11 12:54:07     28s] eee: |       M4 |   4 |   0.024 |   0.024 |   0.048 |  0.002 |   3.17 | H | 0 |  1 |
+[10/11 12:54:07     28s] eee: |       M5 |   5 |   0.024 |   0.024 |   0.048 |  0.002 |   1.83 | V | 0 |  1 |
+[10/11 12:54:07     28s] eee: |       M6 |   6 |   0.032 |   0.032 |   0.064 |  0.002 |   2.38 | H | 0 |  1 |
+[10/11 12:54:07     28s] eee: |       M7 |   7 |   0.032 |   0.032 |   0.064 |  0.002 |   2.38 | V | 0 |  1 |
+[10/11 12:54:07     28s] eee: |       M8 |   8 |   0.040 |   0.040 |   0.080 |  0.001 |   1.90 | H | 0 |  1 |
+[10/11 12:54:07     28s] eee: |       M9 |   9 |   0.040 |   0.040 |   0.080 |  0.001 |   1.90 | V | 0 |  1 |
+[10/11 12:54:07     28s] eee: |      Pad |  10 |   0.040 |   2.000 |   2.240 |  0.000 |   1.90 | H | 0 |  1 |
+[10/11 12:54:07     28s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:07     28s] eee: uC/uR for corner default_emulate_rc_corner, min-width/min-spacing, 30 perc over/under densities.
+[10/11 12:54:07     28s] eee: +-----------------------NDR Info-----------------------+
+[10/11 12:54:07     28s] eee: NDR Count = 0, Fake NDR = 0
+[10/11 12:54:07     28s] Starting consistency checks on late and early library sets of delay corner 'default_emulate_delay_corner'
+[10/11 12:54:07     28s] late library set: default_emulate_libset_max
+[10/11 12:54:07     28s] early library set: default_emulate_libset_min
+[10/11 12:54:07     28s] Completed consistency checks. Status: Successful
+[10/11 12:54:07     28s] Ending "SetAnalysisView" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2610.0M, current mem=2307.7M)
+[10/11 12:54:07     29s] Reading timing constraints file '/dev/null' ...
+[10/11 12:54:07     29s] Current (total cpu=0:00:29.2, real=0:00:29.0, peak res=2727.8M, current mem=2727.8M)
+[10/11 12:54:07     29s] Tech dependent Parameter, Build TLibAnalyzer for: cellAreaConsiderPadding
+[10/11 12:54:07     29s] 
+[10/11 12:54:07     29s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) Begin ...
+[10/11 12:54:08     29s] Summary for sequential cells identification: 
+[10/11 12:54:08     29s]   Identified SBFF number: 34
+[10/11 12:54:08     29s]   Identified MBFF number: 0
+[10/11 12:54:08     29s]   Identified SB Latch number: 12
+[10/11 12:54:08     29s]   Identified MB Latch number: 0
+[10/11 12:54:08     29s]   Not identified SBFF number: 0
+[10/11 12:54:08     29s]   Not identified MBFF number: 0
+[10/11 12:54:08     29s]   Not identified SB Latch number: 0
+[10/11 12:54:08     29s]   Not identified MB Latch number: 0
+[10/11 12:54:08     29s]   Number of sequential cells which are not FFs: 20
+[10/11 12:54:08     29s] Total number of combinational cells: 338
+[10/11 12:54:08     29s] Total number of sequential cells: 66
+[10/11 12:54:08     29s] Total number of tristate cells: 0
+[10/11 12:54:08     29s] Total number of level shifter cells: 0
+[10/11 12:54:08     29s] Total number of power gating cells: 0
+[10/11 12:54:08     29s] Total number of isolation cells: 0
+[10/11 12:54:08     29s] Total number of power switch cells: 0
+[10/11 12:54:08     29s] Total number of pulse generator cells: 0
+[10/11 12:54:08     29s] Total number of always on buffers: 0
+[10/11 12:54:08     29s] Total number of retention cells: 0
+[10/11 12:54:08     29s] Total number of physical cells: 0
+[10/11 12:54:08     29s] List of usable buffers: HB1xp67_ASAP7_75t_R HB1xp67_ASAP7_75t_L BUFx2_ASAP7_75t_R HB2xp67_ASAP7_75t_L BUFx2_ASAP7_75t_L BUFx3_ASAP7_75t_R BUFx3_ASAP7_75t_L BUFx4_ASAP7_75t_R BUFx4_ASAP7_75t_L BUFx5_ASAP7_75t_R BUFx4f_ASAP7_75t_R BUFx5_ASAP7_75t_L BUFx4f_ASAP7_75t_L BUFx6f_ASAP7_75t_R BUFx6f_ASAP7_75t_L BUFx8_ASAP7_75t_R BUFx8_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx10_ASAP7_75t_L BUFx12_ASAP7_75t_R BUFx12_ASAP7_75t_L BUFx12f_ASAP7_75t_R BUFx12f_ASAP7_75t_L BUFx16f_ASAP7_75t_R BUFx16f_ASAP7_75t_L BUFx24_ASAP7_75t_R BUFx24_ASAP7_75t_L
+[10/11 12:54:08     29s] Total number of usable buffers: 27
+[10/11 12:54:08     29s] List of unusable buffers:
+[10/11 12:54:08     29s] Total number of unusable buffers: 0
+[10/11 12:54:08     29s] List of usable inverters: INVxp67_ASAP7_75t_R INVxp33_ASAP7_75t_R INVx1_ASAP7_75t_R INVxp67_ASAP7_75t_L INVxp33_ASAP7_75t_L INVx1_ASAP7_75t_L INVx2_ASAP7_75t_R INVx2_ASAP7_75t_L INVx3_ASAP7_75t_R INVx3_ASAP7_75t_L INVx4_ASAP7_75t_R INVx4_ASAP7_75t_L INVx5_ASAP7_75t_R INVx5_ASAP7_75t_L INVx6_ASAP7_75t_R INVx6_ASAP7_75t_L INVx8_ASAP7_75t_R INVx8_ASAP7_75t_L INVx11_ASAP7_75t_R INVx11_ASAP7_75t_L INVx13_ASAP7_75t_R INVx13_ASAP7_75t_L CKINVDCx8_ASAP7_75t_R CKINVDCx5p33_ASAP7_75t_R CKINVDCx8_ASAP7_75t_L CKINVDCx5p33_ASAP7_75t_L CKINVDCx6p67_ASAP7_75t_R CKINVDCx10_ASAP7_75t_R CKINVDCx6p67_ASAP7_75t_L CKINVDCx10_ASAP7_75t_L CKINVDCx12_ASAP7_75t_R CKINVDCx11_ASAP7_75t_R CKINVDCx12_ASAP7_75t_L CKINVDCx11_ASAP7_75t_L CKINVDCx9p33_ASAP7_75t_R CKINVDCx14_ASAP7_75t_R CKINVDCx9p33_ASAP7_75t_L CKINVDCx14_ASAP7_75t_L CKINVDCx16_ASAP7_75t_R CKINVDCx16_ASAP7_75t_L CKINVDCx20_ASAP7_75t_R CKINVDCx20_ASAP7_75t_L
+[10/11 12:54:08     29s] Total number of usable inverters: 42
+[10/11 12:54:08     29s] List of unusable inverters:
+[10/11 12:54:08     29s] Total number of unusable inverters: 0
+[10/11 12:54:08     29s] List of identified usable delay cells: HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_L
+[10/11 12:54:08     29s] Total number of identified usable delay cells: 5
+[10/11 12:54:08     29s] List of identified unusable delay cells:
+[10/11 12:54:08     29s] Total number of identified unusable delay cells: 0
+[10/11 12:54:08     29s] 
+[10/11 12:54:08     29s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) End ...
+[10/11 12:54:08     29s] 
+[10/11 12:54:08     29s] TimeStamp Deleting Cell Server Begin ...
+[10/11 12:54:08     29s] 
+[10/11 12:54:08     29s] TimeStamp Deleting Cell Server End ...
+[10/11 12:54:08     29s] Ending "Cell type marking" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2756.8M, current mem=2756.8M)
+[10/11 12:54:08     29s] 
+[10/11 12:54:08     29s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) Begin ...
+[10/11 12:54:08     29s] Summary for sequential cells identification: 
+[10/11 12:54:08     29s]   Identified SBFF number: 34
+[10/11 12:54:08     29s]   Identified MBFF number: 0
+[10/11 12:54:08     29s]   Identified SB Latch number: 12
+[10/11 12:54:08     29s]   Identified MB Latch number: 0
+[10/11 12:54:08     29s]   Not identified SBFF number: 0
+[10/11 12:54:08     29s]   Not identified MBFF number: 0
+[10/11 12:54:08     29s]   Not identified SB Latch number: 0
+[10/11 12:54:08     29s]   Not identified MB Latch number: 0
+[10/11 12:54:08     29s]   Number of sequential cells which are not FFs: 20
+[10/11 12:54:08     29s]  Visiting view : default_emulate_view
+[10/11 12:54:08     29s]    : PowerDomain = none : Weighted F : unweighted  = 6.60 (1.000) with rcCorner = 0
+[10/11 12:54:08     29s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[10/11 12:54:08     29s]  Visiting view : default_emulate_view
+[10/11 12:54:08     29s]    : PowerDomain = none : Weighted F : unweighted  = 6.60 (1.000) with rcCorner = 0
+[10/11 12:54:08     29s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[10/11 12:54:08     29s] TLC MultiMap info (StdDelay):
+[10/11 12:54:08     29s]   : default_emulate_delay_corner + default_emulate_libset_max + 1 + no RcCorner := 4.3ps
+[10/11 12:54:08     29s]   : default_emulate_delay_corner + default_emulate_libset_max + 1 + default_emulate_rc_corner := 6.6ps
+[10/11 12:54:08     29s]  Setting StdDelay to: 6.6ps
+[10/11 12:54:08     29s] 
+[10/11 12:54:08     29s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) End ...
+[10/11 12:54:08     29s] 
+[10/11 12:54:08     29s] TimeStamp Deleting Cell Server Begin ...
+[10/11 12:54:08     29s] 
+[10/11 12:54:08     29s] TimeStamp Deleting Cell Server End ...
+[10/11 12:54:08     29s] Extraction setup Started for TopCell top_soc 
+[10/11 12:54:08     29s] Summary of Active RC-Corners : 
+[10/11 12:54:08     29s]  
+[10/11 12:54:08     29s]  Analysis View: default_emulate_view
+[10/11 12:54:08     29s]     RC-Corner Name        : default_emulate_rc_corner
+[10/11 12:54:08     29s]     RC-Corner Index       : 0
+[10/11 12:54:08     29s]     RC-Corner Temperature : 25 Celsius
+[10/11 12:54:08     29s]     RC-Corner Cap Table   : ''
+[10/11 12:54:08     29s]     RC-Corner PostRoute Res Factor        : 1
+[10/11 12:54:08     29s]     RC-Corner PostRoute Cap Factor        : 1
+[10/11 12:54:08     29s]     RC-Corner PostRoute XCap Factor       : 1
+[10/11 12:54:08     29s] eee: RC Grid memory freed = 3033720 (159 X 159 X 10 X 12b)
+[10/11 12:54:08     29s] eee: RC Grid memory allocated = 3033720 (159 X 159 X 10 X 12b)
+[10/11 12:54:08     29s] eee: pegSigSF=1.070000
+[10/11 12:54:08     29s] Initializing multi-corner resistance tables ...
+[10/11 12:54:08     29s] eee: Grid unit RC data computation started
+[10/11 12:54:08     29s] eee: Grid unit RC data computation completed
+[10/11 12:54:08     29s] eee: l=1 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=2 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=3 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=4 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=5 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=6 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=7 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=8 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=9 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=10 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: LAM-FP: thresh=1 ; dimX=11844.694444 ; dimY=11835.000000 ; multX=1.000000 ; multY=1.000000 ; minP=36 ; fpMult=1.000000 ;
+[10/11 12:54:08     29s] eee: LAM: n=7 LLS=2-3 HLS=3-5 rDens=0.000000 uaWl=0.000000 uaWlH=0.000000 aWlH=0.000000 lMod=0 pMax=0.850000 pMod=82 pModAss=50 wcR=0.639100 crit=0.000000 siPrev=0 newSi=0.000000 wHLS=1.597800 viaL=0.000000 shortMod=0.000000 fModUnas=0.000000 fModAs=0.000000 pDens=0.500000 
+[10/11 12:54:08     29s] eee: NetCapCache creation started. (Current Mem: 3095.742M) 
+[10/11 12:54:08     29s] eee: NetCapCache completed. (CPU Time: 0:00:00.0  Real Time: 0:00:00.0  Curr Mem: 3095.742M) 
+[10/11 12:54:08     29s] eee: dbu = 1000, Design = [ll(0.000000, 0.000000) ur(426.409000, 426.060000)], Layers = [f(10) b(0)], Grid size = 2.700000 um, Grid Dim = (158 X 158)
+[10/11 12:54:08     29s] eee: Metal Layers Info:
+[10/11 12:54:08     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:08     29s] eee: |   Layer  |  Id |    W    |    S    |    P    |   uC   |   uR   | D | T | wS |
+[10/11 12:54:08     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:08     29s] eee: |       M1 |   1 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M2 |   2 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M3 |   3 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M4 |   4 |   0.024 |   0.024 |   0.048 |  0.002 |   3.17 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M5 |   5 |   0.024 |   0.024 |   0.048 |  0.002 |   1.83 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M6 |   6 |   0.032 |   0.032 |   0.064 |  0.002 |   2.38 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M7 |   7 |   0.032 |   0.032 |   0.064 |  0.002 |   2.38 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M8 |   8 |   0.040 |   0.040 |   0.080 |  0.001 |   1.90 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M9 |   9 |   0.040 |   0.040 |   0.080 |  0.001 |   1.90 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |      Pad |  10 |   0.040 |   2.000 |   2.240 |  0.000 |   1.90 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:08     29s] eee: uC/uR for corner default_emulate_rc_corner, min-width/min-spacing, 30 perc over/under densities.
+[10/11 12:54:08     29s] eee: +-----------------------NDR Info-----------------------+
+[10/11 12:54:08     29s] eee: NDR Count = 0, Fake NDR = 0
+[10/11 12:54:08     29s] Extraction setup Started for TopCell top_soc 
+[10/11 12:54:08     29s] Summary of Active RC-Corners : 
+[10/11 12:54:08     29s]  
+[10/11 12:54:08     29s]  Analysis View: default_emulate_view
+[10/11 12:54:08     29s]     RC-Corner Name        : default_emulate_rc_corner
+[10/11 12:54:08     29s]     RC-Corner Index       : 0
+[10/11 12:54:08     29s]     RC-Corner Temperature : 25 Celsius
+[10/11 12:54:08     29s]     RC-Corner Cap Table   : ''
+[10/11 12:54:08     29s]     RC-Corner PostRoute Res Factor        : 1
+[10/11 12:54:08     29s]     RC-Corner PostRoute Cap Factor        : 1
+[10/11 12:54:08     29s]     RC-Corner PostRoute XCap Factor       : 1
+[10/11 12:54:08     29s] eee: RC Grid memory freed = 3033720 (159 X 159 X 10 X 12b)
+[10/11 12:54:08     29s] eee: RC Grid memory allocated = 3033720 (159 X 159 X 10 X 12b)
+[10/11 12:54:08     29s] eee: pegSigSF=1.070000
+[10/11 12:54:08     29s] Initializing multi-corner resistance tables ...
+[10/11 12:54:08     29s] eee: Grid unit RC data computation started
+[10/11 12:54:08     29s] eee: Grid unit RC data computation completed
+[10/11 12:54:08     29s] eee: l=1 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=2 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=3 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=4 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=5 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=6 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=7 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=8 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=9 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=10 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: LAM-FP: thresh=1 ; dimX=11844.694444 ; dimY=11835.000000 ; multX=1.000000 ; multY=1.000000 ; minP=36 ; fpMult=1.000000 ;
+[10/11 12:54:08     29s] eee: LAM: n=7 LLS=2-3 HLS=3-5 rDens=0.000000 uaWl=0.000000 uaWlH=0.000000 aWlH=0.000000 lMod=0 pMax=0.850000 pMod=82 pModAss=50 wcR=0.639100 crit=0.000000 siPrev=0 newSi=0.000000 wHLS=1.597800 viaL=0.000000 shortMod=0.000000 fModUnas=0.000000 fModAs=0.000000 pDens=0.500000 
+[10/11 12:54:08     29s] eee: NetCapCache creation started. (Current Mem: 3095.742M) 
+[10/11 12:54:08     29s] eee: NetCapCache completed. (CPU Time: 0:00:00.0  Real Time: 0:00:00.0  Curr Mem: 3095.742M) 
+[10/11 12:54:08     29s] eee: dbu = 1000, Design = [ll(0.000000, 0.000000) ur(426.409000, 426.060000)], Layers = [f(10) b(0)], Grid size = 2.700000 um, Grid Dim = (158 X 158)
+[10/11 12:54:08     29s] eee: Metal Layers Info:
+[10/11 12:54:08     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:08     29s] eee: |   Layer  |  Id |    W    |    S    |    P    |   uC   |   uR   | D | T | wS |
+[10/11 12:54:08     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:08     29s] eee: |       M1 |   1 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M2 |   2 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M3 |   3 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M4 |   4 |   0.024 |   0.024 |   0.048 |  0.002 |   3.17 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M5 |   5 |   0.024 |   0.024 |   0.048 |  0.002 |   1.83 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M6 |   6 |   0.032 |   0.032 |   0.064 |  0.002 |   2.38 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M7 |   7 |   0.032 |   0.032 |   0.064 |  0.002 |   2.38 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M8 |   8 |   0.040 |   0.040 |   0.080 |  0.001 |   1.90 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M9 |   9 |   0.040 |   0.040 |   0.080 |  0.001 |   1.90 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |      Pad |  10 |   0.040 |   2.000 |   2.240 |  0.000 |   1.90 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:08     29s] eee: uC/uR for corner default_emulate_rc_corner, min-width/min-spacing, 30 perc over/under densities.
+[10/11 12:54:08     29s] eee: +-----------------------NDR Info-----------------------+
+[10/11 12:54:08     29s] eee: NDR Count = 0, Fake NDR = 0
+[10/11 12:54:08     29s] Extraction setup Started for TopCell top_soc 
+[10/11 12:54:08     29s] Summary of Active RC-Corners : 
+[10/11 12:54:08     29s]  
+[10/11 12:54:08     29s]  Analysis View: default_emulate_view
+[10/11 12:54:08     29s]     RC-Corner Name        : default_emulate_rc_corner
+[10/11 12:54:08     29s]     RC-Corner Index       : 0
+[10/11 12:54:08     29s]     RC-Corner Temperature : 25 Celsius
+[10/11 12:54:08     29s]     RC-Corner Cap Table   : ''
+[10/11 12:54:08     29s]     RC-Corner PostRoute Res Factor        : 1
+[10/11 12:54:08     29s]     RC-Corner PostRoute Cap Factor        : 1
+[10/11 12:54:08     29s]     RC-Corner PostRoute XCap Factor       : 1
+[10/11 12:54:08     29s] eee: RC Grid memory freed = 3033720 (159 X 159 X 10 X 12b)
+[10/11 12:54:08     29s] eee: RC Grid memory allocated = 3033720 (159 X 159 X 10 X 12b)
+[10/11 12:54:08     29s] eee: pegSigSF=1.070000
+[10/11 12:54:08     29s] Initializing multi-corner resistance tables ...
+[10/11 12:54:08     29s] eee: Grid unit RC data computation started
+[10/11 12:54:08     29s] eee: Grid unit RC data computation completed
+[10/11 12:54:08     29s] eee: l=1 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=2 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=3 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=4 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=5 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=6 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=7 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=8 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=9 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: l=10 avDens=0.000000 usedTrk=0.000000 availTrk=0.000000 sigTrk=0.000000
+[10/11 12:54:08     29s] eee: LAM-FP: thresh=1 ; dimX=11844.694444 ; dimY=11835.000000 ; multX=1.000000 ; multY=1.000000 ; minP=36 ; fpMult=1.000000 ;
+[10/11 12:54:08     29s] eee: LAM: n=7 LLS=2-3 HLS=3-5 rDens=0.000000 uaWl=0.000000 uaWlH=0.000000 aWlH=0.000000 lMod=0 pMax=0.850000 pMod=82 pModAss=50 wcR=0.639100 crit=0.000000 siPrev=0 newSi=0.000000 wHLS=1.597800 viaL=0.000000 shortMod=0.000000 fModUnas=0.000000 fModAs=0.000000 pDens=0.500000 
+[10/11 12:54:08     29s] eee: NetCapCache creation started. (Current Mem: 3095.742M) 
+[10/11 12:54:08     29s] eee: NetCapCache completed. (CPU Time: 0:00:00.0  Real Time: 0:00:00.0  Curr Mem: 3095.742M) 
+[10/11 12:54:08     29s] eee: dbu = 1000, Design = [ll(0.000000, 0.000000) ur(426.409000, 426.060000)], Layers = [f(10) b(0)], Grid size = 2.700000 um, Grid Dim = (158 X 158)
+[10/11 12:54:08     29s] eee: Metal Layers Info:
+[10/11 12:54:08     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:08     29s] eee: |   Layer  |  Id |    W    |    S    |    P    |   uC   |   uR   | D | T | wS |
+[10/11 12:54:08     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:08     29s] eee: |       M1 |   1 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M2 |   2 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M3 |   3 |   0.018 |   0.018 |   0.036 |  0.003 |   4.22 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M4 |   4 |   0.024 |   0.024 |   0.048 |  0.002 |   3.17 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M5 |   5 |   0.024 |   0.024 |   0.048 |  0.002 |   1.83 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M6 |   6 |   0.032 |   0.032 |   0.064 |  0.002 |   2.38 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M7 |   7 |   0.032 |   0.032 |   0.064 |  0.002 |   2.38 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M8 |   8 |   0.040 |   0.040 |   0.080 |  0.001 |   1.90 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: |       M9 |   9 |   0.040 |   0.040 |   0.080 |  0.001 |   1.90 | V | 0 |  1 |
+[10/11 12:54:08     29s] eee: |      Pad |  10 |   0.040 |   2.000 |   2.240 |  0.000 |   1.90 | H | 0 |  1 |
+[10/11 12:54:08     29s] eee: +----------+-----+---------+---------+---------+--------+--------+---+---+----+
+[10/11 12:54:08     29s] eee: uC/uR for corner default_emulate_rc_corner, min-width/min-spacing, 30 perc over/under densities.
+[10/11 12:54:08     29s] eee: +-----------------------NDR Info-----------------------+
+[10/11 12:54:08     29s] eee: NDR Count = 0, Fake NDR = 0
+[10/11 12:54:08     29s] <CMD> read_def /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def
+[10/11 12:54:08     29s] Reading DEF file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def', current time is Sun Oct 11 12:54:08 2026 ...
+[10/11 12:54:08     29s] --- DIVIDERCHAR '/'
+[10/11 12:54:08     29s] --- UnitsPerDBU = 1.0000
+[10/11 12:54:08     29s] 
+[10/11 12:54:08     29s] Honor LEF defined pitches for advanced node
+[10/11 12:54:08     29s] Start create_tracks
+[10/11 12:54:08     29s] --- DIEAREA (0 0) (565632 358128)
+[10/11 12:54:08     29s] defIn read 10000 lines...
+[10/11 12:54:08     29s] defIn read 20000 lines...
+[10/11 12:54:08     29s] defIn read 30000 lines...
+[10/11 12:54:08     29s] defIn read 40000 lines...
+[10/11 12:54:08     29s] defIn read 50000 lines...
+[10/11 12:54:08     29s] defIn read 60000 lines...
+[10/11 12:54:08     29s] defIn read 70000 lines...
+[10/11 12:54:08     29s] defIn read 80000 lines...
+[10/11 12:54:08     29s] defIn read 90000 lines...
+[10/11 12:54:08     29s] defIn read 100000 lines...
+[10/11 12:54:08     29s] defIn read 110000 lines...
+[10/11 12:54:08     29s] defIn read 120000 lines...
+[10/11 12:54:08     29s] defIn read 130000 lines...
+[10/11 12:54:08     29s] defIn read 140000 lines...
+[10/11 12:54:08     29s] defIn read 150000 lines...
+[10/11 12:54:08     29s] defIn read 160000 lines...
+[10/11 12:54:08     29s] defIn read 170000 lines...
+[10/11 12:54:08     29s] defIn read 180000 lines...
+[10/11 12:54:08     29s] defIn read 190000 lines...
+[10/11 12:54:08     29s] defIn read 200000 lines...
+[10/11 12:54:08     29s] defIn read 210000 lines...
+[10/11 12:54:08     29s] defIn read 220000 lines...
+[10/11 12:54:08     29s] defIn read 230000 lines...
+[10/11 12:54:08     29s] defIn read 240000 lines...
+[10/11 12:54:08     29s] defIn read 250000 lines...
+[10/11 12:54:08     29s] defIn read 260000 lines...
+[10/11 12:54:08     29s] defIn read 270000 lines...
+[10/11 12:54:08     29s] defIn read 280000 lines...
+[10/11 12:54:08     29s] defIn read 290000 lines...
+[10/11 12:54:08     29s] defIn read 300000 lines...
+[10/11 12:54:08     29s] defIn read 310000 lines...
+[10/11 12:54:08     29s] defIn read 320000 lines...
+[10/11 12:54:08     29s] defIn read 330000 lines...
+[10/11 12:54:08     29s] defIn read 340000 lines...
+[10/11 12:54:08     29s] defIn read 350000 lines...
+[10/11 12:54:08     30s] defIn read 360000 lines...
+[10/11 12:54:08     30s] defIn read 370000 lines...
+[10/11 12:54:08     30s] defIn read 380000 lines...
+[10/11 12:54:08     30s] defIn read 390000 lines...
+[10/11 12:54:08     30s] defIn read 400000 lines...
+[10/11 12:54:08     30s] defIn read 410000 lines...
+[10/11 12:54:08     30s] defIn read 420000 lines...
+[10/11 12:54:08     30s] defIn read 430000 lines...
+[10/11 12:54:08     30s] defIn read 440000 lines...
+[10/11 12:54:08     30s] defIn read 450000 lines...
+[10/11 12:54:08     30s] defIn read 460000 lines...
+[10/11 12:54:08     30s] defIn read 470000 lines...
+[10/11 12:54:08     30s] defIn read 480000 lines...
+[10/11 12:54:08     30s] defIn read 490000 lines...
+[10/11 12:54:08     30s] defIn read 500000 lines...
+[10/11 12:54:08     30s] defIn read 510000 lines...
+[10/11 12:54:09     30s] defIn read 520000 lines...
+[10/11 12:54:09     30s] defIn read 530000 lines...
+[10/11 12:54:09     30s] defIn read 540000 lines...
+[10/11 12:54:09     30s] defIn read 550000 lines...
+[10/11 12:54:09     30s] defIn read 560000 lines...
+[10/11 12:54:09     30s] defIn read 570000 lines...
+[10/11 12:54:09     30s] defIn read 580000 lines...
+[10/11 12:54:09     30s] defIn read 590000 lines...
+[10/11 12:54:09     30s] defIn read 600000 lines...
+[10/11 12:54:09     30s] defIn read 610000 lines...
+[10/11 12:54:09     30s] defIn read 620000 lines...
+[10/11 12:54:09     30s] defIn read 630000 lines...
+[10/11 12:54:09     30s] defIn read 640000 lines...
+[10/11 12:54:09     30s] defIn read 650000 lines...
+[10/11 12:54:09     30s] defIn read 660000 lines...
+[10/11 12:54:09     30s] defIn read 670000 lines...
+[10/11 12:54:09     30s] defIn read 680000 lines...
+[10/11 12:54:09     30s] defIn read 690000 lines...
+[10/11 12:54:09     30s] defIn read 700000 lines...
+[10/11 12:54:09     30s] defIn read 710000 lines...
+[10/11 12:54:09     30s] defIn read 720000 lines...
+[10/11 12:54:09     30s] defIn read 730000 lines...
+[10/11 12:54:09     30s] defIn read 740000 lines...
+[10/11 12:54:09     30s] defIn read 750000 lines...
+[10/11 12:54:09     30s] defIn read 760000 lines...
+[10/11 12:54:09     30s] defIn read 770000 lines...
+[10/11 12:54:09     30s] defIn read 780000 lines...
+[10/11 12:54:09     30s] defIn read 790000 lines...
+[10/11 12:54:09     30s] defIn read 800000 lines...
+[10/11 12:54:09     30s] defIn read 810000 lines...
+[10/11 12:54:09     30s] defIn read 820000 lines...
+[10/11 12:54:09     30s] defIn read 830000 lines...
+[10/11 12:54:09     30s] defIn read 840000 lines...
+[10/11 12:54:09     30s] defIn read 850000 lines...
+[10/11 12:54:09     30s] defIn read 860000 lines...
+[10/11 12:54:09     30s] defIn read 870000 lines...
+[10/11 12:54:09     30s] defIn read 880000 lines...
+[10/11 12:54:09     30s] defIn read 890000 lines...
+[10/11 12:54:09     30s] defIn read 900000 lines...
+[10/11 12:54:09     30s] defIn read 910000 lines...
+[10/11 12:54:09     30s] defIn read 920000 lines...
+[10/11 12:54:09     30s] defIn read 930000 lines...
+[10/11 12:54:09     30s] defIn read 940000 lines...
+[10/11 12:54:09     30s] defIn read 950000 lines...
+[10/11 12:54:09     30s] defIn read 960000 lines...
+[10/11 12:54:09     30s] defIn read 970000 lines...
+[10/11 12:54:09     31s] defIn read 980000 lines...
+[10/11 12:54:09     31s] defIn read 990000 lines...
+[10/11 12:54:09     31s] defIn read 1000000 lines...
+[10/11 12:54:09     31s] defIn read 1100000 lines...
+[10/11 12:54:10     31s] defIn read 1200000 lines...
+[10/11 12:54:10     31s] defIn read 1300000 lines...
+[10/11 12:54:10     31s] defIn read 1400000 lines...
+[10/11 12:54:10     31s] defIn read 1500000 lines...
+[10/11 12:54:10     31s] defIn read 1600000 lines...
+[10/11 12:54:11     32s] defIn read 1700000 lines...
+[10/11 12:54:11     32s] defIn read 1800000 lines...
+[10/11 12:54:11     32s] defIn read 1900000 lines...
+[10/11 12:54:11     32s] defIn read 2000000 lines...
+[10/11 12:54:11     32s] defIn read 2100000 lines...
+[10/11 12:54:11     33s] defIn read 2200000 lines...
+[10/11 12:54:12     33s] defIn read 2300000 lines...
+[10/11 12:54:12     33s] defIn read 2400000 lines...
+[10/11 12:54:12     33s] defIn read 2500000 lines...
+[10/11 12:54:12     33s] defIn read 2600000 lines...
+[10/11 12:54:12     34s] defIn read 2700000 lines...
+[10/11 12:54:12     34s] defIn read 2800000 lines...
+[10/11 12:54:13     34s] defIn read 2900000 lines...
+[10/11 12:54:13     34s] defIn read 3000000 lines...
+[10/11 12:54:13     35s] defIn read 3100000 lines...
+[10/11 12:54:13     35s] defIn read 3200000 lines...
+[10/11 12:54:14     35s] defIn read 3300000 lines...
+[10/11 12:54:14     35s] defIn read 3400000 lines...
+[10/11 12:54:14     35s] defIn read 3500000 lines...
+[10/11 12:54:14     35s] defIn read 3600000 lines...
+[10/11 12:54:14     35s] defIn read 3700000 lines...
+[10/11 12:54:14     36s] defIn read 3800000 lines...
+[10/11 12:54:15     36s] defIn read 3900000 lines...
+[10/11 12:54:15     36s] defIn read 4000000 lines...
+[10/11 12:54:15     36s] defIn read 4100000 lines...
+[10/11 12:54:15     36s] defIn read 4200000 lines...
+[10/11 12:54:15     36s] defIn read 4300000 lines...
+[10/11 12:54:15     37s] defIn read 4400000 lines...
+[10/11 12:54:16     37s] defIn read 4500000 lines...
+[10/11 12:54:16     37s] defIn read 4600000 lines...
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (IMPDF-141):	Linking placement blockage with component 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+[10/11 12:54:16     37s] **WARN: (EMS-62):	Message <IMPDF-141> has exceeded the default message display limit of 20.
+[10/11 12:54:16     37s] To avoid this warning, increase the display limit per unique message by
+[10/11 12:54:16     37s] using the set_message -limit <number> command.
+[10/11 12:54:16     37s] The message limit can be removed by using the set_message -no_limit command.
+[10/11 12:54:16     37s] Note that setting a very large number using the set_message -limit command
+[10/11 12:54:16     37s] or removing the message limit using the set_message -no_limit command can
+[10/11 12:54:16     37s] significantly increase the log file size.
+[10/11 12:54:16     37s] To suppress a message, use the set_message -suppress command.
+[10/11 12:54:16     37s] defIn read 4700000 lines...
+[10/11 12:54:16     37s] defIn read 4800000 lines...
+[10/11 12:54:16     37s] defIn read 4900000 lines...
+[10/11 12:54:16     37s] defIn read 5000000 lines...
+[10/11 12:54:16     37s] defIn read 5100000 lines...
+[10/11 12:54:16     37s] defIn read 5200000 lines...
+[10/11 12:54:16     37s] defIn read 5300000 lines...
+[10/11 12:54:16     37s] defIn read 5400000 lines...
+[10/11 12:54:16     37s] defIn read 5500000 lines...
+[10/11 12:54:16     37s] defIn read 5600000 lines...
+[10/11 12:54:16     37s] defIn read 5700000 lines...
+[10/11 12:54:16     37s] Creating 1060165 fills into db.
+[10/11 12:54:16     37s] ..
+[10/11 12:54:16     38s] defIn read 5800000 lines...
+[10/11 12:54:16     38s] defIn read 5900000 lines...
+[10/11 12:54:16     38s] defIn read 6000000 lines...
+[10/11 12:54:16     38s] defIn read 6100000 lines...
+[10/11 12:54:16     38s] defIn read 6200000 lines...
+[10/11 12:54:17     38s] defIn read 6300000 lines...
+[10/11 12:54:17     38s] defIn read 6400000 lines...
+[10/11 12:54:17     38s] defIn read 6500000 lines...
+[10/11 12:54:17     38s] defIn read 6600000 lines...
+[10/11 12:54:17     38s] defIn read 6700000 lines...
+[10/11 12:54:17     38s] defIn read 6800000 lines...
+[10/11 12:54:17     38s] defIn read 6900000 lines...
+[10/11 12:54:17     38s] defIn read 7000000 lines...
+[10/11 12:54:17     38s] defIn read 7100000 lines...
+[10/11 12:54:17     38s] defIn read 7200000 lines...
+[10/11 12:54:17     38s] defIn read 7300000 lines...
+[10/11 12:54:17     38s] defIn read 7400000 lines...
+[10/11 12:54:17     39s] defIn read 7500000 lines...
+[10/11 12:54:17     39s] defIn read 7600000 lines...
+[10/11 12:54:17     39s] defIn read 7700000 lines...
+[10/11 12:54:17     39s] defIn read 7800000 lines...
+[10/11 12:54:17     39s] defIn read 7900000 lines...
+[10/11 12:54:17     39s] defIn read 8000000 lines...
+[10/11 12:54:17     39s] defIn read 8100000 lines...
+[10/11 12:54:17     39s] defIn read 8200000 lines...
+[10/11 12:54:17     39s] defIn read 8300000 lines...
+[10/11 12:54:17     39s] defIn read 8400000 lines...
+[10/11 12:54:17     39s] defIn read 8500000 lines...
+[10/11 12:54:17     39s] defIn read 8600000 lines...
+[10/11 12:54:18     39s] defIn read 8700000 lines...
+[10/11 12:54:18     39s] defIn read 8800000 lines...
+[10/11 12:54:18     39s] defIn read 8900000 lines...
+[10/11 12:54:18     40s] defIn read 9000000 lines...
+[10/11 12:54:18     40s] defIn read 9100000 lines...
+[10/11 12:54:18     40s] defIn read 9200000 lines...
+[10/11 12:54:18     40s] defIn read 9300000 lines...
+[10/11 12:54:18     40s] defIn read 9400000 lines...
+[10/11 12:54:18     40s] defIn read 9500000 lines...
+[10/11 12:54:18     40s] defIn read 9600000 lines...
+[10/11 12:54:18     40s] defIn read 9700000 lines...
+[10/11 12:54:18     40s] defIn read 9800000 lines...
+[10/11 12:54:18     40s] defIn read 9900000 lines...
+[10/11 12:54:18     40s] defIn read 10000000 lines...
+[10/11 12:54:18     41s] defIn read 10100000 lines...
+[10/11 12:54:19     41s] Extracting standard cell pins and blockage ...... 
+[10/11 12:54:19     41s] Pin and blockage extraction finished
+[10/11 12:54:19     41s] Extracting macro/IO cell pins and blockage ...... 
+[10/11 12:54:19     41s] Pin and blockage extraction finished
+[10/11 12:54:19     41s] defIn read 10200000 lines...
+[10/11 12:54:19     42s] defIn read 10300000 lines...
+[10/11 12:54:19     42s] defIn read 10400000 lines...
+[10/11 12:54:19     43s] defIn read 10500000 lines...
+[10/11 12:54:19     43s] defIn read 10600000 lines...
+[10/11 12:54:20     43s] defIn read 10700000 lines...
+[10/11 12:54:20     44s] defIn read 10800000 lines...
+[10/11 12:54:20     44s] defIn read 10900000 lines...
+[10/11 12:54:20     44s] defIn read 11000000 lines...
+[10/11 12:54:20     45s] defIn read 11100000 lines...
+[10/11 12:54:20     45s] defIn read 11200000 lines...
+[10/11 12:54:21     45s] defIn read 11300000 lines...
+[10/11 12:54:21     45s] defIn read 11400000 lines...
+[10/11 12:54:21     45s] defIn read 11500000 lines...
+[10/11 12:54:21     45s] defIn read 11600000 lines...
+[10/11 12:54:21     46s] defIn read 11700000 lines...
+[10/11 12:54:21     46s] defIn read 11800000 lines...
+[10/11 12:54:22     46s] defIn read 11900000 lines...
+[10/11 12:54:22     46s] defIn read 12000000 lines...
+[10/11 12:54:22     46s] defIn read 12100000 lines...
+[10/11 12:54:22     46s] defIn read 12200000 lines...
+[10/11 12:54:24     48s] DEF file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def' is parsed, current time is Sun Oct 11 12:54:24 2026.
+[10/11 12:54:24     48s] Updating the floorplan ...
+[10/11 12:54:25     49s] <CMD> read_sdc /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc
+[10/11 12:54:25     49s] Current (total cpu=0:00:49.6, real=0:00:47.0, peak res=3785.1M, current mem=3761.6M)
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cpu/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 36).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_dbg/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 37).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_pwm/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 38).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_gpio/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 39).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cordic/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 40).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_ascon/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 41).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 42).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_spi/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 43).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_i2c/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 44).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 45).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim0/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 46).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 47).
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] Number of path exceptions in the constraint file = 6
+[10/11 12:54:25     49s] INFO (CTE): Reading of timing constraints file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc completed, with 12 WARNING
+[10/11 12:54:25     49s] Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=3777.4M, current mem=3777.4M)
+[10/11 12:54:25     49s] Current (total cpu=0:00:49.8, real=0:00:47.0, peak res=3785.1M, current mem=3777.4M)
+[10/11 12:54:25     49s] <CMD> read_spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef
+[10/11 12:54:25     49s] read_spef Option :  -rc_corner default_emulate_rc_corner /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef -noStarN 
+[10/11 12:54:25     49s] 
+[10/11 12:54:25     49s] SPEF files for RC Corner default_emulate_rc_corner:
+[10/11 12:54:25     49s] Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef'.
+[10/11 12:54:25     49s] Start spef parsing (MEM=4259.31).
+[10/11 12:54:25     49s] Number of corners: 1
+[10/11 12:54:25     49s] Number of parallel threads processing the nets is: 1
+[10/11 12:54:25     49s] Maximum backlog used in parser: 50.
+[10/11 12:54:25     49s] Reading multiple SPEF files in parallel.
+[10/11 12:54:25     50s] RCDB /tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/top_soc_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_Qlxt1Y.rcdb.d/top_soc.rcdb.d Creation Started (CPU Time= 0:00:00.0  MEM= 4290.3M)
+[10/11 12:54:25     50s] Creating parasitic data file '/tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/top_soc_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_Qlxt1Y.rcdb.d/top_soc.rcdb.d' for storing RC.
+[10/11 12:54:28     58s] The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef', has encountered the error/warning message(s) during its reading.
+[10/11 12:54:28     58s] **WARN: (SPEF-1152):	Net 'flash_io_i[3] ( having pins flash_io_i[3] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/11 12:54:28     58s] **WARN: (SPEF-1152):	Net 'flash_io_i[2] ( having pins flash_io_i[2] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/11 12:54:28     58s] **WARN: (SPEF-1152):	Net 'flash_io_i[0] ( having pins flash_io_i[0] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/11 12:54:28     58s] SPEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef.
+[10/11 12:54:28     58s] Number of Resistors     : 1652793
+[10/11 12:54:28     58s] Number of Ground Caps   : 1170669
+[10/11 12:54:28     58s] Number of Coupling Caps : 116540
+[10/11 12:54:28     58s] 
+[10/11 12:54:28     58s] RCDB /tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/top_soc_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_Qlxt1Y.rcdb.d/top_soc.rcdb.d Creation Completed (CPU Time= 0:00:08.5  MEM= 4372.0M)
+[10/11 12:54:28     58s] End spef parsing (MEM=4363.96 CPU=0:00:08.7 REAL=0:00:03.0).
+[10/11 12:54:28     58s] Spef for RC Corner 'default_emulate_rc_corner' was previously specified. Dropping the previous specification.
+[10/11 12:54:28     58s] Lumped Parasitic Loading Started (total cpu=0:00:00.0, real=0:00:00.0, current mem=4363.961M)
+[10/11 12:54:28     58s] Opening parasitic data file '/tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/top_soc_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_Qlxt1Y.rcdb.d/top_soc.rcdb.d' for reading (mem: 4363.961M)
+[10/11 12:54:28     58s] Lumped Parasitic Loading Completed (total cpu=0:00:00.1, real=0:00:00.0, current mem=4363.961M)
+[10/11 12:54:28     58s] Closing parasitic data file '/tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/top_soc_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_Qlxt1Y.rcdb.d/top_soc.rcdb.d': 0 access done (mem: 4363.961M)
+[10/11 12:54:28     58s] 431 nets are missing in SPEF file. The names of these nets are saved in ./default_emulate_rc_corner.missing_nets.rpt.gz.
+[10/11 12:54:28     58s] <CMD> set_power_analysis_mode -method static -corner max -create_binary_db true
+[10/11 12:54:28     58s] <CMD> set_power_output_dir /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/power
+[10/11 12:54:28     58s] <CMD> report_power -outfile /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/power_static.rpt
+[10/11 12:54:28     58s] env CDS_WORKAREA is set to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus
+[10/11 12:54:28     58s] 
+[10/11 12:54:28     58s] Power Net Detected:
+[10/11 12:54:28     58s]         Voltage	    Name
+[10/11 12:54:28     58s]              0V	    VSS
+[10/11 12:54:28     58s]            0.7V	    VDD
+[10/11 12:54:28     58s] AAE_INFO: opIsDesignInPostRouteState() is 1
+[10/11 12:54:29     59s] AAE DB initialization (MEM=3880.097656 CPU=0:00:00.0 REAL=0:00:00.0) 
+[10/11 12:54:29     59s] #################################################################################
+[10/11 12:54:29     59s] # Design Name: top_soc
+[10/11 12:54:29     59s] # Design Mode: 65nm
+[10/11 12:54:29     59s] # Analysis Mode: MMMC OCV 
+[10/11 12:54:29     59s] # Parasitics Mode: SPEF/RCDB 
+[10/11 12:54:29     59s] # Signoff Settings: SI Off 
+[10/11 12:54:29     59s] #################################################################################
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'default_emulate_view'
+[10/11 12:54:33     63s] Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'default_emulate_view'
+[10/11 12:54:34     64s] Topological Sorting (REAL = 0:00:01.0, MEM = 4508.2M, InitMEM = 4490.5M)
+[10/11 12:54:34     64s] Start delay calculation (fullDC) (1 T). (MEM=3867.44)
+[10/11 12:54:34     64s] Start AAE Lib Loading. (MEM=3867.601562)
+[10/11 12:54:34     64s] End AAE Lib Loading. (MEM=3885.546875 CPU=0:00:00.0 Real=0:00:00.0)
+[10/11 12:54:34     64s] End AAE Lib Interpolated Model. (MEM=3885.757812 CPU Time=0:00:00.0, Real Time=0:00:00.0)
+[10/11 12:54:34     64s] Opening parasitic data file '/tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/top_soc_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_Qlxt1Y.rcdb.d/top_soc.rcdb.d' for reading (mem: 4779.801M)
+[10/11 12:54:34     64s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 4791.0M)
+[10/11 12:55:06     96s] End Timing Check Calculation. (CPU Time=0:00:01.4, Real Time=0:00:02.0)
+[10/11 12:55:06     96s] End delay calculation. (MEM=4008.75 CPU=0:00:30.9 REAL=0:00:31.0)
+[10/11 12:55:06     96s] Begin loading slews from CTE ...
+[10/11 12:55:06     96s] Loading slews from CTE completed...
+[10/11 12:55:06     96s] End delay calculation (fullDC). (MEM=3989.27 CPU=0:00:32.2 REAL=0:00:32.0)
+[10/11 12:55:06     96s] *** CDM Built up (cpu=0:00:37.7  real=0:00:37.0  mem= 4991.4M) ***
+[10/11 12:55:08     98s] 
+[10/11 12:55:08     98s] Begin Power Analysis
+[10/11 12:55:08     98s] 
+[10/11 12:55:08     98s]              0V	    VSS
+[10/11 12:55:08     98s]            0.7V	    VDD
+[10/11 12:55:08     98s] Begin Processing Timing Library for Power Calculation
+[10/11 12:55:08     98s] 
+[10/11 12:55:08     98s] Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4002.27MB/unknown/unknown)
+[10/11 12:55:08     98s] 
+[10/11 12:55:08     98s] 
+[10/11 12:55:08     98s] 
+[10/11 12:55:08     98s] Begin Processing Power Net/Grid for Power Calculation
+[10/11 12:55:08     98s] 
+[10/11 12:55:08     98s] Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4002.27MB/unknown/unknown)
+[10/11 12:55:08     98s] 
+[10/11 12:55:08     98s] Begin Processing Timing Window Data for Power Calculation
+[10/11 12:55:08     98s] 
+[10/11 12:55:08     98s] CLK_UART1(250MHz) CLK_UART(250MHz) CLK_TIM1(250MHz) CLK_TIM0(250MHz) CLK_SYS(250MHz) CLK_SPI(250MHz) CLK_SDRAM_OUT(250MHz) CLK_PWM(250MHz) CLK_I2C(250MHz) CLK_GPIO(250MHz) CLK_DBG(250MHz) CLK_CPU(250MHz) CLK_CORDIC(250MHz) CLK_ASCON(250MHz) CLK_TCK(10MHz) Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=4020.54MB/unknown/unknown)
+[10/11 12:55:10    100s] 
+[10/11 12:55:10    100s] Begin Processing User Attributes
+[10/11 12:55:10    100s] 
+[10/11 12:55:10    100s] Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4020.68MB/unknown/unknown)
+[10/11 12:55:10    100s] 
+[10/11 12:55:10    100s] Begin Processing Signal Activity
+[10/11 12:55:10    100s] 
+[10/11 12:55:15    105s] Ended Processing Signal Activity: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=4050.00MB/unknown/unknown)
+[10/11 12:55:15    105s] 
+[10/11 12:55:15    105s] Begin Power Computation
+[10/11 12:55:15    105s] 
+[10/11 12:55:15    105s]       ----------------------------------------------------------
+[10/11 12:55:15    105s]       # of cell(s) missing both power/leakage table: 0
+[10/11 12:55:15    105s]       # of cell(s) missing power table: 2
+[10/11 12:55:15    105s]       # of cell(s) missing leakage table: 0
+[10/11 12:55:15    105s]       ----------------------------------------------------------
+[10/11 12:55:15    105s] CellName                                  Missing Table(s)
+[10/11 12:55:15    105s] TIEHIx1_ASAP7_75t_R                       internal power, 
+[10/11 12:55:15    105s] TIELOx1_ASAP7_75t_R                       internal power, 
+[10/11 12:55:15    105s] 
+[10/11 12:55:15    105s] 
+[10/11 12:55:30    120s]       # of MSMV cell(s) missing power_level: 0
+[10/11 12:55:30    120s] Ended Power Computation: (cpu=0:00:14, real=0:00:14, mem(process/total/peak)=4064.35MB/unknown/unknown)
+[10/11 12:55:30    120s] 
+[10/11 12:55:30    120s] Begin Processing User Attributes
+[10/11 12:55:30    120s] 
+[10/11 12:55:30    120s] Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4064.35MB/unknown/unknown)
+[10/11 12:55:30    120s] 
+[10/11 12:55:30    120s] Ended Power Analysis: (cpu=0:00:21, real=0:00:22, mem(process/total/peak)=4064.35MB/unknown/unknown)
+[10/11 12:55:30    120s] 
+[10/11 12:55:31    121s] *
+
+
+
+[10/11 12:55:31    121s] Total Power
+[10/11 12:55:31    121s] -----------------------------------------------------------------------------------------
+[10/11 12:55:31    121s] Total Internal Power:       85.78037849 	   97.2933%
+[10/11 12:55:31    121s] Total Switching Power:       2.34694520 	    2.6619%
+[10/11 12:55:31    121s] Total Leakage Power:         0.03946085 	    0.0448%
+[10/11 12:55:31    121s] Total Power:                88.16678454
+[10/11 12:55:31    121s] -----------------------------------------------------------------------------------------
+[10/11 12:55:35    125s] <CMD> set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap
+[10/11 12:55:35    125s] 
+[10/11 12:55:35    125s] Usage: set_rail_analysis_mode [-help] [-avg_em_analysis {true false}] [-create_pdn_model {true false}] [-em_cdf_percentage <float>] [-peak_em_analysis {true false}]
+[10/11 12:55:35    125s]                               [-rms_em_analysis {true false}] [-set_analyze_bbox <string>] [-tsv_subckt_modelfile_list <string>] -reset | { -accuracy {xd hd} -method {static dynamic era_static era_dynamic} [-accumulate_overlapping_ddv_pwl_waveforms {true false}] [-analysis_view <string>] [-cell_ignore_file <string>] [-check_current_balanced_power_grid_em {true false}] [-check_thermal_aware_em {true false}] [-check_vsrc_placement_on_switched_net {true false}] [-cluster_via1_ports {true false}] [-cluster_via_rule <string>] [-cluster_via_size <integer>] [-common_res_inst_pair_file_name <string>] [-compress_powergrid_database {true false}] [-decap_cell_list <string>] [-def_based_hierarchical_reports {true false}] [-default_package_capacitor <string>] [-default_package_inductor <string>] [-default_package_resistor <string>] [-disable_analysis_types <string>] [-disable_em_split_ac_dc_rules {true false}] [-disable_parallel_extraction ] [-dynamic_trigger_file <string>] [-eiv_average_per_window_list <string>] [-eiv_eval_gnd_window {true false}] [-eiv_eval_nodes {tap port}] [-eiv_eval_window {both switching timing elapse}] [-eiv_histogram_max <float>] [-eiv_histogram_min <float>] [-eiv_histogram_number_of_bucket <integer>] [-eiv_max_instances <integer>] [-eiv_method <string>] [-eiv_pin_based_report {true false}] [-eiv_eval_layers <string>] [-eiv_eval_layer_file <string>] [-eiv_pin_location {true false}] [-eiv_print_time {true false}] [-eiv_report {auto netonly all}] [-eiv_threshold <float>] [-em_ignore_pgv_resistors {true false}] [-em_limit_scale_factor <string>] [-em_models <string>] [-em_peak_analysis {true false}] [-em_report_line_threshold <integer>] [-em_rms_delta_T <float>] [-em_rms_delta_T_layer_list <string>] [-em_temperature <string>] [-em_temperature_layer_list <string>] [-em_threshold <float>] [-enable_2d_partition_extraction {true false}] [-enable_ccs_analysis {true false}] [-enable_distributed_processing_in_solver {true false}] [-enable_instance_powergate_report {true false}] [-enable_manufacturing_effects {true false}] [-enable_multi_die_connectivity_check {true false}] [-enable_package_battery_current_probing {true false}] [-enable_rc_analysis {true false}] [-enable_reff_analysis {true false}] [-enable_rlrp_analysis {true false}] [-enable_scheduler {true false}] [-enable_seb {true false}] [-enable_sensitivity_analysis {true false}] [-enable_voltage_across_vias {true false}] [-enable_vsrc_in_gif {true false}] [-enable_xp {true false}] [-enable_xpgv_scaling {true false}] [-enlarge_vsrc_in_vuvc {true false}] [-env_temperature <string>] [-era_current_distribution_unplaced_area {instance diearea}] [-era_current_region_file <string>] [-era_insert_virtual_followpin_for_io {true false}] [-era_insert_virtual_followpins {standard extended none}] [-era_instance_dynamic_current_file <string>] [-era_lef_layermap <string>] [-era_power_gate_file <string>] [-era_skip_virtual_via_by_type {whatif def all none}] [-era_techlib_generation {true false}] [-extract_subconductor_layers {true false}] [-extraction_tech_file <string>] [-extractor_include <string>] [-feol_scale_factor <float>] [-filler_cell_list <string>] [-fine_pre_simulation_period <float>] [-finegrain_powergate_ron {min avg max}] [-finegrain_powergate_ron_list <string>] [-flatten_xpgv_block_instances <string>] [-force_extraction {true false}] [-force_library_merging {true false}] [-gds_map <string>] [-gds_purpose {flipChip fullChip metalFill}] [-gds_top_cell <string>] [-generate_combined_ivd_gif {true false}] [-generate_hier_bbv {true false}] [-generate_instance_effr_report <string>] [-generate_instance_ir_report <string>] [-generate_instance_pin_ir_report <string>] [-generate_multi_voltage_library {true false}] [-generate_package_pin_current_voltage {true false}] [-gif_iv_threshold <float>] [-gif_new_color_scale {true false}] [-gif_resolution {low medium high}] [-gif_zoom_area <string>] [-gif_zoom_topcell_diearea {true false}] [-hier_delimiter <string>] [-die_delimiter <string>] [-honor_negative_static_current {true false}] [-hpgv_block_lefs <string>] [-hpgv_generate_view {ir em all}] [-ignore_decaps {true false}] [-ignore_fillers {true false}] [-ignore_incomplete_net {true false}] [-ignore_nets_without_vsrc {true false}] [-ignore_duplicate_vsrc {true false}] [-ignore_shorts {true false}] [-import_what_if_shapes {true false}] [-lef_map <string>] [-lifetime <integer>] [-limit_number_of_steps {true false}] [-lowest_layer_for_em_check <string>] [-mcp_model_mapping <string>] [-off_rails <string>] [-package_trace_connectivity {true false}] [-power_grid_library <string>] [-powering_down_rails <string>] [-powerup_sequence_file <string>] [-pre_simulation_period <float>] [-pre_simulation_resolution <float>] [-prechain_powerup_sequence_file <string>] [-print_gif_range_percentage {true false}] [-probe_instance_pin_waveforms {true false}] [-probe_instance_tap_waveforms {true false}] [-probe_package_interface_ports {true false}] [-probe_pin_voltage_list <string>] [-probe_waveform_list <string>] [-probing_node_file <string>] [-process_bulk_pins_for_body_bias {true false}] [-process_techgen_em_rules {true false}] [-promote_pin_shapes_only <string>] [-rdl_def_list <string>] [-rdl_orientation {N S W E FN FS FW FE}] [-read_thermal_map <string>] [-record_inst_peak_current {true false}] [-record_results_start_time <float>] [-reff_detail_report {true false}] [-reff_domain_report_format <integer>] [-reff_eval_nodes {tap port}] [-reff_pin_report_layer {all top bottom}] [-reff_pin_report_method <string>] [-remove_duplicate_inst {true false}] [-report_instances_missing_current_data {true false}] [-report_layer_based_ir_average {true false}] [-reff_report_all {true false}] [-report_layers_above_pin_for_instance_ir {true false}] [-report_msmv_format {true false}] [-report_power_in_parallel {true false}] [-report_power_options <string>] [-report_shorts {true false}] [-report_voltage_drop {true false}] [-override_set_power_data {true false}] [-reuse_state_directory <string>] [-rlrp_detail_report {true false}] [-rlrp_eval_nodes {tap port}] [-rlrp_percentage_threshold <integer>] [-rlrp_pin_based_report {true false}] [-rlrp_pin_report_layer {all top bottom}] [-rlrp_pin_report_method {worst best eiv_worst eiv_best eiv_worst_window eiv_best_window}] [-rlrp_threshold <float>] [-save_voltage_waveforms {true false}] [-rlrp_cell_report_layer <string>] [-scale_initial_condition_current <string>] [-seb_lifetime <integer>] [-seb_table <string>] [-seb_temperature <float>] [-shorting_resistance <float>] [-skip_extraction {true false}] [-snap_layer_for_current_taps <string>] [-static_multi_mode_analysis <string>] [-static_trigger_file <string>] [-suppress_message <string>] [-switchbit_file_for_eiv_calculation <string>] [-temp_directory_name <string>] [-temperature <string>] [-topcell_orientation <string>] [-topcell_placement <string>] [-unconnected_die_pkg_pins {ignore error edit}] [-unconnectedcell_ignore_file <string>] [-ignore_from_reporting <string>] [-unified_power_switch_flow {true false}] [-use_early_view_list <string>] [-use_em_view_list <string>] [-use_ir_view_list <string>] [-use_rms_delta_t {true false}] [-verbosity {true false}] [-verify_logical_connectivity {true false}] [-vsrc_search_distance <float>] [-watch_location_waveform <string>] [-what_if_shapes_file <string>] [-work_directory_name <string>] [-write_demand_current_region_file <string>] [-xp_cpu_per_job_power <string>] [-xp_cpu_per_job_simulation <string>] [-xp_host_allocation_method {on_demand at_startup}] [-xp_purge <string>] [-xp_resume {true false}] [-xp_reuse_hpt_directory <string>] [-xp_reuse_extraction_directory <string>] [-xp_simulation_cpu_timeout <integer>] [-xp_simulation_min_cpu <integer>] [-xpgv_config_file <string>] [-block_powerup_rail <string> | -powering_up_rails <string> ] [-ict_em_models <string> | -ircx_models <string>] [-rdl_def <string> [-rdl_placement {x y}]] [-gds_file <string> [-gds_offset {x y}]] [-die_mode {single | multi-die | 3dic} -die_instance_name <string> [-design <string>]] [-powering_up_rails <string> ] [-powering_up_rails <string> [-powerup_fast_mode {true false}]] [ -era_skip_virtual_via_on_layers <string> | -era_insert_virtual_via_on_layers <string>] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_layer <string>]] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_factor_for_placed <float>]] [-era_current_distribution {placed unplaced all none} [-era_check_wires_for_generated_current_regions {true false}]] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_nets <string>]] [-off_state_powergate_instance_file <string>] }
+[10/11 12:55:35    125s] 
+[10/11 12:55:35    125s] **ERROR: (IMPTCM-48):	"-lef_layermap" is not a legal option for command "set_rail_analysis_mode". Either the current option or an option prior to it is not specified correctly.
+<CMD> set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap
+[10/11 12:55:35    125s] 
+[10/11 12:55:35    125s] Usage: set_rail_analysis_mode [-help] [-avg_em_analysis {true false}] [-create_pdn_model {true false}] [-em_cdf_percentage <float>] [-peak_em_analysis {true false}]
+[10/11 12:55:35    125s]                               [-rms_em_analysis {true false}] [-set_analyze_bbox <string>] [-tsv_subckt_modelfile_list <string>] -reset | { -accuracy {xd hd} -method {static dynamic era_static era_dynamic} [-accumulate_overlapping_ddv_pwl_waveforms {true false}] [-analysis_view <string>] [-cell_ignore_file <string>] [-check_current_balanced_power_grid_em {true false}] [-check_thermal_aware_em {true false}] [-check_vsrc_placement_on_switched_net {true false}] [-cluster_via1_ports {true false}] [-cluster_via_rule <string>] [-cluster_via_size <integer>] [-common_res_inst_pair_file_name <string>] [-compress_powergrid_database {true false}] [-decap_cell_list <string>] [-def_based_hierarchical_reports {true false}] [-default_package_capacitor <string>] [-default_package_inductor <string>] [-default_package_resistor <string>] [-disable_analysis_types <string>] [-disable_em_split_ac_dc_rules {true false}] [-disable_parallel_extraction ] [-dynamic_trigger_file <string>] [-eiv_average_per_window_list <string>] [-eiv_eval_gnd_window {true false}] [-eiv_eval_nodes {tap port}] [-eiv_eval_window {both switching timing elapse}] [-eiv_histogram_max <float>] [-eiv_histogram_min <float>] [-eiv_histogram_number_of_bucket <integer>] [-eiv_max_instances <integer>] [-eiv_method <string>] [-eiv_pin_based_report {true false}] [-eiv_eval_layers <string>] [-eiv_eval_layer_file <string>] [-eiv_pin_location {true false}] [-eiv_print_time {true false}] [-eiv_report {auto netonly all}] [-eiv_threshold <float>] [-em_ignore_pgv_resistors {true false}] [-em_limit_scale_factor <string>] [-em_models <string>] [-em_peak_analysis {true false}] [-em_report_line_threshold <integer>] [-em_rms_delta_T <float>] [-em_rms_delta_T_layer_list <string>] [-em_temperature <string>] [-em_temperature_layer_list <string>] [-em_threshold <float>] [-enable_2d_partition_extraction {true false}] [-enable_ccs_analysis {true false}] [-enable_distributed_processing_in_solver {true false}] [-enable_instance_powergate_report {true false}] [-enable_manufacturing_effects {true false}] [-enable_multi_die_connectivity_check {true false}] [-enable_package_battery_current_probing {true false}] [-enable_rc_analysis {true false}] [-enable_reff_analysis {true false}] [-enable_rlrp_analysis {true false}] [-enable_scheduler {true false}] [-enable_seb {true false}] [-enable_sensitivity_analysis {true false}] [-enable_voltage_across_vias {true false}] [-enable_vsrc_in_gif {true false}] [-enable_xp {true false}] [-enable_xpgv_scaling {true false}] [-enlarge_vsrc_in_vuvc {true false}] [-env_temperature <string>] [-era_current_distribution_unplaced_area {instance diearea}] [-era_current_region_file <string>] [-era_insert_virtual_followpin_for_io {true false}] [-era_insert_virtual_followpins {standard extended none}] [-era_instance_dynamic_current_file <string>] [-era_lef_layermap <string>] [-era_power_gate_file <string>] [-era_skip_virtual_via_by_type {whatif def all none}] [-era_techlib_generation {true false}] [-extract_subconductor_layers {true false}] [-extraction_tech_file <string>] [-extractor_include <string>] [-feol_scale_factor <float>] [-filler_cell_list <string>] [-fine_pre_simulation_period <float>] [-finegrain_powergate_ron {min avg max}] [-finegrain_powergate_ron_list <string>] [-flatten_xpgv_block_instances <string>] [-force_extraction {true false}] [-force_library_merging {true false}] [-gds_map <string>] [-gds_purpose {flipChip fullChip metalFill}] [-gds_top_cell <string>] [-generate_combined_ivd_gif {true false}] [-generate_hier_bbv {true false}] [-generate_instance_effr_report <string>] [-generate_instance_ir_report <string>] [-generate_instance_pin_ir_report <string>] [-generate_multi_voltage_library {true false}] [-generate_package_pin_current_voltage {true false}] [-gif_iv_threshold <float>] [-gif_new_color_scale {true false}] [-gif_resolution {low medium high}] [-gif_zoom_area <string>] [-gif_zoom_topcell_diearea {true false}] [-hier_delimiter <string>] [-die_delimiter <string>] [-honor_negative_static_current {true false}] [-hpgv_block_lefs <string>] [-hpgv_generate_view {ir em all}] [-ignore_decaps {true false}] [-ignore_fillers {true false}] [-ignore_incomplete_net {true false}] [-ignore_nets_without_vsrc {true false}] [-ignore_duplicate_vsrc {true false}] [-ignore_shorts {true false}] [-import_what_if_shapes {true false}] [-lef_map <string>] [-lifetime <integer>] [-limit_number_of_steps {true false}] [-lowest_layer_for_em_check <string>] [-mcp_model_mapping <string>] [-off_rails <string>] [-package_trace_connectivity {true false}] [-power_grid_library <string>] [-powering_down_rails <string>] [-powerup_sequence_file <string>] [-pre_simulation_period <float>] [-pre_simulation_resolution <float>] [-prechain_powerup_sequence_file <string>] [-print_gif_range_percentage {true false}] [-probe_instance_pin_waveforms {true false}] [-probe_instance_tap_waveforms {true false}] [-probe_package_interface_ports {true false}] [-probe_pin_voltage_list <string>] [-probe_waveform_list <string>] [-probing_node_file <string>] [-process_bulk_pins_for_body_bias {true false}] [-process_techgen_em_rules {true false}] [-promote_pin_shapes_only <string>] [-rdl_def_list <string>] [-rdl_orientation {N S W E FN FS FW FE}] [-read_thermal_map <string>] [-record_inst_peak_current {true false}] [-record_results_start_time <float>] [-reff_detail_report {true false}] [-reff_domain_report_format <integer>] [-reff_eval_nodes {tap port}] [-reff_pin_report_layer {all top bottom}] [-reff_pin_report_method <string>] [-remove_duplicate_inst {true false}] [-report_instances_missing_current_data {true false}] [-report_layer_based_ir_average {true false}] [-reff_report_all {true false}] [-report_layers_above_pin_for_instance_ir {true false}] [-report_msmv_format {true false}] [-report_power_in_parallel {true false}] [-report_power_options <string>] [-report_shorts {true false}] [-report_voltage_drop {true false}] [-override_set_power_data {true false}] [-reuse_state_directory <string>] [-rlrp_detail_report {true false}] [-rlrp_eval_nodes {tap port}] [-rlrp_percentage_threshold <integer>] [-rlrp_pin_based_report {true false}] [-rlrp_pin_report_layer {all top bottom}] [-rlrp_pin_report_method {worst best eiv_worst eiv_best eiv_worst_window eiv_best_window}] [-rlrp_threshold <float>] [-save_voltage_waveforms {true false}] [-rlrp_cell_report_layer <string>] [-scale_initial_condition_current <string>] [-seb_lifetime <integer>] [-seb_table <string>] [-seb_temperature <float>] [-shorting_resistance <float>] [-skip_extraction {true false}] [-snap_layer_for_current_taps <string>] [-static_multi_mode_analysis <string>] [-static_trigger_file <string>] [-suppress_message <string>] [-switchbit_file_for_eiv_calculation <string>] [-temp_directory_name <string>] [-temperature <string>] [-topcell_orientation <string>] [-topcell_placement <string>] [-unconnected_die_pkg_pins {ignore error edit}] [-unconnectedcell_ignore_file <string>] [-ignore_from_reporting <string>] [-unified_power_switch_flow {true false}] [-use_early_view_list <string>] [-use_em_view_list <string>] [-use_ir_view_list <string>] [-use_rms_delta_t {true false}] [-verbosity {true false}] [-verify_logical_connectivity {true false}] [-vsrc_search_distance <float>] [-watch_location_waveform <string>] [-what_if_shapes_file <string>] [-work_directory_name <string>] [-write_demand_current_region_file <string>] [-xp_cpu_per_job_power <string>] [-xp_cpu_per_job_simulation <string>] [-xp_host_allocation_method {on_demand at_startup}] [-xp_purge <string>] [-xp_resume {true false}] [-xp_reuse_hpt_directory <string>] [-xp_reuse_extraction_directory <string>] [-xp_simulation_cpu_timeout <integer>] [-xp_simulation_min_cpu <integer>] [-xpgv_config_file <string>] [-block_powerup_rail <string> | -powering_up_rails <string> ] [-ict_em_models <string> | -ircx_models <string>] [-rdl_def <string> [-rdl_placement {x y}]] [-gds_file <string> [-gds_offset {x y}]] [-die_mode {single | multi-die | 3dic} -die_instance_name <string> [-design <string>]] [-powering_up_rails <string> ] [-powering_up_rails <string> [-powerup_fast_mode {true false}]] [ -era_skip_virtual_via_on_layers <string> | -era_insert_virtual_via_on_layers <string>] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_layer <string>]] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_factor_for_placed <float>]] [-era_current_distribution {placed unplaced all none} [-era_check_wires_for_generated_current_regions {true false}]] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_nets <string>]] [-off_state_powergate_instance_file <string>] }
+[10/11 12:55:35    125s] 
+[10/11 12:55:35    125s] **ERROR: (IMPTCM-48):	"-lef_layermap" is not a legal option for command "set_rail_analysis_mode". Either the current option or an option prior to it is not specified correctly.
+<CMD> set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02
+[10/11 12:55:35    125s] **WARN: (VOLTUS-1007):	The distributed processing (DP) mode will be made obsolete in a future release and it is recommended to use the Extensively Parallel (XP) mode. The obsolete DP mode still works in this release, but to avoid this warning and to ensure compatibility with future releases, update your scripts to use the set_rail_analysis_mode -enable_xp true..
+[10/11 12:55:35    125s] <CMD> set_pg_nets -net VDD -voltage 0.7 -threshold 0.65
+[10/11 12:55:35    125s] <CMD> set_pg_nets -net VSS -voltage 0.0 -threshold 0.05
+[10/11 12:55:35    125s] <CMD> set_power_pads -net VDD -format defpin
+[10/11 12:55:35    125s] <CMD> set_power_pads -net VSS -format defpin
+[10/11 12:55:35    125s] <CMD> analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD VDD
+[10/11 12:55:42    125s] Started PGV Library Generator at 12:55:35 10/11/2026
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] ** INFO:  (VOLTUS_LGEN-3599): Library generation settings: 
+[10/11 12:55:42    125s] 	Mode: TECH 
+[10/11 12:55:42    125s] 	Capacitance: area_cap 
+[10/11 12:55:42    125s] 	Current Distribution: estimation 
+[10/11 12:55:42    125s] 	Grid Port Definition: LEF 
+[10/11 12:55:42    125s] 	Grid Current Sinks: LEF pin 
+[10/11 12:55:42    125s] 	Power Gate: no
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] ** INFO:  (VOLTUS_LGEN-3598): Processing LEF files: 
+[10/11 12:55:42    125s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef
+[10/11 12:55:42    125s] /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef
+[10/11 12:55:42    125s] /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef
+[10/11 12:55:42    125s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef
+[10/11 12:55:42    125s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] ** WARN:  (VOLTUS_LGEN-4286): The Lef Layer to Library Layer mapping for
+[10/11 12:55:42    125s] the layers given below may be inconsistent and lead to incorrect results.
+[10/11 12:55:42    125s] It is recommended to review the automatically generated Lef Layermap and
+[10/11 12:55:42    125s] provide a correct one manually in case of incorrect results. 
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] 	LEF LAYER NAME			LIBRARY LAYER NAME
+[10/11 12:55:42    125s] 	M1			LISD
+[10/11 12:55:42    125s] 	Pad			M9
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] ** INFO:  (VOLTUS_LGEN-3611): No lef leyarmap specified. Tool has
+[10/11 12:55:42    125s] internally generated the mapping between technology layers and lef layers
+[10/11 12:55:42    125s] using information in technology file and technology lef. To specify your
+[10/11 12:55:42    125s] own layer mapping, use set_pg_library_mode -lef_layermap.
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s]   TECH-LAYER    LEF-LAYER
+[10/11 12:55:42    125s]   LISD    M1
+[10/11 12:55:42    125s]   V0    V1
+[10/11 12:55:42    125s]   M1    M2
+[10/11 12:55:42    125s]   V1    V2
+[10/11 12:55:42    125s]   M2    M3
+[10/11 12:55:42    125s]   V2    V3
+[10/11 12:55:42    125s]   M3    M4
+[10/11 12:55:42    125s]   V3    V4
+[10/11 12:55:42    125s]   M4    M5
+[10/11 12:55:42    125s]   V4    V5
+[10/11 12:55:42    125s]   M5    M6
+[10/11 12:55:42    125s]   V5    V6
+[10/11 12:55:42    125s]   M6    M7
+[10/11 12:55:42    125s]   V6    V7
+[10/11 12:55:42    125s]   M7    M8
+[10/11 12:55:42    125s]   V7    V8
+[10/11 12:55:42    125s]   M8    M9
+[10/11 12:55:42    125s]   V8    V9
+[10/11 12:55:42    125s]   M9    Pad
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] ** INFO:  (VOLTUS_LGEN-4112): Kept 9593 obstruction geometries of LEF macro
+[10/11 12:55:42    125s] srambank_256x4x32_6t122 which appear to be blockages. Blockages are
+[10/11 12:55:42    125s] obstructions with minimum spacing of zero, or the color mask is not set.
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] ** INFO:  (VOLTUS_LGEN-4112): Kept 3556 obstruction geometries of LEF macro
+[10/11 12:55:42    125s] srambank_128x4x20_6t122 which appear to be blockages. Blockages are
+[10/11 12:55:42    125s] obstructions with minimum spacing of zero, or the color mask is not set.
+[10/11 12:55:42    125s] 
+[10/11 12:55:42    125s] ** INFO:  (VOLTUS_LGEN-3606): 
+[10/11 12:55:42    125s] Power Grid View Generation Statistics:
+[10/11 12:55:42    125s]         # Total number of cells: 426 
+[10/11 12:55:42    125s]         # TECH view created: 426 (100%)
+[10/11 12:55:42    125s] Finished PGV Library Generator at 12:55:42 10/11/2026 (cpu=0:00:01, real=0:00:07)
+[10/11 12:55:42    131s] 
+[10/11 12:55:42    131s] Begin ERA Data Preparation
+[10/11 12:55:48    137s] All Virtual Vias and Virtual followpins have been skipped. No incremental def would be generated.
+[10/11 12:55:48    137s] Ended ERA Data Preparation: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=4972.12MB/8018.93MB/4972.12MB)
+[10/11 12:55:48    137s] 
+[10/11 12:55:50    137s] 
+[10/11 12:55:50    137s] 
+[10/11 12:55:50    137s] Started Rail Analysis at 12:55:47 10/11/2026
+[10/11 12:55:50    137s] 
+[10/11 12:55:50    137s] 
+[10/11 12:55:50    137s] Multi-CPU Configuration:
+[10/11 12:55:50    137s] 	#CPU: 1
+[10/11 12:55:50    137s] 	Mode: local
+[10/11 12:55:50    137s] 	Host: user1-EliteMini
+[10/11 12:55:50    137s] *** Error: In processing command script
+[10/11 12:55:50    137s] ** ERROR: (VOLTUS_RAIL-1152): No instance or cell power file specified for power type avg.
+[10/11 12:55:50    137s] Use the command "set_power_data" to specify the power file.
+[10/11 12:55:50    137s] 
+[10/11 12:55:50    137s] 1 error was found while processing the file /tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/voltus_rail_2240156.cmd
+[10/11 12:55:50    137s] 
+[10/11 12:55:50    137s] Rail Analysis Statistics:
+[10/11 12:55:50    137s] Warning messages:      0
+[10/11 12:55:50    137s] Error messages:        1
+[10/11 12:55:50    137s] 
+[10/11 12:55:50    137s] Rail Analysis is unsuccessful due to errors.
+[10/11 12:55:50    137s] 
+[10/11 12:55:50    137s] Finished Rail Analysis at 12:55:50 10/11/2026 (cpu=0:00:00, real=0:00:03, peak mem=0.00MB)
+[10/11 12:55:50    137s] Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)
+[10/11 12:55:50    137s] voltus_rail exited unsuccessfully.
+[10/11 12:55:50    137s] **ERROR: (PRL-387):	"Rail Analysis" failed to finish successfully.
+**ERROR: (VOLTUS-1055):	Rail analysis failed to finish successfully; Check voltus log file for more details.
+[10/11 12:55:50    138s] <CMD> analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS VSS
+[10/11 12:55:56    139s] Started PGV Library Generator at 12:55:50 10/11/2026
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] ** INFO:  (VOLTUS_LGEN-3599): Library generation settings: 
+[10/11 12:55:56    139s] 	Mode: TECH 
+[10/11 12:55:56    139s] 	Capacitance: area_cap 
+[10/11 12:55:56    139s] 	Current Distribution: estimation 
+[10/11 12:55:56    139s] 	Grid Port Definition: LEF 
+[10/11 12:55:56    139s] 	Grid Current Sinks: LEF pin 
+[10/11 12:55:56    139s] 	Power Gate: no
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] ** INFO:  (VOLTUS_LGEN-3598): Processing LEF files: 
+[10/11 12:55:56    139s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef
+[10/11 12:55:56    139s] /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef
+[10/11 12:55:56    139s] /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef
+[10/11 12:55:56    139s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef
+[10/11 12:55:56    139s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] ** WARN:  (VOLTUS_LGEN-4286): The Lef Layer to Library Layer mapping for
+[10/11 12:55:56    139s] the layers given below may be inconsistent and lead to incorrect results.
+[10/11 12:55:56    139s] It is recommended to review the automatically generated Lef Layermap and
+[10/11 12:55:56    139s] provide a correct one manually in case of incorrect results. 
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] 	LEF LAYER NAME			LIBRARY LAYER NAME
+[10/11 12:55:56    139s] 	M1			LISD
+[10/11 12:55:56    139s] 	Pad			M9
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] ** INFO:  (VOLTUS_LGEN-3611): No lef leyarmap specified. Tool has
+[10/11 12:55:56    139s] internally generated the mapping between technology layers and lef layers
+[10/11 12:55:56    139s] using information in technology file and technology lef. To specify your
+[10/11 12:55:56    139s] own layer mapping, use set_pg_library_mode -lef_layermap.
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s]   TECH-LAYER    LEF-LAYER
+[10/11 12:55:56    139s]   LISD    M1
+[10/11 12:55:56    139s]   V0    V1
+[10/11 12:55:56    139s]   M1    M2
+[10/11 12:55:56    139s]   V1    V2
+[10/11 12:55:56    139s]   M2    M3
+[10/11 12:55:56    139s]   V2    V3
+[10/11 12:55:56    139s]   M3    M4
+[10/11 12:55:56    139s]   V3    V4
+[10/11 12:55:56    139s]   M4    M5
+[10/11 12:55:56    139s]   V4    V5
+[10/11 12:55:56    139s]   M5    M6
+[10/11 12:55:56    139s]   V5    V6
+[10/11 12:55:56    139s]   M6    M7
+[10/11 12:55:56    139s]   V6    V7
+[10/11 12:55:56    139s]   M7    M8
+[10/11 12:55:56    139s]   V7    V8
+[10/11 12:55:56    139s]   M8    M9
+[10/11 12:55:56    139s]   V8    V9
+[10/11 12:55:56    139s]   M9    Pad
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] ** INFO:  (VOLTUS_LGEN-4112): Kept 9593 obstruction geometries of LEF macro
+[10/11 12:55:56    139s] srambank_256x4x32_6t122 which appear to be blockages. Blockages are
+[10/11 12:55:56    139s] obstructions with minimum spacing of zero, or the color mask is not set.
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] ** INFO:  (VOLTUS_LGEN-4112): Kept 3556 obstruction geometries of LEF macro
+[10/11 12:55:56    139s] srambank_128x4x20_6t122 which appear to be blockages. Blockages are
+[10/11 12:55:56    139s] obstructions with minimum spacing of zero, or the color mask is not set.
+[10/11 12:55:56    139s] 
+[10/11 12:55:56    139s] ** INFO:  (VOLTUS_LGEN-3606): 
+[10/11 12:55:56    139s] Power Grid View Generation Statistics:
+[10/11 12:55:56    139s]         # Total number of cells: 426 
+[10/11 12:55:56    139s]         # TECH view created: 426 (100%)
+[10/11 12:55:56    139s] Finished PGV Library Generator at 12:55:56 10/11/2026 (cpu=0:00:01, real=0:00:06)
+[10/11 12:55:56    144s] 
+[10/11 12:55:56    144s] Begin ERA Data Preparation
+[10/11 12:55:56    144s] All Virtual Vias and Virtual followpins have been skipped. No incremental def would be generated.
+[10/11 12:55:56    144s] Ended ERA Data Preparation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4973.05MB/8018.93MB/4973.05MB)
+[10/11 12:55:56    144s] 
+[10/11 12:55:56    144s] 
+[10/11 12:55:56    144s] 
+[10/11 12:55:56    144s] Started Rail Analysis at 12:55:55 10/11/2026
+[10/11 12:55:56    144s] 
+[10/11 12:55:56    144s] 
+[10/11 12:55:56    144s] Multi-CPU Configuration:
+[10/11 12:55:56    144s] 	#CPU: 1
+[10/11 12:55:56    144s] 	Mode: local
+[10/11 12:55:56    144s] 	Host: user1-EliteMini
+[10/11 12:55:56    144s] *** Error: In processing command script
+[10/11 12:55:56    144s] ** ERROR: (VOLTUS_RAIL-1152): No instance or cell power file specified for power type avg.
+[10/11 12:55:56    144s] Use the command "set_power_data" to specify the power file.
+[10/11 12:55:56    144s] 
+[10/11 12:55:56    144s] 1 error was found while processing the file /tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/voltus_rail_2240156.cmd
+[10/11 12:55:57    144s] 
+[10/11 12:55:57    144s] Rail Analysis Statistics:
+[10/11 12:55:57    144s] Warning messages:      0
+[10/11 12:55:57    144s] Error messages:        1
+[10/11 12:55:57    144s] 
+[10/11 12:55:57    144s] Rail Analysis is unsuccessful due to errors.
+[10/11 12:55:57    144s] 
+[10/11 12:55:57    144s] Finished Rail Analysis at 12:55:56 10/11/2026 (cpu=0:00:00, real=0:00:01, peak mem=0.00MB)
+[10/11 12:55:57    144s] Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)
+[10/11 12:55:57    144s] voltus_rail exited unsuccessfully.
+[10/11 12:55:57    144s] **ERROR: (PRL-387):	"Rail Analysis" failed to finish successfully.
+**ERROR: (VOLTUS-1055):	Rail analysis failed to finish successfully; Check voltus log file for more details.
+[10/11 12:55:57    145s] <CMD> exit 0
+[10/11 12:55:57    145s] 
+--------------------------------------------------------------------------------
+Exiting Voltus IC Power Integrity Solution on Sun Oct 11 12:55:57 2026
+  Total CPU time:     0:02:14
+  Total real time:    0:02:20
+  Peak memory (main): 4973.05MB
+
