@@ -164,10 +164,10 @@ set_false_path -through [list \
   [get_pins u_apb_ascon_u_trng_ro/ro_invs_not_gate_4/inst/u_cell/Y]  \
   [get_pins u_apb_ascon_u_trng_ro/ro_invs_not_gate_5/inst/u_cell/Y]  \
   [get_pins u_apb_ascon_u_trng_ro/ro_nand_nand_gate_0/inst/u_cell/Y] ]
-set_max_delay 4000 -from [get_clocks CLK_TCK] -to [list \
+set_max_delay 4.0 -from [get_clocks CLK_TCK] -to [list \
   [get_clocks CLK_SYS]  \
   [get_clocks CLK_DBG] ]
-set_max_delay 4000 -from [list \
+set_max_delay 4.0 -from [list \
   [get_clocks CLK_SYS]  \
   [get_clocks CLK_DBG] ] -to [get_clocks CLK_TCK]
 set_clock_gating_check -setup 0.0 
