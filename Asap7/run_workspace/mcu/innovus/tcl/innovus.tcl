@@ -1032,3 +1032,7 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
 #   Luu y: derate SRAM, set_max_fanout SRAM, dont_touch TRNG dat o KHOI 0; neu
 #   report_timing_derate sau restore khong con x1.30/x0.75 thi source lai
 #   ./tcl/init_common.tcl KHONG duoc (no goi init_design) - chay lai tu KHOI 0.
+#   Checkpoint luu truoc 2026-10-11 chua co derate lib FF dien ap thap
+#   (STD_FF_LOWV_DERATE): sau restore + source 3 file, go
+#     mcu_apply_ff_lowv_derate
+#   (dat lai cung gia tri thi vo hai).

@@ -345,6 +345,107 @@ set ALL_TIMING_LIBS_FF [concat $STD_LIBS_FF [list $SRAM_LIB $SRAM_TAG_LIB]]
 set SRAM_DERATE_SS 1.30
 set SRAM_DERATE_FF 0.75
 
+# -----------------------------------------------------------------------------
+# Derate bu cho MOT lib std cell goc FF bi dac trung o dien ap thap.
+#
+# asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib la process FF nhung do o 0.7 V / 25 C
+# (header PVT_0P7V_25C, dc_current cua ban ccsn chay -0.7..1.4), trong khi chin
+# lib FF con lai la 0.77 V / 0 C.  Kiem tren may Linux 2026-10-11: bang tre dau
+# tien = 0.822 x TT; file .7z trong git cua PDK (HEAD 875fd1e) va ban goc tren
+# GitHub cung 0.7 V -> KHONG co file dung de thay (innovus/scripts/fix_ff_lib.py).
+#
+# Hau qua: o view_ff cell cua lib nay (33865 instance, 23.9 % thiet ke) CHAM hon
+# silicon FF that -> hold lac quan.  Bu bang derate -early tren dc_ff cho rieng
+# cell cua lib nay; huong luon bi quan nhu derate SRAM o tren.
+#   - chi -cell_delay: lib SIMPLE khong co cell tuan tu nen khong co cell_check.
+#   - khong dung toi -late: dc_ff chi dung cho hold, o do duong late (clock
+#     capture) cham hon thuc te la bi quan san.
+#
+# 0.90 la so TAM, chua do.  Do bang
+#     python3 innovus/scripts/fix_ff_lib.py --derate
+# (ti le FF/TT cua cac lib FF dung dien ap so voi ti le cua file nay) roi sua
+# con so duoi day.  1.0 = tat.  KHI NAO co lib dung dien ap: dat ve 1.0.
+#
+# Tempus, Innovus va buoc ECO goi chung mot proc de ba ben khong troi ra khac
+# nhau.  Genus KHONG goi: hold chi duoc sua tu sau CTS.
+set STD_FF_LOWV_LIB    "asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120"
+set STD_FF_LOWV_DERATE 0.90
+if {![string is double -strict $STD_FF_LOWV_DERATE] ||
+    $STD_FF_LOWV_DERATE <= 0.0 || $STD_FF_LOWV_DERATE > 1.0} {
+    error "STD_FF_LOWV_DERATE phai nam trong (0, 1], dang la '$STD_FF_LOWV_DERATE'"
+}
+
+proc mcu_ff_lowv_derate_on {} {
+    return [expr {$::STD_FF_LOWV_DERATE < 1.0}]
+}
+
+# Dat derate tren; tra ve mot cau mo ta de ghi vao file tom tat ("" khi tat).
+# Goi SAU derate OCV chung: derate theo doi tuong THAY THE (khong nhan voi)
+# derate chung, nen he so OCV early dang dung phai dua vao qua $ocv_early.
+# Chi dung lenh chung cua Innovus va Tempus.
+proc mcu_apply_ff_lowv_derate {{ocv_early 1.0}} {
+    if {![mcu_ff_lowv_derate_on]} {
+        return ""
+    }
+    set lib $::STD_FF_LOWV_LIB
+    set factor [format %.4g [expr {$::STD_FF_LOWV_DERATE * $ocv_early}]]
+    set lib_cells [get_lib_cells -quiet "$lib/*"]
+    set cell_count [sizeof_collection $lib_cells]
+    if {$cell_count == 0} {
+        error "Derate lib FF dien ap thap: khong co lib cell nao khop '$lib/*' -\
+ lib khong duoc nap vao libset_ff, hoac ten library ben trong file khac ten file"
+    }
+
+    # Lib cell: cell do optDesign tao them sau nay cung duoc derate.
+    if {![catch {set_timing_derate -delay_corner dc_ff -early -cell_delay \
+            $factor $lib_cells} derate_err]} {
+        return "$cell_count lib cell cua $lib, dc_ff early cell_delay x$factor"
+    }
+
+    # Tool khong nhan lib cell: dat tren instance, la dang da chay duoc voi 84
+    # macro SRAM.  Cell tao SAU lenh nay khong co derate.
+    set inst_count 0
+    foreach name [get_object_name $lib_cells] {
+        set insts [get_cells -quiet -hierarchical -filter "ref_name == [file tail $name]"]
+        if {[sizeof_collection $insts] > 0} {
+            set_timing_derate -delay_corner dc_ff -early -cell_delay $factor $insts
+            incr inst_count [sizeof_collection $insts]
+        }
+    }
+    if {$inst_count == 0} {
+        error "Derate lib FF dien ap thap: set_timing_derate khong nhan lib cell\
+ ($derate_err) va khong instance nao dung cell cua $lib"
+    }
+    return "$inst_count instance dung cell cua $lib, dc_ff early cell_delay x$factor\
+ (lib cell bi tu choi: $derate_err; cell tao sau lenh nay KHONG duoc derate)"
+}
+
+# Lenh Cadence co the in **ERROR ma khong nem loi Tcl (init_design, analyze_rail
+# da tung nhu vay), nen cau tra ve cua proc tren chua phai bang chung.  Dem trong
+# file 'report_timing_derate' so dong "Cell Delay" cua dc_ff mang dung he so do;
+# 0 = derate KHONG co hieu luc (hoac khong doc duoc file).  Cung $ocv_early da
+# dua cho mcu_apply_ff_lowv_derate.
+proc mcu_ff_lowv_derate_reported {rpt {ocv_early 1.0}} {
+    if {![file isfile $rpt]} {
+        return 0
+    }
+    set want [format %.3f [expr {$::STD_FF_LOWV_DERATE * $ocv_early}]]
+    set corner ""
+    set count 0
+    set fp [open $rpt r]
+    while {[gets $fp line] >= 0} {
+        if {[regexp {DC Corner:\s*(\S+)} $line -> corner]} {
+            continue
+        }
+        if {$corner eq "dc_ff" && [regexp {^\s*Cell Delay\s} $line] &&
+            [lsearch -exact [regexp -all -inline {\S+} $line] $want] >= 0} {
+            incr count
+        }
+    }
+    close $fp
+    return $count
+}
+
 # The macro data/control pins have a 0.320 ns Liberty max-transition.
 set SIGNAL_MAX_TRANSITION_PS 300.0
 set SIGNAL_MAX_TRANSITION_NS 0.300

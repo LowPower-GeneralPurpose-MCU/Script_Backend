@@ -37,7 +37,10 @@
 ##   ECO_CPUS=1              mac dinh 1: IQuantus nhieu tien trinh da treo tren
 ##                           may nay (quantus.tcl, run 2026-10-09 23:33)
 ##   ECO_CHECKPOINT=...      checkpoint khac top_soc_postRoute.enc.dat
-##   ECO_ALLOW_BAD_LIB=1     van chay khi checkpoint con .lib sai dien ap
+##   ECO_ALLOW_BAD_LIB=1     van chay khi checkpoint con .lib sai dien ap.
+##                           KHONG can cho SIMPLE_RVT_FF 0.7 V khi
+##                           STD_FF_LOWV_DERATE (project_config.tcl) dang bat:
+##                           lib do duoc bu bang derate, chi con la WARNING
 ##
 ## Script KHONG ghi de checkpoint goc va KHONG dung vao reports/ cua flow
 ## chinh.  Sau khi PASS: make finish (KHOI 15 + 16), roi LEC, Quantus, Tempus.
@@ -123,12 +126,45 @@ if {[catch {
     # Luot toi uu duoi day sua ca hold.  Hold tinh tren lib FF sai dien ap
     # (SIMPLE_RVT_FF 0.7 V thay vi 0.77 V, Tempus 2026-10-11) la sua nham
     # dich: cell cham hon thuc te nen thieu buffer hold.
-    set lib_problems [eco_checkpoint_lib_problems $ECO_CHECKPOINT]
-    if {[llength $lib_problems] > 0} {
+    #
+    # Ngoai le: lib FF dien ap thap da biet (STD_FF_LOWV_LIB, project_config.tcl)
+    # khong co file dung de thay.  Khi STD_FF_LOWV_DERATE dang bat, no duoc bu
+    # bang derate o buoc 3 nen khong con la ly do dung.  Moi lib sai khac - va
+    # chinh lib do khi derate tat - van chan nhu cu.
+    set lib_blocking {}
+    set lib_derated {}
+    foreach item [eco_checkpoint_lib_problems $ECO_CHECKPOINT] {
+        lassign $item corner name volt major
+        set text "goc $corner: $name khai bao $volt V, cac lib con lai $major V"
+        if {$corner eq "FF" && [file rootname $name] eq $STD_FF_LOWV_LIB &&
+            [mcu_ff_lowv_derate_on] &&
+            [string is double -strict $volt] && [string is double -strict $major] &&
+            $volt < $major} {
+            lappend lib_derated $text
+        } else {
+            lappend lib_blocking $text
+        }
+    }
+    if {[llength $lib_derated] > 0} {
+        eco_warn "[join $lib_derated {; }] - khong co file dung de thay, bu TAM bang derate\
+ dc_ff early cell_delay x$STD_FF_LOWV_DERATE (STD_FF_LOWV_DERATE trong project_config.tcl;\
+ he so do bang scripts/fix_ff_lib.py --derate)"
+    } elseif {[mcu_ff_lowv_derate_on] &&
+              [file isfile [file join $ECO_CHECKPOINT libs mmmc "$STD_FF_LOWV_LIB.lib"]]} {
+        eco_warn "STD_FF_LOWV_DERATE x$STD_FF_LOWV_DERATE dang bat nhung ban sao\
+ $STD_FF_LOWV_LIB.lib trong checkpoint khong khai bao dien ap thap hon cac lib FF khac -\
+ cell cua no bi phat hai lan o hold; dat STD_FF_LOWV_DERATE 1.0 trong project_config.tcl"
+    }
+    if {[llength $lib_blocking] > 0} {
         set lib_msg "Checkpoint $ECO_CHECKPOINT con .lib sai dien ap:
-    [join $lib_problems "\n    "]
+    [join $lib_blocking "\n    "]
   restoreDesign nap ban sao trong <checkpoint>/libs/mmmc/, khong phai file cua PDK.
-  Sua: python3 scripts/fix_ff_lib.py --apply   (thay ca PDK lan ban sao)"
+  Sua: python3 scripts/fix_ff_lib.py --apply   (thay ca PDK lan ban sao)."
+        if {[string first "$STD_FF_LOWV_LIB.lib" $lib_blocking] >= 0} {
+            append lib_msg "
+  Rieng $STD_FF_LOWV_LIB.lib khong co ban dung de thay: bu bang\
+ STD_FF_LOWV_DERATE < 1.0 trong project_config.tcl (dang la $STD_FF_LOWV_DERATE)"
+        }
         if {[eco_env ECO_ALLOW_BAD_LIB 0] eq "1"} {
             eco_warn "ECO_ALLOW_BAD_LIB=1 - $lib_msg"
         } else {
@@ -190,7 +226,22 @@ if {[catch {
             eco_warn "set_timing_derate $corner $side x$factor cho SRAM bi tu choi: $derate_err"
         }
     }
-    catch {report_timing_derate > [file join $ECO_DIR reports timing_derate.rpt]}
+    # Lib FF dien ap thap: checkpoint luu truoc 2026-10-11 chua co derate nay.
+    # Cong o buoc 2 da cho qua vi tin vao no, nen o day bi tu choi la DUNG
+    # (khong canh bao roi chay tiep nhu derate SRAM).  MCU_OCV_DERATE_EARLY:
+    # cung bien moi truong voi init_common.tcl.
+    set eco_ocv_early [eco_env MCU_OCV_DERATE_EARLY 1.0]
+    set ff_lowv_note [mcu_apply_ff_lowv_derate $eco_ocv_early]
+    set derate_rpt [file join $ECO_DIR reports timing_derate.rpt]
+    file delete -force $derate_rpt
+    catch {report_timing_derate > $derate_rpt}
+    if {$ff_lowv_note eq ""} {
+        set ff_lowv_note "tat (STD_FF_LOWV_DERATE 1.0)"
+    } elseif {[mcu_ff_lowv_derate_reported $derate_rpt $eco_ocv_early] == 0} {
+        eco_warn "derate lib FF dien ap thap KHONG thay trong eco/reports/timing_derate.rpt\
+ (khong dong 'Cell Delay' nao cua dc_ff mang he so do) - set_timing_derate co the da bi\
+ tu choi ma khong nem loi Tcl; hold duoc sua tren lib cham hon thuc te"
+    }
     set ro_ptrs [dbGet -e -p top.insts.name u_apb_ascon_u_trng_ro/*]
     if {[llength $ro_ptrs] != 7} {
         error "TRNG ring oscillator: tim thay [llength $ro_ptrs] cell, doi 7"
@@ -328,6 +379,7 @@ if {[catch {
     set lines [list \
         "ECO DRV $TOP: $ECO_CHECKPOINT -> $ECO_OUT.dat, [expr {[clock seconds] - $eco_t0}] s, $ECO_CPUS CPU" \
         "  trich RC : $extract_note" \
+        "  derate   : SRAM dc_ss late x$SRAM_DERATE_SS / dc_ff early x$SRAM_DERATE_FF; lib FF dien ap thap: $ff_lowv_note" \
         "  Tempus   : [llength $tempus_viol] chan max_transition tren [dict size $tempus_nets] net,\
  xau nhat [format %.3f $tempus_worst] ns, gioi han $tempus_limits ns   ([file tail $ECO_TEMPUS_RPT])" \
         "  $pre_note" \

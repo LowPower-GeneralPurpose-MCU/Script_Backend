@@ -20,8 +20,8 @@
 ##   - 3 view nhu innovus/tcl/viewDefinition.tcl: setup = view_ss + view_tt,
 ##     hold = view_ff + view_tt, moi goc RC mot SPEF rieng
 ##   - don vi 1ns / 1pf (xem tempus_views.tcl ben duoi)
-##   - OCV + CPPR, SI, derate SRAM 1.30 / 0.75, process 7 nhu
-##     innovus/tcl/init_common.tcl
+##   - OCV + CPPR, SI, derate SRAM 1.30 / 0.75, derate lib FF dien ap thap
+##     (STD_FF_LOWV_DERATE), process 7 nhu innovus/tcl/init_common.tcl
 ##   - SDC doc qua ban va logs/top_soc_pnr.tempus.sdc (xem tempus_patch_sdc)
 ## Lenh nao Tempus khong nhan thi ly do nam trong reports/tempus_summary.rpt.
 ############################################################
@@ -224,11 +224,36 @@ proc tempus_check_lib_voltages {tag libs skip} {
             set major $volt
         }
     }
+    # Lib FF dien ap thap da biet (STD_FF_LOWV_LIB trong project_config.tcl)
+    # duoc bu bang derate: van canh bao, nhung noi ro la da bu va bang gi.
+    set lowv_seen 0
     foreach volt [lsort [array names group]] {
-        if {$volt ne $major} {
-            tempus_warn "libset_$tag: [join $group($volt) {, }] khai bao $volt, cac lib con\
+        if {$volt eq $major} {
+            continue
+        }
+        set plain {}
+        foreach name $group($volt) {
+            if {$tag eq "ff" && [file rootname $name] eq $::STD_FF_LOWV_LIB &&
+                [mcu_ff_lowv_derate_on] &&
+                [scan $volt %f volt_num] == 1 && [scan $major %f major_num] == 1 &&
+                $volt_num < $major_num} {
+                set lowv_seen 1
+                tempus_warn "libset_ff: $name khai bao $volt, cac lib con lai $major - bu TAM\
+ bang derate dc_ff early cell_delay x$::STD_FF_LOWV_DERATE (STD_FF_LOWV_DERATE trong\
+ project_config.tcl; he so do bang innovus/scripts/fix_ff_lib.py --derate)"
+            } else {
+                lappend plain $name
+            }
+        }
+        if {[llength $plain] > 0} {
+            tempus_warn "libset_$tag: [join $plain {, }] khai bao $volt, cac lib con\
  lai $major - cell cua lib nay bi tinh sai dien ap o view_$tag"
         }
+    }
+    if {$tag eq "ff" && [mcu_ff_lowv_derate_on] && !$lowv_seen} {
+        tempus_warn "STD_FF_LOWV_DERATE x$::STD_FF_LOWV_DERATE dang bat nhung\
+ $::STD_FF_LOWV_LIB.lib khong con khai bao dien ap thap hon cac lib FF khac - cell cua\
+ no bi phat hai lan o hold; dat STD_FF_LOWV_DERATE 1.0 trong project_config.tcl"
     }
 }
 
@@ -437,6 +462,8 @@ if {[catch {
         tempus_warn "khong co derate OCV chung cho std cell (1.0) trong khi CPPR van\
  duoc tru - giong Innovus; bat: MCU_OCV_DERATE_LATE=1.05 MCU_OCV_DERATE_EARLY=0.95"
     }
+    # Lib FF dien ap thap (SIMPLE_RVT_FF 0.7 V): cung proc voi Innovus va ECO.
+    set ff_lowv_note [mcu_apply_ff_lowv_derate $ocv_early]
     tempus_warn "ba goc RC dung chung mot qrcTechFile typical (chi khac nhiet do) va\
  .lib SRAM chi co goc TT (bu bang derate x$SRAM_DERATE_SS / x$SRAM_DERATE_FF)"
 
@@ -458,6 +485,12 @@ if {[catch {
         if {[catch {eval $rpt_cmd > $rpt} rpt_err]} {
             tempus_warn "$rpt_cmd hong: $rpt_err"
         }
+    }
+    if {$ff_lowv_note ne "" && [mcu_ff_lowv_derate_reported \
+            [file join $TEMPUS_DIR reports timing_derate.rpt] $ocv_early] == 0} {
+        tempus_warn "derate lib FF dien ap thap KHONG thay trong reports/timing_derate.rpt\
+ (khong dong 'Cell Delay' nao cua dc_ff mang he so do) - set_timing_derate co the da bi\
+ tu choi ma khong nem loi Tcl; hold view_ff van lac quan"
     }
     if {$TEMPUS_SI} {
         set rpt [file join $TEMPUS_DIR reports glitch.rpt]
@@ -507,6 +540,9 @@ if {[catch {
     lappend lines "  $sdc_note"
     lappend lines "  derate SRAM: $sram_count macro, dc_ss late x$SRAM_DERATE_SS, dc_ff early x$SRAM_DERATE_FF;\
  OCV chung late x$ocv_late / early x$ocv_early"
+    if {$ff_lowv_note ne ""} {
+        lappend lines "  derate lib FF dien ap thap: $ff_lowv_note"
+    }
     foreach line $summary {
         lappend lines "  $line"
     }
