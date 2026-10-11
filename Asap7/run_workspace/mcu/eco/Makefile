@@ -10,7 +10,8 @@
 #     make all ECO_CPUS=8            mac dinh 1: IQuantus nhieu tien trinh da
 #                                    treo tren may nay
 #     make all ECO_CHECKPOINT=./saved/<ten>.enc.dat   (tinh tu mcu/innovus)
-#     make all ECO_ALLOW_BAD_LIB=1
+#     make all ECO_ALLOW_BAD_LIB=1   khong can cho SIMPLE_RVT_FF 0.7 V khi
+#                                    STD_FF_LOWV_DERATE (project_config.tcl) bat
 
 INNOVUS    ?= innovus
 RUN_DIR    := ../innovus

@@ -219,8 +219,30 @@ if {$MCU_OCV_DERATE_LATE != 1.0 || $MCU_OCV_DERATE_EARLY != 1.0} {
     puts "WARNING: ===================================================="
 }
 
+# ------------------------------------------------------------------------
+# DERATE CHO LIB FF DIEN AP THAP (SIMPLE_RVT_FF 0.7 V giua cac lib FF 0.77 V)
+# ------------------------------------------------------------------------
+# Con so, ly do va proc nam trong genus/rtl/flow/project_config.tcl
+# (STD_FF_LOWV_DERATE), dung chung voi Tempus va mcu/eco.  Dat SAU derate OCV
+# chung: derate theo doi tuong thay the derate chung, nen he so OCV early duoc
+# dua vao de nhan.
+if {[lsearch -exact $MCU_HOLD_VIEWS view_ff] >= 0} {
+    set ff_lowv_note [mcu_apply_ff_lowv_derate $MCU_OCV_DERATE_EARLY]
+    if {$ff_lowv_note ne ""} {
+        puts "Derate lib FF dien ap thap: $ff_lowv_note"
+    }
+}
+
 if {[catch {report_timing_derate > ./reports/sram_derate.rpt} derate_err]} {
     puts "WARNING: report_timing_derate that bai: $derate_err"
+}
+if {[info exists ff_lowv_note] && $ff_lowv_note ne "" &&
+    [mcu_ff_lowv_derate_reported ./reports/sram_derate.rpt $MCU_OCV_DERATE_EARLY] == 0} {
+    puts "WARNING: ===================================================="
+    puts "WARNING: derate lib FF dien ap thap KHONG thay trong"
+    puts "WARNING: reports/sram_derate.rpt - set_timing_derate co the da bi"
+    puts "WARNING: tu choi ma khong nem loi Tcl.  Hold view_ff van lac quan."
+    puts "WARNING: ===================================================="
 }
 
 set_interactive_constraint_modes [all_constraint_modes]

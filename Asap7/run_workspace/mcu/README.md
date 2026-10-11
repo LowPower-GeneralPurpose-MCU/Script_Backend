@@ -306,13 +306,32 @@ không phải file của PDK. `innovus/scripts/fix_ff_lib.py` kiểm tra điện
 `.lib` std cell, tìm bản đúng (file nén / git của PDK) và với `--apply` thay cả
 file trong PDK lẫn các bản sao trong `innovus/saved/*.enc.dat`.
 
+Ngoại lệ: `asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib` là process FF nhưng đo ở
+0.7 V / 25 °C (các lib FF khác 0.77 V / 0 °C), và cả bản trong git của PDK lẫn
+bản gốc trên GitHub đều như vậy — không có file đúng để thay. Flow bù bằng
+derate `-early -cell_delay` trên `dc_ff` cho riêng cell của lib này:
+`STD_FF_LOWV_DERATE` trong `genus/rtl/flow/project_config.tcl` (tạm `0.90`,
+`1.0` = tắt), được `tempus.tcl`, `innovus/tcl/init_common.tcl` và `eco_drv.tcl`
+gọi qua cùng một proc `mcu_apply_ff_lowv_derate`. Khi derate đang bật, lib này
+chỉ còn là `WARNING` trong `eco_drv.tcl`; mọi lib sai điện áp khác vẫn chặn.
+Đo hệ số trên máy có PDK rồi sửa con số:
+
+```bash
+cd Asap7/run_workspace/mcu/innovus
+python3 scripts/fix_ff_lib.py --derate
+```
+
+Sau mỗi lần chạy, kiểm `reports/timing_derate.rpt` (Tempus, ECO) hoặc
+`reports/sram_derate.rpt` (Innovus): phần `dc_ff` phải có dòng `Cell Delay`
+mang hệ số đó; thiếu thì file tóm tắt có `WARNING`.
+
 | Biến `make` | Mặc định | Ý nghĩa |
 |---|---|---|
 | `ECO_EXTRACT` | `high` | `flow` = giữ chế độ trích RC của checkpoint (Innovus sẽ không thấy vi phạm) |
 | `ECO_DRV_MARGIN` | `0.05` | `setOptMode -drcMargin`: siết giới hạn DRV khi sửa |
 | `ECO_CPUS` | `1` | IQuantus nhiều tiến trình đã treo trên máy đang dùng |
 | `ECO_CHECKPOINT` | `./saved/top_soc_postRoute.enc.dat` | tính từ `mcu/innovus` |
-| `ECO_ALLOW_BAD_LIB` | *(trống)* | `1` = vẫn chạy khi checkpoint còn `.lib` sai điện áp |
+| `ECO_ALLOW_BAD_LIB` | *(trống)* | `1` = vẫn chạy khi checkpoint còn `.lib` sai điện áp (không cần cho `SIMPLE_RVT_FF` khi `STD_FF_LOWV_DERATE` bật) |
 
 ## Giả định timing cần xác nhận
 

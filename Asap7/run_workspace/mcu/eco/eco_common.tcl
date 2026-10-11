@@ -109,8 +109,9 @@ proc eco_lib_voltage {lib} {
 
 # Cac .lib std cell ma mot lan restoreDesign se nap: saveDesign chep .lib vao
 # <checkpoint>/libs/mmmc/ va viewDefinition.tcl cua checkpoint tro vao do, nen
-# sua file trong PDK KHONG doi duoc thu vien cua checkpoint.  Tra ve danh sach
-# cau mo ta cac file khai bao dien ap khac so dong cua goc no; rong = on.
+# sua file trong PDK KHONG doi duoc thu vien cua checkpoint.  Tra ve cac file
+# khai bao dien ap khac so dong cua goc no, moi file mot muc
+# {goc ten_file dien_ap dien_ap_da_so}; rong = on.
 proc eco_checkpoint_lib_problems {checkpoint} {
     set problems {}
     foreach corner {SS TT FF} {
@@ -131,8 +132,9 @@ proc eco_checkpoint_lib_problems {checkpoint} {
         }
         foreach volt [lsort [array names group]] {
             if {$volt ne $major} {
-                lappend problems "goc $corner: [join $group($volt) {, }] khai bao $volt V,\
- cac lib con lai $major V"
+                foreach name [lsort $group($volt)] {
+                    lappend problems [list $corner $name $volt $major]
+                }
             }
         }
     }
