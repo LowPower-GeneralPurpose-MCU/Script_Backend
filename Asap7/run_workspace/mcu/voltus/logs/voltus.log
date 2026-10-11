@@ -1,0 +1,923 @@
+
+Cadence Voltus(TM) IC Power Integrity Solution.
+Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+
+Version:	v23.15-s108_1, built Tue Jul 22 11:26:13 PDT 2025
+Options:	-nowin -init voltus.tcl -log logs/voltus 
+Date:		Sun Oct 11 12:53:38 2026
+Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
+OS:		Ubuntu 26.04.1 LTS
+
+License:
+		[12:53:38.206258] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+		vtsxl	Voltus Power Integrity Solution XL	23.1	checkout succeeded
+		8 CPU jobs allowed with the current license(s). Use set_multi_cpu_usage to set your required CPU count.
+**ERROR: (IMPOAX-124):	OpenAccess (OA) shared library installation is older than the one that was used to build this Voltus IC Power Integrity Solution version. For using the OA installation built and tested with this Voltus IC Power Integrity Solution version, unset the shell variable OA_HOME. For using 'p025' or higher version of OA, reset OA_HOME to point to that installation.
+Type 'man IMPOAX-124' for more detail.
+**ERROR: (IMPOAX-332):	Failed to initialize OpenAccess (OA) database. OA related commands cannot be run in this session. Confirm that the OA shared library is installed and OA_HOME is set correctly. Typically the OA_HOME environment variable should not be set.
+Type 'man IMPOAX-332' for more detail.
+INFO: OA features are disabled in this session.
+Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
+environment variable TMPDIR is '/tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y'.
+#@ Processing -files option
+Sourcing tcl/tk file 'voltus.tcl' ...
+<CMD> set_multi_cpu_usage -localCpu 1
+<CMD> set_library_unit -time 1ns -cap 1pf
+<CMD> read_lib -lef {/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef}
+<CMD> read_lib {/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib}
+<CMD> read_verilog /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v
+<CMD> set_top_module top_soc
+**ERROR: (IMPOAX-124):	OpenAccess (OA) shared library installation is older than the one that was used to build this Voltus IC Power Integrity Solution version. For using the OA installation built and tested with this Voltus IC Power Integrity Solution version, unset the shell variable OA_HOME. For using 'p025' or higher version of OA, reset OA_HOME to point to that installation.
+**ERROR: (IMPOAX-332):	Failed to initialize OpenAccess (OA) database. OA related commands cannot be run in this session. Confirm that the OA shared library is installed and OA_HOME is set correctly. Typically the OA_HOME environment variable should not be set.
+#% Begin Load MMMC data ... (date=10/11 12:53:51, mem=1609.2M)
+Number of views requested 1 are allowed with the current licenses... continuing with set_analysis_view.
+#% End Load MMMC data ... (date=10/11 12:53:51, total cpu=0:00:00.0, real=0:00:00.0, peak res=1610.4M, current mem=1610.4M)
+default_emulate_early_rc_corner default_emulate_late_rc_corner default_emulate_rc_corner
+
+Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef ...
+
+Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef ...
+Set DBUPerIGU to M1 pitch 36.
+
+Loading LEF file /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef ...
+
+Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef ...
+
+Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef ...
+
+##  Check design process and node:  
+##  Both design process and tech node are not set.
+
+Loading view definition file from .ssv_emulate_view_definition_2240156_2669a1ca-5154-4963-848d-fd07d95685f6.tcl
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 46726)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 75682)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_TT_ccs_211120' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_RVT_TT_ccs_211120' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_RVT_TT_ccs_211120' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_TT_ccs_220123' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib' ...
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 46726)
+**WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 75682)
+Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib' ...
+Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_TT_ccs_211120' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib' ...
+Read 42 cells in library 'asap7sc7p5t_AO_LVT_TT_ccs_211120' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib' ...
+Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
+Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib' ...
+Read 1 cells in library 'srambank_256x4x32_6t122' 
+Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib' ...
+Read 1 cells in library 'srambank_128x4x20_6t122' 
+*** End library_loading (cpu=0.23min, real=0.23min, mem=365.0M, fe_cpu=0.44min, fe_real=0.45min, fe_mem=2063.6M) ***
+#% Begin Load netlist data ... (date=10/11 12:54:05, mem=1695.0M)
+*** Begin netlist parsing (mem=2063.6M) ***
+**WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+**WARN: (IMPVL-159):	Pin 'sdel[1]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+**WARN: (IMPVL-159):	Pin 'sdel[2]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+**WARN: (IMPVL-159):	Pin 'sdel[3]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+**WARN: (IMPVL-159):	Pin 'sdel[4]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
+Reading verilog netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v'
+
+*** Memory Usage v#1 (Current mem = 2307.605M, initial mem = 836.656M) ***
+*** End netlist parsing (cpu=0:00:00.7, real=0:00:01.0, mem=2307.6M) ***
+#% End Load netlist data ... (date=10/11 12:54:06, total cpu=0:00:01.0, real=0:00:01.0, peak res=1901.3M, current mem=1901.3M)
+Set top cell to top_soc.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[3]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[2]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[1]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+**WARN: (IMPTS-124):	Timing library description of pin 'sdel[0]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
+Starting consistency checks on late and early library sets of delay corner 'default_emulate_delay_corner'
+late library set: default_emulate_libset_max
+early library set: default_emulate_libset_min
+Completed consistency checks. Status: Successful
+Starting consistency checks on late and early library sets of delay corner 'default_emulate_delay_corner'
+late library set: default_emulate_libset_max
+early library set: default_emulate_libset_min
+Completed consistency checks. Status: Successful
+Building hierarchical netlist for Cell top_soc ...
+***** UseNewTieNetMode *****.
+*** Netlist is unique.
+Set DBUPerIGU to techSite asap7sc7p5t width 54.
+** info: there are 2130 modules.
+** info: there are 141720 stdCell insts.
+** info: there are 141720 stdCell insts with at least one signal pin.
+** info: there are 84 macros.
+
+*** Memory Usage v#1 (Current mem = 2649.617M, initial mem = 836.656M) ***
+
+Honor LEF defined pitches for advanced node
+Start create_tracks
+Set Default Input Pin Transition as 0.1 ps.
+/dev/null
+Extraction setup Started for TopCell top_soc 
+Summary of Active RC-Corners : 
+ 
+ Analysis View: default_emulate_view
+    RC-Corner Name        : default_emulate_rc_corner
+    RC-Corner Index       : 0
+    RC-Corner Temperature : 25 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PostRoute Res Factor        : 1
+    RC-Corner PostRoute Cap Factor        : 1
+    RC-Corner PostRoute XCap Factor       : 1
+Initializing multi-corner resistance tables ...
+Starting consistency checks on late and early library sets of delay corner 'default_emulate_delay_corner'
+late library set: default_emulate_libset_max
+early library set: default_emulate_libset_min
+Completed consistency checks. Status: Successful
+Reading timing constraints file '/dev/null' ...
+Current (total cpu=0:00:29.2, real=0:00:29.0, peak res=2727.8M, current mem=2727.8M)
+Total number of combinational cells: 338
+Total number of sequential cells: 66
+Total number of tristate cells: 0
+Total number of level shifter cells: 0
+Total number of power gating cells: 0
+Total number of isolation cells: 0
+Total number of power switch cells: 0
+Total number of pulse generator cells: 0
+Total number of always on buffers: 0
+Total number of retention cells: 0
+Total number of physical cells: 0
+List of usable buffers: HB1xp67_ASAP7_75t_R HB1xp67_ASAP7_75t_L BUFx2_ASAP7_75t_R HB2xp67_ASAP7_75t_L BUFx2_ASAP7_75t_L BUFx3_ASAP7_75t_R BUFx3_ASAP7_75t_L BUFx4_ASAP7_75t_R BUFx4_ASAP7_75t_L BUFx5_ASAP7_75t_R BUFx4f_ASAP7_75t_R BUFx5_ASAP7_75t_L BUFx4f_ASAP7_75t_L BUFx6f_ASAP7_75t_R BUFx6f_ASAP7_75t_L BUFx8_ASAP7_75t_R BUFx8_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx10_ASAP7_75t_L BUFx12_ASAP7_75t_R BUFx12_ASAP7_75t_L BUFx12f_ASAP7_75t_R BUFx12f_ASAP7_75t_L BUFx16f_ASAP7_75t_R BUFx16f_ASAP7_75t_L BUFx24_ASAP7_75t_R BUFx24_ASAP7_75t_L
+Total number of usable buffers: 27
+List of unusable buffers:
+Total number of unusable buffers: 0
+List of usable inverters: INVxp67_ASAP7_75t_R INVxp33_ASAP7_75t_R INVx1_ASAP7_75t_R INVxp67_ASAP7_75t_L INVxp33_ASAP7_75t_L INVx1_ASAP7_75t_L INVx2_ASAP7_75t_R INVx2_ASAP7_75t_L INVx3_ASAP7_75t_R INVx3_ASAP7_75t_L INVx4_ASAP7_75t_R INVx4_ASAP7_75t_L INVx5_ASAP7_75t_R INVx5_ASAP7_75t_L INVx6_ASAP7_75t_R INVx6_ASAP7_75t_L INVx8_ASAP7_75t_R INVx8_ASAP7_75t_L INVx11_ASAP7_75t_R INVx11_ASAP7_75t_L INVx13_ASAP7_75t_R INVx13_ASAP7_75t_L CKINVDCx8_ASAP7_75t_R CKINVDCx5p33_ASAP7_75t_R CKINVDCx8_ASAP7_75t_L CKINVDCx5p33_ASAP7_75t_L CKINVDCx6p67_ASAP7_75t_R CKINVDCx10_ASAP7_75t_R CKINVDCx6p67_ASAP7_75t_L CKINVDCx10_ASAP7_75t_L CKINVDCx12_ASAP7_75t_R CKINVDCx11_ASAP7_75t_R CKINVDCx12_ASAP7_75t_L CKINVDCx11_ASAP7_75t_L CKINVDCx9p33_ASAP7_75t_R CKINVDCx14_ASAP7_75t_R CKINVDCx9p33_ASAP7_75t_L CKINVDCx14_ASAP7_75t_L CKINVDCx16_ASAP7_75t_R CKINVDCx16_ASAP7_75t_L CKINVDCx20_ASAP7_75t_R CKINVDCx20_ASAP7_75t_L
+Total number of usable inverters: 42
+List of unusable inverters:
+Total number of unusable inverters: 0
+List of identified usable delay cells: HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_L
+Total number of identified usable delay cells: 5
+List of identified unusable delay cells:
+Total number of identified unusable delay cells: 0
+default_emulate_constraint_mode
+Extraction setup Started for TopCell top_soc 
+Summary of Active RC-Corners : 
+ 
+ Analysis View: default_emulate_view
+    RC-Corner Name        : default_emulate_rc_corner
+    RC-Corner Index       : 0
+    RC-Corner Temperature : 25 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PostRoute Res Factor        : 1
+    RC-Corner PostRoute Cap Factor        : 1
+    RC-Corner PostRoute XCap Factor       : 1
+Initializing multi-corner resistance tables ...
+Extraction setup Started for TopCell top_soc 
+Summary of Active RC-Corners : 
+ 
+ Analysis View: default_emulate_view
+    RC-Corner Name        : default_emulate_rc_corner
+    RC-Corner Index       : 0
+    RC-Corner Temperature : 25 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PostRoute Res Factor        : 1
+    RC-Corner PostRoute Cap Factor        : 1
+    RC-Corner PostRoute XCap Factor       : 1
+Initializing multi-corner resistance tables ...
+Extraction setup Started for TopCell top_soc 
+Summary of Active RC-Corners : 
+ 
+ Analysis View: default_emulate_view
+    RC-Corner Name        : default_emulate_rc_corner
+    RC-Corner Index       : 0
+    RC-Corner Temperature : 25 Celsius
+    RC-Corner Cap Table   : ''
+    RC-Corner PostRoute Res Factor        : 1
+    RC-Corner PostRoute Cap Factor        : 1
+    RC-Corner PostRoute XCap Factor       : 1
+Initializing multi-corner resistance tables ...
+default_emulate_libset_max default_emulate_libset_min
+<CMD> read_def /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def
+Reading DEF file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def', current time is Sun Oct 11 12:54:08 2026 ...
+--- DIVIDERCHAR '/'
+--- UnitsPerDBU = 1.0000
+
+Honor LEF defined pitches for advanced node
+Start create_tracks
+--- DIEAREA (0 0) (565632 358128)
+defIn read 10000 lines...
+defIn read 20000 lines...
+defIn read 30000 lines...
+defIn read 40000 lines...
+defIn read 50000 lines...
+defIn read 60000 lines...
+defIn read 70000 lines...
+defIn read 80000 lines...
+defIn read 90000 lines...
+defIn read 100000 lines...
+defIn read 110000 lines...
+defIn read 120000 lines...
+defIn read 130000 lines...
+defIn read 140000 lines...
+defIn read 150000 lines...
+defIn read 160000 lines...
+defIn read 170000 lines...
+defIn read 180000 lines...
+defIn read 190000 lines...
+defIn read 200000 lines...
+defIn read 210000 lines...
+defIn read 220000 lines...
+defIn read 230000 lines...
+defIn read 240000 lines...
+defIn read 250000 lines...
+defIn read 260000 lines...
+defIn read 270000 lines...
+defIn read 280000 lines...
+defIn read 290000 lines...
+defIn read 300000 lines...
+defIn read 310000 lines...
+defIn read 320000 lines...
+defIn read 330000 lines...
+defIn read 340000 lines...
+defIn read 350000 lines...
+defIn read 360000 lines...
+defIn read 370000 lines...
+defIn read 380000 lines...
+defIn read 390000 lines...
+defIn read 400000 lines...
+defIn read 410000 lines...
+defIn read 420000 lines...
+defIn read 430000 lines...
+defIn read 440000 lines...
+defIn read 450000 lines...
+defIn read 460000 lines...
+defIn read 470000 lines...
+defIn read 480000 lines...
+defIn read 490000 lines...
+defIn read 500000 lines...
+defIn read 510000 lines...
+defIn read 520000 lines...
+defIn read 530000 lines...
+defIn read 540000 lines...
+defIn read 550000 lines...
+defIn read 560000 lines...
+defIn read 570000 lines...
+defIn read 580000 lines...
+defIn read 590000 lines...
+defIn read 600000 lines...
+defIn read 610000 lines...
+defIn read 620000 lines...
+defIn read 630000 lines...
+defIn read 640000 lines...
+defIn read 650000 lines...
+defIn read 660000 lines...
+defIn read 670000 lines...
+defIn read 680000 lines...
+defIn read 690000 lines...
+defIn read 700000 lines...
+defIn read 710000 lines...
+defIn read 720000 lines...
+defIn read 730000 lines...
+defIn read 740000 lines...
+defIn read 750000 lines...
+defIn read 760000 lines...
+defIn read 770000 lines...
+defIn read 780000 lines...
+defIn read 790000 lines...
+defIn read 800000 lines...
+defIn read 810000 lines...
+defIn read 820000 lines...
+defIn read 830000 lines...
+defIn read 840000 lines...
+defIn read 850000 lines...
+defIn read 860000 lines...
+defIn read 870000 lines...
+defIn read 880000 lines...
+defIn read 890000 lines...
+defIn read 900000 lines...
+defIn read 910000 lines...
+defIn read 920000 lines...
+defIn read 930000 lines...
+defIn read 940000 lines...
+defIn read 950000 lines...
+defIn read 960000 lines...
+defIn read 970000 lines...
+defIn read 980000 lines...
+defIn read 990000 lines...
+defIn read 1000000 lines...
+defIn read 1100000 lines...
+defIn read 1200000 lines...
+defIn read 1300000 lines...
+defIn read 1400000 lines...
+defIn read 1500000 lines...
+defIn read 1600000 lines...
+defIn read 1700000 lines...
+defIn read 1800000 lines...
+defIn read 1900000 lines...
+defIn read 2000000 lines...
+defIn read 2100000 lines...
+defIn read 2200000 lines...
+defIn read 2300000 lines...
+defIn read 2400000 lines...
+defIn read 2500000 lines...
+defIn read 2600000 lines...
+defIn read 2700000 lines...
+defIn read 2800000 lines...
+defIn read 2900000 lines...
+defIn read 3000000 lines...
+defIn read 3100000 lines...
+defIn read 3200000 lines...
+defIn read 3300000 lines...
+defIn read 3400000 lines...
+defIn read 3500000 lines...
+defIn read 3600000 lines...
+defIn read 3700000 lines...
+defIn read 3800000 lines...
+defIn read 3900000 lines...
+defIn read 4000000 lines...
+defIn read 4100000 lines...
+defIn read 4200000 lines...
+defIn read 4300000 lines...
+defIn read 4400000 lines...
+defIn read 4500000 lines...
+defIn read 4600000 lines...
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[2].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[1].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_dtcm/u_mem/G_SRAM_BANK[0].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (IMPDF-141):	Linking placement blockage with component 'u_itcm/u_mem/G_SRAM_BANK[3].u_sram' is only supported by defIn/defOut, but not other applications.
+**WARN: (EMS-62):	Message <IMPDF-141> has exceeded the default message display limit of 20.
+To avoid this warning, increase the display limit per unique message by
+using the set_message -limit <number> command.
+The message limit can be removed by using the set_message -no_limit command.
+Note that setting a very large number using the set_message -limit command
+or removing the message limit using the set_message -no_limit command can
+significantly increase the log file size.
+To suppress a message, use the set_message -suppress command.
+defIn read 4700000 lines...
+defIn read 4800000 lines...
+defIn read 4900000 lines...
+defIn read 5000000 lines...
+defIn read 5100000 lines...
+defIn read 5200000 lines...
+defIn read 5300000 lines...
+defIn read 5400000 lines...
+defIn read 5500000 lines...
+defIn read 5600000 lines...
+defIn read 5700000 lines...
+Creating 1060165 fills into db.
+..
+defIn read 5800000 lines...
+defIn read 5900000 lines...
+defIn read 6000000 lines...
+defIn read 6100000 lines...
+defIn read 6200000 lines...
+defIn read 6300000 lines...
+defIn read 6400000 lines...
+defIn read 6500000 lines...
+defIn read 6600000 lines...
+defIn read 6700000 lines...
+defIn read 6800000 lines...
+defIn read 6900000 lines...
+defIn read 7000000 lines...
+defIn read 7100000 lines...
+defIn read 7200000 lines...
+defIn read 7300000 lines...
+defIn read 7400000 lines...
+defIn read 7500000 lines...
+defIn read 7600000 lines...
+defIn read 7700000 lines...
+defIn read 7800000 lines...
+defIn read 7900000 lines...
+defIn read 8000000 lines...
+defIn read 8100000 lines...
+defIn read 8200000 lines...
+defIn read 8300000 lines...
+defIn read 8400000 lines...
+defIn read 8500000 lines...
+defIn read 8600000 lines...
+defIn read 8700000 lines...
+defIn read 8800000 lines...
+defIn read 8900000 lines...
+defIn read 9000000 lines...
+defIn read 9100000 lines...
+defIn read 9200000 lines...
+defIn read 9300000 lines...
+defIn read 9400000 lines...
+defIn read 9500000 lines...
+defIn read 9600000 lines...
+defIn read 9700000 lines...
+defIn read 9800000 lines...
+defIn read 9900000 lines...
+defIn read 10000000 lines...
+defIn read 10100000 lines...
+Extracting standard cell pins and blockage ...... 
+Pin and blockage extraction finished
+Extracting macro/IO cell pins and blockage ...... 
+Pin and blockage extraction finished
+defIn read 10200000 lines...
+defIn read 10300000 lines...
+defIn read 10400000 lines...
+defIn read 10500000 lines...
+defIn read 10600000 lines...
+defIn read 10700000 lines...
+defIn read 10800000 lines...
+defIn read 10900000 lines...
+defIn read 11000000 lines...
+defIn read 11100000 lines...
+defIn read 11200000 lines...
+defIn read 11300000 lines...
+defIn read 11400000 lines...
+defIn read 11500000 lines...
+defIn read 11600000 lines...
+defIn read 11700000 lines...
+defIn read 11800000 lines...
+defIn read 11900000 lines...
+defIn read 12000000 lines...
+defIn read 12100000 lines...
+defIn read 12200000 lines...
+DEF file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def' is parsed, current time is Sun Oct 11 12:54:24 2026.
+Updating the floorplan ...
+<CMD> read_sdc /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc
+Current (total cpu=0:00:49.6, real=0:00:47.0, peak res=3785.1M, current mem=3761.6M)
+top_soc
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cpu/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 36).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_dbg/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 37).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_pwm/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 38).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_gpio/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 39).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cordic/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 40).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_ascon/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 41).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 42).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_spi/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 43).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_i2c/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 44).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 45).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim0/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 46).
+
+**WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 47).
+
+------------------------------------------------------------------------------------
+CONSTRAINT READING SUMMARY                                                          
+------------------------------------------------------------------------------------
+Constraint                                        | Success        | Fail           
+------------------------------------------------------------------------------------
+set_max_delay                                     | 2              | 0              
+set_clock_uncertainty                             | 30             | 0              
+set_input_delay                                   | 110            | 0              
+set_load                                          | 230            | 0              
+set_input_transition                              | 114            | 0              
+get_designs                                       | 2              | 0              
+set_max_fanout                                    | 2693           | 0              
+current_design                                    | 1              | 0              
+set_output_delay                                  | 228            | 0              
+set_clock_gating_check                            | 26             | 0              
+set_clock_latency                                 | 28             | 0              
+create_clock                                      | 2              | 0              
+get_clocks                                        | 465            | 0              
+get_ports                                         | 718            | 0              
+get_cells                                         | 1              | 0              
+get_lib_pins                                      | 52             | 0              
+set_false_path                                    | 4              | 0              
+set_max_transition                                | 31             | 0              
+set_clock_transition                              | 8              | 0              
+create_generated_clock                            | 13             | 0              
+set_propagated_clock                              | 30             | 0              
+get_pins                                          | 2665           | 0              
+set_disable_timing                                | 1              | 0              
+------------------------------------------------------------------------------------
+Number of path exceptions in the constraint file = 6
+INFO (CTE): Reading of timing constraints file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc completed, with 12 WARNING
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=3777.4M, current mem=3777.4M)
+Current (total cpu=0:00:49.8, real=0:00:47.0, peak res=3785.1M, current mem=3777.4M)
+<CMD> read_spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef
+
+SPEF files for RC Corner default_emulate_rc_corner:
+Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef'.
+Start spef parsing (MEM=4259.31).
+The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef', has encountered the error/warning message(s) during its reading.
+**WARN: (SPEF-1152):	Net 'flash_io_i[3] ( having pins flash_io_i[3] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+**WARN: (SPEF-1152):	Net 'flash_io_i[2] ( having pins flash_io_i[2] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+**WARN: (SPEF-1152):	Net 'flash_io_i[0] ( having pins flash_io_i[0] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+SPEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef.
+Number of Resistors     : 1652793
+Number of Ground Caps   : 1170669
+Number of Coupling Caps : 116540
+
+End spef parsing (MEM=4363.96 CPU=0:00:08.7 REAL=0:00:03.0).
+431 nets are missing in SPEF file. The names of these nets are saved in ./default_emulate_rc_corner.missing_nets.rpt.gz.
+<CMD> set_power_analysis_mode -method static -corner max -create_binary_db true
+<CMD> set_power_output_dir /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/power
+<CMD> report_power -outfile /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/power_static.rpt
+env CDS_WORKAREA is set to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus
+
+Power Net Detected:
+        Voltage	    Name
+             0V	    VSS
+           0.7V	    VDD
+Using Power View: default_emulate_view.
+AAE_INFO: opIsDesignInPostRouteState() is 1
+AAE DB initialization (MEM=3880.097656 CPU=0:00:00.0 REAL=0:00:00.0) 
+#################################################################################
+# Design Name: top_soc
+# Design Mode: 65nm
+# Analysis Mode: MMMC OCV 
+# Parasitics Mode: SPEF/RCDB 
+# Signoff Settings: SI Off 
+#################################################################################
+Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'default_emulate_view'
+Start delay calculation (fullDC) (1 T). (MEM=3867.44)
+/dev/null
+End delay calculation. (MEM=4008.75 CPU=0:00:30.9 REAL=0:00:31.0)
+Begin loading slews from CTE ...
+Loading slews from CTE completed...
+End delay calculation (fullDC). (MEM=3989.27 CPU=0:00:32.2 REAL=0:00:32.0)
+
+Begin Power Analysis
+
+             0V	    VSS
+           0.7V	    VDD
+
+Begin Processing Timing Library for Power Calculation
+
+Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4002.27MB/unknown/unknown)
+
+
+
+Begin Processing Power Net/Grid for Power Calculation
+
+Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4002.27MB/unknown/unknown)
+
+Begin Processing Timing Window Data for Power Calculation
+
+CLK_UART1(250MHz) CLK_UART(250MHz) CLK_TIM1(250MHz) CLK_TIM0(250MHz) CLK_SYS(250MHz) CLK_SPI(250MHz) CLK_SDRAM_OUT(250MHz) CLK_PWM(250MHz) CLK_I2C(250MHz) CLK_GPIO(250MHz) CLK_DBG(250MHz) CLK_CPU(250MHz) CLK_CORDIC(250MHz) CLK_ASCON(250MHz) CLK_TCK(10MHz) Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=4020.54MB/unknown/unknown)
+
+Begin Processing User Attributes
+
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4020.68MB/unknown/unknown)
+
+Begin Processing Signal Activity
+
+
+Starting Levelizing
+2026-Oct-11 12:55:10 (2026-Oct-11 03:55:10 GMT)
+2026-Oct-11 12:55:10 (2026-Oct-11 03:55:10 GMT): 10%
+2026-Oct-11 12:55:10 (2026-Oct-11 03:55:10 GMT): 20%
+2026-Oct-11 12:55:10 (2026-Oct-11 03:55:10 GMT): 30%
+2026-Oct-11 12:55:10 (2026-Oct-11 03:55:10 GMT): 40%
+2026-Oct-11 12:55:10 (2026-Oct-11 03:55:10 GMT): 50%
+2026-Oct-11 12:55:10 (2026-Oct-11 03:55:10 GMT): 60%
+2026-Oct-11 12:55:11 (2026-Oct-11 03:55:11 GMT): 70%
+2026-Oct-11 12:55:11 (2026-Oct-11 03:55:11 GMT): 80%
+2026-Oct-11 12:55:11 (2026-Oct-11 03:55:11 GMT): 90%
+
+Finished Levelizing
+2026-Oct-11 12:55:11 (2026-Oct-11 03:55:11 GMT)
+
+Starting Activity Propagation
+2026-Oct-11 12:55:11 (2026-Oct-11 03:55:11 GMT)
+** INFO:  (VOLTUS_POWR-1356): No default input activity has been set. Defaulting to 0.2.
+Use 'set_default_switching_activity -input_activity' command to change the default activity value.
+
+2026-Oct-11 12:55:12 (2026-Oct-11 03:55:12 GMT): 10%
+2026-Oct-11 12:55:12 (2026-Oct-11 03:55:12 GMT): 20%
+2026-Oct-11 12:55:13 (2026-Oct-11 03:55:13 GMT): 30%
+2026-Oct-11 12:55:13 (2026-Oct-11 03:55:13 GMT): 40%
+2026-Oct-11 12:55:14 (2026-Oct-11 03:55:14 GMT): 50%
+2026-Oct-11 12:55:14 (2026-Oct-11 03:55:14 GMT): 60%
+2026-Oct-11 12:55:15 (2026-Oct-11 03:55:15 GMT): 70%
+2026-Oct-11 12:55:15 (2026-Oct-11 03:55:15 GMT): 80%
+2026-Oct-11 12:55:15 (2026-Oct-11 03:55:15 GMT): 90%
+
+Finished Activity Propagation
+2026-Oct-11 12:55:15 (2026-Oct-11 03:55:15 GMT)
+Ended Processing Signal Activity: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=4050.00MB/unknown/unknown)
+
+Begin Power Computation
+
+      ----------------------------------------------------------
+      # of cell(s) missing both power/leakage table: 0
+      # of cell(s) missing power table: 2
+      # of cell(s) missing leakage table: 0
+      ----------------------------------------------------------
+CellName                                  Missing Table(s)
+TIEHIx1_ASAP7_75t_R                       internal power, 
+TIELOx1_ASAP7_75t_R                       internal power, 
+
+
+
+Starting Calculating power
+2026-Oct-11 12:55:15 (2026-Oct-11 03:55:15 GMT)
+ ... Calculating switching power
+2026-Oct-11 12:55:16 (2026-Oct-11 03:55:16 GMT): 10%
+2026-Oct-11 12:55:16 (2026-Oct-11 03:55:16 GMT): 20%
+2026-Oct-11 12:55:16 (2026-Oct-11 03:55:16 GMT): 30%
+2026-Oct-11 12:55:16 (2026-Oct-11 03:55:16 GMT): 40%
+2026-Oct-11 12:55:16 (2026-Oct-11 03:55:16 GMT): 50%
+ ... Calculating internal and leakage power
+2026-Oct-11 12:55:19 (2026-Oct-11 03:55:19 GMT): 60%
+2026-Oct-11 12:55:22 (2026-Oct-11 03:55:22 GMT): 70%
+2026-Oct-11 12:55:24 (2026-Oct-11 03:55:24 GMT): 80%
+2026-Oct-11 12:55:27 (2026-Oct-11 03:55:27 GMT): 90%
+
+Finished Calculating power
+2026-Oct-11 12:55:30 (2026-Oct-11 03:55:30 GMT)
+      # of MSMV cell(s) missing power_level: 0
+Ended Power Computation: (cpu=0:00:14, real=0:00:14, mem(process/total/peak)=4064.35MB/unknown/unknown)
+
+Begin Processing User Attributes
+
+Begin Processing set_power
+Ended Processing set_power: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=4064.35MB/unknown/unknown)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4064.35MB/unknown/unknown)
+
+Ended Power Analysis: (cpu=0:00:21, real=0:00:22, mem(process/total/peak)=4064.35MB/unknown/unknown)
+
+Begin Boundary Leakage Calculation
+Ended Boundary Leakage Calculation: (cpu=0:00:00, real=0:00:00,
+mem(process/total/peak)=4064.35MB/unknown/unknown)
+Begin Static Power Report Generation
+*
+
+
+
+Total Power
+-----------------------------------------------------------------------------------------
+Total Internal Power:       85.78037849 	   97.2933%
+Total Switching Power:       2.34694520 	    2.6619%
+Total Leakage Power:         0.03946085 	    0.0448%
+Total Power:                88.16678454
+-----------------------------------------------------------------------------------------
+** INFO:  (VOLTUS_POWR-3465): There are 0 decaps and 0 fillers in the design
+
+Ended Static Power Report Generation: (cpu=0:00:01, real=0:00:01,
+mem(process/total/peak)=4115.41MB/unknown/unknown)
+
+Begin Creating Binary Database
+Ended Creating Binary Database: (cpu=0:00:03, real=0:00:03,
+mem(process/total/peak)=4663.08MB/unknown/unknown)
+
+Output file is
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/power_static.rpt.
+<CMD> set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap
+
+Usage: set_rail_analysis_mode [-help] [-avg_em_analysis {true false}] [-create_pdn_model {true false}] [-em_cdf_percentage <float>] [-peak_em_analysis {true false}]
+                              [-rms_em_analysis {true false}] [-set_analyze_bbox <string>] [-tsv_subckt_modelfile_list <string>] -reset | { -accuracy {xd hd} -method {static dynamic era_static era_dynamic} [-accumulate_overlapping_ddv_pwl_waveforms {true false}] [-analysis_view <string>] [-cell_ignore_file <string>] [-check_current_balanced_power_grid_em {true false}] [-check_thermal_aware_em {true false}] [-check_vsrc_placement_on_switched_net {true false}] [-cluster_via1_ports {true false}] [-cluster_via_rule <string>] [-cluster_via_size <integer>] [-common_res_inst_pair_file_name <string>] [-compress_powergrid_database {true false}] [-decap_cell_list <string>] [-def_based_hierarchical_reports {true false}] [-default_package_capacitor <string>] [-default_package_inductor <string>] [-default_package_resistor <string>] [-disable_analysis_types <string>] [-disable_em_split_ac_dc_rules {true false}] [-disable_parallel_extraction ] [-dynamic_trigger_file <string>] [-eiv_average_per_window_list <string>] [-eiv_eval_gnd_window {true false}] [-eiv_eval_nodes {tap port}] [-eiv_eval_window {both switching timing elapse}] [-eiv_histogram_max <float>] [-eiv_histogram_min <float>] [-eiv_histogram_number_of_bucket <integer>] [-eiv_max_instances <integer>] [-eiv_method <string>] [-eiv_pin_based_report {true false}] [-eiv_eval_layers <string>] [-eiv_eval_layer_file <string>] [-eiv_pin_location {true false}] [-eiv_print_time {true false}] [-eiv_report {auto netonly all}] [-eiv_threshold <float>] [-em_ignore_pgv_resistors {true false}] [-em_limit_scale_factor <string>] [-em_models <string>] [-em_peak_analysis {true false}] [-em_report_line_threshold <integer>] [-em_rms_delta_T <float>] [-em_rms_delta_T_layer_list <string>] [-em_temperature <string>] [-em_temperature_layer_list <string>] [-em_threshold <float>] [-enable_2d_partition_extraction {true false}] [-enable_ccs_analysis {true false}] [-enable_distributed_processing_in_solver {true false}] [-enable_instance_powergate_report {true false}] [-enable_manufacturing_effects {true false}] [-enable_multi_die_connectivity_check {true false}] [-enable_package_battery_current_probing {true false}] [-enable_rc_analysis {true false}] [-enable_reff_analysis {true false}] [-enable_rlrp_analysis {true false}] [-enable_scheduler {true false}] [-enable_seb {true false}] [-enable_sensitivity_analysis {true false}] [-enable_voltage_across_vias {true false}] [-enable_vsrc_in_gif {true false}] [-enable_xp {true false}] [-enable_xpgv_scaling {true false}] [-enlarge_vsrc_in_vuvc {true false}] [-env_temperature <string>] [-era_current_distribution_unplaced_area {instance diearea}] [-era_current_region_file <string>] [-era_insert_virtual_followpin_for_io {true false}] [-era_insert_virtual_followpins {standard extended none}] [-era_instance_dynamic_current_file <string>] [-era_lef_layermap <string>] [-era_power_gate_file <string>] [-era_skip_virtual_via_by_type {whatif def all none}] [-era_techlib_generation {true false}] [-extract_subconductor_layers {true false}] [-extraction_tech_file <string>] [-extractor_include <string>] [-feol_scale_factor <float>] [-filler_cell_list <string>] [-fine_pre_simulation_period <float>] [-finegrain_powergate_ron {min avg max}] [-finegrain_powergate_ron_list <string>] [-flatten_xpgv_block_instances <string>] [-force_extraction {true false}] [-force_library_merging {true false}] [-gds_map <string>] [-gds_purpose {flipChip fullChip metalFill}] [-gds_top_cell <string>] [-generate_combined_ivd_gif {true false}] [-generate_hier_bbv {true false}] [-generate_instance_effr_report <string>] [-generate_instance_ir_report <string>] [-generate_instance_pin_ir_report <string>] [-generate_multi_voltage_library {true false}] [-generate_package_pin_current_voltage {true false}] [-gif_iv_threshold <float>] [-gif_new_color_scale {true false}] [-gif_resolution {low medium high}] [-gif_zoom_area <string>] [-gif_zoom_topcell_diearea {true false}] [-hier_delimiter <string>] [-die_delimiter <string>] [-honor_negative_static_current {true false}] [-hpgv_block_lefs <string>] [-hpgv_generate_view {ir em all}] [-ignore_decaps {true false}] [-ignore_fillers {true false}] [-ignore_incomplete_net {true false}] [-ignore_nets_without_vsrc {true false}] [-ignore_duplicate_vsrc {true false}] [-ignore_shorts {true false}] [-import_what_if_shapes {true false}] [-lef_map <string>] [-lifetime <integer>] [-limit_number_of_steps {true false}] [-lowest_layer_for_em_check <string>] [-mcp_model_mapping <string>] [-off_rails <string>] [-package_trace_connectivity {true false}] [-power_grid_library <string>] [-powering_down_rails <string>] [-powerup_sequence_file <string>] [-pre_simulation_period <float>] [-pre_simulation_resolution <float>] [-prechain_powerup_sequence_file <string>] [-print_gif_range_percentage {true false}] [-probe_instance_pin_waveforms {true false}] [-probe_instance_tap_waveforms {true false}] [-probe_package_interface_ports {true false}] [-probe_pin_voltage_list <string>] [-probe_waveform_list <string>] [-probing_node_file <string>] [-process_bulk_pins_for_body_bias {true false}] [-process_techgen_em_rules {true false}] [-promote_pin_shapes_only <string>] [-rdl_def_list <string>] [-rdl_orientation {N S W E FN FS FW FE}] [-read_thermal_map <string>] [-record_inst_peak_current {true false}] [-record_results_start_time <float>] [-reff_detail_report {true false}] [-reff_domain_report_format <integer>] [-reff_eval_nodes {tap port}] [-reff_pin_report_layer {all top bottom}] [-reff_pin_report_method <string>] [-remove_duplicate_inst {true false}] [-report_instances_missing_current_data {true false}] [-report_layer_based_ir_average {true false}] [-reff_report_all {true false}] [-report_layers_above_pin_for_instance_ir {true false}] [-report_msmv_format {true false}] [-report_power_in_parallel {true false}] [-report_power_options <string>] [-report_shorts {true false}] [-report_voltage_drop {true false}] [-override_set_power_data {true false}] [-reuse_state_directory <string>] [-rlrp_detail_report {true false}] [-rlrp_eval_nodes {tap port}] [-rlrp_percentage_threshold <integer>] [-rlrp_pin_based_report {true false}] [-rlrp_pin_report_layer {all top bottom}] [-rlrp_pin_report_method {worst best eiv_worst eiv_best eiv_worst_window eiv_best_window}] [-rlrp_threshold <float>] [-save_voltage_waveforms {true false}] [-rlrp_cell_report_layer <string>] [-scale_initial_condition_current <string>] [-seb_lifetime <integer>] [-seb_table <string>] [-seb_temperature <float>] [-shorting_resistance <float>] [-skip_extraction {true false}] [-snap_layer_for_current_taps <string>] [-static_multi_mode_analysis <string>] [-static_trigger_file <string>] [-suppress_message <string>] [-switchbit_file_for_eiv_calculation <string>] [-temp_directory_name <string>] [-temperature <string>] [-topcell_orientation <string>] [-topcell_placement <string>] [-unconnected_die_pkg_pins {ignore error edit}] [-unconnectedcell_ignore_file <string>] [-ignore_from_reporting <string>] [-unified_power_switch_flow {true false}] [-use_early_view_list <string>] [-use_em_view_list <string>] [-use_ir_view_list <string>] [-use_rms_delta_t {true false}] [-verbosity {true false}] [-verify_logical_connectivity {true false}] [-vsrc_search_distance <float>] [-watch_location_waveform <string>] [-what_if_shapes_file <string>] [-work_directory_name <string>] [-write_demand_current_region_file <string>] [-xp_cpu_per_job_power <string>] [-xp_cpu_per_job_simulation <string>] [-xp_host_allocation_method {on_demand at_startup}] [-xp_purge <string>] [-xp_resume {true false}] [-xp_reuse_hpt_directory <string>] [-xp_reuse_extraction_directory <string>] [-xp_simulation_cpu_timeout <integer>] [-xp_simulation_min_cpu <integer>] [-xpgv_config_file <string>] [-block_powerup_rail <string> | -powering_up_rails <string> ] [-ict_em_models <string> | -ircx_models <string>] [-rdl_def <string> [-rdl_placement {x y}]] [-gds_file <string> [-gds_offset {x y}]] [-die_mode {single | multi-die | 3dic} -die_instance_name <string> [-design <string>]] [-powering_up_rails <string> ] [-powering_up_rails <string> [-powerup_fast_mode {true false}]] [ -era_skip_virtual_via_on_layers <string> | -era_insert_virtual_via_on_layers <string>] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_layer <string>]] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_factor_for_placed <float>]] [-era_current_distribution {placed unplaced all none} [-era_check_wires_for_generated_current_regions {true false}]] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_nets <string>]] [-off_state_powergate_instance_file <string>] }
+
+**ERROR: (IMPTCM-48):	"-lef_layermap" is not a legal option for command "set_rail_analysis_mode". Either the current option or an option prior to it is not specified correctly.
+<CMD> set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap
+
+Usage: set_rail_analysis_mode [-help] [-avg_em_analysis {true false}] [-create_pdn_model {true false}] [-em_cdf_percentage <float>] [-peak_em_analysis {true false}]
+                              [-rms_em_analysis {true false}] [-set_analyze_bbox <string>] [-tsv_subckt_modelfile_list <string>] -reset | { -accuracy {xd hd} -method {static dynamic era_static era_dynamic} [-accumulate_overlapping_ddv_pwl_waveforms {true false}] [-analysis_view <string>] [-cell_ignore_file <string>] [-check_current_balanced_power_grid_em {true false}] [-check_thermal_aware_em {true false}] [-check_vsrc_placement_on_switched_net {true false}] [-cluster_via1_ports {true false}] [-cluster_via_rule <string>] [-cluster_via_size <integer>] [-common_res_inst_pair_file_name <string>] [-compress_powergrid_database {true false}] [-decap_cell_list <string>] [-def_based_hierarchical_reports {true false}] [-default_package_capacitor <string>] [-default_package_inductor <string>] [-default_package_resistor <string>] [-disable_analysis_types <string>] [-disable_em_split_ac_dc_rules {true false}] [-disable_parallel_extraction ] [-dynamic_trigger_file <string>] [-eiv_average_per_window_list <string>] [-eiv_eval_gnd_window {true false}] [-eiv_eval_nodes {tap port}] [-eiv_eval_window {both switching timing elapse}] [-eiv_histogram_max <float>] [-eiv_histogram_min <float>] [-eiv_histogram_number_of_bucket <integer>] [-eiv_max_instances <integer>] [-eiv_method <string>] [-eiv_pin_based_report {true false}] [-eiv_eval_layers <string>] [-eiv_eval_layer_file <string>] [-eiv_pin_location {true false}] [-eiv_print_time {true false}] [-eiv_report {auto netonly all}] [-eiv_threshold <float>] [-em_ignore_pgv_resistors {true false}] [-em_limit_scale_factor <string>] [-em_models <string>] [-em_peak_analysis {true false}] [-em_report_line_threshold <integer>] [-em_rms_delta_T <float>] [-em_rms_delta_T_layer_list <string>] [-em_temperature <string>] [-em_temperature_layer_list <string>] [-em_threshold <float>] [-enable_2d_partition_extraction {true false}] [-enable_ccs_analysis {true false}] [-enable_distributed_processing_in_solver {true false}] [-enable_instance_powergate_report {true false}] [-enable_manufacturing_effects {true false}] [-enable_multi_die_connectivity_check {true false}] [-enable_package_battery_current_probing {true false}] [-enable_rc_analysis {true false}] [-enable_reff_analysis {true false}] [-enable_rlrp_analysis {true false}] [-enable_scheduler {true false}] [-enable_seb {true false}] [-enable_sensitivity_analysis {true false}] [-enable_voltage_across_vias {true false}] [-enable_vsrc_in_gif {true false}] [-enable_xp {true false}] [-enable_xpgv_scaling {true false}] [-enlarge_vsrc_in_vuvc {true false}] [-env_temperature <string>] [-era_current_distribution_unplaced_area {instance diearea}] [-era_current_region_file <string>] [-era_insert_virtual_followpin_for_io {true false}] [-era_insert_virtual_followpins {standard extended none}] [-era_instance_dynamic_current_file <string>] [-era_lef_layermap <string>] [-era_power_gate_file <string>] [-era_skip_virtual_via_by_type {whatif def all none}] [-era_techlib_generation {true false}] [-extract_subconductor_layers {true false}] [-extraction_tech_file <string>] [-extractor_include <string>] [-feol_scale_factor <float>] [-filler_cell_list <string>] [-fine_pre_simulation_period <float>] [-finegrain_powergate_ron {min avg max}] [-finegrain_powergate_ron_list <string>] [-flatten_xpgv_block_instances <string>] [-force_extraction {true false}] [-force_library_merging {true false}] [-gds_map <string>] [-gds_purpose {flipChip fullChip metalFill}] [-gds_top_cell <string>] [-generate_combined_ivd_gif {true false}] [-generate_hier_bbv {true false}] [-generate_instance_effr_report <string>] [-generate_instance_ir_report <string>] [-generate_instance_pin_ir_report <string>] [-generate_multi_voltage_library {true false}] [-generate_package_pin_current_voltage {true false}] [-gif_iv_threshold <float>] [-gif_new_color_scale {true false}] [-gif_resolution {low medium high}] [-gif_zoom_area <string>] [-gif_zoom_topcell_diearea {true false}] [-hier_delimiter <string>] [-die_delimiter <string>] [-honor_negative_static_current {true false}] [-hpgv_block_lefs <string>] [-hpgv_generate_view {ir em all}] [-ignore_decaps {true false}] [-ignore_fillers {true false}] [-ignore_incomplete_net {true false}] [-ignore_nets_without_vsrc {true false}] [-ignore_duplicate_vsrc {true false}] [-ignore_shorts {true false}] [-import_what_if_shapes {true false}] [-lef_map <string>] [-lifetime <integer>] [-limit_number_of_steps {true false}] [-lowest_layer_for_em_check <string>] [-mcp_model_mapping <string>] [-off_rails <string>] [-package_trace_connectivity {true false}] [-power_grid_library <string>] [-powering_down_rails <string>] [-powerup_sequence_file <string>] [-pre_simulation_period <float>] [-pre_simulation_resolution <float>] [-prechain_powerup_sequence_file <string>] [-print_gif_range_percentage {true false}] [-probe_instance_pin_waveforms {true false}] [-probe_instance_tap_waveforms {true false}] [-probe_package_interface_ports {true false}] [-probe_pin_voltage_list <string>] [-probe_waveform_list <string>] [-probing_node_file <string>] [-process_bulk_pins_for_body_bias {true false}] [-process_techgen_em_rules {true false}] [-promote_pin_shapes_only <string>] [-rdl_def_list <string>] [-rdl_orientation {N S W E FN FS FW FE}] [-read_thermal_map <string>] [-record_inst_peak_current {true false}] [-record_results_start_time <float>] [-reff_detail_report {true false}] [-reff_domain_report_format <integer>] [-reff_eval_nodes {tap port}] [-reff_pin_report_layer {all top bottom}] [-reff_pin_report_method <string>] [-remove_duplicate_inst {true false}] [-report_instances_missing_current_data {true false}] [-report_layer_based_ir_average {true false}] [-reff_report_all {true false}] [-report_layers_above_pin_for_instance_ir {true false}] [-report_msmv_format {true false}] [-report_power_in_parallel {true false}] [-report_power_options <string>] [-report_shorts {true false}] [-report_voltage_drop {true false}] [-override_set_power_data {true false}] [-reuse_state_directory <string>] [-rlrp_detail_report {true false}] [-rlrp_eval_nodes {tap port}] [-rlrp_percentage_threshold <integer>] [-rlrp_pin_based_report {true false}] [-rlrp_pin_report_layer {all top bottom}] [-rlrp_pin_report_method {worst best eiv_worst eiv_best eiv_worst_window eiv_best_window}] [-rlrp_threshold <float>] [-save_voltage_waveforms {true false}] [-rlrp_cell_report_layer <string>] [-scale_initial_condition_current <string>] [-seb_lifetime <integer>] [-seb_table <string>] [-seb_temperature <float>] [-shorting_resistance <float>] [-skip_extraction {true false}] [-snap_layer_for_current_taps <string>] [-static_multi_mode_analysis <string>] [-static_trigger_file <string>] [-suppress_message <string>] [-switchbit_file_for_eiv_calculation <string>] [-temp_directory_name <string>] [-temperature <string>] [-topcell_orientation <string>] [-topcell_placement <string>] [-unconnected_die_pkg_pins {ignore error edit}] [-unconnectedcell_ignore_file <string>] [-ignore_from_reporting <string>] [-unified_power_switch_flow {true false}] [-use_early_view_list <string>] [-use_em_view_list <string>] [-use_ir_view_list <string>] [-use_rms_delta_t {true false}] [-verbosity {true false}] [-verify_logical_connectivity {true false}] [-vsrc_search_distance <float>] [-watch_location_waveform <string>] [-what_if_shapes_file <string>] [-work_directory_name <string>] [-write_demand_current_region_file <string>] [-xp_cpu_per_job_power <string>] [-xp_cpu_per_job_simulation <string>] [-xp_host_allocation_method {on_demand at_startup}] [-xp_purge <string>] [-xp_resume {true false}] [-xp_reuse_hpt_directory <string>] [-xp_reuse_extraction_directory <string>] [-xp_simulation_cpu_timeout <integer>] [-xp_simulation_min_cpu <integer>] [-xpgv_config_file <string>] [-block_powerup_rail <string> | -powering_up_rails <string> ] [-ict_em_models <string> | -ircx_models <string>] [-rdl_def <string> [-rdl_placement {x y}]] [-gds_file <string> [-gds_offset {x y}]] [-die_mode {single | multi-die | 3dic} -die_instance_name <string> [-design <string>]] [-powering_up_rails <string> ] [-powering_up_rails <string> [-powerup_fast_mode {true false}]] [ -era_skip_virtual_via_on_layers <string> | -era_insert_virtual_via_on_layers <string>] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_layer <string>]] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_factor_for_placed <float>]] [-era_current_distribution {placed unplaced all none} [-era_check_wires_for_generated_current_regions {true false}]] [-era_current_distribution {placed unplaced all none} [-era_current_distribution_nets <string>]] [-off_state_powergate_instance_file <string>] }
+
+**ERROR: (IMPTCM-48):	"-lef_layermap" is not a legal option for command "set_rail_analysis_mode". Either the current option or an option prior to it is not specified correctly.
+<CMD> set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02
+**WARN: (VOLTUS-1007):	The distributed processing (DP) mode will be made obsolete in a future release and it is recommended to use the Extensively Parallel (XP) mode. The obsolete DP mode still works in this release, but to avoid this warning and to ensure compatibility with future releases, update your scripts to use the set_rail_analysis_mode -enable_xp true..
+<CMD> set_pg_nets -net VDD -voltage 0.7 -threshold 0.65
+<CMD> set_pg_nets -net VSS -voltage 0.0 -threshold 0.05
+<CMD> set_power_pads -net VDD -format defpin
+<CMD> set_power_pads -net VSS -format defpin
+<CMD> analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD VDD
+Started PGV Library Generator at 12:55:35 10/11/2026
+
+** INFO:  (VOLTUS_LGEN-3599): Library generation settings: 
+	Mode: TECH 
+	Capacitance: area_cap 
+	Current Distribution: estimation 
+	Grid Port Definition: LEF 
+	Grid Current Sinks: LEF pin 
+	Power Gate: no
+
+** INFO:  (VOLTUS_LGEN-3598): Processing LEF files: 
+/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef
+/home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef
+/home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef
+/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef
+/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef
+
+** WARN:  (VOLTUS_LGEN-4286): The Lef Layer to Library Layer mapping for
+the layers given below may be inconsistent and lead to incorrect results.
+It is recommended to review the automatically generated Lef Layermap and
+provide a correct one manually in case of incorrect results. 
+
+	LEF LAYER NAME			LIBRARY LAYER NAME
+	M1			LISD
+	Pad			M9
+
+
+** INFO:  (VOLTUS_LGEN-3611): No lef leyarmap specified. Tool has
+internally generated the mapping between technology layers and lef layers
+using information in technology file and technology lef. To specify your
+own layer mapping, use set_pg_library_mode -lef_layermap.
+
+  TECH-LAYER    LEF-LAYER
+  LISD    M1
+  V0    V1
+  M1    M2
+  V1    V2
+  M2    M3
+  V2    V3
+  M3    M4
+  V3    V4
+  M4    M5
+  V4    V5
+  M5    M6
+  V5    V6
+  M6    M7
+  V6    V7
+  M7    M8
+  V7    V8
+  M8    M9
+  V8    V9
+  M9    Pad
+
+
+** INFO:  (VOLTUS_LGEN-4112): Kept 9593 obstruction geometries of LEF macro
+srambank_256x4x32_6t122 which appear to be blockages. Blockages are
+obstructions with minimum spacing of zero, or the color mask is not set.
+
+** INFO:  (VOLTUS_LGEN-4112): Kept 3556 obstruction geometries of LEF macro
+srambank_128x4x20_6t122 which appear to be blockages. Blockages are
+obstructions with minimum spacing of zero, or the color mask is not set.
+
+** INFO:  (VOLTUS_LGEN-3606): 
+Power Grid View Generation Statistics:
+        # Total number of cells: 426 
+        # TECH view created: 426 (100%)
+Finished PGV Library Generator at 12:55:42 10/11/2026 (cpu=0:00:01, real=0:00:07)
+
+Begin ERA Data Preparation
+All Virtual Vias and Virtual followpins have been skipped. No incremental def would be generated.
+Ended ERA Data Preparation: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=4972.12MB/8018.93MB/4972.12MB)
+
+
+
+Started Rail Analysis at 12:55:47 10/11/2026
+
+
+Multi-CPU Configuration:
+	#CPU: 1
+	Mode: local
+	Host: user1-EliteMini
+*** Error: In processing command script
+** ERROR: (VOLTUS_RAIL-1152): No instance or cell power file specified for power type avg.
+Use the command "set_power_data" to specify the power file.
+
+1 error was found while processing the file /tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/voltus_rail_2240156.cmd
+
+Rail Analysis Statistics:
+Warning messages:      0
+Error messages:        1
+
+Rail Analysis is unsuccessful due to errors.
+
+Finished Rail Analysis at 12:55:50 10/11/2026 (cpu=0:00:00, real=0:00:03, peak mem=0.00MB)
+Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)
+voltus_rail exited unsuccessfully.
+**ERROR: (PRL-387):	"Rail Analysis" failed to finish successfully.
+**ERROR: (VOLTUS-1055):	Rail analysis failed to finish successfully; Check voltus log file for more details.
+<CMD> analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS VSS
+Started PGV Library Generator at 12:55:50 10/11/2026
+
+** INFO:  (VOLTUS_LGEN-3599): Library generation settings: 
+	Mode: TECH 
+	Capacitance: area_cap 
+	Current Distribution: estimation 
+	Grid Port Definition: LEF 
+	Grid Current Sinks: LEF pin 
+	Power Gate: no
+
+** INFO:  (VOLTUS_LGEN-3598): Processing LEF files: 
+/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef
+/home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef
+/home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef
+/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef
+/home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef
+
+** WARN:  (VOLTUS_LGEN-4286): The Lef Layer to Library Layer mapping for
+the layers given below may be inconsistent and lead to incorrect results.
+It is recommended to review the automatically generated Lef Layermap and
+provide a correct one manually in case of incorrect results. 
+
+	LEF LAYER NAME			LIBRARY LAYER NAME
+	M1			LISD
+	Pad			M9
+
+
+** INFO:  (VOLTUS_LGEN-3611): No lef leyarmap specified. Tool has
+internally generated the mapping between technology layers and lef layers
+using information in technology file and technology lef. To specify your
+own layer mapping, use set_pg_library_mode -lef_layermap.
+
+  TECH-LAYER    LEF-LAYER
+  LISD    M1
+  V0    V1
+  M1    M2
+  V1    V2
+  M2    M3
+  V2    V3
+  M3    M4
+  V3    V4
+  M4    M5
+  V4    V5
+  M5    M6
+  V5    V6
+  M6    M7
+  V6    V7
+  M7    M8
+  V7    V8
+  M8    M9
+  V8    V9
+  M9    Pad
+
+
+** INFO:  (VOLTUS_LGEN-4112): Kept 9593 obstruction geometries of LEF macro
+srambank_256x4x32_6t122 which appear to be blockages. Blockages are
+obstructions with minimum spacing of zero, or the color mask is not set.
+
+** INFO:  (VOLTUS_LGEN-4112): Kept 3556 obstruction geometries of LEF macro
+srambank_128x4x20_6t122 which appear to be blockages. Blockages are
+obstructions with minimum spacing of zero, or the color mask is not set.
+
+** INFO:  (VOLTUS_LGEN-3606): 
+Power Grid View Generation Statistics:
+        # Total number of cells: 426 
+        # TECH view created: 426 (100%)
+Finished PGV Library Generator at 12:55:56 10/11/2026 (cpu=0:00:01, real=0:00:06)
+
+Begin ERA Data Preparation
+All Virtual Vias and Virtual followpins have been skipped. No incremental def would be generated.
+Ended ERA Data Preparation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4973.05MB/8018.93MB/4973.05MB)
+
+
+
+Started Rail Analysis at 12:55:55 10/11/2026
+
+
+Multi-CPU Configuration:
+	#CPU: 1
+	Mode: local
+	Host: user1-EliteMini
+*** Error: In processing command script
+** ERROR: (VOLTUS_RAIL-1152): No instance or cell power file specified for power type avg.
+Use the command "set_power_data" to specify the power file.
+
+1 error was found while processing the file /tmp/ssv_tmpdir_2240156_2669a1ca-5154-4963-848d-fd07d95685f6_SENY5Y/voltus_rail_2240156.cmd
+
+Rail Analysis Statistics:
+Warning messages:      0
+Error messages:        1
+
+Rail Analysis is unsuccessful due to errors.
+
+Finished Rail Analysis at 12:55:56 10/11/2026 (cpu=0:00:00, real=0:00:01, peak mem=0.00MB)
+Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)
+voltus_rail exited unsuccessfully.
+**ERROR: (PRL-387):	"Rail Analysis" failed to finish successfully.
+**ERROR: (VOLTUS-1055):	Rail analysis failed to finish successfully; Check voltus log file for more details.
+<CMD> exit 0
+
+--------------------------------------------------------------------------------
+Exiting Voltus IC Power Integrity Solution on Sun Oct 11 12:55:57 2026
+  Total CPU time:     0:02:14
+  Total real time:    0:02:20
+  Peak memory (main): 4973.05MB
+
