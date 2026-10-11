@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Sun Oct 11 11:51:52 2026                
+#  Created on Sun Oct 11 12:04:15 2026                
 #                                                     
 #######################################################
 
@@ -24,3 +24,6 @@ setDistributeHost -local
 setExtractRCMode -engine postRoute -effortLevel high -coupled true
 setExtractRCMode -lefTechFileMap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map
 extractRC
+rcOut -spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef -rc_corner rc_typ
+rcOut -spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef -rc_corner rc_ss
+rcOut -spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef -rc_corner rc_ff

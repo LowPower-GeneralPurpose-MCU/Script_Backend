@@ -1,4 +1,8 @@
-FAIL
-quantus.tcl: Ghep lop LEF/QRC sai: M1->lisd V1->v0 M2->m1 V2->v1 M3->m2 V3->v2 M4->m3 V4->v3 M5->m4 V5->v4 M6->m5 V6->v5 M7->m6 V7->v6 M8->m7 V8->v7 M9->m8
-  File map /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map khong duoc ap dung hoac sai dinh dang.
-  Xem bang 'db Layer ... -->' trong /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/logs/quantus.log.  Khong ghi SPEF.
+DONE
+Quantus top_soc: effortLevel high = IQuantus tich hop trong Innovus - CHUA phai signoff, coupled, checkpoint ./saved/top_soc_final.enc.dat
+  thoi gian 257 s, QRC tech qrcTechFile_typ03_unscaledV02
+  ghep lop: M1->M1 M2->M2 M3->M3 M4->M4 M5->M5 M6->M6 M7->M7 M8->M8 M9->M9 Pad->LISD V1->V1 V2->V2 V3->V3 V4->V4 V5->V5 V6->V6 V7->V7 V8->V8 V9->V0   (nguon: file map, theo quantus.logv)
+  (SPEF KHOI 16 de doi chieu duoc trich khi lop con ghep lech bac - ti le gom ca khac engine lan khac lop)
+  rc_typ    144620 net        151700.7 fF       32555.3 kOhm   tQuantus KHOI 16:   144620 net        139933.5 fF       34005.8 kOhm   ti le C 1.084 R 0.957   top_soc_quantus_rc_typ.spef
+  rc_ss     144620 net        151700.7 fF       36958.2 kOhm   tQuantus KHOI 16:   144620 net        139933.5 fF       38703.8 kOhm   ti le C 1.084 R 0.955   top_soc_quantus_rc_ss.spef
+  rc_ff     144620 net        151700.7 fF       31087.6 kOhm   tQuantus KHOI 16:   144620 net        139933.5 fF       32439.8 kOhm   ti le C 1.084 R 0.958   top_soc_quantus_rc_ff.spef
