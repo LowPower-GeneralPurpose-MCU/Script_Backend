@@ -20,9 +20,10 @@
 ##   - 3 view nhu innovus/tcl/viewDefinition.tcl: setup = view_ss + view_tt,
 ##     hold = view_ff + view_tt, moi goc RC mot SPEF rieng
 ##   - don vi 1ns / 1pf (xem tempus_views.tcl ben duoi)
-##   - OCV + CPPR, SI, derate SRAM 1.30 / 0.75 nhu innovus/tcl/init_common.tcl
-## CHUA chay tren tool: lenh nao Tempus khong nhan thi ly do nam trong
-## reports/tempus_summary.rpt.
+##   - OCV + CPPR, SI, derate SRAM 1.30 / 0.75, process 7 nhu
+##     innovus/tcl/init_common.tcl
+##   - SDC doc qua ban va logs/top_soc_pnr.tempus.sdc (xem tempus_patch_sdc)
+## Lenh nao Tempus khong nhan thi ly do nam trong reports/tempus_summary.rpt.
 ############################################################
 
 proc tempus_env {name default_value} {
@@ -122,6 +123,115 @@ proc tempus_slack_from_report {rpt} {
     return [list $wns $violated $paths]
 }
 
+# Chu ky clock la 4 ns va 100 ns, nen set_max_delay / set_min_delay tu 1000 ns
+# tro len chi co the la so ps chua doi don vi.
+set TEMPUS_DELAY_UNIT_BUG_NS 1000.0
+
+# Ghi ban va cua SDC writeTimingCon ra $dst, khong dung vao file goc.  Tra ve
+# {so_dong_latency_da_bo  ten_generated_clock_bi_bo  so_delay_da_doi}.
+#   1. set_clock_latency -source tren generated clock GHI DE viec lan truyen
+#      tu master: run 2026-10-11 12:35 capture tai sdram_clk la 2.000 + 0.100
+#      co dinh, khong qua cay clock, trong khi launch di qua cay that.
+#   2. innovus/tcl/prepare_innovus_sdc.tcl (truoc 2026-10-11) khong doi don vi
+#      cho set_max_delay / set_min_delay: rang buoc CDC JTAG <-> SYS con 4000,
+#      doc theo ns.  Het tac dung khi Innovus chay lai voi SDC da doi dung.
+proc tempus_patch_sdc {src dst} {
+    set fp [open $src r]
+    set lines [split [read -nonewline $fp] "\n"]
+    close $fp
+
+    set generated {}
+    foreach line $lines {
+        if {[regexp {^\s*create_generated_clock\s.*-name\s+\{?([^\s\}]+)} $line -> name]} {
+            lappend generated $name
+        }
+    }
+
+    set dropped 0
+    set dropped_clocks {}
+    set scaled 0
+    set out {}
+    foreach line $lines {
+        if {[regexp {^\s*set_clock_latency\s.*-source\s.*\[get_clocks\s+\{?([^\}\]]+)\}?\s*\]} $line -> names]} {
+            set all_generated 1
+            foreach name $names {
+                if {[lsearch -exact $generated $name] < 0} {
+                    set all_generated 0
+                }
+            }
+            if {$all_generated} {
+                incr dropped
+                foreach name $names {
+                    if {[lsearch -exact $dropped_clocks $name] < 0} {
+                        lappend dropped_clocks $name
+                    }
+                }
+                continue
+            }
+        } elseif {[regexp {^(\s*set_(?:max|min)_delay\s+)(\S+)(\s.*)$} $line -> head value tail] &&
+                  [string is double -strict $value] &&
+                  abs($value) >= $::TEMPUS_DELAY_UNIT_BUG_NS} {
+            set line "$head[format %g [expr {$value * 0.001}]]$tail"
+            incr scaled
+        }
+        lappend out $line
+    }
+
+    set fp [open $dst w]
+    puts $fp "# Sinh boi tempus.tcl tu $src - khong sua tay."
+    puts $fp [join $out "\n"]
+    close $fp
+    return [list $dropped $dropped_clocks $scaled]
+}
+
+# Dien ap mot .lib khai bao (nom_voltage / operating_conditions / voltage_map
+# cua VDD), doc tu dau file toi cell dau tien.
+proc tempus_lib_voltage {lib} {
+    set found {}
+    set fp [open $lib r]
+    set count 0
+    while {[gets $fp line] >= 0 && [incr count] <= 20000} {
+        if {[regexp {^\s*cell\s*\(} $line]} {
+            break
+        }
+        if {[regexp {^\s*(?:nom_)?voltage\s*:\s*([0-9.]+)} $line -> volt] ||
+            [regexp {voltage_map\s*\(\s*"?VDD"?\s*,\s*([0-9.]+)} $line -> volt]} {
+            if {[string is double -strict $volt]} {
+                lappend found [format %g $volt]
+            }
+        }
+    }
+    close $fp
+    if {[llength $found] == 0} {
+        return "khong doc duoc"
+    }
+    return "[join [lsort -unique $found] /] V"
+}
+
+# Canh bao khi cac .lib std cell cua cung mot goc khai bao dien ap khac nhau.
+# Run 2026-10-11 12:35: SIMPLE_RVT_FF duoc tinh o 0.7 V giua cac lib FF 0.77 V
+# (33865 instance, 23.9 % thiet ke, sai dien ap o goc hold).  $skip = .lib SRAM,
+# von chi co goc TT va da duoc bu bang derate.
+proc tempus_check_lib_voltages {tag libs skip} {
+    foreach lib $libs {
+        if {[lsearch -exact $skip $lib] < 0} {
+            lappend group([tempus_lib_voltage $lib]) [file tail $lib]
+        }
+    }
+    set major ""
+    foreach volt [array names group] {
+        if {$major eq "" || [llength $group($volt)] > [llength $group($major)]} {
+            set major $volt
+        }
+    }
+    foreach volt [lsort [array names group]] {
+        if {$volt ne $major} {
+            tempus_warn "libset_$tag: [join $group($volt) {, }] khai bao $volt, cac lib con\
+ lai $major - cell cua lib nay bi tinh sai dien ap o view_$tag"
+        }
+    }
+}
+
 set TEMPUS_DIR [file normalize [pwd]]
 set TEMPUS_SUMMARY [file join $TEMPUS_DIR reports tempus_summary.rpt]
 
@@ -199,6 +309,34 @@ if {[catch {
         }
     }
 
+    foreach corner $corners {
+        foreach {tag rc temp libs} $corner break
+        tempus_check_lib_voltages $tag $libs [list $SRAM_LIB $SRAM_TAG_LIB]
+    }
+
+    # SDC dua vao tool: ban va trong logs/ (mac dinh) hoac file goc de doi
+    # chieu (TEMPUS_SDC_PATCH=0).
+    set TEMPUS_SDC_PATCH [tempus_env TEMPUS_SDC_PATCH 1]
+    if {$TEMPUS_SDC_PATCH ne "0" && $TEMPUS_SDC_PATCH ne "1"} {
+        error "TEMPUS_SDC_PATCH phai la 0 hoac 1, dang la '$TEMPUS_SDC_PATCH'"
+    }
+    set TEMPUS_SDC_USED $TEMPUS_SDC
+    set sdc_note "SDC goc cua writeTimingCon, khong va"
+    if {$TEMPUS_SDC_PATCH} {
+        set TEMPUS_SDC_USED [file join $TEMPUS_DIR logs "${TOP}_pnr.tempus.sdc"]
+        foreach {lat_dropped lat_clocks delay_scaled} \
+            [tempus_patch_sdc $TEMPUS_SDC $TEMPUS_SDC_USED] break
+        set sdc_note "logs/[file tail $TEMPUS_SDC_USED]: bo $lat_dropped dong source latency tren\
+ generated clock ([join $lat_clocks {, }]), doi $delay_scaled set_max/min_delay ps -> ns"
+        if {$delay_scaled > 0} {
+            tempus_warn "SDC PnR con $delay_scaled set_max/min_delay chua doi don vi: Innovus da\
+ toi uu CDC JTAG <-> SYS voi 4000 ns - chay lai preflight + Innovus (prepare_innovus_sdc.tcl da sua)"
+        }
+    } else {
+        tempus_warn "TEMPUS_SDC_PATCH=0: SDC goc - CLK_SDRAM_OUT khong lan truyen qua cay\
+ clock va set_max_delay CDC co the con sai don vi"
+    }
+
     # MAC DINH 1 CPU.  Tren may nay Genus (super-thread), Conformal (thread) va
     # IQuantus (8 tien trinh) deu treo khi chay song song; Tempus chua thu.
     set tempus_cpus [tempus_env TEMPUS_CPUS 1]
@@ -220,7 +358,7 @@ if {[catch {
     puts $fp "if {\[catch {set_library_unit -time 1ns -cap 1pf}\]} {"
     puts $fp "    setLibraryUnit -time 1ns -cap 1pf"
     puts $fp "}"
-    puts $fp "create_constraint_mode -name mode_func -sdc_files [list [list $TEMPUS_SDC]]"
+    puts $fp "create_constraint_mode -name mode_func -sdc_files [list [list $TEMPUS_SDC_USED]]"
     foreach corner $corners {
         foreach {tag rc temp libs} $corner break
         puts $fp "create_library_set -name libset_$tag -timing [list $libs]"
@@ -239,6 +377,12 @@ if {[catch {
     # KHONG dung -ignore_undefined_cell cua mau Mul32: netlist _pnr.v khong co
     # cell vat ly, cell nao thieu .lib la loi that.
     set_top_module $TOP
+    # Innovus chay 'setDesignMode -process 7' (init_common.tcl).  Thieu dong nay
+    # Tempus tinh delay / SI voi mac dinh 65nm (run 2026-10-11 12:35).  Dat
+    # truoc cac lenh set_*_mode ben duoi de chung khong bi mac dinh cua node de.
+    if {[catch {set_design_mode -process 7} mode_err]} {
+        tempus_warn "set_design_mode -process 7: $mode_err - van tinh o mac dinh 65nm"
+    }
     foreach corner $corners {
         foreach {tag rc temp libs} $corner break
         read_spef -rc_corner $rc [format $spef_fmt $rc]
@@ -360,6 +504,7 @@ if {[catch {
     lappend lines "Tempus $TOP: SPEF $TEMPUS_SPEF ([file tail [format $spef_fmt rc_*]]), OCV + CPPR,\
  SI [expr {$TEMPUS_SI ? "bat" : "tat"}], $tempus_cpus CPU"
     lappend lines "  update_timing + bao cao [expr {[clock seconds] - $tempus_t0}] s; don vi 1ns / 1pf"
+    lappend lines "  $sdc_note"
     lappend lines "  derate SRAM: $sram_count macro, dc_ss late x$SRAM_DERATE_SS, dc_ff early x$SRAM_DERATE_FF;\
  OCV chung late x$ocv_late / early x$ocv_early"
     foreach line $summary {

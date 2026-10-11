@@ -185,6 +185,12 @@ proc innovus_sdc_normalize_command {cmd time_scale cap_scale {max_transition_ns 
                 set cmd [innovus_sdc_replace_first_number $cmd $max_transition_ns]
             }
         }
+        set_max_delay -
+        set_min_delay {
+            # The delay value is the first bare number.  Without this arm the
+            # JTAG <-> SYS/DBG bound stayed 4000 (ps) and was read as 4000 ns.
+            set cmd [innovus_sdc_scale_first_number $cmd $time_scale]
+        }
         set_load {
             set before $cmd
             set cmd [innovus_sdc_scale_option_numbers $cmd {-pin_load -wire_load} $cap_scale]
