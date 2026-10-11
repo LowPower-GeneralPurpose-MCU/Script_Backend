@@ -152,8 +152,13 @@ if {[catch {
     # -technology_layer_map "LEF" "QRC" ...): run 16:43 dung dinh dang 3 cot
     # "metal M1 M1" va bi IMPEXT-1438 "Only CCL style syntax ... is supported",
     # Innovus quay ve ghep tu dong.  File map KHONG co dong chu thich nao vi
-    # chua biet CCL nhan ky tu chu thich nao.  Pad va V9 khong co lop tuong
-    # ung trong QRC tech file nen khong nam trong map.
+    # chua biet CCL nhan ky tu chu thich nao.
+    # Run 17:01 (CCL, ten trong dau nhay, khong co Pad/V9): cu phap duoc nhan
+    # nhung IMPEXT-1235 "'\"M1\"' not defined in LEF file" (dau nhay bi coi la
+    # mot phan cua ten), IMPEXT-1239 "No leftech map for metal LEF layer 'Pad'"
+    # va IMPEXT-1240 cho V9: MOI lop LEF deu phai co trong map.  QRC tech file
+    # khong co Pad, nen Pad ghep vao LISD - lop QRC duy nhat con trong.  Vo
+    # hai vi sau deleteMetalFill -layer Pad khong con hinh nao tren Pad.
     set QUANTUS_LAYER_MAP [file normalize ./tcl/asap7_lef_to_qrc_layers.map]
     if {![file isfile $QUANTUS_LAYER_MAP]} {
         error "Khong co file ghep lop $QUANTUS_LAYER_MAP"
