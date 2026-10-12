@@ -181,10 +181,19 @@ proc eco_summary_verdict {path} {
     return [string trim $line]
 }
 
-# Bao cao <prefix>.tran cua timeDesign -> {{net slack pin cellport limit loads} ...}
+# Bao cao <prefix>.tran cua timeDesign ->
+#   {{net slack pin cellport limit loads drvlim} ...}
 # cua vi pham THAT (remark R), xep tu xau nhat.  slack/pin/cellport/limit la cua
-# chan xau nhat tren net; loads la moi chan vi pham KHONG phai dau ra cua cell
-# (dung cho ecoAddRepeater -term).  Khac soc_drv_violators o hai truong cuoi.
+# chan xau nhat tren net; loads la moi chan vi pham KHONG phai dau ra cua cell,
+# xau nhat truoc (dung cho ecoAddRepeater -term); drvlim = 1 khi chinh chan
+# DAU RA cua driver cung nam trong danh sach vi pham.
+#
+# drvlim la thu phan biet hai loai net (run fillfix 2026-10-12, 511 net):
+#   drvlim 1 (452 net) driver yeu: slew da xau ngay tai chan ra cua no.  Chen
+#            mot buffer manh hon noi tiep la het - khong net nao quay lai.
+#   drvlim 0 (59 net)  driver du manh (vd BUFx10 keo wd[*] cua 11 SRAM), slew
+#            chi xau o cuoi day.  Chen BUFx4 noi tiep = thay driver manh bang
+#            driver yeu hon: mem_wdata_19 tu +6 ps thanh -94 ps.
 #
 # Mot dong chan:
 #   <chan>  <max>r/<max>f  <tran>r/<tran>f  <slack>r/<slack>f  [cell/port]  R
@@ -194,6 +203,7 @@ proc eco_tran_report {text} {
     set order {}
     array set worst {}
     array set loads {}
+    array set drvlim {}
     foreach line [split $text \n] {
         if {[string index $line 0] eq "#" || [string trim $line] eq ""} {
             continue
@@ -235,19 +245,27 @@ proc eco_tran_report {text} {
         if {![info exists worst($net)]} {
             lappend order $net
             set loads($net) {}
+            set drvlim($net) 0
         }
         if {![info exists worst($net)] || $slack < [lindex $worst($net) 0]} {
             set worst($net) [list $slack $pin $cellport $limit]
         }
-        # Chan tai = chan cua instance ma khong phai dau ra.  Ten dau ra cua
-        # std cell ASAP7: Y, Q, QN, CON, SN, GCLK.
-        if {$cellport ne "" && ![regexp {/(Y|Q|QN|CON|SN|GCLK)$} $cellport]} {
-            lappend loads($net) $pin
+        # Ten dau ra cua std cell ASAP7: Y, Q, QN, CON, SN, GCLK; cua SRAM:
+        # dataout[N].  Chan con lai cua instance la chan tai.  Port cua top
+        # (khong co cot cell/port) khong tinh vao ben nao.
+        if {[regexp {/(Y|Q|QN|CON|SN|GCLK|dataout\[[0-9]+\])$} $cellport]} {
+            set drvlim($net) 1
+        } elseif {$cellport ne ""} {
+            lappend loads($net) [list $slack $pin]
         }
     }
     set out {}
     foreach net $order {
-        lappend out [concat [list $net] $worst($net) [list $loads($net)]]
+        set pins {}
+        foreach item [lsort -real -index 0 $loads($net)] {
+            lappend pins [lindex $item 1]
+        }
+        lappend out [concat [list $net] $worst($net) [list $pins $drvlim($net)]]
     }
     return [lsort -real -index 1 $out]
 }
@@ -387,45 +405,76 @@ proc eco_delete_metal_fill {} {
     }
 }
 
-# Chen mot buffer vao tung net.  items: dong cua eco_tran_report.  Tra ve
-# {{net dang_lenh ghi_chu} ...}; dang_lenh "" = khong chen duoc.
+# Sua tung net bang ecoAddRepeater.
+#   items : {{net slack_that pin cellport limit loads drvlim} ...}
+#   cell / strong : buffer thuong / buffer manh
+#   dist  : -relativeDistToSink cho net MOT tai (1 = sat driver)
+#   viol_below : slack_that < gia tri nay = vi pham that, con lai la net chi
+#                nam trong khoang du
+# Tra ve {{net cach ghi_chu} ...}; cach:
+#   dist  net mot tai: buffer doc theo day, sat driver
+#   net   net nhieu tai, driver yeu: buffer noi tiep, keo moi tai
+#   split net nhieu tai, driver du manh, vi pham that: buffer manh keo NUA so
+#         tai xau nhat (-term), driver cu giu nua con lai
+#   skip  net nhieu tai, driver du manh, chi nam trong khoang du: KHONG dung
+#   ""    khong chen duoc
 #
 # Vi sao tu chen ma khong goi lai optDesign -drv: run 2026-10-12 optDesign bo
 # lai 126 net "can't be fixed" (84 "instance couldn't be resized", 42 "no move
-# is found") va cac net vuot gioi han sau metal fill nam trong so do - 21 net
-# la DFFASRHQNx1 (chi co ban x1) keo mot tai qua day dai.  Driver yeu thi
-# buffer phai nam SAT DRIVER: -relativeDistToSink gan 1.  Dang do chua chay thu
-# tren Innovus 23.14, nen bi tu choi thi lui ve 'ecoAddRepeater -net' roi
-# '-term' (dang -term + setEcoMode batch la dang soc_fix_cg_hold dang dung).
-proc eco_buffer_nets {items cell dist} {
+# is found") va cac net vuot gioi han sau metal fill nam trong so do.
+#
+# Luat duoi day la tu run fillfix 2026-10-12 21:13 (400 net, Innovus 23.14):
+#   - -relativeDistToSink chi nhan net MOT tai (IMPOPT-3135): 114 net, khong
+#     net nao quay lai.
+#   - ecoAddRepeater -net tran chen buffer keo MOI tai.  Voi driver yeu
+#     (drvlim 1) khong net nao quay lai.  Voi driver manh (drvlim 0) 5 / 20 net
+#     hong: BUFx10 keo wd[19] cua 11 SRAM bi thay bang BUFx4, +6 ps -> -94 ps,
+#     va vong sau chen them BUFx4 nua vao dung cho do nen khong bao gio het.
+proc eco_buffer_nets {items cell strong dist viol_below} {
     set results {}
     setEcoMode -batchMode true -refinePlace false -updateTiming false
     set failed [catch {
         foreach item $items {
-            lassign $item net slack pin cellport limit loads
-            # Ten tran, khong boc [list ...]: dang 'get_pins -quiet <ten co [N]>'
-            # cua eco_drv.tcl da tim du 220 chan cua Tempus (run 2026-10-12).
+            lassign $item net real pin cellport limit loads drvlim
+            # Ten tran, khong boc [list ...]: get_pins -quiet <ten co [N]> cua
+            # eco_drv.tcl da tim du 220 chan cua Tempus (run 2026-10-12).
             set obj [get_nets -quiet $net]
             if {[sizeof_collection $obj] != 1} {
                 lappend results [list $net "" "khong tim thay net"]
                 continue
             }
             set name [get_object_name $obj]
-            set forms [list \
-                dist [list ecoAddRepeater -net $name -cell $cell -relativeDistToSink $dist] \
-                net  [list ecoAddRepeater -net $name -cell $cell]]
-            if {[llength $loads] > 0} {
-                lappend forms term [list ecoAddRepeater -term $loads -cell $cell]
-            }
-            set used ""
             set note ""
-            foreach {form cmd} $forms {
-                if {![catch {{*}$cmd} note]} {
-                    set used $form
-                    break
-                }
+            if {![catch {ecoAddRepeater -net $name -cell $cell \
+                    -relativeDistToSink $dist} note]} {
+                lappend results [list $net dist ""]
+                continue
             }
-            lappend results [list $net $used [string map [list \n " "] $note]]
+            # Tu day la net nhieu tai.
+            if {$drvlim} {
+                if {![catch {ecoAddRepeater -net $name -cell $cell} note]} {
+                    lappend results [list $net net ""]
+                } else {
+                    lappend results [list $net "" [string map [list \n " "] $note]]
+                }
+                continue
+            }
+            if {$real >= $viol_below} {
+                lappend results [list $net skip ""]
+                continue
+            }
+            if {[llength $loads] == 0} {
+                lappend results [list $net "" "driver manh, khong co chan tai nao trong bao cao"]
+                continue
+            }
+            set half [lrange $loads 0 [expr {([llength $loads] + 1) / 2 - 1}]]
+            if {![catch {ecoAddRepeater -term $half -cell $strong} note]} {
+                lappend results [list $net split "[llength $half] / [llength $loads] chan tai"]
+            } elseif {![catch {ecoAddRepeater -term [list [lindex $loads 0]] -cell $strong} note]} {
+                lappend results [list $net split "1 / [llength $loads] chan tai"]
+            } else {
+                lappend results [list $net "" [string map [list \n " "] $note]]
+            }
         }
     } msg opts]
     setEcoMode -batchMode false -refinePlace true -updateTiming true

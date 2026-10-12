@@ -307,16 +307,26 @@ metal fill**, còn cổng timing của KHỐI 15/16 đo **sau** fill. Run 2026-1
 −25 ps) — tăng `ECO_DRV_MARGIN` từ 0.05 lên 0.25 không đổi gì, vì đó là những
 net `optDesign` ghi "can't be fixed" (driver chỉ có bản x1, hold buffer
 `HB1xp67`). `eco_fillfix.tcl` đổ fill thử trên database chưa có filler, đo, chèn
-một buffer sát driver cho từng net vượt giới hạn (`ecoAddRepeater`), route lại,
-rồi đổ fill và đo lại, tối đa `ECO_FILL_ROUNDS` vòng; checkpoint nó lưu không
-chứa fill. Từng net và cách xử lý nằm trong `eco/reports/fillfix_nets.rpt`.
+buffer cho từng net vượt giới hạn (`ecoAddRepeater`), route lại, rồi đổ fill và
+đo lại, tối đa `ECO_FILL_ROUNDS` vòng; checkpoint nó lưu không chứa fill. Từng
+net và cách xử lý nằm trong `eco/reports/fillfix_nets.rpt`.
+
+Cách chèn tuỳ loại net (luật rút từ run 2026-10-12 21:13, xem `eco_buffer_nets`):
+
+| Loại net | Cách xử lý |
+|---|---|
+| một tải | buffer dọc theo dây, sát driver (`-relativeDistToSink`) |
+| nhiều tải, chính chân ra của driver cũng vi phạm (driver yếu) | buffer nối tiếp, kéo mọi tải |
+| nhiều tải, driver không vi phạm (driver đã mạnh), vi phạm thật | buffer mạnh kéo nửa số tải xấu nhất (`-term`) |
+| nhiều tải, driver không vi phạm, chỉ nằm trong khoảng dư | **không đụng** — chèn `BUFx4` sau `BUFx10` đã biến +6 ps thành −94 ps |
 
 | Biến `make` | Mặc định | Ý nghĩa |
 |---|---|---|
 | `ECO_FILL_GUARD` | `0.010` | ns; khi đo, siết giới hạn `max_transition` theo clock thêm chừng này để sửa cả net sát giới hạn (`0` = đo đúng giới hạn thật) |
 | `ECO_FILL_ROUNDS` | `3` | số vòng sửa tối đa |
 | `ECO_FILL_BUF` | `BUFx4_ASAP7_75t_R` | buffer được chèn |
-| `ECO_FILL_DIST` | `0.9` | `ecoAddRepeater -relativeDistToSink` (1 = sát driver) |
+| `ECO_FILL_BUF_STRONG` | `BUFx10_ASAP7_75t_R` | buffer cho net mà driver vốn đã mạnh (tách tải) |
+| `ECO_FILL_DIST` | `0.9` | `ecoAddRepeater -relativeDistToSink` (1 = sát driver), chỉ cho net một tải |
 | `ECO_FINISH_IN` | — | `make finish ECO_FINISH_IN=./saved/<tên>.enc.dat`: bỏ qua `fillfix` có chủ đích |
 
 `eco_drv.tcl` từ chối chạy khi checkpoint còn `.lib` sai điện áp: `saveDesign`
