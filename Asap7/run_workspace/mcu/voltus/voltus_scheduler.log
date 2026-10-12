@@ -1,0 +1,116 @@
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*  Voltus Scheduler (RC extraction scheduler)
+*  Copyright 2013 Cadence Design Systems, Inc.
+*  Version: v23.15-s090_1 (07/17/2025 20:53:35)
+*  Excecutable: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_scheduler
+*  Command Line: -nt 1 -usecellid -session_file ./work/sfe.session -prev_session_file ./work/sfe.session.prev -cmd ./work/voltus_scheduler.cmd 
+*  Run by user1 on Sun Oct 11 13:26:38 2026
+*  Hostname: user1-EliteMini
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+Started Voltus Scheduler at 13:26:37 10/11/2026
+
+Extraction option setup as:
+setenv gray_data NONE
+setenv enable_cluster_overhang_via false
+setenv enable_dfm_mask_conflict_shape false
+Begin Preparing Data for Parasitic Extraction
+ * Begin Load cell library
+ * Ended Load cell library: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=25.92MB/unknown/unknown) TimeFromStart: 3.02s Mem: 25.92MB
+
+ * Begin Pre-parse DEF and build hierachy
+ * Ended Pre-parse DEF and build hierachy: (cpu=0:00:05, real=0:00:06, mem(process/total/peak)=417.26MB/unknown/unknown) TimeFromStart: 10.02s Mem: 417.26MB
+
+ * Begin Flatten, partition and dump design
+ * Begin Create cell name DB
+ * Ended Create cell name DB: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=1503.60MB/unknown/unknown) TimeFromStart: 11.92s Mem: 1503.60MB
+
+ * Begin Write cell name DB
+ * Ended Write cell name DB: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1503.60MB/unknown/unknown) TimeFromStart: 12.14s Mem: 1503.60MB
+
+ * Ended Flatten, partition and dump design: (cpu=0:00:12, real=0:00:12, mem(process/total/peak)=1942.81MB/unknown/unknown) TimeFromStart: 22.72s Mem: 1942.81MB
+
+Extracting following DFM effects:
+MetalFill        : ON
+WEE Effects      : n/a
+Erosion Effects  : n/a
+T/B Enlargements : ON
+R(w) Effects     : ON
+R(w,s) Effects   : n/a
+R(sw,st) Effects : n/a
+TC(w) Effects    : n/a
+Some effects indicate n/a because of non-availability of relevant input data (or) requested to be off.
+Ended Preparing Data for Parasitic Extraction: (cpu=0:00:20, real=0:00:19, mem(process/total/peak)=78.23MB/unknown/unknown)
+
+Finished Voltus Scheduler at 13:26:59 10/11/2026 (cpu=0:00:21, real=0:00:22, peak mem=0.00MB)
+Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)
+
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+*  Voltus Scheduler (RC extraction scheduler)
+*  Copyright 2013 Cadence Design Systems, Inc.
+*  Version: v23.15-s090_1 (07/17/2025 20:53:35)
+*  Excecutable: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_scheduler
+*  Command Line: -skip_prep -nt 1 -usecellid -session_file ./work/sfe.session -prev_session_file ./work/sfe.session.prev -cmd ./work/voltus_scheduler.cmd -zx /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor 
+*  Run by user1 on Sun Oct 11 13:26:59 2026
+*  Hostname: user1-EliteMini
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+Started Voltus Scheduler at 13:26:58 10/11/2026
+
+Extraction option setup as:
+setenv gray_data NONE
+setenv enable_cluster_overhang_via false
+setenv enable_dfm_mask_conflict_shape false
+Begin Parasitic Extraction
+Extracting Progress:
+    0% at 13:26:59 10/11/2026
+Extraction command for partition 21: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 21 -partition_bbox 0 3269847 5656320 3425554 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 20: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 20 -partition_bbox 0 3114140 5656320 3269847 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 19: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 19 -partition_bbox 0 2958433 5656320 3114140 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 18: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 18 -partition_bbox 0 2802726 5656320 2958433 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 6: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 6 -partition_bbox 0 934242 5656320 1089949 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 17: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 17 -partition_bbox 0 2647019 5656320 2802726 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 22: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 22 -partition_bbox 0 3425554 5656320 2147483647 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 7: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 7 -partition_bbox 0 1089949 5656320 1245656 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 10: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 10 -partition_bbox 0 1557070 5656320 1712777 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 16: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 16 -partition_bbox 0 2491312 5656320 2647019 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 8: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 8 -partition_bbox 0 1245656 5656320 1401363 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 9: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 9 -partition_bbox 0 1401363 5656320 1557070 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 14: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 14 -partition_bbox 0 2179898 5656320 2335605 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 15: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 15 -partition_bbox 0 2335605 5656320 2491312 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 13: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 13 -partition_bbox 0 2024191 5656320 2179898 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 12: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 12 -partition_bbox 0 1868484 5656320 2024191 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 11: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 11 -partition_bbox 0 1712777 5656320 1868484 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 5: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 5 -partition_bbox 0 778535 5656320 934242 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 4: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 4 -partition_bbox 0 622828 5656320 778535 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 2: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 2 -partition_bbox 0 311414 5656320 467121 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 1: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 1 -partition_bbox 0 155707 5656320 311414 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 3: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 3 -partition_bbox 0 467121 5656320 622828 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+Extraction command for partition 0: /Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_extractor -vstorm -partition 0 -partition_bbox 0 -2147483648 5656320 155707 -sfedb ./work/SFEDB -cachedir /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497/QITJzf -cmd ./work/voltus_extractor.cmd
+    4% at 13:27:16 10/11/2026
+    8% at 13:27:40 10/11/2026
+   13% at 13:27:57 10/11/2026
+   17% at 13:28:13 10/11/2026
+   21% at 13:28:30 10/11/2026
+   26% at 13:28:47 10/11/2026
+   30% at 13:29:04 10/11/2026
+   34% at 13:29:20 10/11/2026
+   39% at 13:29:37 10/11/2026
+   43% at 13:29:54 10/11/2026
+   47% at 13:30:10 10/11/2026
+   52% at 13:30:27 10/11/2026
+   56% at 13:30:44 10/11/2026
+   60% at 13:31:01 10/11/2026
+   65% at 13:31:17 10/11/2026
+   69% at 13:31:34 10/11/2026
+   73% at 13:31:51 10/11/2026
+   78% at 13:31:56 10/11/2026
+   82% at 13:32:02 10/11/2026
+   86% at 13:32:07 10/11/2026
+   91% at 13:32:17 10/11/2026
+   95% at 13:32:23 10/11/2026
+  100% at 13:32:29 10/11/2026
+Ended Parasitic Extraction: (cpu=0:03:18, real=0:05:29, mem(process/total/peak)=18.47MB/unknown/unknown)
+
+Finished Voltus Scheduler at 13:32:29 10/11/2026 (cpu=0:03:18, real=0:05:31, peak mem=0.00MB)
+Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)

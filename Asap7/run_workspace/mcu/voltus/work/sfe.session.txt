@@ -1,0 +1,32 @@
+run_status {
+  sfe_preparation: SUCCESS
+  sfe_zx: SUCCESS
+}
+extraction_config {
+  zx_config {
+    zx_multinet_extraction: true
+    cluster_via_size: 4
+    cluster_via1_maximum: true
+    enable_binary_inst_pgdb: true
+    pgdb_name: "VSS"
+    load_optimized_views: true
+    extr_temperature: "25"
+    eqpotential_region_width: "0"
+    eqpotential_region_length: "0"
+    gray_data: "NONE"
+  }
+  layout_file_md5: "5417916540204168170902351712342318247182137"
+  extracted_nets_md5: "752335241204108173212245882502435119461"
+  library_name: "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/era_work/incremental_output0/pgv/techonly.cl"
+  use_cellid: true
+  hierachy_char: "/"
+  enable_metal_fill_effects: true
+  tech_file_md5: "ccbf49262f0cc97103ed84dfdfaf68ed"
+  extraction_mode: "signoff"
+  inst_id_type_size: 8
+  use_gds_label: "NONE"
+  switch_trace: true
+  enable_def_hier_report: true
+  via_rule_check: true
+  treat_unconnected_power_as_signal: true
+}

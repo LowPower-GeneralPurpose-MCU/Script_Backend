@@ -1,0 +1,53 @@
+
+Begin Preparing Data for Parasitic Extraction
+...
+Ended Preparing Data for Parasitic Extraction: (cpu=0:00:09, real=0:00:10, mem(process/total/peak)=326.42MB/unknown/unknown)
+
+Begin Parasitic Extraction
+
+Nets to Extract:
+VSS
+
+** INFO:  (VOLTUS_EXTR-1054): Extracting following DFM effects:
+ MetalFill        : floating 
+ WEE Effects      : n/a 
+ Erosion Effects  : n/a 
+ T/B Enlargements : ON 
+ R(w) Effects     : ON 
+ R(w,s) Effects   : n/a 
+ R(sw,st) Effects : n/a 
+ TC(w) Effects    : n/a 
+Some effects indicate n/a because of non-availability of relevant input
+data (or) requested to be off.
+
+   0% at 13:31:17 10/11/2026 
+
+  10% at 13:31:17 10/11/2026
+
+  20% at 13:31:17 10/11/2026
+
+  31% at 13:31:17 10/11/2026
+
+  41% at 13:31:17 10/11/2026
+
+  52% at 13:31:17 10/11/2026
+
+  62% at 13:31:17 10/11/2026
+
+  72% at 13:31:17 10/11/2026
+
+  83% at 13:31:17 10/11/2026
+
+  93% at 13:31:17 10/11/2026
+
+ 100% at 13:31:17 10/11/2026 
+
+Ended Parasitic Extraction: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=328.73MB/unknown/unknown)
+
+Hostname user1-EliteMini
+
+Wall clock 16.571265
+
+CPU time 10.080091
+
+Peak memory (process): 415739904

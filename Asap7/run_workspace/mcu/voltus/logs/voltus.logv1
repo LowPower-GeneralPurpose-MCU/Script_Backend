@@ -773,3 +773,338 @@ environment variable TMPDIR is '/tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-
 [10/11 13:19:17     69s] End AAE Lib Interpolated Model. (MEM=3673.832031 CPU Time=0:00:00.0, Real Time=0:00:00.0)
 [10/11 13:19:17     69s] Opening parasitic data file '/tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/top_soc_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_Hfnmw5.rcdb.d/top_soc.rcdb.d' for reading (mem: 4788.379M)
 [10/11 13:19:17     69s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 4799.6M)
+[10/11 13:19:51    103s] End Timing Check Calculation. (CPU Time=0:00:01.5, Real Time=0:00:01.0)
+[10/11 13:19:51    103s] End delay calculation. (MEM=3709.6 CPU=0:00:32.6 REAL=0:00:33.0)
+[10/11 13:19:51    103s] Begin loading slews from CTE ...
+[10/11 13:19:51    103s] Loading slews from CTE completed...
+[10/11 13:19:51    103s] End delay calculation (fullDC). (MEM=3690.14 CPU=0:00:34.2 REAL=0:00:34.0)
+[10/11 13:19:52    103s] *** CDM Built up (cpu=0:00:40.1  real=0:00:40.0  mem= 5000.0M) ***
+[10/11 13:19:53    105s] 
+[10/11 13:19:53    105s] Begin Power Analysis
+[10/11 13:19:53    105s] 
+[10/11 13:19:53    105s]              0V	    VSS
+[10/11 13:19:53    105s]            0.7V	    VDD
+[10/11 13:19:54    105s] Begin Processing Timing Library for Power Calculation
+[10/11 13:19:54    105s] 
+[10/11 13:19:54    105s] Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3703.85MB/unknown/unknown)
+[10/11 13:19:54    105s] 
+[10/11 13:19:54    105s] 
+[10/11 13:19:54    105s] 
+[10/11 13:19:54    105s] Begin Processing Power Net/Grid for Power Calculation
+[10/11 13:19:54    105s] 
+[10/11 13:19:54    105s] Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3703.85MB/unknown/unknown)
+[10/11 13:19:54    105s] 
+[10/11 13:19:54    105s] Begin Processing Timing Window Data for Power Calculation
+[10/11 13:19:54    105s] 
+[10/11 13:19:54    105s] CLK_UART1(250MHz) CLK_UART(250MHz) CLK_TIM1(250MHz) CLK_TIM0(250MHz) CLK_SYS(250MHz) CLK_SPI(250MHz) CLK_SDRAM_OUT(250MHz) CLK_PWM(250MHz) CLK_I2C(250MHz) CLK_GPIO(250MHz) CLK_DBG(250MHz) CLK_CPU(250MHz) CLK_CORDIC(250MHz) CLK_ASCON(250MHz) CLK_TCK(10MHz) Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=3721.93MB/unknown/unknown)
+[10/11 13:19:55    106s] 
+[10/11 13:19:55    106s] Begin Processing User Attributes
+[10/11 13:19:55    106s] 
+[10/11 13:19:55    106s] Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3721.93MB/unknown/unknown)
+[10/11 13:19:55    106s] 
+[10/11 13:19:55    106s] Begin Processing Signal Activity
+[10/11 13:19:55    106s] 
+[10/11 13:20:00    112s] Ended Processing Signal Activity: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=3751.24MB/unknown/unknown)
+[10/11 13:20:00    112s] 
+[10/11 13:20:00    112s] Begin Power Computation
+[10/11 13:20:00    112s] 
+[10/11 13:20:00    112s]       ----------------------------------------------------------
+[10/11 13:20:00    112s]       # of cell(s) missing both power/leakage table: 0
+[10/11 13:20:00    112s]       # of cell(s) missing power table: 2
+[10/11 13:20:00    112s]       # of cell(s) missing leakage table: 0
+[10/11 13:20:00    112s]       ----------------------------------------------------------
+[10/11 13:20:00    112s] CellName                                  Missing Table(s)
+[10/11 13:20:00    112s] TIEHIx1_ASAP7_75t_R                       internal power, 
+[10/11 13:20:00    112s] TIELOx1_ASAP7_75t_R                       internal power, 
+[10/11 13:20:00    112s] 
+[10/11 13:20:00    112s] 
+[10/11 13:20:16    127s]       # of MSMV cell(s) missing power_level: 0
+[10/11 13:20:16    127s] Ended Power Computation: (cpu=0:00:15, real=0:00:15, mem(process/total/peak)=3766.91MB/unknown/unknown)
+[10/11 13:20:16    127s] 
+[10/11 13:20:16    127s] Begin Processing User Attributes
+[10/11 13:20:16    127s] 
+[10/11 13:20:16    127s] Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=3766.91MB/unknown/unknown)
+[10/11 13:20:16    127s] 
+[10/11 13:20:16    127s] Ended Power Analysis: (cpu=0:00:21, real=0:00:22, mem(process/total/peak)=3766.91MB/unknown/unknown)
+[10/11 13:20:16    127s] 
+[10/11 13:20:16    128s] *
+
+
+
+[10/11 13:20:16    128s] Total Power
+[10/11 13:20:16    128s] -----------------------------------------------------------------------------------------
+[10/11 13:20:16    128s] Total Internal Power:       85.78037849 	   97.2933%
+[10/11 13:20:16    128s] Total Switching Power:       2.34694520 	    2.6619%
+[10/11 13:20:16    128s] Total Leakage Power:         0.03946085 	    0.0448%
+[10/11 13:20:16    128s] Total Power:                88.16678454
+[10/11 13:20:16    128s] -----------------------------------------------------------------------------------------
+[10/11 13:20:21    132s] <CMD> set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -era_lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap
+[10/11 13:20:21    132s] **WARN: (VOLTUS-1007):	The distributed processing (DP) mode will be made obsolete in a future release and it is recommended to use the Extensively Parallel (XP) mode. The obsolete DP mode still works in this release, but to avoid this warning and to ensure compatibility with future releases, update your scripts to use the set_rail_analysis_mode -enable_xp true..
+[10/11 13:20:21    132s] <CMD> set_pg_nets -net VDD -voltage 0.7 -threshold 0.65
+[10/11 13:20:21    132s] <CMD> set_pg_nets -net VSS -voltage 0.0 -threshold 0.05
+[10/11 13:20:21    132s] <CMD> set_power_pads -net VDD -format defpin
+[10/11 13:20:21    132s] <CMD> set_power_pads -net VSS -format defpin
+[10/11 13:20:21    132s] <CMD> set_power_data -reset
+[10/11 13:20:21    132s] <CMD> set_power_data -format current -scale 1 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/power/power.db
+[10/11 13:20:21    132s] <CMD> analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD VDD
+[10/11 13:20:27    133s] Started PGV Library Generator at 13:20:21 10/11/2026
+[10/11 13:20:27    133s] 
+[10/11 13:20:27    133s] ** INFO:  (VOLTUS_LGEN-3599): Library generation settings: 
+[10/11 13:20:27    133s] 	Mode: TECH 
+[10/11 13:20:27    133s] 	Capacitance: area_cap 
+[10/11 13:20:27    133s] 	Current Distribution: estimation 
+[10/11 13:20:27    133s] 	Grid Port Definition: LEF 
+[10/11 13:20:27    133s] 	Grid Current Sinks: LEF pin 
+[10/11 13:20:27    133s] 	Power Gate: no
+[10/11 13:20:27    133s] 
+[10/11 13:20:27    133s] ** INFO:  (VOLTUS_LGEN-3598): Processing LEF files: 
+[10/11 13:20:27    133s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef
+[10/11 13:20:27    133s] /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef
+[10/11 13:20:27    133s] /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef
+[10/11 13:20:27    133s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef
+[10/11 13:20:27    133s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef
+[10/11 13:20:27    133s] 
+[10/11 13:20:27    133s] ** INFO:  (VOLTUS_LGEN-4112): Kept 9593 obstruction geometries of LEF macro
+[10/11 13:20:27    133s] srambank_256x4x32_6t122 which appear to be blockages. Blockages are
+[10/11 13:20:27    133s] obstructions with minimum spacing of zero, or the color mask is not set.
+[10/11 13:20:27    133s] 
+[10/11 13:20:27    133s] ** INFO:  (VOLTUS_LGEN-4112): Kept 3556 obstruction geometries of LEF macro
+[10/11 13:20:27    133s] srambank_128x4x20_6t122 which appear to be blockages. Blockages are
+[10/11 13:20:27    133s] obstructions with minimum spacing of zero, or the color mask is not set.
+[10/11 13:20:27    133s] 
+[10/11 13:20:27    133s] ** INFO:  (VOLTUS_LGEN-3606): 
+[10/11 13:20:27    133s] Power Grid View Generation Statistics:
+[10/11 13:20:27    133s]         # Total number of cells: 426 
+[10/11 13:20:27    133s]         # TECH view created: 426 (100%)
+[10/11 13:20:27    133s] Finished PGV Library Generator at 13:20:27 10/11/2026 (cpu=0:00:01, real=0:00:06)
+[10/11 13:20:27    139s] 
+[10/11 13:20:27    139s] Begin ERA Data Preparation
+[10/11 13:20:32    144s] All Virtual Vias and Virtual followpins have been skipped. No incremental def would be generated.
+[10/11 13:20:32    144s] Ended ERA Data Preparation: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=4689.82MB/8034.17MB/4689.82MB)
+[10/11 13:20:32    144s] 
+[10/11 13:20:33    145s] 
+[10/11 13:20:33    145s] 
+[10/11 13:20:33    145s] Started Rail Analysis at 13:20:32 10/11/2026
+[10/11 13:20:33    145s] 
+[10/11 13:20:34    145s] 
+[10/11 13:20:34    145s] Multi-CPU Configuration:
+[10/11 13:20:34    145s] 	#CPU: 1
+[10/11 13:20:34    145s] 	Mode: local
+[10/11 13:20:34    145s] 	Host: user1-EliteMini
+[10/11 13:20:34    145s] 
+[10/11 13:20:34    145s] Analyze Rail Settings:
+[10/11 13:20:34    145s] 	Temp directory: /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr
+[10/11 13:20:34    145s] 	Output directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD
+[10/11 13:20:34    145s] 	Run directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1
+[10/11 13:20:34    145s] 
+[10/11 13:20:34    145s] 
+[10/11 13:20:34    145s] 
+[10/11 13:20:34    145s] Running R  extraction for /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def ...
+[10/11 13:20:34    145s] 
+[10/11 13:20:34    145s] Extraction option setup as:
+[10/11 13:20:34    145s] setenv gray_data NONE
+[10/11 13:20:34    145s] setenv enable_cluster_overhang_via false
+[10/11 13:20:34    145s] setenv enable_dfm_mask_conflict_shape false
+[10/11 13:20:35    145s] Begin Preparing Data for Parasitic Extraction
+[10/11 13:20:55    145s] Extracting following DFM effects:
+[10/11 13:20:55    145s] MetalFill        : ON
+[10/11 13:20:55    145s] WEE Effects      : n/a
+[10/11 13:20:55    145s] Erosion Effects  : n/a
+[10/11 13:20:55    145s] T/B Enlargements : ON
+[10/11 13:20:55    145s] R(w) Effects     : ON
+[10/11 13:20:55    145s] R(w,s) Effects   : n/a
+[10/11 13:20:55    145s] R(sw,st) Effects : n/a
+[10/11 13:20:55    145s] TC(w) Effects    : n/a
+[10/11 13:20:55    145s] Some effects indicate n/a because of non-availability of relevant input data (or) requested to be off.
+[10/11 13:20:55    145s] Ended Preparing Data for Parasitic Extraction: (cpu=0:00:20, real=0:00:20, mem(process/total/peak)=76.39MB/unknown/unknown)
+[10/11 13:20:55    145s] 
+[10/11 13:20:56    145s] Extraction option setup as:
+[10/11 13:20:56    145s] setenv gray_data NONE
+[10/11 13:20:56    145s] setenv enable_cluster_overhang_via false
+[10/11 13:20:56    145s] setenv enable_dfm_mask_conflict_shape false
+[10/11 13:20:56    145s] Begin Parasitic Extraction
+[10/11 13:20:56    145s] Extracting Progress:
+[10/11 13:20:56    145s]     0% at 13:20:56 10/11/2026
+[10/11 13:21:14    145s]     4% at 13:21:14 10/11/2026
+[10/11 13:21:37    145s]     8% at 13:21:37 10/11/2026
+[10/11 13:21:54    145s]    13% at 13:21:54 10/11/2026
+[10/11 13:22:11    145s]    17% at 13:22:11 10/11/2026
+[10/11 13:22:27    145s]    21% at 13:22:27 10/11/2026
+[10/11 13:22:44    145s]    26% at 13:22:44 10/11/2026
+[10/11 13:23:01    145s]    30% at 13:23:01 10/11/2026
+[10/11 13:23:18    145s]    34% at 13:23:18 10/11/2026
+[10/11 13:23:34    145s]    39% at 13:23:34 10/11/2026
+[10/11 13:23:51    145s]    43% at 13:23:51 10/11/2026
+[10/11 13:24:08    145s]    47% at 13:24:08 10/11/2026
+[10/11 13:24:25    146s]    52% at 13:24:25 10/11/2026
+[10/11 13:24:41    146s]    56% at 13:24:41 10/11/2026
+[10/11 13:24:58    146s]    60% at 13:24:58 10/11/2026
+[10/11 13:25:15    146s]    65% at 13:25:15 10/11/2026
+[10/11 13:25:31    146s]    69% at 13:25:31 10/11/2026
+[10/11 13:25:48    146s]    73% at 13:25:48 10/11/2026
+[10/11 13:25:54    146s]    78% at 13:25:54 10/11/2026
+[10/11 13:25:59    146s]    82% at 13:25:59 10/11/2026
+[10/11 13:26:05    146s]    86% at 13:26:05 10/11/2026
+[10/11 13:26:10    146s]    91% at 13:26:10 10/11/2026
+[10/11 13:26:16    146s]    95% at 13:26:16 10/11/2026
+[10/11 13:26:21    146s]   100% at 13:26:21 10/11/2026
+[10/11 13:26:21    146s] Ended Parasitic Extraction: (cpu=0:03:18, real=0:05:25, mem(process/total/peak)=18.64MB/unknown/unknown)
+[10/11 13:26:21    146s] 
+[10/11 13:26:32    146s] Invoking: "/Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_rail_smg -cmd /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/voltus_rail_smg.VDD.cmd -l /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/voltus_rail_smg.VDD.log" ...
+[10/11 13:26:32    146s] Begin Merging power grid
+[10/11 13:26:32    146s] Tech reference temperature: 25
+[10/11 13:26:32    146s] Target temperature: 25
+[10/11 13:26:32    146s] 
+[10/11 13:26:32    146s] ** WARN: (VOLTUS_RAIL_SMG-0019):	Failed to load all 23 partitions of PGDB of Net 'VDD', treat as incomplete net.** ERROR: (VOLTUS_RAIL_SMG-0048):	Unable to continue rail analysis because net "VDD" does not have any node in the top level grid.
+[10/11 13:26:32    146s] Use the -ignore_incomplete_net option of the set_rail_analysis_mode command to ignore the net and rerun the analysis.
+[10/11 13:26:32    146s] *** Error: Failed to run voltus_rail_smg, return code is 1
+[10/11 13:26:32    146s] *** Error: In processing command script
+[10/11 13:26:32    146s] Power grid merging failed.
+[10/11 13:26:32    146s] 1 error was found while processing the file /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/voltus_rail_2360418.cmd
+[10/11 13:26:32    146s] 
+[10/11 13:26:32    146s] Rail Analysis Statistics:
+[10/11 13:26:32    146s] Warning messages:      0
+[10/11 13:26:32    146s] Error messages:        1
+[10/11 13:26:32    146s] 
+[10/11 13:26:32    146s] Rail Analysis is unsuccessful due to errors.
+[10/11 13:26:32    146s] 
+[10/11 13:26:32    146s] Finished Rail Analysis at 13:26:32 10/11/2026 (cpu=0:04:01, real=0:06:00, peak mem=0.00MB)
+[10/11 13:26:32    146s] Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)
+[10/11 13:26:32    146s] voltus_rail exited unsuccessfully.
+[10/11 13:26:32    146s] **ERROR: (PRL-387):	"Rail Analysis" failed to finish successfully.
+**ERROR: (VOLTUS-1055):	Rail analysis failed to finish successfully; Check voltus log file for more details.
+[10/11 13:26:32    380s] <CMD> analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS VSS
+[10/11 13:26:38    380s] Started PGV Library Generator at 13:26:32 10/11/2026
+[10/11 13:26:38    380s] 
+[10/11 13:26:38    380s] ** INFO:  (VOLTUS_LGEN-3599): Library generation settings: 
+[10/11 13:26:38    380s] 	Mode: TECH 
+[10/11 13:26:38    380s] 	Capacitance: area_cap 
+[10/11 13:26:38    380s] 	Current Distribution: estimation 
+[10/11 13:26:38    380s] 	Grid Port Definition: LEF 
+[10/11 13:26:38    380s] 	Grid Current Sinks: LEF pin 
+[10/11 13:26:38    380s] 	Power Gate: no
+[10/11 13:26:38    380s] 
+[10/11 13:26:38    380s] ** INFO:  (VOLTUS_LGEN-3598): Processing LEF files: 
+[10/11 13:26:38    380s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef
+[10/11 13:26:38    380s] /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_R_1x_220121a.lef
+[10/11 13:26:38    380s] /home/user1/Desktop/asap7/asap7sc7p5t_28/LEF/asap7sc7p5t_28_L_1x_220121a.lef
+[10/11 13:26:38    380s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_256x4x32_6t122.fixed.lef
+[10/11 13:26:38    380s] /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/srambank_128x4x20_6t122.fixed.lef
+[10/11 13:26:38    380s] 
+[10/11 13:26:38    380s] ** INFO:  (VOLTUS_LGEN-4112): Kept 9593 obstruction geometries of LEF macro
+[10/11 13:26:38    380s] srambank_256x4x32_6t122 which appear to be blockages. Blockages are
+[10/11 13:26:38    380s] obstructions with minimum spacing of zero, or the color mask is not set.
+[10/11 13:26:38    380s] 
+[10/11 13:26:38    380s] ** INFO:  (VOLTUS_LGEN-4112): Kept 3556 obstruction geometries of LEF macro
+[10/11 13:26:38    380s] srambank_128x4x20_6t122 which appear to be blockages. Blockages are
+[10/11 13:26:38    380s] obstructions with minimum spacing of zero, or the color mask is not set.
+[10/11 13:26:38    380s] 
+[10/11 13:26:38    380s] ** INFO:  (VOLTUS_LGEN-3606): 
+[10/11 13:26:38    380s] Power Grid View Generation Statistics:
+[10/11 13:26:38    380s]         # Total number of cells: 426 
+[10/11 13:26:38    380s]         # TECH view created: 426 (100%)
+[10/11 13:26:38    380s] Finished PGV Library Generator at 13:26:38 10/11/2026 (cpu=0:00:01, real=0:00:06)
+[10/11 13:26:38    387s] 
+[10/11 13:26:38    387s] Begin ERA Data Preparation
+[10/11 13:26:38    388s] All Virtual Vias and Virtual followpins have been skipped. No incremental def would be generated.
+[10/11 13:26:38    388s] Ended ERA Data Preparation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4681.16MB/8034.17MB/4689.82MB)
+[10/11 13:26:38    388s] 
+[10/11 13:26:38    388s] 
+[10/11 13:26:38    388s] 
+[10/11 13:26:38    388s] Started Rail Analysis at 13:26:37 10/11/2026
+[10/11 13:26:38    388s] 
+[10/11 13:26:38    388s] 
+[10/11 13:26:38    388s] Multi-CPU Configuration:
+[10/11 13:26:38    388s] 	#CPU: 1
+[10/11 13:26:38    388s] 	Mode: local
+[10/11 13:26:38    388s] 	Host: user1-EliteMini
+[10/11 13:26:38    388s] 
+[10/11 13:26:38    388s] Analyze Rail Settings:
+[10/11 13:26:38    388s] 	Temp directory: /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr
+[10/11 13:26:38    388s] 	Output directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS
+[10/11 13:26:38    388s] 	Run directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1
+[10/11 13:26:38    388s] 
+[10/11 13:26:38    388s] 
+[10/11 13:26:38    388s] 
+[10/11 13:26:38    388s] Running R  extraction for /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def ...
+[10/11 13:26:38    388s] 
+[10/11 13:26:39    388s] Extraction option setup as:
+[10/11 13:26:39    388s] setenv gray_data NONE
+[10/11 13:26:39    388s] setenv enable_cluster_overhang_via false
+[10/11 13:26:39    388s] setenv enable_dfm_mask_conflict_shape false
+[10/11 13:26:39    388s] Begin Preparing Data for Parasitic Extraction
+[10/11 13:26:59    388s] Extracting following DFM effects:
+[10/11 13:26:59    388s] MetalFill        : ON
+[10/11 13:26:59    388s] WEE Effects      : n/a
+[10/11 13:26:59    388s] Erosion Effects  : n/a
+[10/11 13:26:59    388s] T/B Enlargements : ON
+[10/11 13:26:59    388s] R(w) Effects     : ON
+[10/11 13:26:59    388s] R(w,s) Effects   : n/a
+[10/11 13:26:59    388s] R(sw,st) Effects : n/a
+[10/11 13:26:59    388s] TC(w) Effects    : n/a
+[10/11 13:26:59    388s] Some effects indicate n/a because of non-availability of relevant input data (or) requested to be off.
+[10/11 13:26:59    388s] Ended Preparing Data for Parasitic Extraction: (cpu=0:00:20, real=0:00:19, mem(process/total/peak)=78.23MB/unknown/unknown)
+[10/11 13:26:59    388s] 
+[10/11 13:26:59    388s] Extraction option setup as:
+[10/11 13:26:59    388s] setenv gray_data NONE
+[10/11 13:26:59    388s] setenv enable_cluster_overhang_via false
+[10/11 13:26:59    388s] setenv enable_dfm_mask_conflict_shape false
+[10/11 13:26:59    388s] Begin Parasitic Extraction
+[10/11 13:26:59    388s] Extracting Progress:
+[10/11 13:26:59    388s]     0% at 13:26:59 10/11/2026
+[10/11 13:27:16    388s]     4% at 13:27:16 10/11/2026
+[10/11 13:27:40    388s]     8% at 13:27:40 10/11/2026
+[10/11 13:27:57    388s]    13% at 13:27:57 10/11/2026
+[10/11 13:28:13    388s]    17% at 13:28:13 10/11/2026
+[10/11 13:28:30    388s]    21% at 13:28:30 10/11/2026
+[10/11 13:28:47    388s]    26% at 13:28:47 10/11/2026
+[10/11 13:29:04    388s]    30% at 13:29:04 10/11/2026
+[10/11 13:29:20    388s]    34% at 13:29:20 10/11/2026
+[10/11 13:29:37    388s]    39% at 13:29:37 10/11/2026
+[10/11 13:29:54    388s]    43% at 13:29:54 10/11/2026
+[10/11 13:30:10    388s]    47% at 13:30:10 10/11/2026
+[10/11 13:30:27    388s]    52% at 13:30:27 10/11/2026
+[10/11 13:30:44    388s]    56% at 13:30:44 10/11/2026
+[10/11 13:31:01    388s]    60% at 13:31:01 10/11/2026
+[10/11 13:31:17    388s]    65% at 13:31:17 10/11/2026
+[10/11 13:31:34    389s]    69% at 13:31:34 10/11/2026
+[10/11 13:31:51    389s]    73% at 13:31:51 10/11/2026
+[10/11 13:31:56    389s]    78% at 13:31:56 10/11/2026
+[10/11 13:32:02    389s]    82% at 13:32:02 10/11/2026
+[10/11 13:32:07    389s]    86% at 13:32:07 10/11/2026
+[10/11 13:32:17    389s]    91% at 13:32:17 10/11/2026
+[10/11 13:32:23    389s]    95% at 13:32:23 10/11/2026
+[10/11 13:32:29    389s]   100% at 13:32:29 10/11/2026
+[10/11 13:32:29    389s] Ended Parasitic Extraction: (cpu=0:03:18, real=0:05:29, mem(process/total/peak)=18.47MB/unknown/unknown)
+[10/11 13:32:29    389s] 
+[10/11 13:32:40    389s] Invoking: "/Cadence/SSV/tools.lnx86/ssvtools/bin/64bit/voltus_rail_smg -cmd /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/voltus_rail_smg.VSS.cmd -l /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/voltus_rail_smg.VSS.log" ...
+[10/11 13:32:40    389s] Begin Merging power grid
+[10/11 13:32:40    389s] Tech reference temperature: 25
+[10/11 13:32:40    389s] Target temperature: 25
+[10/11 13:32:40    389s] 
+[10/11 13:32:40    389s] ** WARN: (VOLTUS_RAIL_SMG-0019):	Failed to load all 23 partitions of PGDB of Net 'VSS', treat as incomplete net.** ERROR: (VOLTUS_RAIL_SMG-0048):	Unable to continue rail analysis because net "VSS" does not have any node in the top level grid.
+[10/11 13:32:40    389s] Use the -ignore_incomplete_net option of the set_rail_analysis_mode command to ignore the net and rerun the analysis.
+[10/11 13:32:40    389s] *** Error: Failed to run voltus_rail_smg, return code is 1
+[10/11 13:32:40    389s] *** Error: In processing command script
+[10/11 13:32:40    389s] Power grid merging failed.
+[10/11 13:32:40    389s] 1 error was found while processing the file /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/voltus_rail_2360418.cmd
+[10/11 13:32:40    389s] 
+[10/11 13:32:40    389s] Rail Analysis Statistics:
+[10/11 13:32:40    389s] Warning messages:      0
+[10/11 13:32:40    389s] Error messages:        1
+[10/11 13:32:40    389s] 
+[10/11 13:32:40    389s] Rail Analysis is unsuccessful due to errors.
+[10/11 13:32:40    389s] 
+[10/11 13:32:40    389s] Finished Rail Analysis at 13:32:40 10/11/2026 (cpu=0:04:00, real=0:06:03, peak mem=0.00MB)
+[10/11 13:32:40    389s] Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)
+[10/11 13:32:40    389s] voltus_rail exited unsuccessfully.
+[10/11 13:32:40    389s] **ERROR: (PRL-387):	"Rail Analysis" failed to finish successfully.
+**ERROR: (VOLTUS-1055):	Rail analysis failed to finish successfully; Check voltus log file for more details.
+[10/11 13:32:41    622s] <CMD> exit 0
+[10/11 13:32:41    622s] 
+--------------------------------------------------------------------------------
+Exiting Voltus IC Power Integrity Solution on Sun Oct 11 13:32:41 2026
+  Total CPU time:     0:10:25
+  Total real time:    0:14:25
+  Peak memory (main): 4689.82MB
+

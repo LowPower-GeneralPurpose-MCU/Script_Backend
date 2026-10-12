@@ -1,0 +1,16 @@
+designName: top_soc 
+numXParts: 1 
+numYParts: 23 
+minX: 0 
+minY: 0 
+maxX: 5656320 
+maxY: 3581280 
+dbUnit: 10000 
+maxDEFUnit: 1000 
+HALO: 1 
+totalNumCells: 2323433 
+totalNumIgnoredCells: 0 
+hasCellInstNameIDMap: 1 
+globalDelimiter: / 
+defInstDataFile: defInstData 
+version: 1.1

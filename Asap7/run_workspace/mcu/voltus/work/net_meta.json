@@ -1,0 +1,7 @@
+{
+    "extracted_nets": {
+        "VSS": {
+            "is_analyze_net": "true"
+        }
+    }
+}
