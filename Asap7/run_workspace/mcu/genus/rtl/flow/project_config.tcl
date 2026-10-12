@@ -361,15 +361,23 @@ set SRAM_DERATE_FF 0.75
 #   - khong dung toi -late: dc_ff chi dung cho hold, o do duong late (clock
 #     capture) cham hon thuc te la bi quan san.
 #
-# 0.90 la so TAM, chua do.  Do bang
+# Con so do bang
 #     python3 innovus/scripts/fix_ff_lib.py --derate
-# (ti le FF/TT cua cac lib FF dung dien ap so voi ti le cua file nay) roi sua
-# con so duoi day.  1.0 = tat.  KHI NAO co lib dung dien ap: dat ve 1.0.
+# = (FF/TT cua mot lib FF dung dien ap) / (FF/TT cua file nay, 0.839 tren 438
+# bang).  Ket qua 2026-10-12:
+#   cung Vt RVT, ho cell khac : AO 0.872, OA 0.868, INVBUF 0.886, SEQ 0.857
+#   cung cell, Vt khac        : SLVT 0.925, LVT 0.897, SRAM 0.834
+# He so giam deu theo Vt, RVT nam giua LVT va SRAM; nhom cung Vt la uoc luong
+# sat nhat (~0.87).  0.85 = so nho nhat cua nhom cung Vt lam tron xuong, cung
+# che duoc do tan tung cell (~ +/-3 % quanh trung vi).  0.83 la can duoi tuyet
+# doi (Vt SRAM cao hon RVT), doi lai them buffer hold.  So TAM 0.90 dung truoc
+# do (run Tempus / ECO 2026-10-12 12:34) la lac quan.
+# 1.0 = tat.  KHI NAO co lib dung dien ap: dat ve 1.0.
 #
 # Tempus, Innovus va buoc ECO goi chung mot proc de ba ben khong troi ra khac
 # nhau.  Genus KHONG goi: hold chi duoc sua tu sau CTS.
 set STD_FF_LOWV_LIB    "asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120"
-set STD_FF_LOWV_DERATE 0.90
+set STD_FF_LOWV_DERATE 0.85
 if {![string is double -strict $STD_FF_LOWV_DERATE] ||
     $STD_FF_LOWV_DERATE <= 0.0 || $STD_FF_LOWV_DERATE > 1.0} {
     error "STD_FF_LOWV_DERATE phai nam trong (0, 1], dang la '$STD_FF_LOWV_DERATE'"

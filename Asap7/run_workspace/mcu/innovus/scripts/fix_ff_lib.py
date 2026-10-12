@@ -255,22 +255,35 @@ def measure_derate(name, libs, bad_names):
             print("    %-48s %s/TT trung vi %.3f -> he so %.3f   cung VT %s, ho cell khac"
                   " (ti le hai trung vi, %d bang)" % (
                       ref_name, corner, ref_mid, factor, vt, len(ref_r)))
-        found.append(factor)
+        found.append((factor, same_vt))
 
     if not found:
         print("  Khong do duoc: khong co lib %s nao dung dien ap de lam moc." % corner)
         return None
-    if min(found) >= 1.0:
+    every = [f for f, _ in found]
+    if min(every) >= 1.0:
         print("  KET QUA: moi he so >= 1.000 - bang tre cua %s khong cham hon cac lib %s dung"
               " dien ap;\n  khong can derate (STD_FF_LOWV_DERATE 1.0)." % (name, corner))
         return 1.0
-    proposal = int(min(found) * 100) / 100.0
-    print("  KET QUA: he so tu %.3f den %.3f.  De xuat (so nho nhat, lam tron xuong):"
+    # Do nhay dien ap phu thuoc Vt, nen lib CUNG Vt la uoc luong sat nhat; lib
+    # cung cell Vt khac chi kep hai dau (Vt thap hon -> he so lon hon, Vt cao hon
+    # -> nho hon).  Run 2026-10-12: SLVT 0.925, LVT 0.897, [RVT 0.857..0.886],
+    # SRAM 0.834 - lay so nho nhat cua MOI moc (0.83) la lay can duoi cua Vt SRAM.
+    same = [f for f, is_same_vt in found if is_same_vt]
+    other = [f for f, is_same_vt in found if not is_same_vt]
+    basis = same or every
+    proposal = int(min(basis) * 100) / 100.0
+    print("  KET QUA: he so tu %.3f den %.3f tren moi moc." % (min(every), max(every)))
+    if same:
+        print("  Nhom cung VT %s (sat nhat voi lib nay): %.3f .. %.3f." % (vt, min(same), max(same)))
+        if other:
+            print("  Nhom cung cell, VT khac (chi kep hai dau; Vt cao hon cho he so nho hon):"
+                  " %.3f .. %.3f." % (min(other), max(other)))
+    print("  De xuat (so nho nhat cua %s, lam tron xuong):"
           "\n      set STD_FF_LOWV_DERATE %.2f      (genus/rtl/flow/project_config.tcl)"
           "\n  He so la cho CA lib: p10 / min o tren cho biet tung cell lech bao nhieu so voi no."
-          "\n  Lib Vt cao nhay dien ap hon: neu he so giam dan theo Vt thi so cua VT thap la"
-          "\n  can tren, so cua nhom 'cung VT' moi sat voi lib nay." % (
-              min(found), max(found), proposal))
+          "\n  Can duoi tuyet doi: %.2f (so nho nhat cua moi moc) - an toan hon, them buffer hold."
+          % ("nhom cung VT" if same else "moi moc", proposal, int(min(every) * 100) / 100.0))
     return proposal
 
 
