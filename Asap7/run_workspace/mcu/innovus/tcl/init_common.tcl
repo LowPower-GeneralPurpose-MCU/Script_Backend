@@ -236,13 +236,21 @@ if {[lsearch -exact $MCU_HOLD_VIEWS view_ff] >= 0} {
 if {[catch {report_timing_derate > ./reports/sram_derate.rpt} derate_err]} {
     puts "WARNING: report_timing_derate that bai: $derate_err"
 }
-if {[info exists ff_lowv_note] && $ff_lowv_note ne "" &&
-    [mcu_ff_lowv_derate_reported ./reports/sram_derate.rpt $MCU_OCV_DERATE_EARLY] == 0} {
-    puts "WARNING: ===================================================="
-    puts "WARNING: derate lib FF dien ap thap KHONG thay trong"
-    puts "WARNING: reports/sram_derate.rpt - set_timing_derate co the da bi"
-    puts "WARNING: tu choi ma khong nem loi Tcl.  Hold view_ff van lac quan."
-    puts "WARNING: ===================================================="
+# Innovus 23.14 chi in dc_ss khi khong chi goc (run ECO 2026-10-12: file chi co
+# 84 macro cua dc_ss du derate dc_ff co hieu luc) -> xin them phan dc_ff.
+catch {report_timing_derate -delay_corner dc_ff >> ./reports/sram_derate.rpt}
+if {[info exists ff_lowv_note] && $ff_lowv_note ne ""} {
+    set ff_lowv_seen [mcu_ff_lowv_derate_reported ./reports/sram_derate.rpt $MCU_OCV_DERATE_EARLY]
+    if {$ff_lowv_seen == 0} {
+        puts "WARNING: ===================================================="
+        puts "WARNING: derate lib FF dien ap thap KHONG thay trong phan dc_ff"
+        puts "WARNING: cua reports/sram_derate.rpt - set_timing_derate co the da"
+        puts "WARNING: bi tu choi ma khong nem loi Tcl.  Hold view_ff van lac quan."
+        puts "WARNING: ===================================================="
+    } elseif {$ff_lowv_seen < 0} {
+        puts "Derate lib FF dien ap thap: reports/sram_derate.rpt khong co phan dc_ff -\
+ khong kiem duoc bang bao cao (kiem bang delay cell _R o view_ff)"
+    }
 }
 
 set_interactive_constraint_modes [all_constraint_modes]

@@ -422,28 +422,40 @@ proc mcu_apply_ff_lowv_derate {{ocv_early 1.0}} {
 
 # Lenh Cadence co the in **ERROR ma khong nem loi Tcl (init_design, analyze_rail
 # da tung nhu vay), nen cau tra ve cua proc tren chua phai bang chung.  Dem trong
-# file 'report_timing_derate' so dong "Cell Delay" cua dc_ff mang dung he so do;
-# 0 = derate KHONG co hieu luc (hoac khong doc duoc file).  Cung $ocv_early da
-# dua cho mcu_apply_ff_lowv_derate.
+# file 'report_timing_derate' so dong tre cua dc_ff mang dung he so do:
+#    0 = co phan dc_ff nhung khong dong nao mang he so -> derate KHONG co hieu luc
+#   -1 = file khong co phan dc_ff nao (hoac khong doc duoc) -> KHONG ket luan duoc
+# Cung $ocv_early da dua cho mcu_apply_ff_lowv_derate.
+#
+# Dinh dang, doc tu run 2026-10-12: derate tren instance in "Cell (leaf): <inst>"
+# + " Cell Delay ..."; derate tren lib cell in "LibraryCell: <lib>/<cell>" +
+# " Cell_delay ..." (gach duoi).  Tempus 23.15 in ca dc_ss lan dc_ff; Innovus
+# 23.14 chi in dc_ss du derate dc_ff CO hieu luc (delay cell SIMPLE_RVT o view_ff
+# = x0.916 so voi truoc, cac ho khac x1.000) - nen voi Innovus phai goi them
+# 'report_timing_derate -delay_corner dc_ff' roi moi doc.
 proc mcu_ff_lowv_derate_reported {rpt {ocv_early 1.0}} {
     if {![file isfile $rpt]} {
-        return 0
+        return -1
     }
     set want [format %.3f [expr {$::STD_FF_LOWV_DERATE * $ocv_early}]]
     set corner ""
+    set seen_ff 0
     set count 0
     set fp [open $rpt r]
     while {[gets $fp line] >= 0} {
         if {[regexp {DC Corner:\s*(\S+)} $line -> corner]} {
+            if {$corner eq "dc_ff"} {
+                set seen_ff 1
+            }
             continue
         }
-        if {$corner eq "dc_ff" && [regexp {^\s*Cell Delay\s} $line] &&
+        if {$corner eq "dc_ff" && [regexp {^\s*Cell[ _][Dd]elay\s} $line] &&
             [lsearch -exact [regexp -all -inline {\S+} $line] $want] >= 0} {
             incr count
         }
     }
     close $fp
-    return $count
+    return [expr {$seen_ff ? $count : -1}]
 }
 
 # The macro data/control pins have a 0.320 ns Liberty max-transition.

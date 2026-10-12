@@ -95,7 +95,8 @@ proc tempus_slack_stats {kind view} {
 
 # Du phong khi 'report_timing -collection' khong dung duoc: doc chinh file
 # report_timing da ghi.  Tra ve {wns so_duong_VIOLATED so_duong}; rong neu
-# file khong co dong '= Slack Time'.
+# file khong co dong 'Slack Time' (Tempus 23.15 in "  Slack Time   0.007",
+# khong co dau '=' o dau dong).
 proc tempus_slack_from_report {rpt} {
     if {![file isfile $rpt]} {
         return {}
@@ -110,7 +111,7 @@ proc tempus_slack_from_report {rpt} {
             if {$status eq "VIOLATED"} {
                 incr violated
             }
-        } elseif {[regexp {^=\s*Slack Time\s+(-?[0-9.]+)} $line -> slack]} {
+        } elseif {[regexp {^[=\s]*Slack Time\s+(-?[0-9.]+)} $line -> slack]} {
             if {$wns eq "" || $slack < $wns} {
                 set wns $slack
             }
@@ -487,10 +488,10 @@ if {[catch {
         }
     }
     if {$ff_lowv_note ne "" && [mcu_ff_lowv_derate_reported \
-            [file join $TEMPUS_DIR reports timing_derate.rpt] $ocv_early] == 0} {
+            [file join $TEMPUS_DIR reports timing_derate.rpt] $ocv_early] <= 0} {
         tempus_warn "derate lib FF dien ap thap KHONG thay trong reports/timing_derate.rpt\
- (khong dong 'Cell Delay' nao cua dc_ff mang he so do) - set_timing_derate co the da bi\
- tu choi ma khong nem loi Tcl; hold view_ff van lac quan"
+ (phan dc_ff khong co dong Cell_delay nao mang he so do, hoac khong co phan dc_ff) -\
+ set_timing_derate co the da bi tu choi ma khong nem loi Tcl; hold view_ff van lac quan"
     }
     if {$TEMPUS_SI} {
         set rpt [file join $TEMPUS_DIR reports glitch.rpt]
