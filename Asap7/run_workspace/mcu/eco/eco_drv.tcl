@@ -235,12 +235,21 @@ if {[catch {
     set derate_rpt [file join $ECO_DIR reports timing_derate.rpt]
     file delete -force $derate_rpt
     catch {report_timing_derate > $derate_rpt}
+    # Innovus 23.14 chi in dc_ss khi khong chi goc (run 2026-10-12) -> xin them
+    # phan dc_ff.  Van khong co phan do thi KHONG ket luan (khong canh bao sai):
+    # run do derate co hieu luc that, delay cell SIMPLE_RVT o view_ff x0.916.
+    catch {report_timing_derate -delay_corner dc_ff >> $derate_rpt}
     if {$ff_lowv_note eq ""} {
         set ff_lowv_note "tat (STD_FF_LOWV_DERATE 1.0)"
-    } elseif {[mcu_ff_lowv_derate_reported $derate_rpt $eco_ocv_early] == 0} {
-        eco_warn "derate lib FF dien ap thap KHONG thay trong eco/reports/timing_derate.rpt\
- (khong dong 'Cell Delay' nao cua dc_ff mang he so do) - set_timing_derate co the da bi\
- tu choi ma khong nem loi Tcl; hold duoc sua tren lib cham hon thuc te"
+    } else {
+        set ff_lowv_seen [mcu_ff_lowv_derate_reported $derate_rpt $eco_ocv_early]
+        if {$ff_lowv_seen == 0} {
+            eco_warn "derate lib FF dien ap thap KHONG thay trong phan dc_ff cua\
+ eco/reports/timing_derate.rpt - set_timing_derate co the da bi tu choi ma khong nem loi\
+ Tcl; hold duoc sua tren lib cham hon thuc te"
+        } elseif {$ff_lowv_seen < 0} {
+            append ff_lowv_note " (bao cao derate khong co phan dc_ff - khong kiem duoc bang bao cao)"
+        }
     }
     set ro_ptrs [dbGet -e -p top.insts.name u_apb_ascon_u_trng_ro/*]
     if {[llength $ro_ptrs] != 7} {

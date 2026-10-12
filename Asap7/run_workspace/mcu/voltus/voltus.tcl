@@ -110,25 +110,62 @@ proc voltus_power_pads {how} {
 
 # analyze_rail KHONG nem loi Tcl khi hong va van de lai era_work/ (thu vien PGV)
 # trong thu muc ket qua: run 2026-10-11 dung o VOLTUS_RAIL-1152 ma tom tat van
-# ghi DONE.  Hai dau hieu that cua mot lan hong: voltus_rail.log o thu muc chay
-# ghi "unsuccessful", va thu muc ket qua khong co gi ngoai era_work/.
-proc voltus_rail_check {net out} {
-    set log [file join $::VOLTUS_DIR voltus_rail.log]
+# ghi DONE.  Run 2026-10-11 13:18 lai DONE gia lan nua: analyze_rail hong o buoc
+# ghep luoi (VOLTUS_RAIL_SMG-0048) nhung khong co voltus_rail.log o thu muc chay
+# va thu muc ket qua van co 60 file.  Nen kiem ba noi:
+#   - tool log (logs/voltus.log*): VOLTUS-1055 / "Rail Analysis is unsuccessful"
+#     xuat hien THEM sau lenh analyze_rail (voltus_rail_failures_logged);
+#   - moi file *.log trong thu muc ket qua va voltus_rail.log o thu muc chay;
+#   - thu muc ket qua khong co gi ngoai era_work/.
+# Log cua lan hong duoc chep vao logs/ de con doc duoc sau khi commit (outputs/
+# bi .gitignore chan).
+proc voltus_rail_failures_logged {} {
+    set newest ""
+    set newest_time -1
+    foreach path [glob -nocomplain -directory [file join $::VOLTUS_DIR logs] voltus.log*] {
+        if {[regexp {voltus\.log\d*$} $path] && [file mtime $path] > $newest_time} {
+            set newest $path
+            set newest_time [file mtime $path]
+        }
+    }
+    if {$newest eq ""} {
+        return 0
+    }
+    set fp [open $newest r]
+    set text [read $fp]
+    close $fp
+    return [regexp -all {VOLTUS-1055|Rail Analysis is unsuccessful} $text]
+}
+
+proc voltus_rail_check {net out failures_before} {
     set why {}
-    if {[file isfile $log]} {
-        # Lan VSS ghi de lan VDD: giu moi net mot ban.
-        file copy -force $log [file join $::VOLTUS_DIR logs "voltus_rail_$net.log"]
+    if {[voltus_rail_failures_logged] > $failures_before} {
+        lappend why "tool log ghi VOLTUS-1055 / Rail Analysis is unsuccessful"
+    }
+    set logs {}
+    set cwd_log [file join $::VOLTUS_DIR voltus_rail.log]
+    if {[file isfile $cwd_log]} {
+        lappend logs $cwd_log
+    }
+    foreach path [voltus_files_under $out 4] {
+        if {[string match *.log $path]} {
+            lappend logs $path
+        }
+    }
+    foreach log $logs {
+        if {[file size $log] > 5000000} {
+            continue
+        }
         set fp [open $log r]
         set text [read $fp]
         close $fp
-        if {[regexp {Rail Analysis is unsuccessful|exited unsuccessfully} $text]} {
+        if {[regexp {Rail Analysis is unsuccessful|exited unsuccessfully|\mERROR\M} $text]} {
+            # Lan VSS ghi de lan VDD: giu moi net mot ban.
+            file copy -force $log [file join $::VOLTUS_DIR logs "voltus_rail_${net}_[file tail $log]"]
             foreach line [split $text "\n"] {
-                if {[regexp {ERROR} $line]} {
-                    lappend why [string trim $line]
+                if {[regexp {ERROR} $line] && [llength $why] < 6} {
+                    lappend why "[file tail $log]: [string trim $line]"
                 }
-            }
-            if {[llength $why] == 0} {
-                lappend why "voltus_rail.log bao unsuccessful"
             }
         }
     }
@@ -173,8 +210,9 @@ proc voltus_rail {layer_map pads} {
         set out [file join $::VOLTUS_DIR outputs "rail_$net"]
         file delete -force $out
         file delete -force [file join $::VOLTUS_DIR voltus_rail.log]
+        set failures_before [voltus_rail_failures_logged]
         analyze_rail -type net -output $out $net
-        voltus_rail_check $net $out
+        voltus_rail_check $net $out $failures_before
     }
 }
 
@@ -311,7 +349,11 @@ if {[catch {
     if {[llength $power_totals] == 0} {
         error "report_power khong ghi dong 'Total Power:' nao vao $VOLTUS_POWER_RPT"
     }
-    set VOLTUS_POWER_DATA [lsort [glob -nocomplain -directory $VOLTUS_POWER_DIR *.ptiavg]]
+    # Run 2026-10-11 13:18: static_VDD.ptiavg / static_VSS.ptiavg duoc ghi CANH
+    # file -outfile (reports/), khong phai trong set_power_output_dir.
+    set VOLTUS_POWER_DATA [lsort [concat \
+        [glob -nocomplain -directory $VOLTUS_POWER_DIR *.ptiavg] \
+        [glob -nocomplain -directory [file dirname $VOLTUS_POWER_RPT] *.ptiavg]]]
     if {[llength $VOLTUS_POWER_DATA] == 0} {
         # Cach trao power.db cho set_power_data CHUA duoc kiem tren tool.
         set power_db [file join $VOLTUS_POWER_DIR power.db]
@@ -350,6 +392,11 @@ if {[catch {
                     set rail_err "lenh bi tu choi, Tcl khong tra noi dung - xem logs/voltus.log"
                 }
                 voltus_warn "analyze_rail ($label) hong: $rail_err"
+                # Cac cach thu con lai chi khac option.  analyze_rail da chay
+                # (~6 phut moi net) roi moi hong thi doi option khong cuu duoc.
+                if {[string match "analyze_rail *" $rail_err]} {
+                    break
+                }
                 continue
             }
             set rail_note $label
