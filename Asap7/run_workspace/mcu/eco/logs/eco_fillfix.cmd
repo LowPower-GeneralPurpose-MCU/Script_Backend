@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Mon Oct 12 22:33:21 2026                
+#  Created on Mon Oct 12 23:25:27 2026                
 #                                                     
 #######################################################
 
@@ -172,7 +172,7 @@ ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/wr_timeout_w_top -cell BUFx4_ASAP
 ecoAddRepeater -net u_apb_ascon_u_ascon/n_1953 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_apb_ascon_u_ascon/n_1953 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN9014_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN9014_n -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -term u_axi_ram_hi/u_mem/FE_OFC7954_mem_wdata_9/A -cell BUFx10_ASAP7_75t_R
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_233} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_233} -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_AR_crossing_flag} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -242,7 +242,6 @@ ecoAddRepeater -net u_axi_interconnect/n_15984 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net {u_axi_interconnect/DSP_GEN[3].dispatcher_read_channel_R_channel_SLV_FIFO[3].fifo_rdata_n_31} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_apb_i2c/n_347 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5929 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5929 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/FE_OFN7883_mem_rdata_14 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_6961 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_6961 -cell BUFx4_ASAP7_75t_R
@@ -395,7 +394,6 @@ ecoAddRepeater -net u_axi_interconnect/n_7852 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_clic/n_995 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_clic/n_995 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8165_mem_wdata_2 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8165_mem_wdata_2 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_interconnect/n_13997 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_7106 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_7106 -cell BUFx4_ASAP7_75t_R
@@ -410,9 +408,7 @@ ecoAddRepeater -net u_axi_interconnect/n_5020 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_interconnect/FE_DBTN212_n_26222 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/FE_DBTN212_n_26222 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8254_mem_wdata_23 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8254_mem_wdata_23 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8080_mem_wdata_22 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8080_mem_wdata_22 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_dcache/n_3127 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_dcache/n_3127 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_dcache/n_170 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -424,7 +420,6 @@ ecoAddRepeater -net u_core/n_273 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_core/n_273 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_4739 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8060_mem_wdata_26 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8060_mem_wdata_26 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_B_channel/n_25} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_B_channel/n_25} -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_interconnect/n_7692 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -525,7 +520,6 @@ ecoAddRepeater -net u_core/inc_CSR_RF_add_641_38_n_606 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_core/RF_n_18251 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_core/RF_n_18251 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8095_mem_wdata_19 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8095_mem_wdata_19 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_ARID_valid_nxt[0]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_ARID_valid_nxt[0]} -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_debug_module/n_387 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -567,13 +561,11 @@ ecoAddRepeater -net u_clic/n_4 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net FE_PHN24155_cpu_data_wdata_25 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net FE_PHN24155_cpu_data_wdata_25 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8132_mem_wdata_10 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN8132_mem_wdata_10 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_apb_ascon_u_ascon/n_814 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_apb_ascon_u_ascon/n_814 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net {u_apb_ascon_u_ascon/gen_sbox[28].t2_a} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net {u_apb_ascon_u_ascon/gen_sbox[28].t2_a} -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN9012_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN9012_n -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_dcache/FE_OFN8766_data_write_word_22 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_dcache/FE_OFN8766_data_write_word_22 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel/n_457} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -592,7 +584,6 @@ ecoAddRepeater -net u_core/n_253 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_core/n_253 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_itcm/n_261 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8331_mem_wdata_9 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8331_mem_wdata_9 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net n_17037 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net n_17037 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_icache/n_39 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -610,13 +601,11 @@ ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_2941 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net n_23096 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net n_23096 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8284_mem_wdata_18 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8284_mem_wdata_18 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_icache/n_5237 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_icache/n_5237 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_interconnect/n_26113 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_26113 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_interconnect/FE_DBTN217_n_26217 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/FE_DBTN217_n_26217 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_apb_ascon_u_ascon/n_2090 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_apb_ascon_u_ascon/n_2090 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net {u_apb_ascon_u_ascon/gen_sbox[6].t2_a} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -662,7 +651,6 @@ ecoAddRepeater -net {u_core/if_id_instr[9]} -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_core/FE_OFN1397_FE_DBTN318_n_16870 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_core/FE_OFN1397_FE_DBTN318_n_16870 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN9035_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN9035_n -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_hi/FE_OFN7837_mem_rdata_25 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_7009 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_14 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -687,20 +675,16 @@ ecoAddRepeater -net u_clic/n_370 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_core/FE_OFN7901_FE_DBTN319_n_9748 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_core/FE_OFN7901_FE_DBTN319_n_9748 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8236_mem_wdata_26 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8236_mem_wdata_26 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8910_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN8910_n -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_hi/u_mem/n_550 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_14051 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_14051 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_interconnect/FE_OFN5845_n_6931 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/FE_OFN5845_n_6931 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_interconnect/FE_PHN23394_SA_GEN_5_genblk1_slave_arbitration_AR_crossing_flag -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/FE_PHN23394_SA_GEN_5_genblk1_slave_arbitration_AR_crossing_flag -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_clic/n_810 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_clic/n_810 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net n_9798 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_9798 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/n_338 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_ram_lo/n_338 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/FE_OFN3213_FE_DBTN107_n_385 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -771,9 +755,7 @@ ecoAddRepeater -net u_axi_interconnect/n_13633 -cell BUFx4_ASAP7_75t_R -relative
 ecoAddRepeater -net u_axi_interconnect/n_13633 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_4778 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net {u_itcm/mem_rdata[31]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_itcm/mem_rdata[31]} -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN3071_mem_addr_5 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN3071_mem_addr_5 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_ram_lo/n_291 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_dcache/n_3223 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_dcache/n_3211 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
@@ -784,7 +766,187 @@ ecoAddRepeater -net u_dcache/n_559 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_interconnect/n_6587 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_6587 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_apb_i2c/n_329 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_i2c/n_329 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_core/alu_in2[27]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_core/alu_in2[27]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5936 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5936 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN1217_n_0 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN1217_n_0 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net n_17712 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_17712 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_ram_lo/n_302 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_ram_lo/n_302 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN6986_n_181 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_800 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_800 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_clic/lvl_q[4][1]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_clic/lvl_q[4][1]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_core/n_2050 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_12209 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_12209 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_BANKED_RDATA.read_bank_q[0]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_BANKED_RDATA.read_bank_q[0]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_dcache/n_3247 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_dcache/n_3247 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_dcache/FE_OFN8693_n_3066 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_dcache/FE_OFN8693_n_3066 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_661 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_661 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/u_wr_master_n_858 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/u_wr_master_n_858 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5682 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5682 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_tim1_cnt[12]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_tim1_cnt[12]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {pwdata_0[10]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {pwdata_0[10]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_axi_ram_hi/mem_wdata[24]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_icache/n_5255 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_icache/n_5255 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_dcache/n_3126 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_dcache/n_3126 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_1915 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_1915 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_debug_module/n_620 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_debug_module/n_620 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5836 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5836 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_62 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/n_5027 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/n_5027 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_818 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_818 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_768 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_768 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_845 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_845 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_core/n_4205 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_core/n_2971 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_core/n_2971 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net n_12224 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_12224 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_dcache/FE_OFN8760_data_write_word_26 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_debug_module/n_624 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_debug_module/n_624 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_core/alu_in2[18]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_core/alu_in2[18]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net n_30180 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_30180 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_icache/n_131 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_icache/n_131 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_dcache/n_295 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_dcache/n_295 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/FE_OFN2887_slv_skid_buffer_BWD_REGISTERED_rd_ptr_0} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/FE_OFN2887_slv_skid_buffer_BWD_REGISTERED_rd_ptr_0} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/n_9942 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_ARID_valid_nxt[6]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_ARID_valid_nxt[6]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/FE_DBTN146_n_26288 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_948 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_948 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_3165 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_3165 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_244} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_244} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/n_15067 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/n_15067 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/n_9201 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/n_9201 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_1963 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_1963 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_740 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_740 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_644 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_644 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_core/n_8190 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN6372_n_148 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_15} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_15} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel/n_26} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel/n_26} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/n_5053 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/n_5053 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_axi_interconnect/dsp_sa_RDATA_i[3][143]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/FE_OFN2616_n_5950 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/FE_OFN2616_n_5950 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_2278 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_1832 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_1832 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_819 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_819 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_950 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_950 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_core/n_285 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_core/n_285 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_core/if_id_instr[7]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_core/if_id_instr[7]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_3171 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_2960 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_17699 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_17699 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_axi_interconnect/DSP_GEN[3].dispatcher_read_channel_AR_channel_mst_skid_buffer_BWD_REGISTERED.rd_en} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/DSP_GEN[3].dispatcher_read_channel_AR_channel_mst_skid_buffer_BWD_REGISTERED.rd_en} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/FE_DBTN174_n_26260 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_apb_ascon_u_ascon/gen_sbox[58].t2_a} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_apb_ascon_u_ascon/gen_sbox[58].t2_a} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_2449 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_2449 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net n_18588 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_ram_lo/mem_rdata[21]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_ram_lo/mem_rdata[21]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel/n_262} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel/n_262} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/n_8917 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/FE_OFN2826_n_15297 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/FE_OFN5809_n_6909 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/FE_PHN23769_SA_GEN_5_genblk1_slave_arbitration_ARID_valid_nxt_2 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_core/FE_OFN1774_cpu_data_addr_23 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_core/FE_OFN1774_cpu_data_addr_23 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN477_reset_sys_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_22842 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_16997 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_tim0_cnt[0]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_tim0_cnt[0]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net FE_PHN23852_cpu_data_wdata_31 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net FE_PHN23852_cpu_data_wdata_31 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net FE_PHN34325_pwdata_0_28 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN3051_mem_addr_8 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_dcache/n_3335 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_dcache/n_3335 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_R_channel/n_497} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_R_channel/n_497} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel/n_43} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel/n_43} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/n_16523 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/n_16024 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/n_16024 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/n_5457 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/n_5457 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_apb_watchdog/n_78 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_1950 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_1950 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_86 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_488 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_488 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN3464_n_4898 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/FE_OFN3169_FE_DBTN372_slv_skid_buffer_BWD_REGISTERED_rd_ptr_0} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/n_5021 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_i2c/n_225 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_i2c/n_225 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_core/n_155 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel/n_105} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel/n_105} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_1981 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_ascon_u_ascon/n_1981 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_2056 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_clic/n_2056 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_clic/n_639 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_4431 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_63 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_13377 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net FE_OFN1862_n_14648 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net FE_OFN5225_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net FE_PHN28214_pwdata_0_19 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 setEcoMode -batchMode false -refinePlace true -updateTiming true
 refinePlace
 ecoRoute
@@ -863,242 +1025,30 @@ set_max_transition {*}$flags [format %.4f [expr {$value - $delta}]]  [get_clocks
 set_max_transition {*}$flags [format %.4f [expr {$value - $delta}]]  [get_clocks $clocks]
 set_interactive_constraint_modes {}
 setEcoMode -batchMode true -refinePlace false -updateTiming false
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37184_FE_OFN8095_mem_wdata_19 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37184_FE_OFN8095_mem_wdata_19 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37209_FE_OFN9012_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37209_FE_OFN9012_n -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON36984_FE_OFN9014_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON36984_FE_OFN9014_n -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_ECON37272_FE_OFN8910_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_ECON37272_FE_OFN8910_n -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37206_FE_OFN8132_mem_wdata_10 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37206_FE_OFN8132_mem_wdata_10 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_dcache/FE_OFN8693_n_3066 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_dcache/FE_OFN8693_n_3066 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel/n_262} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel/n_262} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_core/alu_in2[27]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_core/alu_in2[27]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net FE_OFN1587_sdram_dq_o_7 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net n_9813 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net n_9813 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_800 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_800 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_ARID_valid_nxt[6]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_ARID_valid_nxt[6]} -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net FE_OFN1594_sdram_dq_o_0 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_1915 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_1915 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_661 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_661 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net FE_OFN1587_sdram_dq_o_7 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_OFN6986_n_181 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_17712 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_17712 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5936 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5936 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN1217_n_0 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN1217_n_0 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_lo/n_302 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/n_302 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_core/n_2050 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_12209 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_12209 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_BANKED_RDATA.read_bank_q[0]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_BANKED_RDATA.read_bank_q[0]} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_dcache/n_3247 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_dcache/n_3247 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_clic/lvl_q[4][1]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_clic/lvl_q[4][1]} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/u_wr_master_n_858 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/u_wr_master_n_858 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5682 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5682 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_tim1_cnt[12]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_tim1_cnt[12]} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {pwdata_0[10]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {pwdata_0[10]} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_ram_hi/mem_wdata[24]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_ram_hi/mem_wdata[24]} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_icache/n_5255 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_icache/n_5255 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_dcache/n_3126 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_dcache/n_3126 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_debug_module/n_620 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_debug_module/n_620 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5836 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5836 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_5027 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_5027 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/FE_DBTN146_n_26288 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/FE_DBTN146_n_26288 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_845 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_845 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_core/n_2971 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_core/n_2971 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_62 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_62 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net n_12224 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_12224 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_icache/n_131 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_icache/n_131 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_dcache/FE_OFN8760_data_write_word_26 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_dcache/FE_OFN8760_data_write_word_26 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_818 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_818 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_768 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_768 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_948 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_948 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_debug_module/n_624 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_debug_module/n_624 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_core/n_4205 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_core/n_4205 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net n_30180 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_30180 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net n_17723 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net n_17723 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_dcache/n_295 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_dcache/n_295 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_244} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_244} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_9942 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_9942 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_3165 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_3165 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_9201 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_9201 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_5457 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_5457 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_2449 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_2449 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_1963 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_1963 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_740 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_740 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_644 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_644 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_core/n_8190 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_core/if_id_instr[7]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_core/if_id_instr[7]} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_15} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/n_15} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel/n_26} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel/n_26} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_5053 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_5053 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/DSP_GEN[3].dispatcher_read_channel_AR_channel_mst_skid_buffer_BWD_REGISTERED.rd_en} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/DSP_GEN[3].dispatcher_read_channel_AR_channel_mst_skid_buffer_BWD_REGISTERED.rd_en} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/FE_OFN2616_n_5950 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/FE_OFN2616_n_5950 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_2278 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_819 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_819 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_950 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_950 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_core/n_285 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_core/n_285 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_3171 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_3171 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_2960 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_2960 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net n_17699 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_17699 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN6372_n_148 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/FE_OFN2887_slv_skid_buffer_BWD_REGISTERED_rd_ptr_0} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/FE_OFN2887_slv_skid_buffer_BWD_REGISTERED_rd_ptr_0} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/dsp_sa_RDATA_i[3][143]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/dsp_sa_RDATA_i[3][143]} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/FE_DBTN174_n_26260 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/FE_DBTN174_n_26260 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_1832 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_1832 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_apb_ascon_u_ascon/gen_sbox[58].t2_a} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_apb_ascon_u_ascon/gen_sbox[58].t2_a} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_core/alu_in2[18]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_core/alu_in2[18]} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net {pad_oe[3]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_core/FE_OFN1781_cpu_data_addr_17 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_core/FE_OFN1781_cpu_data_addr_17 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net n_18588 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN3051_mem_addr_8 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_OFN3051_mem_addr_8 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_16523 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_8917 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_8917 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_5021 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_5021 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/FE_OFN2826_n_15297 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/FE_OFN2826_n_15297 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/FE_OFN5809_n_6909 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/FE_OFN5809_n_6909 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/FE_PHN23769_SA_GEN_5_genblk1_slave_arbitration_ARID_valid_nxt_2 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/FE_PHN23769_SA_GEN_5_genblk1_slave_arbitration_ARID_valid_nxt_2 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_core/FE_OFN1774_cpu_data_addr_23 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_core/FE_OFN1774_cpu_data_addr_23 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN477_reset_sys_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN477_reset_sys_n -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net n_22842 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_16997 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_16997 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_tim0_cnt[0]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_tim0_cnt[0]} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net FE_PHN23852_cpu_data_wdata_31 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net FE_PHN23852_cpu_data_wdata_31 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net FE_PHN34325_pwdata_0_28 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net FE_PHN34325_pwdata_0_28 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_lo/n_54 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/n_54 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_dcache/n_3335 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_dcache/n_3335 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_B_channel/n_26} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net {u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_B_channel/n_26} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel/n_43} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel/n_43} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_16024 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_16024 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_apb_watchdog/n_78 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_1950 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_1950 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_clic/n_104 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_clic/n_104 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_86 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_488 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_488 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN3464_n_4898 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/FE_OFN3464_n_4898 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net n_10119 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_10119 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_ram_lo/mem_rdata[21]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_ram_lo/mem_rdata[21]} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_dcache/n_3238 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_i2c/n_225 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_i2c/n_225 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_639 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_639 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_core/n_155 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_core/n_155 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/FE_OFN3169_FE_DBTN372_slv_skid_buffer_BWD_REGISTERED_rd_ptr_0} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel/FE_OFN3169_FE_DBTN372_slv_skid_buffer_BWD_REGISTERED_rd_ptr_0} -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel/n_105} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net {u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel/n_105} -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_4231 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_4231 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net n_17702 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net n_17702 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_ram_lo/n_54 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net {u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel/n_111} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_axi_interconnect/n_6973 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_6973 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_1981 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_apb_ascon_u_ascon/n_1981 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_2056 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_2056 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/n_4989 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 ecoAddRepeater -net u_clic/n_1430 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_1430 -cell BUFx4_ASAP7_75t_R
 ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5854 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_5854 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_4431 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_13377 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net FE_OFN1862_n_14648 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net FE_OFN1862_n_14648 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net FE_OFN5225_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net FE_OFN5225_n -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net FE_PHN28214_pwdata_0_19 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net FE_PHN28214_pwdata_0_19 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net {pad_oe[3]} -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
 setEcoMode -batchMode false -refinePlace true -updateTiming true
 refinePlace
 ecoRoute
@@ -1177,26 +1127,11 @@ set_max_transition {*}$flags [format %.4f [expr {$value - $delta}]]  [get_clocks
 set_max_transition {*}$flags [format %.4f [expr {$value - $delta}]]  [get_clocks $clocks]
 set_interactive_constraint_modes {}
 setEcoMode -batchMode true -refinePlace false -updateTiming false
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37327_FE_OFN8095_mem_wdata_19 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37327_FE_OFN8095_mem_wdata_19 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37328_FE_OFN9012_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37328_FE_OFN9012_n -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37329_FE_OFN9014_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37329_FE_OFN9014_n -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_ECON37330_FE_OFN8910_n -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_lo/u_mem/FE_ECON37330_FE_OFN8910_n -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37331_FE_OFN8132_mem_wdata_10 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_ram_hi/u_mem/FE_ECON37331_FE_OFN8132_mem_wdata_10 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_5304 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_5304 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_clic/n_1754 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_clic/n_1754 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_4231 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_apb_dma_u_dma_engine/n_4231 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net n_17702 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net n_17702 -cell BUFx4_ASAP7_75t_R
-ecoAddRepeater -net u_axi_interconnect/n_4989 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
-ecoAddRepeater -net u_axi_interconnect/n_4989 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net FE_OFN1592_sdram_dq_o_2 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_i2c/n_191 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_apb_i2c/n_191 -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -net u_axi_interconnect/FE_OFN2498_SA_GEN_1__genblk1_slave_arbitration_W_channel_n_1104 -cell BUFx4_ASAP7_75t_R -relativeDistToSink 0.9
+ecoAddRepeater -net u_axi_interconnect/FE_OFN2498_SA_GEN_1__genblk1_slave_arbitration_W_channel_n_1104 -cell BUFx4_ASAP7_75t_R
 setEcoMode -batchMode false -refinePlace true -updateTiming true
 refinePlace
 ecoRoute

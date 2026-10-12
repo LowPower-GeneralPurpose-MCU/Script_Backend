@@ -1,12 +1,12 @@
 Gate area 0.0437 um^2
-Level 0 Module top_soc                                  Gates=   2916524 Cells=  148363 Area=  127568.8 um^2
+Level 0 Module top_soc                                  Gates=   2917639 Cells=  148840 Area=  127617.6 um^2
 Level 1 Module cg_cpu                                   Gates=20         Cells=7        Area=       0.9 um^2
 Level 1 Module cg_dbg                                   Gates=21         Cells=8        Area=       0.9 um^2
-Level 1 Module u_axi_apb_dma_u_dma_engine               Gates=40516      Cells=12023    Area=    1772.2 um^2
+Level 1 Module u_axi_apb_dma_u_dma_engine               Gates=40579      Cells=12050    Area=    1774.9 um^2
 Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST229  Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST237  Gates=7          Cells=2        Area=       0.3 um^2
-Level 1 Module u_core                                   Gates=64402      Cells=20510    Area=    2816.9 um^2
-Level 1 Module u_debug_module                           Gates=4120       Cells=1262     Area=     180.2 um^2
+Level 1 Module u_core                                   Gates=64546      Cells=20572    Area=    2823.3 um^2
+Level 1 Module u_debug_module                           Gates=4134       Cells=1268     Area=     180.8 um^2
 Level 1 Module u_jtag_dtm                               Gates=1959       Cells=586      Area=      85.7 um^2
 Level 1 Module u_apb_syscon                             Gates=1366       Cells=396      Area=      59.8 um^2
 Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST228  Gates=17         Cells=2        Area=       0.7 um^2
@@ -22,7 +22,7 @@ Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST230  Gates=7          Cells=2
 Level 1 Module cg_tim0                                  Gates=11         Cells=4        Area=       0.5 um^2
 Level 1 Module cg_uart1                                 Gates=21         Cells=7        Area=       0.9 um^2
 Level 1 Module cg_tim1                                  Gates=14         Cells=6        Area=       0.6 um^2
-Level 1 Module u_clic                                   Gates=8073       Cells=3392     Area=     353.1 um^2
+Level 1 Module u_clic                                   Gates=8169       Cells=3433     Area=     357.3 um^2
 Level 1 Module u_tim1_cg_icg__RC_CG_HIER_INST70         Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_tim1_cg_icg__RC_CG_HIER_INST66         Gates=17         Cells=2        Area=       0.7 um^2
 Level 1 Module u_tim1_cg_icg__RC_CG_HIER_INST73         Gates=7          Cells=2        Area=       0.3 um^2
@@ -48,7 +48,7 @@ Level 1 Module u_tim0_cg_icg__RC_CG_HIER_INST56         Gates=7          Cells=2
 Level 1 Module u_tim0_cg_icg__RC_CG_HIER_INST55         Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_tim0_cg_icg__RC_CG_HIER_INST59         Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module cg_ascon                                 Gates=21         Cells=7        Area=       0.9 um^2
-Level 1 Module u_apb_ascon_u_ascon                      Gates=14149      Cells=3960     Area=     618.9 um^2
+Level 1 Module u_apb_ascon_u_ascon                      Gates=14221      Cells=3991     Area=     622.1 um^2
 Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST11    Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST9     Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST8     Gates=7          Cells=2        Area=       0.3 um^2
@@ -60,8 +60,8 @@ Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST3     Gates=7          Cells=2
 Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST2     Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST10    Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST1     Gates=7          Cells=2        Area=       0.3 um^2
-Level 1 Module u_apb_watchdog                           Gates=1469       Cells=436      Area=      64.3 um^2
-Level 1 Module u_apb_i2c                                Gates=4371       Cells=1209     Area=     191.2 um^2
+Level 1 Module u_apb_watchdog                           Gates=1474       Cells=438      Area=      64.5 um^2
+Level 1 Module u_apb_i2c                                Gates=4382       Cells=1214     Area=     191.7 um^2
 Level 1 Module cg_i2c                                   Gates=14         Cells=5        Area=       0.6 um^2
 Level 1 Module u_apb_spi_cg_icg__RC_CG_HIER_INST49      Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_spi_u_spi_rx_fifo_cg_icg__RC_CG_HIER_INST905 Gates=7          Cells=2        Area=       0.3 um^2
@@ -227,7 +227,7 @@ Level 1 Module u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST878 Gates=7       
 Level 1 Module u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST877 Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST876 Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST882 Gates=7          Cells=2        Area=       0.3 um^2
-Level 1 Module u_axi_interconnect                       Gates=181974     Cells=52338    Area=    7959.6 um^2
+Level 1 Module u_axi_interconnect                       Gates=182299     Cells=52477    Area=    7973.8 um^2
 Level 2 Module u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_AR_channel_cg_icg__RC_CG_HIER_INST404 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_AR_channel_cg_icg__RC_CG_HIER_INST405 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_AR_channel_fifo_xaddr_order_cg_icg__RC_CG_HIER_INST1027 Gates=7          Cells=2        Area=       0.3 um^2
@@ -497,8 +497,8 @@ Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_AW_channel
 Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST509 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST510 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST511 Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel Gates=700        Cells=222      Area=      30.6 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_R_channel Gates=4188       Cells=1390     Area=     183.2 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel Gates=705        Cells=224      Area=      30.9 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_R_channel Gates=4190       Cells=1391     Area=     183.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_W_channel_cg_icg__RC_CG_HIER_INST658 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_W_channel_fifo_wdata_order_cg_icg__RC_CG_HIER_INST979 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_W_channel_fifo_wdata_order_cg_icg__RC_CG_HIER_INST980 Gates=7          Cells=2        Area=       0.3 um^2
@@ -556,7 +556,7 @@ Level 2 Module u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_AW_channel
 Level 2 Module u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST515 Gates=8          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_AW_channel_slv_skid_buffer_cg_icg__RC_CG_HIER_INST746 Gates=17         Cells=2        Area=       0.7 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_B_channel Gates=685        Cells=215      Area=      30.0 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_R_channel Gates=4326       Cells=1425     Area=     189.2 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_R_channel Gates=4331       Cells=1427     Area=     189.5 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_MST_W_FIFO[0].fifo_wdata_cg_icg__RC_CG_HIER_INST1081 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1083 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1084 Gates=7          Cells=2        Area=       0.3 um^2
@@ -638,8 +638,8 @@ Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AW_channel
 Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST518 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST519 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST520 Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_B_channel Gates=695        Cells=220      Area=      30.4 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_R_channel Gates=4309       Cells=1434     Area=     188.5 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_B_channel Gates=697        Cells=221      Area=      30.5 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_R_channel Gates=4316       Cells=1437     Area=     188.8 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_W_channel_cg_icg__RC_CG_HIER_INST659 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_W_channel_fifo_wdata_order_cg_icg__RC_CG_HIER_INST991 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_W_channel_fifo_wdata_order_cg_icg__RC_CG_HIER_INST992 Gates=7          Cells=2        Area=       0.3 um^2
@@ -696,8 +696,8 @@ Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel
 Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST523 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST524 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel_slv_skid_buffer_cg_icg__RC_CG_HIER_INST749 Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_B_channel Gates=662        Cells=210      Area=      29.0 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_R_channel Gates=4272       Cells=1409     Area=     186.9 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_B_channel Gates=669        Cells=213      Area=      29.3 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_R_channel Gates=4277       Cells=1411     Area=     187.1 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_W_channel_MST_W_FIFO[0].fifo_wdata_cg_icg__RC_CG_HIER_INST1133 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1135 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1136 Gates=7          Cells=2        Area=       0.3 um^2
@@ -787,7 +787,7 @@ Level 2 Module u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AW_channel
 Level 2 Module u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST527 Gates=17         Cells=2        Area=       0.7 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST528 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AW_channel_slv_skid_buffer_cg_icg__RC_CG_HIER_INST751 Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel Gates=699        Cells=223      Area=      30.6 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel Gates=704        Cells=225      Area=      30.8 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_R_channel Gates=4256       Cells=1308     Area=     186.2 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1079 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1080 Gates=7          Cells=2        Area=       0.3 um^2
@@ -829,7 +829,7 @@ Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_MST_FIFO[3].fifo_Ax_channel_cg_icg__RC_CG_HIER_INST1674 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_MST_FIFO[3].fifo_Ax_channel_cg_icg__RC_CG_HIER_INST1675 Gates=9          Cells=3        Area=       0.4 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_MST_FIFO[3].fifo_Ax_channel_cg_icg__RC_CG_HIER_INST1676 Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_arbiter Gates=279        Cells=126      Area=      12.2 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_arbiter Gates=282        Cells=127      Area=      12.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_cg_icg__RC_CG_HIER_INST533 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_slv_skid_buffer_cg_icg__RC_CG_HIER_INST743 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AW_channel_MST_FIFO[1].fifo_Ax_channel_cg_icg__RC_CG_HIER_INST1635 Gates=17         Cells=2        Area=       0.7 um^2
@@ -855,7 +855,7 @@ Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AW_channel
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST532 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AW_channel_slv_skid_buffer_cg_icg__RC_CG_HIER_INST742 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_B_channel Gates=683        Cells=214      Area=      29.9 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel Gates=4296       Cells=1407     Area=     187.9 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel Gates=4308       Cells=1412     Area=     188.4 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1073 Gates=8          Cells=3        Area=       0.4 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1074 Gates=8          Cells=3        Area=       0.4 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_W_channel_MST_W_FIFO[2].fifo_wdata_cg_icg__RC_CG_HIER_INST1075 Gates=8          Cells=3        Area=       0.4 um^2
@@ -922,7 +922,7 @@ Level 2 Module u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_AW_channel
 Level 2 Module u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_AW_channel_cg_icg__RC_CG_HIER_INST536 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_AW_channel_slv_skid_buffer_cg_icg__RC_CG_HIER_INST744 Gates=17         Cells=2        Area=       0.7 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_B_channel Gates=692        Cells=217      Area=      30.3 um^2
-Level 2 Module u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel Gates=4262       Cells=1381     Area=     186.4 um^2
+Level 2 Module u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel Gates=4271       Cells=1385     Area=     186.8 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_W_channel_MST_W_FIFO[0].fifo_wdata_cg_icg__RC_CG_HIER_INST1165 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1167 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_W_channel_MST_W_FIFO[1].fifo_wdata_cg_icg__RC_CG_HIER_INST1168 Gates=7          Cells=2        Area=       0.3 um^2
@@ -974,12 +974,12 @@ Level 2 Module u_axi_interconnect/cg_icg__RC_CG_HIER_INST1794 Gates=8          C
 Level 2 Module u_axi_interconnect/cg_icg__RC_CG_HIER_INST1795 Gates=8          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/cg_icg__RC_CG_HIER_INST1796 Gates=8          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/cg_icg__RC_CG_HIER_INST1797 Gates=8          Cells=2        Area=       0.3 um^2
-Level 1 Module u_dcache                                 Gates=174657     Cells=11451    Area=    7639.5 um^2
+Level 1 Module u_dcache                                 Gates=174708     Cells=11473    Area=    7641.7 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST419     Gates=8          Cells=2        Area=       0.3 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST422     Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST1801    Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST421     Gates=21         Cells=3        Area=       0.9 um^2
-Level 1 Module u_icache                                 Gates=170347     Cells=10331    Area=    7451.0 um^2
+Level 1 Module u_icache                                 Gates=170373     Cells=10342    Area=    7452.1 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST1765  Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST208   Gates=8          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST219   Gates=7          Cells=2        Area=       0.3 um^2
@@ -992,7 +992,7 @@ Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST211   Gates=8          Cells=2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST212   Gates=8          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_flash_cg_icg__RC_CG_HIER_INST1799  Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_rom                                Gates=1334       Cells=506      Area=      58.3 um^2
-Level 1 Module u_axi_ram_hi                             Gates=965312     Cells=2684     Area=   42222.8 um^2
+Level 1 Module u_axi_ram_hi                             Gates=965357     Cells=2702     Area=   42224.7 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST191  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST192  Gates=8          Cells=3        Area=       0.4 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST193  Gates=8          Cells=2        Area=       0.3 um^2
@@ -1003,8 +1003,8 @@ Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST197  Gates=7          Cells=2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST198  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST199  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST200  Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_axi_ram_hi/u_mem                       Gates=962625     Cells=1741     Area=   42105.2 um^2
-Level 1 Module u_axi_ram_lo                             Gates=965819     Cells=2906     Area=   42244.9 um^2
+Level 2 Module u_axi_ram_hi/u_mem                       Gates=962646     Cells=1749     Area=   42106.1 um^2
+Level 1 Module u_axi_ram_lo                             Gates=965929     Cells=2953     Area=   42249.7 um^2
 Level 2 Module u_axi_ram_lo/cg_icg__RC_CG_HIER_INST181  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_lo/cg_icg__RC_CG_HIER_INST182  Gates=17         Cells=2        Area=       0.7 um^2
 Level 2 Module u_axi_ram_lo/cg_icg__RC_CG_HIER_INST183  Gates=8          Cells=2        Area=       0.3 um^2
@@ -1015,7 +1015,7 @@ Level 2 Module u_axi_ram_lo/cg_icg__RC_CG_HIER_INST187  Gates=7          Cells=2
 Level 2 Module u_axi_ram_lo/cg_icg__RC_CG_HIER_INST188  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_lo/cg_icg__RC_CG_HIER_INST189  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_lo/cg_icg__RC_CG_HIER_INST190  Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_axi_ram_lo/u_mem                       Gates=963146     Cells=1979     Area=   42128.0 um^2
+Level 2 Module u_axi_ram_lo/u_mem                       Gates=963160     Cells=1985     Area=   42128.6 um^2
 Level 1 Module u_clint_u_slave_cg_icg__RC_CG_HIER_INST296 Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_clint_u_slave_cg_icg__RC_CG_HIER_INST297 Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_clint_u_slave_cg_icg__RC_CG_HIER_INST290 Gates=7          Cells=2        Area=       0.3 um^2
@@ -1060,12 +1060,12 @@ Level 1 Module u_axi_flash_cg_icg__RC_CG_HIER_INST221   Gates=17         Cells=2
 Level 1 Module u_axi_flash_cg_icg__RC_CG_HIER_INST222   Gates=17         Cells=2        Area=       0.7 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST207   Gates=8          Cells=2        Area=       0.4 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST420     Gates=17         Cells=2        Area=       0.7 um^2
-Level 1 Module u_itcm                                   Gates=121521     Cells=643      Area=    5315.3 um^2
+Level 1 Module u_itcm                                   Gates=121533     Cells=648      Area=    5315.9 um^2
 Level 2 Module u_itcm/cg_icg__RC_CG_HIER_INST1748       Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_itcm/u_mem                             Gates=120372     Cells=227      Area=    5265.1 um^2
-Level 1 Module u_dtcm                                   Gates=121346     Cells=583      Area=    5307.7 um^2
+Level 2 Module u_itcm/u_mem                             Gates=120376     Cells=229      Area=    5265.3 um^2
+Level 1 Module u_dtcm                                   Gates=121351     Cells=585      Area=    5307.9 um^2
 Level 2 Module u_dtcm/cg_icg__RC_CG_HIER_INST1747       Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_dtcm/u_mem                             Gates=120269     Cells=189      Area=    5260.6 um^2
+Level 2 Module u_dtcm/u_mem                             Gates=120271     Cells=190      Area=    5260.7 um^2
 Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST236  Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST209   Gates=8          Cells=2        Area=       0.4 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST215   Gates=7          Cells=2        Area=       0.3 um^2
