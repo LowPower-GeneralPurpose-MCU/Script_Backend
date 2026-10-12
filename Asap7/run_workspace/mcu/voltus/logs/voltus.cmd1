@@ -24,3 +24,13 @@ read_spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/out
 set_power_analysis_mode -method static -corner max -create_binary_db true -write_static_currents true
 set_power_output_dir /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/power
 report_power -outfile /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/power_static.rpt
+set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -era_lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap
+set_pg_nets -net VDD -voltage 0.7 -threshold 0.65
+set_pg_nets -net VSS -voltage 0.0 -threshold 0.05
+set_power_pads -net VDD -format defpin
+set_power_pads -net VSS -format defpin
+set_power_data -reset
+set_power_data -format current -scale 1 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/power/power.db
+analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD VDD
+analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS VSS
+exit 0

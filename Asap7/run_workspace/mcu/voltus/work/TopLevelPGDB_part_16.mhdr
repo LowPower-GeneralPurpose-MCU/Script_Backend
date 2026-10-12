@@ -1,0 +1,59 @@
+* The organization, structure, and layout of this file are copyrights and
+* confidential and proprietary trade secrets of Cadence Design Systems, Inc.,
+* subject to the terms and conditions of the license agreement in effect
+* between you and Cadence Design Systems, Inc. This file and its information
+* may not be disclosed, sold, or otherwise transferred to any third party
+* without the express written consent of Cadence Design Systems, Inc. Export
+* of any or all of this file in violation of any statute or regulation is
+* strictly prohibited.
+* 
+
+FORMAT: 11.0
+PROJECT: none
+NET: VSS 
+CREATOR: QX
+
+CREATED: 2026-Oct-11 13:29:54 (2026-Oct-11 04:29:54 GMT)
+
+LAYOUT_XMIN: -10
+LAYOUT_YMIN: 224090
+LAYOUT_XMAX: 565750
+LAYOUT_YMAX: 276890
+
+NODES: 93118
+NODE_FILE: TopLevelPGDB_part_16.mnode
+RESISTORS: 95068
+INDUCTORS: 0
+
+LAYERS: 14
+LAYER: M9 M 2 TopLevelPGDB_part_16.ml00
+LAYER: M7 M 74 TopLevelPGDB_part_16.ml04
+LAYER: V6 V 37 TopLevelPGDB_part_16.ml05
+LAYER: M6 M 97 TopLevelPGDB_part_16.ml06
+LAYER: V5 V 65 TopLevelPGDB_part_16.ml07
+LAYER: M5 M 1729 TopLevelPGDB_part_16.ml08
+LAYER: V4 V 1595 TopLevelPGDB_part_16.ml09
+LAYER: M4 M 2267 TopLevelPGDB_part_16.ml10
+LAYER: V3 V 2267 TopLevelPGDB_part_16.ml11
+LAYER: M3 M 2387 TopLevelPGDB_part_16.ml12
+LAYER: V2 V 1595 TopLevelPGDB_part_16.ml13
+LAYER: M2 M 1595 TopLevelPGDB_part_16.ml14
+LAYER: V1 V 1595 TopLevelPGDB_part_16.ml15
+LAYER: M1 M 79763 TopLevelPGDB_part_16.ml16
+
+CUT_LAYER: none
+GRID_CAP: false
+DIFF_CAP: false
+NUM_PINS: 0
+PINS: /dev/null
+NUM_INSTANCE_TAPS: 123501
+INSTANCES: TopLevelPGDB_part_16.bminst
+I_LOADS:
+NODE_MAP:
+RESISTOR_MAP:
+TILE_FILE: TopLevelPGDB_part_16.mtile
+OUTPUT_WLT: drawn
+LAYOUT_SCALE_FACTOR: 1
+TEMPERATURE: 25
+BINARY_INST: true
+MICRON_UNITS: 1000
