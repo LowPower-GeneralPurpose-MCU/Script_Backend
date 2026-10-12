@@ -4,17 +4,17 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
 Options:	-no_gui -files ../eco/eco_finish.tcl -log ../eco/logs/eco_finish 
-Date:		Mon Oct 12 19:43:57 2026
+Date:		Mon Oct 12 21:39:13 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04.1 LTS
 
 License:
-		[19:44:01.206234] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[21:39:17.206266] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		invs	Innovus Implementation System	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use setMultiCpuUsage to set your required CPU count.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-Info: Process UID = 2896399 / 76d46441-b515-4612-8acf-12036cba12c1 / Tx6MSDHf7M
+Info: Process UID = 3453185 / 44958ce0-3f3d-45ae-b3df-4239f58d880b / ptQhSgK8A9
 
 **INFO:  MMMC transition support version v31-84 
 
@@ -28,20 +28,20 @@ Info: Process UID = 2896399 / 76d46441-b515-4612-8acf-12036cba12c1 / Tx6MSDHf7M
 Sourcing file "../eco/eco_finish.tcl" ...
 source ../eco/eco_finish.tcl
 <CMD> restoreDesign ./saved/top_soc_postRoute_eco.enc.dat top_soc
-#% Begin load design ... (date=10/12 19:44:18, mem=1722.6M)
-Loading design 'top_soc' saved by 'Innovus' '23.14-s088_1' on 'Mon Oct 12 18:42:25 2026'.
-% Begin Load MMMC data ... (date=10/12 19:44:19, mem=1724.5M)
-% End Load MMMC data ... (date=10/12 19:44:19, total cpu=0:00:00.1, real=0:00:00.0, peak res=1726.1M, current mem=1726.1M)
+#% Begin load design ... (date=10/12 21:39:35, mem=1646.2M)
+Loading design 'top_soc' saved by 'Innovus' '23.14-s088_1' on 'Mon Oct 12 20:56:41 2026'.
+% Begin Load MMMC data ... (date=10/12 21:39:36, mem=1648.1M)
+% End Load MMMC data ... (date=10/12 21:39:36, total cpu=0:00:00.0, real=0:00:00.0, peak res=1649.7M, current mem=1649.7M)
 rc_typ rc_ff rc_ss
 
 Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/libs/lef/asap7_tech_1x_201209.fixed.lef ...
 
 Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/libs/lef/asap7sc7p5t_28_R_1x_220121a.lef ...
 Set DBUPerIGU to M1 pitch 36.
-[19:44:29.119875] Periodic Lic check successful
-[19:44:29.644170] Feature usage summary:
-[19:44:29.644170] Innovus_Impl_System
-[19:44:29.644171] Innovus_7nm_Opt
+[21:39:46.301610] Periodic Lic check successful
+[21:39:46.825913] Feature usage summary:
+[21:39:46.825914] Innovus_Impl_System
+[21:39:46.825914] Innovus_7nm_Opt
 
 (#124) This command "restoreDesign ./saved/top_soc_postRoute_eco.enc.dat ..." required an extra checkout of license invs_7nm.
 Additional license(s) checked out: 1 'invs_7nm' (Innovus_7nm_Opt; INVS07; 23.1) license(s)
@@ -109,7 +109,7 @@ Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120'
 Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
 *** End library_loading (cpu=0.45min, real=0.45min, mem=544.1M, fe_cpu=0.71min, fe_real=1.00min, fe_mem=2250.7M) ***
-% Begin Load netlist data ... (date=10/12 19:44:56, mem=1757.1M)
+% Begin Load netlist data ... (date=10/12 21:40:13, mem=1681.9M)
 *** Begin netlist parsing (mem=2250.7M) ***
 **WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
 Type 'man IMPVL-159' for more detail.
@@ -126,9 +126,9 @@ Reading netlist ...
 Backslashed names will retain backslash and a trailing blank character.
 Reading verilogBinary netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.v.bin'
 
-*** Memory Usage v#2 (Current mem = 2250.688M, initial mem = 847.699M) ***
+*** Memory Usage v#2 (Current mem = 2250.688M, initial mem = 839.699M) ***
 *** End netlist parsing (cpu=0:00:00.2, real=0:00:00.0, mem=2250.7M) ***
-% End Load netlist data ... (date=10/12 19:44:56, total cpu=0:00:00.2, real=0:00:00.0, peak res=1886.1M, current mem=1886.1M)
+% End Load netlist data ... (date=10/12 21:40:13, total cpu=0:00:00.2, real=0:00:00.0, peak res=1810.7M, current mem=1810.7M)
 Set top cell to top_soc.
 **WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
 Type 'man IMPTS-124' for more detail.
@@ -148,11 +148,11 @@ Building hierarchical netlist for Cell top_soc ...
 *** Netlist is unique.
 Set DBUPerIGU to techSite asap7sc7p5t width 54.
 ** info: there are 2534 modules.
-** info: there are 148282 stdCell insts.
-** info: there are 148282 stdCell insts with at least one signal pin.
+** info: there are 148279 stdCell insts.
+** info: there are 148279 stdCell insts with at least one signal pin.
 ** info: there are 84 macros.
 
-*** Memory Usage v#2 (Current mem = 2274.699M, initial mem = 847.699M) ***
+*** Memory Usage v#2 (Current mem = 2274.699M, initial mem = 839.699M) ***
 *info: set bottom ioPad orient R0
 
 Honor LEF defined pitches for advanced node
@@ -229,8 +229,8 @@ Type 'man IMPOPT-3602' for more detail.
 Slack adjustment of -0 applied on C2O path_group
 **WARN: (IMPTCM-77):	Option "-drouteStartIteration" for command setNanoRouteMode is obsolete and will be removed in a future release. The obsolete option still works in this release but to avoid this warning and to ensure compatibility with future releases, remove the obsolete option from your script.
 
-viaInitial starts at Mon Oct 12 19:44:57 2026
-viaInitial ends at Mon Oct 12 19:44:57 2026
+viaInitial starts at Mon Oct 12 21:40:14 2026
+viaInitial ends at Mon Oct 12 21:40:14 2026
 Setting -viarule_preference to default order. ViaGen will consider via rule priority based on the order of appearance in the technology file.
 AAE_INFO: switching setDelayCal -siAware from false to true ...
 AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
@@ -287,51 +287,51 @@ Total number of identified usable delay cells: 7
 List of identified unusable delay cells:
 Total number of identified unusable delay cells: 0
 Reading floorplan file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.fp.gz (mem = 2683.8M).
-% Begin Load floorplan data ... (date=10/12 19:45:11, mem=2390.9M)
-*info: reset 166487 existing net BottomPreferredLayer and AvoidDetour
+% Begin Load floorplan data ... (date=10/12 21:40:28, mem=2312.4M)
+*info: reset 166484 existing net BottomPreferredLayer and AvoidDetour
 Deleting old partition specification.
 Set FPlanBox to (0 0 565632 358128)
  ... processed partition successfully.
-Reading binary special route file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.fp.spr.gz (Created by Innovus v23.14-s088_1 on Mon Oct 12 18:42:20 2026, version: 1)
-Ending "Read special route file" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2395.9M, current mem=2395.9M)
+Reading binary special route file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.fp.spr.gz (Created by Innovus v23.14-s088_1 on Mon Oct 12 20:56:34 2026, version: 1)
+Ending "Read special route file" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2317.0M, current mem=2317.0M)
 There are 3497 nets with weight being set
 There are 3531 nets with bottomPreferredRoutingLayer being set
 There are 3497 nets with avoidDetour being set
 Extracting standard cell pins and blockage ...... 
 Pin and blockage extraction finished
-% End Load floorplan data ... (date=10/12 19:45:11, total cpu=0:00:00.2, real=0:00:00.0, peak res=2397.5M, current mem=2397.5M)
+% End Load floorplan data ... (date=10/12 21:40:28, total cpu=0:00:00.3, real=0:00:00.0, peak res=2318.5M, current mem=2318.5M)
 Reading congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.route.congmap.gz ...
 Suppress "**WARN ..." messages.
 Un-suppress "**WARN ..." messages.
-% Begin Load SymbolTable ... (date=10/12 19:45:11, mem=2421.8M)
-% End Load SymbolTable ... (date=10/12 19:45:11, total cpu=0:00:00.3, real=0:00:00.0, peak res=2448.6M, current mem=2448.6M)
+% Begin Load SymbolTable ... (date=10/12 21:40:28, mem=2342.7M)
+% End Load SymbolTable ... (date=10/12 21:40:28, total cpu=0:00:00.2, real=0:00:00.0, peak res=2369.4M, current mem=2369.4M)
 Loading place ...
-% Begin Load placement data ... (date=10/12 19:45:11, mem=2448.6M)
+% Begin Load placement data ... (date=10/12 21:40:28, mem=2369.4M)
 Reading placement file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.place.gz.
-** Reading stdCellPlacement_binary (Created by Innovus v23.14-s088_1 on Mon Oct 12 18:42:20 2026, version# 2) ...
+** Reading stdCellPlacement_binary (Created by Innovus v23.14-s088_1 on Mon Oct 12 20:56:35 2026, version# 2) ...
 Read Views for adaptive view pruning ...
 Read 1 views from Binary DB for adaptive view pruning
 view_ss
 *** applyConnectGlobalNets disabled.
-*** Completed restorePlace (cpu=0:00:00.3 real=0:00:01.0 mem=2702.8M) ***
-Total net length = 1.065e+06 (5.204e+05 5.448e+05) (ext = 1.525e+04)
-% End Load placement data ... (date=10/12 19:45:12, total cpu=0:00:00.3, real=0:00:01.0, peak res=2470.7M, current mem=2470.7M)
-Reading PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on       Mon Oct 12 18:42:20 2026)
-*** Completed restorePGFile (cpu=0:00:00.0 real=0:00:00.0 mem=2702.8M) ***
-% Begin Load routing data ... (date=10/12 19:45:12, mem=2473.6M)
+*** Completed restorePlace (cpu=0:00:00.2 real=0:00:00.0 mem=2693.8M) ***
+Total net length = 1.065e+06 (5.204e+05 5.447e+05) (ext = 1.525e+04)
+% End Load placement data ... (date=10/12 21:40:29, total cpu=0:00:00.3, real=0:00:00.0, peak res=2388.5M, current mem=2388.5M)
+Reading PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on       Mon Oct 12 20:56:34 2026)
+*** Completed restorePGFile (cpu=0:00:00.0 real=0:00:00.0 mem=2693.8M) ***
+% Begin Load routing data ... (date=10/12 21:40:29, mem=2391.3M)
 Reading routing file - /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.route.gz.
-Reading Innovus routing data (Created by Innovus v23.14-s088_1 on Mon Oct 12 18:42:20 2026 Format: 23.1) ...
-*** Total 151618 nets are successfully restored.
-*** Completed restoreRoute (cpu=0:00:00.9 real=0:00:01.0 mem=2864.8M) ***
-% End Load routing data ... (date=10/12 19:45:13, total cpu=0:00:01.0, real=0:00:01.0, peak res=2638.4M, current mem=2638.4M)
+Reading Innovus routing data (Created by Innovus v23.14-s088_1 on Mon Oct 12 20:56:35 2026 Format: 23.1) ...
+*** Total 151615 nets are successfully restored.
+*** Completed restoreRoute (cpu=0:00:00.8 real=0:00:01.0 mem=2857.8M) ***
+% End Load routing data ... (date=10/12 21:40:30, total cpu=0:00:00.9, real=0:00:01.0, peak res=2556.2M, current mem=2556.2M)
 Loading Drc markers ...
 ... 7238 markers are loaded ...
 ... 4 geometry drc markers are loaded ...
 ... 0 antenna drc markers are loaded ...
 TAT_INFO: ::restoreCongMap REAL = 0 : CPU = 0 : MEM = 0.
 Reading property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.prop
-*** Completed restoreProperty (cpu=0:00:00.1 real=0:00:00.0 mem=2876.8M) ***
-Reading dirtyarea snapshot file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.db.da.gz (Create by Innovus v23.14-s088_1 on Mon Oct 12 18:42:22 2026, version: 7).
+*** Completed restoreProperty (cpu=0:00:00.1 real=0:00:00.0 mem=2868.8M) ***
+Reading dirtyarea snapshot file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/top_soc.db.da.gz (Create by Innovus v23.14-s088_1 on Mon Oct 12 20:56:37 2026, version: 7).
 Loading preRoute extraction data from directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/extraction/' ...
 Extraction setup Started for TopCell top_soc 
 Initializing multi-corner RC extraction with 3 active RC Corners ...
@@ -403,14 +403,14 @@ Initializing preRoute extraction patterns for new vias...
 Reading layer map file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/libs/misc/asap7_lef_to_qrc_layers.map'.
 
 Completed (cpu: 0:00:00.4 real: 0:00:01.0)
-% Begin Load power constraints ... (date=10/12 19:45:17, mem=2763.2M)
+% Begin Load power constraints ... (date=10/12 21:40:34, mem=2682.2M)
 'set_default_switching_activity' finished successfully.
-% End Load power constraints ... (date=10/12 19:45:17, total cpu=0:00:00.1, real=0:00:00.0, peak res=2769.3M, current mem=2769.3M)
+% End Load power constraints ... (date=10/12 21:40:34, total cpu=0:00:00.1, real=0:00:00.0, peak res=2687.9M, current mem=2687.9M)
 dc_ss dc_tt dc_ff
-% Begin load AAE data ... (date=10/12 19:45:17, mem=2852.1M)
+% Begin load AAE data ... (date=10/12 21:40:34, mem=2770.4M)
 **WARN: (IMPESI-3505):	setDelayCalMode -eng_enablePrePlacedFlow false (default=false) will be obsoleted along with its sgs2set equivalent.  This parameter will continue to be supported in the current release, but will be removed in the next major release of the software.
-AAE DB initialization (MEM=2894.531250 CPU=0:00:00.0 REAL=0:00:00.0) 
-% End load AAE data ... (date=10/12 19:45:17, total cpu=0:00:00.4, real=0:00:01.0, peak res=2894.5M, current mem=2894.5M)
+AAE DB initialization (MEM=2812.421875 CPU=0:00:00.0 REAL=0:00:00.0) 
+% End load AAE data ... (date=10/12 21:40:34, total cpu=0:00:00.4, real=0:00:01.0, peak res=2812.4M, current mem=2812.4M)
 Restoring CCOpt config...
   Extracting original clock gating for CLK_TCK...
     clock_tree CLK_TCK contains 136 sinks and 6 clock gates.
@@ -534,7 +534,7 @@ Total number of identified unusable delay cells: 0
 timing_aocv_enable_gba_combine_launch_capture
 timing_enable_backward_compatible_latch_thru_mt_mode
 timing_enable_separate_device_slew_effect_sensitivities
-#% End load design ... (date=10/12 19:45:19, total cpu=0:00:51.7, real=0:01:01, peak res=2969.5M, current mem=2950.6M)
+#% End load design ... (date=10/12 21:40:36, total cpu=0:00:51.4, real=0:01:01, peak res=2887.0M, current mem=2868.2M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -561,10 +561,10 @@ Type 'man IMPSP-5217' for more detail.
 INFO: No filler could be restored
 Estimated cell power/ground rail width = 0.025 um
 *INFO: Adding fillers to top-module.
-*INFO:   Added 2059329 filler insts (cell FILLER_ASAP7_75t_R / prefix FILLER).
-*INFO:   Added 77864 filler insts (cell FILLERxp5_ASAP7_75t_R / prefix FILLER).
-*INFO: Total 2137193 filler insts added - prefix FILLER (CPU: 0:00:56.2).
-For 2137193 new insts, <CMD> globalNetConnect VDD -type pgpin -pin VDD -inst * -override
+*INFO:   Added 2059344 filler insts (cell FILLER_ASAP7_75t_R / prefix FILLER).
+*INFO:   Added 77863 filler insts (cell FILLERxp5_ASAP7_75t_R / prefix FILLER).
+*INFO: Total 2137207 filler insts added - prefix FILLER (CPU: 0:00:55.7).
+For 2137207 new insts, <CMD> globalNetConnect VDD -type pgpin -pin VDD -inst * -override
 <CMD> globalNetConnect VSS -type pgpin -pin VSS -inst * -override
 <CMD> globalNetConnect VDD -type tiehi -inst * -override
 <CMD> globalNetConnect VSS -type tielo -inst * -override
@@ -574,54 +574,54 @@ For 2137193 new insts, <CMD> globalNetConnect VDD -type pgpin -pin VDD -inst * -
 *** Applied 4 GNC rules (cpu = 0:00:00.4)
 <CMD> checkPlace ./verify_rpt/checkPlace_final.rpt
 Begin checking placement ... (start mem=5072.6M, init mem=5131.7M)
-*info: Placed = 2316659        (Fixed = 34600)
+*info: Placed = 2316670        (Fixed = 34600)
 *info: Unplaced = 0           
 Placement Density:100.00%(81936/81936)
 Placement Density (including fixed std cells):100.00%(82843/82843)
-Finished checkPlace (total: cpu=0:00:41.5, real=0:00:41.0; vio checks: cpu=0:00:40.1, real=0:00:40.0; mem=5288.3M)
+Finished checkPlace (total: cpu=0:00:41.2, real=0:00:42.0; vio checks: cpu=0:00:39.8, real=0:00:40.0; mem=5290.7M)
 <CMD> saveDesign ./saved/top_soc_prefill.enc
-#% Begin save design ... (date=10/12 19:47:00, mem=4550.4M)
+#% Begin save design ... (date=10/12 21:42:16, mem=4467.6M)
 INFO: Current data have to be saved into a temporary db: 'top_soc_prefill.enc.dat.tmp' first. It will be renamed to the correct name 'top_soc_prefill.enc.dat' after the old db was deleted.
-% Begin Save ccopt configuration ... (date=10/12 19:47:00, mem=4550.4M)
-% End Save ccopt configuration ... (date=10/12 19:47:01, total cpu=0:00:00.8, real=0:00:01.0, peak res=4551.3M, current mem=4551.3M)
-% Begin Save netlist data ... (date=10/12 19:47:01, mem=4551.6M)
+% Begin Save ccopt configuration ... (date=10/12 21:42:16, mem=4467.6M)
+% End Save ccopt configuration ... (date=10/12 21:42:17, total cpu=0:00:00.7, real=0:00:01.0, peak res=4468.5M, current mem=4468.5M)
+% Begin Save netlist data ... (date=10/12 21:42:17, mem=4468.8M)
 Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.v.bin in single-threaded mode...
-% End Save netlist data ... (date=10/12 19:47:01, total cpu=0:00:00.2, real=0:00:00.0, peak res=4551.7M, current mem=4551.7M)
+% End Save netlist data ... (date=10/12 21:42:17, total cpu=0:00:00.2, real=0:00:00.0, peak res=4468.8M, current mem=4468.8M)
 Saving symbol-table file ...
 Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.route.congmap.gz ...
-% Begin Save AAE data ... (date=10/12 19:47:02, mem=4562.5M)
+% Begin Save AAE data ... (date=10/12 21:42:18, mem=4479.6M)
 Saving AAE Data ...
-% End Save AAE data ... (date=10/12 19:47:02, total cpu=0:00:00.1, real=0:00:00.0, peak res=4564.5M, current mem=4564.5M)
+% End Save AAE data ... (date=10/12 21:42:18, total cpu=0:00:00.1, real=0:00:00.0, peak res=4481.4M, current mem=4481.4M)
 Saving mode setting ...
 **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
 Saving global file ...
-% Begin Save floorplan data ... (date=10/12 19:47:03, mem=4570.2M)
+% Begin Save floorplan data ... (date=10/12 21:42:19, mem=4486.9M)
 Saving floorplan file ...
 Convert 0 swires and 0 svias from compressed groups
-% End Save floorplan data ... (date=10/12 19:47:04, total cpu=0:00:00.3, real=0:00:01.0, peak res=4570.9M, current mem=4570.9M)
-Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Mon Oct 12 19:47:04 2026)
-*** Completed savePGFile (cpu=0:00:00.7 real=0:00:00.0 mem=5296.3M) ***
+% End Save floorplan data ... (date=10/12 21:42:20, total cpu=0:00:00.3, real=0:00:01.0, peak res=4487.3M, current mem=4487.3M)
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Mon Oct 12 21:42:20 2026)
+*** Completed savePGFile (cpu=0:00:00.8 real=0:00:01.0 mem=5298.7M) ***
 *info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.bbox.lef
 Saving Drc markers ...
 ... 7238 markers are saved ...
 ... 4 geometry drc markers are saved ...
 ... 0 antenna drc markers are saved ...
-% Begin Save placement data ... (date=10/12 19:47:04, mem=4567.7M)
+% Begin Save placement data ... (date=10/12 21:42:21, mem=4483.2M)
 ** Saving stdCellPlacement_binary (version# 2) ...
 Save Adaptive View Pruning View Names to Binary file
 view_ss
-% End Save placement data ... (date=10/12 19:47:05, total cpu=0:00:00.6, real=0:00:00.0, peak res=4583.0M, current mem=4583.0M)
-% Begin Save routing data ... (date=10/12 19:47:05, mem=4583.0M)
+% End Save placement data ... (date=10/12 21:42:21, total cpu=0:00:00.6, real=0:00:00.0, peak res=4498.5M, current mem=4498.5M)
+% Begin Save routing data ... (date=10/12 21:42:21, mem=4498.5M)
 Saving route file ...
-*** Completed saveRoute (cpu=0:00:00.7 real=0:00:02.0 mem=5296.3M) ***
-% End Save routing data ... (date=10/12 19:47:07, total cpu=0:00:00.7, real=0:00:02.0, peak res=4584.5M, current mem=4584.5M)
+*** Completed saveRoute (cpu=0:00:00.6 real=0:00:02.0 mem=5298.7M) ***
+% End Save routing data ... (date=10/12 21:42:23, total cpu=0:00:00.7, real=0:00:02.0, peak res=4499.9M, current mem=4499.9M)
 Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.prop
-*** Completed saveProperty (cpu=0:00:00.7 real=0:00:01.0 mem=5296.3M) ***
+*** Completed saveProperty (cpu=0:00:00.7 real=0:00:01.0 mem=5298.7M) ***
 #Saving pin access data to file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.apa ...
 Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/top_soc.techData.gz' ...
 Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_prefill.enc.dat.tmp/extraction/' ...
-% Begin Save power constraints data ... (date=10/12 19:47:09, mem=4588.2M)
-% End Save power constraints data ... (date=10/12 19:47:09, total cpu=0:00:00.1, real=0:00:00.0, peak res=4588.4M, current mem=4588.4M)
+% Begin Save power constraints data ... (date=10/12 21:42:25, mem=4503.1M)
+% End Save power constraints data ... (date=10/12 21:42:25, total cpu=0:00:00.1, real=0:00:00.0, peak res=4503.2M, current mem=4503.2M)
 rc_typ rc_ff rc_ss
 rc_typ rc_ff rc_ss
 rc_typ rc_ff rc_ss
@@ -634,7 +634,7 @@ libset_ss libset_tt libset_ff
 rc_typ rc_ff rc_ss
 mode_func
 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/mmmc/modes/mode_func/mode_func.sdc
-#% End save design ... (date=10/12 19:47:11, total cpu=0:00:08.3, real=0:00:11.0, peak res=4599.4M, current mem=4590.9M)
+#% End save design ... (date=10/12 21:42:27, total cpu=0:00:08.2, real=0:00:11.0, peak res=4516.3M, current mem=4505.6M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -646,7 +646,7 @@ WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
 #-limit 500000                           # int, default=500000, user setting
 #-check_same_via_cell true               # bool, default=false, user setting
 #-report ./verify_rpt/drc_final.rpt      # string, default="", user setting
- *** Starting Verify DRC (MEM: 5320.4) ***
+ *** Starting Verify DRC (MEM: 5322.7) ***
 
   VERIFY DRC ...... Starting Verification
   VERIFY DRC ...... Initializing
@@ -665,63 +665,63 @@ WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
 	M4            4        4
 	Totals        4        4
 
- *** End Verify DRC (CPU TIME: 0:00:37.9  ELAPSED TIME: 0:00:37.0  MEM: 256.1M) ***
+ *** End Verify DRC (CPU TIME: 0:00:38.1  ELAPSED TIME: 0:00:38.0  MEM: 256.1M) ***
 
 <CMD> verifyConnectivity -type all -error 100000 -warning 1000 -report ./verify_rpt/connectivity_final.rpt
 VERIFY_CONNECTIVITY use new engine.
 
 ******** Start: VERIFY CONNECTIVITY ********
-Start Time: Mon Oct 12 19:47:49 2026
+Start Time: Mon Oct 12 21:43:05 2026
 
 Design Name: top_soc
 Database Units: 1000
 Design Boundary: (0.0000, 0.0000) (565.6320, 358.1280)
 Error Limit = 100000; Warning Limit = 1000
 Check all nets
-**** 19:47:49 **** Processed 5000 nets.
-**** 19:47:49 **** Processed 10000 nets.
-**** 19:47:49 **** Processed 15000 nets.
-**** 19:47:49 **** Processed 20000 nets.
-**** 19:47:49 **** Processed 25000 nets.
-**** 19:47:49 **** Processed 30000 nets.
-**** 19:47:49 **** Processed 35000 nets.
-**** 19:47:49 **** Processed 40000 nets.
-**** 19:47:50 **** Processed 45000 nets.
-**** 19:47:50 **** Processed 50000 nets.
-**** 19:47:50 **** Processed 55000 nets.
-**** 19:47:50 **** Processed 60000 nets.
-**** 19:47:50 **** Processed 65000 nets.
-**** 19:47:50 **** Processed 70000 nets.
-**** 19:47:50 **** Processed 75000 nets.
-**** 19:47:50 **** Processed 80000 nets.
-**** 19:47:50 **** Processed 85000 nets.
-**** 19:47:50 **** Processed 90000 nets.
-**** 19:47:50 **** Processed 95000 nets.
-**** 19:47:50 **** Processed 100000 nets.
-**** 19:47:51 **** Processed 105000 nets.
-**** 19:47:51 **** Processed 110000 nets.
-**** 19:47:51 **** Processed 115000 nets.
-**** 19:47:51 **** Processed 120000 nets.
-**** 19:47:51 **** Processed 125000 nets.
-**** 19:47:51 **** Processed 130000 nets.
-**** 19:47:51 **** Processed 135000 nets.
-**** 19:47:51 **** Processed 140000 nets.
-**** 19:47:51 **** Processed 145000 nets.
-**** 19:47:51 **** Processed 150000 nets.
-**** 19:47:51 **** Processed 155000 nets.
-**** 19:47:51 **** Processed 160000 nets.
-**** 19:47:51 **** Processed 165000 nets.
+**** 21:43:05 **** Processed 5000 nets.
+**** 21:43:05 **** Processed 10000 nets.
+**** 21:43:05 **** Processed 15000 nets.
+**** 21:43:05 **** Processed 20000 nets.
+**** 21:43:05 **** Processed 25000 nets.
+**** 21:43:06 **** Processed 30000 nets.
+**** 21:43:06 **** Processed 35000 nets.
+**** 21:43:06 **** Processed 40000 nets.
+**** 21:43:06 **** Processed 45000 nets.
+**** 21:43:06 **** Processed 50000 nets.
+**** 21:43:06 **** Processed 55000 nets.
+**** 21:43:06 **** Processed 60000 nets.
+**** 21:43:06 **** Processed 65000 nets.
+**** 21:43:06 **** Processed 70000 nets.
+**** 21:43:06 **** Processed 75000 nets.
+**** 21:43:06 **** Processed 80000 nets.
+**** 21:43:07 **** Processed 85000 nets.
+**** 21:43:07 **** Processed 90000 nets.
+**** 21:43:07 **** Processed 95000 nets.
+**** 21:43:07 **** Processed 100000 nets.
+**** 21:43:07 **** Processed 105000 nets.
+**** 21:43:07 **** Processed 110000 nets.
+**** 21:43:07 **** Processed 115000 nets.
+**** 21:43:07 **** Processed 120000 nets.
+**** 21:43:07 **** Processed 125000 nets.
+**** 21:43:07 **** Processed 130000 nets.
+**** 21:43:07 **** Processed 135000 nets.
+**** 21:43:07 **** Processed 140000 nets.
+**** 21:43:07 **** Processed 145000 nets.
+**** 21:43:08 **** Processed 150000 nets.
+**** 21:43:08 **** Processed 155000 nets.
+**** 21:43:08 **** Processed 160000 nets.
+**** 21:43:08 **** Processed 165000 nets.
 
 Begin Summary 
   Found no problems or warnings.
 End Summary
 
-End Time: Mon Oct 12 19:47:57 2026
-Time Elapsed: 0:00:08.0
+End Time: Mon Oct 12 21:43:14 2026
+Time Elapsed: 0:00:09.0
 
 ******** End: VERIFY CONNECTIVITY ********
   Verification Complete : 0 Viols.  0 Wrngs.
-  (CPU Time: 0:00:08.7  MEM: -0.422M)
+  (CPU Time: 0:00:08.5  MEM: -0.750M)
 
 <CMD> verifyWellTap -cell TAPCELL_ASAP7_75t_R -rule 30.0 -report ./verify_rpt/welltap_final.rpt
 INFO: running in 7nm design.
@@ -749,67 +749,67 @@ Usage: setMetalFill [-help] [-activeSpacing <float>] [-borderSpacing <float>] [-
 **WARN: (IMPMF-5050):	setMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
 **WARN: (IMPMF-5045):	addMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use add_metal_fill_signoff which is the replacement tool for addMetalFill.
 **WARN: (IMPMF-5045):	addMetalFill command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use add_metal_fill_signoff which is the replacement tool for addMetalFill.
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.1'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.1'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.3'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.3'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.4'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.4'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.5'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.5'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.6'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.6'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.7'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.7'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.8'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.8'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.9'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.9'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.10'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '2'!
-**WARN: (from .metalfill_2896399.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.10'!
-**WARN: (from .metalfill_2896399.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.1'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.1'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.3'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.3'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.4'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.4'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.5'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.5'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.6'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.6'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.7'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.7'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.8'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.8'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.9'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.9'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMaxUnionDensityToAboveLayer.10'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '2'!
+**WARN: (from .metalfill_3453185.conf) Unknown option 'srouteLayerFillMinUnionDensityToAboveLayer.10'!
+**WARN: (from .metalfill_3453185.conf) Unknown option '0'!
 ************************
 Timing Aware on 
 P/G Nets: 2
-Signal Nets: 162988
+Signal Nets: 162985
 Clock Nets: 3497
 ************************
 Density calculation ...... Slot :   1 of   1
 Density calculation ...... Slot :   1 of   1
-End of Density Calculation : cpu time : 0:00:36.7, real time : 0:00:37.0, peak mem : 6604.48 megs
+End of Density Calculation : cpu time : 0:00:36.7, real time : 0:00:37.0, peak mem : 6606.80 megs
 Process data during iteration   1 in region   0 of 24.
 Process data during iteration   1 in region   5 of 24.
 Process data during iteration   1 in region  10 of 24.
 Process data during iteration   1 in region  15 of 24.
 Process data during iteration   1 in region  20 of 24.
-End metal filling: cpu:  0:01:46,  real:  0:01:46,  peak mem:  6604.48  megs.
+End metal filling: cpu:  0:01:46,  real:  0:01:47,  peak mem:  6606.80  megs.
 <CMD> clearDrc
 <CMD> verify_drc -limit 500000 -report ./verify_rpt/drc_fill.rpt
 #-limit 500000                           # int, default=500000, user setting
 #-check_same_via_cell true               # bool, default=false, user setting
 #-report ./verify_rpt/drc_fill.rpt       # string, default="", user setting
- *** Starting Verify DRC (MEM: 6604.5) ***
+ *** Starting Verify DRC (MEM: 6606.8) ***
 
   VERIFY DRC ...... Starting Verification
   VERIFY DRC ...... Initializing
@@ -828,7 +828,7 @@ End metal filling: cpu:  0:01:46,  real:  0:01:46,  peak mem:  6604.48  megs.
 	M4            4        4
 	Totals        4        4
 
- *** End Verify DRC (CPU TIME: 0:01:04  ELAPSED TIME: 0:01:05  MEM: 0.0M) ***
+ *** End Verify DRC (CPU TIME: 0:01:04  ELAPSED TIME: 0:01:04  MEM: 0.0M) ***
 
 <CMD> verifyMetalDensity -layer M5 -report ./verify_rpt/density_final.rpt
 
@@ -862,51 +862,51 @@ Windows > Max. Union. Density = 0
 
 ******** End: VERIFY DENSITY ********
 VMD: elapsed time: 27.00
-     (CPU Time: 0:00:27.5  MEM: 214.719M)
+     (CPU Time: 0:00:27.3  MEM: 0.000M)
 
 <CMD> saveDesign ./saved/top_soc_final.enc
-#% Begin save design ... (date=10/12 19:51:21, mem=5366.4M)
+#% Begin save design ... (date=10/12 21:46:37, mem=5276.5M)
 INFO: Current data have to be saved into a temporary db: 'top_soc_final.enc.dat.tmp' first. It will be renamed to the correct name 'top_soc_final.enc.dat' after the old db was deleted.
-% Begin Save ccopt configuration ... (date=10/12 19:51:21, mem=5366.4M)
-% End Save ccopt configuration ... (date=10/12 19:51:22, total cpu=0:00:00.8, real=0:00:00.0, peak res=5367.7M, current mem=5367.7M)
-% Begin Save netlist data ... (date=10/12 19:51:22, mem=5367.7M)
+% Begin Save ccopt configuration ... (date=10/12 21:46:37, mem=5276.5M)
+% End Save ccopt configuration ... (date=10/12 21:46:38, total cpu=0:00:00.8, real=0:00:00.0, peak res=5277.8M, current mem=5277.8M)
+% Begin Save netlist data ... (date=10/12 21:46:38, mem=5277.8M)
 Writing Binary DB to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat.tmp/top_soc.v.bin in single-threaded mode...
-% End Save netlist data ... (date=10/12 19:51:23, total cpu=0:00:00.3, real=0:00:01.0, peak res=5367.7M, current mem=5367.7M)
+% End Save netlist data ... (date=10/12 21:46:38, total cpu=0:00:00.2, real=0:00:01.0, peak res=5277.8M, current mem=5277.8M)
 Saving symbol-table file ...
 Saving congestion map file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat.tmp/top_soc.route.congmap.gz ...
-% Begin Save AAE data ... (date=10/12 19:51:23, mem=5377.9M)
+% Begin Save AAE data ... (date=10/12 21:46:39, mem=5288.0M)
 Saving AAE Data ...
-% End Save AAE data ... (date=10/12 19:51:23, total cpu=0:00:00.1, real=0:00:00.0, peak res=5377.9M, current mem=5375.6M)
+% End Save AAE data ... (date=10/12 21:46:39, total cpu=0:00:00.1, real=0:00:00.0, peak res=5288.0M, current mem=5285.7M)
 Saving mode setting ...
 **WARN: (IMPMF-5054):	fill_setting_save command is obsolete and should not be used any more. It still works in this release but will be removed in future release. Recommend to use Pegasus metal fill flow which is the replacement.
 Saving global file ...
-% Begin Save floorplan data ... (date=10/12 19:51:25, mem=5376.5M)
+% Begin Save floorplan data ... (date=10/12 21:46:41, mem=5286.6M)
 Saving floorplan file ...
 Convert 0 swires and 0 svias from compressed groups
-% End Save floorplan data ... (date=10/12 19:51:28, total cpu=0:00:02.8, real=0:00:03.0, peak res=5382.3M, current mem=5382.3M)
-Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat.tmp/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Mon Oct 12 19:51:28 2026)
-*** Completed savePGFile (cpu=0:00:00.8 real=0:00:01.0 mem=6795.2M) ***
+% End Save floorplan data ... (date=10/12 21:46:44, total cpu=0:00:02.8, real=0:00:03.0, peak res=5292.5M, current mem=5292.5M)
+Saving PG file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat.tmp/top_soc.pg.gz, version#2, (Created by Innovus v23.14-s088_1 on Mon Oct 12 21:46:44 2026)
+*** Completed savePGFile (cpu=0:00:00.8 real=0:00:01.0 mem=6582.8M) ***
 *info - save blackBox cells to lef file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat.tmp/top_soc.bbox.lef
 Saving Drc markers ...
 ... 1118 markers are saved ...
 ... 4 geometry drc markers are saved ...
 ... 0 antenna drc markers are saved ...
-% Begin Save placement data ... (date=10/12 19:51:29, mem=5377.6M)
+% Begin Save placement data ... (date=10/12 21:46:45, mem=5287.8M)
 ** Saving stdCellPlacement_binary (version# 2) ...
 Save Adaptive View Pruning View Names to Binary file
 view_ss
-% End Save placement data ... (date=10/12 19:51:29, total cpu=0:00:00.6, real=0:00:00.0, peak res=5377.6M, current mem=5377.6M)
-% Begin Save routing data ... (date=10/12 19:51:29, mem=5377.6M)
+% End Save placement data ... (date=10/12 21:46:45, total cpu=0:00:00.6, real=0:00:00.0, peak res=5287.8M, current mem=5287.8M)
+% Begin Save routing data ... (date=10/12 21:46:45, mem=5287.8M)
 Saving route file ...
-*** Completed saveRoute (cpu=0:00:00.6 real=0:00:02.0 mem=6795.2M) ***
-% End Save routing data ... (date=10/12 19:51:31, total cpu=0:00:00.7, real=0:00:02.0, peak res=5378.3M, current mem=5378.3M)
+*** Completed saveRoute (cpu=0:00:00.6 real=0:00:02.0 mem=6582.8M) ***
+% End Save routing data ... (date=10/12 21:46:47, total cpu=0:00:00.7, real=0:00:02.0, peak res=5288.5M, current mem=5288.5M)
 Saving property file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat.tmp/top_soc.prop
-*** Completed saveProperty (cpu=0:00:00.7 real=0:00:01.0 mem=6795.2M) ***
+*** Completed saveProperty (cpu=0:00:00.7 real=0:00:01.0 mem=6582.8M) ***
 #Saving pin access data to file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat.tmp/top_soc.apa ...
 Saving preRoute extracted patterns in file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat.tmp/top_soc.techData.gz' ...
 Saving preRoute extraction data in directory '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_final.enc.dat.tmp/extraction/' ...
-% Begin Save power constraints data ... (date=10/12 19:51:33, mem=5380.7M)
-% End Save power constraints data ... (date=10/12 19:51:33, total cpu=0:00:00.1, real=0:00:00.0, peak res=5380.7M, current mem=5380.7M)
+% Begin Save power constraints data ... (date=10/12 21:46:49, mem=5291.0M)
+% End Save power constraints data ... (date=10/12 21:46:49, total cpu=0:00:00.1, real=0:00:00.0, peak res=5291.0M, current mem=5291.0M)
 rc_typ rc_ff rc_ss
 rc_typ rc_ff rc_ss
 rc_typ rc_ff rc_ss
@@ -919,7 +919,7 @@ libset_ss libset_tt libset_ff
 rc_typ rc_ff rc_ss
 mode_func
 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_eco.enc.dat/mmmc/modes/mode_func/mode_func.sdc
-#% End save design ... (date=10/12 19:51:35, total cpu=0:00:10.8, real=0:00:14.0, peak res=5382.3M, current mem=5381.3M)
+#% End save design ... (date=10/12 21:46:51, total cpu=0:00:10.7, real=0:00:14.0, peak res=5292.5M, current mem=5291.5M)
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
@@ -927,10 +927,10 @@ WARNING   IMPMF-5054           1  fill_setting_save command is obsolete an...
 *** Message Summary: 1 warning(s), 0 error(s)
 
 <CMD> timeDesign -postRoute -outDir ./reports/timing_final -prefix final
-*** timeDesign #1 [begin] () : totSession cpu/real = 0:07:17.0/0:07:32.0 (1.0), mem = 6819.2M
+*** timeDesign #1 [begin] () : totSession cpu/real = 0:07:16.1/0:07:30.7 (1.0), mem = 6606.8M
  Reset EOS DB
 Ignoring AAE DB Resetting ...
-Extraction called for design 'top_soc' of instances=2316659 and nets=166488 using extraction engine 'postRoute' at effort level 'high' .
+Extraction called for design 'top_soc' of instances=2316670 and nets=166485 using extraction engine 'postRoute' at effort level 'high' .
 Integrated QRC (IQuantus) Extraction in Multi-Corner mode called for design 'top_soc'. Number of corners is 3.
 No IQuantus parasitic data in Innovus. Going for full-chip extraction.
  Min pitch recieved = 144 
@@ -949,13 +949,13 @@ INFO (EXTIQUANTUS-101) :
                Copyright 2025 Cadence Design Systems, Inc.
 
 
-INFO (EXTIQUANTUS-103) : Starting at 2026-Oct-12 19:51:38 (2026-Oct-12 10:51:38 GMT).
+INFO (EXTIQUANTUS-103) : Starting at 2026-Oct-12 21:46:53 (2026-Oct-12 12:46:53 GMT).
 
 INFO (EXTIQUANTUS-104) : Starting extraction session...
 
 INFO (EXTIQUANTUS-159) : Loading technology data from file:
  
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2896399_76d46441-b515-4612-8acf-12036cba12c1_user1-EliteMini_user1_niqx1r/iqrc_tmp_2896399_eIAbgU/.qrctemp/CceRCGEN0tch2896399
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b_user1-EliteMini_user1_WZOqIV/iqrc_tmp_3453185_89qcNz/.qrctemp/CceRCGEN0tch3453185
 
 INFO (EXTIQUANTUS-159) : Loading technology data from file:
  
@@ -963,7 +963,7 @@ INFO (EXTIQUANTUS-159) : Loading technology data from file:
 
 INFO (EXTIQUANTUS-289) : Loading RCgen extraction models from file:
  
-/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2896399_76d46441-b515-4612-8acf-12036cba12c1_user1-EliteMini_user1_niqx1r/iqrc_tmp_2896399_eIAbgU/.qrctemp/CceRCGEN0tch2896399
+/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b_user1-EliteMini_user1_WZOqIV/iqrc_tmp_3453185_89qcNz/.qrctemp/CceRCGEN0tch3453185
 
 INFO (EXTIQUANTUS-345) : Checking Command/Tech/License Files. 
 
@@ -991,11 +991,11 @@ Type 'man IMPEXT-1241' for more detail.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 IQuantus Extraction engine initialized successfully.
 
-Dumping IQuantus extraction options in file 'extLogDir/IQuantus_12-Oct-2026_19:51:35_2896399_wFHmrh/extr.top_soc.extraction_options.log'.
-Initialization for IQuantus Fullchip Extraction DONE (CPU Time: 0:00:05.4  Real Time: 0:00:12.0  MEM: 6819.195M)
+Dumping IQuantus extraction options in file 'extLogDir/IQuantus_12-Oct-2026_21:46:51_3453185_3TgqQk/extr.top_soc.extraction_options.log'.
+Initialization for IQuantus Fullchip Extraction DONE (CPU Time: 0:00:05.4  Real Time: 0:00:12.0  MEM: 6606.805M)
 
-Geometry processing of Gray and Metal fill STARTED.................... DONE (CPU Time: 0:00:05.2  Real Time: 0:00:09.0  MEM: 6819.195M)
-Geometry processing of nets STARTED.................... DONE (NETS: 151182  Geometries: 2988430  CPU Time: 0:00:04.6  Real Time: 0:00:06.0  MEM: 6819.195M)
+Geometry processing of Gray and Metal fill STARTED.................... DONE (CPU Time: 0:00:05.1  Real Time: 0:00:09.0  MEM: 6606.805M)
+Geometry processing of nets STARTED.................... DONE (NETS: 151179  Geometries: 2988386  CPU Time: 0:00:04.7  Real Time: 0:00:06.0  MEM: 6606.805M)
 
 Extraction of Geometries STARTED.
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1237,17 +1237,17 @@ INFO (EXTHPY-104) :    99%
 
 INFO (EXTHPY-104) :    100%
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-Extraction of Geometries DONE (NETS: 151182  CPU Time: 0:01:25  Real Time: 0:01:26  MEM: 6819.195M)
+Extraction of Geometries DONE (NETS: 151179  CPU Time: 0:01:24  Real Time: 0:01:25  MEM: 6606.805M)
 
 Parasitic Network Creation STARTED
-....................
-Number of Extracted Resistors     : 1686451
-Number of Extracted Ground Caps   : 1847425
-Number of Extracted Coupling Caps : 116142
-Parasitic Network Creation DONE (Nets: 151182  CPU Time: 0:00:04.3  Real Time: 0:00:03.0  MEM: 6819.195M)
+...................
+Number of Extracted Resistors     : 1686431
+Number of Extracted Ground Caps   : 1847402
+Number of Extracted Coupling Caps : 116152
+Parasitic Network Creation DONE (Nets: 151179  CPU Time: 0:00:04.4  Real Time: 0:00:04.0  MEM: 6606.805M)
 
 IQuantus Extraction engine is being closed... 
-IQuantus Fullchip Extraction DONE (CPU Time: 0:01:46  Real Time: 0:01:57  MEM: 6819.195M)
+IQuantus Fullchip Extraction DONE (CPU Time: 0:01:46  Real Time: 0:01:56  MEM: 6606.805M)
 Starting delay calculation for Setup views
 AAE_INFO: opIsDesignInPostRouteState() is 1
 AAE_INFO: resetNetProps viewIdx 0 
@@ -1261,57 +1261,57 @@ Starting SI iteration 1 using Infinite Timing Windows
 # Parasitics Mode: SPEF/RCDB 
 # Signoff Settings: SI On (EWM-WFP)
 #################################################################################
+Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_ss'
 Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_tt'
 Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_ss'
 Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_tt'
 Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_tt'
 Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'view_tt'
 Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'view_ss'
 Message <TCLCMD-1005> has exceeded the message display limit of '20'. Use 'set_message -no_limit -id list_of_msgIDs' to reset the message limit.
 AAE_INFO: 1 threads acquired from CTE.
-Start delay calculation (fullDC) (1 T). (MEM=5884.11)
+Start delay calculation (fullDC) (1 T). (MEM=5816.67)
  Report initialization with DMWrite ... (0, Worst)
 **WARN: (IMPESI-3140):	Bumpy transitions may exist in the design which may lead to inaccurate delay computation. To report/analyze the nets having bumpy transition, please enable delay report and use command 'report_noise -bumpy_waveform -threshold 0' after timing analysis. Delay report is enabled by setting 'set_si_mode -enable_delay_report true' before timing analysis.
 Type 'man IMPESI-3140' for more detail.
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  92.8 percent of the nets selected for SI analysis
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  92.8 percent of the nets selected for SI analysis
-End delay calculation. (MEM=6351.97 CPU=0:01:44 REAL=0:01:44)
-End delay calculation (fullDC). (MEM=5897.27 CPU=0:01:47 REAL=0:01:47)
-Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2896399_76d46441-b515-4612-8acf-12036cba12c1_user1-EliteMini_user1_niqx1r/.AAE_UPwaYn/.AAE_2896399_76d46441-b515-4612-8acf-12036cba12c1/waveform.data...
-Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 5977.2M)
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  92.8 percent of the nets selected for SI analysis
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  92.8 percent of the nets selected for SI analysis
+End delay calculation. (MEM=6294.76 CPU=0:01:45 REAL=0:01:45)
+End delay calculation (fullDC). (MEM=5820.46 CPU=0:01:48 REAL=0:01:48)
+Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b_user1-EliteMini_user1_WZOqIV/.AAE_JBxwng/.AAE_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b/waveform.data...
+Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 5890.4M)
 Add other clocks and setupCteToAAEClockMapping during iter 1
-Loading CTE timing window is completed (CPU = 0:00:01.5, REAL = 0:00:02.0, MEM = 5977.3M)
+Loading CTE timing window is completed (CPU = 0:00:01.5, REAL = 0:00:02.0, MEM = 5890.5M)
 Starting SI iteration 2
-Start delay calculation (fullDC) (1 T). (MEM=5807.52)
-Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2896399_76d46441-b515-4612-8acf-12036cba12c1_user1-EliteMini_user1_niqx1r/.AAE_UPwaYn/.AAE_2896399_76d46441-b515-4612-8acf-12036cba12c1/waveform.data...
+Start delay calculation (fullDC) (1 T). (MEM=5708.62)
+Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b_user1-EliteMini_user1_WZOqIV/.AAE_JBxwng/.AAE_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b/waveform.data...
  Report initialization with DMUpdate ... (1, Worst)
 Glitch Analysis: View view_ss -- Total Number of Nets Skipped = 0. 
 Glitch Analysis: View view_ss -- Total Number of Nets Analyzed = 0. 
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  6.4 percent of the nets selected for SI analysis
-Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 2186. 
-Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 153259. 
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  6.3 percent of the nets selected for SI analysis
-End delay calculation. (MEM=5957.73 CPU=0:00:12.6 REAL=0:00:13.0)
-End delay calculation (fullDC). (MEM=5957.73 CPU=0:00:12.8 REAL=0:00:13.0)
-*** Done Building Timing Graph (cpu=0:02:19 real=0:02:19 totSessionCpu=0:11:22 mem=7316.9M)
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  6.4 percent of the nets selected for SI analysis
+Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 2202. 
+Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 153256. 
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  6.3 percent of the nets selected for SI analysis
+End delay calculation. (MEM=5868.53 CPU=0:00:12.7 REAL=0:00:12.0)
+End delay calculation (fullDC). (MEM=5868.53 CPU=0:00:12.9 REAL=0:00:12.0)
+*** Done Building Timing Graph (cpu=0:02:19 real=0:02:19 totSessionCpu=0:11:22 mem=7104.5M)
 ** INFO: Initializing Glitch Interface
 ** INFO: Initializing Glitch Interface
 ** INFO: Initializing Glitch Interface
@@ -1347,7 +1347,7 @@ Setup views included:
 +--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
 |     Setup mode     |   all   | reg2reg |reg2cgate| default |   C2O   |   I2C   |   I2O   |1:cg_..ON|2:cg_..IC|3:cg_..PU|4:cg_..BG|5:cg_..IO|6:cg_..2C|7:cg_..WM|8:cg_..PI|9:cg_..YS|10:cg..CK|11:cg..M0|12:cg..M1|13:cg..RT|14:cg..T1|
 +--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-|           WNS (ns):|  0.173  |  0.173  |  0.649  |  0.000  |  0.311  |  0.625  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|           WNS (ns):|  0.146  |  0.146  |  0.622  |  0.000  |  0.310  |  0.625  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
 |           TNS (ns):|  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
 |    Violating Paths:|    0    |    0    |    0    |    0    |    0    |    0    |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
 |          All Paths:|  53468  |  51677  |  1635   |    0    |   106   |   101   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
@@ -1359,26 +1359,26 @@ Setup views included:
 |                |  Nr nets(terms)  | Worst Vio  |  Nr nets(terms)  |
 +----------------+------------------+------------+------------------+
 |   max_cap      |      0 (0)       |   0.000    |      0 (0)       |
-|   max_tran     |     47 (109)     |   -0.018   |     47 (109)     |
+|   max_tran     |     64 (198)     |   -0.024   |     64 (198)     |
 |   max_fanout   |      0 (0)       |     0      |    604 (604)     |
 |   max_length   |      0 (0)       |     0      |      0 (0)       |
 +----------------+------------------+------------+------------------+
 
-Density: 25.326%
+Density: 25.325%
        (100.000% with Fillers)
 Total number of glitch violations: 165
 ------------------------------------------------------------------
 Reported timing to dir ./reports/timing_final
-Total CPU time: 254.35 sec
+Total CPU time: 254.78 sec
 Total Real time: 265.0 sec
-Total Memory Usage: 7396.941406 Mbytes
+Total Memory Usage: 7184.550781 Mbytes
 Reset AAE Options
-*** timeDesign #1 [finish] () : cpu/real = 0:04:14.3/0:04:24.8 (1.0), totSession cpu/real = 0:11:31.3/0:11:56.8 (1.0), mem = 7396.9M
+*** timeDesign #1 [finish] () : cpu/real = 0:04:14.8/0:04:24.9 (1.0), totSession cpu/real = 0:11:30.9/0:11:55.6 (1.0), mem = 7184.6M
 <CMD> timeDesign -postRoute -hold -outDir ./reports/timing_final_hold -prefix final
-*** timeDesign #2 [begin] () : totSession cpu/real = 0:11:31.4/0:11:56.8 (1.0), mem = 7396.9M
+*** timeDesign #2 [begin] () : totSession cpu/real = 0:11:30.9/0:11:55.6 (1.0), mem = 7184.6M
  Reset EOS DB
 Ignoring AAE DB Resetting ...
-Extraction called for design 'top_soc' of instances=2316659 and nets=166488 using extraction engine 'postRoute' at effort level 'high' .
+Extraction called for design 'top_soc' of instances=2316670 and nets=166485 using extraction engine 'postRoute' at effort level 'high' .
 Integrated QRC (IQuantus) Extraction in Multi-Corner mode called for design 'top_soc'. Number of corners is 3.
 No changed net or region found. No need to perform incremental extraction.
 
@@ -1398,30 +1398,30 @@ Starting SI iteration 1 using Infinite Timing Windows
 # Signoff Settings: SI On (EWM-WFP)
 #################################################################################
 AAE_INFO: 1 threads acquired from CTE.
-Start delay calculation (fullDC) (1 T). (MEM=5906.89)
+Start delay calculation (fullDC) (1 T). (MEM=5818.49)
 *** Calculating scaling factor for libset_ff libraries using the default operating condition of each library.
  Report initialization with DMWrite ... (0, Best)
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  92.8 percent of the nets selected for SI analysis
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  92.8 percent of the nets selected for SI analysis
-End delay calculation. (MEM=6195.46 CPU=0:01:40 REAL=0:01:40)
-End delay calculation (fullDC). (MEM=6195.46 CPU=0:01:43 REAL=0:01:43)
-Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2896399_76d46441-b515-4612-8acf-12036cba12c1_user1-EliteMini_user1_niqx1r/.AAE_UPwaYn/.AAE_2896399_76d46441-b515-4612-8acf-12036cba12c1/waveform.data...
-Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 6134.5M)
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  92.8 percent of the nets selected for SI analysis
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  92.8 percent of the nets selected for SI analysis
+End delay calculation. (MEM=6124.91 CPU=0:01:41 REAL=0:01:40)
+End delay calculation (fullDC). (MEM=6124.91 CPU=0:01:43 REAL=0:01:43)
+Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b_user1-EliteMini_user1_WZOqIV/.AAE_JBxwng/.AAE_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b/waveform.data...
+Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 6072.7M)
 Add other clocks and setupCteToAAEClockMapping during iter 1
-Loading CTE timing window is completed (CPU = 0:00:01.1, REAL = 0:00:02.0, MEM = 6134.5M)
+Loading CTE timing window is completed (CPU = 0:00:01.1, REAL = 0:00:01.0, MEM = 6072.6M)
 Starting SI iteration 2
-Start delay calculation (fullDC) (1 T). (MEM=6064.97)
-Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2896399_76d46441-b515-4612-8acf-12036cba12c1_user1-EliteMini_user1_niqx1r/.AAE_UPwaYn/.AAE_2896399_76d46441-b515-4612-8acf-12036cba12c1/waveform.data...
+Start delay calculation (fullDC) (1 T). (MEM=5972.11)
+Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b_user1-EliteMini_user1_WZOqIV/.AAE_JBxwng/.AAE_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b/waveform.data...
  Report initialization with DMUpdate ... (1, Worst)
-Glitch Analysis: View view_ff -- Total Number of Nets Skipped = 2154. 
-Glitch Analysis: View view_ff -- Total Number of Nets Analyzed = 153259. 
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  20.4 percent of the nets selected for SI analysis
-End delay calculation. (MEM=6114.05 CPU=0:00:11.8 REAL=0:00:11.0)
-End delay calculation (fullDC). (MEM=6114.05 CPU=0:00:12.0 REAL=0:00:12.0)
-*** Done Building Timing Graph (cpu=0:02:11 real=0:02:11 totSessionCpu=0:13:48 mem=7300.9M)
+Glitch Analysis: View view_ff -- Total Number of Nets Skipped = 2158. 
+Glitch Analysis: View view_ff -- Total Number of Nets Analyzed = 153256. 
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  20.4 percent of the nets selected for SI analysis
+End delay calculation. (MEM=6006.99 CPU=0:00:12.3 REAL=0:00:13.0)
+End delay calculation (fullDC). (MEM=6006.99 CPU=0:00:12.5 REAL=0:00:13.0)
+*** Done Building Timing Graph (cpu=0:02:13 real=0:02:12 totSessionCpu=0:13:49 mem=7088.5M)
 
 OptSummary:
 
@@ -1454,21 +1454,21 @@ Hold views included:
 +--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
 |     Hold mode      |   all   | reg2reg |reg2cgate| default |   C2O   |   I2C   |   I2O   |1:cg_..ON|2:cg_..IC|3:cg_..PU|4:cg_..BG|5:cg_..IO|6:cg_..2C|7:cg_..WM|8:cg_..PI|9:cg_..YS|10:cg..CK|11:cg..M0|12:cg..M1|13:cg..RT|14:cg..T1|
 +--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
-|           WNS (ns):|  0.008  |  0.008  |  0.016  |  0.000  |  0.641  |  0.378  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
+|           WNS (ns):|  0.014  |  0.014  |  0.016  |  0.000  |  0.641  |  0.378  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
 |           TNS (ns):|  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |  0.000  |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
 |    Violating Paths:|    0    |    0    |    0    |    0    |    0    |    0    |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
 |          All Paths:|  53363  |  51572  |  1635   |    0    |   106   |   101   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |   N/A   |
 +--------------------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+---------+
 
-Density: 25.326%
+Density: 25.325%
        (100.000% with Fillers)
 ------------------------------------------------------------------
 Reported timing to dir ./reports/timing_final_hold
-Total CPU time: 138.63 sec
-Total Real time: 138.0 sec
-Total Memory Usage: 7273.921875 Mbytes
+Total CPU time: 140.18 sec
+Total Real time: 140.0 sec
+Total Memory Usage: 7061.53125 Mbytes
 Reset AAE Options
-*** timeDesign #2 [finish] () : cpu/real = 0:02:18.6/0:02:18.4 (1.0), totSession cpu/real = 0:13:50.0/0:14:15.2 (1.0), mem = 7273.9M
+*** timeDesign #2 [finish] () : cpu/real = 0:02:20.2/0:02:19.9 (1.0), totSession cpu/real = 0:13:51.1/0:14:15.5 (1.0), mem = 7061.5M
 <CMD> set_power_analysis_mode -analysis_view view_tt
 ** WARN:  (VOLTUS_POWR-3212): The 'set_power_analysis_mode -leakage_power_view |-dynamic_power_view|-analysis_view' will be obsolete in 18.20 release. Use 'set_analysis_view -leakage <> | -dynamic <>' to set leakage and dynamic power views.
 
@@ -1493,33 +1493,33 @@ Starting SI iteration 1 using Infinite Timing Windows
 # Signoff Settings: SI On (EWM-WFP)
 #################################################################################
 AAE_INFO: 1 threads acquired from CTE.
-Start delay calculation (fullDC) (1 T). (MEM=6042.05)
+Start delay calculation (fullDC) (1 T). (MEM=5933.46)
 *** Calculating scaling factor for libset_ss libraries using the default operating condition of each library.
  Report initialization with DMWrite ... (0, Worst)
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  92.8 percent of the nets selected for SI analysis
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  92.8 percent of the nets selected for SI analysis
-End delay calculation. (MEM=6206.72 CPU=0:01:43 REAL=0:01:43)
-End delay calculation (fullDC). (MEM=6206.72 CPU=0:01:46 REAL=0:01:46)
-Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2896399_76d46441-b515-4612-8acf-12036cba12c1_user1-EliteMini_user1_niqx1r/.AAE_UPwaYn/.AAE_2896399_76d46441-b515-4612-8acf-12036cba12c1/waveform.data...
-Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 6157.6M)
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  92.8 percent of the nets selected for SI analysis
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  92.8 percent of the nets selected for SI analysis
+End delay calculation. (MEM=6094.72 CPU=0:01:45 REAL=0:01:45)
+End delay calculation (fullDC). (MEM=6094.72 CPU=0:01:48 REAL=0:01:48)
+Save waveform /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b_user1-EliteMini_user1_WZOqIV/.AAE_JBxwng/.AAE_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b/waveform.data...
+Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 6049.7M)
 Add other clocks and setupCteToAAEClockMapping during iter 1
-Loading CTE timing window is completed (CPU = 0:00:01.5, REAL = 0:00:02.0, MEM = 6158.3M)
+Loading CTE timing window is completed (CPU = 0:00:01.6, REAL = 0:00:02.0, MEM = 6050.4M)
 Starting SI iteration 2
-Start delay calculation (fullDC) (1 T). (MEM=6110.17)
-Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_2896399_76d46441-b515-4612-8acf-12036cba12c1_user1-EliteMini_user1_niqx1r/.AAE_UPwaYn/.AAE_2896399_76d46441-b515-4612-8acf-12036cba12c1/waveform.data...
+Start delay calculation (fullDC) (1 T). (MEM=5997.36)
+Create and load waveform data /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/innovus_temp_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b_user1-EliteMini_user1_WZOqIV/.AAE_JBxwng/.AAE_3453185_44958ce0-3f3d-45ae-b3df-4239f58d880b/waveform.data...
  Report initialization with DMUpdate ... (1, Worst)
 Glitch Analysis: View view_ss -- Total Number of Nets Skipped = 0. 
 Glitch Analysis: View view_ss -- Total Number of Nets Analyzed = 0. 
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  6.4 percent of the nets selected for SI analysis
-Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 2186. 
-Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 153259. 
-Total number of fetched objects 153236
-AAE_INFO-618: Total number of nets in the design is 166488,  6.3 percent of the nets selected for SI analysis
-End delay calculation. (MEM=6166.52 CPU=0:00:12.6 REAL=0:00:12.0)
-End delay calculation (fullDC). (MEM=6166.52 CPU=0:00:12.9 REAL=0:00:13.0)
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  6.4 percent of the nets selected for SI analysis
+Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 2202. 
+Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 153256. 
+Total number of fetched objects 153233
+AAE_INFO-618: Total number of nets in the design is 166485,  6.3 percent of the nets selected for SI analysis
+End delay calculation. (MEM=6058.27 CPU=0:00:12.7 REAL=0:00:12.0)
+End delay calculation (fullDC). (MEM=6058.27 CPU=0:00:12.9 REAL=0:00:13.0)
 
 Begin Power Analysis
 
@@ -1528,51 +1528,51 @@ Begin Power Analysis
 
 Begin Processing Timing Library for Power Calculation
 
-Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6160.59MB/unknown/unknown)
+Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6047.64MB/unknown/unknown)
 
 
 
 Begin Processing Power Net/Grid for Power Calculation
 
-Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6160.59MB/unknown/unknown)
+Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6047.64MB/unknown/unknown)
 
 Begin Processing Timing Window Data for Power Calculation
 
-CLK_UART1(250MHz) CLK_UART(250MHz) CLK_TIM1(250MHz) CLK_TIM0(250MHz) CLK_SYS(250MHz) CLK_SPI(250MHz) CLK_SDRAM_OUT(250MHz) CLK_PWM(250MHz) CLK_I2C(250MHz) CLK_GPIO(250MHz) CLK_DBG(250MHz) CLK_CPU(250MHz) CLK_CORDIC(250MHz) CLK_ASCON(250MHz) CLK_TCK(10MHz) Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=6165.59MB/unknown/unknown)
+CLK_UART1(250MHz) CLK_UART(250MHz) CLK_TIM1(250MHz) CLK_TIM0(250MHz) CLK_SYS(250MHz) CLK_SPI(250MHz) CLK_SDRAM_OUT(250MHz) CLK_PWM(250MHz) CLK_I2C(250MHz) CLK_GPIO(250MHz) CLK_DBG(250MHz) CLK_CPU(250MHz) CLK_CORDIC(250MHz) CLK_ASCON(250MHz) CLK_TCK(10MHz) Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=6053.76MB/unknown/unknown)
 
 Begin Processing User Attributes
 
-Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6165.59MB/unknown/unknown)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6053.76MB/unknown/unknown)
 
 Begin Processing Signal Activity
 
 
 Starting Levelizing
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT)
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT): 10%
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT): 20%
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT): 30%
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT): 40%
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT): 50%
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT): 60%
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT): 70%
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT): 80%
-2026-Oct-12 20:00:38 (2026-Oct-12 11:00:38 GMT): 90%
+2026-Oct-12 21:55:57 (2026-Oct-12 12:55:57 GMT)
+2026-Oct-12 21:55:57 (2026-Oct-12 12:55:57 GMT): 10%
+2026-Oct-12 21:55:57 (2026-Oct-12 12:55:57 GMT): 20%
+2026-Oct-12 21:55:57 (2026-Oct-12 12:55:57 GMT): 30%
+2026-Oct-12 21:55:57 (2026-Oct-12 12:55:57 GMT): 40%
+2026-Oct-12 21:55:57 (2026-Oct-12 12:55:57 GMT): 50%
+2026-Oct-12 21:55:57 (2026-Oct-12 12:55:57 GMT): 60%
+2026-Oct-12 21:55:57 (2026-Oct-12 12:55:57 GMT): 70%
+2026-Oct-12 21:55:57 (2026-Oct-12 12:55:57 GMT): 80%
+2026-Oct-12 21:55:58 (2026-Oct-12 12:55:58 GMT): 90%
 
 Finished Levelizing
-2026-Oct-12 20:00:39 (2026-Oct-12 11:00:39 GMT)
+2026-Oct-12 21:55:58 (2026-Oct-12 12:55:58 GMT)
 
 Starting Activity Propagation
-2026-Oct-12 20:00:39 (2026-Oct-12 11:00:39 GMT)
+2026-Oct-12 21:55:58 (2026-Oct-12 12:55:58 GMT)
 ** INFO:  (VOLTUS_POWR-1356): No default input activity has been set. Defaulting to 0.2.
 Use 'set_default_switching_activity -input_activity' command to change the default activity value.
 
-2026-Oct-12 20:00:40 (2026-Oct-12 11:00:40 GMT): 10%
-2026-Oct-12 20:00:41 (2026-Oct-12 11:00:41 GMT): 20%
+2026-Oct-12 21:55:59 (2026-Oct-12 12:55:59 GMT): 10%
+2026-Oct-12 21:56:00 (2026-Oct-12 12:56:00 GMT): 20%
 
 Finished Activity Propagation
-2026-Oct-12 20:00:43 (2026-Oct-12 11:00:43 GMT)
-Ended Processing Signal Activity: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=6174.27MB/unknown/unknown)
+2026-Oct-12 21:56:02 (2026-Oct-12 12:56:02 GMT)
+Ended Processing Signal Activity: (cpu=0:00:06, real=0:00:06, mem(process/total/peak)=6061.34MB/unknown/unknown)
 
 Begin Power Computation
 
@@ -1588,36 +1588,36 @@ TIELOx1_ASAP7_75t_R                       internal power,
 
 
 Starting Calculating power
-2026-Oct-12 20:00:43 (2026-Oct-12 11:00:43 GMT)
+2026-Oct-12 21:56:02 (2026-Oct-12 12:56:02 GMT)
  ... Calculating switching power
-2026-Oct-12 20:00:43 (2026-Oct-12 11:00:43 GMT): 10%
-2026-Oct-12 20:00:43 (2026-Oct-12 11:00:43 GMT): 20%
-2026-Oct-12 20:00:44 (2026-Oct-12 11:00:44 GMT): 30%
-2026-Oct-12 20:00:44 (2026-Oct-12 11:00:44 GMT): 40%
-2026-Oct-12 20:00:44 (2026-Oct-12 11:00:44 GMT): 50%
+2026-Oct-12 21:56:03 (2026-Oct-12 12:56:03 GMT): 10%
+2026-Oct-12 21:56:03 (2026-Oct-12 12:56:03 GMT): 20%
+2026-Oct-12 21:56:03 (2026-Oct-12 12:56:03 GMT): 30%
+2026-Oct-12 21:56:03 (2026-Oct-12 12:56:03 GMT): 40%
+2026-Oct-12 21:56:03 (2026-Oct-12 12:56:03 GMT): 50%
  ... Calculating internal and leakage power
-2026-Oct-12 20:00:46 (2026-Oct-12 11:00:46 GMT): 60%
-2026-Oct-12 20:00:49 (2026-Oct-12 11:00:49 GMT): 70%
-2026-Oct-12 20:00:51 (2026-Oct-12 11:00:51 GMT): 80%
-2026-Oct-12 20:00:54 (2026-Oct-12 11:00:54 GMT): 90%
+2026-Oct-12 21:56:06 (2026-Oct-12 12:56:06 GMT): 60%
+2026-Oct-12 21:56:09 (2026-Oct-12 12:56:09 GMT): 70%
+2026-Oct-12 21:56:11 (2026-Oct-12 12:56:11 GMT): 80%
+2026-Oct-12 21:56:13 (2026-Oct-12 12:56:13 GMT): 90%
 
 Finished Calculating power
-2026-Oct-12 20:00:57 (2026-Oct-12 11:00:57 GMT)
+2026-Oct-12 21:56:17 (2026-Oct-12 12:56:17 GMT)
       # of MSMV cell(s) missing power_level: 0
-Ended Power Computation: (cpu=0:00:13, real=0:00:14, mem(process/total/peak)=6179.14MB/unknown/unknown)
+Ended Power Computation: (cpu=0:00:14, real=0:00:14, mem(process/total/peak)=6066.77MB/unknown/unknown)
 
 Begin Processing User Attributes
 
 Begin Processing set_power
 Ended Processing set_power: (cpu=0:00:00, real=0:00:00,
-mem(process/total/peak)=6179.14MB/unknown/unknown)
-Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6179.14MB/unknown/unknown)
+mem(process/total/peak)=6066.95MB/unknown/unknown)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=6066.95MB/unknown/unknown)
 
-Ended Power Analysis: (cpu=0:00:21, real=0:00:21, mem(process/total/peak)=6179.14MB/unknown/unknown)
+Ended Power Analysis: (cpu=0:00:22, real=0:00:22, mem(process/total/peak)=6066.95MB/unknown/unknown)
 
 Begin Boundary Leakage Calculation
 Ended Boundary Leakage Calculation: (cpu=0:00:00, real=0:00:00,
-mem(process/total/peak)=6179.32MB/unknown/unknown)
+mem(process/total/peak)=6066.95MB/unknown/unknown)
 Begin Static Power Report Generation
 *
 
@@ -1625,28 +1625,28 @@ Begin Static Power Report Generation
 
 Total Power
 -----------------------------------------------------------------------------------------
-Total Internal Power:       87.70213879 	   95.0855%
-Total Switching Power:       4.48865825 	    4.8665%
-Total Leakage Power:         0.04421668 	    0.0479%
-Total Power:                92.23501372
+Total Internal Power:       87.70208522 	   95.0857%
+Total Switching Power:       4.48852270 	    4.8664%
+Total Leakage Power:         0.04419564 	    0.0479%
+Total Power:                92.23480356
 -----------------------------------------------------------------------------------------
 ** INFO:  (VOLTUS_POWR-3465): There are 0 decaps and 0 fillers in the design
 
 Ended Static Power Report Generation: (cpu=0:00:01, real=0:00:01,
-mem(process/total/peak)=6227.41MB/unknown/unknown)
+mem(process/total/peak)=6116.02MB/unknown/unknown)
 
 
 Output file is ./reports/power_final.rpt.
 <CMD> report_area > ./reports/area_final.rpt
 <CMD> reportGateCount -limit 0 -level 2 -outfile ./reports/gateCount.rpt
 Gate area 0.0437 um^2
-[0] top_soc Gates=2916534 Cells=148366 Area=127569.2 um^2
+[0] top_soc Gates=2916524 Cells=148363 Area=127568.8 um^2
 [1] cg_cpu Gates=20 Cells=7 Area=0.9 um^2
 [1] cg_dbg Gates=21 Cells=8 Area=0.9 um^2
-[1] u_axi_apb_dma_u_dma_engine Gates=40521 Cells=12027 Area=1772.4 um^2
+[1] u_axi_apb_dma_u_dma_engine Gates=40516 Cells=12023 Area=1772.2 um^2
 [1] u_axi_to_apb_cg_icg__RC_CG_HIER_INST229 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_axi_to_apb_cg_icg__RC_CG_HIER_INST237 Gates=7 Cells=2 Area=0.3 um^2
-[1] u_core Gates=64402 Cells=20510 Area=2817.0 um^2
+[1] u_core Gates=64402 Cells=20510 Area=2816.9 um^2
 [1] u_debug_module Gates=4120 Cells=1262 Area=180.2 um^2
 [1] u_jtag_dtm Gates=1959 Cells=586 Area=85.7 um^2
 [1] u_apb_syscon Gates=1366 Cells=396 Area=59.8 um^2
@@ -1663,7 +1663,7 @@ Gate area 0.0437 um^2
 [1] cg_tim0 Gates=11 Cells=4 Area=0.5 um^2
 [1] cg_uart1 Gates=21 Cells=7 Area=0.9 um^2
 [1] cg_tim1 Gates=14 Cells=6 Area=0.6 um^2
-[1] u_clic Gates=8074 Cells=3392 Area=353.2 um^2
+[1] u_clic Gates=8073 Cells=3392 Area=353.1 um^2
 [1] u_tim1_cg_icg__RC_CG_HIER_INST70 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_tim1_cg_icg__RC_CG_HIER_INST66 Gates=17 Cells=2 Area=0.7 um^2
 [1] u_tim1_cg_icg__RC_CG_HIER_INST73 Gates=7 Cells=2 Area=0.3 um^2
@@ -1689,7 +1689,7 @@ Gate area 0.0437 um^2
 [1] u_tim0_cg_icg__RC_CG_HIER_INST55 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_tim0_cg_icg__RC_CG_HIER_INST59 Gates=7 Cells=2 Area=0.3 um^2
 [1] cg_ascon Gates=21 Cells=7 Area=0.9 um^2
-[1] u_apb_ascon_u_ascon Gates=14150 Cells=3960 Area=619.0 um^2
+[1] u_apb_ascon_u_ascon Gates=14149 Cells=3960 Area=618.9 um^2
 [1] u_apb_ascon_cg_icg__RC_CG_HIER_INST11 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_apb_ascon_cg_icg__RC_CG_HIER_INST9 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_apb_ascon_cg_icg__RC_CG_HIER_INST8 Gates=7 Cells=2 Area=0.3 um^2
@@ -1868,7 +1868,7 @@ Gate area 0.0437 um^2
 [1] u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST877 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST876 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST882 Gates=7 Cells=2 Area=0.3 um^2
-[1] u_axi_interconnect Gates=181979 Cells=52340 Area=7959.8 um^2
+[1] u_axi_interconnect Gates=181974 Cells=52338 Area=7959.6 um^2
 [2] u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_AR_channel_cg_icg__RC_CG_HIER_INST404 Gates=7 Cells=2 Area=0.3 um^2
 [2] u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_AR_channel_cg_icg__RC_CG_HIER_INST405 Gates=7 Cells=2 Area=0.3 um^2
 [2] u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_AR_channel_fifo_xaddr_order_cg_icg__RC_CG_HIER_INST1027 Gates=7 Cells=2 Area=0.3 um^2
@@ -2615,12 +2615,12 @@ Gate area 0.0437 um^2
 [2] u_axi_interconnect/cg_icg__RC_CG_HIER_INST1795 Gates=8 Cells=2 Area=0.3 um^2
 [2] u_axi_interconnect/cg_icg__RC_CG_HIER_INST1796 Gates=8 Cells=2 Area=0.3 um^2
 [2] u_axi_interconnect/cg_icg__RC_CG_HIER_INST1797 Gates=8 Cells=2 Area=0.3 um^2
-[1] u_dcache Gates=174656 Cells=11451 Area=7639.5 um^2
+[1] u_dcache Gates=174657 Cells=11451 Area=7639.5 um^2
 [1] u_dtm_axi_cg_icg__RC_CG_HIER_INST419 Gates=8 Cells=2 Area=0.3 um^2
 [1] u_dtm_axi_cg_icg__RC_CG_HIER_INST422 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_dtm_axi_cg_icg__RC_CG_HIER_INST1801 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_dtm_axi_cg_icg__RC_CG_HIER_INST421 Gates=21 Cells=3 Area=0.9 um^2
-[1] u_icache Gates=170344 Cells=10330 Area=7450.9 um^2
+[1] u_icache Gates=170347 Cells=10331 Area=7451.0 um^2
 [1] u_axi_sdram_cg_icg__RC_CG_HIER_INST1765 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_axi_sdram_cg_icg__RC_CG_HIER_INST208 Gates=8 Cells=2 Area=0.3 um^2
 [1] u_axi_sdram_cg_icg__RC_CG_HIER_INST219 Gates=7 Cells=2 Area=0.3 um^2
@@ -2633,7 +2633,7 @@ Gate area 0.0437 um^2
 [1] u_axi_sdram_cg_icg__RC_CG_HIER_INST212 Gates=8 Cells=2 Area=0.3 um^2
 [1] u_axi_flash_cg_icg__RC_CG_HIER_INST1799 Gates=7 Cells=2 Area=0.3 um^2
 [1] u_axi_rom Gates=1334 Cells=506 Area=58.3 um^2
-[1] u_axi_ram_hi Gates=965314 Cells=2684 Area=42222.9 um^2
+[1] u_axi_ram_hi Gates=965312 Cells=2684 Area=42222.8 um^2
 [2] u_axi_ram_hi/cg_icg__RC_CG_HIER_INST191 Gates=7 Cells=2 Area=0.3 um^2
 [2] u_axi_ram_hi/cg_icg__RC_CG_HIER_INST192 Gates=8 Cells=3 Area=0.4 um^2
 [2] u_axi_ram_hi/cg_icg__RC_CG_HIER_INST193 Gates=8 Cells=2 Area=0.3 um^2
@@ -2644,7 +2644,7 @@ Gate area 0.0437 um^2
 [2] u_axi_ram_hi/cg_icg__RC_CG_HIER_INST198 Gates=7 Cells=2 Area=0.3 um^2
 [2] u_axi_ram_hi/cg_icg__RC_CG_HIER_INST199 Gates=7 Cells=2 Area=0.3 um^2
 [2] u_axi_ram_hi/cg_icg__RC_CG_HIER_INST200 Gates=7 Cells=2 Area=0.3 um^2
-[2] u_axi_ram_hi/u_mem Gates=962627 Cells=1741 Area=42105.3 um^2
+[2] u_axi_ram_hi/u_mem Gates=962625 Cells=1741 Area=42105.2 um^2
 [1] u_axi_ram_lo Gates=965819 Cells=2906 Area=42244.9 um^2
 [2] u_axi_ram_lo/cg_icg__RC_CG_HIER_INST181 Gates=7 Cells=2 Area=0.3 um^2
 [2] u_axi_ram_lo/cg_icg__RC_CG_HIER_INST182 Gates=17 Cells=2 Area=0.7 um^2
@@ -2701,9 +2701,9 @@ Gate area 0.0437 um^2
 [1] u_axi_flash_cg_icg__RC_CG_HIER_INST222 Gates=17 Cells=2 Area=0.7 um^2
 [1] u_axi_sdram_cg_icg__RC_CG_HIER_INST207 Gates=8 Cells=2 Area=0.4 um^2
 [1] u_dtm_axi_cg_icg__RC_CG_HIER_INST420 Gates=17 Cells=2 Area=0.7 um^2
-[1] u_itcm Gates=121520 Cells=642 Area=5315.3 um^2
+[1] u_itcm Gates=121521 Cells=643 Area=5315.3 um^2
 [2] u_itcm/cg_icg__RC_CG_HIER_INST1748 Gates=7 Cells=2 Area=0.3 um^2
-[2] u_itcm/u_mem Gates=120370 Cells=226 Area=5265.0 um^2
+[2] u_itcm/u_mem Gates=120372 Cells=227 Area=5265.1 um^2
 [1] u_dtcm Gates=121346 Cells=583 Area=5307.7 um^2
 [2] u_dtcm/cg_icg__RC_CG_HIER_INST1747 Gates=7 Cells=2 Area=0.3 um^2
 [2] u_dtcm/u_mem Gates=120269 Cells=189 Area=5260.6 um^2
@@ -2724,7 +2724,7 @@ Analyze floorplan/placement ...
 Analysis Routing ...
 Report saved in file ./reports/summary_final.rpt
 
-*** Memory Usage v#2 (Current mem = 7316.934M, initial mem = 847.699M) ***
+*** Memory Usage v#2 (Current mem = 7104.543M, initial mem = 839.699M) ***
 *** Message Summary: 63 warning(s), 1 error(s)
 
---- Ending "Innovus" (totcpu=0:16:36, real=0:17:07, mem=7316.9M) ---
+--- Ending "Innovus" (totcpu=0:16:40, real=0:17:12, mem=7104.5M) ---
