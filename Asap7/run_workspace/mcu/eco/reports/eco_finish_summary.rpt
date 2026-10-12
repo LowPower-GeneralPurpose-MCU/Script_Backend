@@ -1,0 +1,6 @@
+FAIL
+eco_finish.tcl: final SETUP: WNS 0.173 TNS 0.0, 0 duong vi pham
+  -> TIMING DAT
+  -> DRV  : max_tran Real 47 net: u_axi_ram_lo/wdata_hold[14] (-0.018 ns), u_axi_ram_lo/wdata_hold[22] (-0.018 ns), u_axi_ram_lo/wdata_hold[7] (-0.017 ns), u_axi_ram_lo/wdata_hold[30] (-0.017 ns), u_axi_ram_lo/wdata_hold[28] (-0.017 ns) ... con 42 net
+  Xem ./reports/timing_final/final.summary(.gz)
+  KHOI 15 khong chay lai duoc tren database dang do: sua nguyen nhan roi 'make finish' lai.

@@ -4863,3 +4863,181 @@ ECO DRV top_soc: ./saved/top_soc_postRoute.enc.dat -> ./saved/top_soc_postRoute_
   WARNING: goc FF: asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib khai bao 0.7 V, cac lib con lai 0.77 V - khong co file dung de thay, bu TAM bang derate dc_ff early cell_delay x0.90 (STD_FF_LOWV_DERATE trong project_config.tcl; he so do bang scripts/fix_ff_lib.py --derate)
   WARNING: derate lib FF dien ap thap KHONG thay trong eco/reports/timing_derate.rpt (khong dong 'Cell Delay' nao cua dc_ff mang he so do) - set_timing_derate co the da bi tu choi ma khong nem loi Tcl; hold duoc sua tren lib cham hon thuc te
 10-12 13:17:07 ============================================================
+10-12 18:08:45 ECO DRV: truoc ECO, Innovus (high): setup WNS 0.187 ns, max_tran Real 21 net; 16 / 70 net cua Tempus nam trong so do
+10-12 18:32:05 soc_fix_cg_hold vong 1 (136 s): 4 latch hold < 0.020
+10-12 18:32:05   cg_cpu/en_latch_reg slack 0.019 -> buffer thu 1 truoc cg_cpu/g16__6260/B
+10-12 18:32:06   cg_dbg/en_latch_reg slack 0.019 -> buffer thu 1 truoc cg_dbg/g15__4319/B
+10-12 18:32:07   cg_ascon/en_latch_reg slack 0.015 -> buffer thu 1 truoc cg_ascon/g15__2398/B
+10-12 18:32:07   cg_cordic/en_latch_reg slack 0.016 -> buffer thu 1 truoc cg_cordic/g15__5107/B
+10-12 18:34:46 soc_fix_cg_hold vong 2 (297 s): 0 latch hold < 0.020
+10-12 18:34:46 soc_fix_cg_hold: them 4 HB4xp67_ASAP7_75t_R sau 297 s
+10-12 18:34:46   cg_cpu/en_latch_reg          hold slack 0.069 sau 1 buffer
+10-12 18:34:46   cg_dbg/en_latch_reg          hold slack 0.060 sau 1 buffer
+10-12 18:34:46   cg_pwm/en_latch_reg          hold slack 0.021 sau 0 buffer
+10-12 18:34:46   cg_spi/en_latch_reg          hold slack 0.030 sau 0 buffer
+10-12 18:34:46   cg_gpio/en_latch_reg         hold slack 0.024 sau 0 buffer
+10-12 18:34:46   cg_tim0/en_latch_reg         hold slack 0.036 sau 0 buffer
+10-12 18:34:46   cg_uart1/en_latch_reg        hold slack 0.028 sau 0 buffer
+10-12 18:34:46   cg_tim1/en_latch_reg         hold slack 0.035 sau 0 buffer
+10-12 18:34:46   cg_ascon/en_latch_reg        hold slack 0.057 sau 1 buffer
+10-12 18:34:46   cg_i2c/en_latch_reg          hold slack 0.030 sau 0 buffer
+10-12 18:34:46   cg_uart/en_latch_reg         hold slack 0.021 sau 0 buffer
+10-12 18:34:46   cg_cordic/en_latch_reg       hold slack 0.057 sau 1 buffer
+10-12 18:41:42 Chan VDD/VSS std cell (eco): 0 ho
+10-12 18:42:10 --- ./verify_rpt/drc_eco.rpt
+10-12 18:42:10   loai OFFGRID                         4
+10-12 18:42:10   net  u_itcm/u_mem/FE_OFN7471_n_257        1
+10-12 18:42:10   net  u_itcm/u_mem/FE_OFN7469_n_255        1
+10-12 18:42:10   net  u_itcm/u_mem/FE_OFN7470_n_256        1
+10-12 18:42:10   net  u_itcm/u_mem/FE_OFN7475_n_261        1
+10-12 18:42:10   -> 0 vi pham that (4 bo qua: net {}, loai {OFFGRID}; 4 OFFGRID M4 tai chan macro)
+10-12 18:42:26 ============================================================
+10-12 18:42:26 PASS
+ECO DRV top_soc: ./saved/top_soc_postRoute.enc.dat -> ./saved/top_soc_postRoute_eco.enc.dat, 2346 s, 1 CPU
+  trich RC : IQuantus effortLevel high + asap7_lef_to_qrc_layers.map (nhu SPEF cua mcu/quantus)
+  derate   : SRAM dc_ss late x1.30 / dc_ff early x0.75; lib FF dien ap thap: 56 lib cell cua asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120, dc_ff early cell_delay x0.85 (bao cao derate khong co phan dc_ff - khong kiem duoc bang bao cao)
+  Tempus   : 220 chan max_transition tren 70 net, xau nhat -0.027 ns, gioi han 0.150 ns   (all_violators.rpt)
+  truoc ECO, Innovus (high): setup WNS 0.187 ns, max_tran Real 21 net; 16 / 70 net cua Tempus nam trong so do
+  sua      : optDesign -postRoute -setup -hold -drv (drcMargin 0.05) + soc_fix_cg_hold + ecoRoute + soc_fix_drv
+  sau ECO, Innovus: setup WNS 0.219 ns, hold WNS 0.009 ns, max_tran Real 0 net (0 net cua Tempus con trong do), DRC 0
+  instance : 172904 -> 179466 (+6562)
+  bao cao  : eco/reports/timing_eco/, timing_eco_hold/, innovus/verify_rpt/drc_eco.rpt, connectivity_eco.rpt
+  PASS o day = Innovus sach tren RC nhu signoff.  Ket luan DRV la cua Tempus:
+  tiep theo: make finish (KHOI 15 + 16) -> mcu/conformal -> mcu/quantus -> mcu/tempus
+  WARNING: goc FF: asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib khai bao 0.7 V, cac lib con lai 0.77 V - khong co file dung de thay, bu TAM bang derate dc_ff early cell_delay x0.85 (STD_FF_LOWV_DERATE trong project_config.tcl; he so do bang scripts/fix_ff_lib.py --derate)
+10-12 18:42:26 ============================================================
+10-12 19:45:19 ============================================================
+10-12 19:45:19 >>> KHOI 15: filler + verify
+10-12 19:45:19 ============================================================
+10-12 19:45:19 Filler cell: FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R
+10-12 19:47:49 --- ./verify_rpt/drc_final.rpt
+10-12 19:47:49   loai OFFGRID                         4
+10-12 19:47:49   net  u_itcm/u_mem/FE_OFN7471_n_257        1
+10-12 19:47:49   net  u_itcm/u_mem/FE_OFN7469_n_255        1
+10-12 19:47:49   net  u_itcm/u_mem/FE_OFN7470_n_256        1
+10-12 19:47:49   net  u_itcm/u_mem/FE_OFN7475_n_261        1
+10-12 19:47:49   -> 0 vi pham that (4 bo qua: net {}, loai {OFFGRID}; 4 OFFGRID M4 tai chan macro)
+10-12 19:47:58 soc_metal_fill: SOC_FILL_LAYERS = M1 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M2 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M3 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M4 0.024 0.312 0.096 0.096 1.25 0.048 0.048 10 35 25 M5 0.024 0.312 0.096 0.096 1.25 0.048 0.048 15 90 25 M6 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M7 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M8 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 M9 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 Pad 0.2 2.0 0.04 2.24 2.24 2.04 2.04 20 80 25
+10-12 19:47:58 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+10-12 19:47:58   M1: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-12 19:47:58   M2: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-12 19:47:58   M3: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-12 19:47:58   M4: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-12 19:47:58   M5: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-12 19:47:58   M6: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-12 19:47:58   M7: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-12 19:47:58   M8: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-12 19:47:58   M9: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-12 19:47:58   Pad: pitch 2.2400 | buoc fill 2.2400 (1.00 track) | cach day that 2.2400 (1.00 track) | mat do toi da 8.9%
+10-12 19:47:58 WARNING: setMetalFill -reset: 
+10-12 19:49:44 # soc_fill_report doc lai ./top_soc.metalfill.rpt
+10-12 19:49:44 Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai M5/Pad la so TU DAT trong SOC_FILL_LAYERS, khong phai luat foundry.
+10-12 19:49:44   layer   duoi min (truoc -> sau)      vuot max (truoc -> sau)
+10-12 19:49:44   M1        35 -> 0      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-12 19:49:44   M2        41 -> 1      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-12 19:49:44   M3        31 -> 0      (min 25%)        0 -> 2      (max 60%)   /77 window   <- fill LAM TANG so window vuot tran
+10-12 19:49:44   M4        37 -> 0      (min 10%)        0 -> 0      (max 35%)   /77 window
+10-12 19:49:44   M5      1913 -> 1111   (min 15%)        0 -> 0      (max 90%)   /1960 window
+10-12 19:49:44   M6        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-12 19:49:44   M7        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-12 19:49:44   M8        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-12 19:49:44   M9        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-12 19:49:44   Pad       77 -> 0      (min 20%)        0 -> 0      (max 80%)   /77 window
+10-12 19:49:44 WARNING: 3 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).
+10-12 19:49:44   da ghi ./verify_rpt/fill_summary.rpt
+10-12 19:50:49 --- ./verify_rpt/drc_fill.rpt
+10-12 19:50:49   loai OFFGRID                         4
+10-12 19:50:49   net  u_itcm/u_mem/FE_OFN7471_n_257        1
+10-12 19:50:49   net  u_itcm/u_mem/FE_OFN7469_n_255        1
+10-12 19:50:49   net  u_itcm/u_mem/FE_OFN7470_n_256        1
+10-12 19:50:49   net  u_itcm/u_mem/FE_OFN7475_n_261        1
+10-12 19:50:49   -> 0 vi pham that (4 bo qua: net {}, loai {OFFGRID}; 4 OFFGRID M4 tai chan macro)
+10-12 19:50:53 Mat do - layer doc: M5
+10-12 19:50:53   M5   duoi min: 1111 tren macro SRAM + 0 trong vung logic
+10-12 19:50:53   vung logic: dat nguong o moi window
+10-12 19:50:53   1111 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+10-12 19:50:53   da ghi ./verify_rpt/density_summary.rpt
+10-12 19:50:53   density signoff: PENDING_MERGED_GDS_SIGNOFF
+10-12 19:51:21 Mat do - layer doc: M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
+10-12 19:51:21   M1   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-12 19:51:21   M2   duoi min: 0 tren macro SRAM + 1 trong vung logic (thap nhat 22.15%)
+10-12 19:51:21   M3   duoi min: 0 tren macro SRAM + 0 trong vung logic | 2 window VUOT tran
+10-12 19:51:21   M4   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-12 19:51:21   M5   duoi min: 1111 tren macro SRAM + 0 trong vung logic
+10-12 19:51:21   M6   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-12 19:51:21   M7   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-12 19:51:21   M8   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-12 19:51:21   M9   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-12 19:51:21   Pad  duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-12 19:51:21   2 window vuot tran mat do: fill do them vao window von da qua tran (cua so chong nhau 50%).  Chi cac layer co MAXIMUMDENSITY that trong tech LEF moi dang lo - ASAP7 chi co M5 (90%) va Pad (80%).
+10-12 19:51:21 WARNING: 1 window vung logic duoi nguong - metal fill chua du, xem lai SOC_FILL_LAYERS (nhat la -maxWidth / -decrement)
+10-12 19:51:21   1111 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+10-12 19:51:21   da ghi ./verify_rpt/density_all_summary.rpt
+10-12 19:58:18 WARNING: final SETUP: WNS 0.173 TNS 0.0, 0 duong vi pham
+  -> TIMING DAT
+  -> DRV  : max_tran Real 47 net: u_axi_ram_lo/wdata_hold[14] (-0.018 ns), u_axi_ram_lo/wdata_hold[22] (-0.018 ns), u_axi_ram_lo/wdata_hold[7] (-0.017 ns), u_axi_ram_lo/wdata_hold[30] (-0.017 ns), u_axi_ram_lo/wdata_hold[28] (-0.017 ns) ... con 42 net
+  Xem ./reports/timing_final/final.summary(.gz)
+10-12 19:58:18 WARNING: buoc nay chua phai buoc cuoi nen flow chay tiep, nhung con so tren phai ve 0 truoc khi ket luan.
+10-12 19:58:18   final HOLD: WNS 0.008 TNS 0.0, 0 duong vi pham -> DAT
+10-12 19:58:18   Slew chan macro SRAM: khong chan nao vuot gioi han Liberty
+10-12 20:00:58   Cong suat: 92.24 mW, trong do macro SRAM 82.50 mW (89.4%)
+10-12 20:00:58   -> CHUA co VCD/TCF: activity mac dinh 0.2 cho moi chan, tuc coi
+10-12 20:00:58      ca 84 macro SRAM deu bi truy cap cung luc.  RTL chi bat mot
+10-12 20:00:58      bank moi lan doc/ghi -> con so tren la CAN TREN, khong phai
+10-12 20:00:58      cong suat cua thiet ke.  Muon so that: chay mo phong lay VCD
+10-12 20:00:58      roi read_activity_file truoc report_power.
+10-12 20:01:04 ============================================================
+10-12 20:01:04 PNR XONG - saved/top_soc_final.enc
+  verify_rpt/drc_final.rpt           : DRC design that, phai 0
+  verify_rpt/drc_fill.rpt            : DRC sau metal fill, phai 0
+  verify_rpt/connectivity_final.rpt  : 0 open/short
+  verify_rpt/welltap_final.rpt       : 0 cell xa tap qua 30.0 um
+  verify_rpt/density_final.rpt       : chi layer M5 co luat
+  verify_rpt/fill_summary.rpt        : so window duoi min / vuot max CUA
+                                       TUNG layer sau addMetalFill
+  verify_rpt/density_all_summary.rpt : cung so do nhung da tach macro SRAM
+                                       / vung logic - vung logic phai 0
+  reports/timing_final*/             : WNS setup/hold >= 0, DRV Real = 0
+                                       (soc_check_timing o tren moi CANH BAO;
+                                        KHOI 16 moi chan xuat GDS)
+  reports/timing_final/final.tran.gz : slew chan clk SRAM - soc_sram_clk_slew
+                                       da in so o tren, khong phai mo file
+  reports/power_final.rpt            : can tren (chua co VCD), xem ghi chu
+  logs/soc_flow.log                  : toan bo ket luan cua cac cong kiem tra
+Tiep theo: KHOI 16 (xuat file)
+10-12 20:01:04 ============================================================
+10-12 20:01:04 >>> XONG: KHOI 15: filler + verify
+10-12 20:01:04 ============================================================
+10-12 20:01:04 >>> KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF
+10-12 20:01:04 ============================================================
+10-12 20:01:04   ./verify_rpt/drc_final.rpt: sach (4 vi pham waive theo SOC_DRC_WAIVE_* trong soc_fp_config.tcl)
+10-12 20:01:04   ./verify_rpt/drc_fill.rpt: sach (4 vi pham waive theo SOC_DRC_WAIVE_* trong soc_fp_config.tcl)
+10-12 20:01:04 >>> LOI: KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF: final SETUP: WNS 0.173 TNS 0.0, 0 duong vi pham
+  -> TIMING DAT
+  -> DRV  : max_tran Real 47 net: u_axi_ram_lo/wdata_hold[14] (-0.018 ns), u_axi_ram_lo/wdata_hold[22] (-0.018 ns), u_axi_ram_lo/wdata_hold[7] (-0.017 ns), u_axi_ram_lo/wdata_hold[30] (-0.017 ns), u_axi_ram_lo/wdata_hold[28] (-0.017 ns) ... con 42 net
+  Xem ./reports/timing_final/final.summary(.gz)
+10-12 20:01:04 ERROR: eco_finish.tcl: final SETUP: WNS 0.173 TNS 0.0, 0 duong vi pham
+  -> TIMING DAT
+  -> DRV  : max_tran Real 47 net: u_axi_ram_lo/wdata_hold[14] (-0.018 ns), u_axi_ram_lo/wdata_hold[22] (-0.018 ns), u_axi_ram_lo/wdata_hold[7] (-0.017 ns), u_axi_ram_lo/wdata_hold[30] (-0.017 ns), u_axi_ram_lo/wdata_hold[28] (-0.017 ns) ... con 42 net
+  Xem ./reports/timing_final/final.summary(.gz)
+10-12 20:01:04 final SETUP: WNS 0.173 TNS 0.0, 0 duong vi pham
+  -> TIMING DAT
+  -> DRV  : max_tran Real 47 net: u_axi_ram_lo/wdata_hold[14] (-0.018 ns), u_axi_ram_lo/wdata_hold[22] (-0.018 ns), u_axi_ram_lo/wdata_hold[7] (-0.017 ns), u_axi_ram_lo/wdata_hold[30] (-0.017 ns), u_axi_ram_lo/wdata_hold[28] (-0.017 ns) ... con 42 net
+  Xem ./reports/timing_final/final.summary(.gz)
+    while executing
+"error $msg"
+    (procedure "soc_check_timing" line 76)
+    invoked from within
+"soc_check_timing ./reports/timing_final      final -drv"
+    ("uplevel" body line 26)
+    invoked from within
+"uplevel #0 $body"
+    (procedure "soc_block" line 10)
+    invoked from within
+"soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
+    foreach gds $STD_GDS_FILES {
+        if {![file isfile $gds]} {
+            err..."
+    ("uplevel" body line 1)
+    invoked from within
+"uplevel #0 $block16"
