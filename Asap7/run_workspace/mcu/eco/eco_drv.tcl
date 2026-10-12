@@ -31,9 +31,13 @@
 ##                           Innovus se KHONG thay vi pham - khi do can
 ##                           ECO_DRV_MARGIN=0.20 de bu ca khoang lech 27 ps)
 ##   ECO_DRV_MARGIN=0.05     setOptMode -drcMargin: gioi han dung khi sua =
-##                           gioi han that x (1 - margin).  CHUA chay thu tren
-##                           Innovus 23.14; bi tu choi thi chay khong margin va
-##                           ghi WARNING.
+##                           gioi han that x (1 - margin).  Innovus 23.14 nhan
+##                           lenh nay (run 2026-10-12).  KHONG dung margin de bu
+##                           metal fill: run do thu 0.05 roi 0.25, sau fill con
+##                           47 roi 64 net - nhung net do optDesign khong sua
+##                           duoc o bat ky margin nao (xem dong "optDesign bo
+##                           lai" trong file tom tat).  Viec do la cua
+##                           'make fillfix'.
 ##   ECO_CPUS=1              mac dinh 1: IQuantus nhieu tien trinh da treo tren
 ##                           may nay (quantus.tcl, run 2026-10-09 23:33)
 ##   ECO_CHECKPOINT=...      checkpoint khac top_soc_postRoute.enc.dat
@@ -43,7 +47,8 @@
 ##                           lib do duoc bu bang derate, chi con la WARNING
 ##
 ## Script KHONG ghi de checkpoint goc va KHONG dung vao reports/ cua flow
-## chinh.  Sau khi PASS: make finish (KHOI 15 + 16), roi LEC, Quantus, Tempus.
+## chinh.  Sau khi PASS: make fillfix (DRV khi co metal fill), make finish
+## (KHOI 15 + 16), roi LEC, Quantus, Tempus.
 ############################################################
 
 set ECO_DIR [file dirname [file normalize [info script]]]
@@ -64,6 +69,8 @@ if {[catch {
         file mkdir [file join $ECO_DIR $dir]
     }
     file delete -force $ECO_SUMMARY
+    # Ket luan cua 'make fillfix' la ve checkpoint ma buoc nay sap ghi de.
+    file delete -force [file join $ECO_DIR reports eco_fillfix_summary.rpt]
 
     # --------------------------------------------------------------------
     # 0. THAM SO
@@ -368,6 +375,20 @@ if {[catch {
     }
     set inst_after [llength [dbGet top.insts]]
 
+    # Bang DRV o tren do SAU khi margin da tra ve 0, nen "Real 0 net" khong noi
+    # gi ve nhung net optDesign muon keo xuong duoi gioi han x (1 - margin) ma
+    # khong lam duoc.  Run 2026-10-12 (margin 0.25): 126 net nhu vay, va 64 net
+    # vuot gioi han sau metal fill o 'make finish' nam trong so do.  Doc lai con
+    # so tu log cua chinh run nay de no co mat trong file tom tat.
+    lassign [eco_log_unfixed_drv [file join $ECO_DIR logs eco_drv.log]] unfixed unfixed_why
+    set unfixed_note "khong doc duoc tu logs/eco_drv.log"
+    if {$unfixed >= 0} {
+        set unfixed_note "$unfixed net"
+        if {[llength $unfixed_why] > 0} {
+            append unfixed_note " ([join $unfixed_why {; }])"
+        }
+    }
+
     set bad {}
     foreach {label sum} [list setup $sum_eco hold $sum_hold] {
         if {![dict exists $sum wns]} {
@@ -398,6 +419,7 @@ if {[catch {
             [expr {[dict exists $sum_hold wns] ? [dict get $sum_hold wns] : "?"}] \
             [expr {[dict exists $sum_eco drv_max_tran] ? [dict get $sum_eco drv_max_tran] : "?"}] \
             $left $eco_drc] \
+        "  optDesign bo lai (\"can't be fixed\", luot DRV cuoi): $unfixed_note" \
         "  instance : $inst_before -> $inst_after ([format %+d [expr {$inst_after - $inst_before}]])" \
         "  bao cao  : eco/reports/timing_eco/, timing_eco_hold/, innovus/verify_rpt/drc_eco.rpt, connectivity_eco.rpt"]
     if {[llength $bad] > 0} {
@@ -405,8 +427,10 @@ if {[catch {
         eco_write_summary $ECO_SUMMARY FAIL $lines
     } else {
         lappend lines \
-            "  PASS o day = Innovus sach tren RC nhu signoff.  Ket luan DRV la cua Tempus:" \
-            "  tiep theo: make finish (KHOI 15 + 16) -> mcu/conformal -> mcu/quantus -> mcu/tempus"
+            "  PASS o day = Innovus sach tren RC nhu signoff NHUNG CHUA CO METAL FILL: fill" \
+            "  them C ghep, net sat gioi han se vuot (run 2026-10-12: 0 net o day, 64 net sau fill)." \
+            "  tiep theo: make fillfix (do + sua khi co fill) -> make finish (KHOI 15 + 16)" \
+            "             -> mcu/conformal -> mcu/quantus -> mcu/tempus (ket luan DRV la cua Tempus)"
         eco_write_summary $ECO_SUMMARY PASS $lines
     }
 
