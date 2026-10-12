@@ -2,9 +2,12 @@
 ## Sau ECO: chay lai KHOI 15 (filler + metal fill + verify) va KHOI 16 (xuat
 ## netlist / SDC / DEF / SPEF / GDS) tren checkpoint cua eco_drv.tcl.
 ##
-##     cd Asap7/run_workspace/mcu/eco && make finish
+##     cd Asap7/run_workspace/mcu/eco && make finish       (sau 'make fillfix')
 ##
-##   vao : ../innovus/saved/top_soc_postRoute_eco.enc.dat   (make all)
+##   vao : checkpoint ghi o dong 'checkpoint ...' cua
+##         reports/eco_fillfix_summary.rpt (make fillfix): top_soc_postRoute_ecofill
+##         neu buoc do co sua, khong thi top_soc_postRoute_eco cua make all.
+##         ECO_FINISH_IN=./saved/<ten>.enc.dat chi dinh thang, bo qua fillfix.
 ##   ra  : ../innovus/saved/top_soc_prefill.enc.dat, top_soc_final.enc.dat,
 ##         ../innovus/outputs/top_soc_pnr.* , top_soc.gds   - GHI DE ban truoc ECO
 ##         reports/eco_finish_summary.rpt   dong dau DONE / FAIL
@@ -34,24 +37,42 @@ if {[catch {
     }
     file delete -force $ECO_FINISH_SUMMARY
 
-    set ECO_OUT  [format "./saved/%s_postRoute_eco.enc.dat" $TOP]
     set ECO_CPUS [eco_env ECO_CPUS 1]
     if {![string is integer -strict $ECO_CPUS] || $ECO_CPUS < 1} {
         error "ECO_CPUS phai la so nguyen >= 1, dang la '$ECO_CPUS'"
     }
-    if {![file isdirectory $ECO_OUT]} {
-        error "Khong co $ECO_OUT - chay 'make all' truoc"
-    }
     # Chi di tiep tren mot ECO da PASS: KHOI 16 ghi de outputs/ cua ban truoc.
     set eco_rpt [file join $ECO_DIR reports eco_summary.rpt]
-    set eco_verdict ""
-    if {[file isfile $eco_rpt]} {
-        set fp [open $eco_rpt r]
-        gets $fp eco_verdict
-        close $fp
+    if {[eco_summary_verdict $eco_rpt] ne "PASS"} {
+        error "$eco_rpt bao '[eco_summary_verdict $eco_rpt]' - chi chay KHOI 15/16 tren ECO da PASS"
     }
-    if {[string trim $eco_verdict] ne "PASS"} {
-        error "$eco_rpt bao '[string trim $eco_verdict]' - chi chay KHOI 15/16 tren ECO da PASS"
+    # Checkpoint dau vao la cua 'make fillfix' (dong 'checkpoint ...' trong file
+    # tom tat cua no): buoc do do DRV khi da co metal fill va sua truoc.  Run
+    # 2026-10-12 chay thang tu checkpoint cua 'make all' va dung o cong timing
+    # sau fill hai lan lien (47 roi 64 net max_tran).  ECO_FINISH_IN=<checkpoint>
+    # bo qua buoc do co chu dich.
+    set fill_rpt [file join $ECO_DIR reports eco_fillfix_summary.rpt]
+    set ECO_OUT  [eco_env ECO_FINISH_IN ""]
+    if {$ECO_OUT ne ""} {
+        eco_warn "ECO_FINISH_IN=$ECO_OUT - khong dung ket luan cua 'make fillfix'"
+    } else {
+        if {[eco_summary_verdict $fill_rpt] ne "PASS"} {
+            error "$fill_rpt bao '[eco_summary_verdict $fill_rpt]' - chay 'make fillfix'\
+ truoc (do va sua max_transition khi da co metal fill), PASS roi moi 'make finish'"
+        }
+        set fp [open $fill_rpt r]
+        while {[gets $fp line] >= 0} {
+            if {[regexp {^checkpoint\s+(\S+)\s*$} $line -> ECO_OUT]} {
+                break
+            }
+        }
+        close $fp
+        if {$ECO_OUT eq ""} {
+            error "$fill_rpt khong co dong 'checkpoint <duong dan>'"
+        }
+    }
+    if {![file isdirectory $ECO_OUT]} {
+        error "Khong co $ECO_OUT - chay 'make all' roi 'make fillfix' truoc"
     }
 
     # Lay hai khoi TRUOC khi mo checkpoint: innovus.tcl hong thi dung ngay.
@@ -60,15 +81,20 @@ if {[catch {
     set block16 [eco_flow_block $flow_file "KHOI 16"]
 
     set eco_t0 [clock seconds]
+    set eco_stage "mo checkpoint"
     restoreDesign $ECO_OUT $TOP
     source ./tcl/manual/soc_fp_config.tcl
     source ./tcl/manual/soc_fp_procs.tcl
     setMultiCpuUsage -acquireLicense $ECO_CPUS -localCpu $ECO_CPUS
     setDistributeHost -local
+    eco_session_constraints
 
     # soc_block nem loi khi mot lenh trong khoi hong -> roi vao catch ben ngoai.
+    set eco_stage "KHOI 15"
     uplevel #0 $block15
+    set eco_stage "KHOI 16"
     uplevel #0 $block16
+    set eco_stage "tom tat"
 
     set lines [list \
         "ECO finish $TOP: $ECO_OUT -> KHOI 15 + KHOI 16, [expr {[clock seconds] - $eco_t0}] s, $ECO_CPUS CPU"]
@@ -102,8 +128,28 @@ if {[catch {
     set eco_trace $::errorInfo
     puts "ERROR: eco_finish.tcl: $eco_err"
     puts $eco_trace
-    catch {eco_write_summary $ECO_FINISH_SUMMARY FAIL [list "eco_finish.tcl: $eco_err" \
-        "  KHOI 15 khong chay lai duoc tren database dang do: sua nguyen nhan roi 'make finish' lai."]}
+    # Noi ro DUNG O DAU.  Truoc day moi loi deu kem cau "KHOI 15 khong chay lai
+    # duoc..." nen run 2026-10-12 doc nhu KHOI 15 hong, trong khi filler, metal
+    # fill, DRC va mat do deu qua: thu chan la cong timing dau KHOI 16, doc
+    # bang timeDesign do SAU fill.
+    if {![info exists eco_stage]} {
+        set eco_stage "kiem tra dau vao"
+    }
+    set eco_fail [list "eco_finish.tcl, dung o '$eco_stage': $eco_err"]
+    switch -- $eco_stage {
+        "KHOI 15" {
+            lappend eco_fail \
+                "  KHOI 15 khong chay lai duoc tren database dang do: sua nguyen nhan roi 'make finish' lai (no luon mo lai tu checkpoint)." \
+                "  saved/*_prefill.enc.dat / *_final.enc.dat co the da bi ghi de boi lan chay hong nay."
+        }
+        "KHOI 16" {
+            lappend eco_fail \
+                "  KHOI 15 (filler, metal fill, DRC, mat do) DA XONG; thu chan la cong cua KHOI 16." \
+                "  Neu dong tren la DRV / WNS cua 'final': do la timing SAU metal fill -> 'make fillfix' roi 'make finish' lai." \
+                "  saved/*_final.enc.dat gio la thiet ke KHONG DAT nay; innovus/outputs/ chua chac da duoc ghi lai - dung chay conformal/quantus/tempus."
+        }
+    }
+    catch {eco_write_summary $ECO_FINISH_SUMMARY FAIL $eco_fail}
     exit 1
 }
 exit 0
