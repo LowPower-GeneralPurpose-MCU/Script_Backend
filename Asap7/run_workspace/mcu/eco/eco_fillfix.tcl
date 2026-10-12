@@ -23,8 +23,8 @@
 ##
 ## Cach lam, trong MOT session, tren database CHUA co filler:
 ##   1. do fill thu (soc_metal_fill - dung bo so cua KHOI 15), timeDesign
-##   2. net nao vuot gioi han thi xoa fill, chen mot buffer sat driver
-##      (eco_buffer_nets), ecoRoute, kiem DRC + connectivity, saveDesign
+##   2. net nao vuot gioi han thi xoa fill, chen buffer theo loai net (luat o
+##      eco_buffer_nets), ecoRoute, kiem DRC + connectivity, saveDesign
 ##   3. do fill lai va do lai; lap toi da ECO_FILL_ROUNDS vong sua
 ## Checkpoint luon duoc luu TRUOC khi do fill thu nen khong bao gio chua fill;
 ## KHOI 15 cua 'make finish' tu chen filler va fill that.
@@ -38,14 +38,18 @@
 ##                          0 = do dung gioi han that, khong dung vao SDC.
 ##   ECO_FILL_ROUNDS=3      so vong sua toi da
 ##   ECO_FILL_BUF=BUFx4_ASAP7_75t_R
-##   ECO_FILL_DIST=0.9      ecoAddRepeater -relativeDistToSink (1 = sat driver)
-##   ECO_FILL_MAX_NETS=400  so net sua toi da moi vong (xau nhat truoc)
+##   ECO_FILL_BUF_STRONG=BUFx10_ASAP7_75t_R   cho net ma driver von da manh
+##   ECO_FILL_DIST=0.9      ecoAddRepeater -relativeDistToSink (1 = sat driver),
+##                          Innovus chi nhan cho net mot tai
+##   ECO_FILL_MAX_NETS=1000 so net sua toi da moi vong (xau nhat truoc)
 ##   ECO_CPUS=1
 ##
-## CHUA chay thu tren Innovus 23.14: 'ecoAddRepeater -net ... -relativeDistToSink'
-## (co duong lui, xem eco_buffer_nets), 'set_max_transition' trong
-## set_interactive_constraint_modes (bi tu choi thi do khong guard va ghi
-## WARNING), addMetalFill tren database chua co filler.
+## Run 2026-10-12 21:13 (Innovus 23.14, 2051 s) da chay duoc: fill thu tren
+## database chua co filler, siet/tra max_transition, ecoAddRepeater ca hai dang,
+## deleteMetalFill tung layer, DRC 0.  72 net vi pham -> 4, nhung 4 net do la
+## do chinh buoc nay lam hong (BUFx4 chen noi tiep sau BUFx10) - da doi luat,
+## xem eco_buffer_nets.  CHUA chay thu: cach split (ecoAddRepeater -term voi
+## nhieu chan).
 ############################################################
 
 set ECO_DIR [file dirname [file normalize [info script]]]
@@ -73,8 +77,9 @@ if {[catch {
     set ECO_FILL_GUARD    [eco_env ECO_FILL_GUARD 0.010]
     set ECO_FILL_ROUNDS   [eco_env ECO_FILL_ROUNDS 3]
     set ECO_FILL_BUF      [eco_env ECO_FILL_BUF BUFx4_ASAP7_75t_R]
+    set ECO_FILL_STRONG   [eco_env ECO_FILL_BUF_STRONG BUFx10_ASAP7_75t_R]
     set ECO_FILL_DIST     [eco_env ECO_FILL_DIST 0.9]
-    set ECO_FILL_MAX_NETS [eco_env ECO_FILL_MAX_NETS 400]
+    set ECO_FILL_MAX_NETS [eco_env ECO_FILL_MAX_NETS 1000]
     set ECO_CPUS          [eco_env ECO_CPUS 1]
 
     if {![string is double -strict $ECO_FILL_GUARD] ||
@@ -135,6 +140,11 @@ if {[catch {
     if {[llength [dbGet -e head.libCells.name $ECO_FILL_BUF]] == 0} {
         error "Khong co lib cell '$ECO_FILL_BUF' - dat ECO_FILL_BUF"
     }
+    if {[llength [dbGet -e head.libCells.name $ECO_FILL_STRONG]] == 0} {
+        eco_warn "khong co lib cell $ECO_FILL_STRONG (ECO_FILL_BUF_STRONG) - dung\
+ $ECO_FILL_BUF cho ca net co driver manh"
+        set ECO_FILL_STRONG $ECO_FILL_BUF
+    }
     set inst_before [llength [dbGet top.insts]]
 
     set rpt_dir  [file join $ECO_DIR reports timing_fillfix]
@@ -155,6 +165,8 @@ if {[catch {
     set near {}
     set wns "?"
     set viol_below 0.0005
+    # Net da quyet dinh KHONG dung toi (cach skip cua eco_buffer_nets).
+    set skipped [dict create]
     for {set round 0} {1} {incr round} {
         soc_metal_fill
 
@@ -188,9 +200,9 @@ if {[catch {
         set viol {}
         set near {}
         foreach row [eco_tran_report $text] {
-            lassign $row net slack pin cellport limit loads
+            lassign $row net slack pin cellport limit loads drvlim
             set real [eco_real_slack $slack $limit $tight_limits $guard]
-            set row [list $net $real $pin $cellport $limit $loads]
+            set row [list $net $real $pin $cellport $limit $loads $drvlim]
             lappend rows $row
             # Bao cao lam tron toi 1 ps: "-0.000" van la vi pham va van duoc
             # bang DRV cua timeDesign dem (cong cua KHOI 16 doc bang do).
@@ -210,12 +222,24 @@ if {[catch {
             append note [format ", trong khoang du %.3f ns: %d net" $guard [llength $near]]
         }
 
-        if {[llength $rows] == 0 || $round >= $ECO_FILL_ROUNDS} {
+        set todo_all {}
+        foreach row $rows {
+            if {![dict exists $skipped [lindex $row 0]]} {
+                lappend todo_all $row
+            }
+        }
+        if {[llength $todo_all] == 0 || $round >= $ECO_FILL_ROUNDS} {
             foreach row $rows {
                 lassign $row net real pin cellport
+                if {$real < $viol_below} {
+                    set action CON_VI_PHAM
+                } elseif {[dict exists $skipped $net]} {
+                    set action "bo_qua: driver du manh, nhieu tai, con du"
+                } else {
+                    set action con_trong_khoang_du
+                }
                 puts $net_fp [format "%d  %+.3f  %s  %s  %s  %s" $round $real $net $pin \
-                    [expr {$cellport eq "" ? "-" : $cellport}] \
-                    [expr {$real < $viol_below ? "CON_VI_PHAM" : "con_trong_khoang_du"}]]
+                    [expr {$cellport eq "" ? "-" : $cellport}] $action]
             }
             lappend round_notes $note
             puts "ECO FILLFIX: $note"
@@ -223,44 +247,59 @@ if {[catch {
         }
 
         # --- sua -----------------------------------------------------------
-        set todo [lrange $rows 0 [expr {$ECO_FILL_MAX_NETS - 1}]]
-        if {[llength $rows] > [llength $todo]} {
-            eco_warn "vong $round: [llength $rows] net can sua, chi sua\
+        set todo [lrange $todo_all 0 [expr {$ECO_FILL_MAX_NETS - 1}]]
+        if {[llength $todo_all] > [llength $todo]} {
+            eco_warn "vong $round: [llength $todo_all] net can sua, chi sua\
  [llength $todo] net xau nhat (ECO_FILL_MAX_NETS)"
         }
         eco_delete_metal_fill
-        set results [eco_buffer_nets $todo $ECO_FILL_BUF $ECO_FILL_DIST]
+        set results [eco_buffer_nets $todo $ECO_FILL_BUF $ECO_FILL_STRONG \
+            $ECO_FILL_DIST $viol_below]
         array unset form_count
-        array set form_count {dist 0 net 0 term 0 fail 0}
+        array set form_count {dist 0 net 0 split 0 skip 0 fail 0}
         foreach row $todo result $results {
             lassign $row net real pin cellport
             lassign $result rnet form why
-            if {$form eq ""} {
-                incr form_count(fail)
-                set action "KHONG_CHEN_DUOC: $why"
-            } else {
-                incr form_count($form)
-                incr added
-                set action "buffer($form)"
+            switch -- $form {
+                "" {
+                    incr form_count(fail)
+                    set action "KHONG_CHEN_DUOC: $why"
+                }
+                skip {
+                    incr form_count(skip)
+                    dict set skipped $net 1
+                    set action "bo_qua: driver du manh, nhieu tai, con du"
+                }
+                split {
+                    incr form_count(split)
+                    incr added
+                    set action "buffer(split $ECO_FILL_STRONG, $why)"
+                }
+                default {
+                    incr form_count($form)
+                    incr added
+                    set action "buffer($form)"
+                }
             }
             puts $net_fp [format "%d  %+.3f  %s  %s  %s  %s" $round $real $net $pin \
                 [expr {$cellport eq "" ? "-" : $cellport}] $action]
         }
         flush $net_fp
-        set done [expr {$form_count(dist) + $form_count(net) + $form_count(term)}]
-        append note [format " -> chen %d %s (sat driver %d, -net %d, -term %d, khong chen duoc %d)" \
-            $done $ECO_FILL_BUF $form_count(dist) $form_count(net) \
-            $form_count(term) $form_count(fail)]
+        set done [expr {$form_count(dist) + $form_count(net) + $form_count(split)}]
+        append note [format " -> chen %d buffer (mot tai sat driver %d, noi tiep %d, tach tai %d), bo qua %d net driver manh con du, khong chen duoc %d" \
+            $done $form_count(dist) $form_count(net) $form_count(split) \
+            $form_count(skip) $form_count(fail)]
         lappend round_notes $note
         puts "ECO FILLFIX: $note"
         if {$done == 0} {
-            error "vong $round: khong chen duoc buffer nao trong [llength $todo] net -\
+            if {$form_count(fail) > 0} {
+                error "vong $round: khong chen duoc buffer nao trong [llength $todo] net -\
  xem cot xu_ly trong $net_rpt"
-        }
-        if {$form_count(dist) == 0} {
-            eco_warn "vong $round: Innovus tu choi 'ecoAddRepeater -relativeDistToSink';\
- buffer duoc chen bang dang -net/-term, vi tri do Innovus chon - neu vong sau net do\
- van vi pham thi buffer da nam xa driver"
+            }
+            # Chi con net bi bo qua co chu dich: khong co gi de route hay luu.
+            # Fill thu vua bi xoa -> do lai de phep do hold o duoi van la co fill.
+            soc_metal_fill
+            break
         }
 
         # Buffer moi chua co day; cell moi chua noi rail.  Cung chuoi lenh voi
@@ -314,8 +353,10 @@ if {[catch {
         }
     }
     if {[llength $near] > 0 && [llength $viol] == 0} {
-        eco_warn "[llength $near] net con cach gioi han duoi $guard ns khi co fill\
- (reports/fillfix_nets.rpt) - Innovus dat, Tempus co the van bao vai net"
+        eco_warn "[llength $near] net con cach gioi han duoi $guard ns khi co fill,\
+ [dict size $skipped] net trong do bi bo qua co chu dich (driver du manh, nhieu tai:\
+ chen buffer noi tiep lam xau di) - Innovus dat, Tempus co the van bao vai net;\
+ danh sach trong reports/fillfix_nets.rpt"
     }
 
     set use_ckpt [expr {$saved ? "$ECO_FILL_OUT.dat" : $ECO_IN}]
@@ -331,7 +372,7 @@ if {[catch {
     lappend lines \
         [format "  cuoi     : setup WNS %s ns, hold WNS %s ns (ca hai khi co fill), max_tran vuot gioi han %d net" \
             $wns $hold_wns [llength $viol]] \
-        "  instance : $inst_before -> $inst_after ([format %+d [expr {$inst_after - $inst_before}]]), $added buffer $ECO_FILL_BUF" \
+        "  instance : $inst_before -> $inst_after ([format %+d [expr {$inst_after - $inst_before}]]), $added buffer ($ECO_FILL_BUF; tach tai: $ECO_FILL_STRONG)" \
         "  bao cao  : eco/reports/fillfix_nets.rpt, timing_fillfix/, timing_fillfix_hold/"
     if {!$saved} {
         lappend lines "  khong sua gi: make finish dung thang checkpoint cua make all"
