@@ -1,15 +1,14 @@
-FAIL
+PASS
 checkpoint ./saved/top_soc_postRoute_ecofill.enc.dat
-ECO fillfix top_soc: ./saved/top_soc_postRoute_eco.enc.dat, 2051 s, 1 CPU
+ECO fillfix top_soc: ./saved/top_soc_postRoute_eco.enc.dat, 2033 s, 1 CPU
   cach do  : metal fill thu (bo so KHOI 15) tren database chua co filler; khoang du 0.010 ns duoi gioi han max_transition theo clock
   derate   : SRAM dc_ss late x1.30 / dc_ff early x0.75; lib FF dien ap thap: 56 lib cell cua asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120, dc_ff early cell_delay x0.85
-  vong 0: co fill, setup WNS 0.151 ns, max_tran vuot gioi han 72 net (xau nhat u_axi_ram_lo/wdata_hold[11] -0.025 ns), trong khoang du 0.010 ns: 438 net -> chen 400 BUFx4_ASAP7_75t_R (sat driver 114, -net 286, -term 0, khong chen duoc 0)
-  vong 1: co fill, setup WNS 0.182 ns, max_tran vuot gioi han 4 net (xau nhat u_axi_ram_hi/u_mem/FE_ECON37184_FE_OFN8095_mem_wdata_19 -0.094 ns), trong khoang du 0.010 ns: 122 net -> chen 126 BUFx4_ASAP7_75t_R (sat driver 16, -net 110, -term 0, khong chen duoc 0)
-  vong 2: co fill, setup WNS 0.176 ns, max_tran vuot gioi han 4 net (xau nhat u_axi_ram_hi/u_mem/FE_ECON37327_FE_OFN8095_mem_wdata_19 -0.094 ns), trong khoang du 0.010 ns: 6 net -> chen 10 BUFx4_ASAP7_75t_R (sat driver 0, -net 10, -term 0, khong chen duoc 0)
-  vong 3: co fill, setup WNS 0.176 ns, max_tran vuot gioi han 4 net (xau nhat u_axi_ram_hi/u_mem/FE_ECON37453_FE_OFN8095_mem_wdata_19 -0.093 ns), trong khoang du 0.010 ns: 3 net
-  cuoi     : setup WNS 0.176 ns, hold WNS 0.007 ns (ca hai khi co fill), max_tran vuot gioi han 4 net
-  instance : 179463 -> 179999 (+536), 536 buffer BUFx4_ASAP7_75t_R
+  vong 0: co fill, setup WNS 0.151 ns, max_tran vuot gioi han 72 net (xau nhat u_axi_ram_lo/wdata_hold[11] -0.025 ns), trong khoang du 0.010 ns: 438 net -> chen 464 buffer (mot tai sat driver 126, noi tiep 337, tach tai 1), bo qua 46 net driver manh con du, khong chen duoc 0
+  vong 1: co fill, setup WNS 0.176 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 62 net -> chen 10 buffer (mot tai sat driver 3, noi tiep 7, tach tai 0), bo qua 7 net driver manh con du, khong chen duoc 0
+  vong 2: co fill, setup WNS 0.177 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 53 net -> chen 3 buffer (mot tai sat driver 1, noi tiep 2, tach tai 0), bo qua 0 net driver manh con du, khong chen duoc 0
+  vong 3: co fill, setup WNS 0.177 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 51 net
+  cuoi     : setup WNS 0.177 ns, hold WNS 0.007 ns (ca hai khi co fill), max_tran vuot gioi han 0 net
+  instance : 179463 -> 179940 (+477), 477 buffer (BUFx4_ASAP7_75t_R; tach tai: BUFx10_ASAP7_75t_R)
   bao cao  : eco/reports/fillfix_nets.rpt, timing_fillfix/, timing_fillfix_hold/
-  KHONG DAT: max_tran khi co fill: 4 net sau 3 vong sua - u_axi_ram_hi/u_mem/FE_ECON37453_FE_OFN8095_mem_wdata_19 (-0.093 ns), u_axi_ram_hi/u_mem/FE_ECON37454_FE_OFN9012_n (-0.065 ns), u_axi_ram_hi/u_mem/FE_ECON37455_FE_OFN9014_n (-0.049 ns), u_axi_ram_lo/u_mem/FE_ECON37456_FE_OFN8910_n (-0.019 ns)
-  WARNING: vong 0: 510 net can sua, chi sua 400 net xau nhat (ECO_FILL_MAX_NETS)
-  WARNING: vong 2: Innovus tu choi 'ecoAddRepeater -relativeDistToSink'; buffer duoc chen bang dang -net/-term, vi tri do Innovus chon - neu vong sau net do van vi pham thi buffer da nam xa driver
+  tiep theo: make finish (KHOI 15 + 16 tren checkpoint o dong 2)
+  WARNING: 51 net con cach gioi han duoi 0.010 ns khi co fill, 53 net trong do bi bo qua co chu dich (driver du manh, nhieu tai: chen buffer noi tiep lam xau di) - Innovus dat, Tempus co the van bao vai net; danh sach trong reports/fillfix_nets.rpt

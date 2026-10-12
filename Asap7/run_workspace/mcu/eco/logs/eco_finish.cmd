@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Mon Oct 12 21:39:33 2026                
+#  Created on Tue Oct 13 00:04:56 2026                
 #                                                     
 #######################################################
 
@@ -18,9 +18,19 @@ suppressMessage ENCEXT-2799
 getVersion
 getVersion
 getVersion
-restoreDesign ./saved/top_soc_postRoute_eco.enc.dat top_soc
+restoreDesign ./saved/top_soc_postRoute_ecofill.enc.dat top_soc
 setMultiCpuUsage -acquireLicense 1 -localCpu 1
 setDistributeHost -local
+set_timing_derate -delay_corner $corner $side -cell_delay -cell_check  $factor $sram_insts
+set_timing_derate -delay_corner $corner $side -cell_delay -cell_check  $factor $sram_insts
+set_timing_derate -delay_corner dc_ff -early -cell_delay  $factor $lib_cells
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
 setFillerMode -reset
 setFillerMode -core {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R} -add_fillers_with_drc false -fitGap true -honorPrerouteAsObs true -diffCellViol true
 addFiller -cell {FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R} -prefix FILLER -honorPrerouteAsObs true -diffCellViol true

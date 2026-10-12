@@ -1,6 +1,5 @@
 FAIL
-eco_finish.tcl: final SETUP: WNS 0.146 TNS 0.0, 0 duong vi pham
-  -> TIMING DAT
-  -> DRV  : max_tran Real 64 net: u_axi_ram_lo/wdata_hold[11] (-0.025 ns), u_axi_ram_lo/wdata_hold[27] (-0.021 ns), u_axi_ram_lo/wdata_hold[14] (-0.018 ns), u_axi_ram_lo/wdata_hold[22] (-0.018 ns), u_axi_ram_lo/wdata_hold[7] (-0.017 ns) ... con 59 net
-  Xem ./reports/timing_final/final.summary(.gz)
-  KHOI 15 khong chay lai duoc tren database dang do: sua nguyen nhan roi 'make finish' lai.
+eco_finish.tcl, dung o 'KHOI 16': soc_require_sram_lef_clean: thieu ::MFG_GRID - preflight.tcl chua chay (KHOI 0)
+  KHOI 15 (filler, metal fill, DRC, mat do) DA XONG; thu chan la cong cua KHOI 16.
+  Neu dong tren la DRV / WNS cua 'final': do la timing SAU metal fill -> 'make fillfix' roi 'make finish' lai.
+  saved/*_final.enc.dat gio la thiet ke KHONG DAT nay; innovus/outputs/ chua chac da duoc ghi lai - dung chay conformal/quantus/tempus.

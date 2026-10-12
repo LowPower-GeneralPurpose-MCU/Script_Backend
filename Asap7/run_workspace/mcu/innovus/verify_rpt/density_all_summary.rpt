@@ -1,7 +1,7 @@
 # soc_density_report doc lai ./verify_rpt/density_all.rpt
 Mat do - layer doc: M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
   M1   duoi min: 0 tren macro SRAM + 0 trong vung logic
-  M2   duoi min: 0 tren macro SRAM + 1 trong vung logic (thap nhat 22.15%)
+  M2   duoi min: 0 tren macro SRAM + 1 trong vung logic (thap nhat 22.14%)
   M3   duoi min: 0 tren macro SRAM + 0 trong vung logic | 2 window VUOT tran
   M4   duoi min: 0 tren macro SRAM + 0 trong vung logic
   M5   duoi min: 1111 tren macro SRAM + 0 trong vung logic
