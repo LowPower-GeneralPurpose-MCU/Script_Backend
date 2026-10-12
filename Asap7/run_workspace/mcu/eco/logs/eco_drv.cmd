@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Mon Oct 12 12:37:47 2026                
+#  Created on Mon Oct 12 20:17:12 2026                
 #                                                     
 #######################################################
 
@@ -25,6 +25,7 @@ set_timing_derate -delay_corner $corner $side -cell_delay -cell_check  $factor $
 set_timing_derate -delay_corner $corner $side -cell_delay -cell_check  $factor $sram_insts
 set_timing_derate -delay_corner dc_ff -early -cell_delay  $factor $lib_cells
 report_timing_derate > $derate_rpt
+report_timing_derate -delay_corner dc_ff >> $derate_rpt
 set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
 set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
 set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
@@ -36,7 +37,7 @@ setExtractRCMode -engine postRoute -effortLevel high -coupled true
 setExtractRCMode -lefTechFileMap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map
 timeDesign -postRoute -outDir /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/eco/reports/timing_pre -prefix pre
 setOptMode -fixCap true -fixTran true -fixFanoutLoad true -setupTargetSlack 0.020 -holdTargetSlack 0.020
-setOptMode -drcMargin 0.05
+setOptMode -drcMargin 0.25
 optDesign -postRoute -setup -hold -drv -prefix eco
 report_timing -early -through $latch/Q  -max_paths 1 -collection
 report_timing -early -through $latch/Q  -max_paths 1 -collection

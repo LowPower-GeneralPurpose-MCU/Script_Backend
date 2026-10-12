@@ -1,11 +1,11 @@
 Gate area 0.0437 um^2
-Level 0 Module top_soc                                  Gates=   2916534 Cells=  148366 Area=  127569.2 um^2
+Level 0 Module top_soc                                  Gates=   2916524 Cells=  148363 Area=  127568.8 um^2
 Level 1 Module cg_cpu                                   Gates=20         Cells=7        Area=       0.9 um^2
 Level 1 Module cg_dbg                                   Gates=21         Cells=8        Area=       0.9 um^2
-Level 1 Module u_axi_apb_dma_u_dma_engine               Gates=40521      Cells=12027    Area=    1772.4 um^2
+Level 1 Module u_axi_apb_dma_u_dma_engine               Gates=40516      Cells=12023    Area=    1772.2 um^2
 Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST229  Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST237  Gates=7          Cells=2        Area=       0.3 um^2
-Level 1 Module u_core                                   Gates=64402      Cells=20510    Area=    2817.0 um^2
+Level 1 Module u_core                                   Gates=64402      Cells=20510    Area=    2816.9 um^2
 Level 1 Module u_debug_module                           Gates=4120       Cells=1262     Area=     180.2 um^2
 Level 1 Module u_jtag_dtm                               Gates=1959       Cells=586      Area=      85.7 um^2
 Level 1 Module u_apb_syscon                             Gates=1366       Cells=396      Area=      59.8 um^2
@@ -22,7 +22,7 @@ Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST230  Gates=7          Cells=2
 Level 1 Module cg_tim0                                  Gates=11         Cells=4        Area=       0.5 um^2
 Level 1 Module cg_uart1                                 Gates=21         Cells=7        Area=       0.9 um^2
 Level 1 Module cg_tim1                                  Gates=14         Cells=6        Area=       0.6 um^2
-Level 1 Module u_clic                                   Gates=8074       Cells=3392     Area=     353.2 um^2
+Level 1 Module u_clic                                   Gates=8073       Cells=3392     Area=     353.1 um^2
 Level 1 Module u_tim1_cg_icg__RC_CG_HIER_INST70         Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_tim1_cg_icg__RC_CG_HIER_INST66         Gates=17         Cells=2        Area=       0.7 um^2
 Level 1 Module u_tim1_cg_icg__RC_CG_HIER_INST73         Gates=7          Cells=2        Area=       0.3 um^2
@@ -48,7 +48,7 @@ Level 1 Module u_tim0_cg_icg__RC_CG_HIER_INST56         Gates=7          Cells=2
 Level 1 Module u_tim0_cg_icg__RC_CG_HIER_INST55         Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_tim0_cg_icg__RC_CG_HIER_INST59         Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module cg_ascon                                 Gates=21         Cells=7        Area=       0.9 um^2
-Level 1 Module u_apb_ascon_u_ascon                      Gates=14150      Cells=3960     Area=     619.0 um^2
+Level 1 Module u_apb_ascon_u_ascon                      Gates=14149      Cells=3960     Area=     618.9 um^2
 Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST11    Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST9     Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_ascon_cg_icg__RC_CG_HIER_INST8     Gates=7          Cells=2        Area=       0.3 um^2
@@ -227,7 +227,7 @@ Level 1 Module u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST878 Gates=7       
 Level 1 Module u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST877 Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST876 Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_apb_spi_u_spi_tx_fifo_cg_icg__RC_CG_HIER_INST882 Gates=7          Cells=2        Area=       0.3 um^2
-Level 1 Module u_axi_interconnect                       Gates=181979     Cells=52340    Area=    7959.8 um^2
+Level 1 Module u_axi_interconnect                       Gates=181974     Cells=52338    Area=    7959.6 um^2
 Level 2 Module u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_AR_channel_cg_icg__RC_CG_HIER_INST404 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_AR_channel_cg_icg__RC_CG_HIER_INST405 Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_AR_channel_fifo_xaddr_order_cg_icg__RC_CG_HIER_INST1027 Gates=7          Cells=2        Area=       0.3 um^2
@@ -974,12 +974,12 @@ Level 2 Module u_axi_interconnect/cg_icg__RC_CG_HIER_INST1794 Gates=8          C
 Level 2 Module u_axi_interconnect/cg_icg__RC_CG_HIER_INST1795 Gates=8          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/cg_icg__RC_CG_HIER_INST1796 Gates=8          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_interconnect/cg_icg__RC_CG_HIER_INST1797 Gates=8          Cells=2        Area=       0.3 um^2
-Level 1 Module u_dcache                                 Gates=174656     Cells=11451    Area=    7639.5 um^2
+Level 1 Module u_dcache                                 Gates=174657     Cells=11451    Area=    7639.5 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST419     Gates=8          Cells=2        Area=       0.3 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST422     Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST1801    Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST421     Gates=21         Cells=3        Area=       0.9 um^2
-Level 1 Module u_icache                                 Gates=170344     Cells=10330    Area=    7450.9 um^2
+Level 1 Module u_icache                                 Gates=170347     Cells=10331    Area=    7451.0 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST1765  Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST208   Gates=8          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST219   Gates=7          Cells=2        Area=       0.3 um^2
@@ -992,7 +992,7 @@ Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST211   Gates=8          Cells=2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST212   Gates=8          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_flash_cg_icg__RC_CG_HIER_INST1799  Gates=7          Cells=2        Area=       0.3 um^2
 Level 1 Module u_axi_rom                                Gates=1334       Cells=506      Area=      58.3 um^2
-Level 1 Module u_axi_ram_hi                             Gates=965314     Cells=2684     Area=   42222.9 um^2
+Level 1 Module u_axi_ram_hi                             Gates=965312     Cells=2684     Area=   42222.8 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST191  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST192  Gates=8          Cells=3        Area=       0.4 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST193  Gates=8          Cells=2        Area=       0.3 um^2
@@ -1003,7 +1003,7 @@ Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST197  Gates=7          Cells=2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST198  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST199  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_hi/cg_icg__RC_CG_HIER_INST200  Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_axi_ram_hi/u_mem                       Gates=962627     Cells=1741     Area=   42105.3 um^2
+Level 2 Module u_axi_ram_hi/u_mem                       Gates=962625     Cells=1741     Area=   42105.2 um^2
 Level 1 Module u_axi_ram_lo                             Gates=965819     Cells=2906     Area=   42244.9 um^2
 Level 2 Module u_axi_ram_lo/cg_icg__RC_CG_HIER_INST181  Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_axi_ram_lo/cg_icg__RC_CG_HIER_INST182  Gates=17         Cells=2        Area=       0.7 um^2
@@ -1060,9 +1060,9 @@ Level 1 Module u_axi_flash_cg_icg__RC_CG_HIER_INST221   Gates=17         Cells=2
 Level 1 Module u_axi_flash_cg_icg__RC_CG_HIER_INST222   Gates=17         Cells=2        Area=       0.7 um^2
 Level 1 Module u_axi_sdram_cg_icg__RC_CG_HIER_INST207   Gates=8          Cells=2        Area=       0.4 um^2
 Level 1 Module u_dtm_axi_cg_icg__RC_CG_HIER_INST420     Gates=17         Cells=2        Area=       0.7 um^2
-Level 1 Module u_itcm                                   Gates=121520     Cells=642      Area=    5315.3 um^2
+Level 1 Module u_itcm                                   Gates=121521     Cells=643      Area=    5315.3 um^2
 Level 2 Module u_itcm/cg_icg__RC_CG_HIER_INST1748       Gates=7          Cells=2        Area=       0.3 um^2
-Level 2 Module u_itcm/u_mem                             Gates=120370     Cells=226      Area=    5265.0 um^2
+Level 2 Module u_itcm/u_mem                             Gates=120372     Cells=227      Area=    5265.1 um^2
 Level 1 Module u_dtcm                                   Gates=121346     Cells=583      Area=    5307.7 um^2
 Level 2 Module u_dtcm/cg_icg__RC_CG_HIER_INST1747       Gates=7          Cells=2        Area=       0.3 um^2
 Level 2 Module u_dtcm/u_mem                             Gates=120269     Cells=189      Area=    5260.6 um^2
