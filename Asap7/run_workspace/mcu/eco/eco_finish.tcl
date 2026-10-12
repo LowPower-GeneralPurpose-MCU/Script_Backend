@@ -80,6 +80,27 @@ if {[catch {
     set block15 [eco_flow_block $flow_file "KHOI 15"]
     set block16 [eco_flow_block $flow_file "KHOI 16"]
 
+    # KHOI 16 (soc_require_sram_lef_clean) can ::MFG_GRID, ::KNOWN_SITES va cac
+    # proc doc LEF cua tcl/check_handoff.tcl.  O flow chinh chung do preflight.tcl
+    # (KHOI 0) dat; buoc nay khong chay KHOI 0 nen run 2026-10-13 di het KHOI 15
+    # roi moi dung o "thieu ::MFG_GRID".  Dat lai dung cach preflight.tcl dat
+    # (dong 35-50), KHONG source ca file do: no con ghi de outputs/*.innovus.sdc.
+    source ./tcl/check_handoff.tcl
+    set tech_lef_text [read_binary_file $TECH_LEF "tech LEF"]
+    if {![regexp {MANUFACTURINGGRID[ \t]+([0-9.]+)} $tech_lef_text -> MFG_GRID]} {
+        error "Tech LEF khong khai MANUFACTURINGGRID: [file normalize $TECH_LEF]"
+    }
+    set KNOWN_SITES [lef_defined_sites $tech_lef_text]
+    foreach cell_lef $CELL_LEFS {
+        set KNOWN_SITES [concat $KNOWN_SITES \
+            [lef_defined_sites [read_binary_file $cell_lef "cell LEF"]]]
+    }
+    set KNOWN_SITES [lsort -unique $KNOWN_SITES]
+    if {[llength $KNOWN_SITES] == 0} {
+        error "Khong tim thay dinh nghia SITE nao trong tech LEF hay CELL_LEFS"
+    }
+    unset tech_lef_text
+
     set eco_t0 [clock seconds]
     set eco_stage "mo checkpoint"
     restoreDesign $ECO_OUT $TOP
@@ -88,6 +109,10 @@ if {[catch {
     setMultiCpuUsage -acquireLicense $ECO_CPUS -localCpu $ECO_CPUS
     setDistributeHost -local
     eco_session_constraints
+    # Cong LEF SRAM cua KHOI 16 chi doc file: goi luon o day de hong thi hong
+    # trong phut dau, khong phai sau 17 phut filler + metal fill.
+    set eco_stage "kiem LEF SRAM (cong cua KHOI 16, goi som)"
+    soc_require_sram_lef_clean
 
     # soc_block nem loi khi mot lenh trong khoi hong -> roi vao catch ben ngoai.
     set eco_stage "KHOI 15"
