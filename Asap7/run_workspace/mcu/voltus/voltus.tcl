@@ -11,7 +11,10 @@
 ##         ../quantus/outputs/top_soc_quantus_rc_typ.spef
 ##   ra  : reports/voltus_summary.rpt    dong dau DONE / FAIL
 ##         reports/power_static.rpt
+##         reports/rail_VDD/, rail_VSS/  400 dong dau moi bao cao + anh sut ap
 ##         outputs/power/, outputs/rail_VDD/, outputs/rail_VSS/
+##         work/                         luoi dien tro da trich; XOA dau moi lan
+##                                       chay (xem voltus_rail)
 ##
 ## Viet theo mau Asap7/Script/voltus/run_voltus.tcl (Mul32): read_lib -lef,
 ## read_lib, read_verilog, set_top_module, read_def, read_sdc, read_spef,
@@ -250,7 +253,7 @@ proc voltus_ir_values {line} {
 # khong co VOLTUS-1055, khong co file *.log nao, thu muc ket qua van co 16 file.
 # Khong thay loi KHONG phai la bang chung da chay: can them dau hieu duong -
 # "Finished Rail Analysis" moi trong tool log hoac file .rpt trong ket qua.
-proc voltus_tool_log_count {pattern} {
+proc voltus_tool_log_text {} {
     set newest ""
     set newest_time -1
     foreach path [glob -nocomplain -directory [file join $::VOLTUS_DIR logs] voltus.log*] {
@@ -260,12 +263,95 @@ proc voltus_tool_log_count {pattern} {
         }
     }
     if {$newest eq ""} {
-        return 0
+        return ""
     }
     set fp [open $newest r]
     set text [read $fp]
     close $fp
-    return [regexp -all $pattern $text]
+    return $text
+}
+
+proc voltus_tool_log_count {pattern} {
+    return [regexp -all $pattern [voltus_tool_log_text]]
+}
+
+# Khoi bao cao cua <net> trong tool log (tu dong "Net <net>:" CUOI CUNG toi
+# "Finished Rail Analysis"): Voltus bo bao nhieu nguon dong / nut / doan day vi
+# coi la KHONG NOI, va sut ap lon nhat tung lop.  Tra dict rong khi khong thay
+# khoi do.  Cac so nay chi co trong tool log va outputs/ (khong vao git).
+# Run 2026-10-13 22:00: VDD 15543, VSS 26192 nguon dong bi bo ma file tom tat
+# khong noi gi, va 0.102 V cua VSS nam dung tren phan luoi bi bo do (lop M1-M4;
+# M5-M9 chi 5-15 mV) - xem voltus_rail ve nguyen nhan.
+proc voltus_rail_integrity {net} {
+    set text [voltus_tool_log_text]
+    set start [string last "\nNet $net:" $text]
+    if {$start < 0} {
+        return {}
+    }
+    set block [string range $text $start end]
+    set stop [string first "Finished Rail Analysis" $block]
+    if {$stop >= 0} {
+        set block [string range $block 0 $stop]
+    }
+    # Dong 'Note: N current sources' dung ngay sau bang "Circuit profile"; chua
+    # thay bang do = log chua ghi toi (khong duoc coi la 0 nguon dong bi bo).
+    if {[string first "Circuit total" $block] < 0} {
+        return {}
+    }
+    set out [dict create sources 0 nodes 0 segments ? weak ? layers {}]
+    foreach {key pattern} {
+        sources  {Note: (\d+) current sources are disconnected}
+        nodes    {Note : (\d+) disconnected nodes are excluded}
+        segments {# Disconnected Wire Segments: (\d+)}
+        weak     {# Weakly Connected Metal Segments: (\d+)}
+    } {
+        if {[regexp $pattern $block -> count]} {
+            dict set out $key $count
+        }
+    }
+    # "      M9: 0.0051397 [0 - 0.0051397]" ngay duoi "Layer with maximum IR Drop".
+    set at [string first "Layer with maximum IR Drop" $block]
+    if {$at >= 0} {
+        set layers {}
+        foreach line [lrange [split [string range $block $at end] "\n"] 1 end] {
+            if {![regexp {^\s+(\S+): ([0-9.eE+-]+) \[} $line -> layer drop]} {
+                break
+            }
+            lappend layers [format "%s %.1f" $layer [expr {$drop * 1000.0}]]
+        }
+        dict set out layers $layers
+    }
+    return $out
+}
+
+# outputs/ khong vao git, nen sau khi commit khong con biet DIEM XAU NHAT NAM O
+# DAU (run 2026-10-13 22:00: chi con dong "0.102V" trong file tom tat).  Chep
+# 400 dong dau cua moi bao cao .rpt va hai anh ban do sut ap sang
+# reports/rail_<net>/.  Tra ve so file da chep.
+proc voltus_keep_reports {net out} {
+    set dest [file join $::VOLTUS_DIR reports "rail_$net"]
+    file delete -force $dest
+    file mkdir $dest
+    set kept 0
+    foreach path [voltus_files_under $out 5] {
+        set name [file tail $path]
+        if {[string match *.rpt $name]} {
+            set in [open $path r]
+            set fp [open [file join $dest $name] w]
+            set count 0
+            while {$count < 400 && [gets $in line] >= 0} {
+                puts $fp $line
+                incr count
+            }
+            close $in
+            close $fp
+            incr kept
+        } elseif {$name in {ir_limit.gif ir_linear.gif} && [file size $path] < 5000000} {
+            file copy -force $path [file join $dest $name]
+            incr kept
+        }
+    }
+    return $kept
 }
 
 proc voltus_rail_failures_logged {} {
@@ -335,6 +421,24 @@ proc voltus_rail_check {net out failures_before finished_before} {
 
 # Mot lan phan tich luoi nguon.  layer_map rong = khong truyen file ghep lop.
 proc voltus_rail {layer_map pads} {
+    # XOA work/ TRUOC KHI TRICH (truoc ca set_rail_analysis_mode, de khong xoa
+    # thu gi lenh do tao ra).  Voltus khong don thu muc nay giua hai lan chay.
+    # Run 2026-10-13 22:00, lan dau tren luoi nguon moi:
+    #   - 37 / 41 file <net>_part_N.floattxt trong work/ la cua run 14:26 / 15:49
+    #     tren thiet ke CU (git log tung file); lan trich moi chi ghi lai 4 file.
+    #     Moi file la danh sach nut / dien tro "noi" theo SO THU TU.
+    #   - Voltus bo 26192 nguon dong VSS / 15543 VDD va mach sau khi ghep thieu
+    #     3448 / 1347 via V2, chi o M3-M5 va via V2-V4 - dung cac lop ma so thu
+    #     tu trong file cu tro vao; M6-M9, M1, M2 khop tung phan tu voi work/.
+    #   - VSS nay 0.102 V tren M3/M4, 0.072 V tren M1.  Giai lai chinh luoi dien
+    #     tro trong work/ (23 partition, khong bo gi): 16 mV; M5-M9 khop Voltus
+    #     trong 2 mV.
+    # Suy ra (chua thay dong log nao cua tool noi thang): buoc ghep luoi doc ca
+    # file floattxt cu.  Kiem bang lan chay sau: dong 'KHONG NOI' cua file tom
+    # tat phai ve gan 0.
+    set work [file join $::VOLTUS_DIR work]
+    file delete -force $work
+
     set mode_cmd [list set_rail_analysis_mode \
         -method era_static \
         -accuracy hd \
@@ -362,6 +466,11 @@ proc voltus_rail {layer_map pads} {
         set out [file join $::VOLTUS_DIR outputs "rail_$net"]
         file delete -force $out
         file delete -force [file join $::VOLTUS_DIR voltus_rail.log]
+        # Lan VSS chay sau lan VDD trong cung work/: bo file trung ten cua lan
+        # thu truoc (TopLevelPGDB_* la ten chung cua ca hai net khi scheduler bat).
+        foreach stale [glob -nocomplain -directory $work "${net}_part_*" "TopLevelPGDB_part_*"] {
+            file delete -force $stale
+        }
         set failures_before [voltus_rail_failures_logged]
         set finished_before [voltus_rail_finished_logged]
         analyze_rail -type net -output $out $net
@@ -460,6 +569,14 @@ if {[catch {
     set VOLTUS_VDD     0.7
     set VOLTUS_VDD_MIN 0.65
     set VOLTUS_VSS_MAX 0.05
+    # So nguon dong (trong ~1.4 trieu) Voltus duoc phep coi la khong noi ma ket
+    # qua van tinh la hop le.  Luoi dung chi con vai manh chan M3 roi cua macro
+    # TAG (16 tap VDD, dem tu work/ cua run 2026-10-13 22:00); run do bo 15543 /
+    # 26192 vi work/ cu (xem voltus_rail).
+    set VOLTUS_MAX_DISCONNECTED [voltus_env VOLTUS_MAX_DISCONNECTED 100]
+    if {![string is integer -strict $VOLTUS_MAX_DISCONNECTED] || $VOLTUS_MAX_DISCONNECTED < 0} {
+        error "VOLTUS_MAX_DISCONNECTED phai la so nguyen >= 0, dang la '$VOLTUS_MAX_DISCONNECTED'"
+    }
 
     # File ghep lop cho phan trich luoi nguon.  LEF co M1..M9 + Pad, QRC co
     # LISD M1..M9: khong co file nay thi Innovus/IQuantus ghep theo vi tri
@@ -499,10 +616,19 @@ if {[catch {
     # dat dong nay tu 2026-10-11 (log Tempus: "Design Mode: 7nm").  Voltus toi
     # run 2026-10-13 15:49 van ghi "Both design process and tech node are not
     # set" / "Design Mode: 65nm".  Dat sau set_top_module nhu tempus.tcl.
-    set VOLTUS_PROCESS_NOTE "set_design_mode -process 7"
-    if {[catch {set_design_mode -process 7} mode_err]} {
-        voltus_warn "set_design_mode -process 7: $mode_err - van tinh o mac dinh 65nm"
-        set VOLTUS_PROCESS_NOTE "set_design_mode -process 7 BI TU CHOI"
+    # VOLTUS_PROCESS=none bo lenh nay (quay ve 65nm): run 2026-10-13 22:00 la lan
+    # dau chay 7nm va cung la lan dau Voltus bo nham mot phan luoi.  Nguyen nhan
+    # tim duoc la work/ cu (voltus_rail), khong phai dong nay; cong tac de tach
+    # hai thu neu xoa work/ roi ma van con nguon dong 'KHONG NOI'.
+    set VOLTUS_PROCESS [voltus_env VOLTUS_PROCESS 7]
+    if {$VOLTUS_PROCESS eq "none"} {
+        set VOLTUS_PROCESS_NOTE "KHONG dat set_design_mode (VOLTUS_PROCESS=none)"
+    } else {
+        set VOLTUS_PROCESS_NOTE "set_design_mode -process $VOLTUS_PROCESS"
+        if {[catch {set_design_mode -process $VOLTUS_PROCESS} mode_err]} {
+            voltus_warn "set_design_mode -process $VOLTUS_PROCESS: $mode_err - van tinh o mac dinh 65nm"
+            set VOLTUS_PROCESS_NOTE "set_design_mode -process $VOLTUS_PROCESS BI TU CHOI"
+        }
     }
     read_def $VOLTUS_DEF
     read_sdc $VOLTUS_SDC
@@ -686,6 +812,7 @@ if {[catch {
     # DONE can ca hai: analyze_rail chay het VA sut ap dat nguong.  Run
     # 2026-10-13 14:26 ghi DONE trong khi VDD thap nhat -7.8 V.
     set ir_ok 1
+    set integrity_ok 1
     if {$VOLTUS_RAIL && $rail_ok} {
         lappend lines "    nguong: VDD >= $VOLTUS_VDD_MIN V (danh dinh $VOLTUS_VDD V), VSS <= $VOLTUS_VSS_MAX V;\
  -enable_xp [expr {$VOLTUS_XP ? "bat" : "tat"}][expr {$VOLTUS_RAIL_OPTS ne "" ? "; option them: $VOLTUS_RAIL_OPTS" : ""}]"
@@ -727,6 +854,31 @@ if {[catch {
                     $worst [lindex $ir 1] $VOLTUS_VSS_MAX [expr {$met ? "DAT" : "KHONG DAT"}]]
                 set ir_ok [expr {$ir_ok && $met}]
             }
+            # Con so o tren chi tinh tren phan luoi Voltus coi la CON NOI.  Bo
+            # qua nhieu nguon dong thi no khong con la sut ap cua thiet ke.
+            set integ [voltus_rail_integrity $net]
+            if {[dict size $integ] == 0} {
+                voltus_warn "$net: tool log khong co bang 'Circuit profile' cua 'Net $net:' - KHONG biet Voltus\
+ co bo nguon dong nao khong; tim 'current sources are disconnected' trong logs/voltus.log"
+            } else {
+                set dropped [dict get $integ sources]
+                lappend lines "    $net: Voltus coi la KHONG NOI: $dropped nguon dong, [dict get $integ nodes] nut,\
+ [dict get $integ segments] doan day; noi yeu [dict get $integ weak] doan"
+                if {[llength [dict get $integ layers]] > 0} {
+                    lappend lines "    $net: sut lon nhat tung lop (mV): [join [dict get $integ layers] {, }]"
+                }
+                if {$dropped > $VOLTUS_MAX_DISCONNECTED} {
+                    set ir_ok 0
+                    set integrity_ok 0
+                    lappend lines "    $net: $dropped nguon dong bi bo > $VOLTUS_MAX_DISCONNECTED (VOLTUS_MAX_DISCONNECTED) -\
+ con so sut ap o tren KHONG HOP LE, ke ca khi no dat nguong"
+                }
+            }
+            if {[catch {voltus_keep_reports $net $out} kept]} {
+                lappend lines "    $net: khong chep duoc bao cao sang reports/rail_$net ($kept)"
+            } else {
+                lappend lines "    $net: $kept file -> reports/rail_$net/ (400 dong dau moi .rpt, ir_limit.gif, ir_linear.gif)"
+            }
             # Khong biet truoc dinh dang bao cao cua Voltus: chep nguyen van cac
             # dong co ve la con so sut ap, toi da 12 dong moi net.
             set shown 0
@@ -742,7 +894,10 @@ if {[catch {
             }
         }
     }
-    if {$rail_ok && !$ir_ok} {
+    if {$rail_ok && !$integrity_ok} {
+        lappend lines "  KET LUAN: analyze_rail chay het nhung Voltus BO mot phan luoi (dong 'KHONG NOI' o tren) -\
+ kiem verifyConnectivity cua Innovus va work/ cu truoc khi doc con so sut ap"
+    } elseif {$rail_ok && !$ir_ok} {
         lappend lines "  KET LUAN: analyze_rail chay het nhung sut ap KHONG DAT nguong (dong VDD / VSS o tren)"
     }
     voltus_write_summary $VOLTUS_SUMMARY [expr {$rail_ok && $ir_ok ? "DONE" : "FAIL"}] $lines

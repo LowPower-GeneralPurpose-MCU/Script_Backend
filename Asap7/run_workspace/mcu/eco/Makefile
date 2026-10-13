@@ -57,10 +57,13 @@ export ECO_ALLOW_STALE
 # Innovus phai chay trong mcu/innovus: checkpoint va tcl/ deu duoc tim theo
 # duong dan tuong doi tu do.  Ket luan la dong dau cua file tom tat do script
 # ghi; thieu file = innovus chet giua chung.
+# Moi buoc xoa ca file tom tat cua cac buoc SAU no: run 2026-10-13 21:22 de lai
+# eco_finish_summary.rpt "DONE" cua thiet ke truoc khi chay lai Innovus, trong
+# khi fillfix / finish cua lan do chua chay.
 all: $(VIOLATORS)
 	@test -n "$(ECO_CHECKPOINT)" || test -d $(CHECKPOINT) || { echo "Khong co $(CHECKPOINT) - can ket qua KHOI 14"; exit 1; }
 	mkdir -p logs reports
-	rm -f $(SUMMARY) $(FILLFIX)
+	rm -f $(SUMMARY) $(FILLFIX) $(FINISH)
 	-cd $(RUN_DIR) && $(INNOVUS) -no_gui -files ../eco/eco_drv.tcl -log ../eco/logs/eco_drv
 	@test -f $(SUMMARY) || { echo "ECO khong ghi $(SUMMARY) - doc logs/eco_drv.log"; exit 1; }
 	@cat $(SUMMARY)
@@ -69,7 +72,7 @@ all: $(VIOLATORS)
 fillfix:
 	@test -d $(ECO_OUT) || { echo "Khong co $(ECO_OUT) - chay 'make all' truoc"; exit 1; }
 	mkdir -p logs reports
-	rm -f $(FILLFIX)
+	rm -f $(FILLFIX) $(FINISH)
 	-cd $(RUN_DIR) && $(INNOVUS) -no_gui -files ../eco/eco_fillfix.tcl -log ../eco/logs/eco_fillfix
 	@test -f $(FILLFIX) || { echo "Innovus khong ghi $(FILLFIX) - doc logs/eco_fillfix.log"; exit 1; }
 	@cat $(FILLFIX)
