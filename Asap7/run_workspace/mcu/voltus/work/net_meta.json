@@ -1,7 +1,0 @@
-{
-    "extracted_nets": {
-        "VDD": {
-            "is_analyze_net": "true"
-        }
-    }
-}

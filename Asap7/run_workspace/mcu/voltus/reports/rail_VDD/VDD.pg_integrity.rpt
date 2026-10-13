@@ -1,0 +1,40 @@
+* Missing Cell Power-Grid Views
+
+
+
+* Physically Disconnected Instances
+
+*** Rlrp analysis is required to report instances placed but disconnected from voltage sources. 
+
+Instance Name             | Cell Name                 | Root Cause 
+------------------------------------------------------------------
+
+
+* Instances with Floating Power Pins
+
+
+* Disconnected Wire Segments
+
+
+
+* Weakly Connected Metal Segments
+
+Layer      | Location (um)
+------------------------------------------------------------------
+M5         | (227.47, 45.285)
+M5         | (211.782, 45.285)
+M4         | (228.644, 20.301)
+M4         | (228.644, 17.133)
+M4         | (210.686, 20.301)
+M4         | (210.686, 17.133)
+M4         | (228.644, 51.621)
+M4         | (228.644, 48.453)
+M4         | (210.686, 51.621)
+M4         | (210.686, 48.453)
+
+Found 10 weakly connected metal segments
+
+
+
+* Dropped Voltage Sources
+

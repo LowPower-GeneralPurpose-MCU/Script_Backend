@@ -1,6 +1,6 @@
-FAIL
+DONE
 Voltus top_soc: goc TT 0.7 V / 25 C, static, activity mac dinh (chua co VCD = can tren), SPEF quantus (top_soc_quantus_rc_typ.spef), 1 CPU
-  thoi gian 964 s; don vi 1ns / 1pf
+  thoi gian 950 s; don vi 1ns / 1pf
   process: set_design_mode -process 7; tool log ghi 'Design Mode: 7nm' 1 lan, '65nm' 0 lan
   cong suat (reports/power_static.rpt):
     Total Internal Power: 85.69298421 97.4448%
@@ -16,31 +16,36 @@ Voltus top_soc: goc TT 0.7 V / 25 C, static, activity mac dinh (chua co VCD = ca
   luoi nguon: ghep lop asap7_lefdef.layermap, diem cap nguon pin (VDD 182, VSS 182 nguon ap rai doc 4 / 4 hinh chan PG trong top_soc.lef, buoc 10.0 um; chi cap tu canh co hinh)
     nguong: VDD >= 0.65 V (danh dinh 0.7 V), VSS <= 0.05 V; -enable_xp tat; option them: -enable_scheduler false
     VDD: outputs/rail_VDD (178 file, 14 file .rpt)
-    VDD: dien ap nut thap nhat 0.6610 V, trung binh 0.6960 V; nguong >= 0.65 V -> DAT
-      VDD.main.rpt: Minimum, Average, Maximum IR drop: 0.661V 0.696V 0.700V
+    VDD: dien ap nut thap nhat 0.6840 V, trung binh 0.6960 V; nguong >= 0.65 V -> DAT
+    VDD: Voltus coi la KHONG NOI: 0 nguon dong, 0 nut, 0 doan day; noi yeu 10 doan
+    VDD: sut lon nhat tung lop (mV): M9 5.1, M8 5.1, M7 5.2, M6 6.4, M5 15.2, M4 15.5, M3 15.5, M2 5.7, M1 6.0
+    VDD: 18 file -> reports/rail_VDD/ (400 dong dau moi .rpt, ir_limit.gif, ir_linear.gif)
+      VDD.main.rpt: Minimum, Average, Maximum IR drop: 0.684V 0.696V 0.700V
       VDD.main.rpt: Please refer to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/rj.gif for more details
       VDD.main.rpt: Please refer to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/pi.gif for more details
       VDD.main.rpt: Minimum, Average, Maximum IRdrop Across PowerGate (pv): 0, 0, 0
       VDD.main.rpt: SoC Encounter ECO File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/vs2fe_eco.tcl
       VDD.main.rpt: Instance Voltage File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/VDD.iv
       VDD.main.rpt: Summary: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/results
-      VDD.vc.rpt: Minimum, Average, Maximum Voltage Source Current: -1.284mA, -0.690mA, -0.144mA
-      VDD.main.html.rpt: Minimum, Average, Maximum IR drop: 0.661V 0.696V 0.700V
+      VDD.vc.rpt: Minimum, Average, Maximum Voltage Source Current: -1.298mA, -0.690mA, -0.151mA
+      VDD.main.html.rpt: Minimum, Average, Maximum IR drop: 0.684V 0.696V 0.700V
       VDD.main.html.rpt: Please refer to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/rj.gif for more details
       VDD.main.html.rpt: Please refer to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/pi.gif for more details
       VDD.main.html.rpt: Minimum, Average, Maximum IRdrop Across PowerGate (pv): 0, 0, 0
     VSS: outputs/rail_VSS (178 file, 14 file .rpt)
-    VSS: do nay cao nhat 0.1020 V, trung binh 0.0043 V; nguong <= 0.05 V -> KHONG DAT
-      VSS.main.rpt: Minimum, Average, Maximum IR drop: 0.000V 4.314mV 0.102V
+    VSS: do nay cao nhat 0.0158 V, trung binh 0.0037 V; nguong <= 0.05 V -> DAT
+    VSS: Voltus coi la KHONG NOI: 0 nguon dong, 0 nut, 0 doan day; noi yeu 252 doan
+    VSS: sut lon nhat tung lop (mV): M9 5.2, M8 5.2, M7 5.2, M6 6.2, M5 10.7, M4 15.4, M3 15.4, M2 5.8, M1 5.9
+    VSS: 18 file -> reports/rail_VSS/ (400 dong dau moi .rpt, ir_limit.gif, ir_linear.gif)
+      VSS.main.rpt: Minimum, Average, Maximum IR drop: 0.000V 3.683mV 15.796mV
       VSS.main.rpt: Please refer to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/rj.gif for more details
       VSS.main.rpt: Please refer to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/pi.gif for more details
       VSS.main.rpt: Minimum, Average, Maximum IRdrop Across PowerGate (pv): 0, 0, 0
       VSS.main.rpt: SoC Encounter ECO File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/vs2fe_eco.tcl
       VSS.main.rpt: Instance Voltage File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/VSS.iv
       VSS.main.rpt: Summary: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/results
-      VSS.vc.rpt: Minimum, Average, Maximum Voltage Source Current: 0.142mA, 0.690mA, 1.306mA
-      VSS.main.html.rpt: Minimum, Average, Maximum IR drop: 0.000V 4.314mV 0.102V
+      VSS.vc.rpt: Minimum, Average, Maximum Voltage Source Current: 0.143mA, 0.690mA, 1.322mA
+      VSS.main.html.rpt: Minimum, Average, Maximum IR drop: 0.000V 3.683mV 15.796mV
       VSS.main.html.rpt: Please refer to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/rj.gif for more details
       VSS.main.html.rpt: Please refer to /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/pi.gif for more details
       VSS.main.html.rpt: Minimum, Average, Maximum IRdrop Across PowerGate (pv): 0, 0, 0
-  KET LUAN: analyze_rail chay het nhung sut ap KHONG DAT nguong (dong VDD / VSS o tren)
