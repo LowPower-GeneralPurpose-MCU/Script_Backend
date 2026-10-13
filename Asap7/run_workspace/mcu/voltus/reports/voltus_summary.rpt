@@ -1,16 +1,18 @@
-FAIL
+DONE
 Voltus top_soc: goc TT 0.7 V / 25 C, static, activity mac dinh (chua co VCD = can tren), SPEF quantus (top_soc_quantus_rc_typ.spef), 1 CPU
-  thoi gian 468 s; don vi 1ns / 1pf
+  thoi gian 124 s; don vi 1ns / 1pf
   cong suat (reports/power_static.rpt):
-    Total Internal Power: 86.50277331 97.2215%
-    Total Switching Power: 2.42829744 2.7292%
+    Total Internal Power: 86.50281889 97.2148%
+    Total Switching Power: 2.43451692 2.7360%
     Total Leakage Power: 0.04383248 0.0493%
-    Total Power: 88.97490322
+    Total Power: 88.98116828
   doi chieu Innovus KHOI 15 (innovus/reports/power_final.rpt, RC tQuantus):
     Total Internal Power: 87.72430973 95.0821%
     Total Switching Power: 4.49302690 4.8699%
     Total Leakage Power: 0.04430970 0.0480%
     Total Power: 92.26164634
   file dong cho luoi nguon: static_VDD.ptiavg static_VSS.ptiavg
-  luoi nguon: HONG o ca 4 cach thu - xem cac WARNING
-  WARNING: analyze_rail (ghep lop asap7_lefdef.layermap, diem cap nguon defpin) hong: analyze_rail VDD: tool log ghi VOLTUS-1055 / Rail Analysis is unsuccessful | voltus_rail.log: ** WARN: (VOLTUS_RAIL_SMG-0019):	Failed to load all 23 partitions of PGDB of Net 'VDD', treat as incomplete net.** ERROR: (VOLTUS_RAIL_SMG-0048):	Unable to continue rail analysis because net "VDD" does not have any node in the top level grid. | voltus_rail_smg.VDD.log: ** ERROR: (VOLTUS_RAIL_SMG-0048):	Unable to continue rail analysis because net "VDD" does not have any node in the top level grid.
+  luoi nguon: ghep lop asap7_lefdef.layermap, diem cap nguon defpin
+    nguong: VDD >= 0.65 V (danh dinh 0.7 V), VSS <= 0.05 V; -enable_xp bat
+    VDD: outputs/rail_VDD (16 file, 0 file .rpt)
+    VSS: outputs/rail_VSS (16 file, 0 file .rpt)
