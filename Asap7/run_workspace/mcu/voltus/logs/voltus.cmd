@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Voltus IC Power Integrity Solution Command Logging File                     
-#  Created on Tue Oct 13 13:43:18 2026                
+#  Created on Tue Oct 13 15:49:45 2026                
 #                                                     
 #######################################################
 
@@ -24,11 +24,11 @@ read_spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/out
 set_power_analysis_mode -method static -corner max -create_binary_db true -write_static_currents true
 set_power_output_dir /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/power
 report_power -outfile /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/power_static.rpt
-set_rail_analysis_mode -method era_static -accuracy hd -enable_xp true -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -era_lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap
+set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -era_lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap -enable_scheduler false
 set_pg_nets -net VDD -voltage 0.7 -threshold 0.65
 set_pg_nets -net VSS -voltage 0.0 -threshold 0.05
-set_power_pads -net VDD -format defpin
-set_power_pads -net VSS -format defpin
+set_power_pads -net VDD -format xy -file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/vsrc_VDD.pp
+set_power_pads -net VSS -format xy -file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/vsrc_VSS.pp
 set_power_data -reset
 set_power_data -format current -scale 1 {/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/static_VDD.ptiavg /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/static_VSS.ptiavg}
 analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD VDD
