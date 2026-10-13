@@ -1,0 +1,622 @@
+[10/13 00:51:06      0s] 
+[10/13 00:51:06      0s] Cadence Tempus(TM) Timing Solution.
+[10/13 00:51:06      0s] Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+[10/13 00:51:06      0s] 
+[10/13 00:51:06      0s] Version:	v23.15-s108_1, built Tue Jul 22 11:26:13 PDT 2025
+[10/13 00:51:06      0s] Options:	-nowin -init tempus.tcl -log logs/tempus 
+[10/13 00:51:06      0s] Date:		Tue Oct 13 00:51:06 2026
+[10/13 00:51:06      0s] Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
+[10/13 00:51:06      0s] OS:		Ubuntu 26.04.1 LTS
+[10/13 00:51:06      0s] 
+[10/13 00:51:06      0s] License:
+[10/13 00:51:06      0s] 		[00:51:06.206178] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+[10/13 00:51:07      0s] 		tpsxl	Tempus Timing Signoff Solution XL	23.1	checkout succeeded
+[10/13 00:51:07      0s] 		16 CPU jobs allowed with the current license(s). Use set_multi_cpu_usage to set your required CPU count.
+[10/13 00:51:08      0s] **ERROR: (IMPOAX-124):	OpenAccess (OA) shared library installation is older than the one that was used to build this Tempus Timing Solution version. For using the OA installation built and tested with this Tempus Timing Solution version, unset the shell variable OA_HOME. For using 'p025' or higher version of OA, reset OA_HOME to point to that installation.
+Type 'man IMPOAX-124' for more detail.
+[10/13 00:51:08      0s] **ERROR: (IMPOAX-332):	Failed to initialize OpenAccess (OA) database. OA related commands cannot be run in this session. Confirm that the OA shared library is installed and OA_HOME is set correctly. Typically the OA_HOME environment variable should not be set.
+Type 'man IMPOAX-332' for more detail.
+[10/13 00:51:08      0s] INFO: OA features are disabled in this session.
+[10/13 00:51:19      9s] Memory management switch to non-aggressive memory release mode.
+[10/13 00:51:19      9s] 
+[10/13 00:51:19      9s] OS Mmap count monitoring thread starts. Limit of OS Mmap count is 1048576
+[10/13 00:51:19      9s] 
+[10/13 00:51:20     10s] Reset Parastics called with the command setExtractRCMode -reset@(#)CDS: Tempus Timing Solution v23.15-s108_1 (64bit) 07/22/2025 11:26 (Linux 3.10.0-693.el7.x86_64)
+[10/13 00:51:21     11s] @(#)CDS: NanoRoute 23.15-s108_1 NR250707-2219/23_15-UB (database version 18.20.674) {superthreading v2.20}
+[10/13 00:51:21     11s] @(#)CDS: AAE 23.15-s032 (64bit) 07/22/2025 (Linux 3.10.0-693.el7.x86_64)
+[10/13 00:51:21     11s] @(#)CDS: CTE 23.15-s037_1 () Jul 16 2025 02:46:10 ( )
+[10/13 00:51:21     11s] @(#)CDS: SYNTECH 23.15-s011_1 () Jun 23 2025 00:02:58 ( )
+[10/13 00:51:21     11s] @(#)CDS: CPE v23.15-s090
+[10/13 00:51:21     11s] @(#)CDS: OA 22.61-p025 Mon Mar 17 14:41:06 2025
+[10/13 00:51:21     11s] @(#)CDS: SGN 23.10-d005 (03-Oct-2023) (64 bit executable, TkQt5.15.9)
+[10/13 00:51:21     11s] @(#)CDS: RCDB 11.15.0
+[10/13 00:51:21     11s] @(#)CDS: STYLUS 23.16-s001_1 (07/11/2025 08:51 PDT)
+[10/13 00:51:21     11s] Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
+[10/13 00:51:22     11s] **INFO: (TMPDIR-1001): The environment variable TMPDIR is not set.
+Create and set the environment variable TMPDIR to '/tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe'.
+environment variable TMPDIR is '/tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe'.
+[10/13 00:51:22     12s] #@ Processing -files option
+[10/13 00:51:22     12s] Sourcing tcl/tk file 'tempus.tcl' ...
+[10/13 00:51:22     12s] <CMD> set_multi_cpu_usage -localCpu 1
+[10/13 00:51:22     12s] <CMD> read_view_definition /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/tempus_views.tcl
+[10/13 00:51:22     12s] <CMD> read_verilog /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v
+[10/13 00:51:23     12s] <CMD> set_top_module top_soc
+[10/13 00:51:23     12s] **ERROR: (IMPOAX-124):	OpenAccess (OA) shared library installation is older than the one that was used to build this Tempus Timing Solution version. For using the OA installation built and tested with this Tempus Timing Solution version, unset the shell variable OA_HOME. For using 'p025' or higher version of OA, reset OA_HOME to point to that installation.
+**ERROR: (IMPOAX-332):	Failed to initialize OpenAccess (OA) database. OA related commands cannot be run in this session. Confirm that the OA shared library is installed and OA_HOME is set correctly. Typically the OA_HOME environment variable should not be set.
+#% Begin Load MMMC data ... (date=10/13 00:51:23, mem=1593.9M)
+[10/13 00:51:23     12s] Number of views requested 2 are allowed with the current licenses... continuing with set_analysis_view.
+[10/13 00:51:23     12s] #% End Load MMMC data ... (date=10/13 00:51:23, total cpu=0:00:00.0, real=0:00:00.0, peak res=1595.1M, current mem=1595.1M)
+[10/13 00:51:23     12s] Loading view definition file from /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/tempus_views.tcl
+[10/13 00:51:23     12s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib' ...
+[10/13 00:51:23     12s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib, Line 46704)
+[10/13 00:51:23     12s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib, Line 75658)
+[10/13 00:51:23     12s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120' 
+[10/13 00:51:23     12s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_SS_ccs_220122.lib' ...
+[10/13 00:51:23     12s] Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_SS_ccs_211120' 
+[10/13 00:51:23     12s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_SS_ccs_211120.lib' ...
+[10/13 00:51:26     15s] Read 42 cells in library 'asap7sc7p5t_AO_RVT_SS_ccs_211120' 
+[10/13 00:51:26     15s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_SS_ccs_211120.lib' ...
+[10/13 00:51:28     17s] Read 34 cells in library 'asap7sc7p5t_OA_RVT_SS_ccs_211120' 
+[10/13 00:51:28     17s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_SS_ccs_220123.lib' ...
+[10/13 00:51:28     17s] Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_SS_ccs_220123' 
+[10/13 00:51:28     17s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib' ...
+[10/13 00:51:28     18s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib, Line 46704)
+[10/13 00:51:28     18s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120.lib, Line 75658)
+[10/13 00:51:28     18s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_SS_ccs_211120' 
+[10/13 00:51:28     18s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_SS_ccs_220122.lib' ...
+[10/13 00:51:29     18s] Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_SS_ccs_211120' 
+[10/13 00:51:29     18s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_SS_ccs_211120.lib' ...
+[10/13 00:51:31     20s] Read 42 cells in library 'asap7sc7p5t_AO_LVT_SS_ccs_211120' 
+[10/13 00:51:31     20s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_SS_ccs_211120.lib' ...
+[10/13 00:51:33     23s] Read 34 cells in library 'asap7sc7p5t_OA_LVT_SS_ccs_211120' 
+[10/13 00:51:33     23s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_SS_ccs_220123.lib' ...
+[10/13 00:51:33     23s] Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_SS_ccs_220123' 
+[10/13 00:51:33     23s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib' ...
+[10/13 00:51:33     23s] Read 1 cells in library 'srambank_256x4x32_6t122' 
+[10/13 00:51:33     23s] Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib' ...
+[10/13 00:51:33     23s] Read 1 cells in library 'srambank_128x4x20_6t122' 
+[10/13 00:51:33     23s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib' ...
+[10/13 00:51:33     23s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib, Line 46726)
+[10/13 00:51:33     23s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib, Line 75682)
+[10/13 00:51:34     23s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120' 
+[10/13 00:51:34     23s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_FF_ccs_220122.lib' ...
+[10/13 00:51:34     23s] Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_FF_ccs_211120' 
+[10/13 00:51:34     23s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_FF_ccs_211120.lib' ...
+[10/13 00:51:36     26s] Read 42 cells in library 'asap7sc7p5t_AO_RVT_FF_ccs_211120' 
+[10/13 00:51:36     26s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_FF_ccs_211120.lib' ...
+[10/13 00:51:38     28s] Read 34 cells in library 'asap7sc7p5t_OA_RVT_FF_ccs_211120' 
+[10/13 00:51:38     28s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_FF_ccs_220123.lib' ...
+[10/13 00:51:38     28s] Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_FF_ccs_220123' 
+[10/13 00:51:38     28s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120.lib' ...
+[10/13 00:51:38     28s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120.lib, Line 46704)
+[10/13 00:51:38     28s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120.lib, Line 75658)
+[10/13 00:51:39     28s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_FF_ccs_211120' 
+[10/13 00:51:39     28s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_FF_ccs_220122.lib' ...
+[10/13 00:51:39     28s] Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_FF_ccs_211120' 
+[10/13 00:51:39     28s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_FF_ccs_211120.lib' ...
+[10/13 00:51:41     31s] Read 42 cells in library 'asap7sc7p5t_AO_LVT_FF_ccs_211120' 
+[10/13 00:51:41     31s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_FF_ccs_211120.lib' ...
+[10/13 00:51:44     33s] Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120' 
+[10/13 00:51:44     33s] Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
+[10/13 00:51:44     33s] Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
+[10/13 00:51:44     33s] Ending "PreSetAnalysisView" (total cpu=0:00:21.4, real=0:00:21.0, peak res=1923.5M, current mem=1621.1M)
+[10/13 00:51:44     33s] *** End library_loading (cpu=0.36min, real=0.35min, mem=312.0M, fe_cpu=0.56min, fe_real=0.63min, fe_mem=1905.7M) ***
+[10/13 00:51:44     33s] #% Begin Load netlist data ... (date=10/13 00:51:44, mem=1621.1M)
+[10/13 00:51:44     34s] *** Begin netlist parsing (mem=1905.7M) ***
+[10/13 00:51:44     34s] Reading verilog netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v'
+[10/13 00:51:45     34s] 
+[10/13 00:51:45     34s] *** Memory Usage v#1 (Current mem = 2269.668M, initial mem = 836.656M) ***
+[10/13 00:51:45     34s] *** End netlist parsing (cpu=0:00:00.6, real=0:00:01.0, mem=2269.7M) ***
+[10/13 00:51:45     34s] #% End Load netlist data ... (date=10/13 00:51:45, total cpu=0:00:01.0, real=0:00:01.0, peak res=1842.5M, current mem=1842.5M)
+[10/13 00:51:45     34s] Set top cell to top_soc.
+[10/13 00:51:45     34s] Ending "BindLib:" (total cpu=0:00:00.1, real=0:00:00.0, peak res=1902.0M, current mem=1902.0M)
+[10/13 00:51:45     34s] *** Estimate the number of flat objects and h-objects before Flatten ***
+[10/13 00:51:45     34s] 	flat insts : 148841
+[10/13 00:51:45     34s] 	flat terms : 497866
+[10/13 00:51:45     34s] 	HNets : 156700
+[10/13 00:51:45     34s] 	HInsts : 1703
+[10/13 00:51:45     34s] 	HTerms : 18441
+[10/13 00:51:45     35s] Building hierarchical netlist for Cell top_soc ...
+[10/13 00:51:45     35s] ***** UseNewTieNetMode *****.
+[10/13 00:51:45     35s] *** Netlist is unique.
+[10/13 00:51:45     35s] ** info: there are 2514 modules.
+[10/13 00:51:45     35s] ** info: there are 148840 stdCell insts.
+[10/13 00:51:45     35s] ** info: there are 148756 stdCell insts with at least one signal pin.
+[10/13 00:51:45     35s] 
+[10/13 00:51:45     35s] *** Memory Usage v#1 (Current mem = 2605.680M, initial mem = 836.656M) ***
+[10/13 00:51:45     35s] Set Default Input Pin Transition as 0.1 ps.
+[10/13 00:51:45     35s] Extraction setup Started for TopCell top_soc 
+[10/13 00:51:45     35s] Summary of Active RC-Corners : 
+[10/13 00:51:45     35s]  
+[10/13 00:51:45     35s]  Analysis View: view_ss
+[10/13 00:51:45     35s]     RC-Corner Name        : rc_ss
+[10/13 00:51:45     35s]     RC-Corner Index       : 0
+[10/13 00:51:45     35s]     RC-Corner Temperature : 100 Celsius
+[10/13 00:51:45     35s]     RC-Corner Cap Table   : ''
+[10/13 00:51:45     35s]     RC-Corner PostRoute Res Factor        : 1
+[10/13 00:51:45     35s]     RC-Corner PostRoute Cap Factor        : 1
+[10/13 00:51:45     35s]     RC-Corner PostRoute XCap Factor       : 1
+[10/13 00:51:45     35s]  
+[10/13 00:51:45     35s]  Analysis View: view_tt
+[10/13 00:51:45     35s]     RC-Corner Name        : rc_typ
+[10/13 00:51:45     35s]     RC-Corner Index       : 1
+[10/13 00:51:45     35s]     RC-Corner Temperature : 25 Celsius
+[10/13 00:51:45     35s]     RC-Corner Cap Table   : ''
+[10/13 00:51:45     35s]     RC-Corner PostRoute Res Factor        : 1
+[10/13 00:51:45     35s]     RC-Corner PostRoute Cap Factor        : 1
+[10/13 00:51:45     35s]     RC-Corner PostRoute XCap Factor       : 1
+[10/13 00:51:45     35s]  
+[10/13 00:51:45     35s]  Analysis View: view_ff
+[10/13 00:51:45     35s]     RC-Corner Name        : rc_ff
+[10/13 00:51:45     35s]     RC-Corner Index       : 2
+[10/13 00:51:45     35s]     RC-Corner Temperature : 0 Celsius
+[10/13 00:51:45     35s]     RC-Corner Cap Table   : ''
+[10/13 00:51:45     35s]     RC-Corner PostRoute Res Factor        : 1
+[10/13 00:51:45     35s]     RC-Corner PostRoute Cap Factor        : 1
+[10/13 00:51:45     35s]     RC-Corner PostRoute XCap Factor       : 1
+[10/13 00:51:45     35s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib' ...
+[10/13 00:51:45     35s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 46726)
+[10/13 00:51:45     36s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 75682)
+[10/13 00:51:46     36s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120' 
+[10/13 00:51:46     36s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib' ...
+[10/13 00:51:46     36s] Read 37 cells in library 'asap7sc7p5t_INVBUF_RVT_TT_ccs_211120' 
+[10/13 00:51:46     36s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib' ...
+[10/13 00:51:48     38s] Read 42 cells in library 'asap7sc7p5t_AO_RVT_TT_ccs_211120' 
+[10/13 00:51:48     38s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib' ...
+[10/13 00:51:50     41s] Read 34 cells in library 'asap7sc7p5t_OA_RVT_TT_ccs_211120' 
+[10/13 00:51:50     41s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib' ...
+[10/13 00:51:50     41s] Read 33 cells in library 'asap7sc7p5t_SEQ_RVT_TT_ccs_220123' 
+[10/13 00:51:50     41s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib' ...
+[10/13 00:51:51     41s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 46726)
+[10/13 00:51:51     41s] **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib, Line 75682)
+[10/13 00:51:51     41s] Read 56 cells in library 'asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120' 
+[10/13 00:51:51     41s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib' ...
+[10/13 00:51:51     41s] Read 37 cells in library 'asap7sc7p5t_INVBUF_LVT_TT_ccs_211120' 
+[10/13 00:51:51     41s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib' ...
+[10/13 00:51:53     44s] Read 42 cells in library 'asap7sc7p5t_AO_LVT_TT_ccs_211120' 
+[10/13 00:51:53     44s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib' ...
+[10/13 00:51:56     46s] Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120' 
+[10/13 00:51:56     46s] Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
+[10/13 00:51:56     46s] Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
+[10/13 00:51:56     46s] Ending "SetAnalysisView" (total cpu=0:00:10.9, real=0:00:11.0, peak res=2557.2M, current mem=2243.7M)
+[10/13 00:51:56     47s] Reading timing constraints file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc' ...
+[10/13 00:51:56     47s] Current (total cpu=0:00:47.2, real=0:00:50.0, peak res=2670.5M, current mem=2670.5M)
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cpu/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 37).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_dbg/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 38).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_pwm/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 39).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_gpio/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 40).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cordic/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 41).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_ascon/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 42).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 43).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_spi/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 44).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_i2c/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 45).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_uart1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 46).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim0/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 47).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_tim1/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 48).
+[10/13 00:51:56     47s] 
+[10/13 00:51:56     47s] Number of path exceptions in the constraint file = 10
+[10/13 00:51:56     47s] INFO (CTE): Reading of timing constraints file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc completed, with 12 WARNING
+[10/13 00:51:56     47s] Ending "Constraint file reading stats" (total cpu=0:00:00.2, real=0:00:00.0, peak res=2713.2M, current mem=2713.2M)
+[10/13 00:51:57     47s] Current (total cpu=0:00:47.4, real=0:00:51.0, peak res=2713.2M, current mem=2713.2M)
+[10/13 00:51:57     47s] Tech dependent Parameter, Build TLibAnalyzer for: cellAreaConsiderPadding
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) Begin ...
+[10/13 00:51:57     47s] Summary for sequential cells identification: 
+[10/13 00:51:57     47s]   Identified SBFF number: 34
+[10/13 00:51:57     47s]   Identified MBFF number: 0
+[10/13 00:51:57     47s]   Identified SB Latch number: 12
+[10/13 00:51:57     47s]   Identified MB Latch number: 0
+[10/13 00:51:57     47s]   Not identified SBFF number: 0
+[10/13 00:51:57     47s]   Not identified MBFF number: 0
+[10/13 00:51:57     47s]   Not identified SB Latch number: 0
+[10/13 00:51:57     47s]   Not identified MB Latch number: 0
+[10/13 00:51:57     47s]   Number of sequential cells which are not FFs: 20
+[10/13 00:51:57     47s] Total number of combinational cells: 338
+[10/13 00:51:57     47s] Total number of sequential cells: 66
+[10/13 00:51:57     47s] Total number of tristate cells: 0
+[10/13 00:51:57     47s] Total number of level shifter cells: 0
+[10/13 00:51:57     47s] Total number of power gating cells: 0
+[10/13 00:51:57     47s] Total number of isolation cells: 0
+[10/13 00:51:57     47s] Total number of power switch cells: 0
+[10/13 00:51:57     47s] Total number of pulse generator cells: 0
+[10/13 00:51:57     47s] Total number of always on buffers: 0
+[10/13 00:51:57     47s] Total number of retention cells: 0
+[10/13 00:51:57     47s] Total number of physical cells: 0
+[10/13 00:51:57     47s] List of usable buffers: HB1xp67_ASAP7_75t_R BUFx8_ASAP7_75t_R BUFx6f_ASAP7_75t_R BUFx5_ASAP7_75t_R BUFx4f_ASAP7_75t_R BUFx3_ASAP7_75t_R BUFx2_ASAP7_75t_R BUFx16f_ASAP7_75t_R BUFx12f_ASAP7_75t_R BUFx12_ASAP7_75t_R BUFx10_ASAP7_75t_R HB2xp67_ASAP7_75t_L HB1xp67_ASAP7_75t_L BUFx8_ASAP7_75t_L BUFx6f_ASAP7_75t_L BUFx5_ASAP7_75t_L BUFx4f_ASAP7_75t_L BUFx4_ASAP7_75t_L BUFx3_ASAP7_75t_L BUFx2_ASAP7_75t_L BUFx24_ASAP7_75t_L BUFx16f_ASAP7_75t_L BUFx12f_ASAP7_75t_L BUFx12_ASAP7_75t_L BUFx10_ASAP7_75t_L
+[10/13 00:51:57     47s] Total number of usable buffers: 25
+[10/13 00:51:57     47s] List of unusable buffers:
+[10/13 00:51:57     47s] Total number of unusable buffers: 0
+[10/13 00:51:57     47s] List of usable inverters: INVxp67_ASAP7_75t_R INVxp33_ASAP7_75t_R INVx8_ASAP7_75t_R INVx6_ASAP7_75t_R INVx5_ASAP7_75t_R INVx4_ASAP7_75t_R INVx3_ASAP7_75t_R INVx2_ASAP7_75t_R INVx1_ASAP7_75t_R INVx13_ASAP7_75t_R INVx11_ASAP7_75t_R CKINVDCx9p33_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R CKINVDCx6p67_ASAP7_75t_R CKINVDCx5p33_ASAP7_75t_R CKINVDCx20_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx14_ASAP7_75t_R CKINVDCx12_ASAP7_75t_R CKINVDCx11_ASAP7_75t_R CKINVDCx10_ASAP7_75t_R INVxp67_ASAP7_75t_L INVxp33_ASAP7_75t_L INVx8_ASAP7_75t_L INVx6_ASAP7_75t_L INVx5_ASAP7_75t_L INVx4_ASAP7_75t_L INVx3_ASAP7_75t_L INVx2_ASAP7_75t_L INVx1_ASAP7_75t_L INVx13_ASAP7_75t_L INVx11_ASAP7_75t_L CKINVDCx9p33_ASAP7_75t_L CKINVDCx8_ASAP7_75t_L CKINVDCx6p67_ASAP7_75t_L CKINVDCx5p33_ASAP7_75t_L CKINVDCx20_ASAP7_75t_L CKINVDCx16_ASAP7_75t_L CKINVDCx14_ASAP7_75t_L CKINVDCx12_ASAP7_75t_L CKINVDCx11_ASAP7_75t_L CKINVDCx10_ASAP7_75t_L
+[10/13 00:51:57     47s] Total number of usable inverters: 42
+[10/13 00:51:57     47s] List of unusable inverters:
+[10/13 00:51:57     47s] Total number of unusable inverters: 0
+[10/13 00:51:57     47s] List of identified usable delay cells: HB4xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_R HB2xp67_ASAP7_75t_R BUFx4_ASAP7_75t_R BUFx24_ASAP7_75t_R HB4xp67_ASAP7_75t_L HB3xp67_ASAP7_75t_L
+[10/13 00:51:57     47s] Total number of identified usable delay cells: 7
+[10/13 00:51:57     47s] List of identified unusable delay cells:
+[10/13 00:51:57     47s] Total number of identified unusable delay cells: 0
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] TimeStamp Creating Cell Server ...(0, 1, 1, 1) End ...
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] TimeStamp Deleting Cell Server Begin ...
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] TimeStamp Deleting Cell Server End ...
+[10/13 00:51:57     47s] Ending "Cell type marking" (total cpu=0:00:00.0, real=0:00:00.0, peak res=2715.9M, current mem=2715.9M)
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) Begin ...
+[10/13 00:51:57     47s] Summary for sequential cells identification: 
+[10/13 00:51:57     47s]   Identified SBFF number: 34
+[10/13 00:51:57     47s]   Identified MBFF number: 0
+[10/13 00:51:57     47s]   Identified SB Latch number: 12
+[10/13 00:51:57     47s]   Identified MB Latch number: 0
+[10/13 00:51:57     47s]   Not identified SBFF number: 0
+[10/13 00:51:57     47s]   Not identified MBFF number: 0
+[10/13 00:51:57     47s]   Not identified SB Latch number: 0
+[10/13 00:51:57     47s]   Not identified MB Latch number: 0
+[10/13 00:51:57     47s]   Number of sequential cells which are not FFs: 20
+[10/13 00:51:57     47s]  Visiting view : view_ss
+[10/13 00:51:57     47s]    : PowerDomain = none : Weighted F : unweighted  = 6.20 (1.000) with rcCorner = 0
+[10/13 00:51:57     47s]    : PowerDomain = none : Weighted F : unweighted  = 6.20 (1.000) with rcCorner = -1
+[10/13 00:51:57     47s]  Visiting view : view_tt
+[10/13 00:51:57     47s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = 1
+[10/13 00:51:57     47s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[10/13 00:51:57     47s]  Visiting view : view_ff
+[10/13 00:51:57     47s]    : PowerDomain = none : Weighted F : unweighted  = 3.50 (1.000) with rcCorner = 2
+[10/13 00:51:57     47s]    : PowerDomain = none : Weighted F : unweighted  = 3.50 (1.000) with rcCorner = -1
+[10/13 00:51:57     47s]  Visiting view : view_tt
+[10/13 00:51:57     47s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = 1
+[10/13 00:51:57     47s]    : PowerDomain = none : Weighted F : unweighted  = 4.30 (1.000) with rcCorner = -1
+[10/13 00:51:57     47s] TLC MultiMap info (StdDelay):
+[10/13 00:51:57     47s]   : dc_ff + libset_ff + 1 + no RcCorner := 3.5ps
+[10/13 00:51:57     47s]   : dc_ff + libset_ff + 1 + rc_ff := 3.5ps
+[10/13 00:51:57     47s]   : dc_tt + libset_tt + 1 + no RcCorner := 4.3ps
+[10/13 00:51:57     47s]   : dc_tt + libset_tt + 1 + rc_typ := 4.3ps
+[10/13 00:51:57     47s]   : dc_ss + libset_ss + 1 + no RcCorner := 6.2ps
+[10/13 00:51:57     47s]   : dc_ss + libset_ss + 1 + rc_ss := 6.2ps
+[10/13 00:51:57     47s]  Setting StdDelay to: 6.2ps
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] TimeStamp Creating Cell Server ...(0, 0, 0, 0) End ...
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] TimeStamp Deleting Cell Server Begin ...
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] TimeStamp Deleting Cell Server End ...
+[10/13 00:51:57     47s] <CMD> set_design_mode -process 7
+[10/13 00:51:57     47s] ##  Process: 7             (User Set)               
+[10/13 00:51:57     47s] ##     Node: (not set)                           
+[10/13 00:51:57     47s] 
+##  Check design process and node:  
+##  Design tech node is not set.
+
+[10/13 00:51:57     47s] <CMD> read_spef -rc_corner rc_ss /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef
+[10/13 00:51:57     47s] read_spef Option :  /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef -noStarN -rc_corner rc_ss 
+[10/13 00:51:57     47s] WARNING (IMPEXT-3315): Spef available for 1 corner(s)but not available for 2 corner(s). Spef reading will be triggered only after spef for all active RC Corners are available.
+[10/13 00:51:57     47s] <CMD> read_spef -rc_corner rc_typ /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef
+[10/13 00:51:57     47s] read_spef Option :  /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef -noStarN -rc_corner rc_typ 
+[10/13 00:51:57     47s] WARNING (IMPEXT-3315): Spef available for 2 corner(s)but not available for 1 corner(s). Spef reading will be triggered only after spef for all active RC Corners are available.
+[10/13 00:51:57     47s] <CMD> read_spef -rc_corner rc_ff /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef
+[10/13 00:51:57     47s] read_spef Option :  /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef -noStarN -rc_corner rc_ff 
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] SPEF files for RC Corner rc_ss:
+[10/13 00:51:57     47s] Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef'.
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] SPEF files for RC Corner rc_typ:
+[10/13 00:51:57     47s] Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef'.
+[10/13 00:51:57     47s] 
+[10/13 00:51:57     47s] SPEF files for RC Corner rc_ff:
+[10/13 00:51:57     47s] Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef'.
+[10/13 00:51:57     47s] Start spef parsing (MEM=3084.55).
+[10/13 00:51:57     47s] Number of corners: 3
+[10/13 00:51:57     47s] Number of parallel threads processing the nets is: 1
+[10/13 00:51:57     47s] Maximum backlog used in parser: 50.
+[10/13 00:51:57     47s] Reading multiple SPEF files in parallel.
+[10/13 00:51:57     47s] RCDB /tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe/top_soc_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_5IYAQG.rcdb.d/top_soc.rcdb.d Creation Started (CPU Time= 0:00:00.0  MEM= 3115.6M)
+[10/13 00:51:57     47s] Creating parasitic data file '/tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe/top_soc_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_5IYAQG.rcdb.d/top_soc.rcdb.d' for storing RC.
+[10/13 00:52:00     56s] The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef', has encountered the error/warning message(s) during its reading.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_OFC8383_pad_oe_21:Y) for D_NET (pad_oe[21]) that starts on line 290476.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_OFC8383_pad_oe_21:Y) does not belong to net found in D_NET (pad_oe[21]) that starts on line 290476.
+**WARN: (SPEF-1152):	Net 'pad_oe[21] ( having pins FE_ECOC36964_pad_oe_21/Y pad_oe[21] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_OFC1146_pad_oe_6:Y) for D_NET (pad_oe[6]) that starts on line 290948.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_OFC1146_pad_oe_6:Y) does not belong to net found in D_NET (pad_oe[6]) that starts on line 290948.
+**WARN: (SPEF-1152):	Net 'pad_oe[6] ( having pins FE_ECOC37011_pad_oe_6/Y pad_oe[6] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_OFC1147_pad_oe_3:Y) for D_NET (pad_oe[3]) that starts on line 291040.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_OFC1147_pad_oe_3:Y) does not belong to net found in D_NET (pad_oe[3]) that starts on line 291040.
+**WARN: (SPEF-1152):	Net 'pad_oe[3] ( having pins FE_ECOC37395_pad_oe_3/Y pad_oe[3] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_OFC1170_sdram_addr_12:Y) for D_NET (sdram_addr[12]) that starts on line 291705.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_OFC1170_sdram_addr_12:Y) does not belong to net found in D_NET (sdram_addr[12]) that starts on line 291705.
+**WARN: (SPEF-1152):	Net 'sdram_addr[12] ( having pins FE_ECOC37195_sdram_addr_12/Y sdram_addr[12] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_OFC1174_sdram_addr_9:Y) for D_NET (sdram_addr[9]) that starts on line 291799.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_OFC1174_sdram_addr_9:Y) does not belong to net found in D_NET (sdram_addr[9]) that starts on line 291799.
+**WARN: (SPEF-1152):	Net 'sdram_addr[9] ( having pins FE_ECOC37136_sdram_addr_9/Y sdram_addr[9] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_PHC30505_pwdata_0_28:Y) for D_NET (FE_PHN30505_pwdata_0_28) that starts on line 293841.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_PHC30505_pwdata_0_28:Y) does not belong to net found in D_NET (FE_PHN30505_pwdata_0_28) that starts on line 293841.
+**WARN: (SPEF-1152):	Net 'FE_PHN30505_pwdata_0_28 ( having pins g167118/A FE_PHC36793_pwdata_0_28/Y )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (u_axi_sdram_current_addr_reg[21]:D) for D_NET (FE_PHN30437_n_23244) that starts on line 294047.
+**ERROR: (SPEF-1134):	Invalid resistor node (u_axi_sdram_current_addr_reg[21]:D) does not belong to net found in D_NET (FE_PHN30437_n_23244) that starts on line 294047.
+**WARN: (SPEF-1152):	Net 'FE_PHN30437_n_23244 ( having pins FE_PHC30437_n_23244/Y FE_PHC36656_n_23244/A )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_PHC30320_n_25616:Y) for D_NET (FE_PHN30320_n_25616) that starts on line 294489.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_PHC30320_n_25616:Y) does not belong to net found in D_NET (FE_PHN30320_n_25616) that starts on line 294489.
+**WARN: (SPEF-1152):	Net 'FE_PHN30320_n_25616 ( having pins g165746/A FE_PHC36156_n_25616/Y )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_PHC11600_s6_rdata_18:Y) for D_NET (FE_PHN30265_s6_rdata_18) that starts on line 294634.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_PHC11600_s6_rdata_18:Y) does not belong to net found in D_NET (FE_PHN30265_s6_rdata_18) that starts on line 294634.
+**WARN: (SPEF-1152):	Net 'FE_PHN30265_s6_rdata_18 ( having pins FE_PHC30265_s6_rdata_18/A FE_PHC31167_s6_rdata_18/Y )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (u_axi_sdram_g16442:C) for D_NET (FE_PHN30012_n_22945) that starts on line 295418.
+**ERROR: (SPEF-1134):	Invalid resistor node (u_axi_sdram_g16442:C) does not belong to net found in D_NET (FE_PHN30012_n_22945) that starts on line 295418.
+**WARN: (SPEF-1152):	Net 'FE_PHN30012_n_22945 ( having pins FE_PHC30012_n_22945/Y FE_PHC36171_n_22945/A )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_PHC29994_n_23749:Y) for D_NET (FE_PHN29994_n_23749) that starts on line 295473.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_PHC29994_n_23749:Y) does not belong to net found in D_NET (FE_PHN29994_n_23749) that starts on line 295473.
+**WARN: (SPEF-1152):	Net 'FE_PHN29994_n_23749 ( having pins u_axi_to_apb_s_axi_bid_reg[1]/D FE_PHC31745_n_23749/Y )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_PHC29963_n_24944:A) for D_NET (FE_PHN29963_n_24944) that starts on line 295563.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_PHC29963_n_24944:A) does not belong to net found in D_NET (FE_PHN29963_n_24944) that starts on line 295563.
+**WARN: (SPEF-1152):	Net 'FE_PHN29963_n_24944 ( having pins g165762/Y FE_PHC35578_n_24944/A )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (u_sync_rtc_pin_sync_reg_reg[1]:D) for D_NET (FE_PHN29947_n_22718) that starts on line 295579.
+**ERROR: (SPEF-1134):	Invalid resistor node (u_sync_rtc_pin_sync_reg_reg[1]:D) does not belong to net found in D_NET (FE_PHN29947_n_22718) that starts on line 295579.
+**WARN: (SPEF-1152):	Net 'FE_PHN29947_n_22718 ( having pins FE_PHC29947_n_22718/Y FE_PHC36629_n_22718/A )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (u_axi_to_apb_m_apb_pwdata_reg[27]:D) for D_NET (FE_PHN29895_n_9996) that starts on line 295770.
+**ERROR: (SPEF-1134):	Invalid resistor node (u_axi_to_apb_m_apb_pwdata_reg[27]:D) does not belong to net found in D_NET (FE_PHN29895_n_9996) that starts on line 295770.
+**WARN: (SPEF-1152):	Net 'FE_PHN29895_n_9996 ( having pins FE_PHC29895_n_9996/Y FE_PHC30615_n_9996/A )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_PHC29892_n_10062:A) for D_NET (FE_PHN29892_n_10062) that starts on line 295810.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_PHC29892_n_10062:A) does not belong to net found in D_NET (FE_PHN29892_n_10062) that starts on line 295810.
+**WARN: (SPEF-1152):	Net 'FE_PHN29892_n_10062 ( having pins g166472/Y FE_PHC36801_n_10062/A )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (g205414:Y) for D_NET (FE_PHN29863_n_19048) that starts on line 295943.
+**ERROR: (SPEF-1134):	Invalid resistor node (g205414:Y) does not belong to net found in D_NET (FE_PHN29863_n_19048) that starts on line 295943.
+**WARN: (SPEF-1152):	Net 'FE_PHN29863_n_19048 ( having pins FE_PHC29863_n_19048/A FE_PHC31225_n_19048/Y )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (u_dtm_axi_m_axi_araddr_reg[7]:Q) for D_NET (FE_PHN29785_m2_araddr_7) that starts on line 296079.
+**ERROR: (SPEF-1134):	Invalid resistor node (u_dtm_axi_m_axi_araddr_reg[7]:Q) does not belong to net found in D_NET (FE_PHN29785_m2_araddr_7) that starts on line 296079.
+**WARN: (SPEF-1152):	Net 'FE_PHN29785_m2_araddr_7 ( having pins FE_PHC29785_m2_araddr_7/A FE_PHC36188_m2_araddr_7/Y )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_PHC29778_m3_araddr_2:A) for D_NET (FE_PHN29778_m3_araddr_2) that starts on line 296157.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_PHC29778_m3_araddr_2:A) does not belong to net found in D_NET (FE_PHN29778_m3_araddr_2) that starts on line 296157.
+**WARN: (SPEF-1152):	Net 'FE_PHN29778_m3_araddr_2 ( having pins FE_PHC11643_m3_araddr_2/Y FE_PHC36628_m3_araddr_2/A )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (FE_PHC29660_n_24603:Y) for D_NET (FE_PHN29660_n_24603) that starts on line 296386.
+**ERROR: (SPEF-1134):	Invalid resistor node (FE_PHC29660_n_24603:Y) does not belong to net found in D_NET (FE_PHN29660_n_24603) that starts on line 296386.
+**WARN: (SPEF-1152):	Net 'FE_PHN29660_n_24603 ( having pins inc_u_clint_u_timer_add_152_38_g433/A1 FE_PHC35603_n_24603/Y )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1127):	Invalid CONN connection found (u_axi_to_apb_w_addr_reg_reg[19]:D) for D_NET (FE_PHN29656_n_9511) that starts on line 296422.
+**ERROR: (SPEF-1134):	Invalid resistor node (u_axi_to_apb_w_addr_reg_reg[19]:D) does not belong to net found in D_NET (FE_PHN29656_n_9511) that starts on line 296422.
+**WARN: (SPEF-1152):	Net 'FE_PHN29656_n_9511 ( having pins FE_PHC29656_n_9511/Y FE_PHC36312_n_9511/A )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
+[10/13 00:52:00     56s] **WARN: (EMS-27):	Message (SPEF-1127) has exceeded the current message display limit of 20.
+[10/13 00:52:00     56s] To increase the message display limit, refer to the product command reference manual.
+[10/13 00:52:00     56s] **WARN: (EMS-27):	Message (SPEF-1134) has exceeded the current message display limit of 20.
+[10/13 00:52:00     56s] To increase the message display limit, refer to the product command reference manual.
+[10/13 00:52:00     56s] **WARN: (EMS-27):	Message (SPEF-1152) has exceeded the current message display limit of 20.
+[10/13 00:52:00     56s] To increase the message display limit, refer to the product command reference manual.
+[10/13 00:52:00     56s] **ERROR: (SPEF-1123):	Invalid capacitor node (u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram:wd[12]) does not belong to net found in D_NET (u_dcache/FE_OFN8786_data_write_word_12) that starts on line 4065831.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram:wd[22]) does not belong to net found in D_NET (u_dcache/FE_OFN8766_data_write_word_22) that starts on line 4067223.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram:wd[8]) does not belong to net found in D_NET (u_icache/FE_PDN31494_FE_OFN1708_m_axi_rdata_8) that starts on line 4321237.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram:wd[13]) does not belong to net found in D_NET (u_icache/FE_OFN7558_m0_araddr_26) that starts on line 4420786.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram:wd[13]) does not belong to net found in D_NET (u_icache/FE_OFN7558_m0_araddr_26) that starts on line 4420786.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_axi_ram_hi/u_mem/G_SRAM_BANK[2].u_sram:wd[8]) does not belong to net found in D_NET (u_axi_ram_hi/u_mem/FE_OFN26229_n) that starts on line 4673080.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_axi_ram_hi/u_mem/G_SRAM_BANK[20].u_sram:wd[15]) does not belong to net found in D_NET (u_axi_ram_hi/u_mem/FE_OFN9149_n) that starts on line 4678199.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_axi_ram_hi/u_mem/G_SRAM_BANK[12].u_sram:wd[15]) does not belong to net found in D_NET (u_axi_ram_hi/u_mem/FE_OFN9149_n) that starts on line 4678199.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_axi_ram_hi/u_mem/G_SRAM_BANK[11].u_sram:wd[15]) does not belong to net found in D_NET (u_axi_ram_hi/u_mem/FE_OFN9149_n) that starts on line 4678199.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_axi_ram_hi/u_mem/G_SRAM_BANK[3].u_sram:wd[15]) does not belong to net found in D_NET (u_axi_ram_hi/u_mem/FE_OFN9149_n) that starts on line 4678199.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_axi_ram_hi/u_mem/G_SRAM_BANK[2].u_sram:wd[24]) does not belong to net found in D_NET (u_axi_ram_hi/u_mem/FE_OFN8069_mem_wdata_24) that starts on line 4693080.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_axi_ram_lo/u_mem/G_SRAM_BANK[6].u_sram:banksel) does not belong to net found in D_NET (u_axi_ram_lo/u_mem/FE_OFN8388_n_92) that starts on line 4851114.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_dtcm/u_mem/G_SRAM_BANK[3].u_sram:ADDRESS[2]) does not belong to net found in D_NET (u_dtcm/u_mem/FE_OFN3851_n_236) that starts on line 5008886.
+SPEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef.
+[10/13 00:52:00     56s] Number of Resistors     : 1649676
+[10/13 00:52:00     56s] Number of Ground Caps   : 1170656
+[10/13 00:52:00     56s] Number of Coupling Caps : 116540
+[10/13 00:52:00     56s] 
+[10/13 00:52:03     64s] The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef', has encountered the error/warning message(s) during its reading.
+[10/13 00:52:03     64s] **ERROR: (SPEF-1123):	Invalid capacitor node (u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram:wd[12]) does not belong to net found in D_NET (u_dcache/FE_OFN8786_data_write_word_12) that starts on line 4065831.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram/G_SRAM_BANK[1].u_sram:wd[22]) does not belong to net found in D_NET (u_dcache/FE_OFN8766_data_write_word_22) that starts on line 4067223.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_icache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[1].u_sram:wd[8]) does not belong to net found in D_NET (u_icache/FE_PDN31494_FE_OFN1708_m_axi_rdata_8) that starts on line 4321237.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_icache/TAG_RAM_G_TAG_WAY[1].G_TAG_MACRO.u_sram/u_sram:wd[13]) does not belong to net found in D_NET (u_icache/FE_OFN7558_m0_araddr_26) that starts on line 4420786.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_icache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram:wd[13]) does not belong to net found in D_NET (u_icache/FE_OFN7558_m0_araddr_26) that starts on line 4420786.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_axi_ram_hi/u_mem/G_SRAM_BANK[2].u_sram:wd[8]) does not belong to net found in D_NET (u_axi_ram_hi/u_mem/FE_OFN26229_n) that starts on line 4673080.
+**ERROR: (SPEF-1123):	Invalid capacitor node (u_axi_ram_hi/u_mem/G_SRAM_BANK[20].u_sram:wd[15]) does not belong to net found in D_NET (u_axi_ram_hi/u_mem/FE_OFN9149_n) that starts on line 4678199.
+**WARN: (EMS-27):	Message (SPEF-1123) has exceeded the current message display limit of 20.
+[10/13 00:52:03     64s] To increase the message display limit, refer to the product command reference manual.
+[10/13 00:52:03     64s] SPEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef.
+[10/13 00:52:03     64s] Number of Resistors     : 1649676
+[10/13 00:52:03     64s] Number of Ground Caps   : 1170656
+[10/13 00:52:03     64s] Number of Coupling Caps : 116540
+[10/13 00:52:03     64s] 
+[10/13 00:52:05     70s] The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef', has encountered the error/warning message(s) during its reading.
+[10/13 00:52:05     70s] SPEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef.
+[10/13 00:52:05     70s] Number of Resistors     : 1649676
+[10/13 00:52:05     70s] Number of Ground Caps   : 1170656
+[10/13 00:52:05     70s] Number of Coupling Caps : 116540
+[10/13 00:52:05     70s] 
+[10/13 00:52:05     70s] RCDB /tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe/top_soc_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_5IYAQG.rcdb.d/top_soc.rcdb.d Creation Completed (CPU Time= 0:00:22.8  MEM= 3242.6M)
+[10/13 00:52:05     70s] End spef parsing (MEM=3234.62 CPU=0:00:23.0 REAL=0:00:08.0).
+[10/13 00:52:05     70s] Spef for RC Corner 'rc_ss' was previously specified. Dropping the previous specification.
+[10/13 00:52:05     70s] Spef for RC Corner 'rc_typ' was previously specified. Dropping the previous specification.
+[10/13 00:52:05     70s] Spef for RC Corner 'rc_ff' was previously specified. Dropping the previous specification.
+[10/13 00:52:05     70s] Lumped Parasitic Loading Started (total cpu=0:00:00.0, real=0:00:00.0, current mem=3234.625M)
+[10/13 00:52:05     70s] Opening parasitic data file '/tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe/top_soc_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_5IYAQG.rcdb.d/top_soc.rcdb.d' for reading (mem: 3234.625M)
+[10/13 00:52:05     71s] Lumped Parasitic Loading Completed (total cpu=0:00:00.3, real=0:00:00.0, current mem=3250.625M)
+[10/13 00:52:05     71s] Closing parasitic data file '/tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe/top_soc_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_5IYAQG.rcdb.d/top_soc.rcdb.d': 0 access done (mem: 3250.625M)
+[10/13 00:52:05     71s] 7467 nets are missing in SPEF file. The names of these nets are saved in ./rc_ss.missing_nets.rpt.gz.
+[10/13 00:52:05     71s] **WARN: (IMPEXT-3423):	Detected 7015 nets with incomplete RC network. Low-value resistances have been added by the software to complete the RC network of these nets. Review the list of affected nets in the './top_soc.rc_ss.incomplete_res.net.gz' file to ensure they are not along the critical path because results of timing analysis performed on nets with incomplete RC network can be inaccurate.
+[10/13 00:52:05     71s] 7467 nets are missing in SPEF file. The names of these nets are saved in ./rc_typ.missing_nets.rpt.gz.
+[10/13 00:52:05     71s] **WARN: (IMPEXT-3423):	Detected 7015 nets with incomplete RC network. Low-value resistances have been added by the software to complete the RC network of these nets. Review the list of affected nets in the './top_soc.rc_typ.incomplete_res.net.gz' file to ensure they are not along the critical path because results of timing analysis performed on nets with incomplete RC network can be inaccurate.
+[10/13 00:52:05     71s] 7467 nets are missing in SPEF file. The names of these nets are saved in ./rc_ff.missing_nets.rpt.gz.
+[10/13 00:52:05     71s] **WARN: (IMPEXT-3423):	Detected 7015 nets with incomplete RC network. Low-value resistances have been added by the software to complete the RC network of these nets. Review the list of affected nets in the './top_soc.rc_ff.incomplete_res.net.gz' file to ensure they are not along the critical path because results of timing analysis performed on nets with incomplete RC network can be inaccurate.
+[10/13 00:52:05     71s] <CMD> set_analysis_mode -analysisType onChipVariation -cppr both
+[10/13 00:52:05     71s] <CMD> set_delay_cal_mode -siAware true
+[10/13 00:52:05     71s] AAE_INFO: switching setDelayCal -siAware from false to true ...
+[10/13 00:52:05     71s] AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
+[10/13 00:52:05     71s] <CMD> set_si_mode -enable_glitch_report true
+[10/13 00:52:05     71s] <CMD> set_timing_derate -delay_corner dc_ss -late  -cell_delay -cell_check  $SRAM_DERATE_SS $sram_cells
+[10/13 00:52:05     71s] <CMD> set_timing_derate -delay_corner dc_ff -early -cell_delay -cell_check  $SRAM_DERATE_FF $sram_cells
+[10/13 00:52:05     71s] <CMD> set_timing_derate -delay_corner dc_ff -early -cell_delay  $factor $lib_cells
+[10/13 00:52:05     71s] <CMD> update_timing -full
+[10/13 00:52:05     71s] AAE_INFO: opIsDesignInPostRouteState() is 1
+[10/13 00:52:05     71s] AAE_INFO: deleting AAE DB in update_timing -full ...
+[10/13 00:52:06     71s] AAE DB initialization (MEM=2869.882812 CPU=0:00:00.0 REAL=0:00:00.0) 
+[10/13 00:52:06     71s] AAE_INFO: resetNetProps viewIdx 0 
+[10/13 00:52:06     71s] AAE_INFO: resetNetProps viewIdx 1 
+[10/13 00:52:06     71s] AAE_INFO: resetNetProps viewIdx 2 
+[10/13 00:52:06     71s] Starting SI iteration 1 using Infinite Timing Windows
+[10/13 00:52:06     71s] Start slew iteration 
+[10/13 00:52:06     71s] #################################################################################
+[10/13 00:52:06     71s] # Design Name: top_soc
+[10/13 00:52:06     71s] # Design Mode: 7nm
+[10/13 00:52:06     71s] # Analysis Mode: MMMC OCV 
+[10/13 00:52:06     71s] # Parasitics Mode: SPEF/RCDB 
+[10/13 00:52:06     71s] # Signoff Settings: SI On 
+[10/13 00:52:06     71s] #################################################################################
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_ff'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_tt'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_tt'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'view_ff'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'view_tt'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'view_ff'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_tt'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'view_ff'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'view_ss'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'view_ff'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'view_tt'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'view_ss'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'view_ss'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_ss'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'view_ss'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'view_ss'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_ff'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_ss'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'view_ff'
+[10/13 00:52:11     77s] Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_ss'
+[10/13 00:52:11     77s] Message <TCLCMD-1005> has exceeded the message display limit of '20'. Use 'set_message -no_limit -id list_of_msgIDs' to reset the message limit.
+[10/13 00:52:12     78s] AAE_INFO: 1 threads acquired from CTE.
+[10/13 00:52:12     78s] AAE_INFO: 1 threads acquired from CTE.
+[10/13 00:52:12     78s] Start delay calculation (fullDC) (1 T). (MEM=2795.72)
+[10/13 00:52:12     78s] Opening parasitic data file '/tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe/top_soc_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_5IYAQG.rcdb.d/top_soc.rcdb.d' for reading (mem: 3493.547M)
+[10/13 00:52:12     78s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 3503.6M)
+[10/13 00:52:12     78s] Start AAE Lib Loading. (MEM=2801.332031)
+[10/13 00:52:12     78s] End AAE Lib Loading. (MEM=2845.898438 CPU=0:00:00.1 Real=0:00:00.0)
+[10/13 00:52:12     78s] End AAE Lib Interpolated Model. (MEM=2845.996094 CPU Time=0:00:00.0, Real Time=0:00:00.0)
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net tms, driver tms (cell top_soc) voltage 0.77 does not match receiver u_jtag_dtm/g4640/B (cell NOR2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net tms, driver tms (cell top_soc) voltage 0.77 does not match receiver u_jtag_dtm/g4639/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net tms, driver tms (cell top_soc) voltage 0.77 does not match receiver u_jtag_dtm/g4612/A (cell NAND3xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net tdi, driver tdi (cell top_soc) voltage 0.77 does not match receiver u_jtag_dtm/g3762/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[15], driver sdram_dq_i[15] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13038/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[14], driver sdram_dq_i[14] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13041/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[13], driver sdram_dq_i[13] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13039/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[12], driver sdram_dq_i[12] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13036/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[11], driver sdram_dq_i[11] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13032/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[10], driver sdram_dq_i[10] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13040/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[9], driver sdram_dq_i[9] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13029/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[8], driver sdram_dq_i[8] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13035/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[7], driver sdram_dq_i[7] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13042/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[6], driver sdram_dq_i[6] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13000/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[5], driver sdram_dq_i[5] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13030/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[4], driver sdram_dq_i[4] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13034/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[3], driver sdram_dq_i[3] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13037/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[2], driver sdram_dq_i[2] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13033/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[1], driver sdram_dq_i[1] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13028/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (IMPMSMV-1810):	Net sdram_dq_i[0], driver sdram_dq_i[0] (cell top_soc) voltage 0.77 does not match receiver u_axi_sdram_g13031/B (cell NAND2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
+[10/13 00:52:13     78s] **WARN: (EMS-62):	Message <IMPMSMV-1810> has exceeded the default message display limit of 20.
+[10/13 00:52:13     78s] To avoid this warning, increase the display limit per unique message by
+[10/13 00:52:13     78s] using the set_message -limit <number> command.
+[10/13 00:52:13     78s] The message limit can be removed by using the set_message -no_limit command.
+[10/13 00:52:13     78s] Note that setting a very large number using the set_message -limit command
+[10/13 00:52:13     78s] or removing the message limit using the set_message -no_limit command can
+[10/13 00:52:13     78s] significantly increase the log file size.
+[10/13 00:52:13     78s] To suppress a message, use the set_message -suppress command.
+[10/13 00:52:19     84s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 3978.3M)
+[10/13 00:52:24     90s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 3999.4M)
+[10/13 00:52:29     95s] End delay calculation. (MEM=3053.14 CPU=0:00:15.6 REAL=0:00:15.0)
+[10/13 00:52:29     95s] End delay calculation (fullDC). (MEM=3009.21 CPU=0:00:17.3 REAL=0:00:17.0)
+[10/13 00:52:29     95s] update aggressor slew in non distributed run
+[10/13 00:52:29     95s] End Slew iteration 
+[10/13 00:52:29     95s] Setting infinite Tws ...
+[10/13 00:52:29     95s] First Iteration Infinite Tw... 
+[10/13 00:52:30     95s] Start delay calculation (fullDC) (1 T). (MEM=3009.55)
+[10/13 00:52:30     95s] End AAE Lib Interpolated Model. (MEM=3009.617188 CPU Time=0:00:00.0, Real Time=0:00:00.0)
+[10/13 00:52:30     95s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 4020.4M)
+[10/13 00:52:31     96s] **WARN: (IMPESI-3140):	Bumpy transitions may exist in the design which may lead to inaccurate delay computation. To report/analyze the nets having bumpy transition, please enable delay report and use command 'report_noise -bumpy_waveform -threshold 0' after timing analysis. Delay report is enabled by setting 'set_si_mode -enable_delay_report true' before timing analysis.
+[10/13 00:53:04    130s] Total number of fetched objects 153710
+[10/13 00:53:04    130s] AAE_INFO-618: Total number of nets in the design is 166959,  93.0 percent of the nets selected for SI analysis
+[10/13 00:53:04    130s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 4130.1M)
+[10/13 00:53:39    165s] Total number of fetched objects 153710
+[10/13 00:53:39    165s] AAE_INFO-618: Total number of nets in the design is 166959,  93.0 percent of the nets selected for SI analysis
+[10/13 00:53:39    165s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 4130.1M)
+[10/13 00:54:12    197s] Total number of fetched objects 153710
+[10/13 00:54:12    197s] AAE_INFO-618: Total number of nets in the design is 166959,  92.9 percent of the nets selected for SI analysis
+[10/13 00:54:14    199s] End Timing Check Calculation. (CPU Time=0:00:01.6, Real Time=0:00:02.0)
+[10/13 00:54:15    201s] End Timing Check Calculation. (CPU Time=0:00:01.6, Real Time=0:00:01.0)
+[10/13 00:54:16    202s] End Timing Check Calculation. (CPU Time=0:00:01.3, Real Time=0:00:01.0)
+[10/13 00:54:16    202s] End delay calculation. (MEM=3179.88 CPU=0:01:47 REAL=0:01:46)
+[10/13 00:54:16    202s] End delay calculation (fullDC). (MEM=3179.88 CPU=0:01:47 REAL=0:01:46)
+[10/13 00:54:16    202s] esiiDumpWaveformsThread is successfull 1 
+[10/13 00:54:16    202s] Save waveform /tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe/.AAE_xAclS5/.AAE_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4/waveform.data in separate thread...
+[10/13 00:54:16    202s] Finish pthread dumping compressed waveforms.
+[10/13 00:54:17    202s] *** CDM Built up (cpu=0:02:11  real=0:02:11  mem= 4136.2M) ***
+[10/13 00:54:24    209s] Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 3144.3M)
+[10/13 00:54:24    210s] Loading CTE timing window is completed (CPU = 0:00:00.9, REAL = 0:00:00.0, MEM = 3178.2M)
+[10/13 00:54:24    210s] Starting SI iteration 2
+[10/13 00:54:26    211s] Start delay calculation (fullDC) (1 T). (MEM=3160.48)
+[10/13 00:54:26    211s] End AAE Lib Interpolated Model. (MEM=3160.554688 CPU Time=0:00:00.0, Real Time=0:00:00.0)
+[10/13 00:54:26    211s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 4210.7M)
+[10/13 00:54:30    216s] Glitch Analysis: View view_ss -- Total Number of Nets Skipped = 0. 
+[10/13 00:54:30    216s] Glitch Analysis: View view_ss -- Total Number of Nets Analyzed = 0. 
+[10/13 00:54:30    216s] Total number of fetched objects 153710
+[10/13 00:54:30    216s] AAE_INFO-618: Total number of nets in the design is 166959,  4.1 percent of the nets selected for SI analysis
+[10/13 00:54:30    216s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 4239.8M)
+[10/13 00:54:34    220s] Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 0. 
+[10/13 00:54:34    220s] Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 0. 
+[10/13 00:54:34    220s] Total number of fetched objects 153710
+[10/13 00:54:34    220s] AAE_INFO-618: Total number of nets in the design is 166959,  3.9 percent of the nets selected for SI analysis
+[10/13 00:54:34    220s] RC Database In Completed (CPU Time= 0:00:00.0  Real Time=0:00:00.0  MEM= 4239.8M)
+[10/13 00:54:38    224s] Glitch Analysis: View view_ff -- Total Number of Nets Skipped = 2664. 
+[10/13 00:54:38    224s] Glitch Analysis: View view_ff -- Total Number of Nets Analyzed = 153735. 
+[10/13 00:54:38    224s] Total number of fetched objects 153710
+[10/13 00:54:38    224s] AAE_INFO-618: Total number of nets in the design is 166959,  3.9 percent of the nets selected for SI analysis
+[10/13 00:54:38    224s] End delay calculation. (MEM=3196.85 CPU=0:00:12.5 REAL=0:00:12.0)
+[10/13 00:54:38    224s] End delay calculation (fullDC). (MEM=3106.61 CPU=0:00:12.7 REAL=0:00:12.0)
+[10/13 00:54:38    224s] Save and delete waveform data /tmp/ssv_tmpdir_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4_yamjNe/.AAE_xAclS5/.AAE_186814_6aa79491-d7dc-4c5c-bb88-051d5cd551b4/waveform.data ...
+[10/13 00:54:38    224s] Swap out waveforms (MEM=3080.14 CPU=0:00:00.0 REAL=0:00:00.0) 
+[10/13 00:54:38    224s] Finish pthread dumping timing data and compressed waveforms.
+[10/13 00:54:39    224s] *** CDM Built up (cpu=0:00:13.1  real=0:00:13.0  mem= 4139.7M) ***
+[10/13 00:54:45    230s] <CMD> check_timing -verbose > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/check_timing.rpt
+[10/13 00:54:45    230s] <CMD> report_annotated_parasitics > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/annotated_parasitics.rpt
+[10/13 00:54:45    230s] <CMD> report_analysis_coverage > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/analysis_coverage.rpt
+[10/13 00:54:47    232s] <CMD> report_constraint -all_violators > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/all_violators.rpt
+[10/13 00:54:50    235s] <CMD> report_timing_derate > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/timing_derate.rpt
+[10/13 00:54:50    235s] <CMD> report_noise -txtfile /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/glitch.rpt
+[10/13 00:54:50    235s] Output report file name prefix is /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/glitch.rpt 
+[10/13 00:54:50    235s] Info: Processing report for view view_ss ...
+[10/13 00:54:50    235s] Info: The output report file is /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/glitch.rpt_view_ss
+[10/13 00:54:50    235s] Info: Processing report for view view_tt ...
+[10/13 00:54:50    235s] Info: The output report file is /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/glitch.rpt_view_tt
+[10/13 00:54:51    235s] Info: Processing report for view view_ff ...
+[10/13 00:54:51    235s] Info: The output report file is /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/glitch.rpt_view_ff
+[10/13 00:54:51    236s] <CMD> report_timing -$kind -view $view -max_paths 100 -nworst 1  -path_type full_clock > $rpt
+[10/13 00:54:52    236s] <CMD> report_timing -$kind -view $view -max_paths 1 -collection
+[10/13 00:54:52    236s] <CMD> report_timing -$kind -view $view -max_paths 100 -nworst 1  -path_type full_clock > $rpt
+[10/13 00:54:52    237s] <CMD> report_timing -$kind -view $view -max_paths 1 -collection
+[10/13 00:54:52    237s] <CMD> report_timing -$kind -view $view -max_paths 100 -nworst 1  -path_type full_clock > $rpt
+[10/13 00:54:52    237s] <CMD> report_timing -$kind -view $view -max_paths 1 -collection
+[10/13 00:54:52    237s] <CMD> report_timing -$kind -view $view -max_paths 100 -nworst 1  -path_type full_clock > $rpt
+[10/13 00:54:52    237s] <CMD> report_timing -$kind -view $view -max_paths 1 -collection
+[10/13 00:54:53    237s] <CMD> exit 0
+[10/13 00:54:53    237s] 
+[10/13 00:54:53    237s] *** Summary of all messages that are not suppressed in this session:
+[10/13 00:54:53    237s] Severity  ID               Count  Summary                                  
+[10/13 00:54:53    237s] WARNING   IMPMSMV-1810     116527  Net %s, driver %s (cell %s) voltage %g d...
+[10/13 00:54:53    237s] WARNING   IMPEXT-3423          3  Detected %d nets with incomplete RC netw...
+[10/13 00:54:53    237s] WARNING   IMPESI-3140          1  Bumpy transitions may exist in the desig...
+[10/13 00:54:53    237s] ERROR     IMPOAX-124           2  OpenAccess (OA) shared library installat...
+[10/13 00:54:53    237s] ERROR     IMPOAX-332           2  Failed to initialize OpenAccess (OA) dat...
+[10/13 00:54:53    237s] WARNING   SPEF-1152        21054  Net '%s' is not fully specified as per i...
+[10/13 00:54:53    237s] ERROR     SPEF-1123           39  Invalid capacitor node (%s) does not bel...
+[10/13 00:54:53    237s] ERROR     SPEF-1127        30402  Invalid CONN connection found (%s) for D...
+[10/13 00:54:53    237s] ERROR     SPEF-1134        30729  Invalid resistor node (%s) does not belo...
+[10/13 00:54:53    237s] WARNING   TCLCMD-1531         12  '%s' has been applied on hierarchical pi...
+[10/13 00:54:53    237s] WARNING   TECHLIB-1277        12  The %s '%s' has been defined for %s %s '...
+[10/13 00:54:53    237s] *** Message Summary: 137609 warning(s), 61174 error(s)
+[10/13 00:54:53    237s] 
+[10/13 00:54:53    237s] 
+[10/13 00:54:53    237s] *** Memory Usage v#1 (Current mem = 4282.980M, initial mem = 836.656M) ***
+[10/13 00:54:53    237s] --- Ending "Tempus Timing Solution" (totcpu=0:03:58, real=0:03:47, mem=4283.0M) ---
