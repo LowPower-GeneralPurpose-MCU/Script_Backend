@@ -4,12 +4,12 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.15-s108_1, built Tue Jul 22 11:26:13 PDT 2025
 Options:	-nowin -init voltus.tcl -log logs/voltus 
-Date:		Tue Oct 13 13:43:06 2026
+Date:		Tue Oct 13 15:49:31 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04.1 LTS
 
 License:
-		[13:43:06.206218] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[15:49:31.206266] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		vtsxl	Voltus Power Integrity Solution XL	23.1	checkout succeeded
 		8 CPU jobs allowed with the current license(s). Use set_multi_cpu_usage to set your required CPU count.
@@ -19,7 +19,7 @@ Type 'man IMPOAX-124' for more detail.
 Type 'man IMPOAX-332' for more detail.
 INFO: OA features are disabled in this session.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-environment variable TMPDIR is '/tmp/ssv_tmpdir_3972216_7208ab72-e4e8-4b96-974f-0e653f5a885a_nsj93L'.
+environment variable TMPDIR is '/tmp/ssv_tmpdir_392803_e90672e3-f930-4556-be2f-7cfbd9141213_24GR9d'.
 #@ Processing -files option
 Sourcing tcl/tk file 'voltus.tcl' ...
 <CMD> set_multi_cpu_usage -localCpu 1
@@ -30,9 +30,9 @@ Sourcing tcl/tk file 'voltus.tcl' ...
 <CMD> set_top_module top_soc
 **ERROR: (IMPOAX-124):	OpenAccess (OA) shared library installation is older than the one that was used to build this Voltus IC Power Integrity Solution version. For using the OA installation built and tested with this Voltus IC Power Integrity Solution version, unset the shell variable OA_HOME. For using 'p025' or higher version of OA, reset OA_HOME to point to that installation.
 **ERROR: (IMPOAX-332):	Failed to initialize OpenAccess (OA) database. OA related commands cannot be run in this session. Confirm that the OA shared library is installed and OA_HOME is set correctly. Typically the OA_HOME environment variable should not be set.
-#% Begin Load MMMC data ... (date=10/13 13:43:19, mem=1603.2M)
+#% Begin Load MMMC data ... (date=10/13 15:49:46, mem=1607.7M)
 Number of views requested 1 are allowed with the current licenses... continuing with set_analysis_view.
-#% End Load MMMC data ... (date=10/13 13:43:19, total cpu=0:00:00.0, real=0:00:00.0, peak res=1604.4M, current mem=1604.4M)
+#% End Load MMMC data ... (date=10/13 15:49:46, total cpu=0:00:00.1, real=0:00:00.0, peak res=1608.5M, current mem=1608.5M)
 default_emulate_early_rc_corner default_emulate_late_rc_corner default_emulate_rc_corner
 
 Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/techlef_misc/asap7_tech_1x_201209.fixed.lef ...
@@ -49,7 +49,7 @@ Loading LEF file /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/t
 ##  Check design process and node:  
 ##  Both design process and tech node are not set.
 
-Loading view definition file from .ssv_emulate_view_definition_3972216_7208ab72-e4e8-4b96-974f-0e653f5a885a.tcl
+Loading view definition file from .ssv_emulate_view_definition_392803_e90672e3-f930-4556-be2f-7cfbd9141213.tcl
 Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib' ...
 **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 46726)
 **WARN: (TECHLIB-1277):	The attribute 'input_signal_level' has been defined for output pin 'CON'. 'input_signal_level' cannot be defined at this level and is being ignored. (File /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib, Line 75682)
@@ -78,9 +78,9 @@ Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asa
 Read 1 cells in library 'srambank_256x4x32_6t122' 
 Reading default_emulate_libset_max timing library '/home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib' ...
 Read 1 cells in library 'srambank_128x4x20_6t122' 
-*** End library_loading (cpu=0.22min, real=0.22min, mem=364.0M, fe_cpu=0.42min, fe_real=0.43min, fe_mem=2063.4M) ***
-#% Begin Load netlist data ... (date=10/13 13:43:32, mem=1691.6M)
-*** Begin netlist parsing (mem=2063.4M) ***
+*** End library_loading (cpu=0.23min, real=0.23min, mem=365.0M, fe_cpu=0.45min, fe_real=0.48min, fe_mem=2063.6M) ***
+#% Begin Load netlist data ... (date=10/13 15:50:00, mem=1693.7M)
+*** Begin netlist parsing (mem=2063.6M) ***
 **WARN: (IMPVL-159):	Pin 'sdel[0]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
 **WARN: (IMPVL-159):	Pin 'sdel[1]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
 **WARN: (IMPVL-159):	Pin 'sdel[2]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
@@ -88,9 +88,9 @@ Read 1 cells in library 'srambank_128x4x20_6t122'
 **WARN: (IMPVL-159):	Pin 'sdel[4]' of cell 'srambank_128x4x20_6t122' is defined in LEF but not in the timing library.
 Reading verilog netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v'
 
-*** Memory Usage v#1 (Current mem = 2307.355M, initial mem = 844.656M) ***
-*** End netlist parsing (cpu=0:00:00.7, real=0:00:00.0, mem=2307.4M) ***
-#% End Load netlist data ... (date=10/13 13:43:33, total cpu=0:00:01.0, real=0:00:01.0, peak res=1899.7M, current mem=1899.7M)
+*** Memory Usage v#1 (Current mem = 2307.598M, initial mem = 844.656M) ***
+*** End netlist parsing (cpu=0:00:00.7, real=0:00:01.0, mem=2307.6M) ***
+#% End Load netlist data ... (date=10/13 15:50:01, total cpu=0:00:01.0, real=0:00:01.0, peak res=1902.1M, current mem=1902.1M)
 Set top cell to top_soc.
 **WARN: (IMPTS-124):	Timing library description of pin 'sdel[4]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
 **WARN: (IMPTS-124):	Timing library description of pin 'sdel[3]' is missing from cell 'srambank_128x4x20_6t122' in timing library 'srambank_128x4x20_6t122'.
@@ -114,7 +114,7 @@ Set DBUPerIGU to techSite asap7sc7p5t width 54.
 ** info: there are 148756 stdCell insts with at least one signal pin.
 ** info: there are 84 macros.
 
-*** Memory Usage v#1 (Current mem = 2649.367M, initial mem = 844.656M) ***
+*** Memory Usage v#1 (Current mem = 2657.609M, initial mem = 844.656M) ***
 
 Honor LEF defined pitches for advanced node
 Start create_tracks
@@ -137,7 +137,7 @@ late library set: default_emulate_libset_max
 early library set: default_emulate_libset_min
 Completed consistency checks. Status: Successful
 Reading timing constraints file '/dev/null' ...
-Current (total cpu=0:00:28.1, real=0:00:28.0, peak res=2727.6M, current mem=2727.6M)
+Current (total cpu=0:00:29.6, real=0:00:32.0, peak res=2730.7M, current mem=2730.7M)
 Total number of combinational cells: 338
 Total number of sequential cells: 66
 Total number of tristate cells: 0
@@ -200,7 +200,7 @@ Summary of Active RC-Corners :
 Initializing multi-corner resistance tables ...
 default_emulate_libset_max default_emulate_libset_min
 <CMD> read_def /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def
-Reading DEF file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def', current time is Tue Oct 13 13:43:35 2026 ...
+Reading DEF file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def', current time is Tue Oct 13 15:50:03 2026 ...
 --- DIVIDERCHAR '/'
 --- UnitsPerDBU = 1.0000
 
@@ -454,10 +454,10 @@ defIn read 12000000 lines...
 defIn read 12100000 lines...
 defIn read 12200000 lines...
 defIn read 12300000 lines...
-DEF file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def' is parsed, current time is Tue Oct 13 13:43:50 2026.
+DEF file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def' is parsed, current time is Tue Oct 13 15:50:19 2026.
 Updating the floorplan ...
 <CMD> read_sdc /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc
-Current (total cpu=0:00:48.3, real=0:00:45.0, peak res=3784.8M, current mem=3761.3M)
+Current (total cpu=0:00:49.7, real=0:00:49.0, peak res=3788.8M, current mem=3764.6M)
 top_soc
 **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cpu/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc, Line 36).
 
@@ -514,13 +514,13 @@ set_disable_timing                                | 1              | 0
 ------------------------------------------------------------------------------------
 Number of path exceptions in the constraint file = 6
 INFO (CTE): Reading of timing constraints file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.sdc completed, with 12 WARNING
-Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=3777.1M, current mem=3777.1M)
-Current (total cpu=0:00:48.5, real=0:00:45.0, peak res=3784.8M, current mem=3777.1M)
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=3780.4M, current mem=3780.4M)
+Current (total cpu=0:00:49.9, real=0:00:49.0, peak res=3788.8M, current mem=3780.4M)
 <CMD> read_spef /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef
 
 SPEF files for RC Corner default_emulate_rc_corner:
 Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef'.
-Start spef parsing (MEM=4264.57).
+Start spef parsing (MEM=4264.81).
 The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef', has encountered the error/warning message(s) during its reading.
 **WARN: (SPEF-1152):	Net 'flash_io_i[3] ( having pins flash_io_i[3] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 **WARN: (SPEF-1152):	Net 'flash_io_i[2] ( having pins flash_io_i[2] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
@@ -530,7 +530,7 @@ Number of Resistors     : 1689165
 Number of Ground Caps   : 1196666
 Number of Coupling Caps : 116262
 
-End spef parsing (MEM=4371.87 CPU=0:00:08.7 REAL=0:00:02.0).
+End spef parsing (MEM=4372.11 CPU=0:00:08.7 REAL=0:00:03.0).
 431 nets are missing in SPEF file. The names of these nets are saved in ./default_emulate_rc_corner.missing_nets.rpt.gz.
 <CMD> set_power_analysis_mode -method static -corner max -create_binary_db true -write_static_currents true
 <CMD> set_power_output_dir /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/power
@@ -543,7 +543,7 @@ Power Net Detected:
            0.7V	    VDD
 Using Power View: default_emulate_view.
 AAE_INFO: opIsDesignInPostRouteState() is 1
-AAE DB initialization (MEM=3884.273438 CPU=0:00:00.0 REAL=0:00:00.0) 
+AAE DB initialization (MEM=3888.453125 CPU=0:00:00.0 REAL=0:00:00.0) 
 #################################################################################
 # Design Name: top_soc
 # Design Mode: 65nm
@@ -551,25 +551,25 @@ AAE DB initialization (MEM=3884.273438 CPU=0:00:00.0 REAL=0:00:00.0)
 # Parasitics Mode: SPEF/RCDB 
 # Signoff Settings: SI Off 
 #################################################################################
-Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'default_emulate_view'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'default_emulate_view'
-Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'default_emulate_view'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'default_emulate_view'
 Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'default_emulate_view'
 Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'default_emulate_view'
 Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'default_emulate_view'
-Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'default_emulate_view'
 Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'default_emulate_view'
 Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'default_emulate_view'
 Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'default_emulate_view'
 Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'default_emulate_view'
 Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'default_emulate_view'
-Start delay calculation (fullDC) (1 T). (MEM=3870.42)
+Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'default_emulate_view'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'default_emulate_view'
+Start delay calculation (fullDC) (1 T). (MEM=3875.02)
 /dev/null
-End delay calculation. (MEM=4016.19 CPU=0:00:30.7 REAL=0:00:31.0)
+End delay calculation. (MEM=4017.53 CPU=0:00:30.8 REAL=0:00:31.0)
 Begin loading slews from CTE ...
 Loading slews from CTE completed...
-End delay calculation (fullDC). (MEM=3996.69 CPU=0:00:32.0 REAL=0:00:32.0)
+End delay calculation (fullDC). (MEM=3998.03 CPU=0:00:32.2 REAL=0:00:32.0)
 
 Begin Power Analysis
 
@@ -578,58 +578,58 @@ Begin Power Analysis
 
 Begin Processing Timing Library for Power Calculation
 
-Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4009.30MB/unknown/unknown)
+Ended Processing Timing Library for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4014.53MB/unknown/unknown)
 
 
 
 Begin Processing Power Net/Grid for Power Calculation
 
-Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4009.30MB/unknown/unknown)
+Ended Processing Power Net/Grid for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4014.53MB/unknown/unknown)
 
 Begin Processing Timing Window Data for Power Calculation
 
-CLK_UART1(250MHz) CLK_UART(250MHz) CLK_TIM1(250MHz) CLK_TIM0(250MHz) CLK_SYS(250MHz) CLK_SPI(250MHz) CLK_SDRAM_OUT(250MHz) CLK_PWM(250MHz) CLK_I2C(250MHz) CLK_GPIO(250MHz) CLK_DBG(250MHz) CLK_CPU(250MHz) CLK_CORDIC(250MHz) CLK_ASCON(250MHz) CLK_TCK(10MHz) Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4028.22MB/unknown/unknown)
+CLK_UART1(250MHz) CLK_UART(250MHz) CLK_TIM1(250MHz) CLK_TIM0(250MHz) CLK_SYS(250MHz) CLK_SPI(250MHz) CLK_SDRAM_OUT(250MHz) CLK_PWM(250MHz) CLK_I2C(250MHz) CLK_GPIO(250MHz) CLK_DBG(250MHz) CLK_CPU(250MHz) CLK_CORDIC(250MHz) CLK_ASCON(250MHz) CLK_TCK(10MHz) Ended Processing Timing Window Data for Power Calculation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4033.45MB/unknown/unknown)
 
 Begin Processing User Attributes
 
-Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4028.22MB/unknown/unknown)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4033.60MB/unknown/unknown)
 
 Begin Processing Signal Activity
 
 
 Starting Levelizing
-2026-Oct-13 13:44:36 (2026-Oct-13 04:44:36 GMT)
-2026-Oct-13 13:44:36 (2026-Oct-13 04:44:36 GMT): 10%
-2026-Oct-13 13:44:36 (2026-Oct-13 04:44:36 GMT): 20%
-2026-Oct-13 13:44:36 (2026-Oct-13 04:44:36 GMT): 30%
-2026-Oct-13 13:44:36 (2026-Oct-13 04:44:36 GMT): 40%
-2026-Oct-13 13:44:36 (2026-Oct-13 04:44:36 GMT): 50%
-2026-Oct-13 13:44:36 (2026-Oct-13 04:44:36 GMT): 60%
-2026-Oct-13 13:44:36 (2026-Oct-13 04:44:36 GMT): 70%
-2026-Oct-13 13:44:37 (2026-Oct-13 04:44:37 GMT): 80%
-2026-Oct-13 13:44:37 (2026-Oct-13 04:44:37 GMT): 90%
+2026-Oct-13 15:51:05 (2026-Oct-13 06:51:05 GMT)
+2026-Oct-13 15:51:05 (2026-Oct-13 06:51:05 GMT): 10%
+2026-Oct-13 15:51:05 (2026-Oct-13 06:51:05 GMT): 20%
+2026-Oct-13 15:51:05 (2026-Oct-13 06:51:05 GMT): 30%
+2026-Oct-13 15:51:05 (2026-Oct-13 06:51:05 GMT): 40%
+2026-Oct-13 15:51:05 (2026-Oct-13 06:51:05 GMT): 50%
+2026-Oct-13 15:51:05 (2026-Oct-13 06:51:05 GMT): 60%
+2026-Oct-13 15:51:05 (2026-Oct-13 06:51:05 GMT): 70%
+2026-Oct-13 15:51:06 (2026-Oct-13 06:51:06 GMT): 80%
+2026-Oct-13 15:51:06 (2026-Oct-13 06:51:06 GMT): 90%
 
 Finished Levelizing
-2026-Oct-13 13:44:37 (2026-Oct-13 04:44:37 GMT)
+2026-Oct-13 15:51:06 (2026-Oct-13 06:51:06 GMT)
 
 Starting Activity Propagation
-2026-Oct-13 13:44:37 (2026-Oct-13 04:44:37 GMT)
+2026-Oct-13 15:51:06 (2026-Oct-13 06:51:06 GMT)
 ** INFO:  (VOLTUS_POWR-1356): No default input activity has been set. Defaulting to 0.2.
 Use 'set_default_switching_activity -input_activity' command to change the default activity value.
 
-2026-Oct-13 13:44:38 (2026-Oct-13 04:44:38 GMT): 10%
-2026-Oct-13 13:44:38 (2026-Oct-13 04:44:38 GMT): 20%
-2026-Oct-13 13:44:39 (2026-Oct-13 04:44:39 GMT): 30%
-2026-Oct-13 13:44:39 (2026-Oct-13 04:44:39 GMT): 40%
-2026-Oct-13 13:44:40 (2026-Oct-13 04:44:40 GMT): 50%
-2026-Oct-13 13:44:40 (2026-Oct-13 04:44:40 GMT): 60%
-2026-Oct-13 13:44:40 (2026-Oct-13 04:44:40 GMT): 70%
-2026-Oct-13 13:44:41 (2026-Oct-13 04:44:41 GMT): 80%
-2026-Oct-13 13:44:41 (2026-Oct-13 04:44:41 GMT): 90%
+2026-Oct-13 15:51:07 (2026-Oct-13 06:51:07 GMT): 10%
+2026-Oct-13 15:51:07 (2026-Oct-13 06:51:07 GMT): 20%
+2026-Oct-13 15:51:08 (2026-Oct-13 06:51:08 GMT): 30%
+2026-Oct-13 15:51:08 (2026-Oct-13 06:51:08 GMT): 40%
+2026-Oct-13 15:51:09 (2026-Oct-13 06:51:09 GMT): 50%
+2026-Oct-13 15:51:09 (2026-Oct-13 06:51:09 GMT): 60%
+2026-Oct-13 15:51:09 (2026-Oct-13 06:51:09 GMT): 70%
+2026-Oct-13 15:51:10 (2026-Oct-13 06:51:10 GMT): 80%
+2026-Oct-13 15:51:10 (2026-Oct-13 06:51:10 GMT): 90%
 
 Finished Activity Propagation
-2026-Oct-13 13:44:41 (2026-Oct-13 04:44:41 GMT)
-Ended Processing Signal Activity: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=4057.89MB/unknown/unknown)
+2026-Oct-13 15:51:10 (2026-Oct-13 06:51:10 GMT)
+Ended Processing Signal Activity: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=4063.64MB/unknown/unknown)
 
 Begin Power Computation
 
@@ -645,36 +645,36 @@ TIELOx1_ASAP7_75t_R                       internal power,
 
 
 Starting Calculating power
-2026-Oct-13 13:44:41 (2026-Oct-13 04:44:41 GMT)
+2026-Oct-13 15:51:10 (2026-Oct-13 06:51:10 GMT)
  ... Calculating switching power
-2026-Oct-13 13:44:42 (2026-Oct-13 04:44:42 GMT): 10%
-2026-Oct-13 13:44:42 (2026-Oct-13 04:44:42 GMT): 20%
-2026-Oct-13 13:44:42 (2026-Oct-13 04:44:42 GMT): 30%
-2026-Oct-13 13:44:42 (2026-Oct-13 04:44:42 GMT): 40%
-2026-Oct-13 13:44:42 (2026-Oct-13 04:44:42 GMT): 50%
+2026-Oct-13 15:51:11 (2026-Oct-13 06:51:11 GMT): 10%
+2026-Oct-13 15:51:11 (2026-Oct-13 06:51:11 GMT): 20%
+2026-Oct-13 15:51:11 (2026-Oct-13 06:51:11 GMT): 30%
+2026-Oct-13 15:51:11 (2026-Oct-13 06:51:11 GMT): 40%
+2026-Oct-13 15:51:11 (2026-Oct-13 06:51:11 GMT): 50%
  ... Calculating internal and leakage power
-2026-Oct-13 13:44:45 (2026-Oct-13 04:44:45 GMT): 60%
-2026-Oct-13 13:44:48 (2026-Oct-13 04:44:48 GMT): 70%
-2026-Oct-13 13:44:50 (2026-Oct-13 04:44:50 GMT): 80%
-2026-Oct-13 13:44:53 (2026-Oct-13 04:44:53 GMT): 90%
+2026-Oct-13 15:51:13 (2026-Oct-13 06:51:13 GMT): 60%
+2026-Oct-13 15:51:16 (2026-Oct-13 06:51:16 GMT): 70%
+2026-Oct-13 15:51:18 (2026-Oct-13 06:51:18 GMT): 80%
+2026-Oct-13 15:51:21 (2026-Oct-13 06:51:21 GMT): 90%
 
 Finished Calculating power
-2026-Oct-13 13:44:56 (2026-Oct-13 04:44:56 GMT)
+2026-Oct-13 15:51:25 (2026-Oct-13 06:51:25 GMT)
       # of MSMV cell(s) missing power_level: 0
-Ended Power Computation: (cpu=0:00:15, real=0:00:14, mem(process/total/peak)=4073.46MB/unknown/unknown)
+Ended Power Computation: (cpu=0:00:14, real=0:00:14, mem(process/total/peak)=4077.42MB/unknown/unknown)
 
 Begin Processing User Attributes
 
 Begin Processing set_power
 Ended Processing set_power: (cpu=0:00:00, real=0:00:00,
-mem(process/total/peak)=4073.61MB/unknown/unknown)
-Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4073.61MB/unknown/unknown)
+mem(process/total/peak)=4077.55MB/unknown/unknown)
+Ended Processing User Attributes: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4077.55MB/unknown/unknown)
 
-Ended Power Analysis: (cpu=0:00:22, real=0:00:22, mem(process/total/peak)=4073.61MB/unknown/unknown)
+Ended Power Analysis: (cpu=0:00:21, real=0:00:21, mem(process/total/peak)=4077.55MB/unknown/unknown)
 
 Begin Boundary Leakage Calculation
 Ended Boundary Leakage Calculation: (cpu=0:00:00, real=0:00:00,
-mem(process/total/peak)=4073.61MB/unknown/unknown)
+mem(process/total/peak)=4077.55MB/unknown/unknown)
 Begin Static Power Report Generation
 *
 
@@ -687,69 +687,70 @@ Total Switching Power:       2.43451692 	    2.7360%
 Total Leakage Power:         0.04383248 	    0.0493%
 Total Power:                88.98116828
 -----------------------------------------------------------------------------------------
-** WARN:  (VOLTUS_POWR-3424): Cell AO32x2_ASAP7_75t_L has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell AO21x2_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell CKINVDCx8_ASAP7_75t_R has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell BUFx8_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell OAI222xp33_ASAP7_75t_R has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell BUFx10_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell HB4xp67_ASAP7_75t_L has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell INVx4_ASAP7_75t_L has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell OR4x2_ASAP7_75t_L has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell AO332x1_ASAP7_75t_L has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell AOI331xp33_ASAP7_75t_R has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell AND4x1_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell AOI22xp5_ASAP7_75t_L has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell AO221x1_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell AND2x4_ASAP7_75t_L has no power pin defined in LEF/PGV.
-
-** WARN:  (VOLTUS_POWR-3424): Cell AOI211x1_ASAP7_75t_R has no power pin defined in LEF/PGV.
-
-** WARN:  (VOLTUS_POWR-3424): Cell AOI221xp5_ASAP7_75t_L has no power pin defined in LEF/PGV.
-
-** WARN:  (VOLTUS_POWR-3424): Cell AO22x2_ASAP7_75t_R has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell AOI32xp33_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
 ** WARN:  (VOLTUS_POWR-3424): Cell A2O1A1Ixp33_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell AO31x2_ASAP7_75t_R has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell OR2x4_ASAP7_75t_L has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell AO32x1_ASAP7_75t_R has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell OA31x2_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell AND2x2_ASAP7_75t_L has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell srambank_256x4x32_6t122 has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell ICGx1_ASAP7_75t_R has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell BUFx5_ASAP7_75t_L has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell OAI222xp33_ASAP7_75t_L has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell OAI21xp5_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell AOI21x1_ASAP7_75t_L has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell NOR3xp33_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell OAI21xp5_ASAP7_75t_L has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell BUFx2_ASAP7_75t_L has no power pin defined in LEF/PGV.
 
-** WARN:  (VOLTUS_POWR-3424): Cell DLLx1_ASAP7_75t_R has no power pin defined in LEF/PGV.
+** WARN:  (VOLTUS_POWR-3424): Cell HB2xp67_ASAP7_75t_R has no power pin defined in LEF/PGV.
+
+** WARN:  (VOLTUS_POWR-3424): Cell HB2xp67_ASAP7_75t_L has no power pin defined in LEF/PGV.
+
+** WARN:  (VOLTUS_POWR-3424): Cell OAI333xp33_ASAP7_75t_R has no power pin defined in LEF/PGV.
+
+** WARN:  (VOLTUS_POWR-3424): Cell O2A1O1Ixp5_ASAP7_75t_R has no power pin defined in LEF/PGV.
 
 ** WARN:  (EMS-27): Message (VOLTUS_POWR-3424) has exceeded the current message display limit of 20.
 To increase the message display limit, refer to the product command reference manual.
 
 ** INFO:  (VOLTUS_POWR-3465): There are 0 decaps and 0 fillers in the design
 
-Ended Static Power Report Generation: (cpu=0:00:00, real=0:00:01,
-mem(process/total/peak)=4139.18MB/unknown/unknown)
+Ended Static Power Report Generation: (cpu=0:00:01, real=0:00:01,
+mem(process/total/peak)=4144.43MB/unknown/unknown)
 
 Begin Creating Binary Database
 Ended Creating Binary Database: (cpu=0:00:03, real=0:00:03,
-mem(process/total/peak)=4685.29MB/unknown/unknown)
+mem(process/total/peak)=4693.20MB/unknown/unknown)
 
 Output file is
 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/power_static.rpt.
-<CMD> set_rail_analysis_mode -method era_static -accuracy hd -enable_xp true -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -era_lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap
+<CMD> set_rail_analysis_mode -method era_static -accuracy hd -enable_xp false -em_temperature 110 -extraction_tech_file /home/user1/Desktop/asap7/asap7sc7p5t_28/qrc/qrcTechFile_typ03_unscaledV02 -era_lef_layermap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/asap7_lefdef.layermap -enable_scheduler false
+**WARN: (VOLTUS-1007):	The distributed processing (DP) mode will be made obsolete in a future release and it is recommended to use the Extensively Parallel (XP) mode. The obsolete DP mode still works in this release, but to avoid this warning and to ensure compatibility with future releases, update your scripts to use the set_rail_analysis_mode -enable_xp true..
 <CMD> set_pg_nets -net VDD -voltage 0.7 -threshold 0.65
 <CMD> set_pg_nets -net VSS -voltage 0.0 -threshold 0.05
-<CMD> set_power_pads -net VDD -format defpin
-<CMD> set_power_pads -net VSS -format defpin
+<CMD> set_power_pads -net VDD -format xy -file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/vsrc_VDD.pp
+<CMD> set_power_pads -net VSS -format xy -file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/vsrc_VSS.pp
 <CMD> set_power_data -reset
 <CMD> set_power_data -format current -scale 1 {/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/static_VDD.ptiavg /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/static_VSS.ptiavg}
 <CMD> analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD VDD
-Started PGV Library Generator at 13:45:00 10/13/2026
+Started PGV Library Generator at 15:51:30 10/13/2026
 
 ** INFO:  (VOLTUS_LGEN-3599): Library generation settings: 
 	Mode: TECH 
@@ -778,20 +779,341 @@ obstructions with minimum spacing of zero, or the color mask is not set.
 Power Grid View Generation Statistics:
         # Total number of cells: 426 
         # TECH view created: 426 (100%)
-Finished PGV Library Generator at 13:45:09 10/13/2026 (cpu=0:00:01, real=0:00:09)
+Finished PGV Library Generator at 15:51:36 10/13/2026 (cpu=0:00:01, real=0:00:06)
 
 Begin ERA Data Preparation
 All Virtual Vias and Virtual followpins have been skipped. No incremental def would be generated.
-Ended ERA Data Preparation: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=4995.62MB/8043.38MB/4995.62MB)
+Ended ERA Data Preparation: (cpu=0:00:05, real=0:00:05, mem(process/total/peak)=5003.00MB/8051.57MB/5003.00MB)
 
-voltus_xp.flower --use-legacy-power-dir --svcmaster /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/svcmaster_3972216.config -temp_directory_name /tmp/ssv_tmpdir_3972216_7208ab72-e4e8-4b96-974f-0e653f5a885a_nsj93L -x 0001B13AE4030FAB65C39206EC3F3E8F4FF9AE2DD7030FA364C9B43F912C60CB3E81B769B07C3D8B3FC4843FAF3F3D8B4FC4E95BBE6767C92389A950EF3560C32782B26AB83B649E3DD5A569F8287DC22986FE75EC3D66CE20D5A564EB3B659A2888E264FE7D1CD42983B13AC4210F8965C3F75BBB6767C92389FD7EBB2D34DB73DDF83DED6D349A2184A83DE73C7ACB10B0FC4F984F50FB21B0FC62DD231597219DF740844850FB2A80A83DED3C50FB10B0A83DED3C50FB10B0C2F05A67E7A07A7D00005890 -cmd /tmp/ssv_tmpdir_3972216_7208ab72-e4e8-4b96-974f-0e653f5a885a_nsj93L/voltus_rail_3972216.cmd -machine user1-EliteMini -hbPort -1
-MANIFEST_USE_ANLS_BIN=/Cadence/SSV/tools/voltus_components/xp_tools/anls/bin
-MANIFEST_USE_SSV_TOOLS=/Cadence/SSV/tools.lnx86
-[voltus_xp.flower] ERROR - No 'xp_launcher.py' in manifest of dist: /Cadence/SSV/tools/voltus_components/xp_services/flow/..
-[voltus_xp.flower]   (Your distribution might be older than this script.)
-**WARN: (VOLTUS-5410):	Unable to open database 'unable to open database file'. Peak memory statistics will not be available for rail analysis.
+
+
+Started Rail Analysis at 15:51:41 10/13/2026
+
+
+Multi-CPU Configuration:
+	#CPU: 1
+	Mode: local
+	Host: user1-EliteMini
+*** Warning: SMG currently does not support non cell id flow, default to mergegrid.
+
+*** Warning: Unified Power Flow is only supported when 'SMG' analysis/flow is on. UPS will be automatically turned off in this run.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+
+Analyze Rail Settings:
+	Temp directory: /tmp/ssv_tmpdir_392803_e90672e3-f930-4556-be2f-7cfbd9141213_24GR9d
+	Output directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD
+	Run directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1
+
+
+***Warning: turning off enable_binary_inst_pgdb as use_cell_id is off.
+
+Running R  extraction for /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def ...
+
+Extraction option setup as:
+setenv gray_data NONE
+setenv enable_cluster_overhang_via false
+setenv enable_dfm_mask_conflict_shape false
+Begin Preparing Data for Parasitic Extraction
+Extracting following DFM effects:
+MetalFill        : ON
+WEE Effects      : n/a
+Erosion Effects  : n/a
+T/B Enlargements : ON
+R(w) Effects     : ON
+R(w,s) Effects   : n/a
+R(sw,st) Effects : n/a
+TC(w) Effects    : n/a
+Some effects indicate n/a because of non-availability of relevant input data (or) requested to be off.
+Ended Preparing Data for Parasitic Extraction: (cpu=0:00:17, real=0:00:16, mem(process/total/peak)=72.77MB/unknown/unknown)
+
+Extraction option setup as:
+setenv gray_data NONE
+setenv enable_cluster_overhang_via false
+setenv enable_dfm_mask_conflict_shape false
+Begin Parasitic Extraction
+Extracting Progress:
+    0% at 15:52:00 10/13/2026
+    4% at 15:52:17 10/13/2026
+    8% at 15:52:41 10/13/2026
+   13% at 15:52:57 10/13/2026
+   17% at 15:53:14 10/13/2026
+   21% at 15:53:31 10/13/2026
+   26% at 15:53:48 10/13/2026
+   30% at 15:54:04 10/13/2026
+   34% at 15:54:21 10/13/2026
+   39% at 15:54:38 10/13/2026
+   43% at 15:54:55 10/13/2026
+   47% at 15:55:11 10/13/2026
+   52% at 15:55:28 10/13/2026
+   56% at 15:55:45 10/13/2026
+   60% at 15:56:01 10/13/2026
+   65% at 15:56:18 10/13/2026
+   69% at 15:56:35 10/13/2026
+   73% at 15:56:51 10/13/2026
+   78% at 15:56:57 10/13/2026
+   82% at 15:57:03 10/13/2026
+   86% at 15:57:08 10/13/2026
+   91% at 15:57:14 10/13/2026
+   95% at 15:57:19 10/13/2026
+  100% at 15:57:25 10/13/2026
+Ended Parasitic Extraction: (cpu=0:03:15, real=0:05:24, mem(process/total/peak)=18.43MB/unknown/unknown)
+
+Begin Merging Power Grid for net VDD
+** WARN:  (VOLTUS_RAIL-4022): The cell type "io" didn't match any cell in cell libraries.
+Merging cell power views for net VDD 
+ VDD:   10%  at 15:57:41 10/13/26
+ VDD:   20%  at 15:57:41 10/13/26
+ VDD:   30%  at 15:57:41 10/13/26
+ VDD:   40%  at 15:57:42 10/13/26
+ VDD:   50%  at 15:57:43 10/13/26
+ VDD:   60%  at 15:57:43 10/13/26
+ VDD:   70%  at 15:57:44 10/13/26
+ VDD:   80%  at 15:57:45 10/13/26
+ VDD:   90%  at 15:57:46 10/13/26
+ VDD:   100%  at 15:57:47 10/13/26
+Merged power views for 2315351 cells 
+Processed 2318919 cell internal tap current sources.
+Processed 0 cell internal resistors.
+EM: 0  IR: 0  Early: 0  Tech: 2315351  Unused: 0
+
+** WARN:  (VOLTUS_RAIL-4064): The following 242 cells do not contain a <Early|IR|EM> powergrid library,
+The technology library will be used and area based capacitance will apply.
+A2O1A1Ixp33_ASAP7_75t_L A2O1A1Ixp33_ASAP7_75t_R A2O1A1O1Ixp25_ASAP7_75t_L A2O1A1O1Ixp25_ASAP7_75t_R AND2x2_ASAP7_75t_L AND2x2_ASAP7_75t_R AND2x4_ASAP7_75t_L AND2x6_ASAP7_75t_R AND3x1_ASAP7_75t_L AND3x1_ASAP7_75t_R AND3x2_ASAP7_75t_L AND3x2_ASAP7_75t_R AND4x1_ASAP7_75t_L AND4x1_ASAP7_75t_R AND5x1_ASAP7_75t_L AND5x1_ASAP7_75t_R AO21x1_ASAP7_75t_L AO21x1_ASAP7_75t_R AO21x2_ASAP7_75t_L AO21x2_ASAP7_75t_R AO221x1_ASAP7_75t_L AO221x1_ASAP7_75t_R AO221x2_ASAP7_75t_L AO221x2_ASAP7_75t_R AO222x2_ASAP7_75t_L AO222x2_ASAP7_75t_R AO22x1_ASAP7_75t_L AO22x1_ASAP7_75t_R AO22x2_ASAP7_75t_L AO22x2_ASAP7_75t_R AO31x2_ASAP7_75t_R AO322x2_ASAP7_75t_R AO32x1_ASAP7_75t_L AO32x1_ASAP7_75t_R AO32x2_ASAP7_75t_L AO331x1_ASAP7_75t_R AO332x1_ASAP7_75t_L AO332x1_ASAP7_75t_R AO332x2_ASAP7_75t_L AO333x1_ASAP7_75t_R AO33x2_ASAP7_75t_L AO33x2_ASAP7_75t_R AOI211x1_ASAP7_75t_R AOI211xp5_ASAP7_75t_L AOI211xp5_ASAP7_75t_R AOI21x1_ASAP7_75t_L AOI21x1_ASAP7_75t_R AOI21xp33_ASAP7_75t_R AOI21xp5_ASAP7_75t_L AOI21xp5_ASAP7_75t_R AOI221x1_ASAP7_75t_R AOI221xp5_ASAP7_75t_L AOI221xp5_ASAP7_75t_R AOI222xp33_ASAP7_75t_R AOI22x1_ASAP7_75t_L AOI22x1_ASAP7_75t_R AOI22xp33_ASAP7_75t_L AOI22xp33_ASAP7_75t_R AOI22xp5_ASAP7_75t_L AOI22xp5_ASAP7_75t_R AOI311xp33_ASAP7_75t_L AOI311xp33_ASAP7_75t_R AOI31xp33_ASAP7_75t_L AOI31xp33_ASAP7_75t_R AOI321xp33_ASAP7_75t_R AOI322xp5_ASAP7_75t_L AOI322xp5_ASAP7_75t_R AOI32xp33_ASAP7_75t_L AOI32xp33_ASAP7_75t_R AOI331xp33_ASAP7_75t_L AOI331xp33_ASAP7_75t_R AOI332xp33_ASAP7_75t_R AOI333xp33_ASAP7_75t_R AOI33xp33_ASAP7_75t_R BUFx10_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx12_ASAP7_75t_L BUFx12_ASAP7_75t_R BUFx12f_ASAP7_75t_L BUFx12f_ASAP7_75t_R BUFx16f_ASAP7_75t_L BUFx16f_ASAP7_75t_R BUFx24_ASAP7_75t_L BUFx24_ASAP7_75t_R BUFx2_ASAP7_75t_L BUFx2_ASAP7_75t_R BUFx3_ASAP7_75t_L BUFx3_ASAP7_75t_R BUFx4_ASAP7_75t_L BUFx4_ASAP7_75t_R BUFx4f_ASAP7_75t_L BUFx4f_ASAP7_75t_R BUFx5_ASAP7_75t_L BUFx6f_ASAP7_75t_L BUFx6f_ASAP7_75t_R BUFx8_ASAP7_75t_L BUFx8_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R DFFASRHQNx1_ASAP7_75t_L DFFASRHQNx1_ASAP7_75t_R DFFHQNx1_ASAP7_75t_L DFFHQNx1_ASAP7_75t_R DFFHQNx2_ASAP7_75t_R DFFHQNx3_ASAP7_75t_R DFFHQx4_ASAP7_75t_R DLLx1_ASAP7_75t_R FAx1_ASAP7_75t_R FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R HAxp5_ASAP7_75t_R HB1xp67_ASAP7_75t_L HB1xp67_ASAP7_75t_R HB2xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_L HB3xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_R ICGx1_ASAP7_75t_L ICGx1_ASAP7_75t_R ICGx2_ASAP7_75t_L ICGx3_ASAP7_75t_L ICGx4_ASAP7_75t_L ICGx5_ASAP7_75t_L ICGx8DC_ASAP7_75t_L INVx1_ASAP7_75t_L INVx1_ASAP7_75t_R INVx2_ASAP7_75t_L INVx2_ASAP7_75t_R INVx3_ASAP7_75t_L INVx3_ASAP7_75t_R INVx4_ASAP7_75t_L INVx5_ASAP7_75t_L INVx6_ASAP7_75t_L INVx8_ASAP7_75t_L INVxp33_ASAP7_75t_L INVxp33_ASAP7_75t_R INVxp67_ASAP7_75t_L INVxp67_ASAP7_75t_R MAJIxp5_ASAP7_75t_L MAJIxp5_ASAP7_75t_R MAJx2_ASAP7_75t_R NAND2x1_ASAP7_75t_L NAND2x1_ASAP7_75t_R NAND2x1p5_ASAP7_75t_L NAND2x1p5_ASAP7_75t_R NAND2x2_ASAP7_75t_R NAND2xp33_ASAP7_75t_R NAND2xp5_ASAP7_75t_L NAND2xp5_ASAP7_75t_R NAND3xp33_ASAP7_75t_L NAND3xp33_ASAP7_75t_R NAND4xp25_ASAP7_75t_L NAND4xp25_ASAP7_75t_R NAND5xp2_ASAP7_75t_L NAND5xp2_ASAP7_75t_R NOR2x1_ASAP7_75t_L NOR2x1_ASAP7_75t_R NOR2x1p5_ASAP7_75t_L NOR2x1p5_ASAP7_75t_R NOR2x2_ASAP7_75t_L NOR2xp33_ASAP7_75t_L NOR2xp33_ASAP7_75t_R NOR2xp67_ASAP7_75t_L NOR2xp67_ASAP7_75t_R NOR3xp33_ASAP7_75t_L NOR3xp33_ASAP7_75t_R NOR4xp25_ASAP7_75t_L NOR4xp25_ASAP7_75t_R NOR5xp2_ASAP7_75t_R O2A1O1Ixp33_ASAP7_75t_L O2A1O1Ixp33_ASAP7_75t_R O2A1O1Ixp5_ASAP7_75t_R OA211x2_ASAP7_75t_R OA21x2_ASAP7_75t_L OA21x2_ASAP7_75t_R OA221x2_ASAP7_75t_R OA222x2_ASAP7_75t_R OA22x2_ASAP7_75t_R OA31x2_ASAP7_75t_R OA331x1_ASAP7_75t_R OA332x1_ASAP7_75t_R OA333x1_ASAP7_75t_R OA33x2_ASAP7_75t_R OAI211xp5_ASAP7_75t_L OAI211xp5_ASAP7_75t_R OAI21x1_ASAP7_75t_L OAI21x1_ASAP7_75t_R OAI21xp33_ASAP7_75t_L OAI21xp33_ASAP7_75t_R OAI21xp5_ASAP7_75t_L OAI21xp5_ASAP7_75t_R OAI221xp5_ASAP7_75t_L OAI221xp5_ASAP7_75t_R OAI222xp33_ASAP7_75t_L OAI222xp33_ASAP7_75t_R OAI22xp33_ASAP7_75t_L OAI22xp33_ASAP7_75t_R OAI22xp5_ASAP7_75t_L OAI22xp5_ASAP7_75t_R OAI311xp33_ASAP7_75t_L OAI311xp33_ASAP7_75t_R OAI31xp33_ASAP7_75t_L OAI31xp33_ASAP7_75t_R OAI31xp67_ASAP7_75t_R OAI321xp33_ASAP7_75t_R OAI322xp33_ASAP7_75t_R OAI32xp33_ASAP7_75t_R OAI331xp33_ASAP7_75t_R OAI332xp33_ASAP7_75t_R OAI333xp33_ASAP7_75t_R OAI33xp33_ASAP7_75t_R OR2x2_ASAP7_75t_L OR2x2_ASAP7_75t_R OR2x4_ASAP7_75t_L OR3x1_ASAP7_75t_L OR3x1_ASAP7_75t_R OR3x2_ASAP7_75t_L OR3x2_ASAP7_75t_R OR4x1_ASAP7_75t_L OR4x1_ASAP7_75t_R OR4x2_ASAP7_75t_L OR4x2_ASAP7_75t_R OR5x1_ASAP7_75t_L OR5x1_ASAP7_75t_R OR5x2_ASAP7_75t_L SDFHx1_ASAP7_75t_R SDFHx2_ASAP7_75t_R TAPCELL_ASAP7_75t_R TIEHIx1_ASAP7_75t_R TIELOx1_ASAP7_75t_R XNOR2x2_ASAP7_75t_L XNOR2x2_ASAP7_75t_R XNOR2xp5_ASAP7_75t_L XNOR2xp5_ASAP7_75t_R XOR2x2_ASAP7_75t_L XOR2x2_ASAP7_75t_R XOR2xp5_ASAP7_75t_L XOR2xp5_ASAP7_75t_R srambank_128x4x20_6t122 srambank_256x4x32_6t122 
+Ended Merging Power Grid for net VDD: (cpu=0:00:18, real=0:00:26, mem(process/total/peak)=1436.49MB/unknown/unknown)
+
+
+Merge Grid Statistics:
+
+ VDD: 2315351 cells
+	EM: 0  IR: 0  Early: 0  Tech: 2315351  Unused: 0
+
+
+Begin Preparing Data for Rail Analysis
+  Power Pin Location File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/vsrc_VDD.pp
+  # Voltage Source Added/Total (%): 56/56 (100.00%)
+
+  Power Database: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/static_VDD.ptiavg
+  # Current Taps Matched/Total (%): 148840/148840 (100.00%)
+  # Instances Matched: 148840
+Ended Preparing Data for Rail Analysis: (cpu=0:00:09, real=0:00:09, mem(process/total/peak)=1905.38MB/unknown/unknown)
+
+
+Begin PowerGrid Integrity Analysis
+Ended PowerGrid Integrity Analysis: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1905.38MB/unknown/unknown)
+
+
+Begin Steady-State Analysis
+Ended Steady-State Analysis: (cpu=0:00:05, real=0:00:04, mem(process/total/peak)=2483.28MB/unknown/unknown)
+
+
+Begin Report Generation
+
+
+Net VDD:
+
+
+Begin Preparing Database for Report Generation
+
+Circuit profile:
+                                                      Current    Voltage
+Layer Name                       Nodes   Resistors    Sources    Sources
+----- --------------------  ----------  ----------  ---------  ---------
+0     M9                            48          46          0          0
+1     V8                             0           4          0          0
+2     M8                           102         100          0         56
+3     V7                             0          41          0          0
+4     M7                          1864        1827          0          0
+5     V6                             0        1199          0          0
+6     M6                          3521        3293          0          0
+7     V5                             0        2322          0          0
+8     M5                         33726       33549          4          0
+9     V4                             0       30009          0          0
+10    M4                         67882       36776       1380          0
+11    V3                             0       36493          0          0
+12    M3                         67210       37121        508          0
+13    V2                             0       29661          0          0
+14    M2                         59322       29661          0          0
+15    V1                             0       29661          0          0
+16    M1                       1433427     1429776    1403766          0
+                            ----------  ----------  ---------  ---------
+17    Circuit total            1667103     1701539    1405658         56
+Ended Preparing Database for Report Generation: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=1958.55MB/unknown/unknown)
+
+Initializing Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1958.55MB/unknown/unknown)
+
+Begin IR Drop (Linear) Report Generation
+  Voltage: 0.7
+  Threshold: 0.65
+  Minimum, Average, Maximum IR Drop: -6.351V, 92.612mV, 0.700V
+    Range 1(   -6.352V  -     -5.470V ):      1866 (  0.11%)
+    Range 2(   -5.470V  -     -4.589V ):     10715 (  0.64%)
+    Range 3(   -4.589V  -     -3.707V ):     11471 (  0.69%)
+    Range 4(   -3.707V  -     -2.826V ):     22051 (  1.32%)
+    Range 5(   -2.826V  -     -1.944V ):     14336 (  0.86%)
+    Range 6(   -1.944V  -     -1.063V ):     39478 (  2.37%)
+    Range 7(   -1.063V  -     -0.181V ):     26361 (  1.58%)
+    Range 8(   -0.181V  -      0.700V ):   1540824 ( 92.43%)
+    Layer with maximum IR Drop:  M4
+      M9: 1.7093 [-1.0558 - 0.6535]
+      M8: 2.2623 [-1.5623 - 0.7]
+      M7: 2.4791 [-1.7867 - 0.69235]
+      M6: 5.5651 [-4.8962 - 0.66887]
+      M5: 7.0102 [-6.3442 - 0.66603]
+      M4: 7.0173 [-6.3515 - 0.66588]
+      M3: 7.0173 [-6.3514 - 0.66584]
+      M2: 5.5588 [-4.893 - 0.6658]
+      M1: 5.5587 [-4.8929 - 0.66576]
+  IR Report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/VDD.main.rpt
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/ir_linear.gif
+Ended IR Drop (Linear) Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1992.11MB/unknown/unknown)
+
+
+Begin IR Drop (Limit) Report Generation
+  Voltage: 0.7
+  Threshold: 0.65
+  Minimum, Average, Maximum IR Drop: -6.351V, 92.612mV, 0.700V
+    Range 1(   -6.352V  -      0.650V ):   1619816 ( 97.16%)
+    Range 2(    0.650V  -      0.654V ):      8728 (  0.52%)
+    Range 3(    0.654V  -      0.658V ):      8128 (  0.49%)
+    Range 4(    0.658V  -      0.662V ):     12924 (  0.78%)
+    Range 5(    0.662V  -      0.667V ):     17335 (  1.04%)
+    Range 6(    0.667V  -      0.671V ):        40 (  0.00%)
+    Range 7(    0.671V  -      0.675V ):         2 (  0.00%)
+    Range 8(    0.675V  -      0.700V ):       129 (  0.01%)
+    Layer with maximum IR Drop:  M4
+      M9: 1.7093 [-1.0558 - 0.6535]
+      M8: 2.2623 [-1.5623 - 0.7]
+      M7: 2.4791 [-1.7867 - 0.69235]
+      M6: 5.5651 [-4.8962 - 0.66887]
+      M5: 7.0102 [-6.3442 - 0.66603]
+      M4: 7.0173 [-6.3515 - 0.66588]
+      M3: 7.0173 [-6.3514 - 0.66584]
+      M2: 5.5588 [-4.893 - 0.6658]
+      M1: 5.5587 [-4.8929 - 0.66576]
+  IR Report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/VDD.main.rpt
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/ir_limit.gif
+Ended IR Drop (Limit) Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1994.36MB/unknown/unknown)
+
+
+Begin Tap Current Report Generation
+  Minimum, Average, Maximum Tap Current: 0.000A, 90.432nA, 73.063uA
+  Total Current: 0.127A
+    Range 1(   1.000mA  -     1.000GA ):         0 (  0.00%)
+    Range 2( 100.000uA  -     1.000mA ):         0 (  0.00%)
+    Range 3(  10.000uA  -   100.000uA ):      1892 (  0.13%)
+    Range 4(   1.000uA  -    10.000uA ):      1156 (  0.08%)
+    Range 5( 100.000nA  -     1.000uA ):     14338 (  1.02%)
+    Range 6(  10.000nA  -   100.000nA ):     29269 (  2.08%)
+    Range 7(   1.000nA  -    10.000nA ):     37340 (  2.66%)
+    Range 8(    0.000A  -     1.000nA ):   1321663 ( 94.02%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/tc.gif
+Ended Tap Current Report Generation: (cpu=0:00:01, real=0:00:00, mem(process/total/peak)=1994.54MB/unknown/unknown)
+
+
+Begin Instance Based IR Drop Report Generation
+  Minimum, Average, Maximum Instance Based IR Drop: -6.351V, 0.177V, 0.666V
+    Range 1(   -6.352V  -      0.650V ):   1364270 ( 97.06%)
+    Range 2(    0.650V  -      0.654V ):      7679 (  0.55%)
+    Range 3(    0.654V  -      0.658V ):      7147 (  0.51%)
+    Range 4(    0.658V  -      0.662V ):     11322 (  0.81%)
+    Range 5(    0.662V  -      0.667V ):     15240 (  1.08%)
+    Range 6(    0.667V  -      0.671V ):         0 (  0.00%)
+    Range 7(    0.671V  -      0.675V ):         0 (  0.00%)
+    Range 8(    0.675V  -      0.700V ):         0 (  0.00%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/iv.gif
+Ended Instance Based IR Drop Report Generation: (cpu=0:00:04, real=0:00:04, mem(process/total/peak)=2081.91MB/unknown/unknown)
+
+
+Begin Voltage Source Current Report Generation
+  Minimum, Average, Maximum Voltage Source Current: -10.118mA, -2.270mA, 22.204nA
+  Total Current: -0.127A
+    Range 1( -10.119mA  -    -8.853mA ):         1 (  1.79%)
+    Range 2(  -8.853mA  -    -7.588mA ):         2 (  3.57%)
+    Range 3(  -7.588mA  -    -6.324mA ):         1 (  1.79%)
+    Range 4(  -6.324mA  -    -5.059mA ):         0 (  0.00%)
+    Range 5(  -5.059mA  -    -3.794mA ):         0 (  0.00%)
+    Range 6(  -3.794mA  -    -2.529mA ):        31 ( 55.36%)
+    Range 7(  -2.529mA  -    -1.265mA ):         1 (  1.79%)
+    Range 8(  -1.265mA  -    22.207nA ):        20 ( 35.71%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/vc.gif
+Ended Voltage Source Current Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2082.67MB/unknown/unknown)
+
+
+Begin Resistor Current Report Generation
+  Minimum, Average, Maximum Resistor Current: 0.000A, 20.271uA, 18.483mA
+    Range 1(   1.000mA  -     1.000GA ):      3278 (  0.19%)
+    Range 2( 100.000uA  -     1.000mA ):     48995 (  2.88%)
+    Range 3(  10.000uA  -   100.000uA ):    545050 ( 32.03%)
+    Range 4(   1.000uA  -    10.000uA ):    850224 ( 49.97%)
+    Range 5(   0.100uA  -     1.000uA ):    187976 ( 11.05%)
+    Range 6(  10.000nA  -     0.100uA ):     26279 (  1.54%)
+    Range 7(   1.000nA  -    10.000nA ):       662 (  0.04%)
+    Range 8(    0.000A  -     1.000nA ):     39075 (  2.30%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/rc.gif
+Ended Resistor Current Report Generation: (cpu=0:00:02, real=0:00:01, mem(process/total/peak)=2115.42MB/unknown/unknown)
+
+
+Begin Resistor Voltage Report Generation
+  Minimum, Average, Maximum Resistor Voltage: 0.000V, 0.182mV, 1.750V
+    Range 1(    1.531V  -      1.750V ):        10 (  0.00%)
+    Range 2(    1.312V  -      1.531V ):         4 (  0.00%)
+    Range 3(    1.094V  -      1.312V ):        11 (  0.00%)
+    Range 4(    0.875V  -      1.094V ):        17 (  0.00%)
+    Range 5(    0.656V  -      0.875V ):        10 (  0.00%)
+    Range 6(    0.437V  -      0.656V ):        25 (  0.00%)
+    Range 7(    0.219V  -      0.437V ):        31 (  0.00%)
+    Range 8(    0.000V  -      0.219V ):   1701431 ( 99.99%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/VDD_25C_avg_1/Reports/VDD/rv.gif
+Ended Resistor Voltage Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2130.67MB/unknown/unknown)
+
+
+Begin Power Gate I/Idsat Report Generation
+  No data found.
+Ended Power Gate I/Idsat Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2143.79MB/unknown/unknown)
+
+
+Begin Power Gate Voltage Report Generation
+  No data found.
+Ended Power Gate Voltage Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2143.79MB/unknown/unknown)
+
+
+Begin Voltage Across Vias and Contacts Report Generation
+Ended Voltage Across Vias and Contacts Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2143.92MB/unknown/unknown)
+
+
+Begin Weak Grid Connectivity Report
+Ended Weak Grid Connectivity Report: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2143.92MB/unknown/unknown)
+
+
+Begin Grid Integrity Report Generation
+  # Missing Cell Power-Grid Views: 0
+  # Physically Disconnected Instances: 0
+  # Instances with Floating Power Pins: 0
+  # Disconnected Wire Segments: 0
+  # Weakly Connected Metal Segments: 1476
+  # Dropped Voltage Sources: 0
+Ended Grid Integrity Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2144.04MB/unknown/unknown)
+
+Ended Report Generation: (cpu=0:00:15, real=0:00:15, mem(process/total/peak)=2144.04MB/unknown/unknown)
+
+
+Rail Analysis Statistics:
+Warning messages:      3
+Error messages:        0
+
+Rail Analysis completed successfully.
+
+Finished Rail Analysis at 15:58:29 10/13/2026 (cpu=0:04:34, real=0:06:48, peak mem=0.00MB)
+Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)
 <CMD> analyze_rail -type net -output /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS VSS
-Started PGV Library Generator at 13:45:14 10/13/2026
+Started PGV Library Generator at 15:58:29 10/13/2026
 
 ** INFO:  (VOLTUS_LGEN-3599): Library generation settings: 
 	Mode: TECH 
@@ -820,23 +1142,344 @@ obstructions with minimum spacing of zero, or the color mask is not set.
 Power Grid View Generation Statistics:
         # Total number of cells: 426 
         # TECH view created: 426 (100%)
-Finished PGV Library Generator at 13:45:21 10/13/2026 (cpu=0:00:01, real=0:00:07)
+Finished PGV Library Generator at 15:58:35 10/13/2026 (cpu=0:00:01, real=0:00:06)
 
 Begin ERA Data Preparation
 All Virtual Vias and Virtual followpins have been skipped. No incremental def would be generated.
-Ended ERA Data Preparation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=4996.12MB/8043.38MB/4996.12MB)
+Ended ERA Data Preparation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2903.98MB/8051.57MB/5003.00MB)
 
-voltus_xp.flower --use-legacy-power-dir --svcmaster /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/svcmaster_3972216.config -temp_directory_name /tmp/ssv_tmpdir_3972216_7208ab72-e4e8-4b96-974f-0e653f5a885a_nsj93L -x 0001B13AE4030FAB65C39206EC3F3E8F4FF9AE2DD7030FA364C9B43F912C60CB3E81B769B07C3D8B3FC4843FAF3F3D8B4FC4E95BBE6767C92389A950EF3560C32782B26AB83B649E3DD5A569F8287DC22986FE75EC3D66CE20D5A564EB3B659A2888E264FE7D1CD42983B13AC4210F8965C3F75BBB6767C92389FD7EBB2D34DB73DDAE3AB86960CB27D1A83DE73C7ACB10B0FC4F984F50FB21B0FC62DD231597219DF740844850FB2A80A83DED3C50FB10B0A83DED3C50FB10B0C2F05A5EE7997A7D000058A2 -cmd /tmp/ssv_tmpdir_3972216_7208ab72-e4e8-4b96-974f-0e653f5a885a_nsj93L/voltus_rail_3972216.cmd -machine user1-EliteMini -hbPort -1
-MANIFEST_USE_ANLS_BIN=/Cadence/SSV/tools/voltus_components/xp_tools/anls/bin
-MANIFEST_USE_SSV_TOOLS=/Cadence/SSV/tools.lnx86
-[voltus_xp.flower] ERROR - No 'xp_launcher.py' in manifest of dist: /Cadence/SSV/tools/voltus_components/xp_services/flow/..
-[voltus_xp.flower]   (Your distribution might be older than this script.)
-**WARN: (VOLTUS-5410):	Unable to open database 'unable to open database file'. Peak memory statistics will not be available for rail analysis.
+
+
+Started Rail Analysis at 15:58:35 10/13/2026
+
+
+Multi-CPU Configuration:
+	#CPU: 1
+	Mode: local
+	Host: user1-EliteMini
+*** Warning: SMG currently does not support non cell id flow, default to mergegrid.
+
+*** Warning: Unified Power Flow is only supported when 'SMG' analysis/flow is on. UPS will be automatically turned off in this run.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+*** Warning: turn off distributed RLRP due to non-cellID flow.
+
+Analyze Rail Settings:
+	Temp directory: /tmp/ssv_tmpdir_392803_e90672e3-f930-4556-be2f-7cfbd9141213_24GR9d
+	Output directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS
+	Run directory: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1
+
+
+***Warning: turning off enable_binary_inst_pgdb as use_cell_id is off.
+
+Running R  extraction for /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.def ...
+
+Extraction option setup as:
+setenv gray_data NONE
+setenv enable_cluster_overhang_via false
+setenv enable_dfm_mask_conflict_shape false
+Begin Preparing Data for Parasitic Extraction
+Extracting following DFM effects:
+MetalFill        : ON
+WEE Effects      : n/a
+Erosion Effects  : n/a
+T/B Enlargements : ON
+R(w) Effects     : ON
+R(w,s) Effects   : n/a
+R(sw,st) Effects : n/a
+TC(w) Effects    : n/a
+Some effects indicate n/a because of non-availability of relevant input data (or) requested to be off.
+Ended Preparing Data for Parasitic Extraction: (cpu=0:00:17, real=0:00:16, mem(process/total/peak)=72.50MB/unknown/unknown)
+
+Extraction option setup as:
+setenv gray_data NONE
+setenv enable_cluster_overhang_via false
+setenv enable_dfm_mask_conflict_shape false
+Begin Parasitic Extraction
+Extracting Progress:
+    0% at 15:58:54 10/13/2026
+    4% at 15:59:11 10/13/2026
+    8% at 15:59:35 10/13/2026
+   13% at 15:59:51 10/13/2026
+   17% at 16:00:08 10/13/2026
+   21% at 16:00:25 10/13/2026
+   26% at 16:00:42 10/13/2026
+   30% at 16:00:58 10/13/2026
+   34% at 16:01:15 10/13/2026
+   39% at 16:01:32 10/13/2026
+   43% at 16:01:48 10/13/2026
+   47% at 16:02:05 10/13/2026
+   52% at 16:02:22 10/13/2026
+   56% at 16:02:39 10/13/2026
+   60% at 16:02:55 10/13/2026
+   65% at 16:03:12 10/13/2026
+   69% at 16:03:29 10/13/2026
+   73% at 16:03:45 10/13/2026
+   78% at 16:03:51 10/13/2026
+   82% at 16:03:57 10/13/2026
+   86% at 16:04:02 10/13/2026
+   91% at 16:04:08 10/13/2026
+   95% at 16:04:13 10/13/2026
+  100% at 16:04:19 10/13/2026
+Ended Parasitic Extraction: (cpu=0:03:17, real=0:05:24, mem(process/total/peak)=18.50MB/unknown/unknown)
+
+Begin Merging Power Grid for net VSS
+** WARN:  (VOLTUS_RAIL-4022): The cell type "io" didn't match any cell in cell libraries.
+Merging cell power views for net VSS 
+ VSS:   10%  at 16:04:34 10/13/26
+ VSS:   20%  at 16:04:34 10/13/26
+ VSS:   30%  at 16:04:35 10/13/26
+ VSS:   40%  at 16:04:35 10/13/26
+ VSS:   50%  at 16:04:36 10/13/26
+ VSS:   60%  at 16:04:37 10/13/26
+ VSS:   70%  at 16:04:38 10/13/26
+ VSS:   80%  at 16:04:38 10/13/26
+ VSS:   90%  at 16:04:39 10/13/26
+ VSS:   100%  at 16:04:40 10/13/26
+Merged power views for 2315351 cells 
+Processed 2319803 cell internal tap current sources.
+Processed 0 cell internal resistors.
+EM: 0  IR: 0  Early: 0  Tech: 2315351  Unused: 0
+
+** WARN:  (VOLTUS_RAIL-4064): The following 242 cells do not contain a <Early|IR|EM> powergrid library,
+The technology library will be used and area based capacitance will apply.
+A2O1A1Ixp33_ASAP7_75t_L A2O1A1Ixp33_ASAP7_75t_R A2O1A1O1Ixp25_ASAP7_75t_L A2O1A1O1Ixp25_ASAP7_75t_R AND2x2_ASAP7_75t_L AND2x2_ASAP7_75t_R AND2x4_ASAP7_75t_L AND2x6_ASAP7_75t_R AND3x1_ASAP7_75t_L AND3x1_ASAP7_75t_R AND3x2_ASAP7_75t_L AND3x2_ASAP7_75t_R AND4x1_ASAP7_75t_L AND4x1_ASAP7_75t_R AND5x1_ASAP7_75t_L AND5x1_ASAP7_75t_R AO21x1_ASAP7_75t_L AO21x1_ASAP7_75t_R AO21x2_ASAP7_75t_L AO21x2_ASAP7_75t_R AO221x1_ASAP7_75t_L AO221x1_ASAP7_75t_R AO221x2_ASAP7_75t_L AO221x2_ASAP7_75t_R AO222x2_ASAP7_75t_L AO222x2_ASAP7_75t_R AO22x1_ASAP7_75t_L AO22x1_ASAP7_75t_R AO22x2_ASAP7_75t_L AO22x2_ASAP7_75t_R AO31x2_ASAP7_75t_R AO322x2_ASAP7_75t_R AO32x1_ASAP7_75t_L AO32x1_ASAP7_75t_R AO32x2_ASAP7_75t_L AO331x1_ASAP7_75t_R AO332x1_ASAP7_75t_L AO332x1_ASAP7_75t_R AO332x2_ASAP7_75t_L AO333x1_ASAP7_75t_R AO33x2_ASAP7_75t_L AO33x2_ASAP7_75t_R AOI211x1_ASAP7_75t_R AOI211xp5_ASAP7_75t_L AOI211xp5_ASAP7_75t_R AOI21x1_ASAP7_75t_L AOI21x1_ASAP7_75t_R AOI21xp33_ASAP7_75t_R AOI21xp5_ASAP7_75t_L AOI21xp5_ASAP7_75t_R AOI221x1_ASAP7_75t_R AOI221xp5_ASAP7_75t_L AOI221xp5_ASAP7_75t_R AOI222xp33_ASAP7_75t_R AOI22x1_ASAP7_75t_L AOI22x1_ASAP7_75t_R AOI22xp33_ASAP7_75t_L AOI22xp33_ASAP7_75t_R AOI22xp5_ASAP7_75t_L AOI22xp5_ASAP7_75t_R AOI311xp33_ASAP7_75t_L AOI311xp33_ASAP7_75t_R AOI31xp33_ASAP7_75t_L AOI31xp33_ASAP7_75t_R AOI321xp33_ASAP7_75t_R AOI322xp5_ASAP7_75t_L AOI322xp5_ASAP7_75t_R AOI32xp33_ASAP7_75t_L AOI32xp33_ASAP7_75t_R AOI331xp33_ASAP7_75t_L AOI331xp33_ASAP7_75t_R AOI332xp33_ASAP7_75t_R AOI333xp33_ASAP7_75t_R AOI33xp33_ASAP7_75t_R BUFx10_ASAP7_75t_L BUFx10_ASAP7_75t_R BUFx12_ASAP7_75t_L BUFx12_ASAP7_75t_R BUFx12f_ASAP7_75t_L BUFx12f_ASAP7_75t_R BUFx16f_ASAP7_75t_L BUFx16f_ASAP7_75t_R BUFx24_ASAP7_75t_L BUFx24_ASAP7_75t_R BUFx2_ASAP7_75t_L BUFx2_ASAP7_75t_R BUFx3_ASAP7_75t_L BUFx3_ASAP7_75t_R BUFx4_ASAP7_75t_L BUFx4_ASAP7_75t_R BUFx4f_ASAP7_75t_L BUFx4f_ASAP7_75t_R BUFx5_ASAP7_75t_L BUFx6f_ASAP7_75t_L BUFx6f_ASAP7_75t_R BUFx8_ASAP7_75t_L BUFx8_ASAP7_75t_R CKINVDCx16_ASAP7_75t_R CKINVDCx8_ASAP7_75t_R DFFASRHQNx1_ASAP7_75t_L DFFASRHQNx1_ASAP7_75t_R DFFHQNx1_ASAP7_75t_L DFFHQNx1_ASAP7_75t_R DFFHQNx2_ASAP7_75t_R DFFHQNx3_ASAP7_75t_R DFFHQx4_ASAP7_75t_R DLLx1_ASAP7_75t_R FAx1_ASAP7_75t_R FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R HAxp5_ASAP7_75t_R HB1xp67_ASAP7_75t_L HB1xp67_ASAP7_75t_R HB2xp67_ASAP7_75t_L HB2xp67_ASAP7_75t_R HB3xp67_ASAP7_75t_L HB3xp67_ASAP7_75t_R HB4xp67_ASAP7_75t_L HB4xp67_ASAP7_75t_R ICGx1_ASAP7_75t_L ICGx1_ASAP7_75t_R ICGx2_ASAP7_75t_L ICGx3_ASAP7_75t_L ICGx4_ASAP7_75t_L ICGx5_ASAP7_75t_L ICGx8DC_ASAP7_75t_L INVx1_ASAP7_75t_L INVx1_ASAP7_75t_R INVx2_ASAP7_75t_L INVx2_ASAP7_75t_R INVx3_ASAP7_75t_L INVx3_ASAP7_75t_R INVx4_ASAP7_75t_L INVx5_ASAP7_75t_L INVx6_ASAP7_75t_L INVx8_ASAP7_75t_L INVxp33_ASAP7_75t_L INVxp33_ASAP7_75t_R INVxp67_ASAP7_75t_L INVxp67_ASAP7_75t_R MAJIxp5_ASAP7_75t_L MAJIxp5_ASAP7_75t_R MAJx2_ASAP7_75t_R NAND2x1_ASAP7_75t_L NAND2x1_ASAP7_75t_R NAND2x1p5_ASAP7_75t_L NAND2x1p5_ASAP7_75t_R NAND2x2_ASAP7_75t_R NAND2xp33_ASAP7_75t_R NAND2xp5_ASAP7_75t_L NAND2xp5_ASAP7_75t_R NAND3xp33_ASAP7_75t_L NAND3xp33_ASAP7_75t_R NAND4xp25_ASAP7_75t_L NAND4xp25_ASAP7_75t_R NAND5xp2_ASAP7_75t_L NAND5xp2_ASAP7_75t_R NOR2x1_ASAP7_75t_L NOR2x1_ASAP7_75t_R NOR2x1p5_ASAP7_75t_L NOR2x1p5_ASAP7_75t_R NOR2x2_ASAP7_75t_L NOR2xp33_ASAP7_75t_L NOR2xp33_ASAP7_75t_R NOR2xp67_ASAP7_75t_L NOR2xp67_ASAP7_75t_R NOR3xp33_ASAP7_75t_L NOR3xp33_ASAP7_75t_R NOR4xp25_ASAP7_75t_L NOR4xp25_ASAP7_75t_R NOR5xp2_ASAP7_75t_R O2A1O1Ixp33_ASAP7_75t_L O2A1O1Ixp33_ASAP7_75t_R O2A1O1Ixp5_ASAP7_75t_R OA211x2_ASAP7_75t_R OA21x2_ASAP7_75t_L OA21x2_ASAP7_75t_R OA221x2_ASAP7_75t_R OA222x2_ASAP7_75t_R OA22x2_ASAP7_75t_R OA31x2_ASAP7_75t_R OA331x1_ASAP7_75t_R OA332x1_ASAP7_75t_R OA333x1_ASAP7_75t_R OA33x2_ASAP7_75t_R OAI211xp5_ASAP7_75t_L OAI211xp5_ASAP7_75t_R OAI21x1_ASAP7_75t_L OAI21x1_ASAP7_75t_R OAI21xp33_ASAP7_75t_L OAI21xp33_ASAP7_75t_R OAI21xp5_ASAP7_75t_L OAI21xp5_ASAP7_75t_R OAI221xp5_ASAP7_75t_L OAI221xp5_ASAP7_75t_R OAI222xp33_ASAP7_75t_L OAI222xp33_ASAP7_75t_R OAI22xp33_ASAP7_75t_L OAI22xp33_ASAP7_75t_R OAI22xp5_ASAP7_75t_L OAI22xp5_ASAP7_75t_R OAI311xp33_ASAP7_75t_L OAI311xp33_ASAP7_75t_R OAI31xp33_ASAP7_75t_L OAI31xp33_ASAP7_75t_R OAI31xp67_ASAP7_75t_R OAI321xp33_ASAP7_75t_R OAI322xp33_ASAP7_75t_R OAI32xp33_ASAP7_75t_R OAI331xp33_ASAP7_75t_R OAI332xp33_ASAP7_75t_R OAI333xp33_ASAP7_75t_R OAI33xp33_ASAP7_75t_R OR2x2_ASAP7_75t_L OR2x2_ASAP7_75t_R OR2x4_ASAP7_75t_L OR3x1_ASAP7_75t_L OR3x1_ASAP7_75t_R OR3x2_ASAP7_75t_L OR3x2_ASAP7_75t_R OR4x1_ASAP7_75t_L OR4x1_ASAP7_75t_R OR4x2_ASAP7_75t_L OR4x2_ASAP7_75t_R OR5x1_ASAP7_75t_L OR5x1_ASAP7_75t_R OR5x2_ASAP7_75t_L SDFHx1_ASAP7_75t_R SDFHx2_ASAP7_75t_R TAPCELL_ASAP7_75t_R TIEHIx1_ASAP7_75t_R TIELOx1_ASAP7_75t_R XNOR2x2_ASAP7_75t_L XNOR2x2_ASAP7_75t_R XNOR2xp5_ASAP7_75t_L XNOR2xp5_ASAP7_75t_R XOR2x2_ASAP7_75t_L XOR2x2_ASAP7_75t_R XOR2xp5_ASAP7_75t_L XOR2xp5_ASAP7_75t_R srambank_128x4x20_6t122 srambank_256x4x32_6t122 
+Ended Merging Power Grid for net VSS: (cpu=0:00:18, real=0:00:26, mem(process/total/peak)=1435.14MB/unknown/unknown)
+
+
+Merge Grid Statistics:
+
+ VSS: 2315351 cells
+	EM: 0  IR: 0  Early: 0  Tech: 2315351  Unused: 0
+
+
+Begin Preparing Data for Rail Analysis
+  Power Pin Location File: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/vsrc_VSS.pp
+  # Voltage Source Added/Total (%): 56/56 (100.00%)
+
+  Power Database: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/reports/static_VSS.ptiavg
+  # Current Taps Matched/Total (%): 148840/148840 (100.00%)
+  # Instances Matched: 148840
+Ended Preparing Data for Rail Analysis: (cpu=0:00:08, real=0:00:08, mem(process/total/peak)=1905.56MB/unknown/unknown)
+
+
+Begin PowerGrid Integrity Analysis
+Ended PowerGrid Integrity Analysis: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1905.56MB/unknown/unknown)
+
+
+Begin Steady-State Analysis
+Ended Steady-State Analysis: (cpu=0:00:05, real=0:00:03, mem(process/total/peak)=2476.07MB/unknown/unknown)
+
+
+Begin Report Generation
+
+
+Net VSS:
+
+
+Begin Preparing Database for Report Generation
+
+Circuit profile:
+                                                      Current    Voltage
+Layer Name                       Nodes   Resistors    Sources    Sources
+----- --------------------  ----------  ----------  ---------  ---------
+0     M9                            48          46          0          0
+1     V8                             0           4          0          0
+2     M8                           191         189          0         56
+3     V7                             0         130          0          0
+4     M7                          2104        1978          0          0
+5     V6                             0        1321          0          0
+6     M6                          3643        3293          0          0
+7     V5                             0        2444          0          0
+8     M5                         33979       33684          0          0
+9     V4                             0       30148          0          0
+10    M4                         79238       46675       2892          0
+11    V3                             0       46114          0          0
+12    M3                         79844       49330       1644          0
+13    V2                             0       29606          0          0
+14    M2                         59212       29606          0          0
+15    V1                             0       29606          0          0
+16    M1                       1428244     1424598    1398638          0
+                            ----------  ----------  ---------  ---------
+17    Circuit total            1686504     1728772    1403174         56
+Ended Preparing Database for Report Generation: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=1957.10MB/unknown/unknown)
+
+Initializing Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1957.10MB/unknown/unknown)
+
+Begin IR Drop (Linear) Report Generation
+  Voltage: 0
+  Threshold: 0.05
+  Minimum, Average, Maximum IR Drop: 0.000V, 0.528V, 4.274V
+    Range 1(    3.740V  -      4.275V ):      2308 (  0.14%)
+    Range 2(    3.206V  -      3.740V ):     13857 (  0.82%)
+    Range 3(    2.671V  -      3.206V ):     11948 (  0.71%)
+    Range 4(    2.137V  -      2.671V ):     33048 (  1.96%)
+    Range 5(    1.603V  -      2.137V ):     40939 (  2.43%)
+    Range 6(    1.069V  -      1.603V ):     29375 (  1.74%)
+    Range 7(    0.534V  -      1.069V ):    463511 ( 27.48%)
+    Range 8(    0.000V  -      0.534V ):   1091517 ( 64.72%)
+    Layer with maximum IR Drop:  M4
+      M9: 2.4272 [0.057069 - 2.4843]
+      M8: 2.6128 [0 - 2.6128]
+      M7: 2.6193 [0.00047998 - 2.6197]
+      M6: 3.543 [0.0016485 - 3.5446]
+      M5: 4.0909 [0.0028316 - 4.0937]
+      M4: 4.2701 [0.0040224 - 4.2741]
+      M3: 4.2427 [0.031359 - 4.274]
+      M2: 3.5122 [0.031396 - 3.5436]
+      M1: 3.5121 [0.031434 - 3.5436]
+  IR Report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/VSS.main.rpt
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/ir_linear.gif
+Ended IR Drop (Linear) Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1995.27MB/unknown/unknown)
+
+
+Begin IR Drop (Limit) Report Generation
+  Voltage: 0
+  Threshold: 0.05
+  Minimum, Average, Maximum IR Drop: 0.000V, 0.528V, 4.274V
+    Range 1(  50.000mV  -      4.275V ):   1631776 ( 96.76%)
+    Range 2(  45.833mV  -    50.000mV ):      9010 (  0.53%)
+    Range 3(  41.667mV  -    45.833mV ):      9284 (  0.55%)
+    Range 4(  37.500mV  -    41.667mV ):      9253 (  0.55%)
+    Range 5(  33.333mV  -    37.500mV ):     15785 (  0.94%)
+    Range 6(  29.167mV  -    33.333mV ):     11073 (  0.66%)
+    Range 7(  25.000mV  -    29.167mV ):        17 (  0.00%)
+    Range 8(  -1.000uV  -    25.000mV ):       305 (  0.02%)
+    Layer with maximum IR Drop:  M4
+      M9: 2.4272 [0.057069 - 2.4843]
+      M8: 2.6128 [0 - 2.6128]
+      M7: 2.6193 [0.00047998 - 2.6197]
+      M6: 3.543 [0.0016485 - 3.5446]
+      M5: 4.0909 [0.0028316 - 4.0937]
+      M4: 4.2701 [0.0040224 - 4.2741]
+      M3: 4.2427 [0.031359 - 4.274]
+      M2: 3.5122 [0.031396 - 3.5436]
+      M1: 3.5121 [0.031434 - 3.5436]
+  IR Report: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/VSS.main.rpt
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/ir_limit.gif
+Ended IR Drop (Limit) Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1997.52MB/unknown/unknown)
+
+
+Begin Tap Current Report Generation
+  Minimum, Average, Maximum Tap Current: -28.424uA, -90.592nA, 0.000A
+  Total Current: -0.127A
+    Range 1(  -1.000GA  -    -1.000mA ):         0 (  0.00%)
+    Range 2(  -1.000mA  -  -100.000uA ):         0 (  0.00%)
+    Range 3(-100.000uA  -   -10.000uA ):      4536 (  0.32%)
+    Range 4( -10.000uA  -    -1.000uA ):      1154 (  0.08%)
+    Range 5(  -1.000uA  -  -100.000nA ):     14369 (  1.02%)
+    Range 6(-100.000nA  -   -10.000nA ):     29293 (  2.09%)
+    Range 7( -10.000nA  -    -1.000nA ):     37329 (  2.66%)
+    Range 8(  -1.000nA  -      0.000A ):   1316493 ( 93.82%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/tc.gif
+Ended Tap Current Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=1997.52MB/unknown/unknown)
+
+
+Begin Instance Based IR Drop Report Generation
+  Minimum, Average, Maximum Instance Based IR Drop: 31.436mV, 0.455V, 4.274V
+    Range 1(  50.000mV  -      4.275V ):   1355375 ( 96.59%)
+    Range 2(  45.833mV  -    50.000mV ):      7939 (  0.57%)
+    Range 3(  41.667mV  -    45.833mV ):      8171 (  0.58%)
+    Range 4(  37.500mV  -    41.667mV ):      8137 (  0.58%)
+    Range 5(  33.333mV  -    37.500mV ):     13881 (  0.99%)
+    Range 6(  29.167mV  -    33.333mV ):      9671 (  0.69%)
+    Range 7(  25.000mV  -    29.167mV ):         0 (  0.00%)
+    Range 8(  -1.000uV  -    25.000mV ):         0 (  0.00%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/iv.gif
+Ended Instance Based IR Drop Report Generation: (cpu=0:00:04, real=0:00:04, mem(process/total/peak)=2104.29MB/unknown/unknown)
+
+
+Begin Voltage Source Current Report Generation
+  Minimum, Average, Maximum Voltage Source Current: 0.177mA, 2.270mA, 5.922mA
+  Total Current: 0.127A
+    Range 1(   5.204mA  -     5.923mA ):         3 (  5.36%)
+    Range 2(   4.486mA  -     5.204mA ):         1 (  1.79%)
+    Range 3(   3.768mA  -     4.486mA ):         2 (  3.57%)
+    Range 4(   3.049mA  -     3.768mA ):         5 (  8.93%)
+    Range 5(   2.331mA  -     3.049mA ):        27 ( 48.21%)
+    Range 6(   1.613mA  -     2.331mA ):         1 (  1.79%)
+    Range 7(   0.895mA  -     1.613mA ):         4 (  7.14%)
+    Range 8(   0.177mA  -     0.895mA ):        13 ( 23.21%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/vc.gif
+Ended Voltage Source Current Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2105.92MB/unknown/unknown)
+
+
+Begin Resistor Current Report Generation
+  Minimum, Average, Maximum Resistor Current: 0.000A, 18.698uA, 9.551mA
+    Range 1(   1.000mA  -     1.000GA ):      3453 (  0.20%)
+    Range 2( 100.000uA  -     1.000mA ):     52866 (  3.06%)
+    Range 3(  10.000uA  -   100.000uA ):    430293 ( 24.89%)
+    Range 4(   1.000uA  -    10.000uA ):    922881 ( 53.38%)
+    Range 5(   0.100uA  -     1.000uA ):    237011 ( 13.71%)
+    Range 6(  10.000nA  -     0.100uA ):     35437 (  2.05%)
+    Range 7(   1.000nA  -    10.000nA ):      1093 (  0.06%)
+    Range 8(    0.000A  -     1.000nA ):     45738 (  2.65%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/rc.gif
+Ended Resistor Current Report Generation: (cpu=0:00:01, real=0:00:01, mem(process/total/peak)=2125.42MB/unknown/unknown)
+
+
+Begin Resistor Voltage Report Generation
+  Minimum, Average, Maximum Resistor Voltage: 0.000V, 0.176mV, 1.129V
+    Range 1(    0.988V  -      1.129V ):         6 (  0.00%)
+    Range 2(    0.847V  -      0.988V ):         3 (  0.00%)
+    Range 3(    0.706V  -      0.847V ):         5 (  0.00%)
+    Range 4(    0.565V  -      0.706V ):         7 (  0.00%)
+    Range 5(    0.423V  -      0.565V ):        16 (  0.00%)
+    Range 6(    0.282V  -      0.423V ):        39 (  0.00%)
+    Range 7(    0.141V  -      0.282V ):        75 (  0.00%)
+    Range 8(    0.000V  -      0.141V ):   1728621 ( 99.99%)
+  GIF plot: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/VSS_25C_avg_1/Reports/VSS/rv.gif
+Ended Resistor Voltage Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2140.92MB/unknown/unknown)
+
+
+Begin Power Gate I/Idsat Report Generation
+  No data found.
+Ended Power Gate I/Idsat Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2156.30MB/unknown/unknown)
+
+
+Begin Power Gate Voltage Report Generation
+  No data found.
+Ended Power Gate Voltage Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2156.30MB/unknown/unknown)
+
+
+Begin Voltage Across Vias and Contacts Report Generation
+Ended Voltage Across Vias and Contacts Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2156.30MB/unknown/unknown)
+
+
+Begin Weak Grid Connectivity Report
+Ended Weak Grid Connectivity Report: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2157.55MB/unknown/unknown)
+
+
+Begin Grid Integrity Report Generation
+  # Missing Cell Power-Grid Views: 0
+  # Physically Disconnected Instances: 0
+  # Instances with Floating Power Pins: 0
+  # Disconnected Wire Segments: 0
+  # Weakly Connected Metal Segments: 2912
+  # Dropped Voltage Sources: 0
+Ended Grid Integrity Report Generation: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=2157.55MB/unknown/unknown)
+
+Ended Report Generation: (cpu=0:00:15, real=0:00:15, mem(process/total/peak)=2157.74MB/unknown/unknown)
+
+
+Rail Analysis Statistics:
+Warning messages:      3
+Error messages:        0
+
+Rail Analysis completed successfully.
+
+Finished Rail Analysis at 16:05:21 10/13/2026 (cpu=0:04:31, real=0:06:46, peak mem=0.00MB)
+Current Voltus resource usage: (total cpu=0:00:00, real=0:00:00, mem=0.00MB)
 <CMD> exit 0
 
 --------------------------------------------------------------------------------
-Exiting Voltus IC Power Integrity Solution on Tue Oct 13 13:45:22 2026
-  Total CPU time:     0:02:14
-  Total real time:    0:02:18
-  Peak memory (main): 4996.12MB
+Exiting Voltus IC Power Integrity Solution on Tue Oct 13 16:05:22 2026
+  Total CPU time:     0:11:22
+  Total real time:    0:15:59
+  Peak memory (main): 5003.00MB
 
