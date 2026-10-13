@@ -1,12 +1,12 @@
 
 Begin Preparing Data for Parasitic Extraction
 .
-Ended Preparing Data for Parasitic Extraction: (cpu=0:00:00, real=0:00:01, mem(process/total/peak)=210.17MB/unknown/unknown)
+Ended Preparing Data for Parasitic Extraction: (cpu=0:00:00, real=0:00:01, mem(process/total/peak)=210.77MB/unknown/unknown)
 
 Begin Parasitic Extraction
 
 Nets to Extract:
-VSS
+VDD
 
 ** INFO:  (VOLTUS_EXTR-1054): Extracting following DFM effects:
  MetalFill        : floating 
@@ -20,34 +20,34 @@ VSS
 Some effects indicate n/a because of non-availability of relevant input
 data (or) requested to be off.
 
-   0% at 13:32:07 10/11/2026 
+   0% at 00:58:41 10/13/2026 
 
-  10% at 13:32:07 10/11/2026
+  10% at 00:58:41 10/13/2026
 
-  21% at 13:32:07 10/11/2026
+  21% at 00:58:41 10/13/2026
 
-  31% at 13:32:07 10/11/2026
+  31% at 00:58:41 10/13/2026
 
-  42% at 13:32:07 10/11/2026
+  42% at 00:58:41 10/13/2026
 
-  53% at 13:32:07 10/11/2026
+  53% at 00:58:41 10/13/2026
 
-  63% at 13:32:07 10/11/2026
+  63% at 00:58:41 10/13/2026
 
-  74% at 13:32:07 10/11/2026
+  74% at 00:58:41 10/13/2026
 
-  85% at 13:32:07 10/11/2026
+  85% at 00:58:41 10/13/2026
 
-  95% at 13:32:07 10/11/2026
+  95% at 00:58:41 10/13/2026
 
- 100% at 13:32:07 10/11/2026 
+ 100% at 00:58:41 10/13/2026 
 
-Ended Parasitic Extraction: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=213.92MB/unknown/unknown)
+Ended Parasitic Extraction: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=214.68MB/unknown/unknown)
 
 Hostname user1-EliteMini
 
-Wall clock 5.406907
+Wall clock 5.404336
 
-CPU time 0.671160
+CPU time 0.642722
 
-Peak memory (process): 293076992
+Peak memory (process): 294125568

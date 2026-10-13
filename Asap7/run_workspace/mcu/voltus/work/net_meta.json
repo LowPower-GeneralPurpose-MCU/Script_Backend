@@ -1,6 +1,6 @@
 {
     "extracted_nets": {
-        "VSS": {
+        "VDD": {
             "is_analyze_net": "true"
         }
     }

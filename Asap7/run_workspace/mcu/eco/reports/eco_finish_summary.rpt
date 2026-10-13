@@ -1,5 +1,10 @@
-FAIL
-eco_finish.tcl, dung o 'KHOI 16': soc_require_sram_lef_clean: thieu ::MFG_GRID - preflight.tcl chua chay (KHOI 0)
-  KHOI 15 (filler, metal fill, DRC, mat do) DA XONG; thu chan la cong cua KHOI 16.
-  Neu dong tren la DRV / WNS cua 'final': do la timing SAU metal fill -> 'make fillfix' roi 'make finish' lai.
-  saved/*_final.enc.dat gio la thiet ke KHONG DAT nay; innovus/outputs/ chua chac da duoc ghi lai - dung chay conformal/quantus/tempus.
+DONE
+ECO finish top_soc: ./saved/top_soc_postRoute_ecofill.enc.dat -> KHOI 15 + KHOI 16, 1466 s, 1 CPU
+  final setup: WNS 0.176 ns, TNS 0.0 ns, 0 duong vi pham   max_cap Real 0, max_fanout Real 0, max_length Real 0, max_tran Real 0
+  final hold : WNS 0.007 ns, TNS 0.0 ns, 0 duong vi pham   
+  da ghi de: saved/top_soc_prefill.enc.dat, saved/top_soc_final.enc.dat, outputs/top_soc_pnr.{v,sdc,def}, outputs/top_soc.gds
+  tiep theo (netlist da doi, moi ket qua sau PnR cu deu het han):
+    cd ../conformal && make all     LEC syn vs PnR
+    cd ../quantus   && make all QUANTUS_EFFORT=high
+    cd ../tempus    && make all     max_transition trong all_violators.rpt phai het
+    cd ../voltus    && make all

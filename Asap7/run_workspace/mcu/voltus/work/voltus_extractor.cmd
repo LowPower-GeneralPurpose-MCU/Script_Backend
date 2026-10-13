@@ -1,6 +1,6 @@
 setvar log_file ./work/voltus_extractor.log
-setvar output_cache_directory_name /tmp/ssv_tmpdir_2360418_14d1fd21-e044-4124-9848-96af1993e2aa_job2Mr/zx_tmp_user1-EliteMini_2400497
-setvar library_name /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VSS/era_work/incremental_output0/pgv/techonly.cl
+setvar output_cache_directory_name /tmp/ssv_tmpdir_186409_cf53f74e-6f36-4aa2-962f-3c13b18d8d14_yvaYOs/zx_tmp_user1-EliteMini_198457
+setvar library_name /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/voltus/outputs/rail_VDD/era_work/incremental_output0/pgv/techonly.cl
 setvar output_directory_name ./work
 setvar output_file_name TopLevelPGDB
 setvar max_error_messages 100
@@ -26,6 +26,6 @@ setvar density_check_method database
 setvar sfedb_path ./work/SFEDB
 setvar enable_binary_inst_pgdb true
 setvar keep_log_file false
-extraction_type pattern {VSS} r_only 
-hierarchical_path_tracer netinst_table ./work/VSS.netinst
-hierarchical_path_tracer cell_table ./work/VSS.cellinst
+extraction_type pattern {VDD} r_only 
+hierarchical_path_tracer netinst_table ./work/VDD.netinst
+hierarchical_path_tracer cell_table ./work/VDD.cellinst
