@@ -7,10 +7,13 @@ This program is proprietary and confidential information belonging to
 Cadence Design Systems, Inc., and may be used and disclosed only as authorized
 in a license agreement controlling such use and disclosure.
 
-// Warning: This version is 1127 days old. You can download the latest version from http://downloads.cadence.com.
+// Warning: This version is 1139 days old. You can download the latest version from http://downloads.cadence.com.
 
 // Command: set_dofile_abort exit
 0
+CPU time     : 0.15    seconds
+Elapse time  : 2       seconds
+Memory usage : 62.88   M bytes
 // Command: foreach dir {logs reports} {
 //              file mkdir $dir
 //          }
@@ -84,7 +87,6 @@ RingOscillator
 // Command: set golden_stamp  [lec_genus_stamp $GOLDEN_NETLIST]
 Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
 // Command: set revised_stamp [lec_genus_stamp $REVISED_NETLIST]
-Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
 // Command: if {$golden_stamp eq "" || $revised_stamp eq ""} {
 //              lec_warn "khong doc duoc dau thoi gian Genus trong netlist - khong kiem duoc golden/revised co cung mot lan tong hop"
 //          } elseif {$golden_stamp ne $revised_stamp} {
@@ -93,6 +95,7 @@ Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
 //            revised : $revised_stamp  ($REVISED_NETLIST)
 //            Chay lai Innovus tren netlist Genus hien tai, hoac dat LEC_GOLDEN dung file."
 //          }
+WARNING: khong doc duoc dau thoi gian Genus trong netlist - khong kiem duoc golden/revised co cung mot lan tong hop
 // Command: foreach lib $ALL_TIMING_LIBS {
 //              if {![file isfile $lib]} {
 //                  error "Khong co Liberty $lib - dat ASAP7_ROOT / ASAP7_STD_LIB_DIR"
@@ -178,13 +181,13 @@ Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
 //              return [array get seen]
 //          }
 // Command: array set ro_golden  [lec_subtree_canon [lec_read_file $GOLDEN_NETLIST]  $RO_MODULE]
-CPU time     : 0.65    seconds
+CPU time     : 0.75    seconds
 Elapse time  : 2       seconds
-Memory usage : 67.07   M bytes
+Memory usage : 63.96   M bytes
 // Command: array set ro_revised [lec_subtree_canon [lec_read_file $REVISED_NETLIST] $RO_MODULE]
-CPU time     : 1.29    seconds
-Elapse time  : 2       seconds
-Memory usage : 113.22  M bytes
+CPU time     : 1.44    seconds
+Elapse time  : 3       seconds
+Memory usage : 112.69  M bytes
 // Command: if {![info exists ro_golden($RO_MODULE)] || ![info exists ro_revised($RO_MODULE)]} {
 //              error "Khong thay module $RO_MODULE trong golden hoac revised - TRNG da bi toi uu mat?"
 //          }
@@ -248,16 +251,16 @@ Ring oscillator: 15 module duoi RingOscillator giong het o golden va revised
 // Note: (HRC1.2) Module/entity is not translated (blackboxed) (occurrence:2)
 // Note: Read Liberty library successfully
 0
-CPU time     : 5.29    seconds
-Elapse time  : 6       seconds
-Memory usage : 124.46  M bytes
+CPU time     : 5.64    seconds
+Elapse time  : 7       seconds
+Memory usage : 122.36  M bytes
 // Command: read_design -verilog -sensitive -golden -noelab $GOLDEN_NETLIST
 // Parsing file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v ...sh: 0: Illegal option --
 
 0
-CPU time     : 8.37    seconds
+CPU time     : 8.89    seconds
 Elapse time  : 10      seconds
-Memory usage : 265.51  M bytes
+Memory usage : 262.99  M bytes
 // Command: elaborate_design -golden -root $TOP
 // Golden root module is set to 'top_soc'
 // Warning: (RTL2.5) Net is referenced without an assignment. Design verification will be based on set_undriven_signal setting (occurrence:2040)
@@ -269,16 +272,16 @@ Memory usage : 265.51  M bytes
 // Warning: There are 2093 undriven nets in Golden
 // Warning: There are 2093 undriven pins in Golden
 0
-CPU time     : 10.56   seconds
-Elapse time  : 12      seconds
-Memory usage : 239.37  M bytes
+CPU time     : 11.05   seconds
+Elapse time  : 13      seconds
+Memory usage : 236.62  M bytes
 // Command: read_design -verilog -sensitive -revised -noelab $REVISED_NETLIST
 // Parsing file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v ...sh: 0: Illegal option --
 
 0
-CPU time     : 14.44   seconds
-Elapse time  : 16      seconds
-Memory usage : 388.49  M bytes
+CPU time     : 15.37   seconds
+Elapse time  : 17      seconds
+Memory usage : 391.25  M bytes
 // Command: elaborate_design -revised -root $TOP
 // Revised root module is set to 'top_soc'
 // Warning: (RTL2.5) Net is referenced without an assignment. Design verification will be based on set_undriven_signal setting (occurrence:2040)
@@ -293,15 +296,15 @@ Memory usage : 388.49  M bytes
 // Warning: There are 2096 undriven nets in Revised
 // Warning: There are 2096 undriven pins in Revised
 0
-CPU time     : 17.07   seconds
-Elapse time  : 18      seconds
-Memory usage : 350.75  M bytes
+CPU time     : 18.23   seconds
+Elapse time  : 20      seconds
+Memory usage : 351.34  M bytes
 // Command: report_design_data
 ============================================
 Summary           Golden         Revised
 ============================================
 Design-modules      1690            1690
-Library-cells     116092          141797
+Library-cells     116092          148833
 ============================================
 Primitives      Golden              Revised
 ============================================
@@ -309,7 +312,7 @@ INPUT               59                   59
 OUTPUT             115                  115
 --------------------------------------------
 AND        *    133345               133343
-BUF        *      3718                27991
+BUF        *      3718                35027
 DFF              34054                34054
 DLAT              1635                 1635
 INV        *    352354               350377
@@ -320,7 +323,7 @@ WIRE       *         0                    1
 ------ word-level --------------------------
 BBOX                85                   85
 --------------------------------------------
-Total           580283               605972
+Total           580283               613008
 
 0
 // Command: set bbox_rpt [lec_capture ./reports/lec_black_box.rpt {report_black_box}]
@@ -2065,16 +2068,16 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_997, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_997, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_998, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_998, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_999, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_999, prim-cnt = 5 (R)
-# clock_gate, prim-cnt = 3 (G) and clock_gate, prim-cnt = 7 (R)
-# clock_gate_1, prim-cnt = 3 (G) and clock_gate_1, prim-cnt = 8 (R)
+# clock_gate, prim-cnt = 3 (G) and clock_gate, prim-cnt = 8 (R)
+# clock_gate_1, prim-cnt = 3 (G) and clock_gate_1, prim-cnt = 9 (R)
 # clock_gate_10, prim-cnt = 3 (G) and clock_gate_10, prim-cnt = 5 (R)
-# clock_gate_11, prim-cnt = 3 (G) and clock_gate_11, prim-cnt = 6 (R)
+# clock_gate_11, prim-cnt = 3 (G) and clock_gate_11, prim-cnt = 7 (R)
 # clock_gate_2, prim-cnt = 3 (G) and clock_gate_2, prim-cnt = 7 (R)
 # clock_gate_3, prim-cnt = 3 (G) and clock_gate_3, prim-cnt = 7 (R)
-# clock_gate_4, prim-cnt = 3 (G) and clock_gate_4, prim-cnt = 6 (R)
-# clock_gate_5, prim-cnt = 3 (G) and clock_gate_5, prim-cnt = 7 (R)
+# clock_gate_4, prim-cnt = 3 (G) and clock_gate_4, prim-cnt = 7 (R)
+# clock_gate_5, prim-cnt = 3 (G) and clock_gate_5, prim-cnt = 8 (R)
 # clock_gate_6, prim-cnt = 3 (G) and clock_gate_6, prim-cnt = 6 (R)
-# clock_gate_7, prim-cnt = 3 (G) and clock_gate_7, prim-cnt = 6 (R)
+# clock_gate_7, prim-cnt = 3 (G) and clock_gate_7, prim-cnt = 7 (R)
 # clock_gate_8, prim-cnt = 3 (G) and clock_gate_8, prim-cnt = 6 (R)
 # clock_gate_9, prim-cnt = 3 (G) and clock_gate_9, prim-cnt = 8 (R)
 # The following module pairs are not written because of mismatched ports:
@@ -2114,9 +2117,9 @@ Mapping method    PI     PO     DFF    DLAT   BBOX   Total
 --------------------------------------------------------------------------------
 Name              59     115    34054  1      85     34314 
 ================================================================================
-CPU time     : 39.21   seconds
-Elapse time  : 40      seconds
-Memory usage : 826.65  M bytes
+CPU time     : 40.83   seconds
+Elapse time  : 42      seconds
+Memory usage : 831.98  M bytes
 // Command: report unmapped point -summary
 ================================================================================
 Golden:
@@ -2136,9 +2139,9 @@ Unreachable       1634   5759      7393
 // Warning: There are 44 undriven nets in Golden
 // Warning: There are 44 undriven pins in Golden
 0
-CPU time     : 39.49   seconds
-Elapse time  : 41      seconds
-Memory usage : 826.90  M bytes
+CPU time     : 41.12   seconds
+Elapse time  : 43      seconds
+Memory usage : 832.44  M bytes
 // Command: set_root_module dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 -Revised
 // Warning: There are 44 undriven nets in Revised
 // Warning: There are 44 undriven pins in Revised
@@ -2159,9 +2162,9 @@ Memory usage : 826.90  M bytes
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 3114 gated-clock DFF/DLAT(s)
-CPU time     : 40.04   seconds
-Elapse time  : 41      seconds
-Memory usage : 827.08  M bytes
+CPU time     : 41.63   seconds
+Elapse time  : 43      seconds
+Memory usage : 832.44  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2186,17 +2189,17 @@ Unmapped points   DLAT      Total
 --------------------------------------------------------------------------------
 Unreachable       142       142     
 ================================================================================
-CPU time     : 40.41   seconds
-Elapse time  : 42      seconds
-Memory usage : 827.08  M bytes
+CPU time     : 42.00   seconds
+Elapse time  : 44      seconds
+Memory usage : 832.44  M bytes
 // Running automatic setup...
 // Remodeled 104 DLAT/DFF for inserting sequential redundancy.
 // Remodeled 52 DLAT/DFF (G) and 52 DLAT/DFF (R) for removing sequential redundancy.
 // Automatic setup finished.
 0
-CPU time     : 88.23   seconds
-Elapse time  : 89      seconds
-Memory usage : 828.37  M bytes
+CPU time     : 91.63   seconds
+Elapse time  : 93      seconds
+Memory usage : 834.39  M bytes
 // Command: add_compared_points -all
 // 3346 compared points added to compare list
 0
@@ -2211,11 +2214,14 @@ Non-equivalent       0      1         1
 --------------------------------------------------------------------------------
 Not-compared         0      3192      3192    
 ================================================================================
+CPU time     : 91.74   seconds
+Elapse time  : 93      seconds
+Memory usage : 834.53  M bytes
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 88.37   seconds
-Memory usage : 828.37  M bytes
+CPU time     : 91.77   seconds
+Memory usage : 834.68  M bytes
 0
 // Modules 'dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4(G) and dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2235,9 +2241,9 @@ Processed 1 out of 46 module pairs	EQ: 0	NEQ: 1	ABORT: 0
 0
 // Command: report_black_box -NOHidden
 0
-CPU time     : 88.53   seconds
-Elapse time  : 90      seconds
-Memory usage : 828.37  M bytes
+CPU time     : 91.92   seconds
+Elapse time  : 94      seconds
+Memory usage : 834.68  M bytes
 // Applying constraints to module boundaries ...
 // 83 Golden and 103 Revised pins marked as unreachable
 // 0 Golden and 78 Revised pin equivalences applied
@@ -2250,9 +2256,9 @@ Memory usage : 828.37  M bytes
 // Modeling Revised ...
 // (F14) Remodeled 4193 gated-clock DFF/DLAT(s)
 // (F28) Converted 7 internal output port(s) to inout port(s)
-CPU time     : 89.50   seconds
-Elapse time  : 91      seconds
-Memory usage : 828.37  M bytes
+CPU time     : 92.89   seconds
+Elapse time  : 95      seconds
+Memory usage : 834.68  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2277,15 +2283,15 @@ Unmapped points   DLAT      Total
 --------------------------------------------------------------------------------
 Unreachable       103       103     
 ================================================================================
-CPU time     : 89.97   seconds
-Elapse time  : 91      seconds
-Memory usage : 828.37  M bytes
+CPU time     : 93.35   seconds
+Elapse time  : 95      seconds
+Memory usage : 834.68  M bytes
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 102.27  seconds
-Elapse time  : 103     seconds
-Memory usage : 828.37  M bytes
+CPU time     : 106.52  seconds
+Elapse time  : 108     seconds
+Memory usage : 834.68  M bytes
 // Command: add_compared_points -all
 // 4351 compared points added to compare list
 0
@@ -2303,8 +2309,8 @@ Not-compared         2      34        36
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 102.37  seconds
-Memory usage : 828.37  M bytes
+CPU time     : 106.61  seconds
+Memory usage : 834.68  M bytes
 0
 // Modules 'riscv_pipeline(G) and riscv_pipeline(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2378,8 +2384,8 @@ Non-equivalent       0      1         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 102.54  seconds
-Memory usage : 828.55  M bytes
+CPU time     : 106.78  seconds
+Memory usage : 834.93  M bytes
 0
 // Modules 'rv_debug_module_sba(G) and rv_debug_module_sba(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2452,8 +2458,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box rv_jtag_dtm -module -hier -Revised
 0
 // Command: usage
-CPU time     : 102.60  seconds
-Memory usage : 829.55  M bytes
+CPU time     : 106.84  seconds
+Memory usage : 835.07  M bytes
 0
 Processed 4 out of 46 module pairs	EQ: 1	NEQ: 3	ABORT: 0
 // Running Module apb_syscon and apb_syscon
@@ -2520,8 +2526,8 @@ Not-compared         0      4         4
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 102.66  seconds
-Memory usage : 829.55  M bytes
+CPU time     : 106.89  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'apb_syscon(G) and apb_syscon(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2590,8 +2596,8 @@ Not-compared         5      8         13
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 102.82  seconds
-Memory usage : 829.55  M bytes
+CPU time     : 107.06  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'apb_gpio(G) and apb_gpio(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2621,9 +2627,9 @@ Processed 6 out of 46 module pairs	EQ: 1	NEQ: 5	ABORT: 0
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 236 gated-clock DFF/DLAT(s)
-CPU time     : 102.99  seconds
-Elapse time  : 104     seconds
-Memory usage : 829.55  M bytes
+CPU time     : 107.22  seconds
+Elapse time  : 109     seconds
+Memory usage : 835.20  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2651,9 +2657,9 @@ Unreachable       35        35
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 103.67  seconds
-Elapse time  : 105     seconds
-Memory usage : 829.55  M bytes
+CPU time     : 107.94  seconds
+Elapse time  : 110     seconds
+Memory usage : 835.20  M bytes
 // Command: add_compared_points -all
 // 336 compared points added to compare list
 0
@@ -2671,8 +2677,8 @@ Not-compared         0      311       311
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 103.70  seconds
-Memory usage : 829.55  M bytes
+CPU time     : 107.97  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864(G) and clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2699,9 +2705,9 @@ Processed 7 out of 46 module pairs	EQ: 1	NEQ: 6	ABORT: 0
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 713 gated-clock DFF/DLAT(s)
-CPU time     : 103.88  seconds
-Elapse time  : 105     seconds
-Memory usage : 829.55  M bytes
+CPU time     : 108.13  seconds
+Elapse time  : 110     seconds
+Memory usage : 835.20  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2729,9 +2735,9 @@ Unreachable       11        11
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 104.25  seconds
-Elapse time  : 105     seconds
-Memory usage : 830.05  M bytes
+CPU time     : 108.52  seconds
+Elapse time  : 110     seconds
+Memory usage : 835.20  M bytes
 // Command: add_compared_points -all
 // 1169 compared points added to compare list
 0
@@ -2753,8 +2759,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box ascon_core -module -hier -Revised
 0
 // Command: usage
-CPU time     : 104.27  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 108.54  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 8 out of 46 module pairs	EQ: 2	NEQ: 6	ABORT: 0
 // Running Module apb_watchdog and apb_watchdog
@@ -2822,8 +2828,8 @@ Not-compared         0      10        10
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 104.34  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 108.60  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'apb_watchdog(G) and apb_watchdog(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2897,8 +2903,8 @@ Not-compared         0      7         7
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 104.51  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 108.76  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'apb_i2c(G) and apb_i2c(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -2976,8 +2982,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 104.55  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 108.80  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 11 out of 46 module pairs	EQ: 3	NEQ: 8	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5
@@ -3053,8 +3059,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 104.70  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 108.95  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 12 out of 46 module pairs	EQ: 4	NEQ: 8	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3
@@ -3120,8 +3126,8 @@ Non-equivalent       1      0         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 104.75  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 108.99  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3(G) and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -3199,8 +3205,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 104.79  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.04  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 14 out of 46 module pairs	EQ: 5	NEQ: 9	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1
@@ -3276,8 +3282,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 104.95  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.20  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 15 out of 46 module pairs	EQ: 6	NEQ: 9	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5
@@ -3349,8 +3355,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 104.99  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.24  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 16 out of 46 module pairs	EQ: 7	NEQ: 9	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2
@@ -3426,8 +3432,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.03  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.28  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 17 out of 46 module pairs	EQ: 8	NEQ: 9	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7
@@ -3499,8 +3505,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.08  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.32  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 18 out of 46 module pairs	EQ: 9	NEQ: 9	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3
@@ -3576,8 +3582,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.12  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.36  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 19 out of 46 module pairs	EQ: 10	NEQ: 9	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9
@@ -3649,8 +3655,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.16  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.40  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 20 out of 46 module pairs	EQ: 11	NEQ: 9	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8
@@ -3726,8 +3732,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.20  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.44  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 21 out of 46 module pairs	EQ: 12	NEQ: 9	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4
@@ -3803,8 +3809,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.24  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.48  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 22 out of 46 module pairs	EQ: 13	NEQ: 9	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4
@@ -3880,8 +3886,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.39  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.64  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 23 out of 46 module pairs	EQ: 14	NEQ: 9	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11
@@ -3953,8 +3959,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.44  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.68  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 24 out of 46 module pairs	EQ: 15	NEQ: 9	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10
@@ -4024,8 +4030,8 @@ Non-equivalent       1      0         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 105.48  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.74  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10(G) and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -4103,8 +4109,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.52  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.78  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 26 out of 46 module pairs	EQ: 16	NEQ: 10	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5
@@ -4180,8 +4186,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.68  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 109.95  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 27 out of 46 module pairs	EQ: 17	NEQ: 10	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13
@@ -4247,8 +4253,8 @@ Non-equivalent       1      0         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 105.72  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 110.00  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13(G) and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -4326,8 +4332,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 105.76  seconds
-Memory usage : 830.05  M bytes
+CPU time     : 110.04  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 29 out of 46 module pairs	EQ: 18	NEQ: 11	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6
@@ -4384,9 +4390,9 @@ Unreachable       21        21
 // Remodeled 134 DLAT/DFF (G) and 134 DLAT/DFF (R) for removing sequential redundancy.
 // Automatic setup finished.
 0
-CPU time     : 107.04  seconds
-Elapse time  : 108     seconds
-Memory usage : 830.17  M bytes
+CPU time     : 111.46  seconds
+Elapse time  : 113     seconds
+Memory usage : 835.20  M bytes
 // Command: add_compared_points -all
 // 337 compared points added to compare list
 0
@@ -4404,8 +4410,8 @@ Not-compared         1      294       295
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 107.05  seconds
-Memory usage : 830.17  M bytes
+CPU time     : 111.47  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6(G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -4466,8 +4472,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_2 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 107.09  seconds
-Memory usage : 830.17  M bytes
+CPU time     : 111.51  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 31 out of 46 module pairs	EQ: 19	NEQ: 12	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W11_DATA_W32_3 and asap7_sram_1rw_ADDR_W11_DATA_W32_3
@@ -4526,8 +4532,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_3 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 107.12  seconds
-Memory usage : 830.17  M bytes
+CPU time     : 111.54  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 32 out of 46 module pairs	EQ: 20	NEQ: 12	ABORT: 0
 // Running Module data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 and data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4
@@ -4560,9 +4566,9 @@ SYSTEM: (G R) srambank_128x4x20_6t122
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 1918 gated-clock DFF/DLAT(s)
-CPU time     : 107.69  seconds
-Elapse time  : 109     seconds
-Memory usage : 830.67  M bytes
+CPU time     : 112.09  seconds
+Elapse time  : 114     seconds
+Memory usage : 835.20  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -4587,15 +4593,15 @@ Unmapped points   DLAT      Total
 --------------------------------------------------------------------------------
 Unreachable       13        13      
 ================================================================================
-CPU time     : 107.89  seconds
-Elapse time  : 109     seconds
-Memory usage : 830.67  M bytes
+CPU time     : 112.31  seconds
+Elapse time  : 114     seconds
+Memory usage : 835.20  M bytes
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 163.57  seconds
-Elapse time  : 165     seconds
-Memory usage : 830.67  M bytes
+CPU time     : 169.82  seconds
+Elapse time  : 172     seconds
+Memory usage : 835.20  M bytes
 // Command: add_compared_points -all
 // 2064 compared points added to compare list
 0
@@ -4610,14 +4616,14 @@ Non-equivalent       0      1      0         1
 --------------------------------------------------------------------------------
 Not-compared         9      1922   0         1931    
 ================================================================================
-CPU time     : 163.77  seconds
-Elapse time  : 165     seconds
-Memory usage : 830.67  M bytes
+CPU time     : 170.02  seconds
+Elapse time  : 172     seconds
+Memory usage : 835.20  M bytes
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 163.80  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 170.05  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4(G) and data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -4677,8 +4683,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 163.85  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 170.11  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 34 out of 46 module pairs	EQ: 21	NEQ: 13	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W11_DATA_W32_1 and asap7_sram_1rw_ADDR_W11_DATA_W32_1
@@ -4736,8 +4742,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 163.89  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 170.14  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 35 out of 46 module pairs	EQ: 22	NEQ: 13	ABORT: 0
 // Running Module instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 and instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2
@@ -4770,9 +4776,9 @@ SYSTEM: (G R) srambank_128x4x20_6t122
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 1604 gated-clock DFF/DLAT(s)
-CPU time     : 164.40  seconds
-Elapse time  : 166     seconds
-Memory usage : 830.67  M bytes
+CPU time     : 170.65  seconds
+Elapse time  : 172     seconds
+Memory usage : 835.20  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -4797,15 +4803,15 @@ Unmapped points   DLAT      Total
 --------------------------------------------------------------------------------
 Unreachable       6         6       
 ================================================================================
-CPU time     : 164.58  seconds
-Elapse time  : 166     seconds
-Memory usage : 830.67  M bytes
+CPU time     : 170.81  seconds
+Elapse time  : 173     seconds
+Memory usage : 835.20  M bytes
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 165.15  seconds
-Elapse time  : 166     seconds
-Memory usage : 830.67  M bytes
+CPU time     : 171.40  seconds
+Elapse time  : 173     seconds
+Memory usage : 835.20  M bytes
 // Command: add_compared_points -all
 // 1680 compared points added to compare list
 0
@@ -4823,8 +4829,8 @@ Not-compared         1      0      0         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 165.18  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 171.42  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2(G) and instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -4902,8 +4908,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d -module -hier -Revised
 0
 // Command: usage
-CPU time     : 165.27  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 171.51  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 37 out of 46 module pairs	EQ: 23	NEQ: 14	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W15_DATA_W32_1 and asap7_sram_1rw_ADDR_W15_DATA_W32_1
@@ -4956,9 +4962,9 @@ Unreachable       1         1
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 165.56  seconds
-Elapse time  : 167     seconds
-Memory usage : 830.67  M bytes
+CPU time     : 171.80  seconds
+Elapse time  : 174     seconds
+Memory usage : 835.20  M bytes
 // Command: add_compared_points -all
 // 69 compared points added to compare list
 0
@@ -4980,8 +4986,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W15_DATA_W32_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 165.57  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 171.81  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 38 out of 46 module pairs	EQ: 24	NEQ: 14	ABORT: 0
 // Running Module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 and axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1
@@ -5060,8 +5066,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 165.68  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 171.92  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 39 out of 46 module pairs	EQ: 25	NEQ: 14	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W15_DATA_W32 and asap7_sram_1rw_ADDR_W15_DATA_W32
@@ -5112,9 +5118,9 @@ Unreachable       1         1
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 165.98  seconds
-Elapse time  : 167     seconds
-Memory usage : 830.67  M bytes
+CPU time     : 172.22  seconds
+Elapse time  : 174     seconds
+Memory usage : 835.20  M bytes
 // Command: add_compared_points -all
 // 69 compared points added to compare list
 0
@@ -5136,8 +5142,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W15_DATA_W32 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 165.98  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 172.22  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 40 out of 46 module pairs	EQ: 26	NEQ: 14	ABORT: 0
 // Running Module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 and axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768
@@ -5216,8 +5222,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 166.10  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 172.33  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 41 out of 46 module pairs	EQ: 27	NEQ: 14	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W12_DATA_W32 and asap7_sram_1rw_ADDR_W12_DATA_W32
@@ -5273,8 +5279,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W12_DATA_W32 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 166.17  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 172.38  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 42 out of 46 module pairs	EQ: 28	NEQ: 14	ABORT: 0
 // Running Module tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 and tcm_SIZE_BYTES16384_HAS_FETCH_PORT1
@@ -5353,8 +5359,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 166.23  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 172.44  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 43 out of 46 module pairs	EQ: 29	NEQ: 14	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W12_DATA_W32_1 and asap7_sram_1rw_ADDR_W12_DATA_W32_1
@@ -5412,8 +5418,8 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W12_DATA_W32_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 166.29  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 172.48  seconds
+Memory usage : 835.20  M bytes
 0
 Processed 44 out of 46 module pairs	EQ: 30	NEQ: 14	ABORT: 0
 // Running Module tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 and tcm_SIZE_BYTES16384_HAS_FETCH_PORT0
@@ -5488,8 +5494,8 @@ Not-compared         0      53     0         53
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 166.36  seconds
-Memory usage : 830.67  M bytes
+CPU time     : 172.55  seconds
+Memory usage : 835.20  M bytes
 0
 // Modules 'tcm_SIZE_BYTES16384_HAS_FETCH_PORT0(G) and tcm_SIZE_BYTES16384_HAS_FETCH_PORT0(R)' will not be blackboxed,
    and automatically recompared at the parent level.
@@ -5554,9 +5560,9 @@ HIER: (G R) tcm_SIZE_BYTES16384_HAS_FETCH_PORT1
 // (F14) Remodeled 30573 gated-clock DFF/DLAT(s)
 // (F32) Created 1018 Z gate(s) for floating net(s) and floating pin(s)
 // (F28) Converted 1399 internal output port(s) to inout port(s)
-CPU time     : 179.69  seconds
-Elapse time  : 181     seconds
-Memory usage : 837.30  M bytes
+CPU time     : 186.09  seconds
+Elapse time  : 188     seconds
+Memory usage : 841.20  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -5581,21 +5587,21 @@ Unmapped points   DLAT   Z         Total
 --------------------------------------------------------------------------------
 Unreachable       1441   1018      2459    
 ================================================================================
-CPU time     : 184.60  seconds
-Elapse time  : 186     seconds
-Memory usage : 837.30  M bytes
+CPU time     : 191.07  seconds
+Elapse time  : 193     seconds
+Memory usage : 841.33  M bytes
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 235.19  seconds
-Elapse time  : 236     seconds
-Memory usage : 837.55  M bytes
+CPU time     : 241.73  seconds
+Elapse time  : 244     seconds
+Memory usage : 841.58  M bytes
 // Command: add_compared_points -all
 // 31306 compared points added to compare list
 0
-CPU time     : 235.37  seconds
-Elapse time  : 237     seconds
-Memory usage : 837.55  M bytes
+CPU time     : 241.91  seconds
+Elapse time  : 244     seconds
+Memory usage : 841.58  M bytes
 // Command: compare -noneq_stop 1   
 // Compare will stop on the 1st non-equivalent point
 ================================================================================
@@ -5603,26 +5609,26 @@ Compared points      PO     DFF    DLAT   BBOX      Total
 --------------------------------------------------------------------------------
 Equivalent           115    31157  2      32        31306   
 ================================================================================
-CPU time     : 236.26  seconds
-Elapse time  : 238     seconds
-Memory usage : 837.55  M bytes
+CPU time     : 242.90  seconds
+Elapse time  : 245     seconds
+Memory usage : 841.58  M bytes
 // Command: analyze abort -compare
 There is no abort/specified point to be analyzed.
 // Command: save_hier_compare_result
 0
-CPU time     : 236.78  seconds
-Elapse time  : 238     seconds
-Memory usage : 837.55  M bytes
+CPU time     : 243.41  seconds
+Elapse time  : 245     seconds
+Memory usage : 841.58  M bytes
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 236.82  seconds
-Memory usage : 837.55  M bytes
+CPU time     : 243.45  seconds
+Memory usage : 841.58  M bytes
 0
 Processed 46 out of 46 module pairs	EQ: 31	NEQ: 15	ABORT: 0
 
 // Note: 15 module pair(s) are dynamically flattened for hierarchical comparison
-  Usage: 124.00 secs.
+  Usage: 128.00 secs.
   (15 dynamically flattened module pair(s) were non-equivalent)
 // Use "REPort HIer_compare Result -DYNamicflattened" to report them
 
@@ -5639,48 +5645,48 @@ Status          Golden                            Revised                       
 -----------------------------------------------------------------------------------------------------
 Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 0.03 sec  0 sec
 Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 0.14 sec  0 sec
-Equivalent    : tcm_SIZE_BYTES16384_HAS_FETCH_PORT1  tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 0.06 sec  0 sec
+Equivalent    : tcm_SIZE_BYTES16384_HAS_FETCH_PORT1  tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 0.05 sec  0 sec
 Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_1  asap7_sram_1rw_ADDR_W11_DATA_W32_1 0.02 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 0.03 sec  0 sec
-Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 0.04 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 0.04 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 0.03 sec  0 sec
 Equivalent    : asap7_sram_1rw_ADDR_W15_DATA_W32  asap7_sram_1rw_ADDR_W15_DATA_W32 0.27 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W12_DATA_W32  asap7_sram_1rw_ADDR_W12_DATA_W32 0.06 sec  0 sec
-Equivalent    : ascon_core                        ascon_core                       0.52 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_3  asap7_sram_1rw_ADDR_W11_DATA_W32_3 0.02 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 0.03 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W12_DATA_W32  asap7_sram_1rw_ADDR_W12_DATA_W32 0.04 sec  0 sec
+Equivalent    : ascon_core                        ascon_core                       0.53 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_3  asap7_sram_1rw_ADDR_W11_DATA_W32_3 0.03 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_2  asap7_sram_1rw_ADDR_W11_DATA_W32_2 0.03 sec  0 sec
 Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 0.03 sec  0 sec
 Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 0.03 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 0.03 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 0.04 sec  0 sec
 Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 0.13 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_2  asap7_sram_1rw_ADDR_W11_DATA_W32_2 0.02 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32  asap7_sram_1rw_ADDR_W11_DATA_W32 0.02 sec  0 sec
-Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 0.14 sec  0 sec
-Equivalent    : axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768  axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 0.10 sec  0 sec
-Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 0.03 sec  0 sec
-Equivalent    : rv_jtag_dtm                       rv_jtag_dtm                      0.06 sec  0 sec
 Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 0.03 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32  asap7_sram_1rw_ADDR_W11_DATA_W32 0.03 sec  0 sec
+Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 0.15 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W12_DATA_W32_1  asap7_sram_1rw_ADDR_W12_DATA_W32_1 0.04 sec  0 sec
+Equivalent    : axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768  axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 0.08 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 0.04 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 0.04 sec  0 sec
 Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 0.03 sec  0 sec
+Equivalent    : rv_jtag_dtm                       rv_jtag_dtm                      0.05 sec  0 sec
 Equivalent    : axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1  axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 0.09 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 0.03 sec  0 sec
 Equivalent    : axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d  axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d 0.07 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 0.03 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W12_DATA_W32_1  asap7_sram_1rw_ADDR_W12_DATA_W32_1 0.04 sec  1 sec
-Equivalent    : asap7_sram_1rw_ADDR_W15_DATA_W32_1  asap7_sram_1rw_ADDR_W15_DATA_W32_1 0.26 sec  1 sec
-Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 0.13 sec  1 sec
-Equivalent    : top_soc                           top_soc                          68.79 sec  70 sec
-Dyn-flattened (NEQ): data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4  data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 55.22 sec 57 sec
-Dyn-flattened (NEQ): apb_gpio                          apb_gpio                         0.15 sec 0 sec
-Dyn-flattened (NEQ): apb_watchdog                      apb_watchdog                     0.05 sec 1 sec
-Dyn-flattened (NEQ): instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2  instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 1.23 sec 1 sec
-Dyn-flattened (NEQ): apb_i2c                           apb_i2c                          0.15 sec 0 sec
-Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 0.03 sec 0 sec
-Dyn-flattened (NEQ): rv_debug_module_sba               rv_debug_module_sba              0.13 sec 0 sec
+Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 0.13 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 0.03 sec  1 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 0.03 sec  1 sec
+Equivalent    : asap7_sram_1rw_ADDR_W15_DATA_W32_1  asap7_sram_1rw_ADDR_W15_DATA_W32_1 0.27 sec  1 sec
+Equivalent    : top_soc                           top_soc                          69.18 sec  71 sec
+Dyn-flattened (NEQ): data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4  data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 57.01 sec 59 sec
+Dyn-flattened (NEQ): apb_gpio                          apb_gpio                         0.14 sec 0 sec
+Dyn-flattened (NEQ): apb_watchdog                      apb_watchdog                     0.05 sec 0 sec
+Dyn-flattened (NEQ): instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2  instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 1.21 sec 1 sec
+Dyn-flattened (NEQ): apb_i2c                           apb_i2c                          0.14 sec 0 sec
+Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 0.04 sec 0 sec
+Dyn-flattened (NEQ): rv_debug_module_sba               rv_debug_module_sba              0.14 sec 1 sec
 Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 0.03 sec 0 sec
-Dyn-flattened (NEQ): dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4  dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 47.76 sec 49 sec
-Dyn-flattened (NEQ): clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864  clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 0.83 sec 1 sec
+Dyn-flattened (NEQ): dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4  dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 49.48 sec 50 sec
+Dyn-flattened (NEQ): clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864  clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 0.84 sec 1 sec
 Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 0.03 sec 0 sec
-Dyn-flattened (NEQ): riscv_pipeline                    riscv_pipeline                   13.79 sec 14 sec
-Dyn-flattened (NEQ): sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 1.26 sec 1 sec
+Dyn-flattened (NEQ): riscv_pipeline                    riscv_pipeline                   14.65 sec 15 sec
+Dyn-flattened (NEQ): sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 1.38 sec 1 sec
 Dyn-flattened (NEQ): apb_syscon                        apb_syscon                       0.05 sec 0 sec
 Dyn-flattened (NEQ): tcm_SIZE_BYTES16384_HAS_FETCH_PORT0  tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 0.06 sec 0 sec
 ================================================================================
@@ -5736,9 +5742,6 @@ Category                                                                  Count
 ================================================================================
 
 0
-CPU time     : 236.93  seconds
-Elapse time  : 238     seconds
-Memory usage : 837.67  M bytes
 // Command: lec_capture ./reports/lec_unmapped.rpt {report_unmapped_points -summary}
 ================================================================================
 Golden:
@@ -5871,6 +5874,7 @@ LEC top_soc: netlist tong hop vs netlist sau P&R (che do hier)
   Genus   : Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
   diem so sanh 31306, khac 0, abort 0, chua so 0
   (so diem la cua module top; tung module: reports/lec_hier_result.rpt)
+  WARNING: khong doc duoc dau thoi gian Genus trong netlist - khong kiem duoc golden/revised co cung mot lan tong hop
 // Command: puts "============================================================"
 ============================================================
 // Command: close $fp
