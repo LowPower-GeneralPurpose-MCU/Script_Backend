@@ -74,6 +74,12 @@ if {[catch {
     if {![file isdirectory $ECO_OUT]} {
         error "Khong co $ECO_OUT - chay 'make all' roi 'make fillfix' truoc"
     }
+    # Buoc nay GHI DE outputs/ cua Innovus: checkpoint dau vao phai duoc ghi sau
+    # checkpoint cuoi KHOI 14 cua lan P&R hien tai (eco_require_fresh).
+    eco_require_fresh "checkpoint dau vao" $ECO_OUT "checkpoint cuoi KHOI 14" \
+        [format "./saved/%s_postRoute.enc.dat" $TOP] \
+        "Innovus da chay lai sau lan ECO do: 'make finish' se ghi de outputs/ bang thiet ke cu.
+  Chay lai 'make all' -> 'make fillfix' tren ket qua Innovus moi."
 
     # Lay hai khoi TRUOC khi mo checkpoint: innovus.tcl hong thi dung ngay.
     set flow_file ./tcl/innovus.tcl

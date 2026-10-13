@@ -98,6 +98,12 @@ if {[catch {
     if {![file isdirectory $ECO_IN]} {
         error "Khong co $ECO_IN - chay 'make all' truoc"
     }
+    # Checkpoint ECO phai duoc ghi sau checkpoint cuoi KHOI 14 (eco_require_fresh).
+    eco_require_fresh "checkpoint ECO" $ECO_IN "checkpoint cuoi KHOI 14" \
+        [format "./saved/%s_postRoute.enc.dat" $TOP] \
+        "Innovus da chay lai sau lan ECO do, checkpoint ECO la cua thiet ke cu.
+  Chay 'make all' truoc (no can mcu/tempus chay tren ket qua Innovus moi).  Neu 'make all'
+  bao Tempus khong con max_transition thi KHONG can fillfix / finish."
     set eco_rpt [file join $ECO_DIR reports eco_summary.rpt]
     if {[eco_summary_verdict $eco_rpt] ne "PASS"} {
         error "$eco_rpt bao '[eco_summary_verdict $eco_rpt]' - chi chay tren ECO da PASS"

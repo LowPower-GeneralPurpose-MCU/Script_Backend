@@ -14,9 +14,14 @@
 #                                   (mac dinh "-enable_scheduler false"; none =
 #                                   khong noi gi)
 #     make all VOLTUS_PADS=defpin   diem cap nguon: pin (mac dinh, nhieu nguon ap
-#                                   rai doc chan PG cua top), defpin (mot nguon
-#                                   moi net), auto
-#     make all VOLTUS_PAD_PITCH=5   buoc rai nguon ap cua kieu pin, um (mac dinh 10)
+#                                   rai doc cac hinh chan PG cua top trong
+#                                   innovus/outputs/top_soc.lef - 4 canh ring),
+#                                   ring (nhu pin, hinh lay tu
+#                                   innovus/outputs/top_soc_pg_ring.txt: dung
+#                                   khi LEF khong du 4 hinh chan), defpin (mot
+#                                   nguon moi net), auto
+#     make all VOLTUS_PAD_PITCH=5   buoc rai nguon ap cua kieu pin / ring, um
+#                                   (mac dinh 10)
 
 VOLTUS  ?= voltus
 NETLIST := ../innovus/outputs/top_soc_pnr.v

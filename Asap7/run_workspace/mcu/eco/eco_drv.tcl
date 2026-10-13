@@ -102,6 +102,12 @@ if {[catch {
     if {$ECO_EXTRACT eq "high" && ![file isfile $ECO_LAYER_MAP]} {
         error "Khong co file ghep lop $ECO_LAYER_MAP"
     }
+    # Bao cao cua Tempus phai la cua CHINH lan P&R nay (eco_require_fresh).
+    # Cong "chan cua Tempus phai co trong checkpoint" o buoc 3 khong bat duoc
+    # truong hop bao cao cu ghi 0 vi pham.
+    eco_require_fresh "bao cao Tempus" $ECO_TEMPUS_RPT "checkpoint" $ECO_CHECKPOINT \
+        "Innovus da chay lai sau lan Tempus do, bao cao la cua thiet ke cu.
+  Chay truoc, theo thu tu: mcu/conformal -> mcu/quantus -> mcu/tempus (tren outputs/ cua lan Innovus nay)."
 
     # --------------------------------------------------------------------
     # 1. DANH SACH CUA TEMPUS
@@ -110,7 +116,9 @@ if {[catch {
     if {[llength $tempus_viol] == 0} {
         eco_write_summary $ECO_SUMMARY PASS [list \
             "ECO DRV $TOP: $ECO_TEMPUS_RPT khong co vi pham max_transition nao -\
- khong co gi de sua, khong mo checkpoint, khong ghi $ECO_OUT.dat"]
+ khong co gi de sua, khong mo checkpoint, khong ghi $ECO_OUT.dat" \
+            "  KHONG can 'make fillfix' / 'make finish': outputs/ hien co cua mcu/innovus da la ket qua cuoi." \
+            "  ($ECO_OUT.dat neu con tren dia la cua lan ECO truoc do, khong phai do lan chay nay ghi.)"]
         puts "ECO DRV: Tempus khong bao max_transition nao - khong lam gi."
         exit 0
     }

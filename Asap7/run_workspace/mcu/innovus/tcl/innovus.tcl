@@ -13,10 +13,12 @@
 ##
 ## THU TU POWER (giong slide):
 ##   - Ring loi M8/M9 chi bam mep loi -> lam truoc khi dat SRAM (KHOI 2).
-##   - Luoi M4/M5 rieng tung cum SRAM + luoi M6/M7 toan chip
-##     -> chi lam SAU khi SRAM da FIXED (KHOI 5, 6).
+##   - Luoi M4/M5 rieng tung cum SRAM (kem cap M5 tren than SRAM) + luoi
+##     M6/M7/M8/M9 toan chip -> chi lam SAU khi SRAM da FIXED (KHOI 5, 6).
 ##   - Slide trang 32 cung chi ve ring + stripe TAM de tao PG model roi xoa
 ##     (editDelete -shape {STRIPE BLOCKRING}) truoc khi dat macro.
+## Kich thuoc luoi nguon KHAC slide tu 2026-10-13 (Voltus: luoi theo slide sut
+## ap vai von) - ly do va con so o tcl/manual/soc_fp_config.tcl, muc Power.
 ##
 ## Moi khoi (tru KHOI 0) boc trong soc_block: lenh nao loi thi ca khoi dung,
 ## khong chay tiep lenh phia sau.  Thong so sua o tcl/manual/soc_fp_config.tcl.
@@ -73,12 +75,13 @@ soc_block "KHOI 1: floorPlan" {
 
 
 # ==========================================================================
-# KHOI 2 - Ring loi M8 ngang / M9 doc   (so cua flow Risc_V)
+# KHOI 2 - Ring loi M8 ngang / M9 doc
 # ==========================================================================
 # Ring chi bam mep loi, khong phu thuoc SRAM -> lam truoc khi dat SRAM.
 # Neu sau nay doi kich thuoc loi (floorPlan) thi phai paste lai khoi nay.
+# Rong 0.48 (truoc 2026-10-13: 0.136, so cua Risc_V) - xem soc_fp_config.tcl.
 soc_block "KHOI 2: core ring" {
-    # Ring phai co TRUOC luoi M6/M7 (KHOI 6 tao via M7-M8 luc addStripe).
+    # Ring phai co TRUOC luoi M6..M9 (KHOI 6 tao via M7-M8, M8-M9 luc addStripe).
     # Khong dung deleteAllPowerPreroutes: paste lai khoi nay sau KHOI 5/6 se
     # xoa sach luoi ma khong bao gi.
     set stripes [dbGet -e top.nets.sWires.shape stripe]
@@ -90,17 +93,17 @@ soc_block "KHOI 2: core ring" {
     lassign [lindex [dbGet top.fPlan.box] 0] dx0 dy0 dx1 dy1
     lassign [lindex [dbGet top.fPlan.coreBox] 0] cx0 cy0 cx1 cy1
     set margin [expr {min($cx0 - $dx0, $cy0 - $dy0, $dx1 - $cx1, $dy1 - $cy1)}]
-    # -offset = mep loi -> canh trong cua vong.  VSS ngoai (cach mep die 1 khoang S),
+    # -offset = mep loi -> canh trong cua vong.  VSS ngoai (cach mep die EDGE),
     # VDD vao trong.  Lam tron xuong manufacturing grid de Innovus khong tu snap ra ngoai.
     set g $SOC_MFG_GRID
-    set vss_ring_offset [expr {floor(($margin - $SOC_CORE_RING_S - $SOC_CORE_RING_W) / $g + 1e-6) * $g}]
+    set vss_ring_offset [expr {floor(($margin - $SOC_CORE_RING_EDGE - $SOC_CORE_RING_W) / $g + 1e-6) * $g}]
     set SOC_CORE_RING_OFFSET [expr {$vss_ring_offset - $SOC_CORE_RING_S - $SOC_CORE_RING_W}]
     puts [format "Ring loi: le %.3f | trong %.3f | VSS %.3f | trong %.3f | VDD %.3f | trong %.3f -> loi" \
         $margin [expr {$margin - $vss_ring_offset - $SOC_CORE_RING_W}] \
         $SOC_CORE_RING_W $SOC_CORE_RING_S $SOC_CORE_RING_W $SOC_CORE_RING_OFFSET]
     if {$SOC_CORE_RING_OFFSET < $SOC_MACRO_GAP} {
-        error [format "Khoang trong trong cung %.3f < %.2f (cap VSS/VDD mep cum SRAM) - tang SOC_CORE_MARGIN" \
-            $SOC_CORE_RING_OFFSET $SOC_MACRO_GAP]
+        error [format "Khoang trong trong cung %.3f < %.2f (cap VSS/VDD mep cum SRAM) - giam SOC_CORE_RING_W / _S / _EDGE (le loi->die %.3f la co dinh)" \
+            $SOC_CORE_RING_OFFSET $SOC_MACRO_GAP $margin]
     }
     setAddStripeMode -reset
     foreach {net offset} [list VDD $SOC_CORE_RING_OFFSET VSS $vss_ring_offset] {
@@ -115,15 +118,15 @@ soc_block "KHOI 2: core ring" {
     # Chan PG VDD/VSS (createPGPin) KHONG tao o day ma o KHOI 16: run 2026-09-17
     # 21:42 tao chan phu doan ring M8 tren o khoi nay, editTrim cua KHOI 5 xoa
     # mat doan ring do (KHOI 8: "Ring loi VDD thieu (M8=1 M9=2)").
-    # Ring rong 0.544 um tren loi ~2000 um: zoom-all se khong thay, zoom vao goc loi de xem.
+    # Ring rong 0.48 um tren loi ~560 um: zoom-all se khong thay, zoom vao goc loi de xem.
 }
 
 # --------------------------------------------------------------------------
-# [XEM TRUOC - tuy chon] Luoi M7/M6 de canh cum SRAM, xem xong XOA
+# [XEM TRUOC - tuy chon] Luoi M6..M9 de canh cum SRAM, xem xong XOA
 # --------------------------------------------------------------------------
-# Stripe ve bay gio se chay xuyen qua cho sau nay dat SRAM, nen chi de nhin.
+# Luoi ve bay gio chua co cap M5 tren than SRAM de noi xuong, nen chi de nhin.
 #   soc_add_mesh                     ;# ve luoi tam
-#   (GUI) bat/tat layer M6, M7 o panel Layer de nhin
+#   (GUI) bat/tat layer M6..M9 o panel Layer de nhin
 #   editDelete -shape STRIPE         ;# BAT BUOC xoa truoc KHOI 3
 
 
@@ -233,8 +236,11 @@ soc_block "KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp" {
 # tung cum - khong phu thuoc selection:
 #   M4 ngang: mep duoi, moi khe giua hai hang, mep tren
 #   M5 doc  : mep trai, moi khe giua hai cot, mep phai
-#   M5 tap  : moi SRAM 1 cap o canh phai, noi chan PG M4 cua SRAM xuong khe
-# Chi lam SAU KHOI 4 (SRAM da FIXED).
+#   M5 than : moi SRAM lon 7 cap (TAG 3 cap) chay doc tren than, tu khe ben
+#             duoi len sat mep tren, via V4 xuong MOI rail PG M4 cua SRAM
+#             (SOC_BODY_TAP_X).  Truoc 2026-10-13: 1 cap o canh phai, chi sau
+#             2.16 um = 1-2 via cho ca SRAM.
+# Chi lam SAU KHOI 4 (SRAM da FIXED).  ~700 lenh addStripe: mat vai phut.
 soc_block "KHOI 5: luoi nguon M4/M5 cho tung cum SRAM" {
     set unfixed 0
     foreach {group kind cols rows prefixes} $SOC_SRAM_GROUPS {
@@ -269,27 +275,37 @@ soc_block "KHOI 5: luoi nguon M4/M5 cho tung cum SRAM" {
 #   - Panel Layer: chi bat M4, M5 (va Instance) de nhin.
 #   - Zoom vao khe giua hai SRAM: phai thay 1 cap VSS/VDD - khe ngang la M4,
 #     khe doc la M5; bon mep moi cum cung co 1 cap; giua hai cum KHONG co day.
-#   - Canh phai moi SRAM co 1 cap M5 ngan (tap) chui tu khe ben duoi len.
+#   - Tren than moi SRAM lon co 7 cap M5 doc (3 ben trai, 3 ben phai cot chan
+#     o giua, 1 sat mep phai), moi cap dai gan het than va co via V4 tai moi
+#     rail M4 cua SRAM; cot giua (chan tin hieu) KHONG co cap nao.
 # Neu da doi vi tri SRAM: paste lai KHOI 4 roi KHOI 5 (khoi 5 tu xoa M4/M5 cu).
-# Hai SRAM cach nhau < 8.64 um (2 khe) duoc tinh chung mot cum; muon tach cum
-# thi keo xa hon 8.64 um.
+# Hai SRAM cach nhau < 2.16 um (2 khe) duoc tinh chung mot cum; muon tach cum
+# thi keo xa hon 2.16 um.
 
 
 # ==========================================================================
-# KHOI 6 - Luoi nguon toan chip M7/M6   (Hierarchy trang 41)
+# KHOI 6 - Luoi nguon toan chip M6/M7/M8/M9   (Hierarchy trang 41)
 # ==========================================================================
-# Chan PG cua SRAM da duoc tap M5 o KHOI 5 noi vao luoi cum, nen khong con
+# Chan PG cua SRAM da duoc cap M5 tren than o KHOI 5 noi len, nen khong con
 # 'sroute -connect blockPin' (sram_axi: nearestTarget noi bua thanh M4 va de ho
-# hang duoi).  M6 ngang via xuong M5 cua cum SRAM; M7 doc via len ring M8.
-# Neu paste lai KHOI 5 thi phai paste lai khoi nay.
-soc_block "KHOI 6: luoi M7/M6" {
+# hang duoi).  Tu 2026-10-13 ca bon lop phu ca die, KE CA than SRAM:
+#   M6 ngang via xuong moi cap M5 (tren than SRAM, mep / khe cum), via len M7
+#   M7 doc   via len luoi M8 va ring M8
+#   M8 ngang / M9 doc rong 0.48 buoc 2.16: lop mang dong chinh, noi ring 4 canh
+# Chi tiet va ly do: soc_add_mesh (soc_fp_procs.tcl), muc Power cua
+# soc_fp_config.tcl.  Neu paste lai KHOI 5 thi phai paste lai khoi nay.
+soc_block "KHOI 6: luoi M6/M7/M8/M9" {
     soc_check_core_ring
-    editDelete -layer M6 -shape STRIPE
-    editDelete -layer M7 -shape STRIPE
+    foreach layer {M6 M7 M8 M9} {
+        editDelete -layer $layer -shape STRIPE
+    }
     soc_add_mesh
     editTrim -nets {VDD VSS}
+    # editTrim cat dau thua cua luoi; ring khong duoc mat doan nao theo.
+    soc_check_core_ring
 }
-# GUI: panel Layer, bat/tat M6, M7 de nhin luoi.
+# GUI: panel Layer, bat/tat M6..M9 de nhin luoi.  M8/M9 phu 44 % dien tich moi
+# lop: bat ca hai thi gan nhu khong thay gi ben duoi.
 
 
 # ==========================================================================
@@ -321,6 +337,17 @@ soc_block "KHOI 8: verify + saveDesign" {
         -error 100000 -warning 1000 \
         -report ./verify_rpt/connectivity_powerplan.rpt
     set soc_drc_pg [soc_verify_drc ./verify_rpt/drc_powerplan.rpt -limit 500000]
+    # So stripe / via tung lop va so via V4 tren than TUNG SRAM (them
+    # 2026-10-13).  Connectivity va DRC o tren deu sach voi luoi cu trong khi
+    # moi SRAM chi co 1-2 via V4; chi con so nay cho thay dieu do truoc khi
+    # mat ca run P&R roi moi den Voltus.  Proc nay CHUA chay tren Innovus: no
+    # tu hong (lenh dbGet la) thi chi canh bao - bao cao hong khong phai bang
+    # chung luoi hong.
+    if {[catch {soc_pg_report ./reports/pg_grid.rpt} soc_pg_low]} {
+        puts "WARNING: soc_pg_report hong ($soc_pg_low) - KHONG dem duoc via V4 tren\
+ than SRAM; kiem bang mat trong GUI (LAM TAY 2) truoc khi chay KHOI 9"
+        set soc_pg_low 0
+    }
     checkFPlan -reportUtil -outFile ./verify_rpt/reportUtil_powerplan.rpt
     report_clocks > ./reports/clocks_floorplan.rpt
     report_analysis_views > ./reports/analysis_views.rpt
@@ -335,12 +362,19 @@ soc_block "KHOI 8: verify + saveDesign" {
         error "$soc_drc_pg vi pham DRC o luoi nguon - xem verify_rpt/drc_powerplan.rpt.
   KHONG chay KHOI 9: placement, CTS va route deu se chay tren hinh hoc sai."
     }
+    if {$soc_pg_low > 0} {
+        error "$soc_pg_low SRAM/net thieu via V4 tu cap M5 tren than xuong rail M4 -\
+ xem reports/pg_grid.rpt va tim IMPPP-4405 / addStripe trong innovus.log.
+  KHONG chay KHOI 9: SRAM do se sut ap nhu luoi cu, va chi Voltus moi thay."
+    }
     saveDesign ./saved/${TOP}_powerplan.enc
 
     soc_banner "FLOORPLAN + POWER GRID XONG - saved/${TOP}_powerplan.enc
   verify_rpt/connectivity_powerplan.rpt : moi SRAM phai noi VDD/VSS
       (open o chan std cell la binh thuong - rail M1 chua lam)
   verify_rpt/drc_powerplan.rpt          : phai 0 vi pham PG
+  reports/pg_grid.rpt                   : so stripe / via tung lop; moi SRAM
+      lon ~224 via V4 moi net (7 cap M5 x 32 rail), nguong chan la 56
   GUI: Tools > Violation Browser de xem tung loi
 Tiep theo: KHOI 9 (placement), KHOI 10 (rail M1 + stripe M5 std cell)"
 }
@@ -969,7 +1003,8 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
     # Netlist mo phong / LEC; ban _pg co VDD/VSS + tap/filler cho LVS
     saveNetlist ./outputs/${TOP}_pnr.v -excludeLeafCell
     saveNetlist ./outputs/${TOP}_pnr_pg.v -includePowerGround -includePhysicalInst -excludeLeafCell
-    # Chan PG VDD/VSS tren ring M8 (09_PnR tr.21) - sau moi lenh editTrim/sroute
+    # Chan PG VDD/VSS tren ring M8/M9, ca 4 canh (09_PnR tr.21) - sau moi lenh
+    # editTrim/sroute.  Ghi kem outputs/<top>_pg_ring.txt cho Voltus.
     soc_add_pg_pins
     defOut -floorplan -netlist -routing ./outputs/${TOP}_pnr.def
 
@@ -982,6 +1017,8 @@ soc_block "KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF" {
         -merge [concat $STD_GDS_FILES $SRAM_BB_GDS_FILES] -units $SOC_GDS_UNITS \
         -dieAreaAsBoundary
     write_lef_abstract -noCutObs ./outputs/${TOP}.lef
+    # mcu/voltus rai nguon ap theo hinh chan PG trong LEF nay: dem lai.
+    soc_check_pg_pin_lef ./outputs/${TOP}.lef
 }
 # Kiem tra GDS (ngoai Innovus): mo outputs/top_soc.gds, do 1 WELLTAP_* phai
 # rong 0.108 um (1x) = 216 dbu o SOC_GDS_UNITS 2000 va trung khit o dat trong
