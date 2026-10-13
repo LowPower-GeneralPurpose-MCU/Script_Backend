@@ -22,6 +22,15 @@
 #                                   nguon moi net), auto
 #     make all VOLTUS_PAD_PITCH=5   buoc rai nguon ap cua kieu pin / ring, um
 #                                   (mac dinh 10)
+#     make all VOLTUS_MAX_DISCONNECTED=0   so nguon dong Voltus duoc bo vi coi la
+#                                   khong noi ma ket qua van hop le (mac dinh 100)
+#     make all VOLTUS_PROCESS=none  khong dat set_design_mode -process 7 (chi de
+#                                   tach nguyen nhan, xem voltus.tcl)
+#
+# voltus.tcl XOA work/ truoc moi lan phan tich luoi nguon: file cua lan chay
+# truoc nam lai o do lam Voltus bo nham mot phan luoi (run 2026-10-13 22:00:
+# VSS 0.102 V gia).  Bao cao chi tiet nam trong outputs/ (khong vao git); 400
+# dong dau moi .rpt va anh ir_limit / ir_linear duoc chep sang reports/rail_<net>/.
 
 VOLTUS  ?= voltus
 NETLIST := ../innovus/outputs/top_soc_pnr.v
@@ -37,6 +46,8 @@ export VOLTUS_CPUS
 export VOLTUS_RAIL_OPTS
 export VOLTUS_PADS
 export VOLTUS_PAD_PITCH
+export VOLTUS_MAX_DISCONNECTED
+export VOLTUS_PROCESS
 
 .PHONY: all clean
 
@@ -51,4 +62,4 @@ all: $(NETLIST) $(SDC) $(DEF)
 	@head -n 1 $(SUMMARY) | grep -qx DONE || { echo "Voltus KHONG XONG hoac sut ap KHONG DAT - xem $(SUMMARY)"; exit 1; }
 
 clean:
-	rm -rf logs reports outputs *~
+	rm -rf logs reports outputs work *~
