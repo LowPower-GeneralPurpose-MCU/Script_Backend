@@ -1,0 +1,61 @@
+* The organization, structure, and layout of this file are copyrights and
+* confidential and proprietary trade secrets of Cadence Design Systems, Inc.,
+* subject to the terms and conditions of the license agreement in effect
+* between you and Cadence Design Systems, Inc. This file and its information
+* may not be disclosed, sold, or otherwise transferred to any third party
+* without the express written consent of Cadence Design Systems, Inc. Export
+* of any or all of this file in violation of any statute or regulation is
+* strictly prohibited.
+* 
+
+FORMAT: 11.0
+PROJECT: none
+NET: VSS 
+CREATOR: QX
+
+CREATED: 2026-Oct-13 14:41:36 (2026-Oct-13 05:41:36 GMT)
+
+LAYOUT_XMIN: -10
+LAYOUT_YMIN: 20
+LAYOUT_XMAX: 565750
+LAYOUT_YMAX: 49700
+
+NODES: 9697
+NODE_FILE: VSS_part_0.mnode
+RESISTORS: 10920
+INDUCTORS: 0
+
+LAYERS: 17
+LAYER: M9 M 2 VSS_part_0.ml00
+LAYER: V8 V 2 VSS_part_0.ml01
+LAYER: M8 M 66 VSS_part_0.ml02
+LAYER: V7 V 65 VSS_part_0.ml03
+LAYER: M7 M 69 VSS_part_0.ml04
+LAYER: V6 V 65 VSS_part_0.ml05
+LAYER: M6 M 25 VSS_part_0.ml06
+LAYER: V5 V 89 VSS_part_0.ml07
+LAYER: M5 M 489 VSS_part_0.ml08
+LAYER: V4 V 479 VSS_part_0.ml09
+LAYER: M4 M 1766 VSS_part_0.ml10
+LAYER: V3 V 1614 VSS_part_0.ml11
+LAYER: M3 M 1786 VSS_part_0.ml12
+LAYER: V2 V 336 VSS_part_0.ml13
+LAYER: M2 M 336 VSS_part_0.ml14
+LAYER: V1 V 336 VSS_part_0.ml15
+LAYER: M1 M 3395 VSS_part_0.ml16
+
+CUT_LAYER: none
+GRID_CAP: false
+DIFF_CAP: false
+NUM_PINS: 0
+PINS: /dev/null
+NUM_INSTANCE_TAPS: 6601
+INSTANCES: VSS_part_0.minst
+I_LOADS:
+NODE_MAP:
+RESISTOR_MAP:
+TILE_FILE: VSS_part_0.mtile
+OUTPUT_WLT: drawn
+LAYOUT_SCALE_FACTOR: 1
+TEMPERATURE: 25
+MICRON_UNITS: 1000

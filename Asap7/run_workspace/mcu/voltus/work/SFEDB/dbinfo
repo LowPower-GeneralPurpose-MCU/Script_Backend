@@ -10,7 +10,7 @@ maxDEFUnit: 1000
 HALO: 1 
 totalNumCells: 2315351 
 totalNumIgnoredCells: 0 
-hasCellInstNameIDMap: 1 
+hasCellInstNameIDMap: 0 
 globalDelimiter: / 
 defInstDataFile: defInstData 
 version: 1.1
