@@ -5,3 +5,4 @@ LEC top_soc: netlist tong hop vs netlist sau P&R (che do hier)
   Genus   : Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
   diem so sanh 31306, khac 0, abort 0, chua so 0
   (so diem la cua module top; tung module: reports/lec_hier_result.rpt)
+  WARNING: khong doc duoc dau thoi gian Genus trong netlist - khong kiem duoc golden/revised co cung mot lan tong hop

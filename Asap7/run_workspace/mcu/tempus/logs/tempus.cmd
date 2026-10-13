@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Tempus Timing Solution Command Logging File                     
-#  Created on Sun Oct 11 13:15:58 2026                
+#  Created on Tue Oct 13 12:44:46 2026                
 #                                                     
 #######################################################
 
@@ -25,6 +25,7 @@ set_delay_cal_mode -siAware true
 set_si_mode -enable_glitch_report true
 set_timing_derate -delay_corner dc_ss -late  -cell_delay -cell_check  $SRAM_DERATE_SS $sram_cells
 set_timing_derate -delay_corner dc_ff -early -cell_delay -cell_check  $SRAM_DERATE_FF $sram_cells
+set_timing_derate -delay_corner dc_ff -early -cell_delay  $factor $lib_cells
 update_timing -full
 check_timing -verbose > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/check_timing.rpt
 report_annotated_parasitics > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/annotated_parasitics.rpt

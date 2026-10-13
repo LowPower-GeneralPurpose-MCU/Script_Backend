@@ -4,10 +4,10 @@ Tempus top_soc: SPEF quantus (top_soc_quantus_rc_*.spef), OCV + CPPR, SI bat, 1 
   logs/top_soc_pnr.tempus.sdc: bo 4 dong source latency tren generated clock (CLK_SDRAM_OUT), doi 2 set_max/min_delay ps -> ns
   derate SRAM: 84 macro, dc_ss late x1.30, dc_ff early x0.75; OCV chung late x1.0 / early x1.0
   derate lib FF dien ap thap: 56 lib cell cua asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120, dc_ff early cell_delay x0.85
-  setup view_ss  WNS    0.1540 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_ss.rpt
-  setup view_tt  WNS    0.3060 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_tt.rpt
-  hold  view_ff  WNS    0.0090 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_ff.rpt
-  hold  view_tt  WNS    0.0350 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_tt.rpt
+  setup view_ss  WNS    0.2150 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_ss.rpt
+  setup view_tt  WNS    0.3460 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_tt.rpt
+  hold  view_ff  WNS    0.0030 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_ff.rpt
+  hold  view_tt  WNS    0.0260 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_tt.rpt
   max_transition / max_capacitance : reports/all_violators.rpt
   net chua gan ky sinh             : reports/annotated_parasitics.rpt
   duong khong rang buoc            : reports/check_timing.rpt, analysis_coverage.rpt
