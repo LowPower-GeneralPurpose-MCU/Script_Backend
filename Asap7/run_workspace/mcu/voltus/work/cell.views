@@ -1,0 +1,8 @@
+type standard fast default
+type macro fast_accurate default
+type io accurate default
+type standard fast
+type macro fast_accurate
+type io fast_accurate
+accuracy_mode hd
+analysis_mode static

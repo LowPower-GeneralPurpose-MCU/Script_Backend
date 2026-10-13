@@ -1,0 +1,58 @@
+* The organization, structure, and layout of this file are copyrights and
+* confidential and proprietary trade secrets of Cadence Design Systems, Inc.,
+* subject to the terms and conditions of the license agreement in effect
+* between you and Cadence Design Systems, Inc. This file and its information
+* may not be disclosed, sold, or otherwise transferred to any third party
+* without the express written consent of Cadence Design Systems, Inc. Export
+* of any or all of this file in violation of any statute or regulation is
+* strictly prohibited.
+* 
+
+FORMAT: 11.0
+PROJECT: none
+NET: VDD 
+CREATOR: QX
+
+CREATED: 2026-Oct-13 14:29:42 (2026-Oct-13 05:29:42 GMT)
+
+LAYOUT_XMIN: -10
+LAYOUT_YMIN: 268370
+LAYOUT_XMAX: 565750
+LAYOUT_YMAX: 356370
+
+NODES: 94422
+NODE_FILE: VDD_part_20.mnode
+RESISTORS: 96299
+INDUCTORS: 0
+
+LAYERS: 14
+LAYER: M9 M 2 VDD_part_20.ml00
+LAYER: M7 M 111 VDD_part_20.ml04
+LAYER: V6 V 74 VDD_part_20.ml05
+LAYER: M6 M 194 VDD_part_20.ml06
+LAYER: V5 V 130 VDD_part_20.ml07
+LAYER: M5 M 1761 VDD_part_20.ml08
+LAYER: V4 V 1570 VDD_part_20.ml09
+LAYER: M4 M 2084 VDD_part_20.ml10
+LAYER: V3 V 2060 VDD_part_20.ml11
+LAYER: M3 M 2100 VDD_part_20.ml12
+LAYER: V2 V 1540 VDD_part_20.ml13
+LAYER: M2 M 1540 VDD_part_20.ml14
+LAYER: V1 V 1540 VDD_part_20.ml15
+LAYER: M1 M 81593 VDD_part_20.ml16
+
+CUT_LAYER: none
+GRID_CAP: false
+DIFF_CAP: false
+NUM_PINS: 0
+PINS: /dev/null
+NUM_INSTANCE_TAPS: 156820
+INSTANCES: VDD_part_20.minst
+I_LOADS:
+NODE_MAP:
+RESISTOR_MAP:
+TILE_FILE: VDD_part_20.mtile
+OUTPUT_WLT: drawn
+LAYOUT_SCALE_FACTOR: 1
+TEMPERATURE: 25
+MICRON_UNITS: 1000
