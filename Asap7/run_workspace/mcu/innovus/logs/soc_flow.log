@@ -5616,3 +5616,370 @@ ECO finish top_soc: ./saved/top_soc_postRoute_ecofill.enc.dat -> KHOI 15 + KHOI 
     cd ../tempus    && make all     max_transition trong all_violators.rpt phai het
     cd ../voltus    && make all
 10-13 00:50:36 ============================================================
+10-13 19:46:15 Std cell: 18222.0 um^2 (glue top-level 2513.3 um^2)
+10-13 19:46:15 ============================================================
+10-13 19:46:15 >>> KHOI 1: floorPlan
+10-13 19:46:15 ============================================================
+10-13 19:46:16 Cho danh cho SRAM RAM_LO   131.1 x 353.2   tai (2.5, 2.5)
+10-13 19:46:16 Cho danh cho SRAM RAM_HI   131.1 x 353.2   tai (432.1, 2.5)
+10-13 19:46:16 Cho danh cho SRAM CACHE    250.3 x 87.5    tai (138.6, 2.5)
+10-13 19:46:16 Cho danh cho SRAM TAG       33.1 x 61.6    tai (393.9, 2.5)
+10-13 19:46:16 >>> XONG: KHOI 1: floorPlan
+10-13 19:46:16 ============================================================
+10-13 19:46:16 >>> KHOI 2: core ring
+10-13 19:46:16 ============================================================
+10-13 19:46:16 Ring loi: le 2.484 | trong 0.200 | VSS 0.480 | trong 0.160 | VDD 0.480 | trong 1.164 -> loi
+10-13 19:46:17 innovus 2> 10-13 19:46:17 innovus 2> 10-13 19:46:17 Ring loi VDD: 2 doan M8, 2 doan M9
+10-13 19:46:17 Ring loi VSS: 2 doan M8, 2 doan M9
+10-13 19:46:17 >>> XONG: KHOI 2: core ring
+10-13 19:46:17 ============================================================
+10-13 19:46:17 >>> KHOI 3: dat mam 84 SRAM
+10-13 19:46:17 ============================================================
+10-13 19:46:17 Nap 84 SRAM tu ./tcl/manual/soc_sram_place.tcl (xoa file de xep mam lai)
+10-13 19:46:17 Kiem tra mam: 0 loi
+10-13 19:46:17 >>> XONG: KHOI 3: dat mam 84 SRAM
+10-13 19:46:17 ============================================================
+10-13 19:46:17 >>> KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp
+10-13 19:46:17 ============================================================
+10-13 19:46:17 Da luu 84 SRAM vao ./tcl/manual/soc_sram_place.tcl
+10-13 19:46:23 >>> XONG: KHOI 4: snap + FIXED + luu FloorPlan_withMacro.fp
+10-13 19:46:23 ============================================================
+10-13 19:46:23 >>> KHOI 5: luoi nguon M4/M5 cho tung cum SRAM
+10-13 19:46:23 ============================================================
+10-13 19:46:23 Ring loi VDD: 2 doan M8, 2 doan M9
+10-13 19:46:23 Ring loi VSS: 2 doan M8, 2 doan M9
+10-13 19:46:23 84 SRAM -> 10 cum
+10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:23 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:24 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 Cum RAM_LO(8)         1 cot: M4 ngang  18/18  doan, M5 doc 116/116 doan
+10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:25 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:26 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:27 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 Cum RAM_LO(16)        2 cot: M4 ngang  36/36  doan, M5 doc 230/230 doan
+10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:28 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:29 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 Cum RAM_LO(8)         1 cot: M4 ngang  18/18  doan, M5 doc 116/116 doan
+10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:30 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:31 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 Cum RAM_HI(8)         1 cot: M4 ngang  18/18  doan, M5 doc 116/116 doan
+10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:32 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:33 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:34 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:35 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 Cum RAM_HI(16)        2 cot: M4 ngang  36/36  doan, M5 doc 230/230 doan
+10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:36 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 Cum RAM_HI(8)         1 cot: M4 ngang  18/18  doan, M5 doc 116/116 doan
+10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:37 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 Cum CACHE(4)          2 cot: M4 ngang  12/12  doan, M5 doc  62/62  doan
+10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:38 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 Cum CACHE(4)          2 cot: M4 ngang  12/12  doan, M5 doc  62/62  doan
+10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:39 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:40 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:41 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 Cum CACHE(8)          4 cot: M4 ngang  24/24  doan, M5 doc 122/122 doan
+10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 innovus 2> 10-13 19:46:42 Cum TAG(4)            2 cot: M4 ngang  12/12  doan, M5 doc  30/30  doan
+10-13 19:46:42 >>> XONG: KHOI 5: luoi nguon M4/M5 cho tung cum SRAM
+10-13 19:46:42 ============================================================
+10-13 19:46:42 >>> KHOI 6: luoi M6/M7/M8/M9
+10-13 19:46:42 ============================================================
+10-13 19:46:42 Ring loi VDD: 2 doan M8, 2 doan M9
+10-13 19:46:42 Ring loi VSS: 2 doan M8, 2 doan M9
+10-13 19:46:42 innovus 2> 10-13 19:46:43 innovus 2> 10-13 19:46:43 innovus 2> 10-13 19:46:45 innovus 2> 10-13 19:46:45 Luoi nguon toan chip: M7 130 doan, M6 82 doan, M8 326 doan, M9 518 doan (phu ca than SRAM)
+10-13 19:46:45 Ring loi VDD: 2 doan M8, 2 doan M9
+10-13 19:46:45 Ring loi VSS: 2 doan M8, 2 doan M9
+10-13 19:46:45 >>> XONG: KHOI 6: luoi M6/M7/M8/M9
+10-13 19:46:45 ============================================================
+10-13 19:46:45 >>> KHOI 7: blockage + pin
+10-13 19:46:45 ============================================================
+10-13 19:46:45 INFO: da gan 174 pin top_soc: tren 134, duoi 40, x 139.7..425.9
+10-13 19:46:45 >>> XONG: KHOI 7: blockage + pin
+10-13 19:46:45 ============================================================
+10-13 19:46:45 >>> KHOI 8: verify + saveDesign
+10-13 19:46:45 ============================================================
+10-13 19:46:45 Ring loi VDD: 2 doan M8, 2 doan M9
+10-13 19:46:45 Ring loi VSS: 2 doan M8, 2 doan M9
+10-13 19:46:46 --- ./verify_rpt/drc_powerplan.rpt
+10-13 19:46:46   0 vi pham
+10-13 19:46:47 PG: doan stripe (VDD + VSS): M4 204, M5 1200, M6 82, M7 130, M8 326, M9 518
+10-13 19:46:47 PG: VDD: 78898 special via: V8 43065, V7 10725, khac 25108
+10-13 19:46:47 PG:   ten via chua phan loai (nhieu nhat truoc): {VIAGEN_1 18900} {VIAGEN_2 3543} {VIAGEN_3 2665}
+10-13 19:46:47 PG: WARNING: VDD: khong nhan ra via V4 nao theo ten (VIA45* / M5_M4*) - KHONG ket luan duoc so via tren than SRAM; sua soc_pg_via_class theo ten o dong tren
+10-13 19:46:47 PG: VSS: 78896 special via: V8 43065, V7 10725, khac 25106
+10-13 19:46:47 PG:   ten via chua phan loai (nhieu nhat truoc): {VIAGEN_1 18900} {VIAGEN_2 3541} {VIAGEN_3 2665}
+10-13 19:46:47 PG: WARNING: VSS: khong nhan ra via V4 nao theo ten (VIA45* / M5_M4*) - KHONG ket luan duoc so via tren than SRAM; sua soc_pg_via_class theo ten o dong tren
+10-13 19:46:47 PG: WARNING: bao cao khong day du - doc ./reports/pg_grid.rpt va dem tay trong GUI (mot cap M5 tren than SRAM phai co via V4 o moi rail M4)
+10-13 19:46:50 ============================================================
+10-13 19:46:50 FLOORPLAN + POWER GRID XONG - saved/top_soc_powerplan.enc
+  verify_rpt/connectivity_powerplan.rpt : moi SRAM phai noi VDD/VSS
+      (open o chan std cell la binh thuong - rail M1 chua lam)
+  verify_rpt/drc_powerplan.rpt          : phai 0 vi pham PG
+  reports/pg_grid.rpt                   : so stripe / via tung lop; moi SRAM
+      lon ~224 via V4 moi net (7 cap M5 x 32 rail), nguong chan la 56
+  GUI: Tools > Violation Browser de xem tung loi
+Tiep theo: KHOI 9 (placement), KHOI 10 (rail M1 + stripe M5 std cell)
+10-13 19:46:50 ============================================================
+10-13 19:46:50 >>> XONG: KHOI 8: verify + saveDesign
+10-13 19:46:50 ============================================================
+10-13 19:46:50 >>> KHOI 9: placement
+10-13 19:46:50 ============================================================
+10-13 19:46:50 Ring loi VDD: 2 doan M8, 2 doan M9
+10-13 19:46:50 Ring loi VSS: 2 doan M8, 2 doan M9
+10-13 19:46:51 Tap cell: 31100 TAPCELL_ASAP7_75t_R
+10-13 19:46:51 Notch  201.474   65.124  237.816   91.044  (36.34 x 25.92 um)
+10-13 19:46:51 Notch  463.428    2.484  465.588  355.644  (2.16 x 353.16 um)
+10-13 19:46:51 Notch  100.008    2.484  102.168  355.644  (2.16 x 353.16 um)
+10-13 19:46:51 Notch   33.912    2.484   36.072  355.644  (2.16 x 353.16 um)
+10-13 19:46:51 Notch  529.524    2.484  531.684  355.644  (2.16 x 353.16 um)
+10-13 19:46:51 Notch  134.676    2.484  137.538   91.044  (2.86 x 88.56 um)
+10-13 19:46:51 Notch  301.752    2.484  303.210   91.044  (1.46 x 88.56 um)
+10-13 19:46:51 Notch  430.002    2.484  430.920   91.044  (0.92 x 88.56 um)
+10-13 19:46:51 Doc path group: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_syn.innovus_groups.tcl
+10-13 19:48:14 ***** Total cpu  0:5:19
+10-13 19:48:14 ***** Total real time  0:1:22
+10-13 19:48:14 innovus 2> 10-13 19:53:02 Mat do std cell dat duoc: 0.238 (target MCU_TARGET_STD_UTIL 0.550)
+10-13 19:53:02 WARNING: mat do 0.238 chi bang 43% target 0.550 - loi dang bi keo cao qua muc (tuong SRAM quyet dinh chieu cao, khong phai logic). Xem soc_layout trong soc_fp_procs.tcl.
+10-13 19:53:16   place SETUP: WNS 0.202 TNS 0.0, 0 duong vi pham -> DAT
+10-13 19:53:22 >>> XONG: KHOI 9: placement
+10-13 19:53:22 ============================================================
+10-13 19:53:22 >>> KHOI 10: rail M1 + stripe M5 std cell
+10-13 19:53:22 ============================================================
+10-13 19:53:28 innovus 2> 10-13 19:53:29 innovus 2> 10-13 19:53:29 innovus 2> 10-13 19:53:29 innovus 2> 10-13 19:53:29 innovus 2> 10-13 19:53:30 innovus 2> 10-13 19:53:30 innovus 2> 10-13 19:53:31 innovus 2> 10-13 19:53:31 innovus 2> 10-13 19:53:32 innovus 2> 10-13 19:53:32 innovus 2> 10-13 19:53:34 innovus 2> 10-13 19:53:34 innovus 2> 10-13 19:53:34 innovus 2> 10-13 19:53:36 innovus 2> 10-13 19:53:36 innovus 2> 10-13 19:53:37 innovus 2> 10-13 19:53:37 innovus 2> 10-13 19:53:37 innovus 2> 10-13 19:53:37 innovus 2> 10-13 19:53:38 innovus 2> 10-13 19:53:38 Stripe M5 std cell: 20 vung (tranh 10 cum SRAM + khe)
+10-13 19:53:39 Chong via stripe M5: 0 via widePWR moi (phai 0), 237068 via *_PG moi
+10-13 19:53:47 innovus 2> 10-13 19:53:51 --- ./verify_rpt/drc_place.rpt
+10-13 19:53:51   0 vi pham
+10-13 19:53:58 ============================================================
+10-13 19:53:58 PLACEMENT XONG - saved/top_soc_placed_pg.enc
+  verify_rpt/connectivity_place.rpt : phai 'Found no problems' (moi rail M1 co stripe M5)
+  verify_rpt/drc_place.rpt          : phai 0 vi pham
+  reports/timing_preCTS/            : WNS/TNS truoc CTS
+Tiep theo: KHOI 11 (CTS)
+10-13 19:53:58 ============================================================
+10-13 19:53:58 >>> XONG: KHOI 10: rail M1 + stripe M5 std cell
+10-13 19:53:58 ============================================================
+10-13 19:53:58 >>> KHOI 11: CTS
+10-13 19:53:58 ============================================================
+10-13 20:05:28 >>> XONG: KHOI 11: CTS
+10-13 20:05:28 ============================================================
+10-13 20:05:28 >>> KHOI 12: optDesign postCTS
+10-13 20:05:28 ============================================================
+10-13 20:10:34 soc_fix_cg_hold vong 1 (13 s): 12 latch hold < 0.020
+10-13 20:10:34   cg_cpu/en_latch_reg slack -0.048 -> buffer thu 1 truoc cg_cpu/g16__6260/B
+10-13 20:10:35   cg_dbg/en_latch_reg slack -0.049 -> buffer thu 1 truoc cg_dbg/g15__4319/B
+10-13 20:10:36   cg_pwm/en_latch_reg slack -0.044 -> buffer thu 1 truoc cg_pwm/g15__6783/B
+10-13 20:10:36   cg_spi/en_latch_reg slack -0.046 -> buffer thu 1 truoc cg_spi/g15__3680/B
+10-13 20:10:36   cg_gpio/en_latch_reg slack -0.042 -> buffer thu 1 truoc cg_gpio/g15__8428/B
+10-13 20:10:36   cg_tim0/en_latch_reg slack -0.044 -> buffer thu 1 truoc cg_tim0/g15__1617/B
+10-13 20:10:36   cg_uart1/en_latch_reg slack -0.044 -> buffer thu 1 truoc cg_uart1/g15__5122/B
+10-13 20:10:36   cg_tim1/en_latch_reg slack -0.043 -> buffer thu 1 truoc cg_tim1/g15__2802/B
+10-13 20:10:36   cg_ascon/en_latch_reg slack -0.041 -> buffer thu 1 truoc cg_ascon/g15__2398/B
+10-13 20:10:37   cg_i2c/en_latch_reg slack -0.047 -> buffer thu 1 truoc cg_i2c/g15__5526/B
+10-13 20:10:37   cg_uart/en_latch_reg slack -0.034 -> buffer thu 1 truoc cg_uart/g15__1705/B
+10-13 20:10:37   cg_cordic/en_latch_reg slack -0.038 -> buffer thu 1 truoc cg_cordic/g15__5107/B
+10-13 20:10:55 soc_fix_cg_hold vong 2 (34 s): 11 latch hold < 0.020
+10-13 20:10:55   cg_dbg/en_latch_reg slack -0.005 -> buffer thu 2 truoc cg_dbg/g15__4319/B
+10-13 20:10:56   cg_pwm/en_latch_reg slack -0.007 -> buffer thu 2 truoc cg_pwm/g15__6783/B
+10-13 20:10:56   cg_spi/en_latch_reg slack -0.008 -> buffer thu 2 truoc cg_spi/g15__3680/B
+10-13 20:10:56   cg_gpio/en_latch_reg slack -0.004 -> buffer thu 2 truoc cg_gpio/g15__8428/B
+10-13 20:10:56   cg_tim0/en_latch_reg slack -0.007 -> buffer thu 2 truoc cg_tim0/g15__1617/B
+10-13 20:10:56   cg_uart1/en_latch_reg slack -0.007 -> buffer thu 2 truoc cg_uart1/g15__5122/B
+10-13 20:10:56   cg_tim1/en_latch_reg slack -0.006 -> buffer thu 2 truoc cg_tim1/g15__2802/B
+10-13 20:10:56   cg_ascon/en_latch_reg slack -0.003 -> buffer thu 2 truoc cg_ascon/g15__2398/B
+10-13 20:10:56   cg_i2c/en_latch_reg slack -0.011 -> buffer thu 2 truoc cg_i2c/g15__5526/B
+10-13 20:10:57   cg_uart/en_latch_reg slack 0.003 -> buffer thu 2 truoc cg_uart/g15__1705/B
+10-13 20:10:57   cg_cordic/en_latch_reg slack 0.000 -> buffer thu 2 truoc cg_cordic/g15__5107/B
+10-13 20:11:15 soc_fix_cg_hold vong 3 (54 s): 0 latch hold < 0.020
+10-13 20:11:15 soc_fix_cg_hold: them 23 HB4xp67_ASAP7_75t_R sau 54 s
+10-13 20:11:15   cg_cpu/en_latch_reg          hold slack 0.034 sau 1 buffer
+10-13 20:11:15   cg_dbg/en_latch_reg          hold slack 0.032 sau 2 buffer
+10-13 20:11:15   cg_pwm/en_latch_reg          hold slack 0.030 sau 2 buffer
+10-13 20:11:15   cg_spi/en_latch_reg          hold slack 0.029 sau 2 buffer
+10-13 20:11:15   cg_gpio/en_latch_reg         hold slack 0.033 sau 2 buffer
+10-13 20:11:15   cg_tim0/en_latch_reg         hold slack 0.030 sau 2 buffer
+10-13 20:11:15   cg_uart1/en_latch_reg        hold slack 0.030 sau 2 buffer
+10-13 20:11:15   cg_tim1/en_latch_reg         hold slack 0.031 sau 2 buffer
+10-13 20:11:15   cg_ascon/en_latch_reg        hold slack 0.035 sau 2 buffer
+10-13 20:11:15   cg_i2c/en_latch_reg          hold slack 0.027 sau 2 buffer
+10-13 20:11:15   cg_uart/en_latch_reg         hold slack 0.040 sau 2 buffer
+10-13 20:11:15   cg_cordic/en_latch_reg       hold slack 0.037 sau 2 buffer
+10-13 20:11:16 Chan VDD/VSS std cell (postCTS): 0 ho
+10-13 20:11:49 WARNING: postCTS SETUP: WNS 0.077 TNS 0.0, 0 duong vi pham
+  -> TIMING DAT
+  -> DRV  : max_tran Real 1 net: u_axi_interconnect/n_14343 (-0.000 ns)
+  Xem ./reports/timing_postCTS/postCTS.summary(.gz)
+10-13 20:11:49 WARNING: buoc nay chua phai buoc cuoi nen flow chay tiep, nhung con so tren phai ve 0 truoc khi ket luan.
+10-13 20:11:49 WARNING: postCTS HOLD: WNS -0.003 TNS -0.119, 314 duong vi pham
+  -> TIMING: WNS -0.003 ns < 0.0; TNS -0.119 ns; 314 duong vi pham
+  Xem ./reports/timing_postCTS_hold/postCTS_hold.summary(.gz)
+10-13 20:11:49 WARNING: buoc nay chua phai buoc cuoi nen flow chay tiep, nhung con so tren phai ve 0 truoc khi ket luan.
+10-13 20:11:57 >>> XONG: KHOI 12: optDesign postCTS
+10-13 20:11:57 ============================================================
+10-13 20:11:57 >>> KHOI 13: routeDesign
+10-13 20:11:57 ============================================================
+10-13 20:11:57 srambank_256x4x32_6t122.fixed.lef: 0 chan chi co tren M1-M3
+10-13 20:11:57 srambank_128x4x20_6t122.fixed.lef: 0 chan chi co tren M1-M3
+10-13 20:11:57 Chan M3 tren 84 SRAM
+10-13 20:14:02 
+10-13 20:19:28 --- ./verify_rpt/drc_route.rpt
+10-13 20:19:28   loai OFFGRID                        26
+10-13 20:19:28   net  u_itcm/u_mem/FE_OFN7415_n_240        2
+10-13 20:19:28   net  u_itcm/u_mem/FE_OFN7419_n_251        1
+10-13 20:19:28   net  u_itcm/u_mem/FE_OFN6646_n_250        1
+10-13 20:19:28   net  u_itcm/u_mem/bank_rdata[1][25]        1
+10-13 20:19:28   net  u_itcm/u_mem/FE_OFN7420_n_252        1
+10-13 20:19:28   net  u_itcm/u_mem/FE_OFN7405_n_231        1
+10-13 20:19:28   net  u_itcm/u_mem/FE_OFN7429_n_261        1
+10-13 20:19:28   net  u_itcm/u_mem/FE_OFN6639_n_241        1
+10-13 20:19:28   net  u_itcm/u_mem/FE_OFN7430_n_262        1
+10-13 20:19:28   net  u_itcm/u_mem/FE_OFN7421_n_253        1
+10-13 20:19:28   ... con 15 net nua
+10-13 20:19:28   -> 0 vi pham that (26 bo qua: net {}, loai {moi loai}; 26 OFFGRID M4 tai chan macro)
+10-13 20:19:37 >>> XONG: KHOI 13: routeDesign
+10-13 20:19:37 ============================================================
+10-13 20:19:37 >>> KHOI 14: optDesign postRoute
+10-13 20:19:37 ============================================================
+10-13 20:19:37 Net treo con lai: xem reports/dangling_net.rpt
+10-13 20:30:15 soc_fix_cg_hold vong 1 (30 s): 11 latch hold < 0.020
+10-13 20:30:15   cg_cpu/en_latch_reg slack -0.035 -> buffer thu 1 truoc cg_cpu/g16__6260/B
+10-13 20:30:17   cg_dbg/en_latch_reg slack 0.001 -> buffer thu 1 truoc cg_dbg/g15__4319/B
+10-13 20:30:18   cg_pwm/en_latch_reg slack 0.003 -> buffer thu 1 truoc cg_pwm/g15__6783/B
+10-13 20:30:18   cg_spi/en_latch_reg slack 0.003 -> buffer thu 1 truoc cg_spi/g15__3680/B
+10-13 20:30:18   cg_gpio/en_latch_reg slack 0.008 -> buffer thu 1 truoc cg_gpio/g15__8428/B
+10-13 20:30:18   cg_uart1/en_latch_reg slack 0.006 -> buffer thu 1 truoc cg_uart1/g15__5122/B
+10-13 20:30:18   cg_tim1/en_latch_reg slack 0.006 -> buffer thu 1 truoc cg_tim1/g15__2802/B
+10-13 20:30:19   cg_ascon/en_latch_reg slack 0.008 -> buffer thu 1 truoc cg_ascon/g15__2398/B
+10-13 20:30:19   cg_i2c/en_latch_reg slack 0.004 -> buffer thu 1 truoc cg_i2c/g15__5526/B
+10-13 20:30:19   cg_uart/en_latch_reg slack 0.016 -> buffer thu 1 truoc cg_uart/g15__1705/B
+10-13 20:30:19   cg_cordic/en_latch_reg slack 0.010 -> buffer thu 1 truoc cg_cordic/g15__5107/B
+10-13 20:30:55 soc_fix_cg_hold vong 2 (70 s): 0 latch hold < 0.020
+10-13 20:30:55 soc_fix_cg_hold: them 11 HB4xp67_ASAP7_75t_R sau 70 s
+10-13 20:30:55   cg_cpu/en_latch_reg          hold slack 0.039 sau 1 buffer
+10-13 20:30:55   cg_dbg/en_latch_reg          hold slack 0.046 sau 1 buffer
+10-13 20:30:55   cg_pwm/en_latch_reg          hold slack 0.041 sau 1 buffer
+10-13 20:30:55   cg_spi/en_latch_reg          hold slack 0.043 sau 1 buffer
+10-13 20:30:55   cg_gpio/en_latch_reg         hold slack 0.049 sau 1 buffer
+10-13 20:30:55   cg_tim0/en_latch_reg         hold slack 0.029 sau 0 buffer
+10-13 20:30:55   cg_uart1/en_latch_reg        hold slack 0.044 sau 1 buffer
+10-13 20:30:55   cg_tim1/en_latch_reg         hold slack 0.045 sau 1 buffer
+10-13 20:30:55   cg_ascon/en_latch_reg        hold slack 0.049 sau 1 buffer
+10-13 20:30:55   cg_i2c/en_latch_reg          hold slack 0.042 sau 1 buffer
+10-13 20:30:55   cg_uart/en_latch_reg         hold slack 0.054 sau 1 buffer
+10-13 20:30:55   cg_cordic/en_latch_reg       hold slack 0.050 sau 1 buffer
+10-13 20:33:32 Chan VDD/VSS std cell (postRoute): 0 ho
+10-13 20:33:41 --- ./verify_rpt/drc_postRoute.rpt
+10-13 20:33:41   loai OFFGRID                         7
+10-13 20:33:41   net  u_itcm/u_mem/bank_rdata[1][25]        1
+10-13 20:33:41   net  u_itcm/u_mem/FE_OFN7420_n_252        1
+10-13 20:33:41   net  u_itcm/u_mem/FE_OFN7429_n_261        1
+10-13 20:33:41   net  u_itcm/u_mem/FE_OFN7430_n_262        1
+10-13 20:33:41   net  u_itcm/u_mem/FE_OFN7425_n_257        1
+10-13 20:33:41   net  u_itcm/u_mem/FE_OFN7423_n_255        1
+10-13 20:33:41   net  u_itcm/u_mem/FE_OFN7421_n_253        1
+10-13 20:33:41   -> 0 vi pham that (7 bo qua: net {}, loai {OFFGRID}; 7 OFFGRID M4 tai chan macro)
+10-13 20:33:52   postRoute SETUP: WNS 0.216 TNS 0.0, 0 duong vi pham -> DAT
+10-13 20:33:52   postRoute HOLD: WNS 0.014 TNS 0.0, 0 duong vi pham -> DAT
+10-13 20:33:52 >>> XONG: KHOI 14: optDesign postRoute
+10-13 20:33:52 ============================================================
+10-13 20:33:52 >>> KHOI 15: filler + verify
+10-13 20:33:52 ============================================================
+10-13 20:33:52 Filler cell: FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R
+10-13 20:34:51 --- ./verify_rpt/drc_final.rpt
+10-13 20:34:51   loai OFFGRID                         7
+10-13 20:34:51   net  u_itcm/u_mem/bank_rdata[1][25]        1
+10-13 20:34:51   net  u_itcm/u_mem/FE_OFN7420_n_252        1
+10-13 20:34:51   net  u_itcm/u_mem/FE_OFN7429_n_261        1
+10-13 20:34:51   net  u_itcm/u_mem/FE_OFN7430_n_262        1
+10-13 20:34:51   net  u_itcm/u_mem/FE_OFN7425_n_257        1
+10-13 20:34:51   net  u_itcm/u_mem/FE_OFN7423_n_255        1
+10-13 20:34:51   net  u_itcm/u_mem/FE_OFN7421_n_253        1
+10-13 20:34:51   -> 0 vi pham that (7 bo qua: net {}, loai {OFFGRID}; 7 OFFGRID M4 tai chan macro)
+10-13 20:34:56 soc_metal_fill: SOC_FILL_LAYERS = M1 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M2 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M3 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M4 0.024 0.312 0.096 0.096 1.25 0.048 0.048 10 35 25 M5 0.024 0.312 0.096 0.096 1.25 0.048 0.048 15 90 25 M6 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M7 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M8 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 M9 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 Pad 0.2 2.0 0.04 2.24 2.24 2.04 2.04 20 80 25
+10-13 20:34:56 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+10-13 20:34:56   M1: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-13 20:34:56   M2: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-13 20:34:56   M3: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-13 20:34:56   M4: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-13 20:34:56   M5: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-13 20:34:56   M6: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-13 20:34:56   M7: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-13 20:34:56   M8: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-13 20:34:56   M9: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-13 20:34:56   Pad: pitch 2.2400 | buoc fill 2.2400 (1.00 track) | cach day that 2.2400 (1.00 track) | mat do toi da 8.9%
+10-13 20:34:56 WARNING: setMetalFill -reset: 
+10-13 20:36:34 # soc_fill_report doc lai ./top_soc.metalfill.rpt
+10-13 20:36:34 Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai M5/Pad la so TU DAT trong SOC_FILL_LAYERS, khong phai luat foundry.
+10-13 20:36:34   layer   duoi min (truoc -> sau)      vuot max (truoc -> sau)
+10-13 20:36:34   M1        35 -> 0      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-13 20:36:34   M2        41 -> 1      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-13 20:36:34   M3        31 -> 0      (min 25%)        0 -> 2      (max 60%)   /77 window   <- fill LAM TANG so window vuot tran
+10-13 20:36:34   M4        36 -> 0      (min 10%)        0 -> 0      (max 35%)   /77 window
+10-13 20:36:34   M5      1910 -> 1097   (min 15%)        0 -> 0      (max 90%)   /1960 window
+10-13 20:36:34   M6        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-13 20:36:34   M7        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-13 20:36:34   M8         0 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-13 20:36:34   M9         0 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-13 20:36:34   Pad       77 -> 0      (min 20%)        0 -> 0      (max 80%)   /77 window
+10-13 20:36:34 WARNING: 3 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).
+10-13 20:36:34   da ghi ./verify_rpt/fill_summary.rpt
+10-13 20:36:52 --- ./verify_rpt/drc_fill.rpt
+10-13 20:36:52   loai OFFGRID                         7
+10-13 20:36:52   net  u_itcm/u_mem/bank_rdata[1][25]        1
+10-13 20:36:52   net  u_itcm/u_mem/FE_OFN7420_n_252        1
+10-13 20:36:52   net  u_itcm/u_mem/FE_OFN7429_n_261        1
+10-13 20:36:52   net  u_itcm/u_mem/FE_OFN7430_n_262        1
+10-13 20:36:52   net  u_itcm/u_mem/FE_OFN7425_n_257        1
+10-13 20:36:52   net  u_itcm/u_mem/FE_OFN7423_n_255        1
+10-13 20:36:52   net  u_itcm/u_mem/FE_OFN7421_n_253        1
+10-13 20:36:52   -> 0 vi pham that (7 bo qua: net {}, loai {OFFGRID}; 7 OFFGRID M4 tai chan macro)
+10-13 20:36:59 Mat do - layer doc: M5
+10-13 20:36:59   M5   duoi min: 1097 tren macro SRAM + 0 trong vung logic
+10-13 20:36:59   vung logic: dat nguong o moi window
+10-13 20:36:59   1097 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+10-13 20:36:59   da ghi ./verify_rpt/density_summary.rpt
+10-13 20:36:59   density signoff: PENDING_MERGED_GDS_SIGNOFF
+10-13 20:37:30 Mat do - layer doc: M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
+10-13 20:37:30   M1   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-13 20:37:30   M2   duoi min: 0 tren macro SRAM + 1 trong vung logic (thap nhat 22.18%)
+10-13 20:37:30   M3   duoi min: 0 tren macro SRAM + 0 trong vung logic | 2 window VUOT tran
+10-13 20:37:30   M4   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-13 20:37:30   M5   duoi min: 1097 tren macro SRAM + 0 trong vung logic
+10-13 20:37:30   M6   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-13 20:37:30   M7   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-13 20:37:30   M8   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-13 20:37:30   M9   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-13 20:37:30   Pad  duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-13 20:37:30   2 window vuot tran mat do: fill do them vao window von da qua tran (cua so chong nhau 50%).  Chi cac layer co MAXIMUMDENSITY that trong tech LEF moi dang lo - ASAP7 chi co M5 (90%) va Pad (80%).
+10-13 20:37:30 WARNING: 1 window vung logic duoi nguong - metal fill chua du, xem lai SOC_FILL_LAYERS (nhat la -maxWidth / -decrement)
+10-13 20:37:30   1097 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+10-13 20:37:30   da ghi ./verify_rpt/density_all_summary.rpt
+10-13 20:40:42   final SETUP: WNS 0.216 TNS 0.0, 0 duong vi pham -> DAT
+10-13 20:40:42   final HOLD: WNS 0.014 TNS 0.0, 0 duong vi pham -> DAT
+10-13 20:40:42   Slew chan macro SRAM: khong chan nao vuot gioi han Liberty
+10-13 20:41:27   Cong suat: 92.00 mW, trong do macro SRAM 82.48 mW (89.6%)
+10-13 20:41:27   -> CHUA co VCD/TCF: activity mac dinh 0.2 cho moi chan, tuc coi
+10-13 20:41:27      ca 84 macro SRAM deu bi truy cap cung luc.  RTL chi bat mot
+10-13 20:41:27      bank moi lan doc/ghi -> con so tren la CAN TREN, khong phai
+10-13 20:41:27      cong suat cua thiet ke.  Muon so that: chay mo phong lay VCD
+10-13 20:41:27      roi read_activity_file truoc report_power.
+10-13 20:41:34 ============================================================
+10-13 20:41:34 PNR XONG - saved/top_soc_final.enc
+  verify_rpt/drc_final.rpt           : DRC design that, phai 0
+  verify_rpt/drc_fill.rpt            : DRC sau metal fill, phai 0
+  verify_rpt/connectivity_final.rpt  : 0 open/short
+  verify_rpt/welltap_final.rpt       : 0 cell xa tap qua 30.0 um
+  verify_rpt/density_final.rpt       : chi layer M5 co luat
+  verify_rpt/fill_summary.rpt        : so window duoi min / vuot max CUA
+                                       TUNG layer sau addMetalFill
+  verify_rpt/density_all_summary.rpt : cung so do nhung da tach macro SRAM
+                                       / vung logic - vung logic phai 0
+  reports/timing_final*/             : WNS setup/hold >= 0, DRV Real = 0
+                                       (soc_check_timing o tren moi CANH BAO;
+                                        KHOI 16 moi chan xuat GDS)
+  reports/timing_final/final.tran.gz : slew chan clk SRAM - soc_sram_clk_slew
+                                       da in so o tren, khong phai mo file
+  reports/power_final.rpt            : can tren (chua co VCD), xem ghi chu
+  logs/soc_flow.log                  : toan bo ket luan cua cac cong kiem tra
+Tiep theo: KHOI 16 (xuat file)
+10-13 20:41:34 ============================================================
+10-13 20:41:34 >>> XONG: KHOI 15: filler + verify
+10-13 20:41:34 ============================================================
+10-13 20:41:34 >>> KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF
+10-13 20:41:34 ============================================================
+10-13 20:41:34   ./verify_rpt/drc_final.rpt: sach (7 vi pham waive theo SOC_DRC_WAIVE_* trong soc_fp_config.tcl)
+10-13 20:41:34   ./verify_rpt/drc_fill.rpt: sach (7 vi pham waive theo SOC_DRC_WAIVE_* trong soc_fp_config.tcl)
+10-13 20:41:34   final SETUP: WNS 0.216 TNS 0.0, 0 duong vi pham -> DAT
+10-13 20:41:34   final HOLD: WNS 0.014 TNS 0.0, 0 duong vi pham -> DAT
+10-13 20:41:35   srambank_256x4x32_6t122.fixed.lef: toa do tren grid, SITE hop le
+10-13 20:41:35   srambank_128x4x20_6t122.fixed.lef: toa do tren grid, SITE hop le
+10-13 20:41:40 Ten se bi escape khi ghi netlist: 86658 (xem ./reports/escaped_names.rpt)
+10-13 20:41:40   -> ten trong .v bi escape (them backslash o dau, them mot dau
+10-13 20:41:40      cach o cuoi) nen khong khop truc tiep ten trong DEF/GDS.
+10-13 20:41:40      Khai bao cho LVS / Conformal truoc khi so netlist.
+10-13 20:43:27 WARNING: createPGPin VDD voi 4 -geom bi tu choi () - thu tung hinh
+10-13 20:43:27 Chan PG VDD: 4 / 4 doan ring (M8 0.862 356.836 564.73 357.316; M9 0.836 0.842 1.316 357.31; M9 564.276 0.842 564.756 357.31; M8 0.862 0.836 564.73 1.316)
+10-13 20:43:27 WARNING: createPGPin VSS voi 4 -geom bi tu choi () - thu tung hinh
+10-13 20:43:27 Chan PG VSS: 4 / 4 doan ring (M8 0.222 357.476 565.37 357.956; M9 0.196 0.202 0.676 357.95; M9 564.916 0.202 565.396 357.95; M8 0.222 0.196 565.37 0.676)
+10-13 20:43:27 Doan ring loi: ./outputs/top_soc_pg_ring.txt
+10-13 20:43:40 Chan PG VDD trong top_soc.lef: 4 hinh (ring 4 doan)
+10-13 20:43:40 Chan PG VSS trong top_soc.lef: 4 hinh (ring 4 doan)
+10-13 20:43:40 >>> XONG: KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF
