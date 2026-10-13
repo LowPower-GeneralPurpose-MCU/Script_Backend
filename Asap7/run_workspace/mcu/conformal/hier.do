@@ -56,7 +56,7 @@ set_system_mode setup
 # MODULE dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 (R) INSTANCE /u_axi_apb_dma_u_dma_engine (R)
 # Wrapper size: (G) = 2233  (R) = 2233
 # Periphery size: (G) = 13796  (R) = 13796
-# Pins directly connected to key-points/constants: (G) = 84.50%  (R) = 86.89%
+# Pins directly connected to key-points/constants: (G) = 84.50%  (R) = 86.86%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
@@ -195,62 +195,61 @@ set_system_mode setup
 # IN (R) FE_DBTN115_paddr_9_3  (KP<--) (EQ_REP: -apb_paddr[3]) 
 # IN (R) FE_DBTN126_paddr_9_12  (KP<--) (EQ_REP: -apb_paddr[12]) 
 # IN (R) FE_DBTN127_paddr_9_13  (KP<--) (EQ_REP: -apb_paddr[13]) 
-# IN (R) FE_OFN579_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN505_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN503_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN495_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN491_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN397_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN396_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN392_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN389_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN384_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN380_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN291_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN268_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN166_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN375_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN365_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN361_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN359_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN358_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN234_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN231_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN228_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN227_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN226_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN225_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN164_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN162_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
 # IN (R) FE_OFN161_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN645_FE_DBTN87_pwdata_0_30  (KP<--) (EQ_REP: +apb_pwdata[30]) 
-# IN (R) FE_OFN648_FE_DBTN86_pwdata_0_29  (KP<--) (EQ_REP: +apb_pwdata[29]) 
-# IN (R) FE_OFN650_FE_DBTN84_pwdata_0_27  (KP<--) (EQ_REP: +apb_pwdata[27]) 
-# IN (R) FE_OFN656_FE_DBTN80_pwdata_0_23  (KP<--) (EQ_REP: +apb_pwdata[23]) 
-# IN (R) FE_OFN659_FE_DBTN75_pwdata_0_18  (KP<--) (EQ_REP: +apb_pwdata[18]) 
-# IN (R) FE_OFN692_n  (KP<--) (EQ_REP: +apb_pwdata[20]) 
+# IN (R) FE_OFN160_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN159_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN619_FE_DBTN88_pwdata_0_31  (KP<--) (EQ_REP: +apb_pwdata[31]) 
+# IN (R) FE_OFN622_FE_DBTN79_pwdata_0_22  (KP<--) (EQ_REP: +apb_pwdata[22]) 
+# IN (R) FE_OFN624_FE_DBTN72_pwdata_0_15  (KP<--) (EQ_REP: +apb_pwdata[15]) 
+# IN (R) FE_OFN626_FE_DBTN69_pwdata_0_12  (KP<--) (EQ_REP: +apb_pwdata[12]) 
+# IN (R) FE_OFN627_FE_DBTN68_pwdata_0_11  (KP<--) (EQ_REP: +apb_pwdata[11]) 
+# IN (R) FE_OFN628_FE_DBTN67_pwdata_0_10  (KP<--) (EQ_REP: +apb_pwdata[10]) 
+# IN (R) FE_OFN630_FE_DBTN66_pwdata_0_9  (KP<--) (EQ_REP: +apb_pwdata[9]) 
+# IN (R) FE_OFN631_FE_DBTN65_pwdata_0_8  (KP<--) (EQ_REP: +apb_pwdata[8]) 
+# IN (R) FE_OFN632_FE_DBTN64_pwdata_0_5  (KP<--) (EQ_REP: +apb_pwdata[5]) 
+# IN (R) FE_OFN637_FE_DBTN63_pwdata_0_4  (KP<--) (EQ_REP: +apb_pwdata[4]) 
+# IN (R) FE_OFN641_FE_DBTN32_n_10057  (KP<--) (EQ_REP: +apb_pwdata[7]) 
+# IN (R) clk_clone15  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone13  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone28  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone27  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone9  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone25  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone30  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone29  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone31  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone7  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone24  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone6  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone26  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone10  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone23  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone21  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone20  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone26  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone32  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone27  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone22  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone15  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone24  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone19  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone6  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone18  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone17  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone14  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone3  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone12  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone11  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone10  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone17  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone33  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone9  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone8  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone4  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone14  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone16  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone13  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone5  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone7  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone3  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone28  (KP<--) (EQ_REP: +clk) 
-# IN (R) FE_OFN695_n  (KP<--) (EQ_REP: +apb_pwdata[31]) 
-# IN (R) p1  (KP<--) (EQ_REP: +apb_paddr[13]) 
+# IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone4  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone8  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone5  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone16  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) apb_prdata[31]  (KP<--)(REP)  =   (R) apb_prdata[31]  (KP<--)(REP) (by sim and name)
 # OUT (G) apb_prdata[30]  (KP<--)(REP)  =   (R) apb_prdata[30]  (KP<--)(REP) (by sim and name)
@@ -596,32 +595,36 @@ add_ignored_outputs WLAST -Golden -System
 # UR
 add_ignored_outputs BREADY -Golden -System
 # UR
+add_pin_equivalences rst_n -invert FE_OFN159_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN160_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n -invert FE_OFN161_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN166_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN268_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN291_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN380_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN384_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN389_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN392_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN396_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN397_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN491_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN495_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN503_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN505_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN579_reset_sys_n -hier -Revised
-add_pin_equivalences {apb_paddr[13]} p1 -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN162_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN164_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN225_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN226_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN227_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN228_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN231_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN234_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN358_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN359_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN361_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN365_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN375_reset_sys_n -hier -Revised
 add_pin_equivalences {apb_paddr[13]} -invert FE_DBTN127_paddr_9_13 -hier -Revised
 add_pin_equivalences {apb_paddr[12]} -invert FE_DBTN126_paddr_9_12 -hier -Revised
 add_pin_equivalences {apb_paddr[3]} -invert FE_DBTN115_paddr_9_3 -hier -Revised
-add_pin_equivalences {apb_pwdata[31]} FE_OFN695_n -hier -Revised
-add_pin_equivalences {apb_pwdata[30]} FE_OFN645_FE_DBTN87_pwdata_0_30 -hier -Revised
-add_pin_equivalences {apb_pwdata[29]} FE_OFN648_FE_DBTN86_pwdata_0_29 -hier -Revised
-add_pin_equivalences {apb_pwdata[27]} FE_OFN650_FE_DBTN84_pwdata_0_27 -hier -Revised
-add_pin_equivalences {apb_pwdata[23]} FE_OFN656_FE_DBTN80_pwdata_0_23 -hier -Revised
-add_pin_equivalences {apb_pwdata[20]} FE_OFN692_n -hier -Revised
-add_pin_equivalences {apb_pwdata[18]} FE_OFN659_FE_DBTN75_pwdata_0_18 -hier -Revised
+add_pin_equivalences {apb_pwdata[31]} FE_OFN619_FE_DBTN88_pwdata_0_31 -hier -Revised
+add_pin_equivalences {apb_pwdata[22]} FE_OFN622_FE_DBTN79_pwdata_0_22 -hier -Revised
+add_pin_equivalences {apb_pwdata[15]} FE_OFN624_FE_DBTN72_pwdata_0_15 -hier -Revised
+add_pin_equivalences {apb_pwdata[12]} FE_OFN626_FE_DBTN69_pwdata_0_12 -hier -Revised
+add_pin_equivalences {apb_pwdata[11]} FE_OFN627_FE_DBTN68_pwdata_0_11 -hier -Revised
+add_pin_equivalences {apb_pwdata[10]} FE_OFN628_FE_DBTN67_pwdata_0_10 -hier -Revised
+add_pin_equivalences {apb_pwdata[9]} FE_OFN630_FE_DBTN66_pwdata_0_9 -hier -Revised
+add_pin_equivalences {apb_pwdata[8]} FE_OFN631_FE_DBTN65_pwdata_0_8 -hier -Revised
+add_pin_equivalences {apb_pwdata[7]} FE_OFN641_FE_DBTN32_n_10057 -hier -Revised
+add_pin_equivalences {apb_pwdata[5]} FE_OFN632_FE_DBTN64_pwdata_0_5 -hier -Revised
+add_pin_equivalences {apb_pwdata[4]} FE_OFN637_FE_DBTN63_pwdata_0_4 -hier -Revised
 add_pin_equivalences {apb_pwdata[0]} -invert FE_DBTN29_pwdata_0_0 -hier -Revised
 add_ignored_inputs {periph_req[31]} -Revised
 # UR
@@ -677,39 +680,34 @@ add_ignored_inputs {BID[1]} -Revised
 # UR
 add_ignored_inputs {BID[0]} -Revised
 # UR
-add_pin_equivalences clk clk_clone5 -hier -Revised
-add_pin_equivalences clk clk_clone13 -hier -Revised
-add_pin_equivalences clk clk_clone16 -hier -Revised
-add_pin_equivalences clk clk_clone14 -hier -Revised
-add_pin_equivalences clk clk_clone4 -hier -Revised
-add_pin_equivalences clk clk_clone8 -hier -Revised
-add_pin_equivalences clk clk_clone9 -hier -Revised
-add_pin_equivalences clk clk_clone33 -hier -Revised
-add_pin_equivalences clk clk_clone17 -hier -Revised
+add_pin_equivalences clk clk_clone23 -hier -Revised
 add_pin_equivalences clk clk_clone10 -hier -Revised
+add_pin_equivalences clk clk_clone26 -hier -Revised
+add_pin_equivalences clk clk_clone6 -hier -Revised
+add_pin_equivalences clk clk_clone24 -hier -Revised
+add_pin_equivalences clk clk_clone7 -hier -Revised
+add_pin_equivalences clk clk_clone25 -hier -Revised
+add_pin_equivalences clk clk_clone9 -hier -Revised
+add_pin_equivalences clk clk_clone27 -hier -Revised
+add_pin_equivalences clk clk_clone28 -hier -Revised
+add_pin_equivalences clk clk_clone13 -hier -Revised
+add_pin_equivalences clk clk_clone15 -hier -Revised
+add_pin_equivalences clk clk_clone16 -hier -Revised
+add_pin_equivalences clk clk_clone5 -hier -Revised
+add_pin_equivalences clk clk_clone8 -hier -Revised
+add_pin_equivalences clk clk_clone4 -hier -Revised
+add_pin_equivalences clk clk_clone1 -hier -Revised
+add_pin_equivalences clk clk_clone2 -hier -Revised
 add_pin_equivalences clk clk_clone11 -hier -Revised
 add_pin_equivalences clk clk_clone12 -hier -Revised
+add_pin_equivalences clk clk_clone3 -hier -Revised
+add_pin_equivalences clk clk_clone14 -hier -Revised
+add_pin_equivalences clk clk_clone17 -hier -Revised
 add_pin_equivalences clk clk_clone18 -hier -Revised
-add_pin_equivalences clk clk_clone6 -hier -Revised
 add_pin_equivalences clk clk_clone19 -hier -Revised
-add_pin_equivalences clk clk_clone24 -hier -Revised
-add_pin_equivalences clk clk_clone15 -hier -Revised
 add_pin_equivalences clk clk_clone22 -hier -Revised
-add_pin_equivalences clk clk_clone27 -hier -Revised
-add_pin_equivalences clk clk_clone32 -hier -Revised
-add_pin_equivalences clk clk_clone26 -hier -Revised
 add_pin_equivalences clk clk_clone20 -hier -Revised
 add_pin_equivalences clk clk_clone21 -hier -Revised
-add_pin_equivalences clk clk_clone23 -hier -Revised
-add_pin_equivalences clk clk_clone31 -hier -Revised
-add_pin_equivalences clk clk_clone29 -hier -Revised
-add_pin_equivalences clk clk_clone30 -hier -Revised
-add_pin_equivalences clk clk_clone25 -hier -Revised
-add_pin_equivalences clk clk_clone28 -hier -Revised
-add_pin_equivalences clk clk_clone3 -hier -Revised
-add_pin_equivalences clk clk_clone2 -hier -Revised
-add_pin_equivalences clk clk_clone7 -hier -Revised
-add_pin_equivalences clk clk_clone1 -hier -Revised
 add_ignored_outputs apb_pslverr -Revised -System
 # UR
 add_ignored_outputs {periph_clr[31]} -Revised -System
@@ -807,15 +805,16 @@ set_system_mode setup
 add_black_box dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 -module -hier -Golden
 add_black_box dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 -module -hier -Revised
 usage
+# Comparing
 #-------------------------------------------------------------------------------
 # MODULE pipeline_control_unit (G) INSTANCE /u_core/PCU (G)
 # MODULE pipeline_control_unit (R) INSTANCE /u_core/PCU (R)
 # Wrapper size: (G) = 26138  (R) = 26137
-# Periphery size: (G) = 26314  (R) = 26311
-# Pins directly connected to key-points/constants: (G) = 81.54%  (R) = 84.51%
+# Periphery size: (G) = 26314  (R) = 26313
+# Pins directly connected to key-points/constants: (G) = 81.54%  (R) = 83.33%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
-# IN (G) clk (REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
+# IN (G) clk (REP)  =   (R) clk (REP) (by sim and name)
 # IN (G) reset_n  (KP<--)(REP)  =   (R) reset_n  (KP<--)(REP) (by sim and name)
 # IN (G) opcode[6]  (KP<--)(REP)  =   (R) opcode[6]  (KP<--)(REP) (by sim and name)
 # IN (G) opcode[5]  (KP<--)(REP)  =   (R) opcode[5]  (KP<--)(REP) (by sim and name)
@@ -869,8 +868,10 @@ usage
 # IN (G) dbg_resume_req  (KP<--)(REP)  =   (R) dbg_resume_req  (KP<--)(REP) (by sim and name)
 # IN (G) dcsr_step  (KP<--)(REP)  =   (R) dcsr_step  (KP<--)(REP) (by sim and name)
 # IN (R) FE_DBTN133_if_id_instr_2  (KP<--) (EQ_REP: -opcode[2]) 
-# IN (R) FE_OFN610_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) clk_clone1  (EQ_REP: +clk) 
+# IN (R) FE_OFN559_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
+# IN (R) FE_OFN328_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
+# IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
+# IN (R) p1  (KP<--) (EQ_REP: +id_ex_rd[3]) 
 # RESOLVED Constraints
 # OUT (G) is_sleeping  (KP<--)(REP)  =   (R) is_sleeping  (KP<--)(REP) (by sim and name)
 # OUT (G) dbg_halted  (KP<--)(REP)  =   (R) dbg_halted  (KP<--)(REP) (by sim and name)
@@ -880,20 +881,115 @@ usage
 # OUT (G) flush_jalr UZ (KP<--)(REP)  =   (R) flush_jalr UZ (KP<--)(REP) (by name)
 # OUT (G) flush_trap (REP)  =   (R) flush_trap (REP) (by sim and name)
 # OUT (G) stall_IF (REP)  =   (R) stall_IF (REP) (by sim and name)
-# OUT (G) stall_ID (REP)  =   (R) stall_ID Z (KP<--)(REP) (by name)
+# OUT (G) stall_ID (REP)  =   (R) stall_ID (REP) (by sim and name)
 # OUT (G) stall_EX UZ (KP<--)(REP)  =   (R) stall_EX UZ (KP<--)(REP) (by name)
 # OUT (G) stall_MEM UZ (KP<--)(REP)  =   (R) stall_MEM UZ (KP<--)(REP) (by name)
 # OUT (G) stall_WB UZ (KP<--)(REP)  =   (R) stall_WB UZ (KP<--)(REP) (by name)
 # OUT (R) FE_DBTN0_wfi_sleep_state  (KP<--) (EQ_REP: -is_sleeping) 
 # OUT (R) FE_DBTN134_dbg_halted_raw  (KP<--) (EQ_REP: -dbg_halted) 
-# OUT (R) FE_OFN641_dbg_halted_raw  (KP<--) (EQ_REP: +dbg_halted) 
-# Comparing
+set_root_module pipeline_control_unit -Golden
+set_root_module pipeline_control_unit -Revised
+set_module_property -instance /u_core/PCU -Golden
+set_module_property -instance /u_core/PCU -Revised
+# Constraint commands 
+add_ignored_inputs id_ex_mem_read -Golden
+# UR
+add_ignored_inputs id_ex_f_mem_to_reg -Golden
+# UR
+add_ignored_inputs uses_fs1 -Golden
+# UR
+add_ignored_inputs uses_fs2 -Golden
+# UR
+add_ignored_inputs uses_fs3 -Golden
+# UR
+add_ignored_inputs {fs3[4]} -Golden
+# UR
+add_ignored_inputs {fs3[3]} -Golden
+# UR
+add_ignored_inputs {fs3[2]} -Golden
+# UR
+add_ignored_inputs {fs3[1]} -Golden
+# UR
+add_ignored_inputs {fs3[0]} -Golden
+# UR
+add_ignored_inputs id_x_to_f -Golden
+# UR
+add_ignored_inputs id_ex_jalr -Golden
+# UR
+add_ignored_outputs flush_branch -Golden -System
+# UR
+add_ignored_outputs flush_jal -Golden -System
+# UR
+add_ignored_outputs flush_jalr -Golden -System
+# UR
+add_ignored_outputs stall_EX -Golden -System
+# UR
+add_ignored_outputs stall_MEM -Golden -System
+# UR
+add_ignored_outputs stall_WB -Golden -System
+# UR
+add_pin_equivalences reset_n FE_OFN328_reset_sys_n -hier -Revised
+add_pin_equivalences reset_n FE_OFN559_reset_sys_n -hier -Revised
+add_pin_equivalences {opcode[2]} -invert FE_DBTN133_if_id_instr_2 -hier -Revised
+add_ignored_inputs id_ex_mem_read -Revised
+# UR
+add_ignored_inputs id_ex_f_mem_to_reg -Revised
+# UR
+add_ignored_inputs uses_fs1 -Revised
+# UR
+add_ignored_inputs uses_fs2 -Revised
+# UR
+add_ignored_inputs uses_fs3 -Revised
+# UR
+add_ignored_inputs {fs3[4]} -Revised
+# UR
+add_ignored_inputs {fs3[3]} -Revised
+# UR
+add_ignored_inputs {fs3[2]} -Revised
+# UR
+add_ignored_inputs {fs3[1]} -Revised
+# UR
+add_ignored_inputs {fs3[0]} -Revised
+# UR
+add_ignored_inputs id_x_to_f -Revised
+# UR
+add_ignored_inputs id_ex_jalr -Revised
+# UR
+add_pin_equivalences {id_ex_rd[3]} p1 -hier -Revised
+add_pin_equivalences clk clk_clone1 -hier -Revised
+add_output_equivalences is_sleeping -invert FE_DBTN0_wfi_sleep_state -hier -Revised
+add_ignored_outputs FE_DBTN0_wfi_sleep_state -Revised -System
+# (EQ)
+add_output_equivalences dbg_halted -invert FE_DBTN134_dbg_halted_raw -hier -Revised
+add_ignored_outputs FE_DBTN134_dbg_halted_raw -Revised -System
+# (EQ)
+add_ignored_outputs flush_branch -Revised -System
+# UR
+add_ignored_outputs flush_jal -Revised -System
+# UR
+add_ignored_outputs flush_jalr -Revised -System
+# UR
+add_ignored_outputs stall_EX -Revised -System
+# UR
+add_ignored_outputs stall_MEM -Revised -System
+# UR
+add_ignored_outputs stall_WB -Revised -System
+# UR
+report_black_box -NOHidden
+set_system_mode lec
+add_compared_points -all
+compare
+save_hier_compare_result
+set_system_mode setup
+add_black_box pipeline_control_unit -module -hier -Golden
+add_black_box pipeline_control_unit -module -hier -Revised
+usage
 #-------------------------------------------------------------------------------
 # MODULE riscv_pipeline (G) INSTANCE /u_core (G)
 # MODULE riscv_pipeline (R) INSTANCE /u_core (R)
 # Wrapper size: (G) = 38557  (R) = 38556
-# Periphery size: (G) = 62380  (R) = 62377
-# Pins directly connected to key-points/constants: (G) = 65.35%  (R) = 67.98%
+# Periphery size: (G) = 62380  (R) = 62378
+# Pins directly connected to key-points/constants: (G) = 65.35%  (R) = 68.53%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk (REP)  =   (R) clk (REP) (by sim and name)
@@ -1121,66 +1217,66 @@ usage
 # IN (G) dbg_reg_write_data[2]  (KP<--)(REP)  =   (R) dbg_reg_write_data[2]  (KP<--)(REP) (by sim and name)
 # IN (G) dbg_reg_write_data[1]  (KP<--)(REP)  =   (R) dbg_reg_write_data[1]  (KP<--)(REP) (by sim and name)
 # IN (G) dbg_reg_write_data[0]  (KP<--)(REP)  =   (R) dbg_reg_write_data[0]  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN622_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN621_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN617_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN616_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN609_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN568_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN565_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN562_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN561_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN558_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN557_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN554_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN551_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN549_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN548_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN485_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN479_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN461_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN460_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN456_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN454_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN450_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN449_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN448_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN446_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN445_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN443_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN375_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN371_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN367_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN356_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN344_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN317_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
-# IN (R) FE_OFN316_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN315_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
-# IN (R) FE_OFN314_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN246_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN234_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN233_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN232_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN202_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
-# IN (R) FE_OFN678_n  (KP<--) (EQ_REP: -reset_n) 
-# IN (R) FE_OFN679_n  (KP<--) (EQ_REP: -reset_n) 
-# IN (R) clk_clone17  (EQ_REP: +clk) 
-# IN (R) clk_clone15  (EQ_REP: +clk) 
-# IN (R) clk_clone16  (EQ_REP: +clk) 
-# IN (R) clk_clone6  (EQ_REP: +clk) 
-# IN (R) clk_clone7  (EQ_REP: +clk) 
-# IN (R) clk_clone3  (-->KP) (EQ_REP: +clk) 
-# IN (R) clk_clone4  (EQ_REP: +clk) 
-# IN (R) clk_clone5  (EQ_REP: +clk) 
-# IN (R) clk_clone1  (EQ_REP: +clk) 
-# IN (R) clk_clone2  (EQ_REP: +clk) 
-# IN (R) clk_clone14  (EQ_REP: +clk) 
+# IN (R) FE_OFN565_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN562_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN560_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN541_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN540_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN537_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN534_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN533_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN530_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN528_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN466_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN462_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN460_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN458_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN457_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN455_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN453_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN436_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN432_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN430_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN428_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN427_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN424_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN421_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN416_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN334_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN329_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN327_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN325_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN323_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN322_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN280_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN279_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN278_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN277_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN275_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN272_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN268_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN205_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN204_reset_sys_n  (KP<--) (EQ_REP: +reset_n) 
+# IN (R) FE_OFN203_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN202_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN201_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN199_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN176_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) FE_OFN152_reset_sys_n  (KP<--) (EQ_REP: -reset_n) 
+# IN (R) clk_clone12  (-->KP) (EQ_REP: +clk) 
 # IN (R) clk_clone13  (EQ_REP: +clk) 
+# IN (R) clk_clone14  (EQ_REP: +clk) 
 # IN (R) clk_clone11  (EQ_REP: +clk) 
-# IN (R) clk_clone12  (EQ_REP: +clk) 
-# IN (R) clk_clone9  (-->KP) (EQ_REP: +clk) 
-# IN (R) clk_clone8  (EQ_REP: +clk) 
 # IN (R) clk_clone10  (EQ_REP: +clk) 
+# IN (R) clk_clone8  (EQ_REP: +clk) 
+# IN (R) clk_clone9  (EQ_REP: +clk) 
+# IN (R) clk_clone6  (-->KP) (EQ_REP: +clk) 
+# IN (R) clk_clone5  (EQ_REP: +clk) 
+# IN (R) clk_clone7  (EQ_REP: +clk) 
+# IN (R) clk_clone2  (EQ_REP: +clk) 
+# IN (R) clk_clone3  (EQ_REP: +clk) 
+# IN (R) clk_clone1  (EQ_REP: +clk) 
+# IN (R) clk_clone4  (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) clic_ack_o (REP)  =   (R) clic_ack_o (REP) (by sim and name)
 # OUT (G) clic_ack_id_o[4] UZ (KP<--)(REP)  =   (R) clic_ack_id_o[4] UZ (KP<--)(REP) (by name)
@@ -1268,13 +1364,13 @@ usage
 # OUT (G) dcache_addr[24]  (KP<--)(REP)  =   (R) dcache_addr[24]  (KP<--)(REP) (by sim and name)
 # OUT (G) dcache_addr[23]  (KP<--)(REP)  =   (R) dcache_addr[23]  (KP<--)(REP) (by sim and name)
 # OUT (G) dcache_addr[22]  (KP<--)(REP)  =   (R) dcache_addr[22]  (KP<--)(REP) (by sim and name)
-# OUT (G) dcache_addr[21]  (KP<--)(REP)  =   (R) dcache_addr[21]  (KP<--)(REP) (by sim and name)
+# OUT (G) dcache_addr[21]  (KP<--)(REP)  =   (R) dcache_addr[21] Z (KP<--)(REP) (by name)
 # OUT (G) dcache_addr[20]  (KP<--)(REP)  =   (R) dcache_addr[20]  (KP<--)(REP) (by sim and name)
 # OUT (G) dcache_addr[19]  (KP<--)(REP)  =   (R) dcache_addr[19]  (KP<--)(REP) (by sim and name)
 # OUT (G) dcache_addr[18]  (KP<--)(REP)  =   (R) dcache_addr[18]  (KP<--)(REP) (by sim and name)
 # OUT (G) dcache_addr[17]  (KP<--)(REP)  =   (R) dcache_addr[17]  (KP<--)(REP) (by sim and name)
 # OUT (G) dcache_addr[16]  (KP<--)(REP)  =   (R) dcache_addr[16]  (KP<--)(REP) (by sim and name)
-# OUT (G) dcache_addr[15]  (KP<--)(REP)  =   (R) dcache_addr[15]  (KP<--)(REP) (by sim and name)
+# OUT (G) dcache_addr[15]  (KP<--)(REP)  =   (R) dcache_addr[15] Z (KP<--)(REP) (by name)
 # OUT (G) dcache_addr[14]  (KP<--)(REP)  =   (R) dcache_addr[14]  (KP<--)(REP) (by sim and name)
 # OUT (G) dcache_addr[13]  (KP<--)(REP)  =   (R) dcache_addr[13]  (KP<--)(REP) (by sim and name)
 # OUT (G) dcache_addr[12]  (KP<--)(REP)  =   (R) dcache_addr[12]  (KP<--)(REP) (by sim and name)
@@ -1361,500 +1457,35 @@ usage
 # OUT (G) dbg_reg_read_data[2] (REP)  =   (R) dbg_reg_read_data[2] (REP) (by sim and name)
 # OUT (G) dbg_reg_read_data[1] (REP)  =   (R) dbg_reg_read_data[1] (REP) (by sim and name)
 # OUT (G) dbg_reg_read_data[0] (REP)  =   (R) dbg_reg_read_data[0] (REP) (by sim and name)
-# OUT (R) FE_DBTN20_cpu_data_addr_17  (KP<--) (EQ_REP: -dcache_addr[17]) 
+# OUT (R) FE_DBTN20_cpu_data_addr_17 UZ (KP<--)(REP) 
 # OUT (R) FE_DBTN22_cpu_data_addr_25  (KP<--) (EQ_REP: -dcache_addr[25]) 
 # OUT (R) FE_DBTN24_cpu_data_addr_30  (KP<--) (EQ_REP: -dcache_addr[30]) 
-# OUT (R) FE_OFN629_cpu_data_addr_30  (KP<--) (EQ_REP: +dcache_addr[30]) 
-# OUT (R) FE_OFN631_cpu_data_addr_14  (KP<--) (EQ_REP: -dcache_addr[14]) 
-# OUT (R) FE_OFN632_cpu_data_addr_10  (KP<--) (EQ_REP: +dcache_addr[10]) 
-# OUT (R) FE_OFN633_cpu_data_addr_9  (KP<--) (EQ_REP: +dcache_addr[9]) 
-# OUT (R) FE_OFN635_cpu_data_addr_8 UZ (KP<--)(REP) 
-# OUT (R) FE_OFN634_cpu_data_addr_8  (KP<--) (EQ_REP: +dcache_addr[8]) 
-# OUT (R) FE_OFN637_cpu_data_addr_2  (KP<--) (EQ_REP: +dcache_addr[2]) 
-# OUT (R) FE_OFN636_cpu_data_addr_2  (KP<--) (EQ_REP: +dcache_addr[2]) 
-# OUT (R) FE_OFN639_cpu_data_addr_1  (KP<--) (EQ_REP: +dcache_addr[1]) 
-# OUT (R) FE_OFN640_cpu_data_addr_0  (KP<--) (EQ_REP: +dcache_addr[0]) 
-# OUT (R) FE_OFN693_n  (KP<--) (EQ_REP: -dcache_addr[10]) 
-# OUT (R) FE_OFN697_cpu_data_addr_14  (KP<--) (EQ_REP: -dcache_addr[14]) 
-# OUT (R) FE_OFN699_n UZ (KP<--)(REP) 
-# OUT (R) FE_OFN701_n  (KP<--) (EQ_REP: -dcache_addr[11]) 
-# OUT (R) FE_OFN700_n  (KP<--) (EQ_REP: +dcache_addr[11]) 
-# OUT (R) FE_OFN703_n  (KP<--) (EQ_REP: +dcache_addr[4]) 
-# OUT (R) p1  (KP<--) (EQ_REP: +dcache_addr[13]) 
-set_root_module riscv_pipeline -Golden
-set_root_module riscv_pipeline -Revised
-set_module_property -instance /u_core -Golden
-set_module_property -instance /u_core -Revised
-# Constraint commands 
-add_ignored_inputs riscv_start -Golden
-# UR
-add_ignored_inputs meip_i -Golden
-# UR
-add_ignored_inputs {clic_irq_level_i[4]} -Golden
-# UR
-add_ignored_inputs {clic_irq_level_i[3]} -Golden
-# UR
-add_ignored_inputs {clic_irq_level_i[2]} -Golden
-# UR
-add_ignored_inputs {clic_irq_level_i[1]} -Golden
-# UR
-add_ignored_inputs icache_hit -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[31]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[30]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[29]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[28]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[27]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[26]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[25]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[24]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[23]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[22]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[21]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[20]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[19]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[18]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[17]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[16]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[15]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[14]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[13]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[12]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[11]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[10]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[9]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[8]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[7]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[6]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[5]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[4]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[3]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[2]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[1]} -Golden
-# UR
-add_ignored_inputs {icache_read_data_lane1[0]} -Golden
-# UR
-add_ignored_inputs icache_hit_lane1 -Golden
-# UR
-add_ignored_inputs icache_stall_lane1 -Golden
-# UR
-add_ignored_inputs dcache_amo_capture -Golden
-# UR
-add_ignored_inputs dcache_hit -Golden
-# UR
-add_ignored_outputs {clic_ack_id_o[4]} -Golden -System
-# UR
-add_ignored_outputs {clic_ack_id_o[3]} -Golden -System
-# UR
-add_ignored_outputs {clic_ack_id_o[2]} -Golden -System
-# UR
-add_ignored_outputs {clic_ack_id_o[1]} -Golden -System
-# UR
-add_ignored_outputs {clic_ack_id_o[0]} -Golden -System
-# UR
-add_ignored_outputs riscv_done -Golden -System
-# UR
-add_ignored_outputs icache_read_req_lane1 -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[31]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[30]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[29]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[28]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[27]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[26]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[25]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[24]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[23]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[22]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[21]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[20]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[19]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[18]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[17]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[16]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[15]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[14]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[13]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[12]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[11]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[10]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[9]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[8]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[7]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[6]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[5]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[4]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[3]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[2]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[1]} -Golden -System
-# UR
-add_ignored_outputs {icache_addr_lane1[0]} -Golden -System
-# UR
-add_ignored_outputs dcache_amo_req -Golden -System
-# UR
-add_pin_equivalences reset_n -invert FE_OFN679_n -hier -Revised
-add_pin_equivalences reset_n -invert FE_OFN678_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN202_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN232_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN233_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN234_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN246_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN314_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n -invert FE_OFN315_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN316_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n -invert FE_OFN317_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN344_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN356_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN367_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN371_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN375_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN443_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN445_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN446_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN448_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN449_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN450_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN454_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN456_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN460_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN461_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN479_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN485_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN548_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN549_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN551_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN554_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN557_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN558_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN561_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN562_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN565_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN568_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN609_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN616_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN617_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN621_reset_sys_n -hier -Revised
-add_pin_equivalences reset_n FE_OFN622_reset_sys_n -hier -Revised
-add_ignored_inputs riscv_start -Revised
-# UR
-add_ignored_inputs meip_i -Revised
-# UR
-add_ignored_inputs {clic_irq_level_i[4]} -Revised
-# UR
-add_ignored_inputs {clic_irq_level_i[3]} -Revised
-# UR
-add_ignored_inputs {clic_irq_level_i[2]} -Revised
-# UR
-add_ignored_inputs {clic_irq_level_i[1]} -Revised
-# UR
-add_ignored_inputs icache_hit -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[31]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[30]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[29]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[28]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[27]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[26]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[25]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[24]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[23]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[22]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[21]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[20]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[19]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[18]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[17]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[16]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[15]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[14]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[13]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[12]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[11]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[10]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[9]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[8]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[7]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[6]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[5]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[4]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[3]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[2]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[1]} -Revised
-# UR
-add_ignored_inputs {icache_read_data_lane1[0]} -Revised
-# UR
-add_ignored_inputs icache_hit_lane1 -Revised
-# UR
-add_ignored_inputs icache_stall_lane1 -Revised
-# UR
-add_ignored_inputs dcache_amo_capture -Revised
-# UR
-add_ignored_inputs dcache_hit -Revised
-# UR
-add_pin_equivalences clk clk_clone1 -hier -Revised
-add_pin_equivalences clk clk_clone5 -hier -Revised
-add_pin_equivalences clk clk_clone4 -hier -Revised
-add_pin_equivalences clk clk_clone3 -hier -Revised
-add_pin_equivalences clk clk_clone7 -hier -Revised
-add_pin_equivalences clk clk_clone6 -hier -Revised
-add_pin_equivalences clk clk_clone16 -hier -Revised
-add_pin_equivalences clk clk_clone15 -hier -Revised
-add_pin_equivalences clk clk_clone17 -hier -Revised
-add_pin_equivalences clk clk_clone10 -hier -Revised
-add_pin_equivalences clk clk_clone8 -hier -Revised
-add_pin_equivalences clk clk_clone9 -hier -Revised
-add_pin_equivalences clk clk_clone12 -hier -Revised
-add_pin_equivalences clk clk_clone11 -hier -Revised
-add_pin_equivalences clk clk_clone13 -hier -Revised
-add_pin_equivalences clk clk_clone14 -hier -Revised
-add_pin_equivalences clk clk_clone2 -hier -Revised
-add_ignored_outputs {clic_ack_id_o[4]} -Revised -System
-# UR
-add_ignored_outputs {clic_ack_id_o[3]} -Revised -System
-# UR
-add_ignored_outputs {clic_ack_id_o[2]} -Revised -System
-# UR
-add_ignored_outputs {clic_ack_id_o[1]} -Revised -System
-# UR
-add_ignored_outputs {clic_ack_id_o[0]} -Revised -System
-# UR
-add_ignored_outputs riscv_done -Revised -System
-# UR
-add_ignored_outputs icache_read_req_lane1 -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[31]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[30]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[29]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[28]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[27]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[26]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[25]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[24]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[23]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[22]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[21]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[20]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[19]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[18]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[17]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[16]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[15]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[14]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[13]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[12]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[11]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[10]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[9]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[8]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[7]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[6]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[5]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[4]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[3]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[2]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[1]} -Revised -System
-# UR
-add_ignored_outputs {icache_addr_lane1[0]} -Revised -System
-# UR
-add_output_equivalences {dcache_addr[30]} FE_OFN629_cpu_data_addr_30 -hier -Revised
-add_ignored_outputs FE_OFN629_cpu_data_addr_30 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[30]} -invert FE_DBTN24_cpu_data_addr_30 -hier -Revised
-add_ignored_outputs FE_DBTN24_cpu_data_addr_30 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[25]} -invert FE_DBTN22_cpu_data_addr_25 -hier -Revised
-add_ignored_outputs FE_DBTN22_cpu_data_addr_25 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[17]} -invert FE_DBTN20_cpu_data_addr_17 -hier -Revised
-add_ignored_outputs FE_DBTN20_cpu_data_addr_17 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[14]} -invert FE_OFN697_cpu_data_addr_14 -hier -Revised
-add_ignored_outputs FE_OFN697_cpu_data_addr_14 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[14]} -invert FE_OFN631_cpu_data_addr_14 -hier -Revised
-add_ignored_outputs FE_OFN631_cpu_data_addr_14 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[13]} p1 -hier -Revised
-add_ignored_outputs p1 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[11]} FE_OFN700_n -hier -Revised
-add_ignored_outputs FE_OFN700_n -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[11]} -invert FE_OFN701_n -hier -Revised
-add_ignored_outputs FE_OFN701_n -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[10]} -invert FE_OFN693_n -hier -Revised
-add_ignored_outputs FE_OFN693_n -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[10]} FE_OFN632_cpu_data_addr_10 -hier -Revised
-add_ignored_outputs FE_OFN632_cpu_data_addr_10 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[9]} FE_OFN633_cpu_data_addr_9 -hier -Revised
-add_ignored_outputs FE_OFN633_cpu_data_addr_9 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[8]} FE_OFN634_cpu_data_addr_8 -hier -Revised
-add_ignored_outputs FE_OFN634_cpu_data_addr_8 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[4]} FE_OFN703_n -hier -Revised
-add_ignored_outputs FE_OFN703_n -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[2]} FE_OFN636_cpu_data_addr_2 -hier -Revised
-add_ignored_outputs FE_OFN636_cpu_data_addr_2 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[2]} FE_OFN637_cpu_data_addr_2 -hier -Revised
-add_ignored_outputs FE_OFN637_cpu_data_addr_2 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[1]} FE_OFN639_cpu_data_addr_1 -hier -Revised
-add_ignored_outputs FE_OFN639_cpu_data_addr_1 -Revised -System
-# (EQ)
-add_output_equivalences {dcache_addr[0]} FE_OFN640_cpu_data_addr_0 -hier -Revised
-add_ignored_outputs FE_OFN640_cpu_data_addr_0 -Revised -System
-# (EQ)
-add_ignored_outputs dcache_amo_req -Revised -System
-# UR
-add_ignored_outputs FE_OFN635_cpu_data_addr_8 -Revised -System
-# UR
-add_ignored_outputs FE_OFN699_n -Revised -System
-# UR
-report_black_box -NOHidden
-set_system_mode lec
-add_compared_points -all
-compare
-save_hier_compare_result
-set_system_mode setup
-add_black_box riscv_pipeline -module -hier -Golden
-add_black_box riscv_pipeline -module -hier -Revised
-usage
+# OUT (R) FE_OFN610_cpu_data_addr_28  (KP<--) (EQ_REP: +dcache_addr[28]) 
+# OUT (R) FE_OFN611_cpu_data_addr_14  (KP<--) (EQ_REP: +dcache_addr[14]) 
+# OUT (R) FE_OFN612_cpu_data_addr_10  (KP<--) (EQ_REP: +dcache_addr[10]) 
+# OUT (R) FE_OFN613_cpu_data_addr_8  (KP<--) (EQ_REP: +dcache_addr[8]) 
+# OUT (R) FE_OFN614_cpu_data_addr_6  (KP<--) (EQ_REP: +dcache_addr[6]) 
+# OUT (R) FE_OFN615_cpu_data_addr_4  (KP<--) (EQ_REP: +dcache_addr[4]) 
+# OUT (R) FE_OFN616_cpu_data_addr_3  (KP<--) (EQ_REP: +dcache_addr[3]) 
+# OUT (R) FE_OFN617_cpu_data_addr_2  (KP<--) (EQ_REP: +dcache_addr[2]) 
+# OUT (R) FE_OFN673_n  (KP<--)(REP) 
+# OUT (R) FE_OFN674_n  (KP<--) (EQ_REP: +dcache_addr[17]) 
+# OUT (R) FE_OFN675_n  (KP<--)(REP) 
+# OUT (R) FE_OFN676_n  (KP<--) (EQ_REP: +dcache_addr[22]) 
+# OUT (R) FE_OFN681_n  (KP<--) (EQ_REP: +dcache_addr[5]) 
+# OUT (R) FE_OFN682_n  (KP<--) (EQ_REP: +dcache_addr[7]) 
+# OUT (R) FE_OFN683_n  (KP<--) (EQ_REP: -dcache_addr[17]) 
+# OUT (R) p1  (KP<--) (EQ_REP: +dcache_addr[1]) 
 # Comparing
 #-------------------------------------------------------------------------------
 # MODULE rv_debug_module_sba (G) INSTANCE /u_debug_module (G)
 # MODULE rv_debug_module_sba (R) INSTANCE /u_debug_module (R)
-# Wrapper size: (G) = 22299  (R) = 22296
-# Periphery size: (G) = 23847  (R) = 23844
-# Pins directly connected to key-points/constants: (G) = 88.24%  (R) = 87.71%
+# Wrapper size: (G) = 22299  (R) = 22297
+# Periphery size: (G) = 23847  (R) = 23845
+# Pins directly connected to key-points/constants: (G) = 88.24%  (R) = 87.46%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
-# IN (G) clk_sys (REP)  =   (R) clk_sys_clone3 (REP) (by simulation)
+# IN (G) clk_sys (REP)  =   (R) clk_sys_clone4 (REP) (by simulation)
 # IN (G) rst_sys_n  (KP<--)(REP)  =   (R) rst_sys_n  (KP<--)(REP) (by sim and name)
 # IN (G) dmi_req_valid  (KP<--)(REP)  =   (R) dmi_req_valid  (KP<--)(REP) (by sim and name)
 # IN (G) dmi_req_addr[6]  (KP<--)(REP)  =   (R) dmi_req_addr[6]  (KP<--)(REP) (by sim and name)
@@ -1966,9 +1597,11 @@ usage
 # IN (G) cpu_reg_read_data[2] (REP)  =   (R) cpu_reg_read_data[2] (REP) (by sim and name)
 # IN (G) cpu_reg_read_data[1] (REP)  =   (R) cpu_reg_read_data[1] (REP) (by sim and name)
 # IN (G) cpu_reg_read_data[0] (REP)  =   (R) cpu_reg_read_data[0] (REP) (by sim and name)
-# IN (R) clk_sys_clone2  (EQ_REP: +clk_sys_clone3) 
-# IN (R) clk_sys  (-->KP) (EQ_REP: +clk_sys_clone3) 
-# IN (R) clk_sys_clone1  (EQ_REP: +clk_sys_clone3) 
+# IN (R) FE_OFN618_reset_dbg_n  (KP<--) (EQ_REP: +rst_sys_n) 
+# IN (R) clk_sys_clone2  (EQ_REP: +clk_sys_clone4) 
+# IN (R) clk_sys  (-->KP) (EQ_REP: +clk_sys_clone4) 
+# IN (R) clk_sys_clone1  (EQ_REP: +clk_sys_clone4) 
+# IN (R) clk_sys_clone3  (EQ_REP: +clk_sys_clone4) 
 # RESOLVED Constraints
 # OUT (G) dmi_resp_ready UZ (KP<--)(REP)  =   (R) dmi_resp_ready UZ (KP<--)(REP) (by name)
 # OUT (G) dmi_resp_valid  (KP<--)(REP)  =   (R) dmi_resp_valid  (KP<--)(REP) (by sim and name)
@@ -2153,7 +1786,7 @@ set_root_module rv_debug_module_sba -Revised
 set_module_property -instance /u_debug_module -Golden
 set_module_property -instance /u_debug_module -Revised
 # Mapping renaming rules 
-add_pin_binding clk_sys clk_sys_clone3 -module rv_debug_module_sba rv_debug_module_sba  
+add_pin_binding clk_sys clk_sys_clone4 -module rv_debug_module_sba rv_debug_module_sba  
 add_renaming_rule rule_MOD_rv_debug_module_sba_PIN_clk_sys {^clk_sys$} clk_sys_LEC_UNUSED_ -pin -bbox rv_debug_module_sba -Revised
 add_renaming_rule rule_MOD_rv_debug_module_sba_pins _LEC_GOLDEN "" -pin -bbox rv_debug_module_sba -Revised
 # Constraint commands 
@@ -2163,9 +1796,11 @@ add_ignored_outputs {dmi_resp_op[1]} -Golden -System
 # UR
 add_ignored_outputs {dmi_resp_op[0]} -Golden -System
 # UR
-add_pin_equivalences clk_sys_clone3 clk_sys_clone1 -hier -Revised
-add_pin_equivalences clk_sys_clone3 clk_sys -hier -Revised
-add_pin_equivalences clk_sys_clone3 clk_sys_clone2 -hier -Revised
+add_pin_equivalences rst_sys_n FE_OFN618_reset_dbg_n -hier -Revised
+add_pin_equivalences clk_sys_clone4 clk_sys_clone3 -hier -Revised
+add_pin_equivalences clk_sys_clone4 clk_sys_clone1 -hier -Revised
+add_pin_equivalences clk_sys_clone4 clk_sys -hier -Revised
+add_pin_equivalences clk_sys_clone4 clk_sys_clone2 -hier -Revised
 add_ignored_outputs dmi_resp_ready -Revised -System
 # UR
 add_ignored_outputs {dmi_resp_op[1]} -Revised -System
@@ -2309,7 +1944,7 @@ usage
 # MODULE apb_syscon (R) INSTANCE /u_apb_syscon (R)
 # Wrapper size: (G) = 13476  (R) = 13476
 # Periphery size: (G) = 13724  (R) = 13724
-# Pins directly connected to key-points/constants: (G) = 95.59%  (R) = 96.79%
+# Pins directly connected to key-points/constants: (G) = 95.59%  (R) = 96.76%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) pclk  (KP<--)(REP)  =   (R) pclk  (KP<--)(REP) (by sim and name)
@@ -2382,7 +2017,7 @@ usage
 # IN (R) FE_DBTN50_pwdata_0_10  (KP<--) (EQ_REP: -pwdata[10]) 
 # IN (R) FE_DBTN53_pwdata_0_11  (KP<--) (EQ_REP: -pwdata[11]) 
 # IN (R) FE_DBTN56_pwdata_0_12  (KP<--) (EQ_REP: -pwdata[12]) 
-# IN (R) FE_DBTN59_pwdata_0_13  (KP<--) (EQ_REP: -pwdata[13]) 
+# IN (R) FE_DBTN59_pwdata_0_13  (KP<--) (EQ_REP: +pwdata[13]) 
 # IN (R) FE_DBTN61_pwdata_0_14  (KP<--) (EQ_REP: -pwdata[14]) 
 # IN (R) FE_DBTN64_pwdata_0_15  (KP<--) (EQ_REP: -pwdata[15]) 
 # IN (R) FE_DBTN67_pwdata_0_16  (KP<--) (EQ_REP: -pwdata[16]) 
@@ -2403,23 +2038,21 @@ usage
 # IN (R) FE_DBTN110_paddr_9_2  (KP<--) (EQ_REP: -paddr[2]) 
 # IN (R) FE_DBTN116_paddr_9_3  (KP<--) (EQ_REP: -paddr[3]) 
 # IN (R) FE_DBTN119_paddr_9_4  (KP<--) (EQ_REP: -paddr[4]) 
-# IN (R) FE_OFN578_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN575_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN573_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN556_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN504_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN502_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN500_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN496_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN494_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN393_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN269_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN660_FE_DBTN75_pwdata_0_18  (KP<--) (EQ_REP: +pwdata[18]) 
+# IN (R) FE_OFN456_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN372_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN371_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN366_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN363_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN360_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN237_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN233_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN229_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN623_FE_DBTN75_pwdata_0_18  (KP<--) (EQ_REP: +pwdata[18]) 
+# IN (R) FE_OFN643_FE_DBTN30_n_10069  (KP<--) (EQ_REP: -pwdata[3]) 
 # IN (R) pclk_clone4  (KP<--) (EQ_REP: +pclk) 
 # IN (R) pclk_clone3  (KP<--) (EQ_REP: +pclk) 
 # IN (R) pclk_clone2  (KP<--) (EQ_REP: +pclk) 
 # IN (R) pclk_clone1  (KP<--) (EQ_REP: +pclk) 
-# IN (R) pclk_clone5  (KP<--) (EQ_REP: +pclk) 
 # RESOLVED Constraints
 # OUT (G) pready  (KP<--)(REP)  =   (R) pready  (KP<--)(REP) (by sim and name)
 # OUT (G) prdata[31]  (KP<--)(REP)  =   (R) prdata[31]  (KP<--)(REP) (by sim and name)
@@ -2505,17 +2138,15 @@ set_root_module apb_syscon -Revised
 set_module_property -instance /u_apb_syscon -Golden
 set_module_property -instance /u_apb_syscon -Revised
 # Constraint commands 
-add_pin_equivalences presetn FE_OFN269_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN393_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN494_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN496_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN500_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN502_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN504_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN556_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN573_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN575_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN578_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN229_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN233_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN237_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN360_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN363_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN366_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN371_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN372_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN456_reset_sys_n -hier -Revised
 add_pin_equivalences {paddr[4]} -invert FE_DBTN119_paddr_9_4 -hier -Revised
 add_pin_equivalences {paddr[3]} -invert FE_DBTN116_paddr_9_3 -hier -Revised
 add_pin_equivalences {paddr[2]} -invert FE_DBTN110_paddr_9_2 -hier -Revised
@@ -2532,12 +2163,12 @@ add_pin_equivalences {pwdata[22]} -invert FE_DBTN82_pwdata_0_22 -hier -Revised
 add_pin_equivalences {pwdata[21]} -invert FE_DBTN80_pwdata_0_21 -hier -Revised
 add_pin_equivalences {pwdata[20]} -invert FE_DBTN77_pwdata_0_20 -hier -Revised
 add_pin_equivalences {pwdata[19]} -invert FE_DBTN74_pwdata_0_19 -hier -Revised
-add_pin_equivalences {pwdata[18]} FE_OFN660_FE_DBTN75_pwdata_0_18 -hier -Revised
+add_pin_equivalences {pwdata[18]} FE_OFN623_FE_DBTN75_pwdata_0_18 -hier -Revised
 add_pin_equivalences {pwdata[17]} -invert FE_DBTN70_pwdata_0_17 -hier -Revised
 add_pin_equivalences {pwdata[16]} -invert FE_DBTN67_pwdata_0_16 -hier -Revised
 add_pin_equivalences {pwdata[15]} -invert FE_DBTN64_pwdata_0_15 -hier -Revised
 add_pin_equivalences {pwdata[14]} -invert FE_DBTN61_pwdata_0_14 -hier -Revised
-add_pin_equivalences {pwdata[13]} -invert FE_DBTN59_pwdata_0_13 -hier -Revised
+add_pin_equivalences {pwdata[13]} FE_DBTN59_pwdata_0_13 -hier -Revised
 add_pin_equivalences {pwdata[12]} -invert FE_DBTN56_pwdata_0_12 -hier -Revised
 add_pin_equivalences {pwdata[11]} -invert FE_DBTN53_pwdata_0_11 -hier -Revised
 add_pin_equivalences {pwdata[10]} -invert FE_DBTN50_pwdata_0_10 -hier -Revised
@@ -2547,6 +2178,7 @@ add_pin_equivalences {pwdata[7]} -invert FE_DBTN15_n_10057 -hier -Revised
 add_pin_equivalences {pwdata[6]} -invert FE_DBTN11_n_10060 -hier -Revised
 add_pin_equivalences {pwdata[5]} -invert FE_DBTN42_pwdata_0_5 -hier -Revised
 add_pin_equivalences {pwdata[4]} -invert FE_DBTN38_pwdata_0_4 -hier -Revised
+add_pin_equivalences {pwdata[3]} -invert FE_OFN643_FE_DBTN30_n_10069 -hier -Revised
 add_pin_equivalences {pwdata[3]} -invert FE_DBTN7_n_10069 -hier -Revised
 add_pin_equivalences {pwdata[2]} -invert FE_DBTN34_pwdata_0_2 -hier -Revised
 add_pin_equivalences {pwdata[1]} -invert FE_DBTN4_n_10075 -hier -Revised
@@ -2555,7 +2187,6 @@ add_pin_equivalences pclk pclk_clone1 -hier -Revised
 add_pin_equivalences pclk pclk_clone2 -hier -Revised
 add_pin_equivalences pclk pclk_clone3 -hier -Revised
 add_pin_equivalences pclk pclk_clone4 -hier -Revised
-add_pin_equivalences pclk pclk_clone5 -hier -Revised
 report_black_box -NOHidden
 set_system_mode lec
 add_compared_points -all
@@ -2571,7 +2202,7 @@ usage
 # MODULE apb_gpio (R) INSTANCE /u_apb_gpio (R)
 # Wrapper size: (G) = 1502  (R) = 1502
 # Periphery size: (G) = 3025  (R) = 3025
-# Pins directly connected to key-points/constants: (G) = 97.78%  (R) = 98.51%
+# Pins directly connected to key-points/constants: (G) = 97.78%  (R) = 98.43%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) pclk (REP)  =   (R) pclk (REP) (by name)
@@ -2690,60 +2321,46 @@ usage
 # IN (R) FE_DBTN108_pwdata_0_31  (KP<--) (EQ_REP: -pwdata[31]) 
 # IN (R) FE_DBTN111_paddr_9_2  (KP<--) (EQ_REP: -paddr[2]) 
 # IN (R) FE_DBTN120_paddr_9_4  (KP<--) (EQ_REP: -paddr[4]) 
-# IN (R) FE_OFN607_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN606_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN605_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN603_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN598_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN597_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN596_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN595_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN594_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN593_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN592_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN591_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN589_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN588_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN586_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN585_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN584_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN583_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN582_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN581_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN580_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN539_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN536_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN535_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN534_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN532_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN531_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN523_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN521_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN520_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN519_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN518_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN516_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN517_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN515_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN514_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN513_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN512_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN511_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN510_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN509_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN420_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN419_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN416_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN415_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN410_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN408_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN498_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN496_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN494_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN407_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN406_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN405_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN403_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN402_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN400_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN644_FE_DBTN87_pwdata_0_30  (KP<--) (EQ_REP: -pwdata[30]) 
-# IN (R) FE_OFN643_FE_DBTN87_pwdata_0_30  (KP<--) (EQ_REP: -pwdata[30]) 
-# IN (R) FE_OFN647_FE_DBTN86_pwdata_0_29  (KP<--) (EQ_REP: -pwdata[29]) 
-# IN (R) FE_OFN651_FE_DBTN83_pwdata_0_26  (KP<--) (EQ_REP: -pwdata[26]) 
-# IN (R) FE_OFN652_FE_DBTN82_pwdata_0_25  (KP<--) (EQ_REP: -pwdata[25]) 
-# IN (R) FE_OFN654_FE_DBTN81_pwdata_0_24  (KP<--) (EQ_REP: -pwdata[24]) 
-# IN (R) FE_OFN655_FE_DBTN80_pwdata_0_23  (KP<--) (EQ_REP: -pwdata[23]) 
-# IN (R) FE_OFN657_FE_DBTN79_pwdata_0_22  (KP<--) (EQ_REP: -pwdata[22]) 
-# IN (R) FE_OFN662_FE_DBTN69_pwdata_0_12  (KP<--) (EQ_REP: -pwdata[12]) 
-# IN (R) FE_OFN663_FE_DBTN64_pwdata_0_5  (KP<--) (EQ_REP: -pwdata[5]) 
-# IN (R) FE_OFN666_FE_DBTN63_pwdata_0_4  (KP<--) (EQ_REP: -pwdata[4]) 
-# IN (R) FE_OFN668_FE_DBTN62_pwdata_0_2  (KP<--) (EQ_REP: -pwdata[2]) 
-# IN (R) FE_OFN673_FE_DBTN30_n_10069  (KP<--) (EQ_REP: -pwdata[3]) 
+# IN (R) FE_OFN401_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN399_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN389_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN387_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN386_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN384_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN369_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN625_FE_DBTN71_pwdata_0_14  (KP<--) (EQ_REP: -pwdata[14]) 
+# IN (R) FE_OFN633_FE_DBTN64_pwdata_0_5  (KP<--) (EQ_REP: -pwdata[5]) 
+# IN (R) FE_OFN635_FE_DBTN63_pwdata_0_4  (KP<--) (EQ_REP: -pwdata[4]) 
+# IN (R) FE_OFN639_FE_DBTN61_pwdata_0_0  (KP<--) (EQ_REP: -pwdata[0]) 
 # RESOLVED Constraints
 # OUT (G) pready  (KP<--)(REP)  =   (R) pready  (KP<--)(REP) (by sim and name)
 # OUT (G) prdata[31]  (KP<--)(REP)  =   (R) prdata[31]  (KP<--)(REP) (by sim and name)
@@ -2849,67 +2466,54 @@ set_root_module apb_gpio -Revised
 set_module_property -instance /u_apb_gpio -Golden
 set_module_property -instance /u_apb_gpio -Revised
 # Constraint commands 
-add_pin_equivalences presetn FE_OFN400_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN402_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN369_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN384_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN386_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN387_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN389_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN399_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN401_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN403_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN405_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN406_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN407_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN408_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN410_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN415_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN416_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN419_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN420_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN494_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN496_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN498_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN509_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN510_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN511_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN512_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN513_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN514_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN515_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN516_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN517_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN518_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN523_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN531_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN532_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN534_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN535_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN536_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN539_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN580_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN581_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN519_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN520_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN521_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN582_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN583_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN584_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN585_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN586_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN588_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN589_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN591_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN592_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN593_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN594_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN603_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN605_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN606_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN607_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN595_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN596_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN597_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN598_reset_sys_n -hier -Revised
 add_pin_equivalences pwrite -invert FE_DBTN2_pwrite_0 -hier -Revised
 add_pin_equivalences {paddr[4]} -invert FE_DBTN120_paddr_9_4 -hier -Revised
 add_pin_equivalences {paddr[2]} -invert FE_DBTN111_paddr_9_2 -hier -Revised
 add_pin_equivalences {pwdata[31]} -invert FE_DBTN108_pwdata_0_31 -hier -Revised
-add_pin_equivalences {pwdata[30]} -invert FE_OFN643_FE_DBTN87_pwdata_0_30 -hier -Revised
-add_pin_equivalences {pwdata[30]} -invert FE_OFN644_FE_DBTN87_pwdata_0_30 -hier -Revised
 add_pin_equivalences {pwdata[30]} -invert FE_DBTN105_pwdata_0_30 -hier -Revised
-add_pin_equivalences {pwdata[29]} -invert FE_OFN647_FE_DBTN86_pwdata_0_29 -hier -Revised
 add_pin_equivalences {pwdata[29]} -invert FE_DBTN103_pwdata_0_29 -hier -Revised
 add_pin_equivalences {pwdata[28]} -invert FE_DBTN100_pwdata_0_28 -hier -Revised
 add_pin_equivalences {pwdata[27]} -invert FE_DBTN97_pwdata_0_27 -hier -Revised
-add_pin_equivalences {pwdata[26]} -invert FE_OFN651_FE_DBTN83_pwdata_0_26 -hier -Revised
 add_pin_equivalences {pwdata[26]} -invert FE_DBTN94_pwdata_0_26 -hier -Revised
-add_pin_equivalences {pwdata[25]} -invert FE_OFN652_FE_DBTN82_pwdata_0_25 -hier -Revised
 add_pin_equivalences {pwdata[25]} -invert FE_DBTN92_pwdata_0_25 -hier -Revised
-add_pin_equivalences {pwdata[24]} -invert FE_OFN654_FE_DBTN81_pwdata_0_24 -hier -Revised
 add_pin_equivalences {pwdata[24]} -invert FE_DBTN89_pwdata_0_24 -hier -Revised
-add_pin_equivalences {pwdata[23]} -invert FE_OFN655_FE_DBTN80_pwdata_0_23 -hier -Revised
 add_pin_equivalences {pwdata[23]} -invert FE_DBTN86_pwdata_0_23 -hier -Revised
-add_pin_equivalences {pwdata[22]} -invert FE_OFN657_FE_DBTN79_pwdata_0_22 -hier -Revised
 add_pin_equivalences {pwdata[22]} -invert FE_DBTN83_pwdata_0_22 -hier -Revised
 add_pin_equivalences {pwdata[21]} -invert FE_DBTN81_pwdata_0_21 -hier -Revised
 add_pin_equivalences {pwdata[20]} -invert FE_DBTN78_pwdata_0_20 -hier -Revised
@@ -2918,9 +2522,9 @@ add_pin_equivalences {pwdata[18]} -invert FE_DBTN72_pwdata_0_18 -hier -Revised
 add_pin_equivalences {pwdata[17]} -invert FE_DBTN71_pwdata_0_17 -hier -Revised
 add_pin_equivalences {pwdata[16]} -invert FE_DBTN68_pwdata_0_16 -hier -Revised
 add_pin_equivalences {pwdata[15]} -invert FE_DBTN65_pwdata_0_15 -hier -Revised
+add_pin_equivalences {pwdata[14]} -invert FE_OFN625_FE_DBTN71_pwdata_0_14 -hier -Revised
 add_pin_equivalences {pwdata[14]} -invert FE_DBTN62_pwdata_0_14 -hier -Revised
 add_pin_equivalences {pwdata[13]} -invert FE_DBTN60_pwdata_0_13 -hier -Revised
-add_pin_equivalences {pwdata[12]} -invert FE_OFN662_FE_DBTN69_pwdata_0_12 -hier -Revised
 add_pin_equivalences {pwdata[12]} -invert FE_DBTN57_pwdata_0_12 -hier -Revised
 add_pin_equivalences {pwdata[11]} -invert FE_DBTN54_pwdata_0_11 -hier -Revised
 add_pin_equivalences {pwdata[10]} -invert FE_DBTN51_pwdata_0_10 -hier -Revised
@@ -2928,15 +2532,14 @@ add_pin_equivalences {pwdata[9]} -invert FE_DBTN49_pwdata_0_9 -hier -Revised
 add_pin_equivalences {pwdata[8]} -invert FE_DBTN46_pwdata_0_8 -hier -Revised
 add_pin_equivalences {pwdata[7]} -invert FE_DBTN16_n_10057 -hier -Revised
 add_pin_equivalences {pwdata[6]} -invert FE_DBTN12_n_10060 -hier -Revised
-add_pin_equivalences {pwdata[5]} -invert FE_OFN663_FE_DBTN64_pwdata_0_5 -hier -Revised
+add_pin_equivalences {pwdata[5]} -invert FE_OFN633_FE_DBTN64_pwdata_0_5 -hier -Revised
 add_pin_equivalences {pwdata[5]} -invert FE_DBTN43_pwdata_0_5 -hier -Revised
-add_pin_equivalences {pwdata[4]} -invert FE_OFN666_FE_DBTN63_pwdata_0_4 -hier -Revised
+add_pin_equivalences {pwdata[4]} -invert FE_OFN635_FE_DBTN63_pwdata_0_4 -hier -Revised
 add_pin_equivalences {pwdata[4]} -invert FE_DBTN39_pwdata_0_4 -hier -Revised
-add_pin_equivalences {pwdata[3]} -invert FE_OFN673_FE_DBTN30_n_10069 -hier -Revised
 add_pin_equivalences {pwdata[3]} -invert FE_DBTN8_n_10069 -hier -Revised
-add_pin_equivalences {pwdata[2]} -invert FE_OFN668_FE_DBTN62_pwdata_0_2 -hier -Revised
 add_pin_equivalences {pwdata[2]} -invert FE_DBTN35_pwdata_0_2 -hier -Revised
 add_pin_equivalences {pwdata[1]} -invert FE_DBTN5_n_10075 -hier -Revised
+add_pin_equivalences {pwdata[0]} -invert FE_OFN639_FE_DBTN61_pwdata_0_0 -hier -Revised
 add_pin_equivalences {pwdata[0]} -invert FE_DBTN31_pwdata_0_0 -hier -Revised
 report_black_box -NOHidden
 set_system_mode lec
@@ -2953,7 +2556,7 @@ usage
 # MODULE clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 (R) INSTANCE /u_clic (R)
 # Wrapper size: (G) = 19119  (R) = 19117
 # Periphery size: (G) = 23875  (R) = 23873
-# Pins directly connected to key-points/constants: (G) = 90.26%  (R) = 92.23%
+# Pins directly connected to key-points/constants: (G) = 90.26%  (R) = 91.80%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
@@ -3068,34 +2671,24 @@ usage
 # IN (R) FE_DBTN123_paddr_9_5  (KP<--) (EQ_REP: -paddr[5]) 
 # IN (R) FE_DBTN124_paddr_9_6  (KP<--) (EQ_REP: -paddr[6]) 
 # IN (R) FE_DBTN125_paddr_9_12  (KP<--) (EQ_REP: -paddr[12]) 
-# IN (R) FE_OFN497_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN490_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN487_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN459_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN444_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN383_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN381_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN379_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN312_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN303_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN270_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN266_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN263_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN260_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN259_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN258_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN478_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN391_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN362_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN357_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN356_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN333_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN240_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN232_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN230_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN224_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN223_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN222_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN206_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN198_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
 # IN (R) FE_OFN163_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN162_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN160_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN138_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN628_paddr_9_2  (KP<--) (EQ_REP: +paddr[2]) 
-# IN (R) FE_OFN642_FE_DBTN88_pwdata_0_31  (KP<--) (EQ_REP: +pwdata[31]) 
-# IN (R) FE_OFN646_FE_DBTN87_pwdata_0_30  (KP<--) (EQ_REP: +pwdata[30]) 
-# IN (R) FE_OFN649_FE_DBTN86_pwdata_0_29  (KP<--) (EQ_REP: +pwdata[29]) 
+# IN (R) FE_OFN620_FE_DBTN87_pwdata_0_30  (KP<--) (EQ_REP: +pwdata[30]) 
 # IN (R) clk_clone6  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone7  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone5  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone8  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone4  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone3  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
@@ -3295,37 +2888,29 @@ add_ignored_outputs {irq_level[1]} -Golden -System
 # UR
 add_ignored_outputs {irq_level[0]} -Golden -System
 # UR
-add_pin_equivalences rst_n -invert FE_OFN138_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN160_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN162_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n -invert FE_OFN163_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN258_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN259_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN260_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN263_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN266_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN270_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN303_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN312_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN379_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN381_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN383_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN444_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN459_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN487_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN490_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN497_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN198_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN206_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN222_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN223_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN224_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN230_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN232_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN240_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN333_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN356_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN357_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN362_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN391_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN478_reset_sys_n -hier -Revised
 add_pin_equivalences {paddr[12]} -invert FE_DBTN125_paddr_9_12 -hier -Revised
 add_pin_equivalences {paddr[6]} -invert FE_DBTN124_paddr_9_6 -hier -Revised
 add_pin_equivalences {paddr[5]} -invert FE_DBTN123_paddr_9_5 -hier -Revised
 add_pin_equivalences {paddr[4]} -invert FE_DBTN121_paddr_9_4 -hier -Revised
 add_pin_equivalences {paddr[3]} -invert FE_DBTN117_paddr_9_3 -hier -Revised
-add_pin_equivalences {paddr[2]} FE_OFN628_paddr_9_2 -hier -Revised
 add_pin_equivalences {paddr[2]} -invert FE_DBTN112_paddr_9_2 -hier -Revised
 add_pin_equivalences pwrite -invert FE_DBTN3_pwrite_0 -hier -Revised
-add_pin_equivalences {pwdata[31]} FE_OFN642_FE_DBTN88_pwdata_0_31 -hier -Revised
-add_pin_equivalences {pwdata[30]} FE_OFN646_FE_DBTN87_pwdata_0_30 -hier -Revised
-add_pin_equivalences {pwdata[29]} FE_OFN649_FE_DBTN86_pwdata_0_29 -hier -Revised
+add_pin_equivalences {pwdata[30]} FE_OFN620_FE_DBTN87_pwdata_0_30 -hier -Revised
 add_ignored_inputs {pwdata[28]} -Revised
 # UR
 add_ignored_inputs {pwdata[27]} -Revised
@@ -3420,9 +3005,7 @@ add_pin_equivalences clk clk_clone1 -hier -Revised
 add_pin_equivalences clk clk_clone2 -hier -Revised
 add_pin_equivalences clk clk_clone3 -hier -Revised
 add_pin_equivalences clk clk_clone4 -hier -Revised
-add_pin_equivalences clk clk_clone8 -hier -Revised
 add_pin_equivalences clk clk_clone5 -hier -Revised
-add_pin_equivalences clk clk_clone7 -hier -Revised
 add_pin_equivalences clk clk_clone6 -hier -Revised
 add_ignored_outputs {prdata[27]} -Revised -System
 # UR
@@ -3489,10 +3072,10 @@ usage
 # MODULE ascon_core (R) INSTANCE /u_apb_ascon_u_ascon (R)
 # Wrapper size: (G) = 2747  (R) = 2747
 # Periphery size: (G) = 7898  (R) = 7898
-# Pins directly connected to key-points/constants: (G) = 91.53%  (R) = 91.88%
+# Pins directly connected to key-points/constants: (G) = 91.53%  (R) = 91.65%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
-# IN (G) clk (REP)  =   (R) clk_clone4  (-->KP)(REP) (by simulation)
+# IN (G) clk (REP)  =   (R) clk_clone5 (REP) (by simulation)
 # IN (G) rst_n  (KP<--)(REP)  =   (R) rst_n  (KP<--)(REP) (by sim and name)
 # IN (G) start  (KP<--)(REP)  =   (R) start  (KP<--)(REP) (by sim and name)
 # IN (G) mode  (KP<--)(REP)  =   (R) mode  (KP<--)(REP) (by sim and name)
@@ -3820,89 +3403,89 @@ usage
 # IN (G) data_cmd[2]  (KP<--)(REP)  =   (R) data_cmd[2]  (KP<--)(REP) (by sim and name)
 # IN (G) data_cmd[1]  (KP<--)(REP)  =   (R) data_cmd[1]  (KP<--)(REP) (by sim and name)
 # IN (G) data_cmd[0]  (KP<--)(REP)  =   (R) data_cmd[0]  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN602_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN601_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN600_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN599_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN598_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN597_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN596_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN595_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN590_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN587_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN584_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN583_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN581_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN580_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN579_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN578_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN577_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN576_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN540_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN538_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN529_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN528_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN527_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN526_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN525_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN575_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN574_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN573_reset_sys_n UZ (KP<--)(REP) 
+# IN (R) FE_OFN572_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN571_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN570_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN569_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN568_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN567_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN524_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN521_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN520_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN519_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN517_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN523_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN522_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN508_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN507_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN506_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN505_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN504_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN503_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN502_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN501_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN500_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN499_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN497_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN493_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN492_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN491_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN490_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN489_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN488_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN487_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN486_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN425_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN424_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN423_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN422_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN418_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN414_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN413_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN412_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN411_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN485_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN484_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN483_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN482_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN481_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN480_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN409_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN399_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN398_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN391_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN408_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN397_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN396_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN395_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN394_reset_sys_n U (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN393_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN392_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN390_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN388_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN387_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN386_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN385_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN383_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN382_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN285_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN284_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN283_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN282_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN281_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN280_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN279_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN278_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN277_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN276_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN275_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN274_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN273_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN272_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN271_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN267_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN265_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN264_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN262_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN261_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN172_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN171_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN170_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN169_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN168_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN167_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN381_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN380_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN379_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN378_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN377_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN376_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN364_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN248_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN247_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN246_reset_sys_n U (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN245_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN244_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN243_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN242_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN241_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN238_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) FE_OFN165_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN164_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN691_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) clk_clone5  (EQ_REP: +clk_clone4) 
-# IN (R) clk_clone2  (EQ_REP: +clk_clone4) 
-# IN (R) clk_clone3  (EQ_REP: +clk_clone4) 
-# IN (R) clk_clone1  (EQ_REP: +clk_clone4) 
-# IN (R) clk  (EQ_REP: +clk_clone4) 
+# IN (R) FE_OFN715_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) clk_clone6  (EQ_REP: +clk_clone5) 
+# IN (R) clk_clone3  (-->KP) (EQ_REP: +clk_clone5) 
+# IN (R) clk_clone4  (EQ_REP: +clk_clone5) 
+# IN (R) clk_clone2  (EQ_REP: +clk_clone5) 
+# IN (R) clk_clone1  (EQ_REP: +clk_clone5) 
+# IN (R) clk  (EQ_REP: +clk_clone5) 
+# IN (R) clk_clone7  (EQ_REP: +clk_clone5) 
 # RESOLVED Constraints
 # OUT (G) data_out[63] (REP)  =   (R) data_out[63] (REP) (by sim and name)
 # OUT (G) data_out[62] (REP)  =   (R) data_out[62] (REP) (by sim and name)
@@ -4360,93 +3943,98 @@ set_root_module ascon_core -Revised
 set_module_property -instance /u_apb_ascon_u_ascon -Golden
 set_module_property -instance /u_apb_ascon_u_ascon -Revised
 # Mapping renaming rules 
-add_pin_binding clk clk_clone4 -module ascon_core ascon_core  
+add_pin_binding clk clk_clone5 -module ascon_core ascon_core  
 add_renaming_rule rule_MOD_ascon_core_PIN_clk {^clk$} clk_LEC_UNUSED_ -pin -bbox ascon_core -Revised
 add_renaming_rule rule_MOD_ascon_core_pins _LEC_GOLDEN "" -pin -bbox ascon_core -Revised
 # Constraint commands 
-add_pin_equivalences rst_n FE_OFN691_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN164_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN715_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN165_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN167_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN168_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN169_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN170_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN171_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN172_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN261_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN262_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN264_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN265_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN267_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN271_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN272_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN273_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN274_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN275_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN276_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN277_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN278_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN279_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN280_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN281_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN282_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN283_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN284_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN285_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN238_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN241_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN242_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN243_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN244_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN245_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN246_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN247_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN248_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN364_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN376_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN377_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN378_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN379_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN380_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN381_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN382_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN383_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN385_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN386_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN387_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN388_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN390_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN391_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN398_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN399_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN392_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN393_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN394_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN395_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN396_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN397_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN408_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN409_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN411_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN412_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN413_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN414_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN418_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN422_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN423_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN424_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN425_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN480_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN481_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN482_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN483_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN484_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN485_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN486_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN487_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN488_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN489_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN490_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN491_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN492_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN493_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN497_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN499_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN500_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN501_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN502_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN503_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN504_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN505_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN506_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN507_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN517_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN519_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN520_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN521_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN508_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN522_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN523_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN524_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN525_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN526_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN527_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN528_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN529_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN538_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN540_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN567_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN568_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN569_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN570_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN571_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN572_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN574_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN575_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n FE_OFN576_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN587_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN590_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN595_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN596_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN597_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN598_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN599_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN600_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN601_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN602_reset_sys_n -hier -Revised
-add_pin_equivalences clk_clone4 clk -hier -Revised
-add_pin_equivalences clk_clone4 clk_clone1 -hier -Revised
-add_pin_equivalences clk_clone4 clk_clone3 -hier -Revised
-add_pin_equivalences clk_clone4 clk_clone2 -hier -Revised
-add_pin_equivalences clk_clone4 clk_clone5 -hier -Revised
+add_pin_equivalences rst_n FE_OFN577_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN578_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN579_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN580_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN581_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN583_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN584_reset_sys_n -hier -Revised
+add_ignored_inputs FE_OFN573_reset_sys_n -Revised
+# UR
+add_ignored_inputs FE_OFN394_reset_sys_n -Revised
+# UR
+add_ignored_inputs FE_OFN246_reset_sys_n -Revised
+# UR
+add_pin_equivalences clk_clone5 clk_clone7 -hier -Revised
+add_pin_equivalences clk_clone5 clk -hier -Revised
+add_pin_equivalences clk_clone5 clk_clone1 -hier -Revised
+add_pin_equivalences clk_clone5 clk_clone2 -hier -Revised
+add_pin_equivalences clk_clone5 clk_clone4 -hier -Revised
+add_pin_equivalences clk_clone5 clk_clone3 -hier -Revised
+add_pin_equivalences clk_clone5 clk_clone6 -hier -Revised
 report_black_box -NOHidden
 set_system_mode lec
 add_compared_points -all
@@ -4462,7 +4050,7 @@ usage
 # MODULE apb_watchdog (R) INSTANCE /u_apb_watchdog (R)
 # Wrapper size: (G) = 912  (R) = 912
 # Periphery size: (G) = 1093  (R) = 1093
-# Pins directly connected to key-points/constants: (G) = 96.67%  (R) = 97.69%
+# Pins directly connected to key-points/constants: (G) = 96.67%  (R) = 97.73%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) pclk  (KP<--)(REP)  =   (R) pclk  (KP<--)(REP) (by sim and name)
@@ -4545,20 +4133,22 @@ usage
 # IN (R) FE_DBTN109_pwdata_0_31  (KP<--) (EQ_REP: -pwdata[31]) 
 # IN (R) FE_DBTN113_paddr_9_2  (KP<--) (EQ_REP: -paddr[2]) 
 # IN (R) FE_DBTN118_paddr_9_3  (KP<--) (EQ_REP: -paddr[3]) 
-# IN (R) FE_OFN577_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN574_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN572_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN501_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN499_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN498_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN401_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN395_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN394_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN653_FE_DBTN82_pwdata_0_25  (KP<--) (EQ_REP: +pwdata[25]) 
-# IN (R) FE_OFN658_FE_DBTN78_pwdata_0_21  (KP<--) (EQ_REP: +pwdata[21]) 
-# IN (R) FE_OFN661_FE_DBTN70_pwdata_0_13  (KP<--) (EQ_REP: +pwdata[13]) 
-# IN (R) FE_OFN664_FE_DBTN64_pwdata_0_5  (KP<--) (EQ_REP: +pwdata[5]) 
+# IN (R) FE_OFN479_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN374_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN373_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN370_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN368_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN367_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN239_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN236_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN235_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN609_paddr_9_2  (KP<--) (EQ_REP: +paddr[2]) 
+# IN (R) FE_OFN621_FE_DBTN82_pwdata_0_25  (KP<--) (EQ_REP: +pwdata[25]) 
+# IN (R) FE_OFN629_FE_DBTN66_pwdata_0_9  (KP<--) (EQ_REP: +pwdata[9]) 
+# IN (R) FE_OFN645_FE_DBTN29_n_10075  (KP<--) (EQ_REP: +pwdata[1]) 
+# IN (R) pclk_clone2  (KP<--) (EQ_REP: +pclk) 
 # IN (R) pclk_clone1  (KP<--) (EQ_REP: +pclk) 
+# IN (R) FE_OFN684_pwdata_0_13 UZ (KP<--)(REP) 
 # RESOLVED Constraints
 # OUT (G) prdata[31]  (KP<--)(REP)  =   (R) prdata[31]  (KP<--)(REP) (by sim and name)
 # OUT (G) prdata[30]  (KP<--)(REP)  =   (R) prdata[30]  (KP<--)(REP) (by sim and name)
@@ -4609,44 +4199,44 @@ add_ignored_inputs {pstrb[1]} -Golden
 # UR
 add_ignored_inputs {pstrb[0]} -Golden
 # UR
-add_pin_equivalences presetn FE_OFN394_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN395_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN401_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN498_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN499_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN501_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN572_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN574_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN577_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN235_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN236_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN239_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN367_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN368_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN370_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN373_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN374_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN479_reset_sys_n -hier -Revised
 add_pin_equivalences {paddr[3]} -invert FE_DBTN118_paddr_9_3 -hier -Revised
+add_pin_equivalences {paddr[2]} FE_OFN609_paddr_9_2 -hier -Revised
 add_pin_equivalences {paddr[2]} -invert FE_DBTN113_paddr_9_2 -hier -Revised
 add_pin_equivalences {pwdata[31]} -invert FE_DBTN109_pwdata_0_31 -hier -Revised
 add_pin_equivalences {pwdata[30]} -invert FE_DBTN106_pwdata_0_30 -hier -Revised
 add_pin_equivalences {pwdata[28]} -invert FE_DBTN101_pwdata_0_28 -hier -Revised
 add_pin_equivalences {pwdata[27]} -invert FE_DBTN98_pwdata_0_27 -hier -Revised
 add_pin_equivalences {pwdata[26]} -invert FE_DBTN95_pwdata_0_26 -hier -Revised
-add_pin_equivalences {pwdata[25]} FE_OFN653_FE_DBTN82_pwdata_0_25 -hier -Revised
+add_pin_equivalences {pwdata[25]} FE_OFN621_FE_DBTN82_pwdata_0_25 -hier -Revised
 add_pin_equivalences {pwdata[24]} -invert FE_DBTN90_pwdata_0_24 -hier -Revised
 add_pin_equivalences {pwdata[23]} -invert FE_DBTN87_pwdata_0_23 -hier -Revised
 add_pin_equivalences {pwdata[22]} -invert FE_DBTN84_pwdata_0_22 -hier -Revised
-add_pin_equivalences {pwdata[21]} FE_OFN658_FE_DBTN78_pwdata_0_21 -hier -Revised
 add_pin_equivalences {pwdata[20]} -invert FE_DBTN79_pwdata_0_20 -hier -Revised
 add_pin_equivalences {pwdata[19]} -invert FE_DBTN76_pwdata_0_19 -hier -Revised
 add_pin_equivalences {pwdata[18]} -invert FE_DBTN73_pwdata_0_18 -hier -Revised
 add_pin_equivalences {pwdata[16]} -invert FE_DBTN69_pwdata_0_16 -hier -Revised
 add_pin_equivalences {pwdata[15]} -invert FE_DBTN66_pwdata_0_15 -hier -Revised
 add_pin_equivalences {pwdata[14]} -invert FE_DBTN63_pwdata_0_14 -hier -Revised
-add_pin_equivalences {pwdata[13]} FE_OFN661_FE_DBTN70_pwdata_0_13 -hier -Revised
 add_pin_equivalences {pwdata[12]} -invert FE_DBTN58_pwdata_0_12 -hier -Revised
 add_pin_equivalences {pwdata[11]} -invert FE_DBTN55_pwdata_0_11 -hier -Revised
 add_pin_equivalences {pwdata[10]} -invert FE_DBTN52_pwdata_0_10 -hier -Revised
+add_pin_equivalences {pwdata[9]} FE_OFN629_FE_DBTN66_pwdata_0_9 -hier -Revised
 add_pin_equivalences {pwdata[8]} -invert FE_DBTN47_pwdata_0_8 -hier -Revised
 add_pin_equivalences {pwdata[7]} -invert FE_DBTN17_n_10057 -hier -Revised
 add_pin_equivalences {pwdata[6]} -invert FE_DBTN13_n_10060 -hier -Revised
-add_pin_equivalences {pwdata[5]} FE_OFN664_FE_DBTN64_pwdata_0_5 -hier -Revised
 add_pin_equivalences {pwdata[4]} -invert FE_DBTN40_pwdata_0_4 -hier -Revised
 add_pin_equivalences {pwdata[3]} -invert FE_DBTN9_n_10069 -hier -Revised
 add_pin_equivalences {pwdata[2]} -invert FE_DBTN36_pwdata_0_2 -hier -Revised
+add_pin_equivalences {pwdata[1]} FE_OFN645_FE_DBTN29_n_10075 -hier -Revised
 add_pin_equivalences {pwdata[0]} -invert FE_DBTN32_pwdata_0_0 -hier -Revised
 add_ignored_inputs {pstrb[3]} -Revised
 # UR
@@ -4656,7 +4246,10 @@ add_ignored_inputs {pstrb[1]} -Revised
 # UR
 add_ignored_inputs {pstrb[0]} -Revised
 # UR
+add_pin_equivalences pclk pclk_clone2 -hier -Revised
 add_pin_equivalences pclk pclk_clone1 -hier -Revised
+add_ignored_inputs FE_OFN684_pwdata_0_13 -Revised
+# UR
 report_black_box -NOHidden
 set_system_mode lec
 add_compared_points -all
@@ -4672,7 +4265,7 @@ usage
 # MODULE apb_i2c (R) INSTANCE /u_apb_i2c (R)
 # Wrapper size: (G) = 2382  (R) = 2382
 # Periphery size: (G) = 3609  (R) = 3609
-# Pins directly connected to key-points/constants: (G) = 92.71%  (R) = 93.85%
+# Pins directly connected to key-points/constants: (G) = 92.71%  (R) = 93.60%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) pclk (REP)  =   (R) pclk (REP) (by name)
@@ -4741,29 +4334,24 @@ usage
 # IN (R) FE_DBTN44_pwdata_0_5  (KP<--) (EQ_REP: -pwdata[5]) 
 # IN (R) FE_DBTN114_paddr_9_2  (KP<--) (EQ_REP: -paddr[2]) 
 # IN (R) FE_DBTN122_paddr_9_4  (KP<--) (EQ_REP: -paddr[4]) 
-# IN (R) FE_OFN608_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN604_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN593_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN592_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN589_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN586_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN537_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN533_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN530_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN522_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN508_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN421_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN417_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN590_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN587_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN516_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN514_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN512_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN510_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN495_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
 # IN (R) FE_OFN404_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
-# IN (R) FE_OFN665_FE_DBTN64_pwdata_0_5  (KP<--) (EQ_REP: -pwdata[5]) 
-# IN (R) FE_OFN667_FE_DBTN63_pwdata_0_4  (KP<--) (EQ_REP: -pwdata[4]) 
-# IN (R) FE_OFN669_FE_DBTN62_pwdata_0_2  (KP<--) (EQ_REP: -pwdata[2]) 
-# IN (R) FE_OFN670_FE_DBTN61_pwdata_0_0  (KP<--) (EQ_REP: -pwdata[0]) 
-# IN (R) FE_OFN671_FE_DBTN32_n_10057  (KP<--) (EQ_REP: -pwdata[7]) 
-# IN (R) FE_OFN672_FE_DBTN31_n_10060  (KP<--) (EQ_REP: -pwdata[6]) 
-# IN (R) FE_OFN675_FE_DBTN30_n_10069  (KP<--) (EQ_REP: -pwdata[3]) 
-# IN (R) FE_OFN674_FE_DBTN30_n_10069  (KP<--) (EQ_REP: -pwdata[3]) 
-# IN (R) FE_OFN676_FE_DBTN29_n_10075  (KP<--) (EQ_REP: -pwdata[1]) 
+# IN (R) FE_OFN402_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN400_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN398_reset_sys_n  (KP<--) (EQ_REP: +presetn) 
+# IN (R) FE_OFN634_FE_DBTN64_pwdata_0_5  (KP<--) (EQ_REP: -pwdata[5]) 
+# IN (R) FE_OFN636_FE_DBTN63_pwdata_0_4  (KP<--) (EQ_REP: -pwdata[4]) 
+# IN (R) FE_OFN638_FE_DBTN61_pwdata_0_0  (KP<--) (EQ_REP: -pwdata[0]) 
+# IN (R) FE_OFN640_FE_DBTN32_n_10057  (KP<--) (EQ_REP: -pwdata[7]) 
+# IN (R) FE_OFN642_FE_DBTN31_n_10060  (KP<--) (EQ_REP: -pwdata[6]) 
+# IN (R) FE_OFN644_FE_DBTN30_n_10069  (KP<--) (EQ_REP: -pwdata[3]) 
+# IN (R) FE_OFN646_FE_DBTN29_n_10075  (KP<--) (EQ_REP: -pwdata[1]) 
 # RESOLVED Constraints
 # OUT (G) prdata[31] UZ (KP<--)(REP)  =   (R) prdata[31] UZ (KP<--)(REP) (by name)
 # OUT (G) prdata[30] UZ (KP<--)(REP)  =   (R) prdata[30] UZ (KP<--)(REP) (by name)
@@ -4889,20 +4477,17 @@ add_ignored_outputs scl_o -Golden -System
 # UR
 add_ignored_outputs sda_o -Golden -System
 # UR
+add_pin_equivalences presetn FE_OFN398_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN400_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN402_reset_sys_n -hier -Revised
 add_pin_equivalences presetn FE_OFN404_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN417_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN421_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN508_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN522_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN530_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN533_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN537_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN586_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN589_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN592_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN593_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN604_reset_sys_n -hier -Revised
-add_pin_equivalences presetn FE_OFN608_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN495_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN510_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN512_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN514_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN516_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN587_reset_sys_n -hier -Revised
+add_pin_equivalences presetn FE_OFN590_reset_sys_n -hier -Revised
 add_pin_equivalences psel -invert FE_DBTN1_psel_4 -hier -Revised
 add_pin_equivalences {paddr[4]} -invert FE_DBTN122_paddr_9_4 -hier -Revised
 add_pin_equivalences {paddr[2]} -invert FE_DBTN114_paddr_9_2 -hier -Revised
@@ -4938,22 +4523,20 @@ add_ignored_inputs {pwdata[17]} -Revised
 # UR
 add_ignored_inputs {pwdata[16]} -Revised
 # UR
-add_pin_equivalences {pwdata[7]} -invert FE_OFN671_FE_DBTN32_n_10057 -hier -Revised
+add_pin_equivalences {pwdata[7]} -invert FE_OFN640_FE_DBTN32_n_10057 -hier -Revised
 add_pin_equivalences {pwdata[7]} -invert FE_DBTN18_n_10057 -hier -Revised
-add_pin_equivalences {pwdata[6]} -invert FE_OFN672_FE_DBTN31_n_10060 -hier -Revised
+add_pin_equivalences {pwdata[6]} -invert FE_OFN642_FE_DBTN31_n_10060 -hier -Revised
 add_pin_equivalences {pwdata[6]} -invert FE_DBTN14_n_10060 -hier -Revised
-add_pin_equivalences {pwdata[5]} -invert FE_OFN665_FE_DBTN64_pwdata_0_5 -hier -Revised
+add_pin_equivalences {pwdata[5]} -invert FE_OFN634_FE_DBTN64_pwdata_0_5 -hier -Revised
 add_pin_equivalences {pwdata[5]} -invert FE_DBTN44_pwdata_0_5 -hier -Revised
-add_pin_equivalences {pwdata[4]} -invert FE_OFN667_FE_DBTN63_pwdata_0_4 -hier -Revised
+add_pin_equivalences {pwdata[4]} -invert FE_OFN636_FE_DBTN63_pwdata_0_4 -hier -Revised
 add_pin_equivalences {pwdata[4]} -invert FE_DBTN41_pwdata_0_4 -hier -Revised
-add_pin_equivalences {pwdata[3]} -invert FE_OFN674_FE_DBTN30_n_10069 -hier -Revised
-add_pin_equivalences {pwdata[3]} -invert FE_OFN675_FE_DBTN30_n_10069 -hier -Revised
+add_pin_equivalences {pwdata[3]} -invert FE_OFN644_FE_DBTN30_n_10069 -hier -Revised
 add_pin_equivalences {pwdata[3]} -invert FE_DBTN10_n_10069 -hier -Revised
-add_pin_equivalences {pwdata[2]} -invert FE_OFN669_FE_DBTN62_pwdata_0_2 -hier -Revised
 add_pin_equivalences {pwdata[2]} -invert FE_DBTN37_pwdata_0_2 -hier -Revised
-add_pin_equivalences {pwdata[1]} -invert FE_OFN676_FE_DBTN29_n_10075 -hier -Revised
+add_pin_equivalences {pwdata[1]} -invert FE_OFN646_FE_DBTN29_n_10075 -hier -Revised
 add_pin_equivalences {pwdata[1]} -invert FE_DBTN6_n_10075 -hier -Revised
-add_pin_equivalences {pwdata[0]} -invert FE_OFN670_FE_DBTN61_pwdata_0_0 -hier -Revised
+add_pin_equivalences {pwdata[0]} -invert FE_OFN638_FE_DBTN61_pwdata_0_0 -hier -Revised
 add_pin_equivalences {pwdata[0]} -invert FE_DBTN33_pwdata_0_0 -hier -Revised
 add_ignored_inputs {pstrb[3]} -Revised
 # UR
@@ -5016,7 +4599,7 @@ usage
 # MODULE sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 (R) INSTANCE /u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_B_channel (R)
 # Wrapper size: (G) = 232  (R) = 232
 # Periphery size: (G) = 471  (R) = 471
-# Pins directly connected to key-points/constants: (G) = 77.97%  (R) = 79.69%
+# Pins directly connected to key-points/constants: (G) = 77.97%  (R) = 78.69%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -5044,11 +4627,8 @@ usage
 # IN (G) AW_AxID_i[0]  (KP<--)(REP)  =   (R) AW_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AW_crossing_flag_i  (KP<--)(REP)  =   (R) AW_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AW_shift_en_i  (KP<--)(REP)  =   (R) AW_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN470_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_BID_o[19] UZ (KP<--)(REP)  =   (R) dsp_BID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_BID_o[18] (REP)  =   (R) dsp_BID_o[18] (REP) (by sim and name)
@@ -5145,7 +4725,6 @@ add_ignored_outputs {dsp_BRESP_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_BRESP_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN470_reset_sys_n -hier -Revised
 add_ignored_inputs {s_BID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_BRESP_i[0]} -Revised
@@ -5154,8 +4733,6 @@ add_ignored_inputs {AW_AxID_i[4]} -Revised
 # UR
 add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
 add_ignored_outputs {dsp_BID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_BID_o[16]} -Revised -System
@@ -5221,7 +4798,7 @@ usage
 # MODULE sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 (R) INSTANCE /u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_R_channel (R)
 # Wrapper size: (G) = 541  (R) = 541
 # Periphery size: (G) = 1493  (R) = 1493
-# Pins directly connected to key-points/constants: (G) = 81.25%  (R) = 82.16%
+# Pins directly connected to key-points/constants: (G) = 81.25%  (R) = 82.38%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -5282,22 +4859,25 @@ usage
 # IN (G) AR_AxID_i[0]  (KP<--)(REP)  =   (R) AR_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AR_crossing_flag_i  (KP<--)(REP)  =   (R) AR_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AR_shift_en_i  (KP<--)(REP)  =   (R) AR_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN483_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN467_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN373_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN364_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN362_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN359_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN248_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN241_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN238_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN236_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) ACLK_i_clone5  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) FE_OFN527_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN426_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN423_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN420_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN418_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN274_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN271_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN267_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN264_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN258_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN255_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN175_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN173_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
 # IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone5  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone6  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_RID_o[19] UZ (KP<--)(REP)  =   (R) dsp_RID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_RID_o[18] (REP)  =   (R) dsp_RID_o[18] (REP) (by sim and name)
@@ -5741,16 +5321,19 @@ add_ignored_outputs {dsp_RLAST_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_RLAST_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN236_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN238_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN241_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN248_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN359_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN362_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN364_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN373_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN467_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN483_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN173_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN175_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN255_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN258_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN264_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN267_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN271_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN274_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN418_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN420_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN423_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN426_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN527_reset_sys_n -hier -Revised
 add_ignored_inputs {s_RID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_RDATA_i[29]} -Revised
@@ -5765,12 +5348,12 @@ add_ignored_inputs {s_RRESP_i[0]} -Revised
 # UR
 add_ignored_inputs {AR_AxID_i[4]} -Revised
 # UR
-add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone6 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone5 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
 add_ignored_outputs {dsp_RID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_RID_o[16]} -Revised -System
@@ -6045,7 +5628,7 @@ usage
 # MODULE arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 (R) INSTANCE /u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_AR_channel_arbiter (R)
 # Wrapper size: (G) = 606  (R) = 606
 # Periphery size: (G) = 902  (R) = 902
-# Pins directly connected to key-points/constants: (G) = 93.57%  (R) = 93.66%
+# Pins directly connected to key-points/constants: (G) = 93.57%  (R) = 93.71%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
@@ -6184,7 +5767,8 @@ usage
 # IN (G) req_weight_i[127] UZ (KP<--)(REP)  =   (R) req_weight_i[127] UZ (KP<--)(REP) (by name)
 # IN (G) num_grant_req_i[0] UZ (KP<--)(REP)  =   (R) num_grant_req_i[0] UZ (KP<--)(REP) (by name)
 # IN (G) grant_ready_i (REP)  =   (R) grant_ready_i (REP) (by sim and name)
-# IN (R) FE_OFN458_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN150_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) grant_valid_o[3] (REP)  =   (R) grant_valid_o[3] (REP) (by sim and name)
@@ -6454,7 +6038,7 @@ add_ignored_inputs {req_weight_i[127]} -Golden
 # UR
 add_ignored_inputs {num_grant_req_i[0]} -Golden
 # UR
-add_pin_equivalences rst_n FE_OFN458_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN150_reset_sys_n -hier -Revised
 add_ignored_inputs {req_weight_i[0]} -Revised
 # UR
 add_ignored_inputs {req_weight_i[1]} -Revised
@@ -6714,6 +6298,7 @@ add_ignored_inputs {req_weight_i[127]} -Revised
 add_ignored_inputs {num_grant_req_i[0]} -Revised
 # UR
 add_pin_equivalences clk clk_clone1 -hier -Revised
+add_pin_equivalences clk clk_clone2 -hier -Revised
 report_black_box -NOHidden
 set_system_mode lec
 add_compared_points -all
@@ -6757,11 +6342,11 @@ usage
 # IN (G) AW_AxID_i[0]  (KP<--)(REP)  =   (R) AW_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AW_crossing_flag_i  (KP<--)(REP)  =   (R) AW_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AW_shift_en_i  (KP<--)(REP)  =   (R) AW_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN320_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN179_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_BID_o[19] UZ (KP<--)(REP)  =   (R) dsp_BID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_BID_o[18] (REP)  =   (R) dsp_BID_o[18] (REP) (by sim and name)
@@ -6858,17 +6443,17 @@ add_ignored_outputs {dsp_BRESP_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_BRESP_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN320_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN179_reset_sys_n -hier -Revised
 add_ignored_inputs {s_BID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_BRESP_i[0]} -Revised
 # UR
 add_ignored_inputs {AW_AxID_i[4]} -Revised
 # UR
-add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
 add_ignored_outputs {dsp_BID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_BID_o[16]} -Revised -System
@@ -6934,7 +6519,7 @@ usage
 # MODULE sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 (R) INSTANCE /u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_R_channel (R)
 # Wrapper size: (G) = 591  (R) = 591
 # Periphery size: (G) = 1571  (R) = 1571
-# Pins directly connected to key-points/constants: (G) = 79.46%  (R) = 80.67%
+# Pins directly connected to key-points/constants: (G) = 79.46%  (R) = 80.43%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -6995,18 +6580,15 @@ usage
 # IN (G) AR_AxID_i[0]  (KP<--)(REP)  =   (R) AR_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AR_crossing_flag_i  (KP<--)(REP)  =   (R) AR_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AR_shift_en_i  (KP<--)(REP)  =   (R) AR_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN545_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN439_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN438_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN311_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN307_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN305_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN200_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN197_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN195_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN193_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN452_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN337_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN320_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN317_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN208_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN197_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN154_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN148_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
@@ -7435,26 +7017,23 @@ add_ignored_outputs {dsp_RLAST_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_RLAST_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN193_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN195_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN197_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN200_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN305_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN307_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN311_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN438_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN439_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN545_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN148_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN154_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN197_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN208_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN317_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN320_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN337_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN452_reset_sys_n -hier -Revised
 add_ignored_inputs {s_RID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_RRESP_i[0]} -Revised
 # UR
 add_ignored_inputs {AR_AxID_i[4]} -Revised
 # UR
-add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
 add_ignored_outputs {dsp_RID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_RID_o[16]} -Revised -System
@@ -7718,7 +7297,7 @@ usage
 # MODULE arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 (R) INSTANCE /u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AR_channel_arbiter (R)
 # Wrapper size: (G) = 802  (R) = 802
 # Periphery size: (G) = 1108  (R) = 1108
-# Pins directly connected to key-points/constants: (G) = 93.57%  (R) = 93.06%
+# Pins directly connected to key-points/constants: (G) = 93.57%  (R) = 92.96%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
@@ -7857,8 +7436,6 @@ usage
 # IN (G) req_weight_i[127] UZ (KP<--)(REP)  =   (R) req_weight_i[127] UZ (KP<--)(REP) (by name)
 # IN (G) num_grant_req_i[0] UZ (KP<--)(REP)  =   (R) num_grant_req_i[0] UZ (KP<--)(REP) (by name)
 # IN (G) grant_ready_i (REP)  =   (R) grant_ready_i (REP) (by sim and name)
-# IN (R) FE_OFN437_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) grant_valid_o[3] (REP)  =   (R) grant_valid_o[3] (REP) (by sim and name)
@@ -8129,7 +7706,6 @@ add_ignored_inputs {req_weight_i[127]} -Golden
 # UR
 add_ignored_inputs {num_grant_req_i[0]} -Golden
 # UR
-add_pin_equivalences rst_n FE_OFN437_reset_sys_n -hier -Revised
 add_ignored_inputs {req_weight_i[0]} -Revised
 # UR
 add_ignored_inputs {req_weight_i[1]} -Revised
@@ -8388,7 +7964,6 @@ add_ignored_inputs {req_weight_i[127]} -Revised
 # UR
 add_ignored_inputs {num_grant_req_i[0]} -Revised
 # UR
-add_pin_equivalences clk clk_clone2 -hier -Revised
 add_pin_equivalences clk clk_clone1 -hier -Revised
 add_output_equivalences {grant_valid_o[0]} -invert FE_DBTN132_SA_GEN_2__genblk1_slave_arbitration_AR_channel_arb_grant_valid_0 -hier -Revised
 add_ignored_outputs FE_DBTN132_SA_GEN_2__genblk1_slave_arbitration_AR_channel_arb_grant_valid_0 -Revised -System
@@ -8408,7 +7983,7 @@ usage
 # MODULE sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 (R) INSTANCE /u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_B_channel (R)
 # Wrapper size: (G) = 219  (R) = 219
 # Periphery size: (G) = 458  (R) = 458
-# Pins directly connected to key-points/constants: (G) = 77.97%  (R) = 79.37%
+# Pins directly connected to key-points/constants: (G) = 77.97%  (R) = 79.69%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -8436,10 +8011,11 @@ usage
 # IN (G) AW_AxID_i[0]  (KP<--)(REP)  =   (R) AW_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AW_crossing_flag_i  (KP<--)(REP)  =   (R) AW_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AW_shift_en_i  (KP<--)(REP)  =   (R) AW_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN469_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) FE_OFN608_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_BID_o[19] UZ (KP<--)(REP)  =   (R) dsp_BID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_BID_o[18] (REP)  =   (R) dsp_BID_o[18] (REP) (by sim and name)
@@ -8536,16 +8112,17 @@ add_ignored_outputs {dsp_BRESP_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_BRESP_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN469_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN608_reset_sys_n -hier -Revised
 add_ignored_inputs {s_BID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_BRESP_i[0]} -Revised
 # UR
 add_ignored_inputs {AW_AxID_i[4]} -Revised
 # UR
-add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
 add_ignored_outputs {dsp_BID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_BID_o[16]} -Revised -System
@@ -8610,7 +8187,7 @@ usage
 # MODULE sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_2 (R) INSTANCE /u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_R_channel (R)
 # Wrapper size: (G) = 542  (R) = 543
 # Periphery size: (G) = 1515  (R) = 1515
-# Pins directly connected to key-points/constants: (G) = 79.91%  (R) = 81.42%
+# Pins directly connected to key-points/constants: (G) = 79.91%  (R) = 80.89%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -8671,35 +8248,28 @@ usage
 # IN (G) AR_AxID_i[0]  (KP<--)(REP)  =   (R) AR_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AR_crossing_flag_i  (KP<--)(REP)  =   (R) AR_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AR_shift_en_i  (KP<--)(REP)  =   (R) AR_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN626_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN478_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN434_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN300_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN231_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN204_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN187_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN185_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN182_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN180_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN177_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN144_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN142_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN140_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN475_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN412_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN346_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN318_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN313_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN297_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN250_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN214_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN194_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN191_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN145_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN141_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
 # IN (R) n_24300 (REP) 
 # IN (R) n_24301  (EQ_REP: -n_24300) 
-# IN (R) ACLK_i_clone13  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone12  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone11  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone10  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone9  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone8  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone7  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone6  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone5  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_RID_o[19] UZ (KP<--)(REP)  =   (R) dsp_RID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_RID_o[18] (REP)  =   (R) dsp_RID_o[18] (REP) (by sim and name)
@@ -9587,11 +9157,11 @@ usage
 # IN (G) AW_AxID_i[0]  (KP<--)(REP)  =   (R) AW_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AW_crossing_flag_i  (KP<--)(REP)  =   (R) AW_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AW_shift_en_i  (KP<--)(REP)  =   (R) AW_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN335_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
 # IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone5  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_BID_o[19] UZ (KP<--)(REP)  =   (R) dsp_BID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_BID_o[18] (REP)  =   (R) dsp_BID_o[18] (REP) (by sim and name)
@@ -9692,7 +9262,6 @@ add_ignored_outputs {dsp_BRESP_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_BRESP_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN335_reset_sys_n -hier -Revised
 add_ignored_inputs {s_BID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_BRESP_i[1]} -Revised
@@ -9701,6 +9270,7 @@ add_ignored_inputs {s_BRESP_i[0]} -Revised
 # UR
 add_ignored_inputs {AW_AxID_i[4]} -Revised
 # UR
+add_pin_equivalences ACLK_i ACLK_i_clone5 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
@@ -9766,12 +9336,13 @@ set_system_mode setup
 add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 -module -hier -Golden
 add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 -module -hier -Revised
 usage
+# Comparing
 #-------------------------------------------------------------------------------
 # MODULE sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 (G) INSTANCE /u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_R_channel (G)
 # MODULE sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 (R) INSTANCE /u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_R_channel (R)
-# Wrapper size: (G) = 557  (R) = 558
+# Wrapper size: (G) = 557  (R) = 557
 # Periphery size: (G) = 1530  (R) = 1530
-# Pins directly connected to key-points/constants: (G) = 79.91%  (R) = 81.38%
+# Pins directly connected to key-points/constants: (G) = 79.91%  (R) = 81.78%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -9832,25 +9403,25 @@ usage
 # IN (G) AR_AxID_i[0]  (KP<--)(REP)  =   (R) AR_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AR_crossing_flag_i  (KP<--)(REP)  =   (R) AR_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AR_shift_en_i  (KP<--)(REP)  =   (R) AR_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN476_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN474_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN377_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN343_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN341_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN339_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN337_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN257_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN252_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN223_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN221_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN219_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN159_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) n_23043 (REP) 
-# IN (R) ACLK_i_clone8  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) FE_OFN603_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN558_reset_sys_n U (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN552_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN550_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN548_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN544_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN448_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN444_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN440_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN306_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN294_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN292_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) ACLK_i_clone11  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone10  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone9  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone8  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone7  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone6  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone5  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone6  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
@@ -10022,6 +9593,561 @@ usage
 # OUT (G) dsp_RVALID_o[0] (REP)  =   (R) dsp_RVALID_o[0] (REP) (by sim and name)
 # OUT (G) s_RREADY_o (REP)  =   (R) s_RREADY_o (REP) (by sim and name)
 # OUT (G) AR_stall_o (REP)  =   (R) AR_stall_o (REP) (by sim and name)
+set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 -Golden
+set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 -Revised
+set_module_property -instance {/u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_R_channel} -Golden
+set_module_property -instance {/u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_R_channel} -Revised
+# Constraint commands 
+add_ignored_inputs {s_RID_i[4]} -Golden
+# UR
+add_ignored_inputs {s_RRESP_i[1]} -Golden
+# UR
+add_ignored_inputs {s_RRESP_i[0]} -Golden
+# UR
+add_ignored_inputs {AR_AxID_i[4]} -Golden
+# UR
+add_ignored_outputs {dsp_RID_o[19]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[16]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[15]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[14]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[13]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[12]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[11]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[10]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[9]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[8]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[7]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[6]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[5]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[4]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[3]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[2]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[1]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RID_o[0]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[95]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[94]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[93]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[92]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[91]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[90]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[89]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[88]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[87]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[86]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[85]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[84]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[83]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[82]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[81]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[80]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[79]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[78]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[77]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[76]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[75]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[74]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[73]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[72]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[71]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[70]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[69]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[68]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[67]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[66]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[65]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[64]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[63]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[62]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[61]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[60]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[59]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[58]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[57]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[56]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[55]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[54]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[53]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[52]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[51]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[50]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[49]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[48]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[47]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[46]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[45]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[44]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[43]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[42]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[41]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[40]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[39]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[38]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[37]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[36]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[35]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[34]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[33]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[32]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[31]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[30]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[29]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[28]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[27]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[26]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[25]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[24]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[23]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[22]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[21]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[20]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[19]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[18]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[17]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[16]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[15]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[14]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[13]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[12]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[11]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[10]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[9]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[8]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[7]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[6]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[5]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[4]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[3]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[2]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[1]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[0]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[7]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[6]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[5]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[4]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[3]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[2]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[1]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[0]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RLAST_o[2]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RLAST_o[1]} -Golden -System
+# UR
+add_ignored_outputs {dsp_RLAST_o[0]} -Golden -System
+# UR
+add_pin_equivalences ARESETn_i FE_OFN292_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN294_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN306_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN440_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN444_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN448_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN544_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN548_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN550_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN552_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN558_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN603_reset_sys_n -hier -Revised
+add_ignored_inputs {s_RID_i[4]} -Revised
+# UR
+add_ignored_inputs {s_RRESP_i[1]} -Revised
+# UR
+add_ignored_inputs {s_RRESP_i[0]} -Revised
+# UR
+add_ignored_inputs {AR_AxID_i[4]} -Revised
+# UR
+add_ignored_inputs FE_OFN558_reset_sys_n -Revised
+# UR
+add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone6 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone5 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone7 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone8 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone9 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone10 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone11 -hier -Revised
+add_ignored_outputs {dsp_RID_o[19]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[16]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[15]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[14]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[13]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[12]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[11]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[10]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[9]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[8]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[7]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[6]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[5]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[4]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[3]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[2]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[1]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RID_o[0]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[95]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[94]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[93]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[92]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[91]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[90]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[89]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[88]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[87]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[86]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[85]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[84]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[83]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[82]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[81]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[80]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[79]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[78]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[77]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[76]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[75]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[74]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[73]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[72]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[71]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[70]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[69]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[68]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[67]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[66]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[65]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[64]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[63]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[62]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[61]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[60]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[59]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[58]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[57]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[56]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[55]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[54]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[53]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[52]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[51]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[50]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[49]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[48]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[47]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[46]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[45]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[44]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[43]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[42]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[41]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[40]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[39]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[38]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[37]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[36]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[35]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[34]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[33]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[32]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[31]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[30]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[29]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[28]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[27]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[26]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[25]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[24]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[23]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[22]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[21]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[20]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[19]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[18]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[17]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[16]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[15]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[14]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[13]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[12]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[11]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[10]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[9]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[8]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[7]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[6]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[5]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[4]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[3]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[2]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[1]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RDATA_o[0]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[7]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[6]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[5]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[4]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[3]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[2]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[1]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RRESP_o[0]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RLAST_o[2]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RLAST_o[1]} -Revised -System
+# UR
+add_ignored_outputs {dsp_RLAST_o[0]} -Revised -System
+# UR
+report_black_box -NOHidden
+set_system_mode lec
+add_compared_points -all
+compare
+save_hier_compare_result
+set_system_mode setup
+add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 -module -hier -Golden
+add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 -module -hier -Revised
+usage
 # Comparing
 #-------------------------------------------------------------------------------
 # MODULE arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 (G) INSTANCE /u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AR_channel_arbiter (G)
@@ -10167,8 +10293,8 @@ usage
 # IN (G) req_weight_i[127] UZ (KP<--)(REP)  =   (R) req_weight_i[127] UZ (KP<--)(REP) (by name)
 # IN (G) num_grant_req_i[0] UZ (KP<--)(REP)  =   (R) num_grant_req_i[0] UZ (KP<--)(REP) (by name)
 # IN (G) grant_ready_i (REP)  =   (R) grant_ready_i (REP) (by sim and name)
-# IN (R) FE_OFN431_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN294_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN352_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN340_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
@@ -10440,8 +10566,8 @@ add_ignored_inputs {req_weight_i[127]} -Golden
 # UR
 add_ignored_inputs {num_grant_req_i[0]} -Golden
 # UR
-add_pin_equivalences rst_n FE_OFN294_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN431_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN340_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN352_reset_sys_n -hier -Revised
 add_ignored_inputs {req_weight_i[0]} -Revised
 # UR
 add_ignored_inputs {req_weight_i[1]} -Revised
@@ -10720,7 +10846,7 @@ usage
 # MODULE arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 (R) INSTANCE /u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AW_channel_arbiter (R)
 # Wrapper size: (G) = 662  (R) = 662
 # Periphery size: (G) = 881  (R) = 881
-# Pins directly connected to key-points/constants: (G) = 95.00%  (R) = 95.04%
+# Pins directly connected to key-points/constants: (G) = 95.00%  (R) = 95.07%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
@@ -10859,6 +10985,7 @@ usage
 # IN (G) req_weight_i[127] UZ (KP<--)(REP)  =   (R) req_weight_i[127] UZ (KP<--)(REP) (by name)
 # IN (G) num_grant_req_i[0] UZ (KP<--)(REP)  =   (R) num_grant_req_i[0] UZ (KP<--)(REP) (by name)
 # IN (G) grant_ready_i (REP)  =   (R) grant_ready_i (REP) (by sim and name)
+# IN (R) FE_OFN606_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) grant_valid_o[3] (REP)  =   (R) grant_valid_o[3] (REP) (by sim and name)
@@ -11132,6 +11259,7 @@ add_ignored_inputs {num_grant_req_i[0]} -Golden
 # UR
 add_ignored_outputs {grant_valid_o[0]} -Golden -System
 # UR
+add_pin_equivalences rst_n FE_OFN606_reset_sys_n -hier -Revised
 add_ignored_inputs {req_i[0]} -Revised
 # UR
 add_ignored_inputs {req_weight_i[0]} -Revised
@@ -11410,7 +11538,7 @@ usage
 # MODULE sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 (R) INSTANCE /u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel (R)
 # Wrapper size: (G) = 256  (R) = 256
 # Periphery size: (G) = 494  (R) = 494
-# Pins directly connected to key-points/constants: (G) = 77.97%  (R) = 79.03%
+# Pins directly connected to key-points/constants: (G) = 77.97%  (R) = 79.37%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -11438,9 +11566,10 @@ usage
 # IN (G) AW_AxID_i[0]  (KP<--)(REP)  =   (R) AW_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AW_crossing_flag_i  (KP<--)(REP)  =   (R) AW_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AW_shift_en_i  (KP<--)(REP)  =   (R) AW_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN472_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_BID_o[19] UZ (KP<--)(REP)  =   (R) dsp_BID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_BID_o[18] (REP)  =   (R) dsp_BID_o[18] (REP) (by sim and name)
@@ -11537,15 +11666,16 @@ add_ignored_outputs {dsp_BRESP_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_BRESP_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN472_reset_sys_n -hier -Revised
 add_ignored_inputs {s_BID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_BRESP_i[0]} -Revised
 # UR
 add_ignored_inputs {AW_AxID_i[4]} -Revised
 # UR
-add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
 add_ignored_outputs {dsp_BID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_BID_o[16]} -Revised -System
@@ -11672,25 +11802,25 @@ usage
 # IN (G) AR_AxID_i[0]  (KP<--)(REP)  =   (R) AR_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AR_crossing_flag_i  (KP<--)(REP)  =   (R) AR_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AR_shift_en_i  (KP<--)(REP)  =   (R) AR_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN542_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN427_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN351_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN296_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN287_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN179_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN176_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN174_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN146_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) ACLK_i_clone11  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) FE_OFN476_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN472_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN470_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN354_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN348_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN343_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN310_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN221_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN218_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN216_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN181_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
 # IN (R) ACLK_i_clone9  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone10  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone7  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone8  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone6  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone7  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone5  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone6  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone5  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_RID_o[19] UZ (KP<--)(REP)  =   (R) dsp_RID_o[19] UZ (KP<--)(REP) (by name)
@@ -12118,32 +12248,32 @@ add_ignored_outputs {dsp_RLAST_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_RLAST_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN146_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN174_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN176_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN179_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN287_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN296_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN351_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN427_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN542_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN181_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN216_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN218_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN221_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN310_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN343_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN348_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN354_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN470_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN472_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN476_reset_sys_n -hier -Revised
 add_ignored_inputs {s_RID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_RRESP_i[0]} -Revised
 # UR
 add_ignored_inputs {AR_AxID_i[4]} -Revised
 # UR
-add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone5 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone6 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone8 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone5 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone7 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone10 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone8 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone9 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone11 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
 add_ignored_outputs {dsp_RID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_RID_o[16]} -Revised -System
@@ -12407,7 +12537,7 @@ usage
 # MODULE arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 (R) INSTANCE /u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_arbiter (R)
 # Wrapper size: (G) = 1034  (R) = 1034
 # Periphery size: (G) = 1236  (R) = 1236
-# Pins directly connected to key-points/constants: (G) = 93.57%  (R) = 93.01%
+# Pins directly connected to key-points/constants: (G) = 93.57%  (R) = 92.96%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
@@ -12546,7 +12676,6 @@ usage
 # IN (G) req_weight_i[127] UZ (KP<--)(REP)  =   (R) req_weight_i[127] UZ (KP<--)(REP) (by name)
 # IN (G) num_grant_req_i[0] UZ (KP<--)(REP)  =   (R) num_grant_req_i[0] UZ (KP<--)(REP) (by name)
 # IN (G) grant_ready_i (REP)  =   (R) grant_ready_i (REP) (by sim and name)
-# IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) grant_valid_o[3] (REP)  =   (R) grant_valid_o[3] (REP) (by sim and name)
@@ -13075,7 +13204,6 @@ add_ignored_inputs {req_weight_i[127]} -Revised
 # UR
 add_ignored_inputs {num_grant_req_i[0]} -Revised
 # UR
-add_pin_equivalences clk clk_clone2 -hier -Revised
 add_pin_equivalences clk clk_clone1 -hier -Revised
 add_output_equivalences {grant_valid_o[0]} -invert FE_DBTN129_SA_GEN_5__genblk1_slave_arbitration_AR_channel_arb_grant_valid_0 -hier -Revised
 add_ignored_outputs FE_DBTN129_SA_GEN_5__genblk1_slave_arbitration_AR_channel_arb_grant_valid_0 -Revised -System
@@ -13234,7 +13362,7 @@ usage
 # IN (G) req_weight_i[127] UZ (KP<--)(REP)  =   (R) req_weight_i[127] UZ (KP<--)(REP) (by name)
 # IN (G) num_grant_req_i[0] UZ (KP<--)(REP)  =   (R) num_grant_req_i[0] UZ (KP<--)(REP) (by name)
 # IN (G) grant_ready_i (REP)  =   (R) grant_ready_i (REP) (by sim and name)
-# IN (R) FE_OFN209_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN438_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) grant_valid_o[3] (REP)  =   (R) grant_valid_o[3] (REP) (by sim and name)
@@ -13508,7 +13636,7 @@ add_ignored_inputs {num_grant_req_i[0]} -Golden
 # UR
 add_ignored_outputs {grant_valid_o[0]} -Golden -System
 # UR
-add_pin_equivalences rst_n FE_OFN209_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN438_reset_sys_n -hier -Revised
 add_ignored_inputs {req_i[0]} -Revised
 # UR
 add_ignored_inputs {req_weight_i[0]} -Revised
@@ -13815,10 +13943,10 @@ usage
 # IN (G) AW_AxID_i[0]  (KP<--)(REP)  =   (R) AW_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AW_crossing_flag_i  (KP<--)(REP)  =   (R) AW_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AW_shift_en_i  (KP<--)(REP)  =   (R) AW_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN324_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_BID_o[19] UZ (KP<--)(REP)  =   (R) dsp_BID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_BID_o[18] (REP)  =   (R) dsp_BID_o[18] (REP) (by sim and name)
@@ -13915,7 +14043,6 @@ add_ignored_outputs {dsp_BRESP_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_BRESP_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN324_reset_sys_n -hier -Revised
 add_ignored_inputs {s_BID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_BRESP_i[0]} -Revised
@@ -13923,8 +14050,9 @@ add_ignored_inputs {s_BRESP_i[0]} -Revised
 add_ignored_inputs {AW_AxID_i[4]} -Revised
 # UR
 add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
 add_ignored_outputs {dsp_BID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_BID_o[16]} -Revised -System
@@ -13990,7 +14118,7 @@ usage
 # MODULE sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 (R) INSTANCE /u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel (R)
 # Wrapper size: (G) = 1338  (R) = 1338
 # Periphery size: (G) = 2317  (R) = 2317
-# Pins directly connected to key-points/constants: (G) = 79.46%  (R) = 80.99%
+# Pins directly connected to key-points/constants: (G) = 79.46%  (R) = 80.59%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -14051,24 +14179,19 @@ usage
 # IN (G) AR_AxID_i[0]  (KP<--)(REP)  =   (R) AR_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AR_crossing_flag_i  (KP<--)(REP)  =   (R) AR_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AR_shift_en_i  (KP<--)(REP)  =   (R) AR_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN350_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN349_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN347_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN322_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN255_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN228_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN227_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN224_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN211_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN153_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) ACLK_i_clone7  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone6  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) FE_OFN546_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN311_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN303_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN300_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN286_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN188_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN186_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN2575_n_5223  (KP<--) (EQ_REP: -ARESETn_i) 
 # IN (R) ACLK_i_clone5  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone8  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_RID_o[19] UZ (KP<--)(REP)  =   (R) dsp_RID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_RID_o[18] (REP)  =   (R) dsp_RID_o[18] (REP) (by sim and name)
@@ -14495,30 +14618,25 @@ add_ignored_outputs {dsp_RLAST_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_RLAST_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN153_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN211_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN224_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN227_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN228_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN255_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN322_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN347_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN349_reset_sys_n -hier -Revised
-add_pin_equivalences ARESETn_i FE_OFN350_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN2575_n_5223 -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN186_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN188_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN286_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN300_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN303_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN311_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i FE_OFN546_reset_sys_n -hier -Revised
 add_ignored_inputs {s_RID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_RRESP_i[0]} -Revised
 # UR
 add_ignored_inputs {AR_AxID_i[4]} -Revised
 # UR
-add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone8 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone5 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone6 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone7 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone5 -hier -Revised
 add_ignored_outputs {dsp_RID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_RID_o[16]} -Revised -System
@@ -14921,7 +15039,7 @@ usage
 # IN (G) req_weight_i[127] UZ (KP<--)(REP)  =   (R) req_weight_i[127] UZ (KP<--)(REP) (by name)
 # IN (G) num_grant_req_i[0] UZ (KP<--)(REP)  =   (R) num_grant_req_i[0] UZ (KP<--)(REP) (by name)
 # IN (G) grant_ready_i (REP)  =   (R) grant_ready_i (REP) (by sim and name)
-# IN (R) FE_OFN354_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN296_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
@@ -15192,7 +15310,7 @@ add_ignored_inputs {req_weight_i[127]} -Golden
 # UR
 add_ignored_inputs {num_grant_req_i[0]} -Golden
 # UR
-add_pin_equivalences rst_n FE_OFN354_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN296_reset_sys_n -hier -Revised
 add_ignored_inputs {req_weight_i[0]} -Revised
 # UR
 add_ignored_inputs {req_weight_i[1]} -Revised
@@ -15468,7 +15586,7 @@ usage
 # MODULE sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 (R) INSTANCE /u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_B_channel (R)
 # Wrapper size: (G) = 250  (R) = 250
 # Periphery size: (G) = 489  (R) = 489
-# Pins directly connected to key-points/constants: (G) = 77.97%  (R) = 79.69%
+# Pins directly connected to key-points/constants: (G) = 77.97%  (R) = 79.03%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -15496,11 +15614,9 @@ usage
 # IN (G) AW_AxID_i[0]  (KP<--)(REP)  =   (R) AW_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AW_crossing_flag_i  (KP<--)(REP)  =   (R) AW_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AW_shift_en_i  (KP<--)(REP)  =   (R) AW_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN330_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_BID_o[19] UZ (KP<--)(REP)  =   (R) dsp_BID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_BID_o[18] (REP)  =   (R) dsp_BID_o[18] (REP) (by sim and name)
@@ -15597,7 +15713,6 @@ add_ignored_outputs {dsp_BRESP_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_BRESP_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i FE_OFN330_reset_sys_n -hier -Revised
 add_ignored_inputs {s_BID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_BRESP_i[0]} -Revised
@@ -15605,9 +15720,8 @@ add_ignored_inputs {s_BRESP_i[0]} -Revised
 add_ignored_inputs {AW_AxID_i[4]} -Revised
 # UR
 add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
 add_ignored_outputs {dsp_BID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_BID_o[16]} -Revised -System
@@ -15673,7 +15787,7 @@ usage
 # MODULE sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 (R) INSTANCE /u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_R_channel (R)
 # Wrapper size: (G) = 591  (R) = 591
 # Periphery size: (G) = 1573  (R) = 1573
-# Pins directly connected to key-points/constants: (G) = 79.46%  (R) = 79.91%
+# Pins directly connected to key-points/constants: (G) = 79.46%  (R) = 79.82%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -15734,11 +15848,10 @@ usage
 # IN (G) AR_AxID_i[0]  (KP<--)(REP)  =   (R) AR_AxID_i[0]  (KP<--)(REP) (by sim and name)
 # IN (G) AR_crossing_flag_i  (KP<--)(REP)  =   (R) AR_crossing_flag_i  (KP<--)(REP) (by sim and name)
 # IN (G) AR_shift_en_i  (KP<--)(REP)  =   (R) AR_shift_en_i  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN369_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
-# IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) FE_OFN600_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
 # IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
 # RESOLVED Constraints
 # OUT (G) dsp_RID_o[19] UZ (KP<--)(REP)  =   (R) dsp_RID_o[19] UZ (KP<--)(REP) (by name)
 # OUT (G) dsp_RID_o[18] (REP)  =   (R) dsp_RID_o[18] (REP) (by sim and name)
@@ -16165,17 +16278,16 @@ add_ignored_outputs {dsp_RLAST_o[1]} -Golden -System
 # UR
 add_ignored_outputs {dsp_RLAST_o[0]} -Golden -System
 # UR
-add_pin_equivalences ARESETn_i -invert FE_OFN369_reset_sys_n -hier -Revised
+add_pin_equivalences ARESETn_i -invert FE_OFN600_reset_sys_n -hier -Revised
 add_ignored_inputs {s_RID_i[4]} -Revised
 # UR
 add_ignored_inputs {s_RRESP_i[0]} -Revised
 # UR
 add_ignored_inputs {AR_AxID_i[4]} -Revised
 # UR
-add_pin_equivalences ACLK_i ACLK_i_clone4 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone1 -hier -Revised
-add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
 add_pin_equivalences ACLK_i ACLK_i_clone3 -hier -Revised
+add_pin_equivalences ACLK_i ACLK_i_clone2 -hier -Revised
 add_ignored_outputs {dsp_RID_o[19]} -Revised -System
 # UR
 add_ignored_outputs {dsp_RID_o[16]} -Revised -System
@@ -16436,9 +16548,9 @@ usage
 #-------------------------------------------------------------------------------
 # MODULE axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff8000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_DSP_RDATA_DEPTH2_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0 (G) INSTANCE /u_axi_interconnect (G)
 # MODULE axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff8000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_DSP_RDATA_DEPTH2_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0 (R) INSTANCE /u_axi_interconnect (R)
-# Wrapper size: (G) = 14660  (R) = 14663
+# Wrapper size: (G) = 14660  (R) = 14662
 # Periphery size: (G) = 33879  (R) = 33879
-# Pins directly connected to key-points/constants: (G) = 92.26%  (R) = 92.70%
+# Pins directly connected to key-points/constants: (G) = 92.26%  (R) = 92.74%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) ACLK_i  (KP<--)(REP)  =   (R) ACLK_i  (KP<--)(REP) (by sim and name)
@@ -17534,228 +17646,226 @@ usage
 # IN (R) u_clint_u_slave_aw_buf_valid  (KP<--) (EQ_REP: -s_AWREADY_i[5]) 
 # IN (R) n_23858  (EQ_REP: -s_ARREADY_i[5]) 
 # IN (R) n_22906  (EQ_REP: -s_WREADY_i[5]) 
-# IN (R) FE_OFN625_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN570_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN544_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN541_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN482_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN477_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN475_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN473_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN471_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN468_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN466_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN464_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN457_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN436_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN433_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN430_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN426_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN376_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN372_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN368_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN363_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN361_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN358_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN353_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN352_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN346_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN342_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN340_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN338_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN336_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN334_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN333_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN332_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN331_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN329_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN328_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN327_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN323_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN321_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN319_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN310_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN306_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN304_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN299_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN295_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN293_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN290_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN286_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN256_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN254_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN251_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN247_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN244_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
-# IN (R) FE_OFN240_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN237_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN235_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN230_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN229_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN226_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN222_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN220_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN218_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN216_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN215_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN214_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN213_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN210_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN208_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN207_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN203_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN199_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN196_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN194_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN192_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN189_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN186_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN184_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN181_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN178_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN175_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN173_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN158_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN152_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN150_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN149_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN148_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN147_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN145_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN143_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN141_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN139_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
-# IN (R) FE_OFN137_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN607_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN605_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN604_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN602_reset_sys_n UZ (KP<--)(REP) 
+# IN (R) FE_OFN599_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN557_reset_sys_n U (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN555_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN554_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN553_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN551_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN549_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN547_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN545_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN543_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN526_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN474_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN471_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN469_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN464_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN451_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN449_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN447_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN446_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN443_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN441_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN439_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN437_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN425_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN422_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN419_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN417_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN411_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN410_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN353_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN350_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN347_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN345_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN342_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN339_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN336_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN332_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN319_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN316_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN312_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN309_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN305_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN302_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN299_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN295_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN293_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN291_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN290_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN289_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN287_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN285_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN282_reset_sys_n  (KP<--) (EQ_REP: +ARESETn_i) 
+# IN (R) FE_OFN273_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN270_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN266_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN263_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN257_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN254_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN249_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN220_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN217_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN215_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN213_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN212_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN207_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN196_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN193_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN190_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN187_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN185_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN184_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN183_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN182_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN180_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN178_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN174_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN172_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN171_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN168_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN157_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN153_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN149_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN147_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN144_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN143_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN140_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN139_reset_sys_n  (KP<--) (EQ_REP: -ARESETn_i) 
 # IN (R) n_23095 (REP) 
-# IN (R) n_23043 (REP) 
 # IN (R) n_24300 (REP) 
 # IN (R) n_24301  (EQ_REP: -n_24300) 
-# IN (R) FE_OFN689_m1_araddr_8  (EQ_REP: -m_ARADDR_i[40]) 
-# IN (R) ACLK_i_clone25  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone10  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone22  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone27  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone36  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone33  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone44  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone30  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone119  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone13  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone43  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone32  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone26  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone81  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone38  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone7  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone12  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone6  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone94  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone20  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone5  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone3  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone101  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone99  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone100  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone97  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone11  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone66  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone105  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone41  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone125  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone73  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone8  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone9  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone124  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone82  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone85  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone83  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone79  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone65  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone118  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone28  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone96  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone103  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone56  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone54  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone92  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone52  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone72  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone71  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone93  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone104  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone50  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone51  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone48  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone47  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone106  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone69  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone91  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone46  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone45  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone42  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone117  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone90  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone60  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone40  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone113  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone108  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone1  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone39  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone89  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone120  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone34  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone22  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone8  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone15  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone14  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone11  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone64  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone95  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone102  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone62  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone37  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone107  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone87  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone59  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone123  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone18  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone16  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone91  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone90  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone81  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone79  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone77  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone75  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone74  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone120  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone71  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone72  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone69  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone89  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone85  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone24  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone19  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone40  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone103  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone32  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone110  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone31  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone54  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone52  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone101  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone112  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone30  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone111  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone50  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone102  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone55  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone25  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone58  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone100  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone113  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone99  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone21  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone96  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone7  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone104  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone4  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone62  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone61  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone97  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone94  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone63  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone98  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone84  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone110  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone86  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone80  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone77  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone78  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone122  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone74  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone31  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone75  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone76  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone121  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone29  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone88  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone112  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone24  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone67  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone70  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone107  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone23  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone68  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone21  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone20  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone19  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone108  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone115  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone17  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone58  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone109  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone18  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone2  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone124  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone65  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone114  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone16  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone14  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone92  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone93  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone117  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone88  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone86  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone68  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone84  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone116  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone15  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone111  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone12  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone64  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone59  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone61  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone55  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone57  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone123  (KP<--) (EQ_REP: +ACLK_i) 
-# IN (R) ACLK_i_clone53  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone82  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone106  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone80  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone47  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone83  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone119  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone78  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone46  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone109  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone73  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone49  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone76  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone70  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone67  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone118  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone10  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone66  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone60  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone105  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone122  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone56  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone57  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone37  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone53  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone13  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone115  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone36  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone51  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone48  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone44  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone43  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone45  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone41  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone42  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone38  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone33  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone34  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone121  (KP<--) (EQ_REP: +ACLK_i) 
 # IN (R) ACLK_i_clone35  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone9  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone29  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone27  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone28  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone26  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone23  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) ACLK_i_clone17  (KP<--) (EQ_REP: +ACLK_i) 
+# IN (R) FE_OFN678_n  (KP<--) (EQ_REP: -ARESETn_i) 
+# IN (R) FE_OFN680_n  (EQ_REP: -m_ARADDR_i[54]) 
 # RESOLVED Constraints
 # OUT (G) m_AWREADY_o[3] (REP)  =   (R) m_AWREADY_o[3] (REP) (by sim and name)
 # OUT (G) m_AWREADY_o[2] (REP)  =   (R) m_AWREADY_o[2] (REP) (by sim and name)
@@ -19217,14 +19327,14 @@ usage
 # MODULE asap7_sram_1rw_ADDR_W11_DATA_W32_2 (R) INSTANCE /u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram (R)
 # Wrapper size: (G) = 7184  (R) = 7184
 # Periphery size: (G) = 7288  (R) = 7288
-# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 55.56%
+# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 57.14%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (-->KP)(REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
-# IN (G) read (REP)  =   (R) read (REP) (by sim and name)
+# IN (G) read (REP)  =   (R) read  (-->KP)(REP) (by sim and name)
 # IN (G) write (REP)  =   (R) write (REP) (by sim and name)
 # IN (G) addr[10] (REP)  =   (R) addr[10] (REP) (by sim and name)
-# IN (G) addr[9]  (-->KP)(REP)  =   (R) addr[9]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[9]  (-->KP)(REP)  =   (R) addr[9] U (-->KP)(REP) (by sim and name)
 # IN (G) addr[8]  (-->KP)(REP)  =   (R) addr[8]  (-->KP)(REP) (by sim and name)
 # IN (G) addr[7]  (-->KP)(REP)  =   (R) addr[7]  (-->KP)(REP) (by sim and name)
 # IN (G) addr[6]  (-->KP)(REP)  =   (R) addr[6]  (-->KP)(REP) (by sim and name)
@@ -19247,7 +19357,7 @@ usage
 # IN (G) wdata[21]  (-->KP)(REP)  =   (R) wdata[21]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[20]  (-->KP)(REP)  =   (R) wdata[20]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[19]  (-->KP)(REP)  =   (R) wdata[19]  (-->KP)(REP) (by sim and name)
-# IN (G) wdata[18]  (-->KP)(REP)  =   (R) wdata[18]  (-->KP)(REP) (by sim and name)
+# IN (G) wdata[18]  (-->KP)(REP)  =   (R) wdata[18] U (-->KP)(REP) (by sim and name)
 # IN (G) wdata[17]  (-->KP)(REP)  =   (R) wdata[17]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[16]  (-->KP)(REP)  =   (R) wdata[16]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[15]  (-->KP)(REP)  =   (R) wdata[15]  (-->KP)(REP) (by sim and name)
@@ -19267,8 +19377,11 @@ usage
 # IN (G) wdata[1]  (-->KP)(REP)  =   (R) wdata[1]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[0]  (-->KP)(REP)  =   (R) wdata[0]  (-->KP)(REP) (by sim and name)
 # IN (R) n_3921  (EQ_REP: -addr[10]) 
-# IN (R) FE_OFN682_m1_araddr_6  (-->KP) (EQ_REP: +addr[4]) 
-# IN (R) FE_OFN686_n U (-->KP) (EQ_REP: +read) 
+# IN (R) FE_OFN651_data_write_word_20 U (-->KP) (EQ_REP: +wdata[20]) 
+# IN (R) FE_OFN653_data_write_word_18  (-->KP) (EQ_REP: +wdata[18]) 
+# IN (R) FE_OFN665_data_write_word_0  (-->KP) (EQ_REP: +wdata[0]) 
+# IN (R) FE_OFN668_n  (EQ_REP: +read) 
+# IN (R) FE_OFN672_n  (-->KP) (EQ_REP: -addr[9]) 
 # RESOLVED Constraints
 # OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
 # OUT (G) rdata[30] (REP)  =   (R) rdata[30] (REP) (by sim and name)
@@ -19307,10 +19420,13 @@ set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_2 -Revised
 set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram} -Golden
 set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram} -Revised
 # Constraint commands 
-add_pin_equivalences read FE_OFN686_n -hier -Revised
+add_pin_equivalences read FE_OFN668_n -hier -Revised
 add_pin_equivalences {addr[10]} -invert n_3921 -hier -Revised
-add_pin_equivalences {addr[4]} FE_OFN682_m1_araddr_6 -hier -Revised
-add_ignored_inputs FE_OFN686_n -Revised
+add_pin_equivalences {addr[9]} -invert FE_OFN672_n -hier -Revised
+add_pin_equivalences {wdata[20]} FE_OFN651_data_write_word_20 -hier -Revised
+add_pin_equivalences {wdata[18]} FE_OFN653_data_write_word_18 -hier -Revised
+add_pin_equivalences {wdata[0]} FE_OFN665_data_write_word_0 -hier -Revised
+add_ignored_inputs FE_OFN651_data_write_word_20 -Revised
 # UR
 report_black_box -NOHidden
 set_system_mode lec
@@ -19327,14 +19443,14 @@ usage
 # MODULE asap7_sram_1rw_ADDR_W11_DATA_W32_3 (R) INSTANCE /u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram (R)
 # Wrapper size: (G) = 7184  (R) = 7184
 # Periphery size: (G) = 7288  (R) = 7288
-# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 57.65%
+# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 62.50%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (-->KP)(REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
-# IN (G) read (REP)  =   (R) read (REP) (by sim and name)
+# IN (G) read (REP)  =   (R) read  (-->KP)(REP) (by sim and name)
 # IN (G) write (REP)  =   (R) write (REP) (by sim and name)
 # IN (G) addr[10] (REP)  =   (R) addr[10] (REP) (by sim and name)
-# IN (G) addr[9]  (-->KP)(REP)  =   (R) addr[9]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[9]  (-->KP)(REP)  =   (R) addr[9] U (-->KP)(REP) (by sim and name)
 # IN (G) addr[8]  (-->KP)(REP)  =   (R) addr[8]  (-->KP)(REP) (by sim and name)
 # IN (G) addr[7]  (-->KP)(REP)  =   (R) addr[7]  (-->KP)(REP) (by sim and name)
 # IN (G) addr[6]  (-->KP)(REP)  =   (R) addr[6]  (-->KP)(REP) (by sim and name)
@@ -19377,12 +19493,23 @@ usage
 # IN (G) wdata[1]  (-->KP)(REP)  =   (R) wdata[1]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[0]  (-->KP)(REP)  =   (R) wdata[0]  (-->KP)(REP) (by sim and name)
 # IN (R) n_3921  (EQ_REP: -addr[10]) 
-# IN (R) FE_OFN681_m1_araddr_6  (-->KP) (EQ_REP: +addr[4]) 
-# IN (R) FE_OFN683_data_write_word_10 U (-->KP) (EQ_REP: +wdata[10]) 
-# IN (R) FE_OFN687_n U (-->KP) (EQ_REP: +read) 
+# IN (R) FE_OFN649_data_write_word_4  (-->KP) (EQ_REP: +wdata[4]) 
+# IN (R) FE_OFN650_data_write_word_20 U (-->KP) (EQ_REP: +wdata[20]) 
+# IN (R) FE_OFN652_data_write_word_18  (-->KP) (EQ_REP: +wdata[18]) 
+# IN (R) FE_OFN654_data_write_word_15  (-->KP) (EQ_REP: +wdata[15]) 
+# IN (R) FE_OFN655_data_write_word_14  (-->KP) (EQ_REP: +wdata[14]) 
+# IN (R) FE_OFN656_data_write_word_12  (-->KP) (EQ_REP: +wdata[12]) 
+# IN (R) FE_OFN657_data_write_word_11  (-->KP) (EQ_REP: +wdata[11]) 
+# IN (R) FE_OFN658_data_write_word_10  (-->KP) (EQ_REP: +wdata[10]) 
+# IN (R) FE_OFN659_data_write_word_9  (-->KP) (EQ_REP: +wdata[9]) 
+# IN (R) FE_OFN660_data_write_word_8  (-->KP) (EQ_REP: +wdata[8]) 
+# IN (R) FE_OFN661_data_write_word_5  (-->KP) (EQ_REP: +wdata[5]) 
+# IN (R) FE_OFN662_data_write_word_3  (-->KP) (EQ_REP: +wdata[3]) 
+# IN (R) FE_OFN663_data_write_word_1  (-->KP) (EQ_REP: +wdata[1]) 
+# IN (R) FE_OFN664_data_write_word_0  (-->KP) (EQ_REP: +wdata[0]) 
+# IN (R) FE_OFN669_n  (EQ_REP: +read) 
+# IN (R) FE_OFN671_n  (-->KP) (EQ_REP: -addr[9]) 
 # IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
-# IN (R) FE_PDN704_FE_OFN8782_data_write_word_14  (-->KP) (EQ_REP: +wdata[14]) 
-# IN (R) FE_PDN705_FE_OFN8784_data_write_word_13  (-->KP) (EQ_REP: +wdata[13]) 
 # RESOLVED Constraints
 # OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
 # OUT (G) rdata[30] (REP)  =   (R) rdata[30] (REP) (by sim and name)
@@ -19421,15 +19548,24 @@ set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_3 -Revised
 set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram} -Golden
 set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram} -Revised
 # Constraint commands 
-add_pin_equivalences read FE_OFN687_n -hier -Revised
+add_pin_equivalences read FE_OFN669_n -hier -Revised
 add_pin_equivalences {addr[10]} -invert n_3921 -hier -Revised
-add_pin_equivalences {addr[4]} FE_OFN681_m1_araddr_6 -hier -Revised
-add_pin_equivalences {wdata[14]} FE_PDN704_FE_OFN8782_data_write_word_14 -hier -Revised
-add_pin_equivalences {wdata[13]} FE_PDN705_FE_OFN8784_data_write_word_13 -hier -Revised
-add_pin_equivalences {wdata[10]} FE_OFN683_data_write_word_10 -hier -Revised
-add_ignored_inputs FE_OFN683_data_write_word_10 -Revised
-# UR
-add_ignored_inputs FE_OFN687_n -Revised
+add_pin_equivalences {addr[9]} -invert FE_OFN671_n -hier -Revised
+add_pin_equivalences {wdata[20]} FE_OFN650_data_write_word_20 -hier -Revised
+add_pin_equivalences {wdata[18]} FE_OFN652_data_write_word_18 -hier -Revised
+add_pin_equivalences {wdata[15]} FE_OFN654_data_write_word_15 -hier -Revised
+add_pin_equivalences {wdata[14]} FE_OFN655_data_write_word_14 -hier -Revised
+add_pin_equivalences {wdata[12]} FE_OFN656_data_write_word_12 -hier -Revised
+add_pin_equivalences {wdata[11]} FE_OFN657_data_write_word_11 -hier -Revised
+add_pin_equivalences {wdata[10]} FE_OFN658_data_write_word_10 -hier -Revised
+add_pin_equivalences {wdata[9]} FE_OFN659_data_write_word_9 -hier -Revised
+add_pin_equivalences {wdata[8]} FE_OFN660_data_write_word_8 -hier -Revised
+add_pin_equivalences {wdata[5]} FE_OFN661_data_write_word_5 -hier -Revised
+add_pin_equivalences {wdata[4]} FE_OFN649_data_write_word_4 -hier -Revised
+add_pin_equivalences {wdata[3]} FE_OFN662_data_write_word_3 -hier -Revised
+add_pin_equivalences {wdata[1]} FE_OFN663_data_write_word_1 -hier -Revised
+add_pin_equivalences {wdata[0]} FE_OFN664_data_write_word_0 -hier -Revised
+add_ignored_inputs FE_OFN650_data_write_word_20 -Revised
 # UR
 add_pin_equivalences clk clk_clone1 -hier -Revised
 report_black_box -NOHidden
@@ -19447,10 +19583,10 @@ usage
 # MODULE data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 (R) INSTANCE /u_dcache (R)
 # Wrapper size: (G) = 13803  (R) = 13802
 # Periphery size: (G) = 32975  (R) = 32974
-# Pins directly connected to key-points/constants: (G) = 56.80%  (R) = 62.75%
+# Pins directly connected to key-points/constants: (G) = 56.80%  (R) = 61.22%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
-# IN (G) clk (REP)  =   (R) clk (REP) (by sim and name)
+# IN (G) clk (REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
 # IN (G) rst_n  (KP<--)(REP)  =   (R) rst_n  (KP<--)(REP) (by sim and name)
 # IN (G) cpu_read_req (REP)  =   (R) cpu_read_req (REP) (by sim and name)
 # IN (G) cpu_write_req (REP)  =   (R) cpu_write_req (REP) (by sim and name)
@@ -19581,71 +19717,55 @@ usage
 # IN (R) FE_DBTN21_cpu_data_addr_17  (KP<--) (EQ_REP: -cpu_addr[17]) 
 # IN (R) FE_DBTN23_cpu_data_addr_25  (KP<--) (EQ_REP: -cpu_addr[25]) 
 # IN (R) FE_DBTN25_cpu_data_addr_30  (KP<--) (EQ_REP: -cpu_addr[30]) 
-# IN (R) FE_OFN624_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN623_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN613_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN612_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN567_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
 # IN (R) FE_OFN566_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
 # IN (R) FE_OFN564_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
 # IN (R) FE_OFN563_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN555_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN553_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN547_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN546_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN543_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN484_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN480_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN561_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN525_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN468_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN467_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
 # IN (R) FE_OFN465_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
 # IN (R) FE_OFN463_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN462_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN455_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN442_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN441_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN440_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN374_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN366_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN345_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN313_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN309_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN308_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN249_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN242_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN225_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN201_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN198_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN461_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN459_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN454_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN450_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN429_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN415_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN413_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN338_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN335_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN331_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN330_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN321_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN276_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN269_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN261_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN259_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN256_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN253_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN252_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN251_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN210_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN209_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN200_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN170_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN169_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN167_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN166_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN156_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
 # IN (R) FE_OFN155_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN154_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
 # IN (R) FE_OFN151_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN630_cpu_data_addr_30  (KP<--) (EQ_REP: +cpu_addr[30]) 
-# IN (R) FE_OFN638_cpu_data_addr_2  (KP<--) (EQ_REP: +cpu_addr[2]) 
-# IN (R) FE_OFN677_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN680_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN690_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN694_n  (KP<--) (EQ_REP: -cpu_addr[10]) 
-# IN (R) clk_clone3  (-->KP) (EQ_REP: +clk) 
-# IN (R) clk_clone2  (-->KP) (EQ_REP: +clk) 
-# IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
+# IN (R) FE_OFN137_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN677_n  (KP<--) (EQ_REP: +mem_size[1]) 
 # IN (R) clk_clone7  (EQ_REP: +clk) 
-# IN (R) clk_clone8  (EQ_REP: +clk) 
-# IN (R) clk_clone4  (-->KP) (EQ_REP: +clk) 
 # IN (R) clk_clone5  (EQ_REP: +clk) 
+# IN (R) clk_clone4  (EQ_REP: +clk) 
+# IN (R) clk_clone3  (-->KP) (EQ_REP: +clk) 
+# IN (R) clk_clone2  (EQ_REP: +clk) 
+# IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
 # IN (R) clk_clone6  (EQ_REP: +clk) 
-# IN (R) FE_OFN698_cpu_data_addr_14  (KP<--) (EQ_REP: +cpu_addr[14]) 
-# IN (R) FE_OFN696_cpu_data_addr_14  (KP<--) (EQ_REP: -cpu_addr[14]) 
-# IN (R) FE_OFN702_n  (KP<--) (EQ_REP: -cpu_addr[11]) 
-# IN (R) p1  (KP<--) (EQ_REP: +cpu_write_data[20]) 
-# IN (R) p2  (KP<--) (EQ_REP: +cpu_write_data[18]) 
-# IN (R) p3  (KP<--) (EQ_REP: +cpu_write_data[21]) 
-# IN (R) p4  (KP<--) (EQ_REP: +cpu_write_data[17]) 
-# IN (R) p5  (KP<--) (EQ_REP: +cpu_write_data[31]) 
-# IN (R) p6  (KP<--) (EQ_REP: +cpu_write_data[15]) 
-# IN (R) p7  (KP<--) (EQ_REP: +cpu_write_data[16]) 
-# IN (R) p8  (KP<--) (EQ_REP: +cpu_write_data[25]) 
-# IN (R) p9  (KP<--) (EQ_REP: +cpu_write_data[30]) 
-# IN (R) p10  (KP<--) (EQ_REP: +cpu_write_data[2]) 
-# IN (R) p11  (KP<--) (EQ_REP: +cpu_write_data[26]) 
-# IN (R) p12  (KP<--) (EQ_REP: +cpu_write_data[19]) 
+# IN (R) p1  (KP<--) (EQ_REP: +mem_unsigned) 
 # RESOLVED Constraints
 # OUT (G) dcache_amo_capture UZ (KP<--)(REP)  =   (R) dcache_amo_capture UZ (KP<--)(REP) (by name)
 # OUT (G) cpu_read_data[31] (REP)  =   (R) cpu_read_data[31] (REP) (by sim and name)
@@ -19858,7 +19978,7 @@ usage
 # OUT (G) m_axi_arregion[0] UZ (KP<--)(REP)  =   (R) m_axi_arregion[0] UZ (KP<--)(REP) (by name)
 # OUT (G) m_axi_arvalid (REP)  =   (R) m_axi_arvalid (REP) (by sim and name)
 # OUT (G) m_axi_rready (REP)  =   (R) m_axi_rready (REP) (by sim and name)
-# OUT (R) FE_OFN688_m1_araddr_8  (EQ_REP: -m_axi_araddr[8]) 
+# OUT (R) FE_OFN679_n  (EQ_REP: -m_axi_araddr[22]) 
 set_root_module data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 -Golden
 set_root_module data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 -Revised
 set_module_property -instance /u_dcache -Golden
@@ -20038,66 +20158,51 @@ add_ignored_outputs {m_axi_arregion[1]} -Golden -System
 # UR
 add_ignored_outputs {m_axi_arregion[0]} -Golden -System
 # UR
-add_pin_equivalences rst_n -invert FE_OFN690_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN680_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN677_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN137_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n -invert FE_OFN151_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN154_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n -invert FE_OFN155_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN198_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN201_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN225_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN242_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN249_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN308_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN309_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN313_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN345_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN366_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN374_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN440_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN441_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN442_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN455_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN462_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN156_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN166_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN167_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN169_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN170_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN200_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN209_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN210_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN251_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN252_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN253_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN256_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN259_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN261_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN269_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN276_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN321_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN330_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN331_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN335_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN338_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN413_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN415_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN429_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN450_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN454_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN459_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN461_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n -invert FE_OFN463_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n -invert FE_OFN465_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN480_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN484_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN543_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN546_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN547_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN553_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN555_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN467_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN468_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN525_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN561_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n -invert FE_OFN563_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n -invert FE_OFN564_reset_sys_n -hier -Revised
 add_pin_equivalences rst_n -invert FE_OFN566_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN567_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN612_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN613_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN623_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN624_reset_sys_n -hier -Revised
-add_pin_equivalences {cpu_addr[30]} FE_OFN630_cpu_data_addr_30 -hier -Revised
 add_pin_equivalences {cpu_addr[30]} -invert FE_DBTN25_cpu_data_addr_30 -hier -Revised
 add_pin_equivalences {cpu_addr[25]} -invert FE_DBTN23_cpu_data_addr_25 -hier -Revised
 add_pin_equivalences {cpu_addr[17]} -invert FE_DBTN21_cpu_data_addr_17 -hier -Revised
-add_pin_equivalences {cpu_addr[14]} -invert FE_OFN696_cpu_data_addr_14 -hier -Revised
-add_pin_equivalences {cpu_addr[14]} FE_OFN698_cpu_data_addr_14 -hier -Revised
-add_pin_equivalences {cpu_addr[11]} -invert FE_OFN702_n -hier -Revised
-add_pin_equivalences {cpu_addr[10]} -invert FE_OFN694_n -hier -Revised
-add_pin_equivalences {cpu_addr[2]} FE_OFN638_cpu_data_addr_2 -hier -Revised
-add_pin_equivalences {cpu_write_data[31]} p5 -hier -Revised
-add_pin_equivalences {cpu_write_data[30]} p9 -hier -Revised
-add_pin_equivalences {cpu_write_data[26]} p11 -hier -Revised
-add_pin_equivalences {cpu_write_data[25]} p8 -hier -Revised
-add_pin_equivalences {cpu_write_data[21]} p3 -hier -Revised
-add_pin_equivalences {cpu_write_data[20]} p1 -hier -Revised
-add_pin_equivalences {cpu_write_data[19]} p12 -hier -Revised
-add_pin_equivalences {cpu_write_data[18]} p2 -hier -Revised
-add_pin_equivalences {cpu_write_data[17]} p4 -hier -Revised
-add_pin_equivalences {cpu_write_data[16]} p7 -hier -Revised
-add_pin_equivalences {cpu_write_data[15]} p6 -hier -Revised
-add_pin_equivalences {cpu_write_data[2]} p10 -hier -Revised
+add_pin_equivalences mem_unsigned p1 -hier -Revised
+add_pin_equivalences {mem_size[1]} FE_OFN677_n -hier -Revised
 add_pin_equivalences uncache_en_i -invert n_25261 -hier -Revised
 add_ignored_inputs cpu_amo_req -Revised
 # UR
@@ -20125,14 +20230,13 @@ add_ignored_inputs {m_axi_rid[0]} -Revised
 # UR
 add_ignored_inputs {m_axi_rresp[0]} -Revised
 # UR
-add_pin_equivalences clk clk_clone7 -hier -Revised
 add_pin_equivalences clk clk_clone1 -hier -Revised
 add_pin_equivalences clk clk_clone2 -hier -Revised
 add_pin_equivalences clk clk_clone3 -hier -Revised
-add_pin_equivalences clk clk_clone6 -hier -Revised
-add_pin_equivalences clk clk_clone5 -hier -Revised
 add_pin_equivalences clk clk_clone4 -hier -Revised
-add_pin_equivalences clk clk_clone8 -hier -Revised
+add_pin_equivalences clk clk_clone5 -hier -Revised
+add_pin_equivalences clk clk_clone7 -hier -Revised
+add_pin_equivalences clk clk_clone6 -hier -Revised
 add_ignored_outputs dcache_amo_capture -Revised -System
 # UR
 add_ignored_outputs dcache_hit -Revised -System
@@ -20221,8 +20325,8 @@ add_ignored_outputs {m_axi_arid[1]} -Revised -System
 # UR
 add_ignored_outputs {m_axi_arid[0]} -Revised -System
 # UR
-add_output_equivalences {m_axi_araddr[8]} -invert FE_OFN688_m1_araddr_8 -hier -Revised
-add_ignored_outputs FE_OFN688_m1_araddr_8 -Revised -System
+add_output_equivalences {m_axi_araddr[22]} -invert FE_OFN679_n -hier -Revised
+add_ignored_outputs FE_OFN679_n -Revised -System
 # (EQ)
 add_ignored_outputs {m_axi_araddr[1]} -Revised -System
 # UR
@@ -20299,6 +20403,116 @@ usage
 # MODULE asap7_sram_1rw_ADDR_W11_DATA_W32 (R) INSTANCE /u_icache/DATA_RAM_G_DATA_WAY[0].u_sram (R)
 # Wrapper size: (G) = 5246  (R) = 5246
 # Periphery size: (G) = 5350  (R) = 5350
+# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 56.10%
+#-------------------------------------------------------------------------------
+# RESOLVED Constraints
+# IN (G) clk  (-->KP)(REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
+# IN (G) read (REP)  =   (R) read U (-->KP)(REP) (by sim and name)
+# IN (G) write (REP)  =   (R) write (REP) (by sim and name)
+# IN (G) addr[10] (REP)  =   (R) addr[10] (REP) (by sim and name)
+# IN (G) addr[9]  (-->KP)(REP)  =   (R) addr[9]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[8]  (-->KP)(REP)  =   (R) addr[8]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[7]  (-->KP)(REP)  =   (R) addr[7]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[6]  (-->KP)(REP)  =   (R) addr[6]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[5]  (-->KP)(REP)  =   (R) addr[5]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[4]  (-->KP)(REP)  =   (R) addr[4]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[3]  (-->KP)(REP)  =   (R) addr[3]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[2]  (-->KP)(REP)  =   (R) addr[2]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[1]  (-->KP)(REP)  =   (R) addr[1]  (-->KP)(REP) (by sim and name)
+# IN (G) addr[0]  (-->KP)(REP)  =   (R) addr[0]  (-->KP)(REP) (by sim and name)
+# IN (G) wdata[31]  (KP<--)(REP)  =   (R) wdata[31]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[30]  (KP<--)(REP)  =   (R) wdata[30]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[29]  (KP<--)(REP)  =   (R) wdata[29]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[28]  (KP<--)(REP)  =   (R) wdata[28]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[27]  (KP<--)(REP)  =   (R) wdata[27]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[26]  (KP<--)(REP)  =   (R) wdata[26]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[25]  (KP<--)(REP)  =   (R) wdata[25]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[24]  (KP<--)(REP)  =   (R) wdata[24]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[23]  (KP<--)(REP)  =   (R) wdata[23]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[22]  (KP<--)(REP)  =   (R) wdata[22]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[21]  (KP<--)(REP)  =   (R) wdata[21]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[20]  (KP<--)(REP)  =   (R) wdata[20]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[19]  (KP<--)(REP)  =   (R) wdata[19]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[18]  (KP<--)(REP)  =   (R) wdata[18]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[17]  (KP<--)(REP)  =   (R) wdata[17]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[16]  (KP<--)(REP)  =   (R) wdata[16]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[15]  (KP<--)(REP)  =   (R) wdata[15]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[14]  (KP<--)(REP)  =   (R) wdata[14]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[13]  (KP<--)(REP)  =   (R) wdata[13]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[12]  (KP<--)(REP)  =   (R) wdata[12]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[11]  (KP<--)(REP)  =   (R) wdata[11]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[10]  (KP<--)(REP)  =   (R) wdata[10]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[9]  (KP<--)(REP)  =   (R) wdata[9]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[8]  (KP<--)(REP)  =   (R) wdata[8]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[7]  (KP<--)(REP)  =   (R) wdata[7]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[6]  (KP<--)(REP)  =   (R) wdata[6]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[5]  (KP<--)(REP)  =   (R) wdata[5]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[4]  (KP<--)(REP)  =   (R) wdata[4]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[3]  (KP<--)(REP)  =   (R) wdata[3]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[2]  (KP<--)(REP)  =   (R) wdata[2]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[1]  (KP<--)(REP)  =   (R) wdata[1]  (KP<--)(REP) (by sim and name)
+# IN (G) wdata[0]  (KP<--)(REP)  =   (R) wdata[0]  (KP<--)(REP) (by sim and name)
+# IN (R) FE_DBTN135_m0_araddr_12  (EQ_REP: -addr[10]) 
+# IN (R) FE_OFN670_n  (EQ_REP: +read) 
+# IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
+# IN (R) clk_clone2  (-->KP) (EQ_REP: +clk) 
+# RESOLVED Constraints
+# OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
+# OUT (G) rdata[30] (REP)  =   (R) rdata[30] (REP) (by sim and name)
+# OUT (G) rdata[29] (REP)  =   (R) rdata[29] (REP) (by sim and name)
+# OUT (G) rdata[28] (REP)  =   (R) rdata[28] (REP) (by sim and name)
+# OUT (G) rdata[27] (REP)  =   (R) rdata[27] (REP) (by sim and name)
+# OUT (G) rdata[26] (REP)  =   (R) rdata[26] (REP) (by sim and name)
+# OUT (G) rdata[25] (REP)  =   (R) rdata[25] (REP) (by sim and name)
+# OUT (G) rdata[24] (REP)  =   (R) rdata[24] (REP) (by sim and name)
+# OUT (G) rdata[23] (REP)  =   (R) rdata[23] (REP) (by sim and name)
+# OUT (G) rdata[22] (REP)  =   (R) rdata[22] (REP) (by sim and name)
+# OUT (G) rdata[21] (REP)  =   (R) rdata[21] (REP) (by sim and name)
+# OUT (G) rdata[20] (REP)  =   (R) rdata[20] (REP) (by sim and name)
+# OUT (G) rdata[19] (REP)  =   (R) rdata[19] (REP) (by sim and name)
+# OUT (G) rdata[18] (REP)  =   (R) rdata[18] (REP) (by sim and name)
+# OUT (G) rdata[17] (REP)  =   (R) rdata[17] (REP) (by sim and name)
+# OUT (G) rdata[16] (REP)  =   (R) rdata[16] (REP) (by sim and name)
+# OUT (G) rdata[15] (REP)  =   (R) rdata[15] (REP) (by sim and name)
+# OUT (G) rdata[14] (REP)  =   (R) rdata[14] (REP) (by sim and name)
+# OUT (G) rdata[13] (REP)  =   (R) rdata[13] (REP) (by sim and name)
+# OUT (G) rdata[12] (REP)  =   (R) rdata[12] (REP) (by sim and name)
+# OUT (G) rdata[11] (REP)  =   (R) rdata[11] (REP) (by sim and name)
+# OUT (G) rdata[10] (REP)  =   (R) rdata[10] (REP) (by sim and name)
+# OUT (G) rdata[9] (REP)  =   (R) rdata[9] (REP) (by sim and name)
+# OUT (G) rdata[8] (REP)  =   (R) rdata[8] (REP) (by sim and name)
+# OUT (G) rdata[7] (REP)  =   (R) rdata[7] (REP) (by sim and name)
+# OUT (G) rdata[6] (REP)  =   (R) rdata[6] (REP) (by sim and name)
+# OUT (G) rdata[5] (REP)  =   (R) rdata[5] (REP) (by sim and name)
+# OUT (G) rdata[4] (REP)  =   (R) rdata[4] (REP) (by sim and name)
+# OUT (G) rdata[3] (REP)  =   (R) rdata[3] (REP) (by sim and name)
+# OUT (G) rdata[2] (REP)  =   (R) rdata[2] (REP) (by sim and name)
+# OUT (G) rdata[1] (REP)  =   (R) rdata[1] (REP) (by sim and name)
+# OUT (G) rdata[0] (REP)  =   (R) rdata[0] (REP) (by sim and name)
+set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32 -Golden
+set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32 -Revised
+set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[0].u_sram} -Golden
+set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[0].u_sram} -Revised
+# Constraint commands 
+add_pin_equivalences read FE_OFN670_n -hier -Revised
+add_pin_equivalences {addr[10]} -invert FE_DBTN135_m0_araddr_12 -hier -Revised
+add_pin_equivalences clk clk_clone2 -hier -Revised
+add_pin_equivalences clk clk_clone1 -hier -Revised
+report_black_box -NOHidden
+set_system_mode lec
+add_compared_points -all
+compare
+save_hier_compare_result
+set_system_mode setup
+add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32 -module -hier -Golden
+add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32 -module -hier -Revised
+usage
+# Comparing
+#-------------------------------------------------------------------------------
+# MODULE asap7_sram_1rw_ADDR_W11_DATA_W32_1 (G) INSTANCE /u_icache/DATA_RAM_G_DATA_WAY[1].u_sram (G)
+# MODULE asap7_sram_1rw_ADDR_W11_DATA_W32_1 (R) INSTANCE /u_icache/DATA_RAM_G_DATA_WAY[1].u_sram (R)
+# Wrapper size: (G) = 5246  (R) = 5246
+# Periphery size: (G) = 5350  (R) = 5350
 # Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 55.56%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
@@ -20348,115 +20562,8 @@ usage
 # IN (G) wdata[2]  (KP<--)(REP)  =   (R) wdata[2]  (KP<--)(REP) (by sim and name)
 # IN (G) wdata[1]  (KP<--)(REP)  =   (R) wdata[1]  (KP<--)(REP) (by sim and name)
 # IN (G) wdata[0]  (KP<--)(REP)  =   (R) wdata[0]  (KP<--)(REP) (by sim and name)
-# IN (R) FE_DBTN135_m0_araddr_12  (EQ_REP: -addr[10]) 
-# IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
-# IN (R) clk_clone2  (-->KP) (EQ_REP: +clk) 
-# RESOLVED Constraints
-# OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
-# OUT (G) rdata[30] (REP)  =   (R) rdata[30] (REP) (by sim and name)
-# OUT (G) rdata[29] (REP)  =   (R) rdata[29] (REP) (by sim and name)
-# OUT (G) rdata[28] (REP)  =   (R) rdata[28] (REP) (by sim and name)
-# OUT (G) rdata[27] (REP)  =   (R) rdata[27] (REP) (by sim and name)
-# OUT (G) rdata[26] (REP)  =   (R) rdata[26] (REP) (by sim and name)
-# OUT (G) rdata[25] (REP)  =   (R) rdata[25] (REP) (by sim and name)
-# OUT (G) rdata[24] (REP)  =   (R) rdata[24] (REP) (by sim and name)
-# OUT (G) rdata[23] (REP)  =   (R) rdata[23] (REP) (by sim and name)
-# OUT (G) rdata[22] (REP)  =   (R) rdata[22] (REP) (by sim and name)
-# OUT (G) rdata[21] (REP)  =   (R) rdata[21] (REP) (by sim and name)
-# OUT (G) rdata[20] (REP)  =   (R) rdata[20] (REP) (by sim and name)
-# OUT (G) rdata[19] (REP)  =   (R) rdata[19] (REP) (by sim and name)
-# OUT (G) rdata[18] (REP)  =   (R) rdata[18] (REP) (by sim and name)
-# OUT (G) rdata[17] (REP)  =   (R) rdata[17] (REP) (by sim and name)
-# OUT (G) rdata[16] (REP)  =   (R) rdata[16] (REP) (by sim and name)
-# OUT (G) rdata[15] (REP)  =   (R) rdata[15] (REP) (by sim and name)
-# OUT (G) rdata[14] (REP)  =   (R) rdata[14] (REP) (by sim and name)
-# OUT (G) rdata[13] (REP)  =   (R) rdata[13] (REP) (by sim and name)
-# OUT (G) rdata[12] (REP)  =   (R) rdata[12] (REP) (by sim and name)
-# OUT (G) rdata[11] (REP)  =   (R) rdata[11] (REP) (by sim and name)
-# OUT (G) rdata[10] (REP)  =   (R) rdata[10] (REP) (by sim and name)
-# OUT (G) rdata[9] (REP)  =   (R) rdata[9] (REP) (by sim and name)
-# OUT (G) rdata[8] (REP)  =   (R) rdata[8] (REP) (by sim and name)
-# OUT (G) rdata[7] (REP)  =   (R) rdata[7] (REP) (by sim and name)
-# OUT (G) rdata[6] (REP)  =   (R) rdata[6] (REP) (by sim and name)
-# OUT (G) rdata[5] (REP)  =   (R) rdata[5] (REP) (by sim and name)
-# OUT (G) rdata[4] (REP)  =   (R) rdata[4] (REP) (by sim and name)
-# OUT (G) rdata[3] (REP)  =   (R) rdata[3] (REP) (by sim and name)
-# OUT (G) rdata[2] (REP)  =   (R) rdata[2] (REP) (by sim and name)
-# OUT (G) rdata[1] (REP)  =   (R) rdata[1] (REP) (by sim and name)
-# OUT (G) rdata[0] (REP)  =   (R) rdata[0] (REP) (by sim and name)
-set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32 -Golden
-set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32 -Revised
-set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[0].u_sram} -Golden
-set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[0].u_sram} -Revised
-# Constraint commands 
-add_pin_equivalences {addr[10]} -invert FE_DBTN135_m0_araddr_12 -hier -Revised
-add_pin_equivalences clk clk_clone2 -hier -Revised
-add_pin_equivalences clk clk_clone1 -hier -Revised
-report_black_box -NOHidden
-set_system_mode lec
-add_compared_points -all
-compare
-save_hier_compare_result
-set_system_mode setup
-add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32 -module -hier -Golden
-add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32 -module -hier -Revised
-usage
-# Comparing
-#-------------------------------------------------------------------------------
-# MODULE asap7_sram_1rw_ADDR_W11_DATA_W32_1 (G) INSTANCE /u_icache/DATA_RAM_G_DATA_WAY[1].u_sram (G)
-# MODULE asap7_sram_1rw_ADDR_W11_DATA_W32_1 (R) INSTANCE /u_icache/DATA_RAM_G_DATA_WAY[1].u_sram (R)
-# Wrapper size: (G) = 5246  (R) = 5246
-# Periphery size: (G) = 5350  (R) = 5350
-# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 55.00%
-#-------------------------------------------------------------------------------
-# RESOLVED Constraints
-# IN (G) clk  (-->KP)(REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
-# IN (G) read (REP)  =   (R) read (REP) (by sim and name)
-# IN (G) write (REP)  =   (R) write (REP) (by sim and name)
-# IN (G) addr[10] (REP)  =   (R) addr[10] (REP) (by sim and name)
-# IN (G) addr[9]  (-->KP)(REP)  =   (R) addr[9]  (-->KP)(REP) (by sim and name)
-# IN (G) addr[8]  (-->KP)(REP)  =   (R) addr[8]  (-->KP)(REP) (by sim and name)
-# IN (G) addr[7]  (-->KP)(REP)  =   (R) addr[7]  (-->KP)(REP) (by sim and name)
-# IN (G) addr[6]  (-->KP)(REP)  =   (R) addr[6]  (-->KP)(REP) (by sim and name)
-# IN (G) addr[5]  (-->KP)(REP)  =   (R) addr[5]  (-->KP)(REP) (by sim and name)
-# IN (G) addr[4]  (-->KP)(REP)  =   (R) addr[4]  (-->KP)(REP) (by sim and name)
-# IN (G) addr[3]  (-->KP)(REP)  =   (R) addr[3]  (-->KP)(REP) (by sim and name)
-# IN (G) addr[2]  (-->KP)(REP)  =   (R) addr[2]  (-->KP)(REP) (by sim and name)
-# IN (G) addr[1]  (-->KP)(REP)  =   (R) addr[1]  (-->KP)(REP) (by sim and name)
-# IN (G) addr[0]  (-->KP)(REP)  =   (R) addr[0]  (-->KP)(REP) (by sim and name)
-# IN (G) wdata[31]  (KP<--)(REP)  =   (R) wdata[31]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[30]  (KP<--)(REP)  =   (R) wdata[30]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[29]  (KP<--)(REP)  =   (R) wdata[29]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[28]  (KP<--)(REP)  =   (R) wdata[28]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[27]  (KP<--)(REP)  =   (R) wdata[27]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[26]  (KP<--)(REP)  =   (R) wdata[26]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[25]  (KP<--)(REP)  =   (R) wdata[25]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[24]  (KP<--)(REP)  =   (R) wdata[24]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[23]  (KP<--)(REP)  =   (R) wdata[23]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[22]  (KP<--)(REP)  =   (R) wdata[22]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[21]  (KP<--)(REP)  =   (R) wdata[21]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[20]  (KP<--)(REP)  =   (R) wdata[20]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[19]  (KP<--)(REP)  =   (R) wdata[19]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[18]  (KP<--)(REP)  =   (R) wdata[18]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[17]  (KP<--)(REP)  =   (R) wdata[17]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[16]  (KP<--)(REP)  =   (R) wdata[16]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[15]  (KP<--)(REP)  =   (R) wdata[15]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[14]  (KP<--)(REP)  =   (R) wdata[14]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[13]  (KP<--)(REP)  =   (R) wdata[13]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[12]  (KP<--)(REP)  =   (R) wdata[12]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[11]  (KP<--)(REP)  =   (R) wdata[11]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[10]  (KP<--)(REP)  =   (R) wdata[10]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[9]  (KP<--)(REP)  =   (R) wdata[9]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[8]  (KP<--)(REP)  =   (R) wdata[8]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[7]  (KP<--)(REP)  =   (R) wdata[7]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[6]  (KP<--)(REP)  =   (R) wdata[6]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[5]  (KP<--)(REP)  =   (R) wdata[5]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[4]  (KP<--)(REP)  =   (R) wdata[4]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[3]  (KP<--)(REP)  =   (R) wdata[3]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[2]  (KP<--)(REP)  =   (R) wdata[2]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[1]  (KP<--)(REP)  =   (R) wdata[1]  (KP<--)(REP) (by sim and name)
-# IN (G) wdata[0]  (KP<--)(REP)  =   (R) wdata[0]  (KP<--)(REP) (by sim and name)
 # IN (R) FE_DBTN136_m0_araddr_12  (EQ_REP: -addr[10]) 
+# IN (R) FE_OFN648_m0_araddr_4  (-->KP) (EQ_REP: +addr[2]) 
 # IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
@@ -20497,6 +20604,7 @@ set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[1].u_sram} -Golden
 set_module_property -instance {/u_icache/DATA_RAM_G_DATA_WAY[1].u_sram} -Revised
 # Constraint commands 
 add_pin_equivalences {addr[10]} -invert FE_DBTN136_m0_araddr_12 -hier -Revised
+add_pin_equivalences {addr[2]} FE_OFN648_m0_araddr_4 -hier -Revised
 add_pin_equivalences clk clk_clone1 -hier -Revised
 report_black_box -NOHidden
 set_system_mode lec
@@ -20513,7 +20621,7 @@ usage
 # MODULE instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 (R) INSTANCE /u_icache (R)
 # Wrapper size: (G) = 3397  (R) = 3396
 # Periphery size: (G) = 20063  (R) = 20062
-# Pins directly connected to key-points/constants: (G) = 64.65%  (R) = 65.52%
+# Pins directly connected to key-points/constants: (G) = 64.65%  (R) = 64.87%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk (REP)  =   (R) clk (REP) (by sim and name)
@@ -20607,25 +20715,22 @@ usage
 # IN (R) FE_DBTN26_cpu_inst_addr_17  (EQ_REP: -cpu_addr[17]) 
 # IN (R) FE_DBTN27_cpu_inst_addr_25  (EQ_REP: -cpu_addr[25]) 
 # IN (R) FE_DBTN28_cpu_inst_addr_30  (EQ_REP: -cpu_addr[30]) 
-# IN (R) FE_OFN618_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN615_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN611_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN550_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN481_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN453_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN447_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN370_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN365_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN360_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN357_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN243_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN239_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN542_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN536_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN535_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN531_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN529_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN431_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN326_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN324_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN281_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) clk_clone7  (EQ_REP: +clk) 
+# IN (R) clk_clone5  (EQ_REP: +clk) 
 # IN (R) clk_clone4  (-->KP) (EQ_REP: +clk) 
 # IN (R) clk_clone3  (-->KP) (EQ_REP: +clk) 
-# IN (R) clk_clone2  (EQ_REP: +clk) 
-# IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
 # IN (R) clk_clone6  (EQ_REP: +clk) 
-# IN (R) clk_clone5  (-->KP) (EQ_REP: +clk) 
+# IN (R) clk_clone2  (-->KP) (EQ_REP: +clk) 
+# IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) cpu_read_data[31] (REP)  =   (R) cpu_read_data[31] (REP) (by sim and name)
 # OUT (G) cpu_read_data[30] (REP)  =   (R) cpu_read_data[30] (REP) (by sim and name)
@@ -21153,19 +21258,15 @@ add_ignored_outputs {m_axi_arregion[1]} -Golden -System
 # UR
 add_ignored_outputs {m_axi_arregion[0]} -Golden -System
 # UR
-add_pin_equivalences rst_n FE_OFN239_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN243_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN357_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN360_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN365_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN370_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN447_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN453_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN481_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN550_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN611_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN615_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN618_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN281_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN324_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN326_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN431_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN529_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN531_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN535_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN536_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN542_reset_sys_n -hier -Revised
 add_pin_equivalences {cpu_addr[30]} -invert FE_DBTN28_cpu_inst_addr_30 -hier -Revised
 add_pin_equivalences {cpu_addr[25]} -invert FE_DBTN27_cpu_inst_addr_25 -hier -Revised
 add_pin_equivalences {cpu_addr[17]} -invert FE_DBTN26_cpu_inst_addr_17 -hier -Revised
@@ -21203,10 +21304,11 @@ add_ignored_inputs {m_axi_rresp[0]} -Revised
 # UR
 add_pin_equivalences clk clk_clone1 -hier -Revised
 add_pin_equivalences clk clk_clone2 -hier -Revised
+add_pin_equivalences clk clk_clone6 -hier -Revised
 add_pin_equivalences clk clk_clone3 -hier -Revised
 add_pin_equivalences clk clk_clone4 -hier -Revised
 add_pin_equivalences clk clk_clone5 -hier -Revised
-add_pin_equivalences clk clk_clone6 -hier -Revised
+add_pin_equivalences clk clk_clone7 -hier -Revised
 add_ignored_outputs icache_hit -Revised -System
 # UR
 add_ignored_outputs {m_axi_awid[4]} -Revised -System
@@ -21685,13 +21787,14 @@ usage
 # IN (G) s_axi_arregion[0] UZ (KP<--)(REP)  =   (R) s_axi_arregion[0] UZ (KP<--)(REP) (by name)
 # IN (G) s_axi_arvalid  (KP<--)(REP)  =   (R) s_axi_arvalid  (KP<--)(REP) (by sim and name)
 # IN (G) s_axi_rready (REP)  =   (R) s_axi_rready (REP) (by sim and name)
-# IN (R) FE_OFN627_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN569_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN355_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN217_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN212_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) clk_clone3  (KP<--) (EQ_REP: +clk) 
+# IN (R) FE_OFN556_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN442_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN414_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN265_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN262_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN260_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone3  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) s_axi_awready  (KP<--)(REP)  =   (R) s_axi_awready  (KP<--)(REP) (by sim and name)
@@ -22049,11 +22152,12 @@ add_ignored_outputs {s_axi_rresp[1]} -Golden -System
 # UR
 add_ignored_outputs {s_axi_rresp[0]} -Golden -System
 # UR
-add_pin_equivalences rst_n FE_OFN212_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN217_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN355_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN569_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN627_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN260_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN262_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN265_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN414_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN442_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN556_reset_sys_n -hier -Revised
 add_ignored_inputs {s_axi_awid[4]} -Revised
 # UR
 add_ignored_inputs {s_axi_awaddr[31]} -Revised
@@ -22333,8 +22437,8 @@ add_ignored_inputs {s_axi_arregion[1]} -Revised
 add_ignored_inputs {s_axi_arregion[0]} -Revised
 # UR
 add_pin_equivalences clk clk_clone1 -hier -Revised
-add_pin_equivalences clk clk_clone2 -hier -Revised
 add_pin_equivalences clk clk_clone3 -hier -Revised
+add_pin_equivalences clk clk_clone2 -hier -Revised
 add_ignored_outputs {s_axi_bid[4]} -Revised -System
 # UR
 add_ignored_outputs {s_axi_bresp[0]} -Revised -System
@@ -22366,7 +22470,7 @@ usage
 # MODULE asap7_sram_1rw_ADDR_W15_DATA_W32_1 (R) INSTANCE /u_axi_ram_hi/u_mem (R)
 # Wrapper size: (G) = 282  (R) = 282
 # Periphery size: (G) = 3076  (R) = 3076
-# Pins directly connected to key-points/constants: (G) = 52.44%  (R) = 53.01%
+# Pins directly connected to key-points/constants: (G) = 52.44%  (R) = 52.44%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
@@ -22419,7 +22523,6 @@ usage
 # IN (G) wdata[2]  (-->KP)(REP)  =   (R) wdata[2]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[1]  (-->KP)(REP)  =   (R) wdata[1]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[0]  (-->KP)(REP)  =   (R) wdata[0]  (-->KP)(REP) (by sim and name)
-# IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
 # OUT (G) rdata[30] (REP)  =   (R) rdata[30] (REP) (by sim and name)
@@ -22457,8 +22560,6 @@ set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32_1 -Golden
 set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32_1 -Revised
 set_module_property -instance /u_axi_ram_hi/u_mem -Golden
 set_module_property -instance /u_axi_ram_hi/u_mem -Revised
-# Constraint commands 
-add_pin_equivalences clk clk_clone1 -hier -Revised
 report_black_box -NOHidden
 set_system_mode lec
 add_compared_points -all
@@ -22474,7 +22575,7 @@ usage
 # MODULE axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 (R) INSTANCE /u_axi_ram_hi (R)
 # Wrapper size: (G) = 586  (R) = 586
 # Periphery size: (G) = 975  (R) = 975
-# Pins directly connected to key-points/constants: (G) = 99.15%  (R) = 99.23%
+# Pins directly connected to key-points/constants: (G) = 99.15%  (R) = 99.22%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
@@ -22657,29 +22758,27 @@ usage
 # IN (G) s_axi_arregion[0] UZ (KP<--)(REP)  =   (R) s_axi_arregion[0] UZ (KP<--)(REP) (by name)
 # IN (G) s_axi_arvalid  (KP<--)(REP)  =   (R) s_axi_arvalid  (KP<--)(REP) (by sim and name)
 # IN (G) s_axi_rready (REP)  =   (R) s_axi_rready (REP) (by sim and name)
-# IN (R) FE_OFN571_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN378_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN348_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN326_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN325_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN253_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN250_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN245_reset_sys_n U (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN157_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN156_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN606_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) clk_clone10  (KP<--) (EQ_REP: +clk) 
+# IN (R) FE_OFN601_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN445_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN308_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN307_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN304_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN301_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN298_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN288_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN284_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN283_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN189_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) clk_clone9  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone7  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone8  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone6  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone7  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone5  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone4  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone3  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone11  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone12  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone10  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) s_axi_awready  (KP<--)(REP)  =   (R) s_axi_awready  (KP<--)(REP) (by sim and name)
 # OUT (G) s_axi_wready  (KP<--)(REP)  =   (R) s_axi_wready  (KP<--)(REP) (by sim and name)
@@ -22908,17 +23007,17 @@ add_ignored_outputs {s_axi_rid[4]} -Golden -System
 # UR
 add_ignored_outputs {s_axi_rresp[0]} -Golden -System
 # UR
-add_pin_equivalences rst_n FE_OFN606_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN156_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN157_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN245_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN250_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN253_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN325_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN326_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN348_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN378_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN571_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN189_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN283_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN284_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN288_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN298_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN301_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN304_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN307_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN308_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN445_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN601_reset_sys_n -hier -Revised
 add_ignored_inputs {s_axi_awid[4]} -Revised
 # UR
 add_ignored_inputs {s_axi_awaddr[31]} -Revised
@@ -23075,20 +23174,16 @@ add_ignored_inputs {s_axi_arregion[1]} -Revised
 # UR
 add_ignored_inputs {s_axi_arregion[0]} -Revised
 # UR
-add_ignored_inputs FE_OFN245_reset_sys_n -Revised
-# UR
 add_pin_equivalences clk clk_clone1 -hier -Revised
 add_pin_equivalences clk clk_clone2 -hier -Revised
 add_pin_equivalences clk clk_clone3 -hier -Revised
 add_pin_equivalences clk clk_clone4 -hier -Revised
 add_pin_equivalences clk clk_clone5 -hier -Revised
-add_pin_equivalences clk clk_clone7 -hier -Revised
 add_pin_equivalences clk clk_clone6 -hier -Revised
 add_pin_equivalences clk clk_clone8 -hier -Revised
+add_pin_equivalences clk clk_clone7 -hier -Revised
 add_pin_equivalences clk clk_clone9 -hier -Revised
 add_pin_equivalences clk clk_clone10 -hier -Revised
-add_pin_equivalences clk clk_clone12 -hier -Revised
-add_pin_equivalences clk clk_clone11 -hier -Revised
 add_ignored_outputs {s_axi_bid[4]} -Revised -System
 # UR
 add_ignored_outputs {s_axi_bresp[0]} -Revised -System
@@ -23114,12 +23209,12 @@ usage
 # MODULE asap7_sram_1rw_ADDR_W15_DATA_W32 (R) INSTANCE /u_axi_ram_lo/u_mem (R)
 # Wrapper size: (G) = 282  (R) = 282
 # Periphery size: (G) = 3076  (R) = 3076
-# Pins directly connected to key-points/constants: (G) = 52.44%  (R) = 52.44%
+# Pins directly connected to key-points/constants: (G) = 52.44%  (R) = 54.12%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
 # IN (G) read (REP)  =   (R) read (REP) (by sim and name)
-# IN (G) write (REP)  =   (R) write (REP) (by sim and name)
+# IN (G) write (REP)  =   (R) write  (-->KP)(REP) (by sim and name)
 # IN (G) addr[14] (REP)  =   (R) addr[14] (REP) (by sim and name)
 # IN (G) addr[13] (REP)  =   (R) addr[13] (REP) (by sim and name)
 # IN (G) addr[12] (REP)  =   (R) addr[12] (REP) (by sim and name)
@@ -23167,6 +23262,9 @@ usage
 # IN (G) wdata[2]  (-->KP)(REP)  =   (R) wdata[2]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[1]  (-->KP)(REP)  =   (R) wdata[1]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[0]  (-->KP)(REP)  =   (R) wdata[0]  (-->KP)(REP) (by sim and name)
+# IN (R) FE_OFN647_n_58  (EQ_REP: +write) 
+# IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
 # OUT (G) rdata[30] (REP)  =   (R) rdata[30] (REP) (by sim and name)
@@ -23204,6 +23302,10 @@ set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32 -Golden
 set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32 -Revised
 set_module_property -instance /u_axi_ram_lo/u_mem -Golden
 set_module_property -instance /u_axi_ram_lo/u_mem -Revised
+# Constraint commands 
+add_pin_equivalences write FE_OFN647_n_58 -hier -Revised
+add_pin_equivalences clk clk_clone1 -hier -Revised
+add_pin_equivalences clk clk_clone2 -hier -Revised
 report_black_box -NOHidden
 set_system_mode lec
 add_compared_points -all
@@ -23219,7 +23321,7 @@ usage
 # MODULE axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 (R) INSTANCE /u_axi_ram_lo (R)
 # Wrapper size: (G) = 590  (R) = 590
 # Periphery size: (G) = 976  (R) = 976
-# Pins directly connected to key-points/constants: (G) = 99.15%  (R) = 99.24%
+# Pins directly connected to key-points/constants: (G) = 99.15%  (R) = 99.25%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (KP<--)(REP)  =   (R) clk  (KP<--)(REP) (by sim and name)
@@ -23402,34 +23504,36 @@ usage
 # IN (G) s_axi_arregion[0] UZ (KP<--)(REP)  =   (R) s_axi_arregion[0] UZ (KP<--)(REP) (by name)
 # IN (G) s_axi_arvalid  (KP<--)(REP)  =   (R) s_axi_arvalid  (KP<--)(REP) (by sim and name)
 # IN (G) s_axi_rready (REP)  =   (R) s_axi_rready (REP) (by sim and name)
-# IN (R) FE_OFN435_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN432_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN429_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN428_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN318_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN302_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN301_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN298_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN297_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN292_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN289_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN288_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN206_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN205_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN191_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN190_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN188_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN183_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN477_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN473_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN355_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN351_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN349_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN344_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN341_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN315_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN314_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN219_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN211_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN195_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN192_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN177_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN158_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN146_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN142_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN138_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) clk_clone11  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone10  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone9  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone8  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone6  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone7  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone6  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone5  (KP<--) (EQ_REP: +clk) 
-# IN (R) clk_clone3  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone4  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone3  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone2  (KP<--) (EQ_REP: +clk) 
 # IN (R) clk_clone1  (KP<--) (EQ_REP: +clk) 
+# IN (R) clk_clone12  (KP<--) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) s_axi_awready  (KP<--)(REP)  =   (R) s_axi_awready  (KP<--)(REP) (by sim and name)
 # OUT (G) s_axi_wready  (KP<--)(REP)  =   (R) s_axi_wready  (KP<--)(REP) (by sim and name)
@@ -23658,24 +23762,24 @@ add_ignored_outputs {s_axi_rid[4]} -Golden -System
 # UR
 add_ignored_outputs {s_axi_rresp[0]} -Golden -System
 # UR
-add_pin_equivalences rst_n FE_OFN183_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN188_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN190_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN191_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN205_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN206_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN288_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN289_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN292_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN297_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN298_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN301_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN302_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN318_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN428_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN429_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN432_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN435_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN138_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN142_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN146_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN158_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN177_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN192_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN195_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN211_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN219_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN314_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN315_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN341_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN344_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN349_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN351_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN355_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN473_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n -invert FE_OFN477_reset_sys_n -hier -Revised
 add_ignored_inputs {s_axi_awid[4]} -Revised
 # UR
 add_ignored_inputs {s_axi_awaddr[31]} -Revised
@@ -23834,14 +23938,16 @@ add_ignored_inputs {s_axi_arregion[0]} -Revised
 # UR
 add_pin_equivalences clk clk_clone1 -hier -Revised
 add_pin_equivalences clk clk_clone2 -hier -Revised
-add_pin_equivalences clk clk_clone4 -hier -Revised
 add_pin_equivalences clk clk_clone3 -hier -Revised
+add_pin_equivalences clk clk_clone4 -hier -Revised
 add_pin_equivalences clk clk_clone5 -hier -Revised
-add_pin_equivalences clk clk_clone7 -hier -Revised
 add_pin_equivalences clk clk_clone6 -hier -Revised
+add_pin_equivalences clk clk_clone7 -hier -Revised
 add_pin_equivalences clk clk_clone8 -hier -Revised
 add_pin_equivalences clk clk_clone9 -hier -Revised
 add_pin_equivalences clk clk_clone10 -hier -Revised
+add_pin_equivalences clk clk_clone11 -hier -Revised
+add_pin_equivalences clk clk_clone12 -hier -Revised
 add_ignored_outputs {s_axi_bid[4]} -Revised -System
 # UR
 add_ignored_outputs {s_axi_bresp[0]} -Revised -System
@@ -23969,7 +24075,7 @@ usage
 # MODULE tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 (R) INSTANCE /u_itcm (R)
 # Wrapper size: (G) = 10609  (R) = 10608
 # Periphery size: (G) = 11567  (R) = 11565
-# Pins directly connected to key-points/constants: (G) = 50.87%  (R) = 52.51%
+# Pins directly connected to key-points/constants: (G) = 50.87%  (R) = 52.25%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk (REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
@@ -24077,12 +24183,11 @@ usage
 # IN (G) d_size[1]  (KP<--)(REP)  =   (R) d_size[1]  (KP<--)(REP) (by sim and name)
 # IN (G) d_size[0]  (KP<--)(REP)  =   (R) d_size[0]  (KP<--)(REP) (by sim and name)
 # IN (G) d_unsigned  (KP<--)(REP)  =   (R) d_unsigned  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN620_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN619_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN559_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) FE_OFN452_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
-# IN (R) clk_clone1  (EQ_REP: +clk) 
+# IN (R) FE_OFN539_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN435_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
 # IN (R) clk_clone2  (-->KP) (EQ_REP: +clk) 
+# IN (R) clk_clone1  (EQ_REP: +clk) 
+# IN (R) FE_OFN685_cpu_data_addr_5 U (KP<--) (EQ_REP: +d_addr[5]) 
 # RESOLVED Constraints
 # OUT (G) f_rdata[31] (REP)  =   (R) f_rdata[31] (REP) (by sim and name)
 # OUT (G) f_rdata[30] (REP)  =   (R) f_rdata[30] (REP) (by sim and name)
@@ -24233,10 +24338,8 @@ add_ignored_outputs f_hit -Golden -System
 # UR
 add_ignored_outputs d_hit -Golden -System
 # UR
-add_pin_equivalences rst_n FE_OFN452_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN559_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN619_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n FE_OFN620_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN435_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN539_reset_sys_n -hier -Revised
 add_ignored_inputs {f_addr[31]} -Revised
 # UR
 add_ignored_inputs {f_addr[30]} -Revised
@@ -24309,8 +24412,11 @@ add_ignored_inputs {d_addr[15]} -Revised
 # UR
 add_ignored_inputs {d_addr[14]} -Revised
 # UR
+add_pin_equivalences {d_addr[5]} FE_OFN685_cpu_data_addr_5 -hier -Revised
 add_pin_equivalences clk clk_clone1 -hier -Revised
 add_pin_equivalences clk clk_clone2 -hier -Revised
+add_ignored_inputs FE_OFN685_cpu_data_addr_5 -Revised
+# UR
 add_ignored_outputs f_hit -Revised -System
 # UR
 add_ignored_outputs d_hit -Revised -System
@@ -24330,7 +24436,7 @@ usage
 # MODULE asap7_sram_1rw_ADDR_W12_DATA_W32_1 (R) INSTANCE /u_dtcm/u_mem (R)
 # Wrapper size: (G) = 3215  (R) = 3215
 # Periphery size: (G) = 3582  (R) = 3582
-# Pins directly connected to key-points/constants: (G) = 54.43%  (R) = 57.14%
+# Pins directly connected to key-points/constants: (G) = 54.43%  (R) = 56.63%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (-->KP)(REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
@@ -24380,11 +24486,10 @@ usage
 # IN (G) wdata[2]  (-->KP)(REP)  =   (R) wdata[2]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[1]  (-->KP)(REP)  =   (R) wdata[1]  (-->KP)(REP) (by sim and name)
 # IN (G) wdata[0]  (-->KP)(REP)  =   (R) wdata[0]  (-->KP)(REP) (by sim and name)
-# IN (R) clk_clone2  (-->KP) (EQ_REP: +clk) 
 # IN (R) clk_clone3  (-->KP) (EQ_REP: +clk) 
-# IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
 # IN (R) clk_clone4  (-->KP) (EQ_REP: +clk) 
-# IN (R) FE_PDN706_n_241  (-->KP) (EQ_REP: +addr[7]) 
+# IN (R) clk_clone2  (-->KP) (EQ_REP: +clk) 
+# IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
 # OUT (G) rdata[30] (REP)  =   (R) rdata[30] (REP) (by sim and name)
@@ -24423,11 +24528,10 @@ set_root_module asap7_sram_1rw_ADDR_W12_DATA_W32_1 -Revised
 set_module_property -instance /u_dtcm/u_mem -Golden
 set_module_property -instance /u_dtcm/u_mem -Revised
 # Constraint commands 
-add_pin_equivalences {addr[7]} FE_PDN706_n_241 -hier -Revised
 add_pin_equivalences clk clk_clone1 -hier -Revised
-add_pin_equivalences clk clk_clone3 -hier -Revised
 add_pin_equivalences clk clk_clone2 -hier -Revised
 add_pin_equivalences clk clk_clone4 -hier -Revised
+add_pin_equivalences clk clk_clone3 -hier -Revised
 report_black_box -NOHidden
 set_system_mode lec
 add_compared_points -all
@@ -24551,14 +24655,14 @@ usage
 # IN (G) d_size[1]  (KP<--)(REP)  =   (R) d_size[1]  (KP<--)(REP) (by sim and name)
 # IN (G) d_size[0]  (KP<--)(REP)  =   (R) d_size[0]  (KP<--)(REP) (by sim and name)
 # IN (G) d_unsigned  (KP<--)(REP)  =   (R) d_unsigned  (KP<--)(REP) (by sim and name)
-# IN (R) FE_OFN614_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN560_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN552_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
-# IN (R) FE_OFN451_reset_sys_n  (KP<--) (EQ_REP: -rst_n) 
+# IN (R) FE_OFN538_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN532_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN434_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) FE_OFN433_reset_sys_n  (KP<--) (EQ_REP: +rst_n) 
+# IN (R) clk_clone3  (-->KP) (EQ_REP: +clk) 
+# IN (R) clk_clone4  (EQ_REP: +clk) 
 # IN (R) clk_clone2  (-->KP) (EQ_REP: +clk) 
-# IN (R) clk_clone3  (EQ_REP: +clk) 
 # IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
-# IN (R) clk_clone4  (-->KP) (EQ_REP: +clk) 
 # RESOLVED Constraints
 # OUT (G) f_rdata[31] UZ (KP<--)(REP)  =   (R) f_rdata[31] UZ (KP<--)(REP) (by name)
 # OUT (G) f_rdata[30] UZ (KP<--)(REP)  =   (R) f_rdata[30] UZ (KP<--)(REP) (by name)
@@ -24805,10 +24909,10 @@ add_ignored_outputs f_stall -Golden -System
 # UR
 add_ignored_outputs d_hit -Golden -System
 # UR
-add_pin_equivalences rst_n -invert FE_OFN451_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN552_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN560_reset_sys_n -hier -Revised
-add_pin_equivalences rst_n -invert FE_OFN614_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN433_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN434_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN532_reset_sys_n -hier -Revised
+add_pin_equivalences rst_n FE_OFN538_reset_sys_n -hier -Revised
 add_ignored_inputs f_req -Revised
 # UR
 add_ignored_inputs {f_addr[31]} -Revised
@@ -24912,9 +25016,9 @@ add_ignored_inputs {d_addr[15]} -Revised
 add_ignored_inputs {d_addr[14]} -Revised
 # UR
 add_pin_equivalences clk clk_clone1 -hier -Revised
-add_pin_equivalences clk clk_clone3 -hier -Revised
 add_pin_equivalences clk clk_clone2 -hier -Revised
 add_pin_equivalences clk clk_clone4 -hier -Revised
+add_pin_equivalences clk clk_clone3 -hier -Revised
 add_ignored_outputs {f_rdata[31]} -Revised -System
 # UR
 add_ignored_outputs {f_rdata[30]} -Revised -System
@@ -25243,18 +25347,18 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1230, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1230, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1626, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1626, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_759, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_759, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_46, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_46, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_46, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_46, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_803, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_803, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_358, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_358, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1360, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1360, prim-cnt = 5 (R)
-# clock_gate_9, prim-cnt = 3 (G) and clock_gate_9, prim-cnt = 8 (R)
+# clock_gate_9, prim-cnt = 3 (G) and clock_gate_9, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_230, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_230, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_47, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_47, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_804, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_804, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1767, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1767, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_231, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_231, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_48, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_48, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_805, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_805, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_805, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_805, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1680, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1680, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_232, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_232, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_49, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_49, prim-cnt = 5 (R)
@@ -25268,19 +25372,19 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_513, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_513, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_571, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_571, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1749, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1749, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1773, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1773, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1773, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1773, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_234, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_234, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1683, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1683, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1260, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1260, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1489, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1489, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_170, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_170, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_572, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_572, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_572, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_572, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1203, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1203, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_235, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_235, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1684, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1684, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_171, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_171, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1204, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1204, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_236, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_236, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_236, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_236, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_172, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_172, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1130, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1130, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_835, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_835, prim-cnt = 5 (R)
@@ -25315,13 +25419,13 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_641, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_641, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1618, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1618, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1591, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1591, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_642, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_642, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_642, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_642, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1619, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1619, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1592, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1592, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_643, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_643, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1593, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1593, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_88, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_88, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_644, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_644, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_644, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_644, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_580, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_580, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1594, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1594, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_89, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_89, prim-cnt = 5 (R)
@@ -25342,7 +25446,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1075, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1075, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_699, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_699, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_712, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_712, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1076, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1076, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1076, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1076, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_586, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_586, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_713, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_713, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_21, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_21, prim-cnt = 5 (R)
@@ -25357,8 +25461,8 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_23, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_23, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_945, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_945, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1052, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1052, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_480, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_480, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_589, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_589, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_480, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_480, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_589, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_589, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1527, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1527, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_24, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_24, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_946, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_946, prim-cnt = 5 (R)
@@ -25385,7 +25489,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_999, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_999, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_949, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_949, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1056, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1056, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_484, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_484, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_484, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_484, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1724, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1724, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_390, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_390, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1057, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1057, prim-cnt = 5 (R)
@@ -25400,7 +25504,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_54, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_54, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1059, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1059, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1063, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1063, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_487, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_487, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_487, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_487, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_393, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_393, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_55, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_55, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_790, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_790, prim-cnt = 5 (R)
@@ -25422,7 +25526,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1454, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1454, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1587, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1587, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_396, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_396, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1185, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1185, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_58, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_58, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_793, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_793, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1067, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1067, prim-cnt = 5 (R)
@@ -25432,11 +25536,11 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_380, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_380, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_397, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_397, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1140, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1140, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1186, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1186, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1186, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1186, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_59, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_59, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_794, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_794, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1650, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1650, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_702, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_702, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_702, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_702, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1068, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1068, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1456, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1456, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1589, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1589, prim-cnt = 5 (R)
@@ -25447,7 +25551,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_37, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_37, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1191, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1191, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_795, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_795, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1651, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1651, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1651, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1651, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_703, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_703, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1752, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1752, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1457, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1457, prim-cnt = 5 (R)
@@ -25456,7 +25560,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_382, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_382, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_399, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_399, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1142, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1142, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_38, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_38, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_38, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_38, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1090, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1090, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1192, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1192, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_796, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_796, prim-cnt = 5 (R)
@@ -25464,7 +25568,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1753, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1753, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1458, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1458, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_536, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_536, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1143, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1143, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1143, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1143, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_39, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_39, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1091, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1091, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_797, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_797, prim-cnt = 5 (R)
@@ -25475,7 +25579,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1755, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1755, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_799, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_799, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_740, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_740, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_668, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_668, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_668, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_668, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1317, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1317, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1690, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1690, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_669, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_669, prim-cnt = 5 (R)
@@ -25492,7 +25596,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1289, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1289, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1006, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1006, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_780, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_780, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1718, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1718, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1718, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1718, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1007, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1007, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_520, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_520, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_666, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_666, prim-cnt = 5 (R)
@@ -25514,7 +25618,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_942, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_942, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_784, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_784, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_735, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_735, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_239, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_239, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_239, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_239, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_785, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_785, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1641, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1641, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1630, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1630, prim-cnt = 5 (R)
@@ -25575,7 +25679,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_717, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_717, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_159, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_159, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1500, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1500, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1219, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1219, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1219, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1219, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1501, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1501, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1502, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1502, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1635, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1635, prim-cnt = 5 (R)
@@ -25585,9 +25689,9 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1070, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1070, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_56769_6, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_6, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1168, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1168, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1637, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1637, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1637, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1637, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_744, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_744, prim-cnt = 5 (R)
-# clock_gate_1, prim-cnt = 3 (G) and clock_gate_1, prim-cnt = 9 (R)
+# clock_gate_1, prim-cnt = 3 (G) and clock_gate_1, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_850, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_850, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1169, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1169, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1638, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1638, prim-cnt = 5 (R)
@@ -25612,17 +25716,17 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_864, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_864, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1115, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1115, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_865, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_865, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1116, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1116, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1116, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1116, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_866, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_866, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1040, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1040, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1205, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1205, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1205, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1205, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1117, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1117, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_174, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_174, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1213, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1213, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1541, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1541, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_867, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_867, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1041, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1041, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1206, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1206, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1206, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1206, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1118, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1118, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_175, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_175, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1214, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1214, prim-cnt = 5 (R)
@@ -25636,7 +25740,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_176, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_176, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1566, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1566, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1543, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1543, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1768, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1768, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1768, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1768, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_869, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_869, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_711, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_711, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1043, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1043, prim-cnt = 5 (R)
@@ -25666,7 +25770,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_261, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_261, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_877, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_877, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1508, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1508, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_20, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_20, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_20, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_20, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_262, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_262, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_878, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_878, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_889, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_889, prim-cnt = 5 (R)
@@ -25689,8 +25793,8 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_268, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_268, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1536, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1536, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_433, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_433, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_1094, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1094, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_269, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_269, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1094, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1094, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_269, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_269, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1460, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1460, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_152, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_152, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1537, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1537, prim-cnt = 5 (R)
@@ -25698,9 +25802,9 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1095, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1095, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1461, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1461, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_743, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_743, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_10, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_10, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_10, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_10, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1538, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1538, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1096, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1096, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1096, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1096, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_316, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_316, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1462, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1462, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_11, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_11, prim-cnt = 5 (R)
@@ -25737,7 +25841,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_362, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_362, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1011, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1011, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_623, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_623, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_363, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_363, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_363, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_363, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1012, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1012, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_364, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_364, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_706, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_706, prim-cnt = 5 (R)
@@ -25745,7 +25849,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_365, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_365, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1150, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1150, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_707, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_707, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1014, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1014, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1014, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1014, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_366, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_366, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1151, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1151, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1152, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1152, prim-cnt = 5 (R)
@@ -25777,7 +25881,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_424, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_424, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_253, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_253, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1698, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1698, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_425, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_425, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_425, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_425, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_254, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_254, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1699, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1699, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1352, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1352, prim-cnt = 5 (R)
@@ -25790,7 +25894,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_674, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_674, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_675, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_675, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_807, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_807, prim-cnt = 5 (R)
-# clock_gate, prim-cnt = 3 (G) and clock_gate, prim-cnt = 8 (R)
+# clock_gate, prim-cnt = 3 (G) and clock_gate, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_690, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_690, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_808, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_808, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1330, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1330, prim-cnt = 5 (R)
@@ -25809,14 +25913,14 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1333, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1333, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_446, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_446, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1390, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1390, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_28, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_28, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_28, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_28, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1112, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1112, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1334, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1334, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_447, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_447, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_29, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_29, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1410, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1410, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_448, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_448, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1221, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1221, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_448, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_448, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1221, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1221, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1411, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1411, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_449, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_449, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1222, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1222, prim-cnt = 5 (R)
@@ -25831,7 +25935,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1511, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1511, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_980, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_980, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_661, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_661, prim-cnt = 5 (R)
-# clock_gate_11, prim-cnt = 3 (G) and clock_gate_11, prim-cnt = 7 (R)
+# clock_gate_11, prim-cnt = 3 (G) and clock_gate_11, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1764, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1764, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1512, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1512, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_981, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_981, prim-cnt = 5 (R)
@@ -25853,7 +25957,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_212, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_212, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_562, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_562, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1340, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1340, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_421, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_421, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_421, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_421, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_213, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_213, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_127, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_127, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_672, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_672, prim-cnt = 5 (R)
@@ -25882,14 +25986,14 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_183, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_183, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1679, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1679, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_830, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_830, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_218, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_218, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_568, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_568, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1124, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1124, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_184, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_184, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_219, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_219, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_569, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_569, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1125, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1125, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_185, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_185, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1126, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1126, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_115, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_115, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_537, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_537, prim-cnt = 5 (R)
@@ -25903,11 +26007,11 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1129, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1129, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1209, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1209, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_189, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_189, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1217, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1217, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1217, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1217, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_970, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_970, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1400, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1400, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_510, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_510, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1218, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1218, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_971, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_971, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_56769_10, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_10, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1401, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1401, prim-cnt = 5 (R)
@@ -25918,7 +26022,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_973, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_973, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_974, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_974, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_975, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_975, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_203, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_203, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_203, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_203, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_573, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_573, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_976, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_976, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_204, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_204, prim-cnt = 5 (R)
@@ -25957,7 +26061,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1396, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1396, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1580, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1580, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_285, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_285, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_473, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_473, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_473, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_473, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_330, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_330, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1020, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1020, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1581, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1581, prim-cnt = 5 (R)
@@ -25982,7 +26086,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_289, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_289, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_477, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_477, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_334, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_334, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_478, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_478, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_478, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_478, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1050, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1050, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_383, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_383, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_746, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_746, prim-cnt = 5 (R)
@@ -26011,7 +26115,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1135, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1135, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1083, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1083, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_789, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_789, prim-cnt = 5 (R)
-# clock_gate_7, prim-cnt = 3 (G) and clock_gate_7, prim-cnt = 7 (R)
+# clock_gate_7, prim-cnt = 3 (G) and clock_gate_7, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1161, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1161, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1380, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1380, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_376, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_376, prim-cnt = 5 (R)
@@ -26032,7 +26136,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1138, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1138, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1086, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1086, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1648, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1648, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1164, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1164, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1164, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1164, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1383, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1383, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_379, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_379, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1573, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1573, prim-cnt = 5 (R)
@@ -26045,12 +26149,12 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1088, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1088, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_220, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_220, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1575, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1575, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_501, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_501, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_501, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_501, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_550, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_550, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1089, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1089, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1403, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1403, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1199, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1199, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_745, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_745, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_745, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_745, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_221, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_221, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1576, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1576, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_502, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_502, prim-cnt = 5 (R)
@@ -26099,7 +26203,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_775, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_775, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1236, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1236, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_924, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_924, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_344, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_344, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_344, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_344, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_1034, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1034, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_934, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_934, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1733, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1733, prim-cnt = 5 (R)
@@ -26111,7 +26215,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1734, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1734, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_777, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_777, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_820, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_820, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_346, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_346, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_346, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_346, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1036, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1036, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_936, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_936, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1735, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1735, prim-cnt = 5 (R)
@@ -26149,7 +26253,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1629, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1629, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_429, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_429, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1564, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1564, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_730, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_730, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_730, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_730, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_624, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_624, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_731, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_731, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_306, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_306, prim-cnt = 5 (R)
@@ -26162,27 +26266,27 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_762, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_762, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_627, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_627, prim-cnt = 5 (R)
 # asap7_sram_tag_512x20_ADDR_W9_DATA_W19, prim-cnt = 2 (G) and asap7_sram_tag_512x20_ADDR_W9_DATA_W19, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_309, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_309, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_309, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_309, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_763, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_763, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1756, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1756, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_628, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_628, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_764, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_764, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1757, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1757, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_629, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_629, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_704, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_704, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_704, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_704, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_765, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_765, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1750, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1750, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1758, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1758, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_705, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_705, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_705, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_705, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_766, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_766, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1751, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1751, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1759, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1759, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1490, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1490, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_767, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_767, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1225, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1225, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1225, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1225, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_664, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_664, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_768, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_768, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1226, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1226, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1226, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1226, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_665, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_665, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1471, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1471, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_418, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_418, prim-cnt = 5 (R)
@@ -26193,7 +26297,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1547, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1547, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1165, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1165, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1472, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1472, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1232, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1232, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1232, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1232, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1728, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1728, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_693, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_693, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1548, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1548, prim-cnt = 5 (R)
@@ -26230,7 +26334,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_846, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_846, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_85, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_85, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1211, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1211, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1558, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1558, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1558, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1558, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1365, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1365, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_857, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_857, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_374, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_374, prim-cnt = 5 (R)
@@ -26258,7 +26362,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1265, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1265, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_439, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_439, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1266, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1266, prim-cnt = 5 (R)
-# clock_gate_3, prim-cnt = 3 (G) and clock_gate_3, prim-cnt = 7 (R)
+# clock_gate_3, prim-cnt = 3 (G) and clock_gate_3, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_493, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_493, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_650, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_650, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_494, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_494, prim-cnt = 5 (R)
@@ -26292,9 +26396,9 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1468, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1468, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_994, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_994, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1662, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1662, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_657, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_657, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_657, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_657, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1469, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1469, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_426, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_426, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_426, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_426, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1530, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1530, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_995, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_995, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1663, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1663, prim-cnt = 5 (R)
@@ -26313,7 +26417,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_952, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_952, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_13, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_13, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1611, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1611, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1077, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1077, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1077, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1077, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1303, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1303, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_953, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_953, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_14, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_14, prim-cnt = 5 (R)
@@ -26368,7 +26472,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_198, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_198, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_65, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_65, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_613, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_613, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_199, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_199, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_199, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_199, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_614, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_614, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1459, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1459, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_615, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_615, prim-cnt = 5 (R)
@@ -26377,13 +26481,13 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_616, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_616, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1654, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1654, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_718, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_718, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1187, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1187, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1187, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1187, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1320, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1320, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1522, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1522, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_617, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_617, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1655, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1655, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_719, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_719, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1188, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1188, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1188, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1188, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1321, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1321, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1523, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1523, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_618, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_618, prim-cnt = 5 (R)
@@ -26395,8 +26499,8 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_694, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_694, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_619, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_619, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1657, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1657, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1194, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1194, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_359, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_359, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1194, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1194, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_359, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_359, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1525, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1525, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_695, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_695, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1603, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1603, prim-cnt = 5 (R)
@@ -26465,7 +26569,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1518, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1518, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1712, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1712, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1247, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1247, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1519, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1519, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1519, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1519, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_640, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_640, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1713, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1713, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1248, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1248, prim-cnt = 5 (R)
@@ -26477,12 +26581,12 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_523, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_523, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1103, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1103, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_162, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_162, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1220, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1220, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1220, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1220, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_408, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_408, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_524, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_524, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1104, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1104, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_163, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_163, prim-cnt = 5 (R)
-# clock_gate_6, prim-cnt = 3 (G) and clock_gate_6, prim-cnt = 6 (R)
+# clock_gate_6, prim-cnt = 3 (G) and clock_gate_6, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_409, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_409, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1105, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1105, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1298, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1298, prim-cnt = 5 (R)
@@ -26492,7 +26596,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1329, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1329, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1385, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1385, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1107, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1107, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_166, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_166, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_166, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_166, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_1386, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1386, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_533, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_533, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_742, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_742, prim-cnt = 5 (R)
@@ -26512,7 +26616,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1173, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1173, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_723, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_723, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1174, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1174, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_737, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_737, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_737, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_737, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1433, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1433, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1409, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1409, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1175, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1175, prim-cnt = 5 (R)
@@ -26541,12 +26645,12 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_205, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_205, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1438, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1438, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_556, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_556, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1121, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1121, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1121, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1121, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1705, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1705, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_206, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_206, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_747, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_747, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_557, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_557, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1122, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1122, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1122, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1122, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_600, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_600, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1706, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1706, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_207, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_207, prim-cnt = 5 (R)
@@ -26556,7 +26660,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_558, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_558, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_139, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_139, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_601, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_601, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1707, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1707, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1707, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1707, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_208, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_208, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1336, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1336, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_559, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_559, prim-cnt = 5 (R)
@@ -26605,14 +26709,14 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1272, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1272, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1375, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1375, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_4, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_4, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_291, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_291, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_291, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_291, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_300, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_300, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_964, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_964, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_739, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_739, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_880, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_880, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_679, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_679, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1376, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1376, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_5, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_5, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_5, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_5, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_890, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_890, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_292, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_292, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_301, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_301, prim-cnt = 5 (R)
@@ -26638,7 +26742,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_151, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_151, prim-cnt = 5 (R)
 # asap7_sram_tag_512x20_ADDR_W9_DATA_W19_1, prim-cnt = 2 (G) and asap7_sram_tag_512x20_ADDR_W9_DATA_W19_1, prim-cnt = 3 (R)
 # cg_icg__RC_CG_MOD_295, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_295, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_304, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_304, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_304, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_304, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_894, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_894, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_968, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_968, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_884, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_884, prim-cnt = 5 (R)
@@ -26659,14 +26763,14 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_887, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_887, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_271, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_271, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_898, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_898, prim-cnt = 5 (R)
-# clock_gate_8, prim-cnt = 3 (G) and clock_gate_8, prim-cnt = 6 (R)
+# clock_gate_8, prim-cnt = 3 (G) and clock_gate_8, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_888, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_888, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_460, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_460, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_460, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_460, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_272, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_272, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_406, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_406, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_899, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_899, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_461, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_461, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_273, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_273, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_273, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_273, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1540, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1540, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_56769_8, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_56769_8, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1180, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1180, prim-cnt = 5 (R)
@@ -26682,7 +26786,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_321, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_321, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_464, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_464, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_276, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_276, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_506, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_506, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_506, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_506, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_322, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_322, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_465, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_465, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_277, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_277, prim-cnt = 5 (R)
@@ -26698,12 +26802,12 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_325, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_325, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_468, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_468, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1015, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1015, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1181, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1181, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1181, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1181, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_326, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_326, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_469, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_469, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_469, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_469, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1577, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1577, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1016, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1016, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1182, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1182, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1182, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1182, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_327, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_327, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1578, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1578, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1017, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1017, prim-cnt = 5 (R)
@@ -26716,7 +26820,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1045, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1045, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_676, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_676, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_71, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_71, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1046, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1046, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1046, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1046, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_677, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_677, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_72, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_72, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1047, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1047, prim-cnt = 5 (R)
@@ -26732,7 +26836,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_75, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_75, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_515, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_515, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_76, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_76, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_77, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_77, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_77, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_77, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_590, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_590, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1155, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1155, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1197, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1197, prim-cnt = 5 (R)
@@ -26771,7 +26875,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_597, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_597, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_914, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_914, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_546, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_546, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_42, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_42, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_42, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_42, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_598, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_598, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_682, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_682, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_915, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_915, prim-cnt = 5 (R)
@@ -26804,7 +26908,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_814, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_814, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_30, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_30, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1495, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1495, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_815, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_815, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_815, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_815, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1762, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1762, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_31, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_31, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1496, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1496, prim-cnt = 5 (R)
@@ -26824,7 +26928,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1671, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1671, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1693, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1693, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_298, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_298, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_453, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_453, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_453, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_453, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_819, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_819, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1478, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1478, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_35, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_35, prim-cnt = 5 (R)
@@ -26839,7 +26943,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1673, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1673, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1695, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1695, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_455, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_455, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1202, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1202, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1202, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1202, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1254, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1254, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1674, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1674, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1696, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1696, prim-cnt = 5 (R)
@@ -26847,7 +26951,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_351, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_351, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_753, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_753, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1559, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1559, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1675, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1675, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1675, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1675, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_457, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_457, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_400, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_400, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_352, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_352, prim-cnt = 5 (R)
@@ -26867,24 +26971,23 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_757, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_757, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1445, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1445, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_355, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_355, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1224, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1224, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1224, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1224, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_800, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_800, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1624, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1624, prim-cnt = 5 (R)
 #-------------------------------------------------------------------------------
 # The following module pairs are not written because of mismatched ports:
-# Module Pair: pipeline_control_unit (G) and pipeline_control_unit (R)
-# Cause for mismatched ports is pin unreachables
-# OUT (G) stall_ID (REP)  =    (R) stall_ID UZ (KP<--)(REP) 
+# Module Pair: riscv_pipeline (G) and riscv_pipeline (R)
+# Cause for mismatched ports is extra ports
+# OUT (G) dcache_addr[21]  (KP<--)(REP)  =    (R) dcache_addr[21] UZ (KP<--)(REP) 
+# OUT (G) dcache_addr[15]  (KP<--)(REP)  =    (R) dcache_addr[15] UZ (KP<--)(REP) 
+# OUT (R) FE_OFN673_n  (KP<--)(REP) 
+# OUT (R) FE_OFN675_n  (KP<--)(REP) 
 # Module Pair: sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_2 (G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_2 (R)
 # Cause for mismatched ports is extra ports
 # IN (R) n_24300 (REP) 
-# Module Pair: sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 (G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 (R)
-# Cause for mismatched ports is extra ports
-# IN (R) n_23043 (REP) 
 # Module Pair: axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff8000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_DSP_RDATA_DEPTH2_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0 (G) and axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff8000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_DSP_RDATA_DEPTH2_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0 (R)
 # Cause for mismatched ports is extra ports
 # IN (R) n_23095 (REP) 
-# IN (R) n_23043 (REP) 
 # IN (R) n_24300 (REP) 
 #-------------------------------------------------------------------------------
 # _END_OF_LEC_HIERARCHICAL_DOFILE_

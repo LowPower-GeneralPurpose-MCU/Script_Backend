@@ -11,9 +11,9 @@ in a license agreement controlling such use and disclosure.
 
 // Command: set_dofile_abort exit
 0
-CPU time     : 0.15    seconds
-Elapse time  : 2       seconds
-Memory usage : 62.88   M bytes
+CPU time     : 0.14    seconds
+Elapse time  : 1       seconds
+Memory usage : 62.84   M bytes
 // Command: foreach dir {logs reports} {
 //              file mkdir $dir
 //          }
@@ -87,6 +87,7 @@ RingOscillator
 // Command: set golden_stamp  [lec_genus_stamp $GOLDEN_NETLIST]
 Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
 // Command: set revised_stamp [lec_genus_stamp $REVISED_NETLIST]
+Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
 // Command: if {$golden_stamp eq "" || $revised_stamp eq ""} {
 //              lec_warn "khong doc duoc dau thoi gian Genus trong netlist - khong kiem duoc golden/revised co cung mot lan tong hop"
 //          } elseif {$golden_stamp ne $revised_stamp} {
@@ -95,7 +96,6 @@ Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
 //            revised : $revised_stamp  ($REVISED_NETLIST)
 //            Chay lai Innovus tren netlist Genus hien tai, hoac dat LEC_GOLDEN dung file."
 //          }
-WARNING: khong doc duoc dau thoi gian Genus trong netlist - khong kiem duoc golden/revised co cung mot lan tong hop
 // Command: foreach lib $ALL_TIMING_LIBS {
 //              if {![file isfile $lib]} {
 //                  error "Khong co Liberty $lib - dat ASAP7_ROOT / ASAP7_STD_LIB_DIR"
@@ -181,13 +181,13 @@ WARNING: khong doc duoc dau thoi gian Genus trong netlist - khong kiem duoc gold
 //              return [array get seen]
 //          }
 // Command: array set ro_golden  [lec_subtree_canon [lec_read_file $GOLDEN_NETLIST]  $RO_MODULE]
-CPU time     : 0.75    seconds
+CPU time     : 0.72    seconds
 Elapse time  : 2       seconds
-Memory usage : 63.96   M bytes
+Memory usage : 63.91   M bytes
 // Command: array set ro_revised [lec_subtree_canon [lec_read_file $REVISED_NETLIST] $RO_MODULE]
-CPU time     : 1.44    seconds
-Elapse time  : 3       seconds
-Memory usage : 112.69  M bytes
+CPU time     : 1.40    seconds
+Elapse time  : 2       seconds
+Memory usage : 110.43  M bytes
 // Command: if {![info exists ro_golden($RO_MODULE)] || ![info exists ro_revised($RO_MODULE)]} {
 //              error "Khong thay module $RO_MODULE trong golden hoac revised - TRNG da bi toi uu mat?"
 //          }
@@ -251,16 +251,16 @@ Ring oscillator: 15 module duoi RingOscillator giong het o golden va revised
 // Note: (HRC1.2) Module/entity is not translated (blackboxed) (occurrence:2)
 // Note: Read Liberty library successfully
 0
-CPU time     : 5.64    seconds
+CPU time     : 5.69    seconds
 Elapse time  : 7       seconds
-Memory usage : 122.36  M bytes
+Memory usage : 121.52  M bytes
 // Command: read_design -verilog -sensitive -golden -noelab $GOLDEN_NETLIST
 // Parsing file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v ...sh: 0: Illegal option --
 
 0
-CPU time     : 8.89    seconds
+CPU time     : 8.80    seconds
 Elapse time  : 10      seconds
-Memory usage : 262.99  M bytes
+Memory usage : 262.54  M bytes
 // Command: elaborate_design -golden -root $TOP
 // Golden root module is set to 'top_soc'
 // Warning: (RTL2.5) Net is referenced without an assignment. Design verification will be based on set_undriven_signal setting (occurrence:2040)
@@ -272,58 +272,56 @@ Memory usage : 262.99  M bytes
 // Warning: There are 2093 undriven nets in Golden
 // Warning: There are 2093 undriven pins in Golden
 0
-CPU time     : 11.05   seconds
-Elapse time  : 13      seconds
-Memory usage : 236.62  M bytes
+CPU time     : 10.96   seconds
+Elapse time  : 12      seconds
+Memory usage : 236.58  M bytes
 // Command: read_design -verilog -sensitive -revised -noelab $REVISED_NETLIST
 // Parsing file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v ...sh: 0: Illegal option --
 
 0
-CPU time     : 15.37   seconds
-Elapse time  : 17      seconds
-Memory usage : 391.25  M bytes
+CPU time     : 14.94   seconds
+Elapse time  : 16      seconds
+Memory usage : 385.83  M bytes
 // Command: elaborate_design -revised -root $TOP
 // Revised root module is set to 'top_soc'
-// Warning: (RTL2.5) Net is referenced without an assignment. Design verification will be based on set_undriven_signal setting (occurrence:2040)
+// Warning: (RTL2.5) Net is referenced without an assignment. Design verification will be based on set_undriven_signal setting (occurrence:2043)
 // Warning: (RTL2.13) Undriven pin is detected (occurrence:2096)
-// Warning: (RTL14) Signal has input but it has no output (occurrence:2526)
+// Warning: (RTL14) Signal has input but it has no output (occurrence:2527)
 // Note: (HRC1.2) Module/entity is not translated (blackboxed) (occurrence:1)
 // Warning: (HRC3.5a) Open input/inout port connection is detected (occurrence:1623)
-// Note: (HRC3.5b) Open output port connection is detected (occurrence:1)
-// Warning: (HRC3.10a) An input port is declared, but it is not completely used in the module (occurrence:3678)
+// Warning: (HRC3.10a) An input port is declared, but it is not completely used in the module (occurrence:3684)
 // Warning: (HRC3.16) A wire is declared, but not used in the module (occurrence:1)
 // Warning: Total black box modules referenced in Revised = 3
 // Warning: There are 2096 undriven nets in Revised
 // Warning: There are 2096 undriven pins in Revised
 0
-CPU time     : 18.23   seconds
-Elapse time  : 20      seconds
-Memory usage : 351.34  M bytes
+CPU time     : 17.43   seconds
+Elapse time  : 19      seconds
+Memory usage : 348.50  M bytes
 // Command: report_design_data
 ============================================
 Summary           Golden         Revised
 ============================================
 Design-modules      1690            1690
-Library-cells     116092          148833
+Library-cells     116092          142963
 ============================================
 Primitives      Golden              Revised
 ============================================
 INPUT               59                   59
 OUTPUT             115                  115
 --------------------------------------------
-AND        *    133345               133343
-BUF        *      3718                35027
+AND        *    133345               133344
+BUF        *      3718                29284
 DFF              34054                34054
 DLAT              1635                 1635
-INV        *    352354               350377
-OR         *     55092                55088
+INV        *    352354               350252
+OR         *     55092                55089
 TIE0       *         0                 1632
 TIE1       *         0                 1766
-WIRE       *         0                    1
 ------ word-level --------------------------
 BBOX                85                   85
 --------------------------------------------
-Total           580283               613008
+Total           580283               607141
 
 0
 // Command: set bbox_rpt [lec_capture ./reports/lec_black_box.rpt {report_black_box}]
@@ -393,11 +391,11 @@ srambank_256x4x32_6t122 srambank_128x4x20_6t122 RingOscillator
 // (F32) Created 4133 Z gate(s) for floating net(s) and floating pin(s)
 // (F28) Converted 2093 internal output port(s) to inout port(s)
 // (F14) Remodeled 33361 gated-clock DFF/DLAT(s)
-// (F32) Created 5759 Z gate(s) for floating net(s) and floating pin(s)
+// (F32) Created 5762 Z gate(s) for floating net(s) and floating pin(s)
 // (F28) Converted 2096 internal output port(s) to inout port(s)
 // Warning: Golden and Revised have different numbers of key points:
 // Golden  key points = 40081
-// Revised key points = 41707
+// Revised key points = 41710
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -420,7 +418,7 @@ Revised:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT   Z         Total   
 --------------------------------------------------------------------------------
-Unreachable       1634   5759      7393    
+Unreachable       1634   5762      7396    
 ================================================================================
 --------------------------------------------------------------------------------
 // Starting hierarchical dofile generation ...
@@ -447,7 +445,7 @@ Unreachable       1634   5759      7393
 # asap7_sram_tag_512x20_ADDR_W9_DATA_W19_3, prim-cnt = 2 (G) and asap7_sram_tag_512x20_ADDR_W9_DATA_W19_3, prim-cnt = 3 (R)
 # cg_icg__RC_CG_MOD, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_10, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_10, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_10, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_10, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1000, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1000, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1001, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1001, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1002, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1002, prim-cnt = 5 (R)
@@ -462,7 +460,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1011, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1011, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1012, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1012, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1013, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1013, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1014, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1014, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1014, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1014, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1015, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1015, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1016, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1016, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1017, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1017, prim-cnt = 5 (R)
@@ -490,7 +488,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1043, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1043, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1044, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1044, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1045, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1045, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1046, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1046, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1046, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1046, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1047, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1047, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1048, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1048, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1049, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1049, prim-cnt = 5 (R)
@@ -521,8 +519,8 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1073, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1073, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1074, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1074, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1075, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1075, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_1076, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1076, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_1077, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1077, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1076, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1076, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1077, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1077, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1078, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1078, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1079, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1079, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1080, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1080, prim-cnt = 5 (R)
@@ -538,9 +536,9 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1091, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1091, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1092, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1092, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1093, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1093, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1094, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1094, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1094, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1094, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1095, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1095, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1096, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1096, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1096, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1096, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1097, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1097, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1098, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1098, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1099, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1099, prim-cnt = 5 (R)
@@ -562,14 +560,14 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1113, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1113, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1114, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1114, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1115, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1115, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1116, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1116, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1116, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1116, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1117, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1117, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1118, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1118, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1119, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1119, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_112, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_112, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1120, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1120, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1121, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1121, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1122, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1122, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1121, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1121, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1122, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1122, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1123, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1123, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1124, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1124, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1125, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1125, prim-cnt = 5 (R)
@@ -589,7 +587,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1140, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1140, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1141, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1141, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1142, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1142, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1143, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1143, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1143, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1143, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1144, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1144, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1145, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1145, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1146, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1146, prim-cnt = 5 (R)
@@ -611,7 +609,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1161, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1161, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1162, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1162, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1163, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1163, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1164, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1164, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1164, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1164, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1165, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1165, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1167, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1167, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1168, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1168, prim-cnt = 5 (R)
@@ -627,21 +625,21 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1178, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1178, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1179, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1179, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1180, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1180, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1181, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1181, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1182, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1182, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1181, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1181, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1182, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1182, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1183, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1183, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1184, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1184, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1185, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1186, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1186, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1187, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1187, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1188, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1188, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1185, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1186, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1186, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1187, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1187, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1188, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1188, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1189, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1189, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_119, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_119, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1190, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1190, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1191, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1191, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1192, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1192, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1193, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1193, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1194, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1194, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1194, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1194, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1195, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1195, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1196, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1196, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1197, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1197, prim-cnt = 5 (R)
@@ -651,11 +649,11 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_120, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_120, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1200, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1200, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1201, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1201, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1202, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1202, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1202, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1202, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1203, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1203, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1204, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1204, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1205, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1205, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_1206, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1206, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1205, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1205, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1206, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1206, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1207, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1207, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1208, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1208, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1209, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1209, prim-cnt = 5 (R)
@@ -666,23 +664,23 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1214, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1214, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1215, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1215, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1216, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1216, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1217, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1217, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_1218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1218, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1219, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1219, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1220, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1220, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_1221, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1221, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1217, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1217, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1218, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1219, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1219, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1220, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1220, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1221, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1221, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1222, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1222, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1223, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1223, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1224, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1224, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1225, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1225, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1226, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1226, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1224, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1224, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1225, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1225, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1226, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1226, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1227, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1227, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1228, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1228, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1229, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1229, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_123, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_123, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1230, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1230, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1231, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1231, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1232, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1232, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1232, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1232, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1233, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1233, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1234, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1234, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1236, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1236, prim-cnt = 5 (R)
@@ -890,7 +888,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1516, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1516, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1517, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1517, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1518, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1518, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1519, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1519, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1519, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1519, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_152, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_152, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1520, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1520, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1521, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1521, prim-cnt = 5 (R)
@@ -929,7 +927,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1555, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1555, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1556, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1556, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1557, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1557, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1558, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1558, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1558, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1558, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1559, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1559, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_156, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_156, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1560, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1560, prim-cnt = 5 (R)
@@ -1013,7 +1011,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1632, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1632, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1635, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1635, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1636, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1636, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1637, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1637, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1637, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1637, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1638, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1638, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1639, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1639, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_164, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_164, prim-cnt = 5 (R)
@@ -1029,7 +1027,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1649, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1649, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_165, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_165, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1650, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1650, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1651, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1651, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1651, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1651, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1652, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1652, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1653, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1653, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1654, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1654, prim-cnt = 5 (R)
@@ -1038,7 +1036,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1657, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1657, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1658, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1658, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1659, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1659, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_166, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_166, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_166, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_166, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_1660, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1660, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1661, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1661, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1662, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1662, prim-cnt = 5 (R)
@@ -1055,7 +1053,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1672, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1672, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1673, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1673, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1674, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1674, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1675, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1675, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1675, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1675, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1676, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1676, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1679, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1679, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_168, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_168, prim-cnt = 5 (R)
@@ -1089,7 +1087,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1704, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1704, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1705, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1705, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1706, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1706, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1707, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1707, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1707, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1707, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1708, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1708, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1709, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1709, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_171, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_171, prim-cnt = 5 (R)
@@ -1101,7 +1099,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1715, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1715, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1716, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1716, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1717, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1717, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1718, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1718, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1718, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1718, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1719, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1719, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_172, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_172, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1720, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1720, prim-cnt = 5 (R)
@@ -1153,12 +1151,12 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_1764, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1764, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1765, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1765, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1767, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1767, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1768, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1768, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_1768, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1768, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_177, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_177, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1770, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1770, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1771, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1771, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1772, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1772, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_1773, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1773, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_1773, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1773, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_1774, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1774, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1775, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1775, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_178, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_178, prim-cnt = 5 (R)
@@ -1170,7 +1168,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_182, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_182, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_183, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_183, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_184, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_184, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_185, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_185, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_185, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_186, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_186, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_187, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_187, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_188, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_188, prim-cnt = 5 (R)
@@ -1185,12 +1183,12 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_196, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_196, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_197, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_197, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_198, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_198, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_199, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_199, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_199, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_199, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_2, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_2, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_20, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_20, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_20, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_20, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_200, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_200, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_201, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_201, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_203, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_203, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_203, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_203, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_204, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_204, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_205, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_205, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_206, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_206, prim-cnt = 5 (R)
@@ -1206,7 +1204,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_215, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_215, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_216, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_216, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_217, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_217, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_218, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_218, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_218, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_219, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_219, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_22, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_22, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_220, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_220, prim-cnt = 5 (R)
@@ -1226,10 +1224,10 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_233, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_233, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_234, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_234, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_235, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_235, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_236, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_236, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_236, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_236, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_237, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_237, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_238, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_238, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_239, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_239, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_239, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_239, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_24, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_24, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_240, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_240, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_241, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_241, prim-cnt = 5 (R)
@@ -1262,19 +1260,19 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_266, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_266, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_267, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_267, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_268, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_268, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_269, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_269, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_269, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_269, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_27, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_27, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_270, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_270, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_271, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_271, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_272, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_272, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_273, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_273, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_273, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_273, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_274, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_274, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_275, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_275, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_276, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_276, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_277, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_277, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_278, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_278, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_279, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_279, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_28, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_28, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_28, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_28, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_280, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_280, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_281, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_281, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_282, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_282, prim-cnt = 5 (R)
@@ -1287,7 +1285,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_289, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_289, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_29, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_29, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_290, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_290, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_291, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_291, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_291, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_291, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_292, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_292, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_293, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_293, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_294, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_294, prim-cnt = 6 (R)
@@ -1302,12 +1300,12 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_301, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_301, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_302, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_302, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_303, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_303, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_304, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_304, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_304, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_304, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_305, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_305, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_306, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_306, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_307, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_307, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_308, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_308, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_309, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_309, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_309, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_309, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_31, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_31, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_310, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_310, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_311, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_311, prim-cnt = 5 (R)
@@ -1344,9 +1342,9 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_341, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_341, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_342, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_342, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_343, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_343, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_344, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_344, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_344, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_344, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_345, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_345, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_346, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_346, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_346, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_346, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_347, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_347, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_348, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_348, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_349, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_349, prim-cnt = 5 (R)
@@ -1360,12 +1358,12 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_356, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_356, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_357, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_357, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_358, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_358, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_359, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_359, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_359, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_359, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_36, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_36, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_360, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_360, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_361, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_361, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_362, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_362, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_363, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_363, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_363, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_363, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_364, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_364, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_365, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_365, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_366, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_366, prim-cnt = 5 (R)
@@ -1383,7 +1381,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_377, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_377, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_378, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_378, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_379, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_379, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_38, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_38, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_38, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_38, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_380, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_380, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_381, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_381, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_382, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_382, prim-cnt = 5 (R)
@@ -1423,14 +1421,14 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_417, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_417, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_418, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_418, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_419, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_419, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_42, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_42, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_42, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_42, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_420, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_420, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_421, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_421, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_421, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_421, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_422, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_422, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_423, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_423, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_424, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_424, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_425, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_425, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_426, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_426, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_425, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_425, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_426, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_426, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_427, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_427, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_428, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_428, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_429, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_429, prim-cnt = 5 (R)
@@ -1454,20 +1452,20 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_445, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_445, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_446, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_446, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_447, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_447, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_448, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_448, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_448, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_448, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_449, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_449, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_45, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_45, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_450, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_450, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_451, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_451, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_452, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_452, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_453, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_453, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_453, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_453, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_454, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_454, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_455, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_455, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_456, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_456, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_457, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_457, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_458, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_458, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_46, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_46, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_460, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_460, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_46, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_46, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_460, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_460, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_461, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_461, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_462, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_462, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_463, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_463, prim-cnt = 5 (R)
@@ -1476,27 +1474,27 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_466, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_466, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_467, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_467, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_468, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_468, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_469, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_469, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_469, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_469, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_47, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_47, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_470, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_470, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_471, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_471, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_472, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_472, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_473, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_473, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_473, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_473, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_474, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_474, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_475, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_475, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_476, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_476, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_477, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_477, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_478, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_478, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_478, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_478, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_479, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_479, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_48, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_48, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_480, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_480, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_480, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_480, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_481, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_481, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_482, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_482, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_483, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_483, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_484, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_484, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_484, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_484, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_485, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_485, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_486, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_486, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_487, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_487, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_487, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_487, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_488, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_488, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_489, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_489, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_49, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_49, prim-cnt = 5 (R)
@@ -1509,15 +1507,15 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_497, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_497, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_498, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_498, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_499, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_499, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_5, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_5, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_5, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_5, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_50, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_50, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_500, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_500, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_501, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_501, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_501, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_501, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_502, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_502, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_503, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_503, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_504, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_504, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_505, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_505, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_506, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_506, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_506, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_506, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_507, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_507, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_508, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_508, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_509, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_509, prim-cnt = 5 (R)
@@ -1602,7 +1600,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_57, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_57, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_570, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_570, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_571, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_571, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_572, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_572, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_572, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_572, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_573, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_573, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_574, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_574, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_575, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_575, prim-cnt = 5 (R)
@@ -1620,7 +1618,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_586, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_586, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_587, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_587, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_588, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_588, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_589, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_589, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_589, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_589, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_59, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_59, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_590, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_590, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_591, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_591, prim-cnt = 5 (R)
@@ -1680,9 +1678,9 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_64, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_64, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_640, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_640, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_641, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_641, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_642, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_642, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_642, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_642, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_643, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_643, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_644, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_644, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_644, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_644, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_645, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_645, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_646, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_646, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_647, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_647, prim-cnt = 5 (R)
@@ -1696,7 +1694,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_654, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_654, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_655, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_655, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_656, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_656, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_657, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_657, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_657, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_657, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_658, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_658, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_659, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_659, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_66, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_66, prim-cnt = 5 (R)
@@ -1708,7 +1706,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_665, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_665, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_666, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_666, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_667, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_667, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_668, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_668, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_668, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_668, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_669, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_669, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_67, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_67, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_670, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_670, prim-cnt = 5 (R)
@@ -1747,10 +1745,10 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_70, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_70, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_700, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_700, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_701, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_701, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_702, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_702, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_702, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_702, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_703, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_703, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_704, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_704, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_705, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_705, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_704, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_704, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_705, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_705, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_706, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_706, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_707, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_707, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_708, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_708, prim-cnt = 5 (R)
@@ -1778,14 +1776,14 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_728, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_728, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_729, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_729, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_73, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_73, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_730, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_730, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_730, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_730, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_731, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_731, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_732, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_732, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_733, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_733, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_734, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_734, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_735, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_735, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_736, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_736, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_737, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_737, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_737, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_737, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_738, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_738, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_739, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_739, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_74, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_74, prim-cnt = 5 (R)
@@ -1794,7 +1792,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_742, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_742, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_743, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_743, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_744, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_744, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_745, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_745, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_745, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_745, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_746, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_746, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_747, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_747, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_748, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_748, prim-cnt = 5 (R)
@@ -1821,7 +1819,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_767, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_767, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_768, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_768, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_769, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_769, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_77, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_77, prim-cnt = 5 (R)
+# cg_icg__RC_CG_MOD_77, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_77, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_770, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_770, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_771, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_771, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_772, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_772, prim-cnt = 5 (R)
@@ -1861,7 +1859,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_802, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_802, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_803, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_803, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_804, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_804, prim-cnt = 5 (R)
-# cg_icg__RC_CG_MOD_805, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_805, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_805, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_805, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_806, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_806, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_807, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_807, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_808, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_808, prim-cnt = 5 (R)
@@ -1872,7 +1870,7 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_812, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_812, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_813, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_813, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_814, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_814, prim-cnt = 6 (R)
-# cg_icg__RC_CG_MOD_815, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_815, prim-cnt = 6 (R)
+# cg_icg__RC_CG_MOD_815, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_815, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_816, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_816, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_817, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_817, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_818, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_818, prim-cnt = 5 (R)
@@ -2068,40 +2066,38 @@ Unreachable       1634   5759      7393
 # cg_icg__RC_CG_MOD_997, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_997, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_998, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_998, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_999, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_999, prim-cnt = 5 (R)
-# clock_gate, prim-cnt = 3 (G) and clock_gate, prim-cnt = 8 (R)
-# clock_gate_1, prim-cnt = 3 (G) and clock_gate_1, prim-cnt = 9 (R)
+# clock_gate, prim-cnt = 3 (G) and clock_gate, prim-cnt = 6 (R)
+# clock_gate_1, prim-cnt = 3 (G) and clock_gate_1, prim-cnt = 7 (R)
 # clock_gate_10, prim-cnt = 3 (G) and clock_gate_10, prim-cnt = 5 (R)
-# clock_gate_11, prim-cnt = 3 (G) and clock_gate_11, prim-cnt = 7 (R)
+# clock_gate_11, prim-cnt = 3 (G) and clock_gate_11, prim-cnt = 6 (R)
 # clock_gate_2, prim-cnt = 3 (G) and clock_gate_2, prim-cnt = 7 (R)
-# clock_gate_3, prim-cnt = 3 (G) and clock_gate_3, prim-cnt = 7 (R)
+# clock_gate_3, prim-cnt = 3 (G) and clock_gate_3, prim-cnt = 6 (R)
 # clock_gate_4, prim-cnt = 3 (G) and clock_gate_4, prim-cnt = 7 (R)
 # clock_gate_5, prim-cnt = 3 (G) and clock_gate_5, prim-cnt = 8 (R)
-# clock_gate_6, prim-cnt = 3 (G) and clock_gate_6, prim-cnt = 6 (R)
-# clock_gate_7, prim-cnt = 3 (G) and clock_gate_7, prim-cnt = 7 (R)
-# clock_gate_8, prim-cnt = 3 (G) and clock_gate_8, prim-cnt = 6 (R)
-# clock_gate_9, prim-cnt = 3 (G) and clock_gate_9, prim-cnt = 8 (R)
+# clock_gate_6, prim-cnt = 3 (G) and clock_gate_6, prim-cnt = 7 (R)
+# clock_gate_7, prim-cnt = 3 (G) and clock_gate_7, prim-cnt = 6 (R)
+# clock_gate_8, prim-cnt = 3 (G) and clock_gate_8, prim-cnt = 7 (R)
+# clock_gate_9, prim-cnt = 3 (G) and clock_gate_9, prim-cnt = 6 (R)
 # The following module pairs are not written because of mismatched ports:
-# Module Pair: pipeline_control_unit (G) and pipeline_control_unit (R)
-# Cause for mismatched ports is pin unreachables
-# OUT (G) stall_ID (REP)  =    (R) stall_ID UZ (KP<--)(REP) 
+# Module Pair: riscv_pipeline (G) and riscv_pipeline (R)
+# Cause for mismatched ports is extra ports
+# OUT (G) dcache_addr[21]  (KP<--)(REP)  =    (R) dcache_addr[21] UZ (KP<--)(REP) 
+# OUT (G) dcache_addr[15]  (KP<--)(REP)  =    (R) dcache_addr[15] UZ (KP<--)(REP) 
+# OUT (R) FE_OFN673_n  (KP<--)(REP) 
+# OUT (R) FE_OFN675_n  (KP<--)(REP) 
 # Module Pair: sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_2 (G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_2 (R)
 # Cause for mismatched ports is extra ports
 # IN (R) n_24300 (REP) 
-# Module Pair: sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 (G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 (R)
-# Cause for mismatched ports is extra ports
-# IN (R) n_23043 (REP) 
 # Module Pair: axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff8000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_DSP_RDATA_DEPTH2_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0 (G) and axi_interconnect_MST_AMT4_SLV_AMT7_OUTSTANDING_AMT4_MST_WEIGHTx00000005000000040000000300000001_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_SLV_BASE_ADDRx20020000020000004000000080000000300000002000000000010000_SLV_ADDR_MASKxfffe0000ffff0000f8000000fc000000ff000000fffe0000ffff8000_SLV_W_FIFO_DEPTHx00000008000000020000000200000008000000020000000800000002_DSP_RDATA_DEPTH2_AXI_SIDEBAND_EN0_AXI_LOCK_CONST0_AXI_CACHE_CONST3_AXI_QOS_CONST0_AXI_REGION_CONST0 (R)
 # Cause for mismatched ports is extra ports
 # IN (R) n_23095 (REP) 
-# IN (R) n_23043 (REP) 
 # IN (R) n_24300 (REP) 
 2 modules are not written because they have been added as black box
 1639 module pairs are not written because of primitive instances less than 50
 // Note: Use the option '-threshold' to allow writing out modules with primitive instances less than 50
-4 module pairs are not written because of mismatched ports
+3 module pairs are not written because of mismatched ports
   3 modules have extra ports
-  1 modules have mismatched pin unreachables
-46 module pairs are written for hierarchical comparison
+47 module pairs are written for hierarchical comparison
 // Command: report mapped point -summary -method
 ================================================================================
 Mapped points: SYSTEM class
@@ -2117,9 +2113,9 @@ Mapping method    PI     PO     DFF    DLAT   BBOX   Total
 --------------------------------------------------------------------------------
 Name              59     115    34054  1      85     34314 
 ================================================================================
-CPU time     : 40.83   seconds
-Elapse time  : 42      seconds
-Memory usage : 831.98  M bytes
+CPU time     : 39.61   seconds
+Elapse time  : 41      seconds
+Memory usage : 825.10  M bytes
 // Command: report unmapped point -summary
 ================================================================================
 Golden:
@@ -2132,16 +2128,16 @@ Revised:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT   Z         Total   
 --------------------------------------------------------------------------------
-Unreachable       1634   5759      7393    
+Unreachable       1634   5762      7396    
 ================================================================================
 // Running Module dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 and dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4
 // Command: set_root_module dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 -Golden
 // Warning: There are 44 undriven nets in Golden
 // Warning: There are 44 undriven pins in Golden
 0
-CPU time     : 41.12   seconds
-Elapse time  : 43      seconds
-Memory usage : 832.44  M bytes
+CPU time     : 39.88   seconds
+Elapse time  : 41      seconds
+Memory usage : 825.55  M bytes
 // Command: set_root_module dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 -Revised
 // Warning: There are 44 undriven nets in Revised
 // Warning: There are 44 undriven pins in Revised
@@ -2154,7 +2150,7 @@ Memory usage : 832.44  M bytes
 0
 // Applying constraints to module boundaries ...
 // 71 Golden and 71 Revised pins marked as unreachable
-// 0 Golden and 60 Revised pin equivalences applied
+// 0 Golden and 59 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -2162,9 +2158,9 @@ Memory usage : 832.44  M bytes
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 3114 gated-clock DFF/DLAT(s)
-CPU time     : 41.63   seconds
-Elapse time  : 43      seconds
-Memory usage : 832.44  M bytes
+CPU time     : 40.40   seconds
+Elapse time  : 42      seconds
+Memory usage : 825.55  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2189,17 +2185,17 @@ Unmapped points   DLAT      Total
 --------------------------------------------------------------------------------
 Unreachable       142       142     
 ================================================================================
-CPU time     : 42.00   seconds
-Elapse time  : 44      seconds
-Memory usage : 832.44  M bytes
+CPU time     : 40.74   seconds
+Elapse time  : 42      seconds
+Memory usage : 825.55  M bytes
 // Running automatic setup...
 // Remodeled 104 DLAT/DFF for inserting sequential redundancy.
 // Remodeled 52 DLAT/DFF (G) and 52 DLAT/DFF (R) for removing sequential redundancy.
 // Automatic setup finished.
 0
-CPU time     : 91.63   seconds
-Elapse time  : 93      seconds
-Memory usage : 834.39  M bytes
+CPU time     : 87.99   seconds
+Elapse time  : 89      seconds
+Memory usage : 827.03  M bytes
 // Command: add_compared_points -all
 // 3346 compared points added to compare list
 0
@@ -2214,60 +2210,52 @@ Non-equivalent       0      1         1
 --------------------------------------------------------------------------------
 Not-compared         0      3192      3192    
 ================================================================================
-CPU time     : 91.74   seconds
-Elapse time  : 93      seconds
-Memory usage : 834.53  M bytes
+CPU time     : 88.10   seconds
+Elapse time  : 89      seconds
+Memory usage : 827.03  M bytes
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 91.77   seconds
-Memory usage : 834.68  M bytes
+CPU time     : 88.13   seconds
+Memory usage : 827.16  M bytes
 0
 // Modules 'dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4(G) and dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 1 out of 46 module pairs	EQ: 0	NEQ: 1	ABORT: 0
-// Running Module riscv_pipeline and riscv_pipeline
-// Command: set_root_module riscv_pipeline -Golden
-// Warning: There are 46 undriven nets in Golden
-// Warning: There are 46 undriven pins in Golden
+Processed 1 out of 47 module pairs	EQ: 0	NEQ: 1	ABORT: 0
+// Running Module pipeline_control_unit and pipeline_control_unit
+// Command: set_root_module pipeline_control_unit -Golden
+// Warning: There are 6 undriven nets in Golden
+// Warning: There are 6 undriven pins in Golden
 0
-// Command: set_root_module riscv_pipeline -Revised
-// Warning: There are 49 undriven nets in Revised
-// Warning: There are 49 undriven pins in Revised
+// Command: set_root_module pipeline_control_unit -Revised
+// Warning: There are 6 undriven nets in Revised
+// Warning: There are 6 undriven pins in Revised
 0
-// Command: set_module_property -instance /u_core -Golden
+// Command: set_module_property -instance /u_core/PCU -Golden
 0
-// Command: set_module_property -instance /u_core -Revised
+// Command: set_module_property -instance /u_core/PCU -Revised
 0
 // Command: report_black_box -NOHidden
 0
-CPU time     : 91.92   seconds
-Elapse time  : 94      seconds
-Memory usage : 834.68  M bytes
 // Applying constraints to module boundaries ...
-// 83 Golden and 103 Revised pins marked as unreachable
-// 0 Golden and 78 Revised pin equivalences applied
+// 18 Golden and 20 Revised pins marked as unreachable
+// 0 Golden and 7 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
-// (F14) Remodeled 4193 gated-clock DFF/DLAT(s)
-// (F28) Converted 6 internal output port(s) to inout port(s)
+// (F14) Remodeled 4 gated-clock DFF/DLAT(s)
 // Processing Revised ...
 // Modeling Revised ...
-// (F14) Remodeled 4193 gated-clock DFF/DLAT(s)
-// (F28) Converted 7 internal output port(s) to inout port(s)
-CPU time     : 92.89   seconds
-Elapse time  : 95      seconds
-Memory usage : 834.68  M bytes
+// (F14) Remodeled 4 gated-clock DFF/DLAT(s)
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
 --------------------------------------------------------------------------------
 Mapped points     PI     PO     DFF       Total   
 --------------------------------------------------------------------------------
-Golden            225    139    4212      4576    
+Golden            53     6      7         66      
 --------------------------------------------------------------------------------
-Revised           225    139    4212      4576    
+Revised           53     6      7         66      
 ================================================================================
 Unmapped points:
 ================================================================================
@@ -2275,46 +2263,40 @@ Golden:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT      Total   
 --------------------------------------------------------------------------------
-Unreachable       103       103     
+Unreachable       1         1       
 ================================================================================
 Revised:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT      Total   
 --------------------------------------------------------------------------------
-Unreachable       103       103     
+Unreachable       1         1       
 ================================================================================
-CPU time     : 93.35   seconds
-Elapse time  : 95      seconds
-Memory usage : 834.68  M bytes
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 106.52  seconds
-Elapse time  : 108     seconds
-Memory usage : 834.68  M bytes
 // Command: add_compared_points -all
-// 4351 compared points added to compare list
+// 13 compared points added to compare list
 0
 // Command: compare -noneq_stop 1   
 // Compare will stop on the 1st non-equivalent point
 ================================================================================
 Compared points      PO     DFF       Total   
 --------------------------------------------------------------------------------
-Equivalent           136    4178      4314    
+Equivalent           5      0         5       
 --------------------------------------------------------------------------------
-Non-equivalent       1      0         1       
+Non-equivalent       0      1         1       
 --------------------------------------------------------------------------------
-Not-compared         2      34        36      
+Not-compared         1      6         7       
 ================================================================================
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 106.61  seconds
-Memory usage : 834.68  M bytes
+CPU time     : 88.18   seconds
+Memory usage : 827.16  M bytes
 0
-// Modules 'riscv_pipeline(G) and riscv_pipeline(R)' will not be blackboxed,
+// Modules 'pipeline_control_unit(G) and pipeline_control_unit(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 2 out of 46 module pairs	EQ: 0	NEQ: 2	ABORT: 0
+Processed 2 out of 47 module pairs	EQ: 0	NEQ: 2	ABORT: 0
 // Running Module rv_debug_module_sba and rv_debug_module_sba
 // Command: set_root_module rv_debug_module_sba -Golden
 // Warning: There are 3 undriven nets in Golden
@@ -2332,7 +2314,7 @@ Processed 2 out of 46 module pairs	EQ: 0	NEQ: 2	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 3 Golden and 4 Revised pins marked as unreachable
-// 0 Golden and 4 Revised pin equivalences applied
+// 0 Golden and 6 Revised pin equivalences applied
 // 1 pin bindings applied
 // 0 Golden and 2 Revised renaming rules applied
 // Command: set_system_mode lec
@@ -2384,12 +2366,12 @@ Non-equivalent       0      1         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 106.78  seconds
-Memory usage : 834.93  M bytes
+CPU time     : 88.34   seconds
+Memory usage : 827.30  M bytes
 0
 // Modules 'rv_debug_module_sba(G) and rv_debug_module_sba(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 3 out of 46 module pairs	EQ: 0	NEQ: 3	ABORT: 0
+Processed 3 out of 47 module pairs	EQ: 0	NEQ: 3	ABORT: 0
 // Running Module rv_jtag_dtm and rv_jtag_dtm
 // Command: set_root_module rv_jtag_dtm -Golden
 0
@@ -2458,10 +2440,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box rv_jtag_dtm -module -hier -Revised
 0
 // Command: usage
-CPU time     : 106.84  seconds
-Memory usage : 835.07  M bytes
+CPU time     : 88.42   seconds
+Memory usage : 827.62  M bytes
 0
-Processed 4 out of 46 module pairs	EQ: 1	NEQ: 3	ABORT: 0
+Processed 4 out of 47 module pairs	EQ: 1	NEQ: 3	ABORT: 0
 // Running Module apb_syscon and apb_syscon
 // Command: set_root_module apb_syscon -Golden
 0
@@ -2474,7 +2456,7 @@ Processed 4 out of 46 module pairs	EQ: 1	NEQ: 3	ABORT: 0
 // Command: report_black_box -NOHidden
 0
 // Applying constraints to module boundaries ...
-// 0 Golden and 51 Revised pin equivalences applied
+// 0 Golden and 49 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -2517,21 +2499,21 @@ Unreachable       5         5
 ================================================================================
 Compared points      PO     DFF       Total   
 --------------------------------------------------------------------------------
-Equivalent           79     93        172     
+Equivalent           79     92        171     
 --------------------------------------------------------------------------------
 Non-equivalent       0      1         1       
 --------------------------------------------------------------------------------
-Not-compared         0      4         4       
+Not-compared         0      5         5       
 ================================================================================
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 106.89  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 88.49   seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'apb_syscon(G) and apb_syscon(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 5 out of 46 module pairs	EQ: 1	NEQ: 4	ABORT: 0
+Processed 5 out of 47 module pairs	EQ: 1	NEQ: 4	ABORT: 0
 // Running Module apb_gpio and apb_gpio
 // Command: set_root_module apb_gpio -Golden
 0
@@ -2544,7 +2526,7 @@ Processed 5 out of 46 module pairs	EQ: 1	NEQ: 4	ABORT: 0
 // Command: report_black_box -NOHidden
 0
 // Applying constraints to module boundaries ...
-// 0 Golden and 89 Revised pin equivalences applied
+// 0 Golden and 75 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -2587,21 +2569,21 @@ Unreachable       7         7
 ================================================================================
 Compared points      PO     DFF       Total   
 --------------------------------------------------------------------------------
-Equivalent           94     345       439     
+Equivalent           94     331       425     
 --------------------------------------------------------------------------------
 Non-equivalent       0      1         1       
 --------------------------------------------------------------------------------
-Not-compared         5      8         13      
+Not-compared         5      22        27      
 ================================================================================
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 107.06  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 88.66   seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'apb_gpio(G) and apb_gpio(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 6 out of 46 module pairs	EQ: 1	NEQ: 5	ABORT: 0
+Processed 6 out of 47 module pairs	EQ: 1	NEQ: 5	ABORT: 0
 // Running Module clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 and clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864
 // Command: set_root_module clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 -Golden
 // Warning: There are 25 undriven nets in Golden
@@ -2619,7 +2601,7 @@ Processed 6 out of 46 module pairs	EQ: 1	NEQ: 5	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 70 Golden and 70 Revised pins marked as unreachable
-// 0 Golden and 39 Revised pin equivalences applied
+// 0 Golden and 29 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -2627,9 +2609,9 @@ Processed 6 out of 46 module pairs	EQ: 1	NEQ: 5	ABORT: 0
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 236 gated-clock DFF/DLAT(s)
-CPU time     : 107.22  seconds
-Elapse time  : 109     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 88.82   seconds
+Elapse time  : 90      seconds
+Memory usage : 827.80  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2657,9 +2639,9 @@ Unreachable       35        35
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 107.94  seconds
-Elapse time  : 110     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 89.51   seconds
+Elapse time  : 91      seconds
+Memory usage : 827.80  M bytes
 // Command: add_compared_points -all
 // 336 compared points added to compare list
 0
@@ -2677,12 +2659,12 @@ Not-compared         0      311       311
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 107.97  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 89.53   seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864(G) and clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 7 out of 46 module pairs	EQ: 1	NEQ: 6	ABORT: 0
+Processed 7 out of 47 module pairs	EQ: 1	NEQ: 6	ABORT: 0
 // Running Module ascon_core and ascon_core
 // Command: set_root_module ascon_core -Golden
 0
@@ -2695,7 +2677,8 @@ Processed 7 out of 46 module pairs	EQ: 1	NEQ: 6	ABORT: 0
 // Command: report_black_box -NOHidden
 0
 // Applying constraints to module boundaries ...
-// 0 Golden and 83 Revised pin equivalences applied
+// 0 Golden and 3 Revised pins marked as unreachable
+// 0 Golden and 82 Revised pin equivalences applied
 // 1 pin bindings applied
 // 0 Golden and 2 Revised renaming rules applied
 // Command: set_system_mode lec
@@ -2705,9 +2688,12 @@ Processed 7 out of 46 module pairs	EQ: 1	NEQ: 6	ABORT: 0
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 713 gated-clock DFF/DLAT(s)
-CPU time     : 108.13  seconds
-Elapse time  : 110     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 89.69   seconds
+Elapse time  : 91      seconds
+Memory usage : 827.80  M bytes
+// Warning: Golden and Revised have different numbers of key points:
+// Golden  key points = 1508
+// Revised key points = 1509
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2728,16 +2714,17 @@ Unreachable       11        11
 ================================================================================
 Revised:
 --------------------------------------------------------------------------------
-Unmapped points   DLAT      Total   
+Unmapped points   PI     DLAT      Total   
 --------------------------------------------------------------------------------
-Unreachable       11        11      
+Extra             1      0         1       
+Unreachable       0      11        11      
 ================================================================================
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 108.52  seconds
-Elapse time  : 110     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 90.06   seconds
+Elapse time  : 91      seconds
+Memory usage : 827.80  M bytes
 // Command: add_compared_points -all
 // 1169 compared points added to compare list
 0
@@ -2759,10 +2746,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box ascon_core -module -hier -Revised
 0
 // Command: usage
-CPU time     : 108.54  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 90.08   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 8 out of 46 module pairs	EQ: 2	NEQ: 6	ABORT: 0
+Processed 8 out of 47 module pairs	EQ: 2	NEQ: 6	ABORT: 0
 // Running Module apb_watchdog and apb_watchdog
 // Command: set_root_module apb_watchdog -Golden
 0
@@ -2775,8 +2762,8 @@ Processed 8 out of 46 module pairs	EQ: 2	NEQ: 6	ABORT: 0
 // Command: report_black_box -NOHidden
 0
 // Applying constraints to module boundaries ...
-// 4 Golden and 4 Revised pins marked as unreachable
-// 0 Golden and 40 Revised pin equivalences applied
+// 4 Golden and 5 Revised pins marked as unreachable
+// 0 Golden and 41 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -2784,6 +2771,9 @@ Processed 8 out of 46 module pairs	EQ: 2	NEQ: 6	ABORT: 0
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 99 gated-clock DFF/DLAT(s)
+// Warning: Golden and Revised have different numbers of key points:
+// Golden  key points = 198
+// Revised key points = 199
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -2804,9 +2794,10 @@ Unreachable       4         4
 ================================================================================
 Revised:
 --------------------------------------------------------------------------------
-Unmapped points   DLAT      Total   
+Unmapped points   PI     DLAT      Total   
 --------------------------------------------------------------------------------
-Unreachable       4         4       
+Extra             1      0         1       
+Unreachable       0      4         4       
 ================================================================================
 // Running automatic setup...
 // Automatic setup finished.
@@ -2819,21 +2810,21 @@ Unreachable       4         4
 ================================================================================
 Compared points      PO     DFF       Total   
 --------------------------------------------------------------------------------
-Equivalent           36     93        129     
+Equivalent           36     94        130     
 --------------------------------------------------------------------------------
 Non-equivalent       0      1         1       
 --------------------------------------------------------------------------------
-Not-compared         0      10        10      
+Not-compared         0      9         9       
 ================================================================================
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 108.60  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 90.16   seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'apb_watchdog(G) and apb_watchdog(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 9 out of 46 module pairs	EQ: 2	NEQ: 7	ABORT: 0
+Processed 9 out of 47 module pairs	EQ: 2	NEQ: 7	ABORT: 0
 // Running Module apb_i2c and apb_i2c
 // Command: set_root_module apb_i2c -Golden
 // Warning: There are 18 undriven nets in Golden
@@ -2851,7 +2842,7 @@ Processed 9 out of 46 module pairs	EQ: 2	NEQ: 7	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 39 Golden and 39 Revised pins marked as unreachable
-// 0 Golden and 34 Revised pin equivalences applied
+// 0 Golden and 29 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -2903,12 +2894,12 @@ Not-compared         0      7         7
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 108.76  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 90.33   seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'apb_i2c(G) and apb_i2c(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 10 out of 46 module pairs	EQ: 2	NEQ: 8	ABORT: 0
+Processed 10 out of 47 module pairs	EQ: 2	NEQ: 8	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2
 // Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 -Golden
 // Warning: There are 25 undriven nets in Golden
@@ -2926,7 +2917,7 @@ Processed 10 out of 46 module pairs	EQ: 2	NEQ: 8	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 28 Golden and 28 Revised pins marked as unreachable
-// 0 Golden and 5 Revised pin equivalences applied
+// 0 Golden and 2 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -2982,10 +2973,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 108.80  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 90.37   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 11 out of 46 module pairs	EQ: 3	NEQ: 8	ABORT: 0
+Processed 11 out of 47 module pairs	EQ: 3	NEQ: 8	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5
 // Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 -Golden
 // Warning: There are 128 undriven nets in Golden
@@ -3003,7 +2994,7 @@ Processed 11 out of 46 module pairs	EQ: 3	NEQ: 8	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 135 Golden and 136 Revised pins marked as unreachable
-// 0 Golden and 17 Revised pin equivalences applied
+// 0 Golden and 20 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -3059,10 +3050,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 108.95  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 90.54   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 12 out of 46 module pairs	EQ: 4	NEQ: 8	ABORT: 0
+Processed 12 out of 47 module pairs	EQ: 4	NEQ: 8	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3
 // Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 -Golden
 0
@@ -3076,7 +3067,7 @@ Processed 12 out of 46 module pairs	EQ: 4	NEQ: 8	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 129 Golden and 129 Revised pins marked as unreachable
-// 0 Golden and 2 Revised pin equivalences applied
+// 0 Golden and 3 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -3126,12 +3117,12 @@ Non-equivalent       1      0         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 108.99  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 90.59   seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3(G) and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 13 out of 46 module pairs	EQ: 4	NEQ: 9	ABORT: 0
+Processed 13 out of 47 module pairs	EQ: 4	NEQ: 9	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1
 // Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 -Golden
 // Warning: There are 25 undriven nets in Golden
@@ -3205,10 +3196,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.04  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 90.63   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 14 out of 46 module pairs	EQ: 5	NEQ: 9	ABORT: 0
+Processed 14 out of 47 module pairs	EQ: 5	NEQ: 9	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1
 // Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 -Golden
 // Warning: There are 124 undriven nets in Golden
@@ -3226,7 +3217,7 @@ Processed 14 out of 46 module pairs	EQ: 5	NEQ: 9	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 127 Golden and 127 Revised pins marked as unreachable
-// 0 Golden and 14 Revised pin equivalences applied
+// 0 Golden and 11 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -3259,8 +3250,13 @@ Unmapped points   DLAT      Total
 Unreachable       21        21      
 ================================================================================
 // Running automatic setup...
+// Remodeled 268 DLAT/DFF for inserting sequential redundancy.
+// Remodeled 134 DLAT/DFF (G) and 134 DLAT/DFF (R) for removing sequential redundancy.
 // Automatic setup finished.
 0
+CPU time     : 92.70   seconds
+Elapse time  : 94      seconds
+Memory usage : 827.80  M bytes
 // Command: add_compared_points -all
 // 337 compared points added to compare list
 0
@@ -3269,23 +3265,21 @@ Unreachable       21        21
 ================================================================================
 Compared points      PO     DFF       Total   
 --------------------------------------------------------------------------------
-Equivalent           42     295       337     
+Equivalent           42     0         42      
+--------------------------------------------------------------------------------
+Non-equivalent       0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         0      294       294     
 ================================================================================
-// Command: analyze abort -compare
-There is no abort/specified point to be analyzed.
-// Command: save_hier_compare_result
-0
 // Command: set_system_mode setup
 0
-// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 -module -hier -Golden
-0
-// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 -module -hier -Revised
-0
 // Command: usage
-CPU time     : 109.20  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 92.71   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 15 out of 46 module pairs	EQ: 6	NEQ: 9	ABORT: 0
+// Modules 'sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1(G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 15 out of 47 module pairs	EQ: 5	NEQ: 10	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5
 // Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 -Golden
 0
@@ -3299,7 +3293,7 @@ Processed 15 out of 46 module pairs	EQ: 6	NEQ: 9	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 129 Golden and 130 Revised pins marked as unreachable
-// 0 Golden and 4 Revised pin equivalences applied
+// 0 Golden and 2 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -3355,10 +3349,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.24  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 92.75   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 16 out of 46 module pairs	EQ: 7	NEQ: 9	ABORT: 0
+Processed 16 out of 47 module pairs	EQ: 6	NEQ: 10	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2
 // Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 -Golden
 // Warning: There are 25 undriven nets in Golden
@@ -3376,7 +3370,7 @@ Processed 16 out of 46 module pairs	EQ: 7	NEQ: 9	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 28 Golden and 28 Revised pins marked as unreachable
-// 0 Golden and 4 Revised pin equivalences applied
+// 0 Golden and 5 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -3432,10 +3426,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.28  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 92.79   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 17 out of 46 module pairs	EQ: 8	NEQ: 9	ABORT: 0
+Processed 17 out of 47 module pairs	EQ: 7	NEQ: 10	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7
 // Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 -Golden
 0
@@ -3505,10 +3499,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.32  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 92.83   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 18 out of 46 module pairs	EQ: 9	NEQ: 9	ABORT: 0
+Processed 18 out of 47 module pairs	EQ: 8	NEQ: 10	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3
 // Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 -Golden
 // Warning: There are 26 undriven nets in Golden
@@ -3582,10 +3576,87 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.36  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 92.87   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 19 out of 46 module pairs	EQ: 10	NEQ: 9	ABORT: 0
+Processed 19 out of 47 module pairs	EQ: 9	NEQ: 10	ABORT: 0
+// Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 -Golden
+// Warning: There are 125 undriven nets in Golden
+// Warning: There are 125 undriven pins in Golden
+0
+// Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 -Revised
+// Warning: There are 125 undriven nets in Revised
+// Warning: There are 125 undriven pins in Revised
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_R_channel} -Golden
+0
+// Command: set_module_property -instance {/u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_R_channel} -Revised
+0
+// Command: report_black_box -NOHidden
+0
+// Applying constraints to module boundaries ...
+// 129 Golden and 130 Revised pins marked as unreachable
+// 0 Golden and 23 Revised pin equivalences applied
+// Command: set_system_mode lec
+// Processing Golden ...
+// Modeling Golden ...
+// (F14) Remodeled 285 gated-clock DFF/DLAT(s)
+// Processing Revised ...
+// Modeling Revised ...
+// (F14) Remodeled 285 gated-clock DFF/DLAT(s)
+// Mapping key points ...
+================================================================================
+Mapped points: SYSTEM class
+--------------------------------------------------------------------------------
+Mapped points     PI     PO     DFF       Total   
+--------------------------------------------------------------------------------
+Golden            58     41     291       390     
+--------------------------------------------------------------------------------
+Revised           58     41     291       390     
+================================================================================
+Unmapped points:
+================================================================================
+Golden:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+Revised:
+--------------------------------------------------------------------------------
+Unmapped points   DLAT      Total   
+--------------------------------------------------------------------------------
+Unreachable       21        21      
+================================================================================
+// Running automatic setup...
+// Automatic setup finished.
+0
+// Command: add_compared_points -all
+// 332 compared points added to compare list
+0
+// Command: compare -noneq_stop 1   
+// Compare will stop on the 1st non-equivalent point
+================================================================================
+Compared points      PO     DFF       Total   
+--------------------------------------------------------------------------------
+Equivalent           41     291       332     
+================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
+// Command: set_system_mode setup
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 -module -hier -Golden
+0
+// Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 93.03   seconds
+Memory usage : 827.80  M bytes
+0
+Processed 20 out of 47 module pairs	EQ: 10	NEQ: 10	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9
 // Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 -Golden
 0
@@ -3655,10 +3726,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.40  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.06   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 20 out of 46 module pairs	EQ: 11	NEQ: 9	ABORT: 0
+Processed 21 out of 47 module pairs	EQ: 11	NEQ: 10	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8
 // Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 -Golden
 // Warning: There are 1 undriven nets in Golden
@@ -3676,7 +3747,7 @@ Processed 20 out of 46 module pairs	EQ: 11	NEQ: 9	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 131 Golden and 131 Revised pins marked as unreachable
-// 0 Golden and 1 Revised pin equivalences applied
+// 0 Golden and 2 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -3732,10 +3803,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.44  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.10   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 21 out of 46 module pairs	EQ: 12	NEQ: 9	ABORT: 0
+Processed 22 out of 47 module pairs	EQ: 12	NEQ: 10	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4
 // Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 -Golden
 // Warning: There are 25 undriven nets in Golden
@@ -3753,7 +3824,7 @@ Processed 21 out of 46 module pairs	EQ: 12	NEQ: 9	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 28 Golden and 28 Revised pins marked as unreachable
-// 0 Golden and 3 Revised pin equivalences applied
+// 0 Golden and 4 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -3809,10 +3880,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.48  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.14   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 22 out of 46 module pairs	EQ: 13	NEQ: 9	ABORT: 0
+Processed 23 out of 47 module pairs	EQ: 13	NEQ: 10	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4
 // Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 -Golden
 // Warning: There are 124 undriven nets in Golden
@@ -3886,10 +3957,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.64  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.29   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 23 out of 46 module pairs	EQ: 14	NEQ: 9	ABORT: 0
+Processed 24 out of 47 module pairs	EQ: 14	NEQ: 10	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11
 // Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 -Golden
 0
@@ -3903,7 +3974,7 @@ Processed 23 out of 46 module pairs	EQ: 14	NEQ: 9	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 129 Golden and 130 Revised pins marked as unreachable
-// 0 Golden and 3 Revised pin equivalences applied
+// 0 Golden and 2 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -3959,10 +4030,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.68  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.33   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 24 out of 46 module pairs	EQ: 15	NEQ: 9	ABORT: 0
+Processed 25 out of 47 module pairs	EQ: 15	NEQ: 10	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10
 // Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 -Golden
 // Warning: There are 1 undriven nets in Golden
@@ -4030,12 +4101,12 @@ Non-equivalent       1      0         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 109.74  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.37   seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10(G) and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 25 out of 46 module pairs	EQ: 15	NEQ: 10	ABORT: 0
+Processed 26 out of 47 module pairs	EQ: 15	NEQ: 11	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5
 // Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 -Golden
 // Warning: There are 25 undriven nets in Golden
@@ -4109,10 +4180,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.78  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.41   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 26 out of 46 module pairs	EQ: 16	NEQ: 10	ABORT: 0
+Processed 27 out of 47 module pairs	EQ: 16	NEQ: 11	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5
 // Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 -Golden
 // Warning: There are 124 undriven nets in Golden
@@ -4130,7 +4201,7 @@ Processed 26 out of 46 module pairs	EQ: 16	NEQ: 10	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 127 Golden and 127 Revised pins marked as unreachable
-// 0 Golden and 18 Revised pin equivalences applied
+// 0 Golden and 13 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4186,10 +4257,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 109.95  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.56   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 27 out of 46 module pairs	EQ: 17	NEQ: 10	ABORT: 0
+Processed 28 out of 47 module pairs	EQ: 17	NEQ: 11	ABORT: 0
 // Running Module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13
 // Command: set_root_module arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 -Golden
 0
@@ -4253,12 +4324,12 @@ Non-equivalent       1      0         1
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 110.00  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.61   seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13(G) and arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 28 out of 46 module pairs	EQ: 17	NEQ: 11	ABORT: 0
+Processed 29 out of 47 module pairs	EQ: 17	NEQ: 12	ABORT: 0
 // Running Module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 and sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6
 // Command: set_root_module sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 -Golden
 // Warning: There are 25 undriven nets in Golden
@@ -4276,7 +4347,7 @@ Processed 28 out of 46 module pairs	EQ: 17	NEQ: 11	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 28 Golden and 28 Revised pins marked as unreachable
-// 0 Golden and 5 Revised pin equivalences applied
+// 0 Golden and 3 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4332,10 +4403,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 110.04  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 93.65   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 29 out of 46 module pairs	EQ: 18	NEQ: 11	ABORT: 0
+Processed 30 out of 47 module pairs	EQ: 18	NEQ: 12	ABORT: 0
 // Running Module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6
 // Command: set_root_module sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 -Golden
 // Warning: There are 124 undriven nets in Golden
@@ -4353,7 +4424,7 @@ Processed 29 out of 46 module pairs	EQ: 18	NEQ: 11	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 127 Golden and 127 Revised pins marked as unreachable
-// 0 Golden and 5 Revised pin equivalences applied
+// 0 Golden and 4 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4390,9 +4461,9 @@ Unreachable       21        21
 // Remodeled 134 DLAT/DFF (G) and 134 DLAT/DFF (R) for removing sequential redundancy.
 // Automatic setup finished.
 0
-CPU time     : 111.46  seconds
-Elapse time  : 113     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 95.07   seconds
+Elapse time  : 96      seconds
+Memory usage : 827.80  M bytes
 // Command: add_compared_points -all
 // 337 compared points added to compare list
 0
@@ -4401,21 +4472,21 @@ Memory usage : 835.20  M bytes
 ================================================================================
 Compared points      PO     DFF       Total   
 --------------------------------------------------------------------------------
-Equivalent           41     0         41      
+Equivalent           42     0         42      
 --------------------------------------------------------------------------------
 Non-equivalent       0      1         1       
 --------------------------------------------------------------------------------
-Not-compared         1      294       295     
+Not-compared         0      294       294     
 ================================================================================
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 111.47  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 95.08   seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6(G) and sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 30 out of 46 module pairs	EQ: 18	NEQ: 12	ABORT: 0
+Processed 31 out of 47 module pairs	EQ: 18	NEQ: 13	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W11_DATA_W32_2 and asap7_sram_1rw_ADDR_W11_DATA_W32_2
 // Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_2 -Golden
 // Warning: Total black box modules referenced in Golden = 1
@@ -4432,7 +4503,7 @@ SYSTEM: (G R) srambank_256x4x32_6t122
 0
 // Applying constraints to module boundaries ...
 // 0 Golden and 1 Revised pins marked as unreachable
-// 0 Golden and 3 Revised pin equivalences applied
+// 0 Golden and 6 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4459,23 +4530,21 @@ Revised           46     32     1      2         81
 ================================================================================
 Compared points      PO     DFF    BBOX      Total   
 --------------------------------------------------------------------------------
-Equivalent           32     1      2         35      
+Equivalent           32     1      0         33      
+--------------------------------------------------------------------------------
+Non-equivalent       0      0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         0      0      1         1       
 ================================================================================
-// Command: analyze abort -compare
-There is no abort/specified point to be analyzed.
-// Command: save_hier_compare_result
-0
 // Command: set_system_mode setup
 0
-// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_2 -module -hier -Golden
-0
-// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_2 -module -hier -Revised
-0
 // Command: usage
-CPU time     : 111.51  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 95.13   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 31 out of 46 module pairs	EQ: 19	NEQ: 12	ABORT: 0
+// Modules 'asap7_sram_1rw_ADDR_W11_DATA_W32_2(G) and asap7_sram_1rw_ADDR_W11_DATA_W32_2(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 32 out of 47 module pairs	EQ: 18	NEQ: 14	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W11_DATA_W32_3 and asap7_sram_1rw_ADDR_W11_DATA_W32_3
 // Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_3 -Golden
 // Warning: Total black box modules referenced in Golden = 1
@@ -4491,8 +4560,8 @@ Processed 31 out of 46 module pairs	EQ: 19	NEQ: 12	ABORT: 0
 SYSTEM: (G R) srambank_256x4x32_6t122
 0
 // Applying constraints to module boundaries ...
-// 0 Golden and 2 Revised pins marked as unreachable
-// 0 Golden and 7 Revised pin equivalences applied
+// 0 Golden and 1 Revised pins marked as unreachable
+// 0 Golden and 18 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4519,31 +4588,29 @@ Revised           46     32     1      2         81
 ================================================================================
 Compared points      PO     DFF    BBOX      Total   
 --------------------------------------------------------------------------------
-Equivalent           32     1      2         35      
+Equivalent           32     1      0         33      
+--------------------------------------------------------------------------------
+Non-equivalent       0      0      1         1       
+--------------------------------------------------------------------------------
+Not-compared         0      0      1         1       
 ================================================================================
-// Command: analyze abort -compare
-There is no abort/specified point to be analyzed.
-// Command: save_hier_compare_result
-0
 // Command: set_system_mode setup
 0
-// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_3 -module -hier -Golden
-0
-// Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_3 -module -hier -Revised
-0
 // Command: usage
-CPU time     : 111.54  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 95.16   seconds
+Memory usage : 827.80  M bytes
 0
-Processed 32 out of 46 module pairs	EQ: 20	NEQ: 12	ABORT: 0
+// Modules 'asap7_sram_1rw_ADDR_W11_DATA_W32_3(G) and asap7_sram_1rw_ADDR_W11_DATA_W32_3(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 33 out of 47 module pairs	EQ: 18	NEQ: 15	ABORT: 0
 // Running Module data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 and data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4
 // Command: set_root_module data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 -Golden
-// Warning: Total black box modules referenced in Golden = 4
+// Warning: Total black box modules referenced in Golden = 2
 // Warning: There are 74 undriven nets in Golden
 // Warning: There are 74 undriven pins in Golden
 0
 // Command: set_root_module data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 -Revised
-// Warning: Total black box modules referenced in Revised = 4
+// Warning: Total black box modules referenced in Revised = 2
 // Warning: There are 74 undriven nets in Revised
 // Warning: There are 74 undriven pins in Revised
 0
@@ -4552,13 +4619,12 @@ Processed 32 out of 46 module pairs	EQ: 20	NEQ: 12	ABORT: 0
 // Command: set_module_property -instance /u_dcache -Revised
 0
 // Command: report_black_box -NOHidden
-HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_2
-HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_3
 SYSTEM: (G R) srambank_128x4x20_6t122
+SYSTEM: (G R) srambank_256x4x32_6t122
 0
 // Applying constraints to module boundaries ...
 // 87 Golden and 88 Revised pins marked as unreachable
-// 0 Golden and 70 Revised pin equivalences applied
+// 0 Golden and 54 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4566,18 +4632,18 @@ SYSTEM: (G R) srambank_128x4x20_6t122
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 1918 gated-clock DFF/DLAT(s)
-CPU time     : 112.09  seconds
-Elapse time  : 114     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 95.70   seconds
+Elapse time  : 97      seconds
+Memory usage : 827.80  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
 --------------------------------------------------------------------------------
 Mapped points     PI     PO     DFF    BBOX      Total   
 --------------------------------------------------------------------------------
-Golden            127    137    1923   4         2191    
+Golden            127    137    1925   6         2195    
 --------------------------------------------------------------------------------
-Revised           127    137    1923   4         2191    
+Revised           127    137    1925   6         2195    
 ================================================================================
 Unmapped points:
 ================================================================================
@@ -4593,41 +4659,41 @@ Unmapped points   DLAT      Total
 --------------------------------------------------------------------------------
 Unreachable       13        13      
 ================================================================================
-CPU time     : 112.31  seconds
-Elapse time  : 114     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 95.90   seconds
+Elapse time  : 97      seconds
+Memory usage : 827.80  M bytes
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 169.82  seconds
-Elapse time  : 172     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 109.01  seconds
+Elapse time  : 110     seconds
+Memory usage : 827.80  M bytes
 // Command: add_compared_points -all
-// 2064 compared points added to compare list
+// 2068 compared points added to compare list
 0
 // Command: compare -noneq_stop 1   
 // Compare will stop on the 1st non-equivalent point
 ================================================================================
 Compared points      PO     DFF    BBOX      Total   
 --------------------------------------------------------------------------------
-Equivalent           128    0      4         132     
+Equivalent           94     2      0         96      
 --------------------------------------------------------------------------------
 Non-equivalent       0      1      0         1       
 --------------------------------------------------------------------------------
-Not-compared         9      1922   0         1931    
+Not-compared         43     1922   6         1971    
 ================================================================================
-CPU time     : 170.02  seconds
-Elapse time  : 172     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 109.20  seconds
+Elapse time  : 111     seconds
+Memory usage : 827.80  M bytes
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 170.05  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 109.23  seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4(G) and data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 33 out of 46 module pairs	EQ: 20	NEQ: 13	ABORT: 0
+Processed 34 out of 47 module pairs	EQ: 18	NEQ: 16	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W11_DATA_W32 and asap7_sram_1rw_ADDR_W11_DATA_W32
 // Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32 -Golden
 // Warning: Total black box modules referenced in Golden = 1
@@ -4643,7 +4709,7 @@ Processed 33 out of 46 module pairs	EQ: 20	NEQ: 13	ABORT: 0
 SYSTEM: (G R) srambank_256x4x32_6t122
 0
 // Applying constraints to module boundaries ...
-// 0 Golden and 3 Revised pin equivalences applied
+// 0 Golden and 4 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4683,10 +4749,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 170.11  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 109.27  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 34 out of 46 module pairs	EQ: 21	NEQ: 13	ABORT: 0
+Processed 35 out of 47 module pairs	EQ: 19	NEQ: 16	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W11_DATA_W32_1 and asap7_sram_1rw_ADDR_W11_DATA_W32_1
 // Command: set_root_module asap7_sram_1rw_ADDR_W11_DATA_W32_1 -Golden
 // Warning: Total black box modules referenced in Golden = 1
@@ -4702,7 +4768,7 @@ Processed 34 out of 46 module pairs	EQ: 21	NEQ: 13	ABORT: 0
 SYSTEM: (G R) srambank_256x4x32_6t122
 0
 // Applying constraints to module boundaries ...
-// 0 Golden and 2 Revised pin equivalences applied
+// 0 Golden and 3 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4742,10 +4808,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W11_DATA_W32_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 170.14  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 109.31  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 35 out of 46 module pairs	EQ: 22	NEQ: 13	ABORT: 0
+Processed 36 out of 47 module pairs	EQ: 20	NEQ: 16	ABORT: 0
 // Running Module instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 and instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2
 // Command: set_root_module instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 -Golden
 // Warning: Total black box modules referenced in Golden = 4
@@ -4768,7 +4834,7 @@ SYSTEM: (G R) srambank_128x4x20_6t122
 0
 // Applying constraints to module boundaries ...
 // 156 Golden and 156 Revised pins marked as unreachable
-// 0 Golden and 22 Revised pin equivalences applied
+// 0 Golden and 19 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4776,9 +4842,9 @@ SYSTEM: (G R) srambank_128x4x20_6t122
 // Processing Revised ...
 // Modeling Revised ...
 // (F14) Remodeled 1604 gated-clock DFF/DLAT(s)
-CPU time     : 170.65  seconds
-Elapse time  : 172     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 109.82  seconds
+Elapse time  : 111     seconds
+Memory usage : 827.80  M bytes
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
@@ -4803,15 +4869,15 @@ Unmapped points   DLAT      Total
 --------------------------------------------------------------------------------
 Unreachable       6         6       
 ================================================================================
-CPU time     : 170.81  seconds
-Elapse time  : 173     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 109.98  seconds
+Elapse time  : 111     seconds
+Memory usage : 827.80  M bytes
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 171.40  seconds
-Elapse time  : 173     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 110.55  seconds
+Elapse time  : 112     seconds
+Memory usage : 827.80  M bytes
 // Command: add_compared_points -all
 // 1680 compared points added to compare list
 0
@@ -4820,21 +4886,21 @@ Memory usage : 835.20  M bytes
 ================================================================================
 Compared points      PO     DFF    BBOX      Total   
 --------------------------------------------------------------------------------
-Equivalent           67     1607   4         1678    
+Equivalent           65     1607   4         1676    
 --------------------------------------------------------------------------------
 Non-equivalent       1      0      0         1       
 --------------------------------------------------------------------------------
-Not-compared         1      0      0         1       
+Not-compared         3      0      0         3       
 ================================================================================
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 171.42  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 110.58  seconds
+Memory usage : 827.80  M bytes
 0
 // Modules 'instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2(G) and instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2(R)' will not be blackboxed,
    and automatically recompared at the parent level.
-Processed 36 out of 46 module pairs	EQ: 22	NEQ: 14	ABORT: 0
+Processed 37 out of 47 module pairs	EQ: 20	NEQ: 17	ABORT: 0
 // Running Module axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d and axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d
 // Command: set_root_module axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d -Golden
 // Warning: There are 8 undriven nets in Golden
@@ -4852,7 +4918,7 @@ Processed 36 out of 46 module pairs	EQ: 22	NEQ: 14	ABORT: 0
 0
 // Applying constraints to module boundaries ...
 // 147 Golden and 147 Revised pins marked as unreachable
-// 0 Golden and 8 Revised pin equivalences applied
+// 0 Golden and 9 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4908,10 +4974,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d -module -hier -Revised
 0
 // Command: usage
-CPU time     : 171.51  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 110.66  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 37 out of 46 module pairs	EQ: 23	NEQ: 14	ABORT: 0
+Processed 38 out of 47 module pairs	EQ: 21	NEQ: 17	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W15_DATA_W32_1 and asap7_sram_1rw_ADDR_W15_DATA_W32_1
 // Command: set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32_1 -Golden
 // Warning: Total black box modules referenced in Golden = 1
@@ -4926,8 +4992,6 @@ Processed 37 out of 46 module pairs	EQ: 23	NEQ: 14	ABORT: 0
 // Command: report_black_box -NOHidden
 SYSTEM: (G R) srambank_256x4x32_6t122
 0
-// Applying constraints to module boundaries ...
-// 0 Golden and 1 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -4962,9 +5026,9 @@ Unreachable       1         1
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 171.80  seconds
-Elapse time  : 174     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 110.95  seconds
+Elapse time  : 112     seconds
+Memory usage : 827.80  M bytes
 // Command: add_compared_points -all
 // 69 compared points added to compare list
 0
@@ -4986,10 +5050,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W15_DATA_W32_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 171.81  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 110.95  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 38 out of 46 module pairs	EQ: 24	NEQ: 14	ABORT: 0
+Processed 39 out of 47 module pairs	EQ: 22	NEQ: 17	ABORT: 0
 // Running Module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 and axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1
 // Command: set_root_module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 -Golden
 // Warning: Total black box modules referenced in Golden = 2
@@ -5009,8 +5073,8 @@ Processed 38 out of 46 module pairs	EQ: 24	NEQ: 14	ABORT: 0
 HIER: (G R) asap7_sram_1rw_ADDR_W15_DATA_W32_1
 0
 // Applying constraints to module boundaries ...
-// 83 Golden and 84 Revised pins marked as unreachable
-// 0 Golden and 23 Revised pin equivalences applied
+// 83 Golden and 83 Revised pins marked as unreachable
+// 0 Golden and 21 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -5066,10 +5130,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 171.92  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 111.06  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 39 out of 46 module pairs	EQ: 25	NEQ: 14	ABORT: 0
+Processed 40 out of 47 module pairs	EQ: 23	NEQ: 17	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W15_DATA_W32 and asap7_sram_1rw_ADDR_W15_DATA_W32
 // Command: set_root_module asap7_sram_1rw_ADDR_W15_DATA_W32 -Golden
 // Warning: Total black box modules referenced in Golden = 1
@@ -5084,6 +5148,8 @@ Processed 39 out of 46 module pairs	EQ: 25	NEQ: 14	ABORT: 0
 // Command: report_black_box -NOHidden
 SYSTEM: (G R) srambank_256x4x32_6t122
 0
+// Applying constraints to module boundaries ...
+// 0 Golden and 3 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -5118,9 +5184,9 @@ Unreachable       1         1
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 172.22  seconds
-Elapse time  : 174     seconds
-Memory usage : 835.20  M bytes
+CPU time     : 111.34  seconds
+Elapse time  : 113     seconds
+Memory usage : 827.80  M bytes
 // Command: add_compared_points -all
 // 69 compared points added to compare list
 0
@@ -5142,10 +5208,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W15_DATA_W32 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 172.22  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 111.35  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 40 out of 46 module pairs	EQ: 26	NEQ: 14	ABORT: 0
+Processed 41 out of 47 module pairs	EQ: 24	NEQ: 17	ABORT: 0
 // Running Module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 and axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768
 // Command: set_root_module axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 -Golden
 // Warning: Total black box modules referenced in Golden = 2
@@ -5166,7 +5232,7 @@ HIER: (G R) asap7_sram_1rw_ADDR_W15_DATA_W32
 0
 // Applying constraints to module boundaries ...
 // 83 Golden and 83 Revised pins marked as unreachable
-// 0 Golden and 28 Revised pin equivalences applied
+// 0 Golden and 30 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -5209,23 +5275,21 @@ Unreachable       10        10
 ================================================================================
 Compared points      PO     DFF    BBOX      Total   
 --------------------------------------------------------------------------------
-Equivalent           51     158    1         210     
+Equivalent           51     0      1         52      
+--------------------------------------------------------------------------------
+Non-equivalent       0      1      0         1       
+--------------------------------------------------------------------------------
+Not-compared         0      157    0         157     
 ================================================================================
-// Command: analyze abort -compare
-There is no abort/specified point to be analyzed.
-// Command: save_hier_compare_result
-0
 // Command: set_system_mode setup
 0
-// Command: add_black_box axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 -module -hier -Golden
-0
-// Command: add_black_box axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 -module -hier -Revised
-0
 // Command: usage
-CPU time     : 172.33  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 111.49  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 41 out of 46 module pairs	EQ: 27	NEQ: 14	ABORT: 0
+// Modules 'axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768(G) and axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768(R)' will not be blackboxed,
+   and automatically recompared at the parent level.
+Processed 42 out of 47 module pairs	EQ: 24	NEQ: 18	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W12_DATA_W32 and asap7_sram_1rw_ADDR_W12_DATA_W32
 // Command: set_root_module asap7_sram_1rw_ADDR_W12_DATA_W32 -Golden
 // Warning: Total black box modules referenced in Golden = 1
@@ -5279,10 +5343,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W12_DATA_W32 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 172.38  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 111.54  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 42 out of 46 module pairs	EQ: 28	NEQ: 14	ABORT: 0
+Processed 43 out of 47 module pairs	EQ: 25	NEQ: 18	ABORT: 0
 // Running Module tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 and tcm_SIZE_BYTES16384_HAS_FETCH_PORT1
 // Command: set_root_module tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 -Golden
 // Warning: Total black box modules referenced in Golden = 2
@@ -5302,8 +5366,8 @@ Processed 42 out of 46 module pairs	EQ: 28	NEQ: 14	ABORT: 0
 HIER: (G R) asap7_sram_1rw_ADDR_W12_DATA_W32
 0
 // Applying constraints to module boundaries ...
-// 38 Golden and 38 Revised pins marked as unreachable
-// 0 Golden and 6 Revised pin equivalences applied
+// 38 Golden and 39 Revised pins marked as unreachable
+// 0 Golden and 5 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -5359,10 +5423,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 172.44  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 111.60  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 43 out of 46 module pairs	EQ: 29	NEQ: 14	ABORT: 0
+Processed 44 out of 47 module pairs	EQ: 26	NEQ: 18	ABORT: 0
 // Running Module asap7_sram_1rw_ADDR_W12_DATA_W32_1 and asap7_sram_1rw_ADDR_W12_DATA_W32_1
 // Command: set_root_module asap7_sram_1rw_ADDR_W12_DATA_W32_1 -Golden
 // Warning: Total black box modules referenced in Golden = 1
@@ -5378,7 +5442,7 @@ Processed 43 out of 46 module pairs	EQ: 29	NEQ: 14	ABORT: 0
 SYSTEM: (G R) srambank_256x4x32_6t122
 0
 // Applying constraints to module boundaries ...
-// 0 Golden and 5 Revised pin equivalences applied
+// 0 Golden and 4 Revised pin equivalences applied
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
@@ -5418,10 +5482,10 @@ There is no abort/specified point to be analyzed.
 // Command: add_black_box asap7_sram_1rw_ADDR_W12_DATA_W32_1 -module -hier -Revised
 0
 // Command: usage
-CPU time     : 172.48  seconds
-Memory usage : 835.20  M bytes
+CPU time     : 111.66  seconds
+Memory usage : 827.80  M bytes
 0
-Processed 44 out of 46 module pairs	EQ: 30	NEQ: 14	ABORT: 0
+Processed 45 out of 47 module pairs	EQ: 27	NEQ: 18	ABORT: 0
 // Running Module tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 and tcm_SIZE_BYTES16384_HAS_FETCH_PORT0
 // Command: set_root_module tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 -Golden
 // Warning: Total black box modules referenced in Golden = 2
@@ -5485,32 +5549,37 @@ Unreachable       1         1
 ================================================================================
 Compared points      PO     DFF    BBOX      Total   
 --------------------------------------------------------------------------------
-Equivalent           33     0      1         34      
---------------------------------------------------------------------------------
-Non-equivalent       0      1      0         1       
---------------------------------------------------------------------------------
-Not-compared         0      53     0         53      
+Equivalent           33     54     1         88      
 ================================================================================
+// Command: analyze abort -compare
+There is no abort/specified point to be analyzed.
+// Command: save_hier_compare_result
+0
 // Command: set_system_mode setup
 0
-// Command: usage
-CPU time     : 172.55  seconds
-Memory usage : 835.20  M bytes
+// Command: add_black_box tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 -module -hier -Golden
 0
-// Modules 'tcm_SIZE_BYTES16384_HAS_FETCH_PORT0(G) and tcm_SIZE_BYTES16384_HAS_FETCH_PORT0(R)' will not be blackboxed,
-   and automatically recompared at the parent level.
-Processed 45 out of 46 module pairs	EQ: 30	NEQ: 15	ABORT: 0
+// Command: add_black_box tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 -module -hier -Revised
+0
+// Command: usage
+CPU time     : 111.72  seconds
+Memory usage : 827.80  M bytes
+0
+Processed 46 out of 47 module pairs	EQ: 28	NEQ: 18	ABORT: 0
 // Running Module top_soc and top_soc
 // Command: set_root_module top_soc -Golden
-// Warning: Total black box modules referenced in Golden = 33
-// Warning: There are 1396 undriven nets in Golden
-// Warning: There are 1396 undriven pins in Golden
+// Warning: Total black box modules referenced in Golden = 31
+// Warning: There are 1365 undriven nets in Golden
+// Warning: There are 1365 undriven pins in Golden
 0
 // Command: set_root_module top_soc -Revised
-// Warning: Total black box modules referenced in Revised = 33
-// Warning: There are 1399 undriven nets in Revised
-// Warning: There are 1399 undriven pins in Revised
+// Warning: Total black box modules referenced in Revised = 31
+// Warning: There are 1368 undriven nets in Revised
+// Warning: There are 1368 undriven pins in Revised
 0
+CPU time     : 111.91  seconds
+Elapse time  : 113     seconds
+Memory usage : 827.80  M bytes
 // Command: set_module_property -instance / -Golden
 0
 // Command: set_module_property -instance / -Revised
@@ -5523,11 +5592,8 @@ HIER: (G R) arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx000000050000
 HIER: (G R) arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9
 HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32
 HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_1
-HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_2
-HIER: (G R) asap7_sram_1rw_ADDR_W11_DATA_W32_3
-HIER: (G R) asap7_sram_1rw_ADDR_W12_DATA_W32_1
+HIER: (G R) asap7_sram_1rw_ADDR_W15_DATA_W32
 HIER: (G R) ascon_core
-HIER: (G R) axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768
 HIER: (G R) axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1
 HIER: (G R) axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d
 SYSTEM: (G R) RingOscillator
@@ -5540,10 +5606,12 @@ HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRA
 HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5
 HIER: (G R) sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6
 HIER: (G R) sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5
-HIER: (G R) sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1
+HIER: (G R) sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3
 HIER: (G R) sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4
 HIER: (G R) sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5
 SYSTEM: (G R) srambank_128x4x20_6t122
+SYSTEM: (G R) srambank_256x4x32_6t122
+HIER: (G R) tcm_SIZE_BYTES16384_HAS_FETCH_PORT0
 HIER: (G R) tcm_SIZE_BYTES16384_HAS_FETCH_PORT1
 0
 // Applying constraints to module boundaries ...
@@ -5552,26 +5620,29 @@ HIER: (G R) tcm_SIZE_BYTES16384_HAS_FETCH_PORT1
 // Command: set_system_mode lec
 // Processing Golden ...
 // Modeling Golden ...
-// (F14) Remodeled 30573 gated-clock DFF/DLAT(s)
-// (F32) Created 1018 Z gate(s) for floating net(s) and floating pin(s)
-// (F28) Converted 1396 internal output port(s) to inout port(s)
+// (F14) Remodeled 30676 gated-clock DFF/DLAT(s)
+// (F32) Created 992 Z gate(s) for floating net(s) and floating pin(s)
+// (F28) Converted 1365 internal output port(s) to inout port(s)
 // Processing Revised ...
 // Modeling Revised ...
-// (F14) Remodeled 30573 gated-clock DFF/DLAT(s)
-// (F32) Created 1018 Z gate(s) for floating net(s) and floating pin(s)
-// (F28) Converted 1399 internal output port(s) to inout port(s)
-CPU time     : 186.09  seconds
-Elapse time  : 188     seconds
-Memory usage : 841.20  M bytes
+// (F14) Remodeled 30676 gated-clock DFF/DLAT(s)
+// (F32) Created 993 Z gate(s) for floating net(s) and floating pin(s)
+// (F28) Converted 1368 internal output port(s) to inout port(s)
+CPU time     : 125.16  seconds
+Elapse time  : 127     seconds
+Memory usage : 835.80  M bytes
+// Warning: Golden and Revised have different numbers of key points:
+// Golden  key points = 33919
+// Revised key points = 33920
 // Mapping key points ...
 ================================================================================
 Mapped points: SYSTEM class
 --------------------------------------------------------------------------------
 Mapped points     PI     PO     DFF    DLAT   BBOX      Total   
 --------------------------------------------------------------------------------
-Golden            59     115    31157  2      32        31365   
+Golden            59     115    31267  2      34        31477   
 --------------------------------------------------------------------------------
-Revised           59     115    31157  2      32        31365   
+Revised           59     115    31267  2      34        31477   
 ================================================================================
 Unmapped points:
 ================================================================================
@@ -5579,116 +5650,117 @@ Golden:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT   Z         Total   
 --------------------------------------------------------------------------------
-Unreachable       1441   1018      2459    
+Unreachable       1450   992       2442    
 ================================================================================
 Revised:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT   Z         Total   
 --------------------------------------------------------------------------------
-Unreachable       1441   1018      2459    
+Unreachable       1450   993       2443    
 ================================================================================
-CPU time     : 191.07  seconds
-Elapse time  : 193     seconds
-Memory usage : 841.33  M bytes
+CPU time     : 130.08  seconds
+Elapse time  : 131     seconds
+Memory usage : 835.80  M bytes
 // Running automatic setup...
 // Automatic setup finished.
 0
-CPU time     : 241.73  seconds
-Elapse time  : 244     seconds
-Memory usage : 841.58  M bytes
+CPU time     : 180.67  seconds
+Elapse time  : 182     seconds
+Memory usage : 836.05  M bytes
 // Command: add_compared_points -all
-// 31306 compared points added to compare list
+// 31418 compared points added to compare list
 0
-CPU time     : 241.91  seconds
-Elapse time  : 244     seconds
-Memory usage : 841.58  M bytes
+CPU time     : 180.85  seconds
+Elapse time  : 182     seconds
+Memory usage : 836.05  M bytes
 // Command: compare -noneq_stop 1   
 // Compare will stop on the 1st non-equivalent point
 ================================================================================
 Compared points      PO     DFF    DLAT   BBOX      Total   
 --------------------------------------------------------------------------------
-Equivalent           115    31157  2      32        31306   
+Equivalent           115    31267  2      34        31418   
 ================================================================================
-CPU time     : 242.90  seconds
-Elapse time  : 245     seconds
-Memory usage : 841.58  M bytes
+CPU time     : 181.63  seconds
+Elapse time  : 183     seconds
+Memory usage : 836.05  M bytes
 // Command: analyze abort -compare
 There is no abort/specified point to be analyzed.
 // Command: save_hier_compare_result
 0
-CPU time     : 243.41  seconds
-Elapse time  : 245     seconds
-Memory usage : 841.58  M bytes
+CPU time     : 182.16  seconds
+Elapse time  : 184     seconds
+Memory usage : 836.05  M bytes
 // Command: set_system_mode setup
 0
 // Command: usage
-CPU time     : 243.45  seconds
-Memory usage : 841.58  M bytes
+CPU time     : 182.20  seconds
+Memory usage : 836.05  M bytes
 0
-Processed 46 out of 46 module pairs	EQ: 31	NEQ: 15	ABORT: 0
+Processed 47 out of 47 module pairs	EQ: 29	NEQ: 18	ABORT: 0
 
-// Note: 15 module pair(s) are dynamically flattened for hierarchical comparison
-  Usage: 128.00 secs.
-  (15 dynamically flattened module pair(s) were non-equivalent)
+// Note: 18 module pair(s) are dynamically flattened for hierarchical comparison
+  Usage: 70.00 secs.
+  (18 dynamically flattened module pair(s) were non-equivalent)
 // Use "REPort HIer_compare Result -DYNamicflattened" to report them
 
 ================================================================================
 Module Comparison Results
 --------------------------------------------------------------------------------
-Equivalent                     31
+Equivalent                     29
 --------------------------------------------------------------------------------
-Total                          31
+Total                          29
 --------------------------------------------------------------------------------
 Hierarchical compare : Equivalent 
 ================================================================================
 Status          Golden                            Revised                          CPU / Elapsed Time
 -----------------------------------------------------------------------------------------------------
 Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_6 0.03 sec  0 sec
-Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 0.14 sec  0 sec
 Equivalent    : tcm_SIZE_BYTES16384_HAS_FETCH_PORT1  tcm_SIZE_BYTES16384_HAS_FETCH_PORT1 0.05 sec  0 sec
 Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_1  asap7_sram_1rw_ADDR_W11_DATA_W32_1 0.02 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 0.04 sec  0 sec
-Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 0.03 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W15_DATA_W32  asap7_sram_1rw_ADDR_W15_DATA_W32 0.27 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_3 0.03 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_7 0.04 sec  0 sec
+Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 0.15 sec  0 sec
 Equivalent    : asap7_sram_1rw_ADDR_W12_DATA_W32  asap7_sram_1rw_ADDR_W12_DATA_W32 0.04 sec  0 sec
-Equivalent    : ascon_core                        ascon_core                       0.53 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_3  asap7_sram_1rw_ADDR_W11_DATA_W32_3 0.03 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32_2  asap7_sram_1rw_ADDR_W11_DATA_W32_2 0.03 sec  0 sec
+Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_3 0.13 sec  0 sec
+Equivalent    : ascon_core                        ascon_core                       0.51 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 0.03 sec  0 sec
 Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_11 0.03 sec  0 sec
 Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_9 0.03 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 0.04 sec  0 sec
-Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5 0.13 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 0.03 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32  asap7_sram_1rw_ADDR_W11_DATA_W32 0.03 sec  0 sec
-Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 0.15 sec  0 sec
-Equivalent    : asap7_sram_1rw_ADDR_W12_DATA_W32_1  asap7_sram_1rw_ADDR_W12_DATA_W32_1 0.04 sec  0 sec
-Equivalent    : axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768  axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 0.08 sec  0 sec
-Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 0.04 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 0.04 sec  0 sec
-Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 0.03 sec  0 sec
-Equivalent    : rv_jtag_dtm                       rv_jtag_dtm                      0.05 sec  0 sec
+Equivalent    : tcm_SIZE_BYTES16384_HAS_FETCH_PORT0  tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 0.04 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_2 0.03 sec  0 sec
+Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_5 0.13 sec  0 sec
 Equivalent    : axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1  axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768_1 0.09 sec  0 sec
-Equivalent    : axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d  axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d 0.07 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W11_DATA_W32  asap7_sram_1rw_ADDR_W11_DATA_W32 0.03 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_5 0.04 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W12_DATA_W32_1  asap7_sram_1rw_ADDR_W12_DATA_W32_1 0.04 sec  0 sec
+Equivalent    : asap7_sram_1rw_ADDR_W15_DATA_W32_1  asap7_sram_1rw_ADDR_W15_DATA_W32_1 0.25 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_1 0.03 sec  0 sec
+Equivalent    : arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_8 0.03 sec  0 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 0.03 sec  0 sec
+Equivalent    : axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d  axi_rom_ID_WIDTH7_ADDR_MASK32h00007fff_MEM_DEPTH8192_INIT_FILE152h72746c2f6d656d6f72792f626f6f742e6d656d 0.06 sec  0 sec
+Equivalent    : rv_jtag_dtm                       rv_jtag_dtm                      0.06 sec  0 sec
 Equivalent    : sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_4 0.13 sec  0 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_5 0.03 sec  1 sec
-Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2 0.03 sec  1 sec
-Equivalent    : asap7_sram_1rw_ADDR_W15_DATA_W32_1  asap7_sram_1rw_ADDR_W15_DATA_W32_1 0.27 sec  1 sec
-Equivalent    : top_soc                           top_soc                          69.18 sec  71 sec
-Dyn-flattened (NEQ): data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4  data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 57.01 sec 59 sec
-Dyn-flattened (NEQ): apb_gpio                          apb_gpio                         0.14 sec 0 sec
-Dyn-flattened (NEQ): apb_watchdog                      apb_watchdog                     0.05 sec 0 sec
-Dyn-flattened (NEQ): instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2  instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 1.21 sec 1 sec
-Dyn-flattened (NEQ): apb_i2c                           apb_i2c                          0.14 sec 0 sec
-Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 0.04 sec 0 sec
-Dyn-flattened (NEQ): rv_debug_module_sba               rv_debug_module_sba              0.14 sec 1 sec
-Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 0.03 sec 0 sec
-Dyn-flattened (NEQ): dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4  dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 49.48 sec 50 sec
-Dyn-flattened (NEQ): clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864  clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 0.84 sec 1 sec
-Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 0.03 sec 0 sec
-Dyn-flattened (NEQ): riscv_pipeline                    riscv_pipeline                   14.65 sec 15 sec
+Equivalent    : asap7_sram_1rw_ADDR_W15_DATA_W32  asap7_sram_1rw_ADDR_W15_DATA_W32 0.25 sec  1 sec
+Equivalent    : sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4  sa_B_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_TRANS_WR_RESP_W2_4 0.03 sec  1 sec
+Equivalent    : top_soc                           top_soc                          68.87 sec  71 sec
+Dyn-flattened (NEQ): data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4  data_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2_STORE_BUF_DEPTH4 12.84 sec 14 sec
+Dyn-flattened (NEQ): apb_gpio                          apb_gpio                         0.17 sec 0 sec
+Dyn-flattened (NEQ): pipeline_control_unit             pipeline_control_unit            0.03 sec 0 sec
+Dyn-flattened (NEQ): apb_watchdog                      apb_watchdog                     0.06 sec 1 sec
+Dyn-flattened (NEQ): axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768  axi_ram_ID_WIDTH7_ADDR_MASK32h0001ffff_MEM_DEPTH32768 0.13 sec 0 sec
+Dyn-flattened (NEQ): instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2  instruction_cache_C_CACHE_SIZE16384_C_BLOCK_SIZE16_C_WAYS2 1.20 sec 1 sec
+Dyn-flattened (NEQ): apb_i2c                           apb_i2c                          0.15 sec 0 sec
+Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_10 0.03 sec 0 sec
+Dyn-flattened (NEQ): rv_debug_module_sba               rv_debug_module_sba              0.14 sec 0 sec
+Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_13 0.04 sec 0 sec
+Dyn-flattened (NEQ): dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4  dma_engine_N_CH4_N_CH_W2_ADDR_W32_LEN_W4_ID_W4_FIFO_DEPTH16_MAX_BURST64_BURST_W7_TOKEN_W4_OUT_W4_TIMEOUT_W12_PERIPH_NUM_W5_LEN_FIELD_W16_APB_ADDR_W14_DEF_TOKENS4_DEF_OUTS4 47.19 sec 49 sec
+Dyn-flattened (NEQ): asap7_sram_1rw_ADDR_W11_DATA_W32_3  asap7_sram_1rw_ADDR_W11_DATA_W32_3 0.02 sec 0 sec
+Dyn-flattened (NEQ): clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864  clic_NUM_IRQ32_CTLBITS3_TRIG_EDGE_RST67108864 0.81 sec 1 sec
+Dyn-flattened (NEQ): asap7_sram_1rw_ADDR_W11_DATA_W32_2  asap7_sram_1rw_ADDR_W11_DATA_W32_2 0.03 sec 1 sec
+Dyn-flattened (NEQ): arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3  arbiter_iwrr_1cycle_P_REQUESTER_NUM4_P_REQUESTER_WEIGHTx00000005000000040000000300000001_P_NUM_GRANT_REQ_W1_3 0.04 sec 0 sec
 Dyn-flattened (NEQ): sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_6 1.38 sec 1 sec
-Dyn-flattened (NEQ): apb_syscon                        apb_syscon                       0.05 sec 0 sec
-Dyn-flattened (NEQ): tcm_SIZE_BYTES16384_HAS_FETCH_PORT0  tcm_SIZE_BYTES16384_HAS_FETCH_PORT0 0.06 sec 0 sec
+Dyn-flattened (NEQ): apb_syscon                        apb_syscon                       0.06 sec 0 sec
+Dyn-flattened (NEQ): sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1  sa_R_channel_MST_AMT4_OUTSTANDING_AMT4_MST_ID_W2_DATA_WIDTH32_ADDR_WIDTH32_TRANS_MST_ID_W5_TRANS_SLV_ID_W7_DSP_RID_W5_1 2.04 sec 2 sec
 ================================================================================
 
 Hierarchical compare : Equivalent 
@@ -5737,8 +5809,8 @@ Category                                                                  Count
      Always X compared point is detected:                      not checked
 --------------------------------------------------------------------------------
 6. Compare Results:                                                        PASS
-     Total Equivalent modules  = 31
-     Total Dynamic-flattened modules = 15
+     Total Equivalent modules  = 29
+     Total Dynamic-flattened modules = 18
 ================================================================================
 
 0
@@ -5748,13 +5820,13 @@ Golden:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT   Z         Total   
 --------------------------------------------------------------------------------
-Unreachable       1441   1018      2459    
+Unreachable       1450   992       2442    
 ================================================================================
 Revised:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT   Z         Total   
 --------------------------------------------------------------------------------
-Unreachable       1441   1018      2459    
+Unreachable       1450   993       2443    
 ================================================================================
 
 ================================================================================
@@ -5762,13 +5834,13 @@ Golden:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT   Z         Total   
 --------------------------------------------------------------------------------
-Unreachable       1441   1018      2459    
+Unreachable       1450   992       2442    
 ================================================================================
 Revised:
 --------------------------------------------------------------------------------
 Unmapped points   DLAT   Z         Total   
 --------------------------------------------------------------------------------
-Unreachable       1441   1018      2459    
+Unreachable       1450   993       2443    
 ================================================================================
 
 // Command: lec_capture ./reports/lec_noneq.rpt \
@@ -5780,7 +5852,7 @@ Unreachable       1441   1018      2459
 ================================================================================
 Compared points      PO     DFF    DLAT   BBOX      Total   
 --------------------------------------------------------------------------------
-Equivalent           115    31157  2      32        31306   
+Equivalent           115    31267  2      34        31418   
 ================================================================================
 
 0 Non-equivalent point(s) reported
@@ -5790,7 +5862,7 @@ Equivalent           115    31157  2      32        31306
 ================================================================================
 Compared points      PO     DFF    DLAT   BBOX      Total   
 --------------------------------------------------------------------------------
-Equivalent           115    31157  2      32        31306   
+Equivalent           115    31267  2      34        31418   
 ================================================================================
 
 // Command: report_statistics
@@ -5803,27 +5875,27 @@ Root module name                          top_soc           top_soc
 Primary inputs                                59                 59
    Mapped                                     59                 59
 
-Tri-state (Z) key points                    1018               1018
-   Unmapped                                 1018               1018
-      Unreachable                           1018               1018
+Tri-state (Z) key points                     992                993
+   Unmapped                                  992                993
+      Unreachable                            992                993
 
 Primary outputs                              115                115
    Mapped                                    115                115
       Equivalent                115
 
-Black-box key points                          32                 32
-   Mapped                                     32                 32
-      Equivalent                 32
+Black-box key points                          34                 34
+   Mapped                                     34                 34
+      Equivalent                 34
 
-State key points                           32600              32600
-   Mapped                                  31159              31159
-      Equivalent              31159
-   Unmapped                                 1441               1441
-      Unreachable                           1441               1441
+State key points                           32719              32719
+   Mapped                                  31269              31269
+      Equivalent              31269
+   Unmapped                                 1450               1450
+      Unreachable                           1450               1450
 ================================================================================
 0
 // Command: set n_total   [get_compare_points -count]
-31306
+31418
 // Command: set n_noneq   [get_compare_points -NONequivalent -count]
 0
 // Command: set n_abort   [get_compare_points -abort -count]
@@ -5872,9 +5944,8 @@ LEC top_soc: netlist tong hop vs netlist sau P&R (che do hier)
   golden  : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v
   revised : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v
   Genus   : Sep 29 2026 18:43:24 JST (Sep 29 2026 09:43:24 UTC)
-  diem so sanh 31306, khac 0, abort 0, chua so 0
+  diem so sanh 31418, khac 0, abort 0, chua so 0
   (so diem la cua module top; tung module: reports/lec_hier_result.rpt)
-  WARNING: khong doc duoc dau thoi gian Genus trong netlist - khong kiem duoc golden/revised co cung mot lan tong hop
 // Command: puts "============================================================"
 ============================================================
 // Command: close $fp

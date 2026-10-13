@@ -1,0 +1,7 @@
+doan stripe (VDD + VSS): M4 204, M5 1200, M6 82, M7 130, M8 326, M9 518
+VDD: 78898 special via: V8 43065, V7 10725, khac 25108
+  ten via chua phan loai (nhieu nhat truoc): {VIAGEN_1 18900} {VIAGEN_2 3543} {VIAGEN_3 2665}
+WARNING: VDD: khong nhan ra via V4 nao theo ten (VIA45* / M5_M4*) - KHONG ket luan duoc so via tren than SRAM; sua soc_pg_via_class theo ten o dong tren
+VSS: 78896 special via: V8 43065, V7 10725, khac 25106
+  ten via chua phan loai (nhieu nhat truoc): {VIAGEN_1 18900} {VIAGEN_2 3541} {VIAGEN_3 2665}
+WARNING: VSS: khong nhan ra via V4 nao theo ten (VIA45* / M5_M4*) - KHONG ket luan duoc so via tren than SRAM; sua soc_pg_via_class theo ten o dong tren
