@@ -4,7 +4,10 @@
 ## Chay tu thu muc mcu/voltus:   make all
 ##
 ##   vao : ../innovus/outputs/top_soc_pnr.{v,sdc,def}   KHOI 16 (DEF da co chan
-##                                                      PG VDD/VSS tren ring M8)
+##                                                      PG VDD/VSS tren ring
+##                                                      M8/M9, 4 canh)
+##         ../innovus/outputs/top_soc.lef               hinh chan PG -> vi tri
+##                                                      nguon ap (VOLTUS_PADS=pin)
 ##         ../quantus/outputs/top_soc_quantus_rc_typ.spef
 ##   ra  : reports/voltus_summary.rpt    dong dau DONE / FAIL
 ##         reports/power_static.rpt
@@ -23,6 +26,8 @@
 ##   - diem cap nguon lay tu chan PG trong DEF, roi moi den cach cua mau
 ##   - thu truyen file ghep lop LEF/QRC (asap7_lefdef.layermap)
 ##   - them set_power_data (file dong .ptiavg cua report_power): mau khong co
+##   - set_design_mode -process 7 nhu Innovus va Tempus (them 2026-10-13, CHUA
+##     chay tren Voltus: dong 'process:' cua file tom tat doc lai tool log)
 ## Run dau 2026-10-11: cong suat chay, luoi nguon hong (thieu set_power_data,
 ## sai ten option ghep lop).  Ban nay CHUA chay lai tren tool: lenh nao Voltus
 ## khong nhan thi ly do nam trong reports/voltus_summary.rpt.
@@ -97,19 +102,38 @@ proc voltus_files_under {dir depth} {
 }
 
 # Diem cap nguon.
-#   pin    = nhieu nguon ap rai doc theo hinh chan PG VDD/VSS trong LEF cua top
-#            (soc_add_pg_pins dat moi net mot chan phu ca doan ring M8 tren
-#            cung, dai 565 um).  Run 2026-10-13 14:26 dung defpin: Voltus chi
-#            dat MOT nguon ap cho ca chan do, rieng lop M8 da sut 3.9 V.
+#   pin    = nhieu nguon ap rai doc theo cac hinh chan PG VDD/VSS trong LEF cua
+#            top.  Tu 2026-10-13 soc_add_pg_pins lay MOI doan ring loi lam hinh
+#            chan (M8 tren + duoi, M9 trai + phai) -> nguon cap tu 4 canh.
+#            Run 2026-10-13 14:26 dung defpin: Voltus chi dat MOT nguon ap cho
+#            ca chan, rieng lop M8 da sut 3.9 V.
+#   ring   = nhu pin nhung hinh lay tu innovus/outputs/<top>_pg_ring.txt (cac
+#            doan ring ma soc_add_pg_pins ghi ra).  Dung khi createPGPin khong
+#            nhan du 4 hinh: ring van co that trong DEF, chi thieu khai bao chan.
 #   defpin = mot nguon ap moi chan DEF;  auto = cach cua mau Mul32.
 proc voltus_power_pads {how} {
     foreach net {VDD VSS} {
         switch -- $how {
-            pin     { set_power_pads -net $net -format xy -file $::VOLTUS_PAD_FILE($net) }
-            defpin  { set_power_pads -net $net -format defpin }
-            default { set_power_pads -net $net -auto_voltage_source_creation true }
+            pin - ring { set_power_pads -net $net -format xy -file $::VOLTUS_PAD_FILE($net) }
+            defpin     { set_power_pads -net $net -format defpin }
+            default    { set_power_pads -net $net -auto_voltage_source_creation true }
         }
     }
+}
+
+# Cac doan ring cua <net> trong file soc_add_pg_pins ghi ("net layer x0 y0 x1
+# y1" moi dong, '#' la ghi chu): danh sach {layer x0 y0 x1 y1}.
+proc voltus_ring_rects {path net} {
+    set fp [open $path r]
+    set rects {}
+    while {[gets $fp line] >= 0} {
+        set words [regexp -all -inline {\S+} $line]
+        if {[llength $words] == 6 && [lindex $words 0] eq $net} {
+            lappend rects [lrange $words 1 end]
+        }
+    }
+    close $fp
+    return $rects
 }
 
 # Cac hinh chu nhat cua chan <net> trong LEF top: danh sach {layer x0 y0 x1 y1}.
@@ -150,11 +174,11 @@ proc voltus_lef_pin_rects {lef net} {
     return $rects
 }
 
-# Rai nguon ap doc theo truc dai cua tung hinh chan, cach nhau khoang <pitch> um.
-# Moi phan tu: {ten x y layer}.
-proc voltus_pin_sources {lef net pitch} {
+# Rai nguon ap doc theo truc dai cua tung hinh {layer x0 y0 x1 y1}, cach nhau
+# khoang <pitch> um.  Moi phan tu: {ten x y layer}.
+proc voltus_rect_sources {rects net pitch} {
     set sources {}
-    foreach rect [voltus_lef_pin_rects $lef $net] {
+    foreach rect $rects {
         lassign $rect layer x0 y0 x1 y1
         set horizontal [expr {($x1 - $x0) >= ($y1 - $y0)}]
         set length [expr {$horizontal ? $x1 - $x0 : $y1 - $y0}]
@@ -419,10 +443,10 @@ if {[catch {
     if {$VOLTUS_RAIL_OPTS eq "none"} {
         set VOLTUS_RAIL_OPTS ""
     }
-    # Diem cap nguon (xem voltus_power_pads) va buoc rai nguon ap cua kieu pin.
+    # Diem cap nguon (xem voltus_power_pads) va buoc rai nguon ap cua kieu pin / ring.
     set VOLTUS_PADS [voltus_env VOLTUS_PADS pin]
-    if {$VOLTUS_PADS ni {pin defpin auto}} {
-        error "VOLTUS_PADS phai la pin, defpin hoac auto, dang la '$VOLTUS_PADS'"
+    if {$VOLTUS_PADS ni {pin ring defpin auto}} {
+        error "VOLTUS_PADS phai la pin, ring, defpin hoac auto, dang la '$VOLTUS_PADS'"
     }
     set VOLTUS_PAD_PITCH [voltus_env VOLTUS_PAD_PITCH 10.0]
     if {![string is double -strict $VOLTUS_PAD_PITCH] || $VOLTUS_PAD_PITCH <= 0} {
@@ -471,6 +495,15 @@ if {[catch {
     read_lib $ALL_TIMING_LIBS
     read_verilog $VOLTUS_NETLIST
     set_top_module $TOP
+    # Innovus chay 'setDesignMode -process 7' (init_common.tcl) va Tempus da
+    # dat dong nay tu 2026-10-11 (log Tempus: "Design Mode: 7nm").  Voltus toi
+    # run 2026-10-13 15:49 van ghi "Both design process and tech node are not
+    # set" / "Design Mode: 65nm".  Dat sau set_top_module nhu tempus.tcl.
+    set VOLTUS_PROCESS_NOTE "set_design_mode -process 7"
+    if {[catch {set_design_mode -process 7} mode_err]} {
+        voltus_warn "set_design_mode -process 7: $mode_err - van tinh o mac dinh 65nm"
+        set VOLTUS_PROCESS_NOTE "set_design_mode -process 7 BI TU CHOI"
+    }
     read_def $VOLTUS_DEF
     read_sdc $VOLTUS_SDC
     read_spef $VOLTUS_SPEF_FILE
@@ -495,6 +528,16 @@ if {[catch {
     set power_totals [voltus_power_totals $VOLTUS_POWER_RPT]
     if {[llength $power_totals] == 0} {
         error "report_power khong ghi dong 'Total Power:' nao vao $VOLTUS_POWER_RPT"
+    }
+    # report_power in "# Design Mode: <node>" vao tool log: doc lai de biet
+    # set_design_mode co hieu luc that khong ('puts' khong vao log, va lenh co
+    # the duoc nhan ma khong doi gi).
+    set mode_7nm  [voltus_tool_log_count {# Design Mode: 7nm}]
+    set mode_65nm [voltus_tool_log_count {# Design Mode: 65nm}]
+    append VOLTUS_PROCESS_NOTE "; tool log ghi 'Design Mode: 7nm' $mode_7nm lan, '65nm' $mode_65nm lan"
+    if {$mode_65nm > 0 || $mode_7nm == 0} {
+        voltus_warn "tool log khong xac nhan 'Design Mode: 7nm' (7nm $mode_7nm lan, 65nm $mode_65nm lan) -\
+ cong suat / luoi nguon co the van tinh o mac dinh 65nm"
     }
     # Run 2026-10-11 13:18: static_VDD.ptiavg / static_VSS.ptiavg duoc ghi CANH
     # file -outfile (reports/), khong phai trong set_power_output_dir.
@@ -521,27 +564,55 @@ if {[catch {
         set pad_label(defpin) "defpin (MOT nguon ap moi net)"
         set pad_label(auto)   "auto_voltage_source_creation"
         set pad_choices [list $VOLTUS_PADS]
-        if {$VOLTUS_PADS eq "pin"} {
-            set top_lef [file join $FLOW_ROOT innovus outputs "${TOP}.lef"]
+        if {$VOLTUS_PADS in {pin ring}} {
+            # pin: hinh chan PG trong LEF abstract cua top; ring: cac doan ring
+            # soc_add_pg_pins ghi ra.  Ca hai do KHOI 16 ghi cung luc voi DEF.
+            if {$VOLTUS_PADS eq "pin"} {
+                set pad_src [file join $FLOW_ROOT innovus outputs "${TOP}.lef"]
+            } else {
+                set pad_src [file join $FLOW_ROOT innovus outputs "${TOP}_pg_ring.txt"]
+            }
             set pad_counts {}
+            set pad_rects {}
             if {[catch {
                 foreach net {VDD VSS} {
-                    set sources [voltus_pin_sources $top_lef $net $VOLTUS_PAD_PITCH]
+                    if {$VOLTUS_PADS eq "pin"} {
+                        set rects [voltus_lef_pin_rects $pad_src $net]
+                    } else {
+                        set rects [voltus_ring_rects $pad_src $net]
+                    }
+                    set sources [voltus_rect_sources $rects $net $VOLTUS_PAD_PITCH]
                     if {[llength $sources] == 0} {
-                        error "khong co hinh chan $net trong $top_lef"
+                        error "khong co hinh $net nao trong $pad_src"
                     }
                     set VOLTUS_PAD_FILE($net) [file join $VOLTUS_DIR outputs "vsrc_$net.pp"]
                     voltus_write_pad_file $VOLTUS_PAD_FILE($net) $sources
                     lappend pad_counts "$net [llength $sources]"
+                    lappend pad_rects [llength $rects]
                 }
             } pad_err]} {
-                voltus_warn "khong tao duoc file nguon ap tu chan PG ($pad_err) - dung defpin"
+                voltus_warn "khong tao duoc file nguon ap kieu $VOLTUS_PADS ($pad_err) - dung defpin"
                 set pad_choices {}
             } else {
-                set pad_label(pin) "pin ([join $pad_counts {, }] nguon ap rai doc chan PG trong\
- [file tail $top_lef], buoc $VOLTUS_PAD_PITCH um; chi cap tu canh co chan)"
-                if {[file mtime $top_lef] < [file mtime $VOLTUS_DEF] - 3600} {
-                    voltus_warn "[file tail $top_lef] cu hon DEF hon 1 gio - toa do chan PG co the khong khop"
+                set pad_label($VOLTUS_PADS) "$VOLTUS_PADS ([join $pad_counts {, }] nguon ap rai doc\
+ [join $pad_rects { / }] hinh [expr {$VOLTUS_PADS eq "pin" ? "chan PG" : "ring"}] trong\
+ [file tail $pad_src], buoc $VOLTUS_PAD_PITCH um; chi cap tu canh co hinh)"
+                if {[file mtime $pad_src] < [file mtime $VOLTUS_DEF] - 3600} {
+                    voltus_warn "[file tail $pad_src] cu hon DEF hon 1 gio - toa do diem cap nguon co the khong khop"
+                }
+                # Luoi M8/M9 duoc thiet ke cho nguon cap tu ca 4 canh ring
+                # (innovus/tcl/manual/soc_fp_config.tcl): uoc luong sut ap tren
+                # M8/M9 la ~6 mV voi 4 canh, ~50 mV neu chi canh tren.
+                if {[tcl::mathfunc::min {*}$pad_rects] < 4} {
+                    set pad_hint [expr {$VOLTUS_PADS eq "pin" ?
+                        "createPGPin khong nhan du hinh (xem WARNING cuoi KHOI 16); chay lai bang\
+ 'make all VOLTUS_PADS=ring'" : "ring loi thieu doan - xem KHOI 2"}]
+                    voltus_warn "diem cap nguon chi co [join $pad_rects { / }] hinh (VDD / VSS), khong\
+ du 4 canh ring - sut ap se cao hon thiet ke; $pad_hint"
+                }
+                if {$VOLTUS_PADS eq "ring"} {
+                    voltus_warn "VOLTUS_PADS=ring: nguon ap dat theo hinh ring loi, khong theo chan PG\
+ khai bao trong LEF/DEF"
                 }
             }
         }
@@ -594,6 +665,7 @@ if {[catch {
     lappend lines "Voltus $TOP: goc TT 0.7 V / 25 C, static, activity mac dinh (chua co VCD = can tren),\
  SPEF $VOLTUS_SPEF_SRC ([file tail $VOLTUS_SPEF_FILE]), $voltus_cpus CPU"
     lappend lines "  thoi gian [expr {[clock seconds] - $voltus_t0}] s; don vi 1ns / 1pf"
+    lappend lines "  process: $VOLTUS_PROCESS_NOTE"
     lappend lines "  cong suat (reports/power_static.rpt):"
     foreach line $power_totals {
         lappend lines "    $line"

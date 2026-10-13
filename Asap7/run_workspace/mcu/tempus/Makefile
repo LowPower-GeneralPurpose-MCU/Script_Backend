@@ -10,6 +10,11 @@
 #     make all TEMPUS_CPUS=4       mac dinh 1 (xem tempus.tcl)
 #     make all TEMPUS_SDC_PATCH=0  doc SDC goc cua writeTimingCon thay cho ban
 #                                  va logs/top_soc_pnr.tempus.sdc (de doi chieu)
+#     make all TEMPUS_SPEF_GATE=0  cong "SPEF khop netlist" chi con canh bao
+#                                  (mac dinh 1: FAIL khi SPEF cu hon netlist,
+#                                  hoac con net that chua gan RC / net broken)
+#     make all TEMPUS_SLACK_WATCH=0.020   nguong (ns) ghi WARNING khi slack
+#                                  duong nhung sat mep (mac dinh 0.010)
 #     MCU_OCV_DERATE_LATE / MCU_OCV_DERATE_EARLY: cung ten bien voi Innovus.
 
 TEMPUS  ?= tempus
@@ -21,6 +26,8 @@ export TEMPUS_SPEF
 export TEMPUS_SI
 export TEMPUS_CPUS
 export TEMPUS_SDC_PATCH
+export TEMPUS_SPEF_GATE
+export TEMPUS_SLACK_WATCH
 
 .PHONY: all clean
 

@@ -6,15 +6,20 @@
 ## tuc nhan MCU_SCALE (project_config.tcl, mac dinh 1).  MCU_SCALE=4 cho lai
 ## dung tung so cua cac run 4x 2026-09-17..22.  Tech/cell/SRAM LEF 1x deu
 ## dung bang ban 4x chia 4 (kiem 2026-09-25), nen chia 4 moi so o day giu
-## nguyen hinh hoc da route sach - khong co so nao duoc "chon lai".
+## nguyen hinh hoc da route sach - khong co so nao duoc "chon lai", TRU luoi
+## nguon: ring loi, luoi M8/M9 va cap M5 tren than SRAM duoc thiet ke lai
+## 2026-10-13 theo ket qua Voltus (muc Power ben duoi).
 ## Khong nhan: phan tram mat do, so row, so cell, don vi GDS.
 ##
 ## Doi chieu slide thay (ROHM 180 nm) -> ASAP7 (so 1x):
 ##   gap giua SRAM 20.16 um = 4 row ROHM  -> 4 row ASAP7 = 1.08 um
 ##   ring SRAM M5/M4 rong 1.92            -> M4 (ngang) / M5 (doc) rong 0.024
 ##   stripe M4/M5 rong 1.92               -> luoi M6 (ngang) / M7 (doc) 0.16
-##   ring loi                              -> M8 (ngang) / M9 (doc)
-## Cac so ASAP7 lay tu flow Risc_V va sram_axi da route sach (ban 4x, chia 4).
+##   ring loi                              -> M8 (ngang) / M9 (doc) 0.48
+##   (slide khong co)                      -> luoi M8/M9 0.48 buoc 2.16 phu die,
+##                                            cap M5 tren than moi SRAM
+## Cac so ASAP7 lay tu flow Risc_V va sram_axi da route sach (ban 4x, chia 4),
+## tru luoi nguon noi tren.
 ############################################################
 
 # Do dai 1x -> don vi cua database hien tai.  format %.4f: 4 chu so thap phan
@@ -83,41 +88,103 @@ set SOC_SRAM_PLACE_FILE ./tcl/manual/soc_sram_place.tcl
 #   TAG ben phai CACHE.  Muon doi thi sua proc soc_layout (soc_fp_procs.tcl).
 
 # ---- Power (Hierarchy trang 37-41) ----------------------------------------
-# Ring loi M8/M9 va luoi M6/M7: so cua Risc_V.
+# LUOI NGUON THIET KE LAI 2026-10-13.  So cu (ring 0.136, luoi M6/M7 0.16 buoc
+# 8.64 khong di len SRAM, M8/M9 chi co ring, moi SRAM mot tap M5 sau 2.16 um)
+# la so cua slide ROHM chia theo ti le.  Voltus 2026-10-13 15:49, 127 mA:
+# VDD thap nhat -6.35 V, 97 % nut duoi 0.65 V.  Ba cho hong, do tu LEF va
+# voltus/work/*.sum (khong phai doan):
+#   1. Moi SRAM co 32 rail VDD + 35 rail VSS tren M4 (rong 0.048, dai het
+#      than), nhung tap M5 chi sau 2.16 um nen chi cham 1-2 rail = 1-2 via V4
+#      (10 ohm / via) cho 1.4 mA.
+#   2. Luoi M6/M7 dung o mep cum SRAM: 45 mA cua mot tuong RAM di vao qua day
+#      M4/M5 rong 0.024 (19 ohm/um) dai hon 100 um.
+#   3. M8/M9 chi co ring 0.136 (1.7 ohm/um), chan PG chi o canh tren.
+# Thiet ke moi, tu tren xuong:
+#   ring M8/M9 0.48           chan PG tren ca 4 canh (soc_add_pg_pins)
+#   luoi M8 ngang / M9 doc    0.48, buoc 2.16, phu ca die (SOC_TOP_MESH_*)
+#   luoi M7 doc / M6 ngang    0.16, buoc 8.64, nay phu ca than SRAM
+#   M5 doc tren than SRAM     0.024, 7 cap / SRAM lon, cao het than: via V4
+#                             xuong MOI rail M4 (SOC_BODY_TAP_X)
+#   stripe M5 std cell        khong doi (KHOI 10): logic chi ~8 mA
+# Uoc luong (dien tro tam M8/M9 0.232 ohm/o do tu ring cu, via 10 ohm/cut;
+# 127 mA = mo hinh .lib SRAM hien tai, can tren): luoi M8/M9 sut ~6 mV khi
+# nguon cap tu 4 canh, 12 mV neu chi canh tren + duoi, 50 mV neu chi canh
+# tren; cac lop duoi M8 them ~2 mV.  Nguong Voltus: 50 mV moi net.
+# CHUA chay tren Innovus / Voltus: so tren la mo hinh, khong phai ket qua do.
+#
 # Ring loi 2 vong trong le loi->die (tu ngoai vao):
-#   mep die | trong S | VSS rong W | trong S | VDD rong W | trong | mep loi
+#   mep die | trong EDGE | VSS rong W | trong S | VDD rong W | trong | mep loi
+# Le loi->die la 2.484 um va KHONG doi (doi le la doi loi: file vi tri SRAM
+# xep tay het dung).  0.2 + 0.48 + 0.16 + 0.48 = 1.32, con 1.164.
 # Khoang trong trong cung (con lai) phai >= SOC_MACRO_GAP de chua cap M4/M5 mep cum SRAM.
+# W = 0.48 chu khong phai 0.5: bang SPACINGTABLE cua M8/M9, day rong tu 0.49975
+# chay song song qua 1.8 um phai cach nhau 0.5; duoi nguong do chi can 0.04.
+# W + S = 0.64 = 8 track M8/M9 (pitch 0.08): addRing snap TAM tung vong len
+# track, lech nhau khong tron track thi khoang cach bi doi (run cu: S 0.136
+# thanh 0.104).  EDGE 0.2: vong VSS bi snap ra ngoai toi 0.08 van trong die.
 # W/S phai la boi CHAN cua manufacturing grid (tam day nam tren grid): run 4x
 # 0.54 = 135*0.004 le -> Innovus tu nang len 0.544 (IMPPP-152), vong VSS sat
-# mep die lo ra ngoai 4 nm va bi bo (IMPPP-220).  1x: 0.136 = 136*0.001, chan.
+# mep die lo ra ngoai 4 nm va bi bo (IMPPP-220).
 # Luoi 1x la 0.001 = 0.004/4, nen boi chan o 4x van la boi chan o 1x.
-set SOC_MFG_GRID    [soc_len 0.001]
-set SOC_CORE_RING_W [soc_len 0.136] ;# ~0.5 row
-set SOC_CORE_RING_S [soc_len 0.136] ;# khoang trong giua 2 vong va giua VSS - mep die
+set SOC_MFG_GRID       [soc_len 0.001]
+set SOC_CORE_RING_W    [soc_len 0.480]
+set SOC_CORE_RING_S    [soc_len 0.160] ;# giua hai vong
+set SOC_CORE_RING_EDGE [soc_len 0.200] ;# vong VSS - mep die
+# Luoi M7 doc / M6 ngang: so cua Risc_V, khong doi (da route sach).
 set SOC_MESH_W      [soc_len 0.160]
 set SOC_MESH_S      [soc_len 0.072]
 set SOC_MESH_PITCH  [soc_len 8.640]
 set SOC_MESH_OFFSET [soc_len 4.320]
+# Luoi tren cung M8 ngang / M9 doc.  Tin hieu chi route toi M7 (KHOI 13:
+# -topRoutingLayer 7) nen hai lop nay chi de cap nguon.  Trong mot cap VDD cach
+# VSS S: W + S = 1.04 = 13 track; buoc 2.16 = 27 track.  Mat do kim loai
+# 2 x 0.48 / 2.16 = 44 % moi lop (tran tu dat cua metal fill la 55 %).
+# Muon nhe hon: buoc 4.32 voi S 1.68 (22 %), sut ap M8/M9 gap doi.
+set SOC_TOP_MESH_W      [soc_len 0.480]
+set SOC_TOP_MESH_S      [soc_len 0.560]
+set SOC_TOP_MESH_PITCH  [soc_len 2.160]
+set SOC_TOP_MESH_OFFSET [soc_len 1.080]
 
 # Luoi nguon rieng cho tung cum SRAM (thay addRing -around shared_cluster, xem
 # soc_island_pg): 1 cap VSS/VDD o moi mep cum va moi khe 4 row giua SRAM.
 #   M4 ngang: mep duoi, mep tren, moi khe giua hai hang
 #   M5 doc  : mep trai, mep phai, moi khe giua hai cot
-#   M5 tap  : moi SRAM mot cap o canh phai, tu khe ben duoi an len chan M4
+#   M5 than : moi SRAM nhieu cap chay doc tren than, tu khe ben duoi len sat
+#             mep tren, via V4 xuong moi rail M4 cua SRAM
 # So lay tu sram_axi/innovus/tcl/sram_island_power.tcl (da route sach, 4x).
 set SOC_ISLAND_PG_W [soc_len 0.024]
 set SOC_ISLAND_PG_S [soc_len 0.072]
-set SOC_PIN_TAP_DEPTH  [expr {8 * $SOC_ROW_H}]     ;# tap an vao than SRAM
-set SOC_PIN_TAP_BORDER [expr {2 * $SOC_ROW_H}]     ;# tap nam trong 2 row sat canh phai
 set SOC_PG_EPS [soc_len 0.048]
 # Pitch/offset track M4/M5 cua tech LEF (1x: PITCH 0.048, M4 OFFSET 0.003).
 array set SOC_PG_PITCH  [list M4 [soc_len 0.048] M5 [soc_len 0.048]]
 array set SOC_PG_OFFSET [list M4 [soc_len 0.003] M5 0.0]
 
-# Chan PG VDD/VSS cua top (09_PnR tr.21 createPGPin): nam tren doan ring loi
-# phia tren (M8) cua tung net - DEF/GDS/LEF abstract co chan nguon cho LVS.
+# Cap M5 tren than SRAM.  Moi so la tam mot kenh rong 2 x SOC_BODY_TAP_HALF,
+# tinh tu mep TRAI hop SRAM (so am = tu mep PHAI), micron 1x; cap VSS/VDD rong
+# 0.12 duoc dat giua kenh, tam day tren track M5.  Danh sach doi xung
+# trai/phai nen R0 va MY nhu nhau.  -0.294 la kenh cua tap cu (2 row sat mep
+# phai).
+# Kenh phai tranh cot giua SRAM: LEF co OBS M5 va 14-18 chan tin hieu M5 o x
+# 13.812..17.940 (256x4x32) / 5.928..11.028 (128x4x20).  soc_body_tap_layout
+# doc lai LEF va chan khi kenh nao cach cot do duoi SOC_BODY_TAP_GUARD (tinh
+# ca ban lat MY) - doi master SRAM la biet ngay.  Cac kenh o day cung nam
+# ngoai chan PG M4 rong 0.216 giua than (x 10.476..19.872 / 3.564..12.960).
+# Vi sao 7 cap: M5 0.024 la 19 ohm/um, luoi M6 cat no moi 8.64 um; 1.4 mA chia
+# 7 cap thi sut tren M5 + V5 + V4 ~1.3 mV, 1 cap la ~9 mV.
+set SOC_BODY_TAP_HALF  [soc_len 0.246]
+set SOC_BODY_TAP_TOP   [soc_len 0.108]   ;# dau tren cach mep tren SRAM
+set SOC_BODY_TAP_GUARD [soc_len 0.500]   ;# cach cot giua (OBS/chan M5) toi thieu
+array set SOC_BODY_TAP_X {
+    big {1.5 4.5 7.5 -7.5 -4.5 -1.5 -0.294}
+    tag {1.5 -1.5 -0.294}
+}
+
+# Chan PG VDD/VSS cua top (09_PnR tr.21 createPGPin): MOI doan ring loi tren
+# cac lop nay la mot hinh cua chan (M8 = canh tren + duoi, M9 = trai + phai) -
+# DEF/GDS/LEF abstract co chan nguon cho LVS, va Voltus (VOLTUS_PADS=pin) rai
+# nguon ap doc ca 4 canh.  Truoc 2026-10-13 chi co doan M8 tren cung.
 # Tao o KHOI 16 (sau moi editTrim): tao som o KHOI 2 thi mat doan ring M8.
-set SOC_PG_PIN_LAYER M8
+set SOC_PG_PIN_LAYERS {M8 M9}
 
 # ---- Tap cell (10_Macro tr.21 latch-up) -----------------------------------
 # Deck calibreDRC.rul ACTIVE.LUP.1: PMOS cach tap N-well <= 30 um (1x; = 120 um

@@ -170,6 +170,47 @@ proc eco_flow_block {file prefix} {
     error "Khoi '$prefix' trong $file khong dong ngoac"
 }
 
+# Thoi diem moi nhat mot checkpoint <ten>.enc.dat duoc ghi: mtime lon nhat cua
+# thu muc va cac muc truc tiep ben trong (saveDesign ghi de file ben trong
+# khong nhat thiet doi mtime cua chinh thu muc).  File thuong: mtime cua no.
+proc eco_checkpoint_mtime {path} {
+    set newest [file mtime $path]
+    if {[file isdirectory $path]} {
+        foreach child [glob -nocomplain -directory $path *] {
+            if {[file mtime $child] > $newest} {
+                set newest [file mtime $child]
+            }
+        }
+    }
+    return $newest
+}
+
+# CONG TUOI (them 2026-10-13).  <path> phai duoc ghi SAU <base>; khong thi nem
+# loi kem <why>.  Moi buoc ECO doc ket qua cua buoc truoc tu file tren dia, va
+# cac file do song sot qua mot lan chay lai Innovus: sau khi luoi nguon doi,
+# tempus/reports/all_violators.rpt (0 vi pham, cua thiet ke CU) lam 'make all'
+# khong lam gi, roi 'make fillfix' / 'make finish' mo
+# top_soc_postRoute_eco*.enc.dat cua lan chay TRUOC va ghi de outputs/ bang
+# thiet ke cu - khong lenh nao bao.  ECO_ALLOW_STALE=1 ha xuong WARNING.
+proc eco_require_fresh {what path base_what base why} {
+    if {![file exists $path] || ![file exists $base]} {
+        return
+    }
+    set t [eco_checkpoint_mtime $path]
+    set t_base [eco_checkpoint_mtime $base]
+    if {$t >= $t_base} {
+        return
+    }
+    set msg [format "%s (%s) cu hon %s (%s) %.1f gio - %s" $what $path $base_what $base \
+        [expr {($t_base - $t) / 3600.0}] $why]
+    if {[eco_env ECO_ALLOW_STALE 0] eq "1"} {
+        eco_warn "ECO_ALLOW_STALE=1: $msg"
+        return
+    }
+    error "$msg
+  Bo qua co chu dich: them ECO_ALLOW_STALE=1 vao lenh make."
+}
+
 # Dong dau cua mot file tom tat (PASS / FAIL / DONE); "" neu chua co file.
 proc eco_summary_verdict {path} {
     if {![file isfile $path]} {

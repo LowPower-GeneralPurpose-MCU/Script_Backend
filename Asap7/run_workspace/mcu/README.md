@@ -328,6 +328,16 @@ Cách chèn tuỳ loại net (luật rút từ run 2026-10-12 21:13, xem `eco_bu
 | `ECO_FILL_BUF_STRONG` | `BUFx10_ASAP7_75t_R` | buffer cho net mà driver vốn đã mạnh (tách tải) |
 | `ECO_FILL_DIST` | `0.9` | `ecoAddRepeater -relativeDistToSink` (1 = sát driver), chỉ cho net một tải |
 | `ECO_FINISH_IN` | — | `make finish ECO_FINISH_IN=./saved/<tên>.enc.dat`: bỏ qua `fillfix` có chủ đích |
+| `ECO_ALLOW_STALE` | *(trống)* | `1` = cổng tuổi bên dưới chỉ còn cảnh báo |
+
+**Sau khi chạy lại Innovus** phải chạy `conformal` → `quantus` → `tempus` trên
+kết quả mới rồi mới `make all`. Ba bước ECO đọc đầu vào từ file trên đĩa, và
+các file đó sống sót qua một lần chạy lại Innovus: báo cáo Tempus cũ (0 vi phạm)
+làm `make all` không làm gì, rồi `make fillfix`/`make finish` mở checkpoint ECO
+của lần chạy trước và ghi đè `innovus/outputs/` bằng thiết kế cũ. Từ 2026-10-13
+cả ba bước dừng khi đầu vào cũ hơn `saved/top_soc_postRoute.enc.dat`
+(`eco_require_fresh` trong `eco_common.tcl`). Nếu `make all` báo Tempus không
+còn `max_transition` thì dừng ở đó, không `fillfix`, không `finish`.
 
 `eco_drv.tcl` từ chối chạy khi checkpoint còn `.lib` sai điện áp: `saveDesign`
 chép `.lib` vào `<tên>.enc.dat/libs/mmmc/` và `restoreDesign` nạp bản sao đó,

@@ -23,6 +23,8 @@
 ##   - OCV + CPPR, SI, derate SRAM 1.30 / 0.75, derate lib FF dien ap thap
 ##     (STD_FF_LOWV_DERATE), process 7 nhu innovus/tcl/init_common.tcl
 ##   - SDC doc qua ban va logs/top_soc_pnr.tempus.sdc (xem tempus_patch_sdc)
+##   - cong "SPEF khop netlist" (them 2026-10-13, xem tempus_spef_stale): PASS
+##     chi co nghia khi dong 'ky sinh' cua file tom tat ghi 0 chua gan / 0 broken
 ## Lenh nao Tempus khong nhan thi ly do nam trong reports/tempus_summary.rpt.
 ############################################################
 
@@ -258,6 +260,74 @@ proc tempus_check_lib_voltages {tag libs skip} {
     }
 }
 
+# ==========================================================================
+# CONG "SPEF KHOP NETLIST"                              (them 2026-10-13)
+# ==========================================================================
+# Run 2026-10-13 00:51 ghi PASS (setup +154 ps, hold +9 ps) tren mot SPEF trich
+# tu netlist TRUOC ECO: Quantus chay 2026-10-11, ECO them 7036 cell sau do.
+# 7036 net that khong co RC nao, 7015 net "broken" duoc Tempus va bang R gia;
+# duong WNS setup va chan max_transition xau nhat deu nam tren nhung net do.
+# Script luc ay chi kiem quantus_summary.rpt ghi DONE.  Hai cong:
+#   - truoc khi doc thiet ke: SPEF phai moi hon netlist (tempus_spef_stale)
+#   - sau update_timing: bang cua report_annotated_parasitics khong duoc co net
+#     that chua gan RC hay net broken (tempus_annotation_stats)
+# TEMPUS_SPEF_GATE=0 ha ca hai xuong WARNING (vi du KHOI 16 vua xuat lai netlist
+# y nguyen sau khi Quantus da chay).
+
+# Thoi diem (giay) -> "thang-ngay gio:phut".  'clock format' can goi msgcat cua
+# Tcl; ban Tcl cua tool thieu goi do thi tra so giay, khong lam hong ca run.
+proc tempus_time {seconds} {
+    if {[catch {clock format $seconds -format {%m-%d %H:%M}} text]} {
+        return "${seconds}s"
+    }
+    return $text
+}
+
+# SPEF nao cu hon netlist qua <slack_s> giay: danh sach thong bao, rong = on.
+# slack_s: SPEF cua mcu/quantus luon duoc ghi SAU netlist (0); SPEF tQuantus
+# cua KHOI 16 duoc ghi vai phut TRUOC netlist trong cung khoi do (3600).
+proc tempus_spef_stale {netlist spefs slack_s} {
+    set t_net [file mtime $netlist]
+    set stale {}
+    foreach spef $spefs {
+        set age [expr {$t_net - [file mtime $spef]}]
+        if {$age > $slack_s} {
+            lappend stale [format "%s cu hon %s %.1f gio (SPEF %s, netlist %s)" \
+                [file tail $spef] [file tail $netlist] [expr {$age / 3600.0}] \
+                [tempus_time [file mtime $spef]] [tempus_time $t_net]]
+        }
+    }
+    return $stale
+}
+
+# Bang "Summary of Annotated Parasitics" cua report_annotated_parasitics
+# (Tempus 23.15):
+#   | real net (complete) |     151656 |     151656 100.00%   |          0  0.00%   |
+#   | real net (broken)   |          0 |          0  0.00%   |          0  0.00%   |
+# -> dict {total annotated missing broken}; {} khi khong tim thay ca hai dong.
+proc tempus_annotation_stats {rpt} {
+    if {![file isfile $rpt]} {
+        return {}
+    }
+    set out [dict create]
+    set fp [open $rpt r]
+    while {[gets $fp line] >= 0} {
+        if {[regexp {^\|\s*real net \(complete\)\s*\|\s*(\d+)\s*\|\s*(\d+)\s+[\d.]+%\s*\|\s*(\d+)\s+[\d.]+%} \
+                $line -> total annotated missing]} {
+            dict set out total $total
+            dict set out annotated $annotated
+            dict set out missing $missing
+        } elseif {[regexp {^\|\s*real net \(broken\)\s*\|\s*(\d+)\s*\|} $line -> broken]} {
+            dict set out broken $broken
+        }
+    }
+    close $fp
+    if {![dict exists $out total] || ![dict exists $out broken]} {
+        return {}
+    }
+    return $out
+}
+
 set TEMPUS_DIR [file normalize [pwd]]
 set TEMPUS_SUMMARY [file join $TEMPUS_DIR reports tempus_summary.rpt]
 
@@ -333,6 +403,37 @@ if {[catch {
         if {![file isfile $path]} {
             error "Thieu file dau vao: $path"
         }
+    }
+
+    # CONG SPEF (1/2): SPEF phai duoc trich sau khi netlist nay duoc ghi.  Chan
+    # TRUOC khi doc thiet ke: STA tren SPEF cu mat 4 phut va cho mot PASS gia.
+    set TEMPUS_SPEF_GATE [tempus_env TEMPUS_SPEF_GATE 1]
+    if {$TEMPUS_SPEF_GATE ne "0" && $TEMPUS_SPEF_GATE ne "1"} {
+        error "TEMPUS_SPEF_GATE phai la 0 hoac 1, dang la '$TEMPUS_SPEF_GATE'"
+    }
+    set spef_files {}
+    set spef_oldest ""
+    foreach corner $corners {
+        foreach {tag rc temp libs} $corner break
+        set spef [format $spef_fmt $rc]
+        lappend spef_files $spef
+        if {$spef_oldest eq "" || [file mtime $spef] < $spef_oldest} {
+            set spef_oldest [file mtime $spef]
+        }
+    }
+    set spef_stale [tempus_spef_stale $TEMPUS_NETLIST $spef_files \
+        [expr {$TEMPUS_SPEF eq "quantus" ? 0 : 3600}]]
+    set spef_age_note [format "SPEF cu nhat ghi luc %s, netlist %s" \
+        [tempus_time $spef_oldest] [tempus_time [file mtime $TEMPUS_NETLIST]]]
+    if {[llength $spef_stale] > 0} {
+        set stale_msg "SPEF cu hon netlist - khong cung mot thiet ke: [join $spef_stale {; }]"
+        if {$TEMPUS_SPEF_GATE} {
+            error "$stale_msg.
+  Netlist da doi (KHOI 16 / 'make finish' cua mcu/eco) sau lan trich RC gan nhat.
+  Chay lai theo thu tu: mcu/conformal -> mcu/quantus -> mcu/tempus.
+  Bo qua co chu dich (netlist chi duoc xuat lai, khong doi): make all TEMPUS_SPEF_GATE=0"
+        }
+        tempus_warn "TEMPUS_SPEF_GATE=0: $stale_msg"
     }
 
     foreach corner $corners {
@@ -504,6 +605,38 @@ if {[catch {
     set TEMPUS_MAX_VIOL 100000
     set summary {}
     set failed {}
+
+    # CONG SPEF (2/2): moi net that phai co RC cua chinh no.  Bao cao chi in
+    # mot view (view_ss); ba SPEF cung mot lan chay Quantus nen phu net nhu
+    # nhau, va cong (1/2) da kiem tuoi ca ba file.
+    set annot [tempus_annotation_stats [file join $TEMPUS_DIR reports annotated_parasitics.rpt]]
+    if {[llength $annot] == 0} {
+        set annot_note "KHONG doc duoc bang 'real net' trong reports/annotated_parasitics.rpt"
+        set annot_bad "khong kiem duoc SPEF co phu het net that hay khong"
+    } else {
+        set annot_note [format "%d / %d net that da gan RC, %d chua gan, %d net broken" \
+            [dict get $annot annotated] [dict get $annot total] \
+            [dict get $annot missing] [dict get $annot broken]]
+        set annot_bad ""
+        if {[dict get $annot missing] > 0 || [dict get $annot broken] > 0} {
+            set annot_bad [format "SPEF khong khop netlist: %d net that chua gan RC, %d net broken" \
+                [dict get $annot missing] [dict get $annot broken]]
+        }
+    }
+    if {$annot_bad ne ""} {
+        if {$TEMPUS_SPEF_GATE} {
+            lappend failed "$annot_bad (chay lai mcu/quantus tren dung thiet ke nay)"
+        } else {
+            tempus_warn "TEMPUS_SPEF_GATE=0: $annot_bad - moi con so slack ben duoi khong dang tin"
+        }
+    }
+
+    # Nguong "sat mep": slack duong nhung nho hon so nay thi ghi WARNING de
+    # theo doi (hold view_ff con +3 ps o run 2026-10-13 12:44).  Khong lam FAIL.
+    set TEMPUS_SLACK_WATCH [tempus_env TEMPUS_SLACK_WATCH 0.010]
+    if {![string is double -strict $TEMPUS_SLACK_WATCH] || $TEMPUS_SLACK_WATCH < 0} {
+        error "TEMPUS_SLACK_WATCH phai la so >= 0 (ns), dang la '$TEMPUS_SLACK_WATCH'"
+    }
     foreach {kind label views} [list \
             late  setup $TEMPUS_SETUP_VIEWS \
             early hold  $TEMPUS_HOLD_VIEWS] {
@@ -530,6 +663,11 @@ if {[catch {
             }
             if {$wns < 0} {
                 lappend failed [format "%s/%s WNS %.4f ns" $label $view $wns]
+            } elseif {$wns < $TEMPUS_SLACK_WATCH} {
+                tempus_warn [format "%s %s chi con du %.0f ps (WNS %.4f ns, nguong theo doi %.0f ps -\
+ TEMPUS_SLACK_WATCH): duong xau nhat o dau reports/%s; mot lan trich RC / ECO nua co the lam no am" \
+                    $label $view [expr {$wns * 1000.0}] $wns [expr {$TEMPUS_SLACK_WATCH * 1000.0}] \
+                    [file tail $rpt]]
             }
         }
     }
@@ -547,6 +685,7 @@ if {[catch {
     foreach line $summary {
         lappend lines "  $line"
     }
+    lappend lines "  ky sinh (cong SPEF khop netlist)  : $annot_note; $spef_age_note"
     lappend lines "  max_transition / max_capacitance : reports/all_violators.rpt"
     lappend lines "  net chua gan ky sinh             : reports/annotated_parasitics.rpt"
     lappend lines "  duong khong rang buoc            : reports/check_timing.rpt, analysis_coverage.rpt"

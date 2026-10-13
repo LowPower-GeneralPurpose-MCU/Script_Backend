@@ -19,6 +19,15 @@
 #                                    STD_FF_LOWV_DERATE (project_config.tcl) bat
 #     make fillfix ECO_FILL_GUARD=0.015 ECO_FILL_ROUNDS=4   (dau file eco_fillfix.tcl)
 #     make finish ECO_FINISH_IN=./saved/<ten>.enc.dat       bo qua fillfix co chu dich
+#     make ... ECO_ALLOW_STALE=1     cong tuoi chi con canh bao.  Mac dinh ca ba
+#                                    buoc DUNG khi dau vao cu hon checkpoint
+#                                    cuoi KHOI 14 (Innovus da chay lai): bao cao
+#                                    Tempus o 'all', checkpoint ECO o 'fillfix'
+#                                    va 'finish' (eco_require_fresh, eco_common.tcl)
+#
+# SAU KHI CHAY LAI INNOVUS: chay mcu/conformal -> mcu/quantus -> mcu/tempus tren
+# ket qua moi TRUOC 'make all'.  'make all' bao Tempus khong con max_transition
+# thi dung o do - khong fillfix, khong finish.
 
 INNOVUS    ?= innovus
 RUN_DIR    := ../innovus
@@ -41,6 +50,7 @@ export ECO_FILL_BUF_STRONG
 export ECO_FILL_DIST
 export ECO_FILL_MAX_NETS
 export ECO_FINISH_IN
+export ECO_ALLOW_STALE
 
 .PHONY: all fillfix finish clean
 

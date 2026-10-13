@@ -787,12 +787,125 @@ proc soc_sram_islands {boxes} {
     return $islands
 }
 
+# big | tag cua mot nhom trong SOC_SRAM_GROUPS.
+proc soc_group_kind {group} {
+    foreach {name kind cols rows prefixes} $::SOC_SRAM_GROUPS {
+        if {$name eq $group} {
+            return $kind
+        }
+    }
+    error "Khong co nhom SRAM '$group' trong SOC_SRAM_GROUPS"
+}
+
+# {x_nho_nhat x_lon_nhat} cua moi RECT tren <layer> trong mot file LEF macro
+# (chan lan OBS, moi net); {} khi lop khong co hinh nao.  Don vi cua file LEF.
+proc soc_lef_layer_xrange {file layer} {
+    set fp [open $file]
+    set lo ""
+    set hi ""
+    set cur ""
+    while {[gets $fp line] >= 0} {
+        set w [regexp -inline -all {\S+} $line]
+        switch -- [lindex $w 0] {
+            LAYER { set cur [lindex $w 1] }
+            RECT {
+                if {$cur ne $layer} {
+                    continue
+                }
+                # "RECT [MASK n] x0 y0 x1 y1 ;" - bon so cuoi la toa do.
+                set nums {}
+                foreach t [lrange $w 1 end] {
+                    if {[string is double -strict $t]} {
+                        lappend nums $t
+                    }
+                }
+                if {[llength $nums] < 4} {
+                    continue
+                }
+                lassign [lrange $nums end-3 end] x0 y0 x1 y1
+                if {$lo eq "" || $x0 < $lo} { set lo $x0 }
+                if {$hi eq "" || $x1 > $hi} { set hi $x1 }
+            }
+        }
+    }
+    close $fp
+    if {$lo eq ""} {
+        return {}
+    }
+    return [list $lo $hi]
+}
+
+# Kenh dat cap M5 tren than mot SRAM (big | tag), tu SOC_BODY_TAP_X: danh sach
+# {lo hi} tinh tu mep trai hop SRAM, tang dan.  <w> la be rong macro, <m5> la
+# {lo hi} cua moi hinh M5 trong LEF macro ({} = khong co).  Loi khi mot kenh:
+#   - lo ra ngoai than SRAM,
+#   - cham cot M5 cua macro (OBS + chan tin hieu), ke ca khi macro lat MY,
+#   - de len / sat kenh ben canh.
+# Khong goi lenh Innovus nao nen thu duoc bang tclsh.
+proc soc_body_tap_layout {kind w m5} {
+    set half $::SOC_BODY_TAP_HALF
+    set E $::SOC_PG_EPS
+    set pair [expr {2.0 * $::SOC_ISLAND_PG_W + $::SOC_ISLAND_PG_S}]
+    if {2.0 * $half <= $pair} {
+        error "SOC_BODY_TAP_HALF $half: kenh hep hon mot cap VSS/VDD ($pair)"
+    }
+    if {![info exists ::SOC_BODY_TAP_X($kind)] || [llength $::SOC_BODY_TAP_X($kind)] == 0} {
+        error "SOC_BODY_TAP_X($kind) rong - SRAM loai '$kind' se khong co cap M5 nao tren than"
+    }
+    set forbid {}
+    if {[llength $m5] == 2} {
+        lassign $m5 a b
+        set g $::SOC_BODY_TAP_GUARD
+        # hop R0 va hop lat MY (x -> w - x)
+        set forbid [list [expr {min($a, $w - $b) - $g}] [expr {max($b, $w - $a) + $g}]]
+    }
+    set zones {}
+    foreach c $::SOC_BODY_TAP_X($kind) {
+        set center [expr {$c < 0 ? $w - [soc_len [expr {-$c}]] : [soc_len $c]}]
+        set z0 [expr {$center - $half}]
+        set z1 [expr {$center + $half}]
+        if {$z0 < $E - $::SOC_EPS || $z1 > $w - $E + $::SOC_EPS} {
+            error [format "SOC_BODY_TAP_X(%s) %s: kenh %.3f..%.3f lo ra ngoai than SRAM rong %.3f" \
+                $kind $c $z0 $z1 $w]
+        }
+        if {[llength $forbid] == 2 && $z1 > [lindex $forbid 0] && $z0 < [lindex $forbid 1]} {
+            error [format "SOC_BODY_TAP_X(%s) %s: kenh %.3f..%.3f cham cot M5 cua macro\
+ (OBS / chan tin hieu, R0 + MY, kem khoang cach %.3f: %.3f..%.3f) - cap M5 nguon se\
+ short voi chan SRAM" $kind $c $z0 $z1 $::SOC_BODY_TAP_GUARD {*}$forbid]
+        }
+        lappend zones [list $z0 $z1]
+    }
+    set zones [lsort -real -index 0 $zones]
+    foreach a [lrange $zones 0 end-1] b [lrange $zones 1 end] {
+        if {[lindex $b 0] - [lindex $a 1] < 2.0 * $E - $::SOC_EPS} {
+            error [format "SOC_BODY_TAP_X(%s): hai kenh %.3f..%.3f va %.3f..%.3f de len / sat nhau" \
+                $kind {*}$a {*}$b]
+        }
+    }
+    return $zones
+}
+
+# soc_body_tap_layout voi be rong va cot M5 doc tu LEF that; nho ket qua theo
+# cau hinh (soc_island_pg goi mot lan moi SRAM).
+proc soc_body_tap_zones {kind} {
+    set key [list $kind $::SOC_BODY_TAP_X($kind) $::SOC_BODY_TAP_HALF $::SOC_BODY_TAP_GUARD]
+    if {[info exists ::SOC_BODY_TAP_CACHE($key)]} {
+        return $::SOC_BODY_TAP_CACHE($key)
+    }
+    set lef [expr {$kind eq "tag" ? $::SRAM_TAG_LEF : $::SRAM_LEF}]
+    set w [lindex [soc_macro_size $kind] 0]
+    set zones [soc_body_tap_layout $kind $w [soc_lef_layer_xrange $lef M5]]
+    set ::SOC_BODY_TAP_CACHE($key) $zones
+    return $zones
+}
+
 # Luoi nguon rieng cho MOT cum (tu soc_sram_islands).  Cum khong can deu:
 #   M5 doc  : moi kenh doc suot chieu cao cum - mep trai, khe giua cac cot, mep phai
 #   M4 ngang: trong tung cot - mep duoi, moi khe giua hai SRAM, mep tren - keo
 #             sang hai kenh doc ke ben de cat qua cap M5 (co via M4-M5)
-#   M5 tap  : moi SRAM mot cap o canh phai, tu khe ben duoi an len chan PG M4
-# Moi dai deu nam ngoai than SRAM (tru phan tap trong than SRAM cua chinh no).
+#   M5 than : moi SRAM nhieu cap (SOC_BODY_TAP_X) chay doc tren than, tu khe
+#             ben duoi len sat mep tren, via V4 xuong moi rail PG M4 cua SRAM
+# Moi dai deu nam ngoai than SRAM (tru cap M5 tren than SRAM cua chinh no).
 proc soc_island_pg {members all_boxes} {
     set G $::SOC_MACRO_GAP
     set E $::SOC_PG_EPS
@@ -911,20 +1024,26 @@ proc soc_island_pg {members all_boxes} {
             }
         }
     }
-    # Tap: phan nam trong khe ben duoi SRAM khong duoc cham SRAM khac
+    # Cap M5 tren than SRAM (soc_body_tap_zones): tu day khe ben duoi (cat cap
+    # M4 cua khe do) len sat mep tren, qua MOI rail M4 cua SRAM.  Truoc
+    # 2026-10-13 moi SRAM chi co mot cap o canh phai, sau 2.16 um: 1-2 via V4.
+    # Phan nam trong khe ben duoi khong duoc cham SRAM khac.
     set taps {}
     foreach m $members {
         lassign $m name group mx0 my0 mx1 my1
-        set tap [list [expr {$mx1 - $::SOC_PIN_TAP_BORDER}] [expr {$my0 - $G}] \
-            [expr {$mx1 - $E}] [expr {$my0 + $::SOC_PIN_TAP_DEPTH}]]
-        lassign $tap tx0 ty0 tx1 ty1
-        foreach body $all_boxes {
-            lassign $body bname bgroup bx0 by0 bx1 by1
-            if {$bname ne $name && min($tx1, $bx1) - max($tx0, $bx0) > $eps && min($ty1, $by1) - max($ty0, $by0) > $eps} {
-                error "Cum $label: tap cua $name de len $bname"
+        foreach zone [soc_body_tap_zones [soc_group_kind $group]] {
+            lassign $zone z0 z1
+            set tap [list [expr {$mx0 + $z0}] [expr {$my0 - $G}] \
+                [expr {$mx0 + $z1}] [expr {$my1 - $::SOC_BODY_TAP_TOP}]]
+            lassign $tap tx0 ty0 tx1 ty1
+            foreach body $all_boxes {
+                lassign $body bname bgroup bx0 by0 bx1 by1
+                if {$bname ne $name && min($tx1, $bx1) - max($tx0, $bx0) > $eps && min($ty1, $by1) - max($ty0, $by0) > $eps} {
+                    error "Cum $label: cap M5 tren than $name de len $bname"
+                }
             }
+            lappend taps $tap
         }
-        lappend taps $tap
     }
 
     set n4 [soc_stripe_count M4]
@@ -1072,6 +1191,8 @@ proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0} {cgrid 0}} {
             lappend positions $pos
         }
     }
+    # So vi tri cap VDD/VSS cua lan goi nay, de noi goi dem lai stripe that.
+    set ::SOC_MESH_LAST_PAIRS [llength $positions]
     set groups {}
     foreach pos [lsort -real $positions] {
         set blocked {}
@@ -1136,11 +1257,9 @@ proc soc_mesh_layer {layer dir keepouts {shape {}} {extra 0} {cgrid 0}} {
     return $n
 }
 
-# Luoi toan chip M7 doc / M6 ngang, KHONG di len vung cum SRAM (than + khe giua
-# cac SRAM).  Noi vao luoi M4/M5 cua cum o mep cum:
-#   M6 ngang dung sat than cum -> cat cap M5 mep trai/phai cum, via M5-M6
-#   M7 doc  dung sat than cum -> cat cap M4 mep tren/duoi cum, via M4..M7
-# Hop bao moi cum SRAM (soc_sram_islands), noi rong moi phia 'grow' um.
+# Hop bao moi cum SRAM (soc_sram_islands), noi rong moi phia 'grow' um.  Tu
+# 2026-10-13 luoi M6..M9 KHONG con tranh cac hop nay (xem soc_add_mesh); chi
+# con row / std cell / stripe M5 std cell tranh (soc_sram_no_std_boxes).
 proc soc_island_keepouts {{grow 0.0}} {
     set keepouts {}
     foreach island [soc_sram_islands [soc_sram_boxes]] {
@@ -1156,21 +1275,196 @@ proc soc_island_keepouts {{grow 0.0}} {
     return $keepouts
 }
 
+# Luoi nguon toan chip, bon lop, phu CA die ke ca than SRAM (LEF SRAM chi co
+# OBS toi M5).  Moi lop chi ha via xuong lop ngay duoi va len lop ngay tren:
+#   M7 doc   0.16 / 8.64  via len ring M8 (va luoi M8 ve sau)
+#   M6 ngang 0.16 / 8.64  via len M7, via V5 xuong MOI day M5 cung net no cat:
+#                         cap M5 tren than SRAM, cap M5 mep / khe cum
+#   M8 ngang 0.48 / 2.16  via xuong M7, via len ring M9 trai / phai
+#   M9 doc   0.48 / 2.16  via xuong luoi M8 va ring M8 tren / duoi
+# Thu tu M7, M6, M8, M9: addStripe chi ha via xuong hinh DA co.
+#
+# Truoc 2026-10-13 chi co M7 / M6 va chung dung o mep cum SRAM: ca cum (tuong
+# RAM 131 x 353 um, 45 mA) an dong qua cap M5 / M4 rong 0.024 o mep cum.
+# M7 truoc day ha chong via M4..M7 xuong cap M4 mep cum.  Nay M7 di tren than
+# SRAM nen day via cua no dung o M6: de M4 thi addStripe se ha chong via
+# V4+V5+V6 (mieng dem M5 / M6 tu sinh) xuong tung rail PG M4 cua SRAM.
+# Chong via do KHONG dang tin - dem tu voltus/work/*.sum cua run 2026-10-13,
+# doi chieu voi so giao cat dung lai tu chinh cac proc nay:
+#   V6: VDD 1199 = dung so giao cat M6 x M7; VSS 1321 = 1199 + 122
+#   V5: VDD 2322 = so giao cat M6 x M5 (2404) tru 82 doan M6 cut o le loi;
+#       VSS 2444 = 2322 + 122
+#   -> chong via M7 -> M4 duoc tao o 122 / 126 cho cua VSS va 0 / 124 cho cua
+#      VDD.  (V7: VDD 41, VSS 130 - doan M7 cut cua VDD chi con moi noi voi
+#      ring nen bi editTrim xoa.)
+# Cung phep dem do cho thay via V5 giua M6 0.16 va M5 0.024 duoc tao o MOI
+# giao cat, ca 456 cho tao ngay tai KHOI 6 (khong ep loai via) - day la moi
+# noi ma luoi moi dua vao.  Duong xuong rail: M6 -> V5 -> M5 0.024 -> V4 (kieu
+# cua tap M5 cu tren chan M4 SRAM).
 proc soc_add_mesh {} {
-    set keepouts [soc_island_keepouts]
+    set top [list $::SOC_TOP_MESH_W $::SOC_TOP_MESH_S $::SOC_TOP_MESH_PITCH $::SOC_TOP_MESH_OFFSET]
+    set notes {}
+    foreach {layer dir bottom up shape} [list \
+            M7 vertical   M6 M8 {} \
+            M6 horizontal M5 M7 {} \
+            M8 horizontal M7 M9 $top \
+            M9 vertical   M8 M9 $top] {
+        set before [soc_stripe_count $layer]
+        setAddStripeMode -reset
+        setAddStripeMode -allow_jog none -break_at none -split_vias true \
+            -via_using_exact_crossover_size false \
+            -stacked_via_bottom_layer $bottom -stacked_via_top_layer $up
+        soc_mesh_layer $layer $dir {} $shape
+        # Khong co keepout nen moi vi tri la mot cap chay suot: thieu doan la
+        # addStripe da bo (xem innovus.log), khong duoc di tiep.
+        set want [expr {2 * $::SOC_MESH_LAST_PAIRS}]
+        set made [expr {[soc_stripe_count $layer] - $before}]
+        if {$made < $want} {
+            error "Luoi $layer thieu stripe ($made / $want doan) - xem addStripe trong innovus.log"
+        }
+        lappend notes "$layer $made doan"
+    }
+    puts "Luoi nguon toan chip: [join $notes {, }] (phu ca than SRAM)"
+}
 
-    setAddStripeMode -reset
-    setAddStripeMode -allow_jog none -break_at none -split_vias true \
-        -via_using_exact_crossover_size false \
-        -stacked_via_bottom_layer M4 -stacked_via_top_layer M8
-    set n7 [soc_mesh_layer M7 vertical $keepouts]
+# Loai cut cua mot via PG, doan theo TEN (soc_count_svias cung dua vao ten):
+# via co dinh cua tech LEF la VIA<a><b>[_PG], via sinh tu VIARULE GENERATE mang
+# ten rule o dau (M9_M8..., M5_M4widePWR...).  Ten la -> "khac".
+proc soc_pg_via_class {name} {
+    foreach {cut pats} {
+        V8 {VIA89* M9_M8*} V7 {VIA78* M8_M7*} V6 {VIA67* M7_M6*}
+        V5 {VIA56* M6_M5*} V4 {VIA45* M5_M4*} V3 {VIA34* M4_M3*}
+        V2 {VIA23* M3_M2*} V1 {VIA12* M2_M1*}
+    } {
+        foreach pat $pats {
+            if {[string match $pat $name]} {
+                return $cut
+            }
+        }
+    }
+    return khac
+}
 
-    setAddStripeMode -reset
-    setAddStripeMode -allow_jog none -break_at none -split_vias true \
-        -via_using_exact_crossover_size false \
-        -stacked_via_bottom_layer M5 -stacked_via_top_layer M7
-    set n6 [soc_mesh_layer M6 horizontal $keepouts]
-    puts "Luoi M7: $n7 vung, M6: $n6 vung (tranh [llength $keepouts] cum SRAM)"
+# Dem via V4 nam tren than tung SRAM.  boxes = {ten x0 y0 x1 y1 so_cap},
+# pts = {{x y} ...}; tra ve {{ten so_via nguong} ...} cua SRAM co it via hon
+# nguong = so_cap * per_pair.  Thuan Tcl de thu duoc bang tclsh.
+proc soc_pg_low_srams {boxes pts per_pair} {
+    foreach b $boxes {
+        set n([lindex $b 0]) 0
+    }
+    foreach pt $pts {
+        lassign $pt x y
+        foreach b $boxes {
+            lassign $b name x0 y0 x1 y1
+            if {$x >= $x0 && $x <= $x1 && $y >= $y0 && $y <= $y1} {
+                incr n($name)
+                break
+            }
+        }
+    }
+    set low {}
+    foreach b $boxes {
+        lassign $b name x0 y0 x1 y1 pairs
+        set need [expr {$pairs * $per_pair}]
+        if {$n($name) < $need} {
+            lappend low [list $name $n($name) $need]
+        }
+    }
+    return $low
+}
+
+# Bao cao luoi nguon sau KHOI 6 + CONG so via V4 tren than tung SRAM.
+# Vi sao can: voi luoi cu, verifyConnectivity va DRC deu sach trong khi moi
+# SRAM chi noi nguon qua 1-2 via V4 - chi Voltus (sau ca run P&R) moi thay.
+# Mot cap M5 tren than phai ha via xuong 32 rail M4 moi net; viaGen bo via
+# (kieu IMPPP-4405) thi so nay tut ma khong lenh kiem nao khac bao.
+# Tra ve so SRAM thieu via (KHOI 8 chan khi > 0).  Nguong: 8 via moi cap moi
+# net (du kien 32).  Ten via khong nhan ra duoc thi KHONG ket luan: tra 0 va
+# in WARNING kem cac ten via gap nhieu nhat.
+proc soc_pg_report {{report ./reports/pg_grid.rpt}} {
+    set lines {}
+    set parts {}
+    foreach layer {M4 M5 M6 M7 M8 M9} {
+        lappend parts "$layer [soc_stripe_count $layer]"
+    }
+    lappend lines "doan stripe (VDD + VSS): [join $parts {, }]"
+    set boxes {}
+    foreach b [soc_sram_boxes] {
+        lassign $b name group x0 y0 x1 y1
+        lappend boxes [list $name $x0 $y0 $x1 $y1 \
+            [llength [soc_body_tap_zones [soc_group_kind $group]]]]
+    }
+    set bad 0
+    set unknown 0
+    foreach net {VDD VSS} {
+        if {[catch {
+            set net_ptr [dbGet -p top.nets.name $net]
+            set names [dbGet -e $net_ptr.sVias.via.name]
+            set pts   [dbGet -e $net_ptr.sVias.pt]
+        } err]} {
+            lappend lines "WARNING: $net: khong doc duoc special via ($err) - khong dem duoc"
+            set unknown 1
+            continue
+        }
+        if {[llength $names] != [llength $pts]} {
+            lappend lines "WARNING: $net: [llength $names] ten via nhung [llength $pts] toa do - khong dem duoc"
+            set unknown 1
+            continue
+        }
+        array unset count
+        array unset other
+        set v4 {}
+        foreach name $names pt $pts {
+            set cls [soc_pg_via_class $name]
+            incr count($cls)
+            if {$cls eq "V4"} {
+                lappend v4 $pt
+            } elseif {$cls eq "khac"} {
+                incr other($name)
+            }
+        }
+        set parts {}
+        foreach cls {V8 V7 V6 V5 V4 V3 V2 V1 khac} {
+            if {[info exists count($cls)]} {
+                lappend parts "$cls $count($cls)"
+            }
+        }
+        lappend lines "$net: [llength $names] special via: [join $parts {, }]"
+        if {[array size other] > 0} {
+            set top {}
+            foreach name [array names other] {
+                lappend top [list $name $other($name)]
+            }
+            set top [lrange [lsort -integer -decreasing -index 1 $top] 0 9]
+            lappend lines "  ten via chua phan loai (nhieu nhat truoc): $top"
+        }
+        if {[llength $v4] == 0} {
+            lappend lines "WARNING: $net: khong nhan ra via V4 nao theo ten (VIA45* / M5_M4*) -\
+ KHONG ket luan duoc so via tren than SRAM; sua soc_pg_via_class theo ten o dong tren"
+            set unknown 1
+            continue
+        }
+        set low [soc_pg_low_srams $boxes $v4 8]
+        lappend lines "  via V4 tren than SRAM: [llength $boxes] SRAM, [llength $low] SRAM duoi nguong\
+ (8 via moi cap M5; du kien 32)"
+        foreach item [lrange $low 0 19] {
+            lassign $item name got need
+            lappend lines "    THIEU $net $name: $got via V4, can >= $need"
+        }
+        incr bad [llength $low]
+    }
+    file mkdir [file dirname $report]
+    set fp [open $report w]
+    puts $fp [join $lines "\n"]
+    close $fp
+    foreach line $lines {
+        puts "PG: $line"
+    }
+    if {$unknown} {
+        puts "PG: WARNING: bao cao khong day du - doc $report va dem tay trong GUI\
+ (mot cap M5 tren than SRAM phai co via V4 o moi rail M4)"
+    }
+    return $bad
 }
 
 # Vung cum SRAM + khe mep cum (cap M4/M5 rieng cua cum nam trong khe 4.32):
@@ -2079,29 +2373,112 @@ proc soc_sram_route_blk {} {
     return $n
 }
 
-# Chan PG cua top (09_PnR tr.21): moi net mot chan phu doan ring loi
-# SOC_PG_PIN_LAYER nam tren cung.  Paste lai KHOI 2: chan da co thi giu nguyen.
-proc soc_add_pg_pins {} {
+# Chan PG cua top (09_PnR tr.21): moi net MOT chan, hinh cua no la moi doan
+# ring loi tren SOC_PG_PIN_LAYERS (M8 tren + duoi, M9 trai + phai).  Truoc
+# 2026-10-13 chi lay doan M8 tren cung: Voltus cap ca chip tu mot canh, rieng
+# luoi M8/M9 da sut gap ~9 lan so voi cap tu 4 canh (soc_fp_config.tcl).
+# Cac doan ring cung duoc ghi ra <ring_file> (net layer x0 y0 x1 y1): hinh ring
+# co that trong DEF du createPGPin co nhan du hinh hay khong, va
+# 'make all VOLTUS_PADS=ring' cua mcu/voltus doc file nay.
+# createPGPin voi nhieu -geom CHUA chay thu tren Innovus 23.14: bi tu choi thi
+# thu tung hinh, doan M8 tren cung truoc (= hinh cua cac run cu).  So hinh
+# that su vao LEF do soc_check_pg_pin_lef dem sau write_lef_abstract.
+proc soc_add_pg_pins {{ring_file ""}} {
+    if {$ring_file eq ""} {
+        set ring_file ./outputs/${::TOP}_pg_ring.txt
+    }
+    set ring_lines [list "# net layer x0 y0 x1 y1 (um) - doan ring loi, ghi boi soc_add_pg_pins"]
     foreach net {VDD VSS} {
+        set geoms {}
+        foreach w [dbGet -e -p [dbGet -p top.nets.name $net].sWires.shape ring] {
+            set layer [dbGet $w.layer.name]
+            if {$layer ni $::SOC_PG_PIN_LAYERS} {
+                continue
+            }
+            lappend geoms [concat [list $layer] [lindex [dbGet $w.box] 0]]
+        }
+        if {[llength $geoms] == 0} {
+            error "Ring $net khong co doan nao tren $::SOC_PG_PIN_LAYERS - chay lai KHOI 2"
+        }
+        # Doan ngang cao nhat truoc, roi cac doan con lai.
+        set geoms [lsort -decreasing -real -index 2 $geoms]
+        foreach g $geoms {
+            lappend ring_lines [format "%s %s %.4f %.4f %.4f %.4f" $net {*}$g]
+        }
+        set ::SOC_PG_PIN_GEOMS($net) [llength $geoms]
         if {![catch {dbGet -e top.pgTerms.name $net} have] && $have ne ""} {
             puts "Chan PG $net da co - bo qua"
             continue
         }
-        set best {}
-        foreach w [dbGet -e -p [dbGet -p top.nets.name $net].sWires.shape ring] {
-            if {[dbGet $w.layer.name] ne $::SOC_PG_PIN_LAYER} {
-                continue
-            }
-            set box [lindex [dbGet $w.box] 0]
-            if {[llength $best] == 0 || [lindex $box 1] > [lindex $best 1]} {
-                set best $box
+        set geom_args {}
+        foreach g $geoms {
+            lappend geom_args -geom {*}$g
+        }
+        set made 0
+        if {![catch {createPGPin $net {*}$geom_args} err]} {
+            set made [llength $geoms]
+        } else {
+            puts "WARNING: createPGPin $net voi [llength $geoms] -geom bi tu choi ($err) - thu tung hinh"
+            foreach g $geoms {
+                if {[catch {createPGPin $net -geom {*}$g} err]} {
+                    puts "WARNING: createPGPin $net -geom $g: $err"
+                } else {
+                    incr made
+                }
             }
         }
-        if {[llength $best] == 0} {
-            error "Ring $net khong co doan $::SOC_PG_PIN_LAYER - chay lai KHOI 2"
+        if {$made == 0} {
+            error "Khong tao duoc chan PG $net tren hinh ring nao"
         }
-        createPGPin $net -geom $::SOC_PG_PIN_LAYER {*}$best
-        puts [format "Chan PG %s: %s {%.3f %.3f %.3f %.3f}" $net $::SOC_PG_PIN_LAYER {*}$best]
+        puts "Chan PG $net: $made / [llength $geoms] doan ring ([join $geoms {; }])"
+    }
+    file mkdir [file dirname $ring_file]
+    set fp [open $ring_file w]
+    puts $fp [join $ring_lines "\n"]
+    close $fp
+    puts "Doan ring loi: $ring_file"
+}
+
+# So RECT cua chan <net> trong mot LEF abstract.
+proc soc_lef_pin_rect_count {lef net} {
+    set fp [open $lef]
+    set in_pin 0
+    set n 0
+    while {[gets $fp line] >= 0} {
+        set w [regexp -inline -all {\S+} $line]
+        if {!$in_pin} {
+            if {[lindex $w 0] eq "PIN" && [lindex $w 1] eq $net} {
+                set in_pin 1
+            }
+            continue
+        }
+        if {[lindex $w 0] eq "END" && [lindex $w 1] eq $net} {
+            break
+        }
+        if {[lindex $w 0] eq "RECT"} {
+            incr n
+        }
+    }
+    close $fp
+    return $n
+}
+
+# Sau write_lef_abstract: chan PG trong LEF phai co du so hinh ma
+# soc_add_pg_pins da xin.  Chi WARNING: moi file khac cua KHOI 16 van dung, va
+# Voltus con duong 'VOLTUS_PADS=ring' - nhung phai noi ra, vi voltus mac dinh
+# (VOLTUS_PADS=pin) rai nguon ap theo dung cac hinh nay.
+proc soc_check_pg_pin_lef {lef} {
+    foreach net {VDD VSS} {
+        set have [soc_lef_pin_rect_count $lef $net]
+        set want [expr {[info exists ::SOC_PG_PIN_GEOMS($net)] ? $::SOC_PG_PIN_GEOMS($net) : 4}]
+        if {$have < $want} {
+            puts "WARNING: chan PG $net trong [file tail $lef] co $have hinh, ring co $want doan -\
+ Voltus (VOLTUS_PADS=pin) chi cap nguon tu $have canh.  Chay Voltus bang\
+ 'make all VOLTUS_PADS=ring' (doc outputs/${::TOP}_pg_ring.txt), va xem dong\
+ 'createPGPin' trong log."
+        } else {
+            puts "Chan PG $net trong [file tail $lef]: $have hinh (ring $want doan)"
+        }
     }
 }
 
