@@ -96,16 +96,118 @@ proc voltus_files_under {dir depth} {
     return $out
 }
 
-# Diem cap nguon.  defpin = chan PG VDD/VSS ma KHOI 16 dat tren ring M8
-# (soc_add_pg_pins truoc defOut); auto = cach cua mau Mul32.
+# Diem cap nguon.
+#   pin    = nhieu nguon ap rai doc theo hinh chan PG VDD/VSS trong LEF cua top
+#            (soc_add_pg_pins dat moi net mot chan phu ca doan ring M8 tren
+#            cung, dai 565 um).  Run 2026-10-13 14:26 dung defpin: Voltus chi
+#            dat MOT nguon ap cho ca chan do, rieng lop M8 da sut 3.9 V.
+#   defpin = mot nguon ap moi chan DEF;  auto = cach cua mau Mul32.
 proc voltus_power_pads {how} {
     foreach net {VDD VSS} {
-        if {$how eq "defpin"} {
-            set_power_pads -net $net -format defpin
-        } else {
-            set_power_pads -net $net -auto_voltage_source_creation true
+        switch -- $how {
+            pin     { set_power_pads -net $net -format xy -file $::VOLTUS_PAD_FILE($net) }
+            defpin  { set_power_pads -net $net -format defpin }
+            default { set_power_pads -net $net -auto_voltage_source_creation true }
         }
     }
+}
+
+# Cac hinh chu nhat cua chan <net> trong LEF top: danh sach {layer x0 y0 x1 y1}.
+proc voltus_lef_pin_rects {lef net} {
+    set fp [open $lef r]
+    set rects {}
+    set in_pin 0
+    set layer ""
+    while {[gets $fp line] >= 0} {
+        set words [regexp -all -inline {\S+} $line]
+        set key [lindex $words 0]
+        if {!$in_pin} {
+            if {$key eq "PIN" && [lindex $words 1] eq $net} {
+                set in_pin 1
+            }
+            continue
+        }
+        if {$key eq "END" && [lindex $words 1] eq $net} {
+            break
+        }
+        if {$key eq "LAYER"} {
+            set layer [lindex $words 1]
+        }
+        if {$key eq "RECT"} {
+            # "RECT MASK n x0 y0 x1 y1 ;" - bon so cuoi la toa do.
+            set nums {}
+            foreach word [lrange $words 1 end] {
+                if {[string is double -strict $word]} {
+                    lappend nums $word
+                }
+            }
+            if {[llength $nums] >= 4} {
+                lappend rects [list $layer {*}[lrange $nums end-3 end]]
+            }
+        }
+    }
+    close $fp
+    return $rects
+}
+
+# Rai nguon ap doc theo truc dai cua tung hinh chan, cach nhau khoang <pitch> um.
+# Moi phan tu: {ten x y layer}.
+proc voltus_pin_sources {lef net pitch} {
+    set sources {}
+    foreach rect [voltus_lef_pin_rects $lef $net] {
+        lassign $rect layer x0 y0 x1 y1
+        set horizontal [expr {($x1 - $x0) >= ($y1 - $y0)}]
+        set length [expr {$horizontal ? $x1 - $x0 : $y1 - $y0}]
+        set count [expr {max(1, int(floor($length / $pitch)))}]
+        set step [expr {$length / double($count)}]
+        for {set i 0} {$i < $count} {incr i} {
+            set along [expr {($i + 0.5) * $step}]
+            if {$horizontal} {
+                set x [expr {$x0 + $along}]
+                set y [expr {($y0 + $y1) / 2.0}]
+            } else {
+                set x [expr {($x0 + $x1) / 2.0}]
+                set y [expr {$y0 + $along}]
+            }
+            lappend sources [list "${net}_[llength $sources]" [format %.4f $x] [format %.4f $y] $layer]
+        }
+    }
+    return $sources
+}
+
+proc voltus_write_pad_file {path sources} {
+    set fp [open $path w]
+    puts $fp "*vsrc_name x y layer_name"
+    foreach source $sources {
+        puts $fp [join $source " "]
+    }
+    close $fp
+}
+
+# "-7.808V" / "1.271nV" / "0.700V," -> so thuc (V); khong doc duoc thi tra "".
+proc voltus_value {token} {
+    if {![regexp {^(-?[0-9.]+(?:[eE][-+]?[0-9]+)?)([fpnum]?)[VA],?$} $token -> num prefix]} {
+        return ""
+    }
+    return [expr {$num * [dict get {{} 1.0 f 1e-15 p 1e-12 n 1e-9 u 1e-6 m 1e-3} $prefix]}]
+}
+
+# Dong "Minimum, Average, Maximum IR drop: a b c" cua <net>.main.rpt -> {a b c}
+# theo V; dong khac tra {}.  Voi VDD ba so la DIEN AP NUT (lon nhat = danh
+# dinh), voi VSS la do nay so voi 0 V.
+proc voltus_ir_values {line} {
+    if {![regexp -nocase {Minimum, Average, Maximum IR drop:\s*(\S+)\s+(\S+)\s+(\S+)} $line -> a b c]} {
+        return {}
+    }
+    set values {}
+    foreach token [list $a $b $c] {
+        set value [voltus_value $token]
+        if {$value eq ""} {
+            return {}
+        }
+        lappend values $value
+    }
+    return $values
 }
 
 # analyze_rail KHONG nem loi Tcl khi hong va van de lai era_work/ (thu vien PGV)
@@ -308,9 +410,24 @@ if {[catch {
     # tren may nay Genus (super-thread), Conformal (thread) va IQuantus (8 tien
     # trinh) deu treo o che do do.  Mau Mul32 bat XP voi 2 CPU.
     set VOLTUS_XP [voltus_env_flag VOLTUS_XP 0]
-    # Option noi them vao set_rail_analysis_mode (danh sach Tcl), de thu cac
-    # cach trich luoi khac ma khong sua script.
-    set VOLTUS_RAIL_OPTS [voltus_env VOLTUS_RAIL_OPTS ""]
+    # Option noi them vao set_rail_analysis_mode (danh sach Tcl).  Mac dinh
+    # "-enable_scheduler false": run 2026-10-13 14:26 la lan dau analyze_rail
+    # chay het voi no; de scheduler bat thi buoc ghep luoi (SMG) tim
+    # VDD_part_N.mhdr trong khi buoc trich ghi TopLevelPGDB_part_N.*
+    # (VOLTUS_RAIL_SMG-0048).  VOLTUS_RAIL_OPTS=none = khong noi gi.
+    set VOLTUS_RAIL_OPTS [voltus_env VOLTUS_RAIL_OPTS "-enable_scheduler false"]
+    if {$VOLTUS_RAIL_OPTS eq "none"} {
+        set VOLTUS_RAIL_OPTS ""
+    }
+    # Diem cap nguon (xem voltus_power_pads) va buoc rai nguon ap cua kieu pin.
+    set VOLTUS_PADS [voltus_env VOLTUS_PADS pin]
+    if {$VOLTUS_PADS ni {pin defpin auto}} {
+        error "VOLTUS_PADS phai la pin, defpin hoac auto, dang la '$VOLTUS_PADS'"
+    }
+    set VOLTUS_PAD_PITCH [voltus_env VOLTUS_PAD_PITCH 10.0]
+    if {![string is double -strict $VOLTUS_PAD_PITCH] || $VOLTUS_PAD_PITCH <= 0} {
+        error "VOLTUS_PAD_PITCH phai la so duong (um), dang la '$VOLTUS_PAD_PITCH'"
+    }
     set voltus_cpus [voltus_env VOLTUS_CPUS 1]
     if {![string is integer -strict $voltus_cpus] || $voltus_cpus < 1} {
         error "VOLTUS_CPUS phai la so nguyen >= 1, dang la '$voltus_cpus'"
@@ -401,9 +518,40 @@ if {[catch {
     set rail_note "bo qua (VOLTUS_RAIL=0)"
     set rail_ok 1
     if {$VOLTUS_RAIL} {
+        set pad_label(defpin) "defpin (MOT nguon ap moi net)"
+        set pad_label(auto)   "auto_voltage_source_creation"
+        set pad_choices [list $VOLTUS_PADS]
+        if {$VOLTUS_PADS eq "pin"} {
+            set top_lef [file join $FLOW_ROOT innovus outputs "${TOP}.lef"]
+            set pad_counts {}
+            if {[catch {
+                foreach net {VDD VSS} {
+                    set sources [voltus_pin_sources $top_lef $net $VOLTUS_PAD_PITCH]
+                    if {[llength $sources] == 0} {
+                        error "khong co hinh chan $net trong $top_lef"
+                    }
+                    set VOLTUS_PAD_FILE($net) [file join $VOLTUS_DIR outputs "vsrc_$net.pp"]
+                    voltus_write_pad_file $VOLTUS_PAD_FILE($net) $sources
+                    lappend pad_counts "$net [llength $sources]"
+                }
+            } pad_err]} {
+                voltus_warn "khong tao duoc file nguon ap tu chan PG ($pad_err) - dung defpin"
+                set pad_choices {}
+            } else {
+                set pad_label(pin) "pin ([join $pad_counts {, }] nguon ap rai doc chan PG trong\
+ [file tail $top_lef], buoc $VOLTUS_PAD_PITCH um; chi cap tu canh co chan)"
+                if {[file mtime $top_lef] < [file mtime $VOLTUS_DEF] - 3600} {
+                    voltus_warn "[file tail $top_lef] cu hon DEF hon 1 gio - toa do chan PG co the khong khop"
+                }
+            }
+        }
+        # Kieu da chon bi Tcl tu choi (sai cu phap) thi con defpin de van co so.
+        if {"defpin" ni $pad_choices} {
+            lappend pad_choices defpin
+        }
         set attempts {}
         foreach map [lsort -unique -decreasing [list $VOLTUS_LAYER_MAP ""]] {
-            foreach pads {defpin auto} {
+            foreach pads $pad_choices {
                 lappend attempts [list $map $pads]
             }
         }
@@ -415,7 +563,7 @@ if {[catch {
         foreach attempt $attempts {
             foreach {map pads} $attempt break
             set label "ghep lop [expr {$map eq "" ? "THEO VI TRI" : [file tail $map]}],\
- diem cap nguon $pads"
+ diem cap nguon $pad_label($pads)"
             if {[catch {voltus_rail $map $pads} rail_err]} {
                 # Option bi tu choi (IMPTCM-48) nem loi Tcl KHONG co noi dung.
                 if {[string trim $rail_err] eq ""} {
@@ -463,6 +611,9 @@ if {[catch {
     }
     lappend lines "  file dong cho luoi nguon: [expr {[llength $power_data_names] ? [join $power_data_names { }] : "KHONG CO"}]"
     lappend lines "  luoi nguon: $rail_note"
+    # DONE can ca hai: analyze_rail chay het VA sut ap dat nguong.  Run
+    # 2026-10-13 14:26 ghi DONE trong khi VDD thap nhat -7.8 V.
+    set ir_ok 1
     if {$VOLTUS_RAIL && $rail_ok} {
         lappend lines "    nguong: VDD >= $VOLTUS_VDD_MIN V (danh dinh $VOLTUS_VDD V), VSS <= $VOLTUS_VSS_MAX V;\
  -enable_xp [expr {$VOLTUS_XP ? "bat" : "tat"}][expr {$VOLTUS_RAIL_OPTS ne "" ? "; option them: $VOLTUS_RAIL_OPTS" : ""}]"
@@ -476,6 +627,34 @@ if {[catch {
             }
             lappend lines "    $net: outputs/rail_$net ([llength [voltus_files_under $out 4]] file,\
  [llength $rpts] file .rpt)"
+            set ir {}
+            foreach rpt $rpts {
+                if {[file tail $rpt] ne "$net.main.rpt"} {
+                    continue
+                }
+                set fp [open $rpt r]
+                while {[llength $ir] == 0 && [gets $fp line] >= 0} {
+                    set ir [voltus_ir_values $line]
+                }
+                close $fp
+            }
+            if {[llength $ir] != 3} {
+                set ir_ok 0
+                lappend lines "    $net: KHONG doc duoc dong 'Minimum, Average, Maximum IR drop' trong\
+ $net.main.rpt - khong ket luan duoc sut ap"
+            } elseif {$net eq "VDD"} {
+                set worst [lindex [lsort -real $ir] 0]
+                set met [expr {$worst >= $VOLTUS_VDD_MIN}]
+                lappend lines [format "    VDD: dien ap nut thap nhat %.4f V, trung binh %.4f V; nguong >= %s V -> %s" \
+                    $worst [lindex $ir 1] $VOLTUS_VDD_MIN [expr {$met ? "DAT" : "KHONG DAT"}]]
+                set ir_ok [expr {$ir_ok && $met}]
+            } else {
+                set worst [lindex [lsort -real $ir] end]
+                set met [expr {$worst <= $VOLTUS_VSS_MAX}]
+                lappend lines [format "    VSS: do nay cao nhat %.4f V, trung binh %.4f V; nguong <= %s V -> %s" \
+                    $worst [lindex $ir 1] $VOLTUS_VSS_MAX [expr {$met ? "DAT" : "KHONG DAT"}]]
+                set ir_ok [expr {$ir_ok && $met}]
+            }
             # Khong biet truoc dinh dang bao cao cua Voltus: chep nguyen van cac
             # dong co ve la con so sut ap, toi da 12 dong moi net.
             set shown 0
@@ -491,7 +670,10 @@ if {[catch {
             }
         }
     }
-    voltus_write_summary $VOLTUS_SUMMARY [expr {$rail_ok ? "DONE" : "FAIL"}] $lines
+    if {$rail_ok && !$ir_ok} {
+        lappend lines "  KET LUAN: analyze_rail chay het nhung sut ap KHONG DAT nguong (dong VDD / VSS o tren)"
+    }
+    voltus_write_summary $VOLTUS_SUMMARY [expr {$rail_ok && $ir_ok ? "DONE" : "FAIL"}] $lines
 
     set fp [open $VOLTUS_SUMMARY r]
     puts "============================================================"
