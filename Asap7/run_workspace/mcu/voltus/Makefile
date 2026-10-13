@@ -10,6 +10,8 @@
 #                                   xem voltus.tcl)
 #     make all VOLTUS_LAYERMAP=0    khong truyen file ghep lop LEF/QRC
 #     make all VOLTUS_CPUS=4        mac dinh 1
+#     make all VOLTUS_RAIL_OPTS="-enable_scheduler false"
+#                                   option noi them vao set_rail_analysis_mode
 
 VOLTUS  ?= voltus
 NETLIST := ../innovus/outputs/top_soc_pnr.v
@@ -22,6 +24,7 @@ export VOLTUS_RAIL
 export VOLTUS_XP
 export VOLTUS_LAYERMAP
 export VOLTUS_CPUS
+export VOLTUS_RAIL_OPTS
 
 .PHONY: all clean
 

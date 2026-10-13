@@ -119,7 +119,12 @@ proc voltus_power_pads {how} {
 #   - thu muc ket qua khong co gi ngoai era_work/.
 # Log cua lan hong duoc chep vao logs/ de con doc duoc sau khi commit (outputs/
 # bi .gitignore chan).
-proc voltus_rail_failures_logged {} {
+# Run 2026-10-13 13:43 (VOLTUS_XP=1) DONE gia lan thu ba: voltus_xp.flower chet
+# ngay ("No 'xp_launcher.py' in manifest"), analyze_rail tra ve sau 1 giay,
+# khong co VOLTUS-1055, khong co file *.log nao, thu muc ket qua van co 16 file.
+# Khong thay loi KHONG phai la bang chung da chay: can them dau hieu duong -
+# "Finished Rail Analysis" moi trong tool log hoac file .rpt trong ket qua.
+proc voltus_tool_log_count {pattern} {
     set newest ""
     set newest_time -1
     foreach path [glob -nocomplain -directory [file join $::VOLTUS_DIR logs] voltus.log*] {
@@ -134,13 +139,21 @@ proc voltus_rail_failures_logged {} {
     set fp [open $newest r]
     set text [read $fp]
     close $fp
-    return [regexp -all {VOLTUS-1055|Rail Analysis is unsuccessful} $text]
+    return [regexp -all $pattern $text]
 }
 
-proc voltus_rail_check {net out failures_before} {
+proc voltus_rail_failures_logged {} {
+    return [voltus_tool_log_count {VOLTUS-1055|Rail Analysis is unsuccessful|\[voltus_xp\.flower\] ERROR}]
+}
+
+proc voltus_rail_finished_logged {} {
+    return [voltus_tool_log_count {Finished Rail Analysis}]
+}
+
+proc voltus_rail_check {net out failures_before finished_before} {
     set why {}
     if {[voltus_rail_failures_logged] > $failures_before} {
-        lappend why "tool log ghi VOLTUS-1055 / Rail Analysis is unsuccessful"
+        lappend why "tool log ghi VOLTUS-1055 / Rail Analysis is unsuccessful / \[voltus_xp.flower\] ERROR"
     }
     set logs {}
     set cwd_log [file join $::VOLTUS_DIR voltus_rail.log]
@@ -178,6 +191,17 @@ proc voltus_rail_check {net out failures_before} {
     if {[llength $why] == 0 && [llength $results] == 0} {
         lappend why "khong co ket qua nao trong $out ngoai era_work"
     }
+    set rpts 0
+    foreach path [voltus_files_under $out 4] {
+        if {[string match *.rpt $path]} {
+            incr rpts
+        }
+    }
+    if {[llength $why] == 0 && $rpts == 0 &&
+        [voltus_rail_finished_logged] <= $finished_before} {
+        lappend why "khong co dau hieu analyze_rail da chay: tool log khong co\
+ 'Finished Rail Analysis' moi va $out khong co file .rpt"
+    }
     if {[llength $why] > 0} {
         error "analyze_rail $net: [join $why { | }]"
     }
@@ -196,6 +220,8 @@ proc voltus_rail {layer_map pads} {
         # co -era_lef_layermap.
         lappend mode_cmd -era_lef_layermap $layer_map
     }
+    # Option thu them tu dong lenh, vi du VOLTUS_RAIL_OPTS="-enable_scheduler false".
+    lappend mode_cmd {*}$::VOLTUS_RAIL_OPTS
     {*}$mode_cmd
 
     set_pg_nets -net VDD -voltage $::VOLTUS_VDD -threshold $::VOLTUS_VDD_MIN
@@ -211,8 +237,9 @@ proc voltus_rail {layer_map pads} {
         file delete -force $out
         file delete -force [file join $::VOLTUS_DIR voltus_rail.log]
         set failures_before [voltus_rail_failures_logged]
+        set finished_before [voltus_rail_finished_logged]
         analyze_rail -type net -output $out $net
-        voltus_rail_check $net $out $failures_before
+        voltus_rail_check $net $out $failures_before $finished_before
     }
 }
 
@@ -281,6 +308,9 @@ if {[catch {
     # tren may nay Genus (super-thread), Conformal (thread) va IQuantus (8 tien
     # trinh) deu treo o che do do.  Mau Mul32 bat XP voi 2 CPU.
     set VOLTUS_XP [voltus_env_flag VOLTUS_XP 0]
+    # Option noi them vao set_rail_analysis_mode (danh sach Tcl), de thu cac
+    # cach trich luoi khac ma khong sua script.
+    set VOLTUS_RAIL_OPTS [voltus_env VOLTUS_RAIL_OPTS ""]
     set voltus_cpus [voltus_env VOLTUS_CPUS 1]
     if {![string is integer -strict $voltus_cpus] || $voltus_cpus < 1} {
         error "VOLTUS_CPUS phai la so nguyen >= 1, dang la '$voltus_cpus'"
@@ -435,7 +465,7 @@ if {[catch {
     lappend lines "  luoi nguon: $rail_note"
     if {$VOLTUS_RAIL && $rail_ok} {
         lappend lines "    nguong: VDD >= $VOLTUS_VDD_MIN V (danh dinh $VOLTUS_VDD V), VSS <= $VOLTUS_VSS_MAX V;\
- -enable_xp [expr {$VOLTUS_XP ? "bat" : "tat"}]"
+ -enable_xp [expr {$VOLTUS_XP ? "bat" : "tat"}][expr {$VOLTUS_RAIL_OPTS ne "" ? "; option them: $VOLTUS_RAIL_OPTS" : ""}]"
         foreach net {VDD VSS} {
             set out [file join $VOLTUS_DIR outputs "rail_$net"]
             set rpts {}
