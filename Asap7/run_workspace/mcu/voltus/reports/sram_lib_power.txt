@@ -1,0 +1,678 @@
+##### /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib
+so dong: 1376   kich thuoc: 58608 byte
+--- don vi, dien ap, leakage, ten cell
+7:  capacitive_load_unit (1,pf);
+8:  current_unit : "1mA";
+9:  leakage_power_unit : "1nW";
+10:  pulling_resistance_unit : "1kohm";
+11:  time_unit : "1ns";
+12:  voltage_unit : "1V";
+16:  default_cell_leakage_power : 0;
+27:  nom_temperature : 25;
+28:  nom_voltage : 0.7;
+101:  cell (srambank_256x4x32_6t122) {
+102:    area : 1311.0336;
+103:    cell_leakage_power : 0;
+106:    pg_pin (VDD) {
+109:      voltage_name : "VDD";
+111:    pg_pin (VSS) {
+114:      voltage_name : "VSS";
+174:        related_pg_pin : VDD;
+189:        related_pg_pin : VSS;
+249:        related_pg_pin : VDD;
+265:        related_pg_pin : VSS;
+281:        related_pg_pin : VDD;
+297:        related_pg_pin : VSS;
+696:        related_pg_pin : VDD;
+711:        related_pg_pin : VSS;
+797:        related_pg_pin : VDD;
+812:        related_pg_pin : VSS;
+898:        related_pg_pin : VDD;
+913:        related_pg_pin : VSS;
+1092:        related_pg_pin : VDD;
+1107:        related_pg_pin : VSS;
+1314:        related_pg_pin : VDD;
+1344:        related_pg_pin : VSS;
+--- so lan xuat hien
+internal_power               16
+leakage_power                4
+when[[:space:]]*:            4
+related_pin                  16
+related_pg_pin               16
+rise_power                   16
+fall_power                   16
+power[[:space:]]*\(          48
+--- cac chan / bus
+116:    pin (banksel) {
+204:    pin (clk) {
+312:    bus (wd) {
+315:      pin (wd[31]) {
+325:      pin (wd[30]) {
+335:      pin (wd[29]) {
+345:      pin (wd[28]) {
+355:      pin (wd[27]) {
+365:      pin (wd[26]) {
+375:      pin (wd[25]) {
+385:      pin (wd[24]) {
+395:      pin (wd[23]) {
+405:      pin (wd[22]) {
+415:      pin (wd[21]) {
+425:      pin (wd[20]) {
+435:      pin (wd[19]) {
+445:      pin (wd[18]) {
+455:      pin (wd[17]) {
+465:      pin (wd[16]) {
+475:      pin (wd[15]) {
+485:      pin (wd[14]) {
+495:      pin (wd[13]) {
+505:      pin (wd[12]) {
+515:      pin (wd[11]) {
+525:      pin (wd[10]) {
+535:      pin (wd[9]) {
+545:      pin (wd[8]) {
+555:      pin (wd[7]) {
+565:      pin (wd[6]) {
+575:      pin (wd[5]) {
+585:      pin (wd[4]) {
+595:      pin (wd[3]) {
+605:      pin (wd[2]) {
+615:      pin (wd[1]) {
+625:      pin (wd[0]) {
+726:    pin (read) {
+827:    pin (write) {
+928:    bus (ADDRESS) {
+931:      pin (ADDRESS[9]) {
+941:      pin (ADDRESS[8]) {
+951:      pin (ADDRESS[7]) {
+961:      pin (ADDRESS[6]) {
+971:      pin (ADDRESS[5]) {
+981:      pin (ADDRESS[4]) {
+991:      pin (ADDRESS[3]) {
+1001:      pin (ADDRESS[2]) {
+1011:      pin (ADDRESS[1]) {
+1021:      pin (ADDRESS[0]) {
+1122:    bus (dataout) {
+1125:      pin (dataout[31]) {
+1129:      pin (dataout[30]) {
+1133:      pin (dataout[29]) {
+1137:      pin (dataout[28]) {
+1141:      pin (dataout[27]) {
+1145:      pin (dataout[26]) {
+1149:      pin (dataout[25]) {
+1153:      pin (dataout[24]) {
+1157:      pin (dataout[23]) {
+1161:      pin (dataout[22]) {
+1165:      pin (dataout[21]) {
+--- cac dong when / related_pin / clock
+69:    variable_2 : related_pin_transition;
+127:        related_pin : "clk";
+157:        related_pin : "clk";
+174:        related_pg_pin : VDD;
+189:        related_pg_pin : VSS;
+205:      clock : true;
+216:        related_pin : "clk";
+232:        related_pin : "clk";
+248:        when : "write";
+249:        related_pg_pin : VDD;
+264:        when : "write";
+265:        related_pg_pin : VSS;
+280:        when : "!write";
+281:        related_pg_pin : VDD;
+296:        when : "!write";
+297:        related_pg_pin : VSS;
+636:        related_pin : "clk";
+666:        related_pin : "clk";
+696:        related_pg_pin : VDD;
+711:        related_pg_pin : VSS;
+737:        related_pin : "clk";
+767:        related_pin : "clk";
+797:        related_pg_pin : VDD;
+812:        related_pg_pin : VSS;
+838:        related_pin : "clk";
+868:        related_pin : "clk";
+898:        related_pg_pin : VDD;
+913:        related_pg_pin : VSS;
+1032:        related_pin : "clk";
+1062:        related_pin : "clk";
+1092:        related_pg_pin : VDD;
+1107:        related_pg_pin : VSS;
+1256:        related_pin : "clk";
+1313:        related_pin : "clk";
+1314:        related_pg_pin : VDD;
+1343:        related_pin : "clk";
+1344:        related_pg_pin : VSS;
+--- 12 khoi internal_power dau tien (moi khoi toi da 30 dong)
+  [khoi 1, dong 173]
+        internal_power () {
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.00736568, 0.00736568, 0.00736568, 0.00736568, 0.00736568, 0.00736568, 0.00736568" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.0096976, 0.0096976, 0.0096976, 0.0096976, 0.0096976, 0.0096976, 0.0096976" \
+            );
+          }
+        }
+  [khoi 2, dong 188]
+        internal_power () {
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.0100234, 0.0100234, 0.0100234, 0.0100234, 0.0100234, 0.0100234, 0.0100234" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.00753465, 0.00753465, 0.00753465, 0.00753465, 0.00753465, 0.00753465, 0.00753465" \
+            );
+          }
+        }
+  [khoi 3, dong 247]
+        internal_power () {
+          when : "write";
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0, 0, 0, 0, 0, 0, 0" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.186927, 0.186927, 0.186927, 0.186927, 0.186927, 0.186927, 0.186927" \
+            );
+          }
+        }
+  [khoi 4, dong 263]
+        internal_power () {
+          when : "write";
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0, 0, 0, 0, 0, 0, 0" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.132678, 0.132678, 0.132678, 0.132678, 0.132678, 0.132678, 0.132678" \
+            );
+          }
+        }
+  [khoi 5, dong 279]
+        internal_power () {
+          when : "!write";
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "1.44236, 1.44236, 1.44236, 1.44236, 1.44236, 1.44236, 1.44236" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.373495, 0.373495, 0.373495, 0.373495, 0.373495, 0.373495, 0.373495" \
+            );
+          }
+        }
+  [khoi 6, dong 295]
+        internal_power () {
+          when : "!write";
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "2.11495, 2.11495, 2.11495, 2.11495, 2.11495, 2.11495, 2.11495" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.360267, 0.360267, 0.360267, 0.360267, 0.360267, 0.360267, 0.360267" \
+            );
+          }
+        }
+  [khoi 7, dong 695]
+        internal_power () {
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0, 0, 0, 0, 0, 0, 0" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "3.7561e-05, 3.7561e-05, 3.7561e-05, 3.7561e-05, 3.7561e-05, 3.7561e-05, 3.7561e-05" \
+            );
+          }
+        }
+  [khoi 8, dong 710]
+        internal_power () {
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "3.40917e-05, 3.40917e-05, 3.40917e-05, 3.40917e-05, 3.40917e-05, 3.40917e-05, 3.40917e-05" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0, 0, 0, 0, 0, 0, 0" \
+            );
+          }
+        }
+  [khoi 9, dong 796]
+        internal_power () {
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.0069561, 0.0069561, 0.0069561, 0.0069561, 0.0069561, 0.0069561, 0.0069561" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.00808243, 0.00808243, 0.00808243, 0.00808243, 0.00808243, 0.00808243, 0.00808243" \
+            );
+          }
+        }
+  [khoi 10, dong 811]
+        internal_power () {
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.00990845, 0.00990845, 0.00990845, 0.00990845, 0.00990845, 0.00990845, 0.00990845" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.0076021, 0.0076021, 0.0076021, 0.0076021, 0.0076021, 0.0076021, 0.0076021" \
+            );
+          }
+        }
+  [khoi 11, dong 897]
+        internal_power () {
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.000290756, 0.000290756, 0.000290756, 0.000290756, 0.000290756, 0.000290756, 0.000290756" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.000338406, 0.000338406, 0.000338406, 0.000338406, 0.000338406, 0.000338406, 0.000338406" \
+            );
+          }
+        }
+  [khoi 12, dong 912]
+        internal_power () {
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.000430543, 0.000430543, 0.000430543, 0.000430543, 0.000430543, 0.000430543, 0.000430543" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.000209809, 0.000209809, 0.000209809, 0.000209809, 0.000209809, 0.000209809, 0.000209809" \
+            );
+          }
+        }
+
+##### /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib
+so dong: 1198   kich thuoc: 52734 byte
+--- don vi, dien ap, leakage, ten cell
+7:  capacitive_load_unit (1,pf);
+8:  current_unit : "1mA";
+9:  leakage_power_unit : "1nW";
+10:  pulling_resistance_unit : "1kohm";
+11:  time_unit : "1ns";
+12:  voltage_unit : "1V";
+16:  default_cell_leakage_power : 0;
+27:  nom_temperature : 25;
+28:  nom_voltage : 0.7;
+101:  cell (srambank_128x4x20_6t122) {
+102:    area : 483.84;
+103:    cell_leakage_power : 0;
+106:    pg_pin (VDD) {
+109:      voltage_name : "VDD";
+111:    pg_pin (VSS) {
+114:      voltage_name : "VSS";
+174:        related_pg_pin : VDD;
+189:        related_pg_pin : VSS;
+249:        related_pg_pin : VDD;
+265:        related_pg_pin : VSS;
+281:        related_pg_pin : VDD;
+297:        related_pg_pin : VSS;
+576:        related_pg_pin : VDD;
+591:        related_pg_pin : VSS;
+677:        related_pg_pin : VDD;
+692:        related_pg_pin : VSS;
+778:        related_pg_pin : VDD;
+793:        related_pg_pin : VSS;
+962:        related_pg_pin : VDD;
+977:        related_pg_pin : VSS;
+1136:        related_pg_pin : VDD;
+1166:        related_pg_pin : VSS;
+--- so lan xuat hien
+internal_power               16
+leakage_power                4
+when[[:space:]]*:            4
+related_pin                  16
+related_pg_pin               16
+rise_power                   16
+fall_power                   16
+power[[:space:]]*\(          48
+--- cac chan / bus
+116:    pin (banksel) {
+204:    pin (clk) {
+312:    bus (wd) {
+315:      pin (wd[19]) {
+325:      pin (wd[18]) {
+335:      pin (wd[17]) {
+345:      pin (wd[16]) {
+355:      pin (wd[15]) {
+365:      pin (wd[14]) {
+375:      pin (wd[13]) {
+385:      pin (wd[12]) {
+395:      pin (wd[11]) {
+405:      pin (wd[10]) {
+415:      pin (wd[9]) {
+425:      pin (wd[8]) {
+435:      pin (wd[7]) {
+445:      pin (wd[6]) {
+455:      pin (wd[5]) {
+465:      pin (wd[4]) {
+475:      pin (wd[3]) {
+485:      pin (wd[2]) {
+495:      pin (wd[1]) {
+505:      pin (wd[0]) {
+606:    pin (read) {
+707:    pin (write) {
+808:    bus (ADDRESS) {
+811:      pin (ADDRESS[8]) {
+821:      pin (ADDRESS[7]) {
+831:      pin (ADDRESS[6]) {
+841:      pin (ADDRESS[5]) {
+851:      pin (ADDRESS[4]) {
+861:      pin (ADDRESS[3]) {
+871:      pin (ADDRESS[2]) {
+881:      pin (ADDRESS[1]) {
+891:      pin (ADDRESS[0]) {
+992:    bus (dataout) {
+995:      pin (dataout[19]) {
+999:      pin (dataout[18]) {
+1003:      pin (dataout[17]) {
+1007:      pin (dataout[16]) {
+1011:      pin (dataout[15]) {
+1015:      pin (dataout[14]) {
+1019:      pin (dataout[13]) {
+1023:      pin (dataout[12]) {
+1027:      pin (dataout[11]) {
+1031:      pin (dataout[10]) {
+1035:      pin (dataout[9]) {
+1039:      pin (dataout[8]) {
+1043:      pin (dataout[7]) {
+1047:      pin (dataout[6]) {
+1051:      pin (dataout[5]) {
+1055:      pin (dataout[4]) {
+1059:      pin (dataout[3]) {
+1063:      pin (dataout[2]) {
+1067:      pin (dataout[1]) {
+1071:      pin (dataout[0]) {
+--- cac dong when / related_pin / clock
+69:    variable_2 : related_pin_transition;
+127:        related_pin : "clk";
+157:        related_pin : "clk";
+174:        related_pg_pin : VDD;
+189:        related_pg_pin : VSS;
+205:      clock : true;
+216:        related_pin : "clk";
+232:        related_pin : "clk";
+248:        when : "write";
+249:        related_pg_pin : VDD;
+264:        when : "write";
+265:        related_pg_pin : VSS;
+280:        when : "!write";
+281:        related_pg_pin : VDD;
+296:        when : "!write";
+297:        related_pg_pin : VSS;
+516:        related_pin : "clk";
+546:        related_pin : "clk";
+576:        related_pg_pin : VDD;
+591:        related_pg_pin : VSS;
+617:        related_pin : "clk";
+647:        related_pin : "clk";
+677:        related_pg_pin : VDD;
+692:        related_pg_pin : VSS;
+718:        related_pin : "clk";
+748:        related_pin : "clk";
+778:        related_pg_pin : VDD;
+793:        related_pg_pin : VSS;
+902:        related_pin : "clk";
+932:        related_pin : "clk";
+962:        related_pg_pin : VDD;
+977:        related_pg_pin : VSS;
+1078:        related_pin : "clk";
+1135:        related_pin : "clk";
+1136:        related_pg_pin : VDD;
+1165:        related_pin : "clk";
+1166:        related_pg_pin : VSS;
+--- 12 khoi internal_power dau tien (moi khoi toi da 30 dong)
+  [khoi 1, dong 173]
+        internal_power () {
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.00736568, 0.00736568, 0.00736568, 0.00736568, 0.00736568, 0.00736568, 0.00736568" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.0096976, 0.0096976, 0.0096976, 0.0096976, 0.0096976, 0.0096976, 0.0096976" \
+            );
+          }
+        }
+  [khoi 2, dong 188]
+        internal_power () {
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.0100234, 0.0100234, 0.0100234, 0.0100234, 0.0100234, 0.0100234, 0.0100234" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.00753465, 0.00753465, 0.00753465, 0.00753465, 0.00753465, 0.00753465, 0.00753465" \
+            );
+          }
+        }
+  [khoi 3, dong 247]
+        internal_power () {
+          when : "write";
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0, 0, 0, 0, 0, 0, 0" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.186927, 0.186927, 0.186927, 0.186927, 0.186927, 0.186927, 0.186927" \
+            );
+          }
+        }
+  [khoi 4, dong 263]
+        internal_power () {
+          when : "write";
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0, 0, 0, 0, 0, 0, 0" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.132678, 0.132678, 0.132678, 0.132678, 0.132678, 0.132678, 0.132678" \
+            );
+          }
+        }
+  [khoi 5, dong 279]
+        internal_power () {
+          when : "!write";
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "1.44236, 1.44236, 1.44236, 1.44236, 1.44236, 1.44236, 1.44236" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.373495, 0.373495, 0.373495, 0.373495, 0.373495, 0.373495, 0.373495" \
+            );
+          }
+        }
+  [khoi 6, dong 295]
+        internal_power () {
+          when : "!write";
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "2.11495, 2.11495, 2.11495, 2.11495, 2.11495, 2.11495, 2.11495" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.360267, 0.360267, 0.360267, 0.360267, 0.360267, 0.360267, 0.360267" \
+            );
+          }
+        }
+  [khoi 7, dong 575]
+        internal_power () {
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0, 0, 0, 0, 0, 0, 0" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "3.7561e-05, 3.7561e-05, 3.7561e-05, 3.7561e-05, 3.7561e-05, 3.7561e-05, 3.7561e-05" \
+            );
+          }
+        }
+  [khoi 8, dong 590]
+        internal_power () {
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "3.40917e-05, 3.40917e-05, 3.40917e-05, 3.40917e-05, 3.40917e-05, 3.40917e-05, 3.40917e-05" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0, 0, 0, 0, 0, 0, 0" \
+            );
+          }
+        }
+  [khoi 9, dong 676]
+        internal_power () {
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.0069561, 0.0069561, 0.0069561, 0.0069561, 0.0069561, 0.0069561, 0.0069561" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.00808243, 0.00808243, 0.00808243, 0.00808243, 0.00808243, 0.00808243, 0.00808243" \
+            );
+          }
+        }
+  [khoi 10, dong 691]
+        internal_power () {
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.00990845, 0.00990845, 0.00990845, 0.00990845, 0.00990845, 0.00990845, 0.00990845" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.0076021, 0.0076021, 0.0076021, 0.0076021, 0.0076021, 0.0076021, 0.0076021" \
+            );
+          }
+        }
+  [khoi 11, dong 777]
+        internal_power () {
+          related_pg_pin : VDD;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.000290756, 0.000290756, 0.000290756, 0.000290756, 0.000290756, 0.000290756, 0.000290756" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.000338406, 0.000338406, 0.000338406, 0.000338406, 0.000338406, 0.000338406, 0.000338406" \
+            );
+          }
+        }
+  [khoi 12, dong 792]
+        internal_power () {
+          related_pg_pin : VSS;
+          rise_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.000430543, 0.000430543, 0.000430543, 0.000430543, 0.000430543, 0.000430543, 0.000430543" \
+            );
+          }
+          fall_power (passive_power_template_7x1_x1) {
+            index_1 ("0.005, 0.01, 0.02, 0.04, 0.08, 0.16, 0.32");
+            values ( \
+              "0.000209809, 0.000209809, 0.000209809, 0.000209809, 0.000209809, 0.000209809, 0.000209809" \
+            );
+          }
+        }
+
