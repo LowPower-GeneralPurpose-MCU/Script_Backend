@@ -5983,3 +5983,50 @@ Tiep theo: KHOI 16 (xuat file)
 10-13 20:43:40 Chan PG VDD trong top_soc.lef: 4 hinh (ring 4 doan)
 10-13 20:43:40 Chan PG VSS trong top_soc.lef: 4 hinh (ring 4 doan)
 10-13 20:43:40 >>> XONG: KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF
+10-13 21:27:51 ECO DRV: truoc ECO, Innovus (high): setup WNS 0.139 ns, max_tran Real 13 net; 4 / 58 net cua Tempus nam trong so do
+10-13 21:47:33 soc_fix_cg_hold vong 1 (136 s): 2 latch hold < 0.020
+10-13 21:47:33   cg_cpu/en_latch_reg slack -0.020 -> buffer thu 1 truoc cg_cpu/g16__6260/B
+10-13 21:47:35   cg_dbg/en_latch_reg slack 0.017 -> buffer thu 1 truoc cg_dbg/g15__4319/B
+10-13 21:50:15 soc_fix_cg_hold vong 2 (298 s): 0 latch hold < 0.020
+10-13 21:50:15 soc_fix_cg_hold: them 2 HB4xp67_ASAP7_75t_R sau 298 s
+10-13 21:50:15   cg_cpu/en_latch_reg          hold slack 0.056 sau 1 buffer
+10-13 21:50:15   cg_dbg/en_latch_reg          hold slack 0.062 sau 1 buffer
+10-13 21:50:15   cg_pwm/en_latch_reg          hold slack 0.020 sau 0 buffer
+10-13 21:50:15   cg_spi/en_latch_reg          hold slack 0.020 sau 0 buffer
+10-13 21:50:15   cg_gpio/en_latch_reg         hold slack 0.024 sau 0 buffer
+10-13 21:50:15   cg_tim0/en_latch_reg         hold slack 0.029 sau 0 buffer
+10-13 21:50:15   cg_uart1/en_latch_reg        hold slack 0.022 sau 0 buffer
+10-13 21:50:15   cg_tim1/en_latch_reg         hold slack 0.022 sau 0 buffer
+10-13 21:50:15   cg_ascon/en_latch_reg        hold slack 0.024 sau 0 buffer
+10-13 21:50:15   cg_i2c/en_latch_reg          hold slack 0.021 sau 0 buffer
+10-13 21:50:15   cg_uart/en_latch_reg         hold slack 0.032 sau 0 buffer
+10-13 21:50:15   cg_cordic/en_latch_reg       hold slack 0.029 sau 0 buffer
+10-13 21:56:58 Chan VDD/VSS std cell (eco): 0 ho
+10-13 21:57:28 --- ./verify_rpt/drc_eco.rpt
+10-13 21:57:28   loai OFFGRID                         7
+10-13 21:57:28   net  u_itcm/u_mem/bank_rdata[1][25]        1
+10-13 21:57:28   net  u_itcm/u_mem/FE_OFN7420_n_252        1
+10-13 21:57:28   net  u_itcm/u_mem/FE_OFN7429_n_261        1
+10-13 21:57:28   net  u_itcm/u_mem/FE_OFN7430_n_262        1
+10-13 21:57:28   net  u_itcm/u_mem/FE_OFN7425_n_257        1
+10-13 21:57:28   net  u_itcm/u_mem/FE_OFN7423_n_255        1
+10-13 21:57:28   net  u_itcm/u_mem/FE_OFN7421_n_253        1
+10-13 21:57:28   -> 0 vi pham that (7 bo qua: net {}, loai {OFFGRID}; 7 OFFGRID M4 tai chan macro)
+10-13 21:58:02 ============================================================
+10-13 21:58:02 PASS
+ECO DRV top_soc: ./saved/top_soc_postRoute.enc.dat -> ./saved/top_soc_postRoute_eco.enc.dat, 2133 s, 1 CPU
+  trich RC : IQuantus effortLevel high + asap7_lef_to_qrc_layers.map (nhu SPEF cua mcu/quantus)
+  derate   : SRAM dc_ss late x1.30 / dc_ff early x0.75; lib FF dien ap thap: 56 lib cell cua asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120, dc_ff early cell_delay x0.85 (bao cao derate khong co phan dc_ff - khong kiem duoc bang bao cao)
+  Tempus   : 142 chan max_transition tren 58 net, xau nhat -0.133 ns, gioi han 0.150 ns   (all_violators.rpt)
+  truoc ECO, Innovus (high): setup WNS 0.139 ns, max_tran Real 13 net; 4 / 58 net cua Tempus nam trong so do
+  sua      : optDesign -postRoute -setup -hold -drv (drcMargin 0.05) + soc_fix_cg_hold + ecoRoute + soc_fix_drv
+  sau ECO, Innovus: setup WNS 0.139 ns, hold WNS 0.018 ns, max_tran Real 0 net (0 net cua Tempus con trong do), DRC 0
+  optDesign bo lai ("can't be fixed", luot DRV cuoi): 103 net (71 net(s): Could not be fixed because instance couldn't be resized.; 32 net(s): Could not be fixed because no move is found.)
+  instance : 174070 -> 174459 (+389)
+  bao cao  : eco/reports/timing_eco/, timing_eco_hold/, innovus/verify_rpt/drc_eco.rpt, connectivity_eco.rpt
+  PASS o day = Innovus sach tren RC nhu signoff NHUNG CHUA CO METAL FILL: fill
+  them C ghep, net sat gioi han se vuot (run 2026-10-12: 0 net o day, 64 net sau fill).
+  tiep theo: make fillfix (do + sua khi co fill) -> make finish (KHOI 15 + 16)
+             -> mcu/conformal -> mcu/quantus -> mcu/tempus (ket luan DRV la cua Tempus)
+  WARNING: goc FF: asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib khai bao 0.7 V, cac lib con lai 0.77 V - khong co file dung de thay, bu TAM bang derate dc_ff early cell_delay x0.85 (STD_FF_LOWV_DERATE trong project_config.tcl; he so do bang scripts/fix_ff_lib.py --derate)
+10-13 21:58:02 ============================================================

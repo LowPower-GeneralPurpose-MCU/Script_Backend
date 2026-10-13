@@ -8,7 +8,7 @@ maxY: 3581280
 dbUnit: 10000 
 maxDEFUnit: 1000 
 HALO: 1 
-totalNumCells: 2315351 
+totalNumCells: 2322539 
 totalNumIgnoredCells: 0 
 hasCellInstNameIDMap: 0 
 globalDelimiter: / 
