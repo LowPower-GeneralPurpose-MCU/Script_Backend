@@ -1,7 +1,7 @@
 
 Begin Preparing Data for Parasitic Extraction
 ...
-Ended Preparing Data for Parasitic Extraction: (cpu=0:00:09, real=0:00:09, mem(process/total/peak)=333.28MB/unknown/unknown)
+Ended Preparing Data for Parasitic Extraction: (cpu=0:00:08, real=0:00:10, mem(process/total/peak)=333.74MB/unknown/unknown)
 
 Begin Parasitic Extraction
 
@@ -20,34 +20,34 @@ VSS
 Some effects indicate n/a because of non-availability of relevant input
 data (or) requested to be off.
 
-   0% at 00:02:29 10/14/2026 
+   0% at 02:11:06 10/14/2026 
 
-  10% at 00:02:29 10/14/2026
+  10% at 02:11:06 10/14/2026
 
-  20% at 00:02:29 10/14/2026
+  20% at 02:11:06 10/14/2026
 
-  31% at 00:02:29 10/14/2026
+  31% at 02:11:06 10/14/2026
 
-  41% at 00:02:29 10/14/2026
+  41% at 02:11:06 10/14/2026
 
-  52% at 00:02:29 10/14/2026
+  52% at 02:11:06 10/14/2026
 
-  62% at 00:02:29 10/14/2026
+  62% at 02:11:06 10/14/2026
 
-  72% at 00:02:29 10/14/2026
+  72% at 02:11:06 10/14/2026
 
-  83% at 00:02:29 10/14/2026
+  83% at 02:11:06 10/14/2026
 
-  93% at 00:02:29 10/14/2026
+  93% at 02:11:06 10/14/2026
 
- 100% at 00:02:29 10/14/2026 
+ 100% at 02:11:06 10/14/2026 
 
-Ended Parasitic Extraction: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=337.25MB/unknown/unknown)
+Ended Parasitic Extraction: (cpu=0:00:00, real=0:00:00, mem(process/total/peak)=335.03MB/unknown/unknown)
 
 Hostname user1-EliteMini
 
-Wall clock 16.585186
+Wall clock 16.611623
 
-CPU time 9.432238
+CPU time 9.581184
 
-Peak memory (process): 422694912
+Peak memory (process): 419495936

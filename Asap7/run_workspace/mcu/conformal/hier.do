@@ -19327,7 +19327,7 @@ usage
 # MODULE asap7_sram_1rw_ADDR_W11_DATA_W32_2 (R) INSTANCE /u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram (R)
 # Wrapper size: (G) = 7184  (R) = 7184
 # Periphery size: (G) = 7288  (R) = 7288
-# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 57.14%
+# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 57.65%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (-->KP)(REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
@@ -19382,6 +19382,7 @@ usage
 # IN (R) FE_OFN665_data_write_word_0  (-->KP) (EQ_REP: +wdata[0]) 
 # IN (R) FE_OFN668_n  (EQ_REP: +read) 
 # IN (R) FE_OFN672_n  (-->KP) (EQ_REP: -addr[9]) 
+# IN (R) FE_PDN1_FE_OFN7511_m1_araddr_4  (-->KP) (EQ_REP: +addr[2]) 
 # RESOLVED Constraints
 # OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
 # OUT (G) rdata[30] (REP)  =   (R) rdata[30] (REP) (by sim and name)
@@ -19423,6 +19424,7 @@ set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram} -Revised
 add_pin_equivalences read FE_OFN668_n -hier -Revised
 add_pin_equivalences {addr[10]} -invert n_3921 -hier -Revised
 add_pin_equivalences {addr[9]} -invert FE_OFN672_n -hier -Revised
+add_pin_equivalences {addr[2]} FE_PDN1_FE_OFN7511_m1_araddr_4 -hier -Revised
 add_pin_equivalences {wdata[20]} FE_OFN651_data_write_word_20 -hier -Revised
 add_pin_equivalences {wdata[18]} FE_OFN653_data_write_word_18 -hier -Revised
 add_pin_equivalences {wdata[0]} FE_OFN665_data_write_word_0 -hier -Revised
@@ -19443,7 +19445,7 @@ usage
 # MODULE asap7_sram_1rw_ADDR_W11_DATA_W32_3 (R) INSTANCE /u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram (R)
 # Wrapper size: (G) = 7184  (R) = 7184
 # Periphery size: (G) = 7288  (R) = 7288
-# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 62.50%
+# Pins directly connected to key-points/constants: (G) = 55.13%  (R) = 62.89%
 #-------------------------------------------------------------------------------
 # RESOLVED Constraints
 # IN (G) clk  (-->KP)(REP)  =   (R) clk  (-->KP)(REP) (by sim and name)
@@ -19510,6 +19512,7 @@ usage
 # IN (R) FE_OFN669_n  (EQ_REP: +read) 
 # IN (R) FE_OFN671_n  (-->KP) (EQ_REP: -addr[9]) 
 # IN (R) clk_clone1  (-->KP) (EQ_REP: +clk) 
+# IN (R) FE_PDN0_FE_OFN7511_m1_araddr_4  (-->KP) (EQ_REP: +addr[2]) 
 # RESOLVED Constraints
 # OUT (G) rdata[31] (REP)  =   (R) rdata[31] (REP) (by sim and name)
 # OUT (G) rdata[30] (REP)  =   (R) rdata[30] (REP) (by sim and name)
@@ -19551,6 +19554,7 @@ set_module_property -instance {/u_dcache/DATA_RAM_G_DATA_WAY[1].u_sram} -Revised
 add_pin_equivalences read FE_OFN669_n -hier -Revised
 add_pin_equivalences {addr[10]} -invert n_3921 -hier -Revised
 add_pin_equivalences {addr[9]} -invert FE_OFN671_n -hier -Revised
+add_pin_equivalences {addr[2]} FE_PDN0_FE_OFN7511_m1_araddr_4 -hier -Revised
 add_pin_equivalences {wdata[20]} FE_OFN650_data_write_word_20 -hier -Revised
 add_pin_equivalences {wdata[18]} FE_OFN652_data_write_word_18 -hier -Revised
 add_pin_equivalences {wdata[15]} FE_OFN654_data_write_word_15 -hier -Revised
@@ -25691,7 +25695,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_1168, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1168, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1637, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1637, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_744, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_744, prim-cnt = 5 (R)
-# clock_gate_1, prim-cnt = 3 (G) and clock_gate_1, prim-cnt = 7 (R)
+# clock_gate_1, prim-cnt = 3 (G) and clock_gate_1, prim-cnt = 8 (R)
 # cg_icg__RC_CG_MOD_850, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_850, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1169, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1169, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1638, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1638, prim-cnt = 5 (R)
@@ -25894,7 +25898,7 @@ report_hier_compare_result -Uncompared
 # cg_icg__RC_CG_MOD_674, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_674, prim-cnt = 6 (R)
 # cg_icg__RC_CG_MOD_675, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_675, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_807, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_807, prim-cnt = 5 (R)
-# clock_gate, prim-cnt = 3 (G) and clock_gate, prim-cnt = 6 (R)
+# clock_gate, prim-cnt = 3 (G) and clock_gate, prim-cnt = 7 (R)
 # cg_icg__RC_CG_MOD_690, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_690, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_808, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_808, prim-cnt = 5 (R)
 # cg_icg__RC_CG_MOD_1330, prim-cnt = 4 (G) and cg_icg__RC_CG_MOD_1330, prim-cnt = 5 (R)

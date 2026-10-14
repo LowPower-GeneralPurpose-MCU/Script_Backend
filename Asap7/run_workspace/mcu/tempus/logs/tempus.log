@@ -4,12 +4,12 @@ Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
 
 Version:	v23.15-s108_1, built Tue Jul 22 11:26:13 PDT 2025
 Options:	-nowin -init tempus.tcl -log logs/tempus 
-Date:		Tue Oct 13 21:17:25 2026
+Date:		Wed Oct 14 01:37:33 2026
 Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-31-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
 OS:		Ubuntu 26.04.1 LTS
 
 License:
-		[21:17:25.206226] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+		[01:37:33.206218] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
 
 		tpsxl	Tempus Timing Signoff Solution XL	23.1	checkout succeeded
 		16 CPU jobs allowed with the current license(s). Use set_multi_cpu_usage to set your required CPU count.
@@ -19,7 +19,7 @@ Type 'man IMPOAX-124' for more detail.
 Type 'man IMPOAX-332' for more detail.
 INFO: OA features are disabled in this session.
 Change the soft stacksize limit to 0.2%RAM (26 mbytes). Set global soft_stack_size_limit to change the value.
-environment variable TMPDIR is '/tmp/ssv_tmpdir_1985147_2e251b77-6fe1-445f-bb19-a01e7525bf69_h777ev'.
+environment variable TMPDIR is '/tmp/ssv_tmpdir_3242953_13e199a1-60d2-432e-8137-133797abb3c8_EBg47E'.
 #@ Processing -files option
 Sourcing tcl/tk file 'tempus.tcl' ...
 <CMD> set_multi_cpu_usage -localCpu 1
@@ -28,9 +28,9 @@ Sourcing tcl/tk file 'tempus.tcl' ...
 <CMD> set_top_module top_soc
 **ERROR: (IMPOAX-124):	OpenAccess (OA) shared library installation is older than the one that was used to build this Tempus Timing Solution version. For using the OA installation built and tested with this Tempus Timing Solution version, unset the shell variable OA_HOME. For using 'p025' or higher version of OA, reset OA_HOME to point to that installation.
 **ERROR: (IMPOAX-332):	Failed to initialize OpenAccess (OA) database. OA related commands cannot be run in this session. Confirm that the OA shared library is installed and OA_HOME is set correctly. Typically the OA_HOME environment variable should not be set.
-#% Begin Load MMMC data ... (date=10/13 21:17:42, mem=1599.1M)
+#% Begin Load MMMC data ... (date=10/14 01:37:51, mem=1599.2M)
 Number of views requested 2 are allowed with the current licenses... continuing with set_analysis_view.
-#% End Load MMMC data ... (date=10/13 21:17:42, total cpu=0:00:00.0, real=0:00:00.0, peak res=1600.3M, current mem=1600.3M)
+#% End Load MMMC data ... (date=10/14 01:37:51, total cpu=0:00:00.0, real=0:00:00.0, peak res=1600.4M, current mem=1600.4M)
 rc_typ rc_ff rc_ss
 Loading view definition file from /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/tempus_views.tcl
 Reading libset_ss timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_SS_ccs_211120.lib' ...
@@ -85,23 +85,23 @@ Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/C
 Read 34 cells in library 'asap7sc7p5t_OA_LVT_FF_ccs_211120' 
 Reading libset_ff timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_FF_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_FF_ccs_220123' 
-*** End library_loading (cpu=0.37min, real=0.37min, mem=312.0M, fe_cpu=0.59min, fe_real=0.65min, fe_mem=1905.2M) ***
-#% Begin Load netlist data ... (date=10/13 21:18:04, mem=1629.8M)
+*** End library_loading (cpu=0.37min, real=0.37min, mem=312.0M, fe_cpu=0.59min, fe_real=0.67min, fe_mem=1905.2M) ***
+#% Begin Load netlist data ... (date=10/14 01:38:13, mem=1626.8M)
 *** Begin netlist parsing (mem=1905.2M) ***
 Reading verilog netlist '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v'
 
-*** Memory Usage v#1 (Current mem = 2241.207M, initial mem = 836.656M) ***
-*** End netlist parsing (cpu=0:00:00.7, real=0:00:01.0, mem=2241.2M) ***
-#% End Load netlist data ... (date=10/13 21:18:05, total cpu=0:00:01.0, real=0:00:01.0, peak res=1848.9M, current mem=1848.9M)
+*** Memory Usage v#1 (Current mem = 2269.207M, initial mem = 844.656M) ***
+*** End netlist parsing (cpu=0:00:00.7, real=0:00:01.0, mem=2269.2M) ***
+#% End Load netlist data ... (date=10/14 01:38:14, total cpu=0:00:01.0, real=0:00:01.0, peak res=1845.4M, current mem=1845.4M)
 Set top cell to top_soc.
 Building hierarchical netlist for Cell top_soc ...
 ***** UseNewTieNetMode *****.
 *** Netlist is unique.
 ** info: there are 2514 modules.
-** info: there are 142970 stdCell insts.
-** info: there are 142886 stdCell insts with at least one signal pin.
+** info: there are 143735 stdCell insts.
+** info: there are 143651 stdCell insts with at least one signal pin.
 
-*** Memory Usage v#1 (Current mem = 2600.234M, initial mem = 836.656M) ***
+*** Memory Usage v#1 (Current mem = 2613.219M, initial mem = 844.656M) ***
 Set Default Input Pin Transition as 0.1 ps.
 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc
 Extraction setup Started for TopCell top_soc 
@@ -158,7 +158,7 @@ Read 34 cells in library 'asap7sc7p5t_OA_LVT_TT_ccs_211120'
 Reading libset_tt timing library '/home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib' ...
 Read 33 cells in library 'asap7sc7p5t_SEQ_LVT_TT_ccs_220123' 
 Reading timing constraints file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc' ...
-Current (total cpu=0:00:48.8, real=0:00:52.0, peak res=2673.7M, current mem=2673.7M)
+Current (total cpu=0:00:49.4, real=0:00:53.0, peak res=2671.0M, current mem=2671.0M)
 top_soc
 **WARN: (TCLCMD-1531):	'create_generated_clock' has been applied on hierarchical pin 'cg_cpu/clk_out' (File /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc, Line 37).
 
@@ -215,8 +215,8 @@ set_disable_timing                                | 1              | 0
 ------------------------------------------------------------------------------------
 Number of path exceptions in the constraint file = 10
 INFO (CTE): Reading of timing constraints file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc completed, with 12 WARNING
-Ending "Constraint file reading stats" (total cpu=0:00:00.2, real=0:00:01.0, peak res=2716.6M, current mem=2716.6M)
-Current (total cpu=0:00:49.0, real=0:00:53.0, peak res=2716.6M, current mem=2716.6M)
+Ending "Constraint file reading stats" (total cpu=0:00:00.1, real=0:00:00.0, peak res=2713.5M, current mem=2713.5M)
+Current (total cpu=0:00:49.6, real=0:00:53.0, peak res=2713.5M, current mem=2713.5M)
 Total number of combinational cells: 338
 Total number of sequential cells: 66
 Total number of tristate cells: 0
@@ -259,35 +259,35 @@ Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/
 
 SPEF files for RC Corner rc_ff:
 Top-level spef file '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef'.
-Start spef parsing (MEM=3089.61).
+Start spef parsing (MEM=3090.59).
 The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef', has encountered the error/warning message(s) during its reading.
 **WARN: (SPEF-1152):	Net 'flash_io_i[3] ( having pins flash_io_i[3] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 **WARN: (SPEF-1152):	Net 'flash_io_i[2] ( having pins flash_io_i[2] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 **WARN: (SPEF-1152):	Net 'flash_io_i[0] ( having pins flash_io_i[0] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 SPEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ss.spef.
-Number of Resistors     : 1657901
-Number of Ground Caps   : 1174396
-Number of Coupling Caps : 113556
+Number of Resistors     : 1662589
+Number of Ground Caps   : 1177674
+Number of Coupling Caps : 112828
 
 The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef', has encountered the error/warning message(s) during its reading.
 **WARN: (SPEF-1152):	Net 'flash_io_i[3] ( having pins flash_io_i[3] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 **WARN: (SPEF-1152):	Net 'flash_io_i[2] ( having pins flash_io_i[2] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 **WARN: (SPEF-1152):	Net 'flash_io_i[0] ( having pins flash_io_i[0] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 SPEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_typ.spef.
-Number of Resistors     : 1657901
-Number of Ground Caps   : 1174396
-Number of Coupling Caps : 113556
+Number of Resistors     : 1662589
+Number of Ground Caps   : 1177674
+Number of Coupling Caps : 112828
 
 The SPEF file, '/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef', has encountered the error/warning message(s) during its reading.
 **WARN: (SPEF-1152):	Net 'flash_io_i[3] ( having pins flash_io_i[3] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 **WARN: (SPEF-1152):	Net 'flash_io_i[2] ( having pins flash_io_i[2] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 **WARN: (SPEF-1152):	Net 'flash_io_i[0] ( having pins flash_io_i[0] )' is not fully specified as per its connectivity in design netlist. Missing ports have been added to the net using low RC values. The timing accuracy is not reliable for such nets.
 SPEF file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/quantus/outputs/top_soc_quantus_rc_ff.spef.
-Number of Resistors     : 1657901
-Number of Ground Caps   : 1174396
-Number of Coupling Caps : 113556
+Number of Resistors     : 1662589
+Number of Ground Caps   : 1177674
+Number of Coupling Caps : 112828
 
-End spef parsing (MEM=3223.12 CPU=0:00:23.1 REAL=0:00:08.0).
+End spef parsing (MEM=3226.13 CPU=0:00:23.1 REAL=0:00:08.0).
 431 nets are missing in SPEF file. The names of these nets are saved in ./rc_ss.missing_nets.rpt.gz.
 431 nets are missing in SPEF file. The names of these nets are saved in ./rc_typ.missing_nets.rpt.gz.
 431 nets are missing in SPEF file. The names of these nets are saved in ./rc_ff.missing_nets.rpt.gz.
@@ -302,7 +302,7 @@ AAE_INFO: The setting is changed from false to true in setDelayCalMode -SIAware
 <CMD> update_timing -full
 AAE_INFO: opIsDesignInPostRouteState() is 1
 AAE_INFO: deleting AAE DB in update_timing -full ...
-AAE DB initialization (MEM=2856.230469 CPU=0:00:00.1 REAL=0:00:00.0) 
+AAE DB initialization (MEM=2852.398438 CPU=0:00:00.0 REAL=0:00:00.0) 
 AAE_INFO: resetNetProps viewIdx 0 
 AAE_INFO: resetNetProps viewIdx 1 
 AAE_INFO: resetNetProps viewIdx 2 
@@ -315,28 +315,28 @@ Start slew iteration
 # Parasitics Mode: SPEF/RCDB 
 # Signoff Settings: SI On 
 #################################################################################
-Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_ff'
-Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_ff'
-Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'view_tt'
-Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'view_ff'
-Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'view_ss'
-Using master clock 'CLK_SYS' for generated clock 'CLK_PWM' in view 'view_ff'
-Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_ff'
-Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'view_ss'
 Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'view_ss'
 Using master clock 'CLK_SYS' for generated clock 'CLK_ASCON' in view 'view_ff'
 Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_ss'
 Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_tt'
 Using master clock 'CLK_SYS' for generated clock 'CLK_SDRAM_OUT' in view 'view_ff'
 Using master clock 'CLK_SYS' for generated clock 'CLK_SPI' in view 'view_tt'
 Using master clock 'CLK_SYS' for generated clock 'CLK_I2C' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CPU' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'view_ff'
+Using master clock 'CLK_SYS' for generated clock 'CLK_CORDIC' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_ss'
+Using master clock 'CLK_SYS' for generated clock 'CLK_UART1' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_GPIO' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_TIM0' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_TIM1' in view 'view_tt'
+Using master clock 'CLK_SYS' for generated clock 'CLK_UART' in view 'view_ff'
+Using master clock 'CLK_SYS' for generated clock 'CLK_DBG' in view 'view_tt'
 Message <TCLCMD-1005> has exceeded the message display limit of '20'. Use 'set_message -no_limit -id list_of_msgIDs' to reset the message limit.
-Start delay calculation (fullDC) (1 T). (MEM=2783.76)
+Start delay calculation (fullDC) (1 T). (MEM=2779.93)
 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc
 /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/logs/top_soc_pnr.tempus.sdc
 **WARN: (IMPMSMV-1810):	Net tms, driver tms (cell top_soc) voltage 0.77 does not match receiver u_jtag_dtm/g4640/B (cell NOR2xp33_ASAP7_75t_R) voltage 0.7 for view view_ff.
@@ -367,43 +367,43 @@ Note that setting a very large number using the set_message -limit command
 or removing the message limit using the set_message -no_limit command can
 significantly increase the log file size.
 To suppress a message, use the set_message -suppress command.
-End delay calculation. (MEM=3038.31 CPU=0:00:15.3 REAL=0:00:16.0)
-End delay calculation (fullDC). (MEM=2994.48 CPU=0:00:17.0 REAL=0:00:17.0)
+End delay calculation. (MEM=3036.21 CPU=0:00:15.5 REAL=0:00:16.0)
+End delay calculation (fullDC). (MEM=2992.18 CPU=0:00:17.3 REAL=0:00:18.0)
 update aggressor slew in non distributed run
 End Slew iteration 
-Start delay calculation (fullDC) (1 T). (MEM=2994.88)
+Start delay calculation (fullDC) (1 T). (MEM=2992.62)
 **WARN: (IMPESI-3140):	Bumpy transitions may exist in the design which may lead to inaccurate delay computation. To report/analyze the nets having bumpy transition, please enable delay report and use command 'report_noise -bumpy_waveform -threshold 0' after timing analysis. Delay report is enabled by setting 'set_si_mode -enable_delay_report true' before timing analysis.
-Total number of fetched objects 147840
-AAE_INFO-618: Total number of nets in the design is 161091,  92.7 percent of the nets selected for SI analysis
-Total number of fetched objects 147840
-AAE_INFO-618: Total number of nets in the design is 161091,  92.7 percent of the nets selected for SI analysis
-Total number of fetched objects 147840
-AAE_INFO-618: Total number of nets in the design is 161091,  92.7 percent of the nets selected for SI analysis
-End delay calculation. (MEM=3164.32 CPU=0:01:45 REAL=0:01:45)
-End delay calculation (fullDC). (MEM=3164.32 CPU=0:01:45 REAL=0:01:45)
+Total number of fetched objects 148605
+AAE_INFO-618: Total number of nets in the design is 161856,  92.8 percent of the nets selected for SI analysis
+Total number of fetched objects 148605
+AAE_INFO-618: Total number of nets in the design is 161856,  92.7 percent of the nets selected for SI analysis
+Total number of fetched objects 148605
+AAE_INFO-618: Total number of nets in the design is 161856,  92.8 percent of the nets selected for SI analysis
+End delay calculation. (MEM=3160.61 CPU=0:01:46 REAL=0:01:45)
+End delay calculation (fullDC). (MEM=3160.61 CPU=0:01:46 REAL=0:01:45)
 esiiDumpWaveformsThread is successfull 1 
-Save waveform /tmp/ssv_tmpdir_1985147_2e251b77-6fe1-445f-bb19-a01e7525bf69_h777ev/.AAE_jAfb3n/.AAE_1985147_2e251b77-6fe1-445f-bb19-a01e7525bf69/waveform.data in separate thread...
+Save waveform /tmp/ssv_tmpdir_3242953_13e199a1-60d2-432e-8137-133797abb3c8_EBg47E/.AAE_dndVf9/.AAE_3242953_13e199a1-60d2-432e-8137-133797abb3c8/waveform.data in separate thread...
 Finish pthread dumping compressed waveforms.
-Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 3128.5M)
-Loading CTE timing window is completed (CPU = 0:00:00.9, REAL = 0:00:01.0, MEM = 3161.4M)
+Loading CTE timing window with TwFlowType 0...(CPU = 0:00:00.0, REAL = 0:00:00.0, MEM = 3126.1M)
+Loading CTE timing window is completed (CPU = 0:00:00.8, REAL = 0:00:01.0, MEM = 3159.4M)
 Starting SI iteration 2
-Start delay calculation (fullDC) (1 T). (MEM=3144.93)
+Start delay calculation (fullDC) (1 T). (MEM=3142.29)
 Glitch Analysis: View view_ss -- Total Number of Nets Skipped = 0. 
 Glitch Analysis: View view_ss -- Total Number of Nets Analyzed = 0. 
-Total number of fetched objects 147840
-AAE_INFO-618: Total number of nets in the design is 161091,  4.1 percent of the nets selected for SI analysis
+Total number of fetched objects 148605
+AAE_INFO-618: Total number of nets in the design is 161856,  4.2 percent of the nets selected for SI analysis
 Glitch Analysis: View view_tt -- Total Number of Nets Skipped = 0. 
 Glitch Analysis: View view_tt -- Total Number of Nets Analyzed = 0. 
-Total number of fetched objects 147840
-AAE_INFO-618: Total number of nets in the design is 161091,  3.9 percent of the nets selected for SI analysis
-Glitch Analysis: View view_ff -- Total Number of Nets Skipped = 2786. 
-Glitch Analysis: View view_ff -- Total Number of Nets Analyzed = 147853. 
-Total number of fetched objects 147840
-AAE_INFO-618: Total number of nets in the design is 161091,  3.8 percent of the nets selected for SI analysis
-End delay calculation. (MEM=3182.27 CPU=0:00:12.0 REAL=0:00:12.0)
-End delay calculation (fullDC). (MEM=3093.25 CPU=0:00:12.2 REAL=0:00:12.0)
-Save and delete waveform data /tmp/ssv_tmpdir_1985147_2e251b77-6fe1-445f-bb19-a01e7525bf69_h777ev/.AAE_jAfb3n/.AAE_1985147_2e251b77-6fe1-445f-bb19-a01e7525bf69/waveform.data ...
-Swap out waveforms (MEM=3064.54 CPU=0:00:00.0 REAL=0:00:00.0) 
+Total number of fetched objects 148605
+AAE_INFO-618: Total number of nets in the design is 161856,  3.9 percent of the nets selected for SI analysis
+Glitch Analysis: View view_ff -- Total Number of Nets Skipped = 2776. 
+Glitch Analysis: View view_ff -- Total Number of Nets Analyzed = 148618. 
+Total number of fetched objects 148605
+AAE_INFO-618: Total number of nets in the design is 161856,  3.8 percent of the nets selected for SI analysis
+End delay calculation. (MEM=3179.79 CPU=0:00:12.3 REAL=0:00:13.0)
+End delay calculation (fullDC). (MEM=3089.55 CPU=0:00:12.5 REAL=0:00:13.0)
+Save and delete waveform data /tmp/ssv_tmpdir_3242953_13e199a1-60d2-432e-8137-133797abb3c8_EBg47E/.AAE_dndVf9/.AAE_3242953_13e199a1-60d2-432e-8137-133797abb3c8/waveform.data ...
+Swap out waveforms (MEM=3061.37 CPU=0:00:00.0 REAL=0:00:00.0) 
 Finish pthread dumping timing data and compressed waveforms.
 <CMD> check_timing -verbose > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/check_timing.rpt
 <CMD> report_annotated_parasitics > /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/tempus/reports/annotated_parasitics.rpt
@@ -430,15 +430,15 @@ Info: The output report file is /home/user1/Desktop/Script_Backend/Asap7/run_wor
 
 *** Summary of all messages that are not suppressed in this session:
 Severity  ID               Count  Summary                                  
-WARNING   IMPMSMV-1810     116458  Net %s, driver %s (cell %s) voltage %g d...
+WARNING   IMPMSMV-1810     116506  Net %s, driver %s (cell %s) voltage %g d...
 WARNING   IMPESI-3140          1  Bumpy transitions may exist in the desig...
 ERROR     IMPOAX-124           2  OpenAccess (OA) shared library installat...
 ERROR     IMPOAX-332           2  Failed to initialize OpenAccess (OA) dat...
 WARNING   SPEF-1152            9  Net '%s' is not fully specified as per i...
 WARNING   TCLCMD-1531         12  '%s' has been applied on hierarchical pi...
 WARNING   TECHLIB-1277        12  The %s '%s' has been defined for %s %s '...
-*** Message Summary: 116492 warning(s), 4 error(s)
+*** Message Summary: 116540 warning(s), 4 error(s)
 
 
-*** Memory Usage v#1 (Current mem = 4263.246M, initial mem = 836.656M) ***
---- Ending "Tempus Timing Solution" (totcpu=0:03:56, real=0:03:46, mem=4263.2M) ---
+*** Memory Usage v#1 (Current mem = 4263.355M, initial mem = 844.656M) ***
+--- Ending "Tempus Timing Solution" (totcpu=0:03:58, real=0:03:49, mem=4263.4M) ---

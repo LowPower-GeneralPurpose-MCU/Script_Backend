@@ -1,8 +1,8 @@
 DONE
 Quantus top_soc: effortLevel high = IQuantus tich hop trong Innovus - CHUA phai signoff, coupled, checkpoint ./saved/top_soc_final.enc.dat
-  thoi gian 255 s, QRC tech qrcTechFile_typ03_unscaledV02
+  thoi gian 205 s, QRC tech qrcTechFile_typ03_unscaledV02
   ghep lop: M1->M1 M2->M2 M3->M3 M4->M4 M5->M5 M6->M6 M7->M7 M8->M8 M9->M9 Pad->LISD V1->V1 V2->V2 V3->V3 V4->V4 V5->V5 V6->V6 V7->V7 V8->V8 V9->V0   (nguon: file map, theo quantus.logv)
   (SPEF KHOI 16 de doi chieu duoc trich khi lop con ghep lech bac - ti le gom ca khac engine lan khac lop)
-  rc_typ    145786 net        152965.1 fF       32530.3 kOhm   tQuantus KHOI 16:   145786 net        141306.7 fF       33992.0 kOhm   ti le C 1.083 R 0.957   top_soc_quantus_rc_typ.spef
-  rc_ss     145786 net        152965.1 fF       36920.5 kOhm   tQuantus KHOI 16:   145786 net        141306.7 fF       38679.5 kOhm   ti le C 1.083 R 0.955   top_soc_quantus_rc_ss.spef
-  rc_ff     145786 net        152965.1 fF       31066.9 kOhm   tQuantus KHOI 16:   145786 net        141306.7 fF       32429.5 kOhm   ti le C 1.083 R 0.958   top_soc_quantus_rc_ff.spef
+  rc_typ    146551 net        152861.4 fF       32582.3 kOhm   tQuantus KHOI 16:   146551 net        152885.1 fF       32582.3 kOhm   ti le C 1.000 R 1.000   top_soc_quantus_rc_typ.spef
+  rc_ss     146551 net        152861.4 fF       36975.7 kOhm   tQuantus KHOI 16:   146551 net        152885.1 fF       36975.7 kOhm   ti le C 1.000 R 1.000   top_soc_quantus_rc_ss.spef
+  rc_ff     146551 net        152861.4 fF       31117.9 kOhm   tQuantus KHOI 16:   146551 net        152885.1 fF       31117.9 kOhm   ti le C 1.000 R 1.000   top_soc_quantus_rc_ff.spef
