@@ -6030,3 +6030,207 @@ ECO DRV top_soc: ./saved/top_soc_postRoute.enc.dat -> ./saved/top_soc_postRoute_
              -> mcu/conformal -> mcu/quantus -> mcu/tempus (ket luan DRV la cua Tempus)
   WARNING: goc FF: asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib khai bao 0.7 V, cac lib con lai 0.77 V - khong co file dung de thay, bu TAM bang derate dc_ff early cell_delay x0.85 (STD_FF_LOWV_DERATE trong project_config.tcl; he so do bang scripts/fix_ff_lib.py --derate)
 10-13 21:58:02 ============================================================
+10-14 00:16:41 soc_metal_fill: SOC_FILL_LAYERS = M1 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M2 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M3 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M4 0.024 0.312 0.096 0.096 1.25 0.048 0.048 10 35 25 M5 0.024 0.312 0.096 0.096 1.25 0.048 0.048 15 90 25 M6 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M7 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M8 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 M9 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 Pad 0.2 2.0 0.04 2.24 2.24 2.04 2.04 20 80 25
+10-14 00:16:41 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+10-14 00:16:41   M1: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:16:41   M2: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:16:41   M3: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:16:41   M4: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:16:41   M5: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:16:41   M6: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:16:41   M7: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:16:41   M8: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:16:41   M9: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:16:41   Pad: pitch 2.2400 | buoc fill 2.2400 (1.00 track) | cach day that 2.2400 (1.00 track) | mat do toi da 8.9%
+10-14 00:16:41 WARNING: setMetalFill -reset: 
+10-14 00:22:52 ECO FILLFIX: vong 0: co fill, setup WNS 0.092 ns, max_tran vuot gioi han 32 net (xau nhat u_axi_ram_lo/wdata_hold[7] -0.018 ns), trong khoang du 0.010 ns: 370 net -> chen 363 buffer (mot tai sat driver 97, noi tiep 265, tach tai 1), bo qua 39 net driver manh con du, khong chen duoc 0
+10-14 00:24:29 Chan VDD/VSS std cell (fillfix): 0 ho
+10-14 00:24:59 --- ./verify_rpt/drc_fillfix.rpt
+10-14 00:24:59   0 vi pham
+10-14 00:25:13 soc_metal_fill: SOC_FILL_LAYERS = M1 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M2 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M3 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M4 0.024 0.312 0.096 0.096 1.25 0.048 0.048 10 35 25 M5 0.024 0.312 0.096 0.096 1.25 0.048 0.048 15 90 25 M6 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M7 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M8 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 M9 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 Pad 0.2 2.0 0.04 2.24 2.24 2.04 2.04 20 80 25
+10-14 00:25:13 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+10-14 00:25:13   M1: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:25:13   M2: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:25:13   M3: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:25:13   M4: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:25:13   M5: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:25:13   M6: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:25:13   M7: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:25:13   M8: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:25:13   M9: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:25:13   Pad: pitch 2.2400 | buoc fill 2.2400 (1.00 track) | cach day that 2.2400 (1.00 track) | mat do toi da 8.9%
+10-14 00:25:13 WARNING: setMetalFill -reset: 
+10-14 00:31:32 ECO FILLFIX: vong 1: co fill, setup WNS 0.091 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 52 net -> chen 10 buffer (mot tai sat driver 4, noi tiep 6, tach tai 0), bo qua 4 net driver manh con du, khong chen duoc 0
+10-14 00:32:40 Chan VDD/VSS std cell (fillfix): 0 ho
+10-14 00:33:11 --- ./verify_rpt/drc_fillfix.rpt
+10-14 00:33:11   0 vi pham
+10-14 00:33:24 soc_metal_fill: SOC_FILL_LAYERS = M1 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M2 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M3 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M4 0.024 0.312 0.096 0.096 1.25 0.048 0.048 10 35 25 M5 0.024 0.312 0.096 0.096 1.25 0.048 0.048 15 90 25 M6 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M7 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M8 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 M9 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 Pad 0.2 2.0 0.04 2.24 2.24 2.04 2.04 20 80 25
+10-14 00:33:24 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+10-14 00:33:24   M1: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:33:24   M2: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:33:24   M3: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:33:24   M4: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:33:24   M5: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:33:24   M6: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:33:24   M7: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:33:24   M8: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:33:24   M9: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:33:24   Pad: pitch 2.2400 | buoc fill 2.2400 (1.00 track) | cach day that 2.2400 (1.00 track) | mat do toi da 8.9%
+10-14 00:33:24 WARNING: setMetalFill -reset: 
+10-14 00:39:46 ECO FILLFIX: vong 2: co fill, setup WNS 0.091 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 46 net -> chen 3 buffer (mot tai sat driver 1, noi tiep 2, tach tai 0), bo qua 1 net driver manh con du, khong chen duoc 0
+10-14 00:40:53 Chan VDD/VSS std cell (fillfix): 0 ho
+10-14 00:41:23 --- ./verify_rpt/drc_fillfix.rpt
+10-14 00:41:23   0 vi pham
+10-14 00:41:37 soc_metal_fill: SOC_FILL_LAYERS = M1 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M2 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M3 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M4 0.024 0.312 0.096 0.096 1.25 0.048 0.048 10 35 25 M5 0.024 0.312 0.096 0.096 1.25 0.048 0.048 15 90 25 M6 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M7 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M8 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 M9 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 Pad 0.2 2.0 0.04 2.24 2.24 2.04 2.04 20 80 25
+10-14 00:41:37 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+10-14 00:41:37   M1: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:41:37   M2: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:41:37   M3: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:41:37   M4: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:41:37   M5: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:41:37   M6: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:41:37   M7: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:41:37   M8: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:41:37   M9: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:41:37   Pad: pitch 2.2400 | buoc fill 2.2400 (1.00 track) | cach day that 2.2400 (1.00 track) | mat do toi da 8.9%
+10-14 00:41:37 WARNING: setMetalFill -reset: 
+10-14 00:47:18 ECO FILLFIX: vong 3: co fill, setup WNS 0.092 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 42 net
+10-14 00:49:31 WARNING: 42 net con cach gioi han duoi 0.010 ns khi co fill, 44 net trong do bi bo qua co chu dich (driver du manh, nhieu tai: chen buffer noi tiep lam xau di) - Innovus dat, Tempus co the van bao vai net; danh sach trong reports/fillfix_nets.rpt
+10-14 00:49:31 ============================================================
+10-14 00:49:31 PASS
+checkpoint ./saved/top_soc_postRoute_ecofill.enc.dat
+ECO fillfix top_soc: ./saved/top_soc_postRoute_eco.enc.dat, 2032 s, 1 CPU
+  cach do  : metal fill thu (bo so KHOI 15) tren database chua co filler; khoang du 0.010 ns duoi gioi han max_transition theo clock
+  derate   : SRAM dc_ss late x1.30 / dc_ff early x0.75; lib FF dien ap thap: 56 lib cell cua asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120, dc_ff early cell_delay x0.85
+  vong 0: co fill, setup WNS 0.092 ns, max_tran vuot gioi han 32 net (xau nhat u_axi_ram_lo/wdata_hold[7] -0.018 ns), trong khoang du 0.010 ns: 370 net -> chen 363 buffer (mot tai sat driver 97, noi tiep 265, tach tai 1), bo qua 39 net driver manh con du, khong chen duoc 0
+  vong 1: co fill, setup WNS 0.091 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 52 net -> chen 10 buffer (mot tai sat driver 4, noi tiep 6, tach tai 0), bo qua 4 net driver manh con du, khong chen duoc 0
+  vong 2: co fill, setup WNS 0.091 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 46 net -> chen 3 buffer (mot tai sat driver 1, noi tiep 2, tach tai 0), bo qua 1 net driver manh con du, khong chen duoc 0
+  vong 3: co fill, setup WNS 0.092 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 42 net
+  cuoi     : setup WNS 0.092 ns, hold WNS 0.014 ns (ca hai khi co fill), max_tran vuot gioi han 0 net
+  instance : 174459 -> 174835 (+376), 376 buffer (BUFx4_ASAP7_75t_R; tach tai: BUFx10_ASAP7_75t_R)
+  bao cao  : eco/reports/fillfix_nets.rpt, timing_fillfix/, timing_fillfix_hold/
+  tiep theo: make finish (KHOI 15 + 16 tren checkpoint o dong 2)
+  WARNING: 42 net con cach gioi han duoi 0.010 ns khi co fill, 44 net trong do bi bo qua co chu dich (driver du manh, nhieu tai: chen buffer noi tiep lam xau di) - Innovus dat, Tempus co the van bao vai net; danh sach trong reports/fillfix_nets.rpt
+10-14 00:49:31 ============================================================
+10-14 00:55:35   srambank_256x4x32_6t122.fixed.lef: toa do tren grid, SITE hop le
+10-14 00:55:35   srambank_128x4x20_6t122.fixed.lef: toa do tren grid, SITE hop le
+10-14 00:55:35 ============================================================
+10-14 00:55:35 >>> KHOI 15: filler + verify
+10-14 00:55:35 ============================================================
+10-14 00:55:35 Filler cell: FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R
+10-14 00:58:08 --- ./verify_rpt/drc_final.rpt
+10-14 00:58:08   0 vi pham
+10-14 00:58:18 soc_metal_fill: SOC_FILL_LAYERS = M1 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M2 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M3 0.018 0.234 0.072 0.037 1.25 0.036 0.036 25 60 40 M4 0.024 0.312 0.096 0.096 1.25 0.048 0.048 10 35 25 M5 0.024 0.312 0.096 0.096 1.25 0.048 0.048 15 90 25 M6 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M7 0.032 0.416 0.128 0.128 1.25 0.075 0.075 25 55 40 M8 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 M9 0.04 0.625 0.04 0.24 1.25 0.16 0.16 25 55 40 Pad 0.2 2.0 0.04 2.24 2.24 2.04 2.04 20 80 25
+10-14 00:58:18 soc_metal_fill: bao cao on-track (tham khao, khong con chan)
+10-14 00:58:18   M1: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:58:18   M2: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:58:18   M3: pitch 0.0360 | buoc fill 0.0540 (1.50 track) | cach day that 0.0540 (1.50 track) | mat do toi da 33.3%
+10-14 00:58:18   M4: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:58:18   M5: pitch 0.0480 | buoc fill 0.0720 (1.50 track) | cach day that 0.0720 (1.50 track) | mat do toi da 33.3%
+10-14 00:58:18   M6: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:58:18   M7: pitch 0.0640 | buoc fill 0.1070 (1.67 track) | cach day that 0.1070 (1.67 track) | mat do toi da 29.9%
+10-14 00:58:18   M8: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:58:18   M9: pitch 0.0800 | buoc fill 0.2000 (2.50 track) | cach day that 0.2000 (2.50 track) | mat do toi da 20.0%
+10-14 00:58:18   Pad: pitch 2.2400 | buoc fill 2.2400 (1.00 track) | cach day that 2.2400 (1.00 track) | mat do toi da 8.9%
+10-14 00:58:18 WARNING: setMetalFill -reset: 
+10-14 01:00:02 # soc_fill_report doc lai ./top_soc.metalfill.rpt
+10-14 01:00:02 Ket qua addMetalFill theo tung layer.  Nguong cua layer ngoai M5/Pad la so TU DAT trong SOC_FILL_LAYERS, khong phai luat foundry.
+10-14 01:00:02   layer   duoi min (truoc -> sau)      vuot max (truoc -> sau)
+10-14 01:00:02   M1        35 -> 0      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-14 01:00:02   M2        41 -> 1      (min 25%)        0 -> 0      (max 60%)   /77 window
+10-14 01:00:02   M3        31 -> 0      (min 25%)        0 -> 2      (max 60%)   /77 window   <- fill LAM TANG so window vuot tran
+10-14 01:00:02   M4        36 -> 0      (min 10%)        0 -> 0      (max 35%)   /77 window
+10-14 01:00:02   M5      1910 -> 1098   (min 15%)        0 -> 0      (max 90%)   /1960 window
+10-14 01:00:02   M6        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-14 01:00:02   M7        77 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-14 01:00:02   M8         0 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-14 01:00:02   M9         0 -> 0      (min 25%)        0 -> 0      (max 55%)   /77 window
+10-14 01:00:02   Pad       77 -> 0      (min 20%)        0 -> 0      (max 80%)   /77 window
+10-14 01:00:02 WARNING: 3 layer chua dat nguong sau fill.  Doc tiep verify_rpt/density_summary.rpt: o do window duoi nguong da duoc tach thanh 'de len macro SRAM' (P&R khong sua duoc) va 'trong vung logic' (moi la loi cua metal fill).
+10-14 01:00:02   da ghi ./verify_rpt/fill_summary.rpt
+10-14 01:00:59 --- ./verify_rpt/drc_fill.rpt
+10-14 01:00:59   0 vi pham
+10-14 01:01:02 Mat do - layer doc: M5
+10-14 01:01:02   M5   duoi min: 1098 tren macro SRAM + 0 trong vung logic
+10-14 01:01:02   vung logic: dat nguong o moi window
+10-14 01:01:02   1098 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+10-14 01:01:02   da ghi ./verify_rpt/density_summary.rpt
+10-14 01:01:02   density signoff: PENDING_MERGED_GDS_SIGNOFF
+10-14 01:01:29 Mat do - layer doc: M1 M2 M3 M4 M5 M6 M7 M8 M9 Pad
+10-14 01:01:29   M1   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-14 01:01:29   M2   duoi min: 0 tren macro SRAM + 1 trong vung logic (thap nhat 22.18%)
+10-14 01:01:29   M3   duoi min: 0 tren macro SRAM + 0 trong vung logic | 2 window VUOT tran
+10-14 01:01:29   M4   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-14 01:01:29   M5   duoi min: 1098 tren macro SRAM + 0 trong vung logic
+10-14 01:01:29   M6   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-14 01:01:29   M7   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-14 01:01:29   M8   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-14 01:01:29   M9   duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-14 01:01:29   Pad  duoi min: 0 tren macro SRAM + 0 trong vung logic
+10-14 01:01:29   2 window vuot tran mat do: fill do them vao window von da qua tran (cua so chong nhau 50%).  Chi cac layer co MAXIMUMDENSITY that trong tech LEF moi dang lo - ASAP7 chi co M5 (90%) va Pad (80%).
+10-14 01:01:29 WARNING: 1 window vung logic duoi nguong - metal fill chua du, xem lai SOC_FILL_LAYERS (nhat la -maxWidth / -decrement)
+10-14 01:01:29   1098 window de len macro SRAM: PENDING_MERGED_GDS_SIGNOFF (abstract khong co metal trong macro)
+10-14 01:01:29   da ghi ./verify_rpt/density_all_summary.rpt
+10-14 01:08:20   final SETUP: WNS 0.091 TNS 0.0, 0 duong vi pham -> DAT
+10-14 01:08:20   final HOLD: WNS 0.013 TNS 0.0, 0 duong vi pham -> DAT
+10-14 01:08:20   Slew chan macro SRAM: khong chan nao vuot gioi han Liberty
+10-14 01:10:58   Cong suat: 92.19 mW, trong do macro SRAM 82.50 mW (89.5%)
+10-14 01:10:58   -> CHUA co VCD/TCF: activity mac dinh 0.2 cho moi chan, tuc coi
+10-14 01:10:58      ca 84 macro SRAM deu bi truy cap cung luc.  RTL chi bat mot
+10-14 01:10:58      bank moi lan doc/ghi -> con so tren la CAN TREN, khong phai
+10-14 01:10:58      cong suat cua thiet ke.  Muon so that: chay mo phong lay VCD
+10-14 01:10:58      roi read_activity_file truoc report_power.
+10-14 01:11:03 ============================================================
+10-14 01:11:03 PNR XONG - saved/top_soc_final.enc
+  verify_rpt/drc_final.rpt           : DRC design that, phai 0
+  verify_rpt/drc_fill.rpt            : DRC sau metal fill, phai 0
+  verify_rpt/connectivity_final.rpt  : 0 open/short
+  verify_rpt/welltap_final.rpt       : 0 cell xa tap qua 30.0 um
+  verify_rpt/density_final.rpt       : chi layer M5 co luat
+  verify_rpt/fill_summary.rpt        : so window duoi min / vuot max CUA
+                                       TUNG layer sau addMetalFill
+  verify_rpt/density_all_summary.rpt : cung so do nhung da tach macro SRAM
+                                       / vung logic - vung logic phai 0
+  reports/timing_final*/             : WNS setup/hold >= 0, DRV Real = 0
+                                       (soc_check_timing o tren moi CANH BAO;
+                                        KHOI 16 moi chan xuat GDS)
+  reports/timing_final/final.tran.gz : slew chan clk SRAM - soc_sram_clk_slew
+                                       da in so o tren, khong phai mo file
+  reports/power_final.rpt            : can tren (chua co VCD), xem ghi chu
+  logs/soc_flow.log                  : toan bo ket luan cua cac cong kiem tra
+Tiep theo: KHOI 16 (xuat file)
+10-14 01:11:03 ============================================================
+10-14 01:11:03 >>> XONG: KHOI 15: filler + verify
+10-14 01:11:03 ============================================================
+10-14 01:11:03 >>> KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF
+10-14 01:11:03 ============================================================
+10-14 01:11:04   ./verify_rpt/drc_final.rpt: sach (0 vi pham waive theo SOC_DRC_WAIVE_* trong soc_fp_config.tcl)
+10-14 01:11:04   ./verify_rpt/drc_fill.rpt: sach (0 vi pham waive theo SOC_DRC_WAIVE_* trong soc_fp_config.tcl)
+10-14 01:11:04   final SETUP: WNS 0.091 TNS 0.0, 0 duong vi pham -> DAT
+10-14 01:11:04   final HOLD: WNS 0.013 TNS 0.0, 0 duong vi pham -> DAT
+10-14 01:11:04   srambank_256x4x32_6t122.fixed.lef: toa do tren grid, SITE hop le
+10-14 01:11:04   srambank_128x4x20_6t122.fixed.lef: toa do tren grid, SITE hop le
+10-14 01:11:05 Ten se bi escape khi ghi netlist: 86752 (xem ./reports/escaped_names.rpt)
+10-14 01:11:05   -> ten trong .v bi escape (them backslash o dau, them mot dau
+10-14 01:11:05      cach o cuoi) nen khong khop truc tiep ten trong DEF/GDS.
+10-14 01:11:05      Khai bao cho LVS / Conformal truoc khi so netlist.
+10-14 01:18:22 WARNING: createPGPin VDD voi 4 -geom bi tu choi () - thu tung hinh
+10-14 01:18:22 Chan PG VDD: 4 / 4 doan ring (M8 0.862 356.836 564.73 357.316; M9 0.836 0.842 1.316 357.31; M9 564.276 0.842 564.756 357.31; M8 0.862 0.836 564.73 1.316)
+10-14 01:18:22 WARNING: createPGPin VSS voi 4 -geom bi tu choi () - thu tung hinh
+10-14 01:18:22 Chan PG VSS: 4 / 4 doan ring (M8 0.222 357.476 565.37 357.956; M9 0.196 0.202 0.676 357.95; M9 564.916 0.202 565.396 357.95; M8 0.222 0.196 565.37 0.676)
+10-14 01:18:22 Doan ring loi: ./outputs/top_soc_pg_ring.txt
+10-14 01:18:34 Chan PG VDD trong top_soc.lef: 4 hinh (ring 4 doan)
+10-14 01:18:34 Chan PG VSS trong top_soc.lef: 4 hinh (ring 4 doan)
+10-14 01:18:34 >>> XONG: KHOI 16: xuat netlist, SDF, SPEF, DEF, SDC, GDS, LEF
+10-14 01:18:34 ============================================================
+10-14 01:18:34 DONE
+ECO finish top_soc: ./saved/top_soc_postRoute_ecofill.enc.dat -> KHOI 15 + KHOI 16, 1441 s, 1 CPU
+  final setup: WNS 0.091 ns, TNS 0.0 ns, 0 duong vi pham   max_cap Real 0, max_fanout Real 0, max_length Real 0, max_tran Real 0
+  final hold : WNS 0.013 ns, TNS 0.0 ns, 0 duong vi pham   
+  da ghi de: saved/top_soc_prefill.enc.dat, saved/top_soc_final.enc.dat, outputs/top_soc_pnr.{v,sdc,def}, outputs/top_soc.gds
+  tiep theo (netlist da doi, moi ket qua sau PnR cu deu het han):
+    cd ../conformal && make all     LEC syn vs PnR
+    cd ../quantus   && make all QUANTUS_EFFORT=high
+    cd ../tempus    && make all     max_transition trong all_violators.rpt phai het
+    cd ../voltus    && make all
+10-14 01:18:34 ============================================================

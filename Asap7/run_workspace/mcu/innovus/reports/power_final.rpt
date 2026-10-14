@@ -2,25 +2,25 @@
 *	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
 *	
 *
-* 	Date & Time:	2026-Oct-13 20:41:26 (2026-Oct-13 11:41:26 GMT)
+* 	Date & Time:	2026-Oct-14 01:10:57 (2026-Oct-13 16:10:57 GMT)
 *
 *----------------------------------------------------------------------------------------
 *
 *	Design: top_soc
 *
 *	Liberty Libraries used: 
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7sc7p5t_28/LIB/CCS/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_256x4x32_6t122.lib
-*	        view_tt: /home/user1/Desktop/asap7/asap7_sram_0p0/generated/LIB/srambank_128x4x20_6t122.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_SIMPLE_RVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_INVBUF_RVT_TT_ccs_220122.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_AO_RVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_OA_RVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_SEQ_RVT_TT_ccs_220123.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_SIMPLE_LVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_INVBUF_LVT_TT_ccs_220122.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_AO_LVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_OA_LVT_TT_ccs_211120.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/asap7sc7p5t_SEQ_LVT_TT_ccs_220123.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/srambank_256x4x32_6t122.lib
+*	        view_tt: /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/saved/top_soc_postRoute_ecofill.enc.dat/libs/mmmc/srambank_128x4x20_6t122.lib
 *
 *	Power Domain used: 
 *              Rail:        VDD      Voltage:        0.7 
@@ -54,52 +54,52 @@
 
 Total Power 
 -----------------------------------------------------------------------------------------
-Total Internal Power:       87.62049048 	   95.2348%
-Total Switching Power:       4.34367397 	    4.7211%
-Total Leakage Power:         0.04049177 	    0.0440%
-Total Power:                92.00465622 
+Total Internal Power:       87.65170370 	   95.0812%
+Total Switching Power:       4.49323569 	    4.8741%
+Total Leakage Power:         0.04121809 	    0.0447%
+Total Power:                92.18615749 
 -----------------------------------------------------------------------------------------
 
 
 Group                           Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-Sequential                         3.232      0.4761     0.01065       3.719       4.042 
-Macro                              82.21      0.2764           0       82.48       89.65 
+Sequential                         3.233      0.4858      0.0108       3.729       4.045 
+Macro                              82.21      0.2945           0        82.5        89.5 
 IO                                     0           0           0           0           0 
-Combinational                      1.101       2.363     0.02374       3.487        3.79 
-Clock (Combinational)             0.8256        1.12    0.001119       1.947       2.116 
-Clock (Sequential)                0.2546      0.1084    0.004982       0.368      0.3999 
+Combinational                      1.129       2.456      0.0243       3.609       3.915 
+Clock (Combinational)             0.8277       1.148    0.001122       1.976       2.144 
+Clock (Sequential)                0.2548      0.1097       0.005      0.3695      0.4008 
 -----------------------------------------------------------------------------------------
-Total                              87.62       4.344     0.04049          92         100 
+Total                              87.65       4.493     0.04122       92.19         100 
 -----------------------------------------------------------------------------------------
 
 
 Rail                  Voltage   Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-VDD                       0.7      87.62       4.344     0.04049          92         100 
+VDD                       0.7      87.65       4.493     0.04122       92.19         100 
 
 
 Clock                           Internal   Switching     Leakage       Total  Percentage 
                                 Power      Power         Power         Power  (%)        
 -----------------------------------------------------------------------------------------
-CLK_TIM1                         0.00893     0.01071   4.565e-05     0.01968     0.02139 
-CLK_UART                         0.01998     0.02216   0.0001687     0.04231     0.04599 
-CLK_GPIO                         0.01187     0.01432   2.475e-05     0.02621     0.02848 
-CLK_TIM0                        0.009469     0.01086   4.398e-05     0.02037     0.02214 
-CLK_ASCON                        0.02842     0.03821   0.0001101     0.06674     0.07254 
-CLK_I2C                          0.01774     0.01982   0.0001618     0.03772       0.041 
-CLK_PWM                         0.003748    0.003426   1.874e-05    0.007193    0.007818 
-CLK_CORDIC                      0.008067     0.01013    3.48e-05     0.01823     0.01981 
-CLK_TCK                        0.0004748   0.0004489   5.152e-05   0.0009753     0.00106 
-CLK_SYS                           0.8052      0.9109    0.004368        1.72        1.87 
-CLK_UART1                        0.01915     0.02126   0.0001538     0.04057     0.04409 
-CLK_SPI                          0.01759     0.02023   0.0001639     0.03798     0.04128 
-CLK_DBG                          0.01164     0.01176   8.966e-05     0.02348     0.02552 
-CLK_CPU                            0.118      0.1342   0.0006651      0.2528      0.2748 
+CLK_TIM1                        0.008933     0.01091   4.565e-05     0.01989     0.02157 
+CLK_UART                         0.01998     0.02233   0.0001687     0.04248     0.04608 
+CLK_GPIO                         0.01187     0.01452   2.475e-05     0.02641     0.02865 
+CLK_TIM0                        0.009471     0.01099   4.398e-05      0.0205     0.02224 
+CLK_ASCON                        0.02843     0.03879   0.0001106     0.06733     0.07304 
+CLK_I2C                          0.01774     0.02002   0.0001618     0.03793     0.04114 
+CLK_PWM                         0.003749    0.003475   1.874e-05    0.007243    0.007857 
+CLK_CORDIC                      0.008069     0.01033    3.48e-05     0.01843     0.01999 
+CLK_TCK                        0.0004752     0.00047   5.152e-05   0.0009967    0.001081 
+CLK_SYS                           0.8066       0.933    0.004384       1.744       1.892 
+CLK_UART1                        0.01916     0.02139   0.0001538     0.04069     0.04414 
+CLK_SPI                          0.01759      0.0204   0.0001644     0.03815     0.04139 
+CLK_DBG                          0.01164     0.01193   8.966e-05     0.02366     0.02567 
+CLK_CPU                           0.1188      0.1388    0.000669      0.2583      0.2802 
 -----------------------------------------------------------------------------------------
-Total (excluding duplicates)        1.08       1.228    0.006101       2.315       2.516 
+Total (excluding duplicates)       1.083       1.257    0.006122       2.346       2.545 
 -----------------------------------------------------------------------------------------
 Clock: CLK_TIM1
 Clock Period: 0.004000 usec 
@@ -177,8 +177,8 @@ Clock Static Probability:  0.5000
 *	Power Distribution Summary: 
 *                Highest Average Power: u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram (srambank_128x4x20_6t122):            1.083 
 *                Highest Leakage Power: u_dcache/FE_PDC11265_tag_out_bus_16 (BUFx24_ASAP7_75t_L):        1.404e-05 
-*          Total Cap:      3.2559e-10 F
-*          Total instances in design: 142970
+*          Total Cap:      3.37489e-10 F
+*          Total instances in design: 143735
 *          Total instances in design with no power:     0
 *          Total instances in design with no activity:     0
 *          Total Fillers and Decap:     0

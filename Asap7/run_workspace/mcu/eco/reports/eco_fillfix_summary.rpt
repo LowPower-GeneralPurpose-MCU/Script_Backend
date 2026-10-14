@@ -1,0 +1,14 @@
+PASS
+checkpoint ./saved/top_soc_postRoute_ecofill.enc.dat
+ECO fillfix top_soc: ./saved/top_soc_postRoute_eco.enc.dat, 2032 s, 1 CPU
+  cach do  : metal fill thu (bo so KHOI 15) tren database chua co filler; khoang du 0.010 ns duoi gioi han max_transition theo clock
+  derate   : SRAM dc_ss late x1.30 / dc_ff early x0.75; lib FF dien ap thap: 56 lib cell cua asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120, dc_ff early cell_delay x0.85
+  vong 0: co fill, setup WNS 0.092 ns, max_tran vuot gioi han 32 net (xau nhat u_axi_ram_lo/wdata_hold[7] -0.018 ns), trong khoang du 0.010 ns: 370 net -> chen 363 buffer (mot tai sat driver 97, noi tiep 265, tach tai 1), bo qua 39 net driver manh con du, khong chen duoc 0
+  vong 1: co fill, setup WNS 0.091 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 52 net -> chen 10 buffer (mot tai sat driver 4, noi tiep 6, tach tai 0), bo qua 4 net driver manh con du, khong chen duoc 0
+  vong 2: co fill, setup WNS 0.091 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 46 net -> chen 3 buffer (mot tai sat driver 1, noi tiep 2, tach tai 0), bo qua 1 net driver manh con du, khong chen duoc 0
+  vong 3: co fill, setup WNS 0.092 ns, max_tran vuot gioi han 0 net, trong khoang du 0.010 ns: 42 net
+  cuoi     : setup WNS 0.092 ns, hold WNS 0.014 ns (ca hai khi co fill), max_tran vuot gioi han 0 net
+  instance : 174459 -> 174835 (+376), 376 buffer (BUFx4_ASAP7_75t_R; tach tai: BUFx10_ASAP7_75t_R)
+  bao cao  : eco/reports/fillfix_nets.rpt, timing_fillfix/, timing_fillfix_hold/
+  tiep theo: make finish (KHOI 15 + 16 tren checkpoint o dong 2)
+  WARNING: 42 net con cach gioi han duoi 0.010 ns khi co fill, 44 net trong do bi bo qua co chu dich (driver du manh, nhieu tai: chen buffer noi tiep lam xau di) - Innovus dat, Tempus co the van bao vai net; danh sach trong reports/fillfix_nets.rpt
