@@ -6238,3 +6238,7 @@ ECO finish top_soc: ./saved/top_soc_postRoute_ecofill.enc.dat -> KHOI 15 + KHOI 
 10-20 23:35:10 1 / 2 chan cua Tempus khong co trong ./saved/top_soc_postRoute.enc.dat (vd cg_cpu/FE_ECOC31901_CTS_1/Y) - checkpoint va tempus/reports khong cung mot run.  Chay lai Quantus + Tempus tren ket qua PnR hien tai, hoac chi dung checkpoint bang ECO_CHECKPOINT.
     while executing
 "error "[llength $missing] / [llength $tempus_viol] chan cua Tempus khong co trong $ECO_CHECKPOINT (vd [join [lrange $missing 0 2] {, }]) - checkpoint ..."
+10-20 23:40:40 ERROR: eco_drv.tcl: 1 / 2 chan cua Tempus khong co trong ./saved/top_soc_postRoute.enc.dat (vd cg_cpu/FE_ECOC31901_CTS_1/Y) - checkpoint va tempus/reports khong cung mot run.  Chay lai Quantus + Tempus tren ket qua PnR hien tai, hoac chi dung checkpoint bang ECO_CHECKPOINT.
+10-20 23:40:40 1 / 2 chan cua Tempus khong co trong ./saved/top_soc_postRoute.enc.dat (vd cg_cpu/FE_ECOC31901_CTS_1/Y) - checkpoint va tempus/reports khong cung mot run.  Chay lai Quantus + Tempus tren ket qua PnR hien tai, hoac chi dung checkpoint bang ECO_CHECKPOINT.
+    while executing
+"error "[llength $missing] / [llength $tempus_viol] chan cua Tempus khong co trong $ECO_CHECKPOINT (vd [join [lrange $missing 0 2] {, }]) - checkpoint ..."
