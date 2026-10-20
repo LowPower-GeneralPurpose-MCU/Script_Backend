@@ -1809,7 +1809,8 @@ set ::SOC_DRV_REPORT_SUFFIX {
 
 # Doc bao cao DRV cua timeDesign, tra ve {{net slack pin cell/port} ...} cua
 # nhung vi pham THAT (remark R), xep tu xau nhat.  Remark C la chan clock do
-# CCOpt tao ra - chinh bao cao ghi "may not be fixable" - nen khong dem o day.
+# CCOpt tao ra - chinh bao cao ghi "may not be fixable" - nen khong dem o day;
+# muon doc chung thi goi voi remark C (soc_clock_tran_report).
 #
 # Vi sao can: run 2026-09-21 12:40 KHOI 14 dung voi dong
 #     postRoute SETUP: WNS 0.342 TNS 0.0, 0 duong vi pham
@@ -1817,7 +1818,7 @@ set ::SOC_DRV_REPORT_SUFFIX {
 # Doc nguyen van thi thay mau thuan (setup sach ma van loi) va khong biet net
 # nao.  Phai zcat postRoute.tran.gz bang tay moi ra u_apb_cordic_state[0],
 # lech dung 1 ps (0.151 so voi 0.150 ns), driver HB2xp67 keo 12 chan.
-proc soc_drv_violators {dir prefix kind} {
+proc soc_drv_violators {dir prefix kind {remark R}} {
     if {![dict exists $::SOC_DRV_REPORT_SUFFIX $kind]} {
         return {}
     }
@@ -1841,7 +1842,7 @@ proc soc_drv_violators {dir prefix kind} {
             continue
         }
         set f [regexp -all -inline {\S+} $line]
-        if {[lindex $f end] ne "R"} {
+        if {[lindex $f end] ne $remark} {
             continue
         }
         # Cot slack la truong <so>r/<so>f CUOI CUNG (truoc no la MaxTran, Tran).
@@ -1866,6 +1867,35 @@ proc soc_drv_violators {dir prefix kind} {
         lappend out [linsert $info 0 $n]
     }
     return [lsort -real -index 1 $out]
+}
+
+# max_tran tren clock net (remark C) - phan ma cot Real, va vi the moi cong DRV
+# cua flow, KHONG dem.  Tempus thi dem.  Run 2026-10-13/14: timeDesign bao
+# cg_cpu/g16__6260/B 0.247-0.293 ns tren gioi han 0.150 o CA BA buoc postCTS,
+# postRoute, final - deu remark C, deu "max_tran Real 0" -> DAT; phai chay het
+# KHOI 15/16 + Quantus + Tempus (283 ps) moi lo ra, hai lan lien.
+# Chi IN, khong chan.  Bo chan macro SRAM (gioi han Liberty 46 ps o chan clk):
+# da co soc_sram_clk_slew.  Tra ve so net.
+proc soc_clock_tran_report {dir prefix} {
+    set who {}
+    foreach item [soc_drv_violators $dir $prefix max_tran C] {
+        if {![string match *srambank_* [lindex $item 3]]} {
+            lappend who $item
+        }
+    }
+    if {[llength $who] == 0} {
+        return 0
+    }
+    puts "WARNING: $prefix: max_tran tren CLOCK NET (remark C, ngoai cot Real):\
+ [llength $who] net - cong DRV khong dem, Tempus thi dem"
+    foreach item [lrange $who 0 4] {
+        lassign $item net slack pin cellport
+        puts [format "WARNING:   %-44s %+.3f ns  chan %s (%s)" $net $slack $pin $cellport]
+    }
+    if {[llength $who] > 5} {
+        puts "WARNING:   ... con [expr {[llength $who] - 5}] net"
+    }
+    return [llength $who]
 }
 
 # Kiem tra va bao cao.  Tra ve so van de tim duoc.
@@ -1927,6 +1957,11 @@ proc soc_check_timing {dir prefix args} {
                 }
             }
             lappend bad_drv "$kind Real [dict get $sum $key] net$tail"
+        }
+        # Clock net (remark C) khong tinh vao ket luan o day, nhung phai hien
+        # ra log cua moi buoc co kiem DRV.
+        if {[catch {soc_clock_tran_report $dir $prefix} clk_err]} {
+            puts "WARNING: soc_clock_tran_report: $clk_err"
         }
     }
     set head [format "%s %s: WNS %s TNS %s, %s duong vi pham" \
@@ -2055,19 +2090,86 @@ proc soc_sram_clk_slew {dir prefix} {
 }
 
 
+# Cell dang keo chan vao $pin: {instance cell}, hoac {} neu khong doc duoc (net
+# khong co dung mot driver la chan instance, hoac lenh truy van bi tu choi).
+# 'get_pins -of_objects <net>' CHUA chay tren Innovus 23.14 trong flow nay (moi
+# co -of_objects <cell>, init_common.tcl) -> hong thi tra {}, nguoi goi phai
+# chiu duoc.
+proc soc_pin_driver {pin} {
+    if {[catch {
+        set drv [get_pins -quiet -of_objects [get_nets -of_objects [get_pins $pin]] \
+            -filter "direction == out"]
+        if {[sizeof_collection $drv] != 1} {
+            error "khong co dung mot driver"
+        }
+        set name [get_object_name $drv]
+        # KHONG dung 'file dirname': xem soc_drv_report.
+        set inst [string range $name 0 [expr {[string last / $name] - 1}]]
+        set cell [lindex [dbGet -e [dbGet -e -p top.insts.name $inst].cell.name] 0]
+        if {$cell eq ""} {
+            error "khong doc duoc cell cua $inst"
+        }
+    }]} {
+        return {}
+    }
+    return [list $inst $cell]
+}
+
+# Chen mot $cell ngay truoc chan $pin.  Chi goi trong ECO batch mode cua
+# soc_fix_cg_hold (-honorFixedNetWire false).
+proc soc_cg_add_repeater {pin cell} {
+    if {![catch {ecoAddRepeater -term [list $pin] -cell $cell} eco_err]} {
+        return
+    }
+    # Van hong (ban Innovus khong nhan -honorFixedNetWire, hoac day bi khoa vi
+    # ly do khac): quay ve cach cu - xoa day roi chen.  routeDesign / ecoRoute
+    # se route lai net do.
+    set net [get_object_name [get_nets -of_objects [get_pins $pin]]]
+    puts "  ecoAddRepeater hong ($eco_err)"
+    puts "  -> xoa day FIXED cua $net roi chen lai (day clock nay\
+ se do ecoRoute ve lai, KHONG phai CCOpt)"
+    editDelete -net $net
+    ecoAddRepeater -term [list $pin] -cell $cell
+}
+
 # Hold o clock gate roi cg_* (RTL utils/clock_gate.v = latch en_latch_reg + AND2).
 # CCOpt coi en_latch_reg la generator (cay CLK_SYS_generator_for_CLK_*), net
 # latch Q -> AND.B thanh clock net nam trong "4063 clock nets excluded from IPO"
 # nen optDesign -hold khong chen buffer: run 2026-09-17 con 12 duong reg2cgate
-# -72 ps (view_ff) sau optDesign -postRoute.  Proc chen hold buffer ngay truoc
-# chan AND.B cho toi khi slack hold >= target.  Sau route phai ecoRoute.
-# Chay theo VONG: do slack ca 12 latch (1 lan tinh tre), chen 1 buffer cho moi
-# latch con vi pham o che do ECO batch, refinePlace 1 lan.  Ban cu chen tung
+# -72 ps (view_ff) sau optDesign -postRoute.  Proc chen cell tre truoc chan
+# AND.B cho toi khi slack hold >= target.  Sau route phai ecoRoute.
+# Chay theo VONG: do slack ca 12 latch (1 lan tinh tre), chen 1 don vi tre cho
+# moi latch con vi pham o che do ECO batch, refinePlace 1 lan.  Ban cu chen tung
 # buffer: moi buffer 2 lan full delay calc + refinePlace (~3.7 phut CPU); run
 # 2026-09-17 20:00 KHOI 12 can 12 latch x 4 buffer = 48 lan, trong nhu lap mai.
-proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
+#
+# CELL TRE KHONG DUOC KEO THANG CHAN AND (sua 2026-10-14).  Ban cu moi vong chen
+# dung mot $cell truoc AND.B, tuc mot cell tre xp67 la driver cua chan clock
+# gate.  Run 2026-10-13/14 ra cung mot ket qua ba lan lien o cg_cpu (AND2x6_L):
+# slew 0.282 ns postCTS, 0.247 postRoute, 0.293 final, Tempus 0.283 tren gioi
+# han 0.150 - moi lan mot instance khac (FE_ECOC16691 KHOI 12 -> FE_ECOC31650
+# KHOI 14 -> FE_ECOC31901 ECO).  Vi sao no cu quay lai:
+#   - net do la trunk cua cay clock CCOpt (target 40 ps), nen CCOpt-PRO trong
+#     MOI optDesign -postRoute doi cell tre sat chan AND thanh buffer CTS
+#     (innovus.log KHOI 14: HB4xp67 23 -> 12, BUFx4 +10, cg_cpu thanh BUFx8)
+#   - mat cell tre thi hold lai am (cg_cpu +0.034 -> -0.035); proc nay chay SAU
+#     optDesign nen chen lai mot $cell moi sat chan AND, va trang thai cuoi
+#     luon la cell tre keo chan AND
+#   - timeDesign co bao net nay o ca ba buoc, nhung remark C (clock net) nen
+#     khong vao cot Real ma soc_check_timing / soc_fix_drv doc (xem
+#     soc_clock_tran_report).
+# Nay mot don vi tre la mot CAP chen truoc AND.B: $cell roi $drive, thanh
+# ... -> $cell -> $drive -> AND.B.  $cell chi con keo chan A cua $drive - dung
+# cau hinh cua 12 HB4xp67 song qua hai luot PRO ma khong bi doi (chung keo chan
+# A cua HB4/BUFx4; trunk max 0.045 ns sau PRO).  $drive phai nam trong
+# buffer_cells cua CCOpt (KHOI 11); BUFx4 la cell PRO tu chon cho 10/11 chan
+# AND.  Checkpoint cu con $cell keo thang chan AND ma hold da dat (ECO restore
+# top_soc_postRoute*.enc): chen rieng mot $drive, khong them tre.
+proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}
+                      {drive BUFx4_ASAP7_75t_R}} {
     set latches [dbGet -e top.insts.name cg_*/en_latch_reg]
     set nbuf [dict create]
+    set mended [dict create]
     set final [dict create]
     foreach latch $latches {
         dict set nbuf $latch 0
@@ -2077,6 +2179,7 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
     for {set round 1} {1} {incr round} {
         # Lenh report_timing dau tien sau vong truoc tu tinh lai tre (1 lan/vong)
         set todo {}
+        set nhold 0
         foreach latch $latches {
             set slack ""
             set pin ""
@@ -2085,15 +2188,28 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
                 set slack [get_property $p slack]
                 set pin [get_object_name [get_property $p capturing_point]]
             }
-            dict set final $latch [list $slack $pin]
-            if {![string is double -strict $slack] || $slack >= $target ||
-                [dict get $nbuf $latch] >= $max_buf || ![string match cg_* $pin]} {
+            set by ""
+            if {[string match cg_* $pin]} {
+                set by [lindex [soc_pin_driver $pin] 1]
+            }
+            dict set final $latch [list $slack $pin $by]
+            if {![string is double -strict $slack] || ![string match cg_* $pin]} {
                 continue
             }
-            lappend todo [list $latch $pin $slack]
+            # Truong cuoi: 1 = chen ca cap, 0 = chi chen $drive
+            if {$slack < $target && [dict get $nbuf $latch] < $max_buf} {
+                lappend todo [list $latch $pin $slack 1]
+                incr nhold
+            } elseif {$by eq $cell && ![dict exists $mended $latch]} {
+                lappend todo [list $latch $pin $slack 0]
+            }
         }
-        puts [format "soc_fix_cg_hold vong %d (%d s): %d latch hold < %.3f" \
-            $round [expr {[clock seconds] - $t0}] [llength $todo] $target]
+        set note ""
+        if {[llength $todo] > $nhold} {
+            set note ", [expr {[llength $todo] - $nhold}] chan AND con do $cell keo"
+        }
+        puts [format "soc_fix_cg_hold vong %d (%d s): %d latch hold < %.3f%s" \
+            $round [expr {[clock seconds] - $t0}] $nhold $target $note]
         if {[llength $todo] == 0} {
             break
         }
@@ -2114,21 +2230,19 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
             -honorFixedNetWire false
         set failed [catch {
             foreach item $todo {
-                lassign $item latch pin slack
-                puts "  $latch slack $slack -> buffer thu [expr {[dict get $nbuf $latch] + 1}] truoc $pin"
-                if {[catch {ecoAddRepeater -term [list $pin] -cell $cell} eco_err]} {
-                    # Van hong (ban Innovus khong nhan -honorFixedNetWire, hoac
-                    # day bi khoa vi ly do khac): quay ve cach cu - xoa day roi
-                    # chen.  routeDesign / ecoRoute se route lai net do.
-                    set net [get_object_name [get_nets -of_objects [get_pins $pin]]]
-                    puts "  ecoAddRepeater hong ($eco_err)"
-                    puts "  -> xoa day FIXED cua $net roi chen lai (day clock nay\
- se do ecoRoute ve lai, KHONG phai CCOpt)"
-                    editDelete -net $net
-                    ecoAddRepeater -term [list $pin] -cell $cell
+                lassign $item latch pin slack pair
+                if {$pair} {
+                    puts "  $latch slack $slack -> cap $cell + $drive thu\
+ [expr {[dict get $nbuf $latch] + 1}] truoc $pin"
+                    soc_cg_add_repeater $pin $cell
+                    dict incr nbuf $latch
+                    incr added
+                } else {
+                    puts "  $latch: $pin dang do $cell keo -> chen $drive"
+                    dict set mended $latch 1
                 }
-                dict incr nbuf $latch
-                incr added
+                # Chen SAU $cell, cung chan: $drive nam giua $cell va AND.B.
+                soc_cg_add_repeater $pin $drive
             }
         } msg opts]
         setEcoMode -batchMode false -refinePlace true -updateTiming true \
@@ -2138,15 +2252,22 @@ proc soc_fix_cg_hold {{target 0.020} {cell HB4xp67_ASAP7_75t_R} {max_buf 8}} {
         }
         refinePlace
     }
-    puts "soc_fix_cg_hold: them $added $cell sau [expr {[clock seconds] - $t0}] s"
+    set nmend [dict size $mended]
+    puts "soc_fix_cg_hold: them $added cap $cell + $drive[expr {$nmend ?\
+ " va $nmend $drive le" : ""}] sau [expr {[clock seconds] - $t0}] s"
     foreach latch $latches {
-        lassign [dict get $final $latch] slack pin
-        puts [format "  %-28s hold slack %s sau %d buffer" $latch $slack [dict get $nbuf $latch]]
+        lassign [dict get $final $latch] slack pin by
+        puts [format "  %-28s hold slack %s sau %d cap, chan AND do %s keo" $latch \
+            $slack [dict get $nbuf $latch] [expr {$by eq "" ? "?" : $by}]]
         if {[string is double -strict $slack] && $slack < $target} {
             puts "WARNING: chua sua duoc hold $latch -> $pin ($slack)"
         }
+        if {$by eq $cell} {
+            puts "WARNING: $pin van do $cell keo thang - max_transition\
+ (cg_cpu run 2026-10-14: 283 ps / 150 ps)"
+        }
     }
-    return $added
+    return [expr {2 * $added + $nmend}]
 }
 
 # In ra AI dang vi pham DRV, kem dong lenh va tay neu muon sua tung net.
