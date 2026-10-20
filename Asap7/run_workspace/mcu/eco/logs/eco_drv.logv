@@ -1,0 +1,14 @@
+[10/20 22:58:32      0s] 
+[10/20 22:58:32      0s] Cadence Innovus(TM) Implementation System.
+[10/20 22:58:32      0s] Copyright 2024 Cadence Design Systems, Inc. All rights reserved worldwide.
+[10/20 22:58:32      0s] 
+[10/20 22:58:32      0s] Version:	v23.14-s088_1, built Fri Feb 28 12:25:44 PST 2025
+[10/20 22:58:32      0s] Options:	-no_gui -files ../eco/eco_drv.tcl -log ../eco/logs/eco_drv 
+[10/20 22:58:32      0s] Date:		Tue Oct 20 22:58:32 2026
+[10/20 22:58:32      0s] Host:		user1-EliteMini (x86_64 w/Linux 7.0.0-38-generic) (6cores*12cpus*AMD Ryzen 5 7545U 1024KB)
+[10/20 22:58:32      0s] OS:		Ubuntu 26.04.1 LTS
+[10/20 22:58:32      0s] 
+[10/20 22:58:32      0s] License:
+[10/20 22:59:12      0s] 		[22:59:12.206250] Configured Lic search path (23.02-s006): 5280@192.168.32.10:1700@192.168.32.10
+
+[10/20 23:03:12      0s] **ERROR: (IMPLIC-4):	No valid licenses found for this product.
