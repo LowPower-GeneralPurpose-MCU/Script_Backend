@@ -1,0 +1,17 @@
+============================================================
+MCU ASAP7 CONFIGURATION
+ - Root source  : auto-detected complete collateral
+ - ASAP7 root   : /home/user1/Desktop/asap7
+ - Stdcell root : /home/user1/Desktop/asap7/asap7sc7p5t_28
+ - SRAM root    : /home/user1/Desktop/asap7/asap7_sram_0p0
+ - Top          : top_soc
+============================================================
+INFO: doc /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr_pg.v
+INFO: 240 master, 1704 module, 13 s
+INFO: 5 master stub: FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R TAPCELL_ASAP7_75t_R srambank_128x4x20_6t122 srambank_256x4x32_6t122
+INFO: LVS BOX: srambank_256x4x32_6t122 srambank_128x4x20_6t122
+V2LVS_CMD is: v2lvs -64 -sn -s /home/user1/Desktop/asap7/asap7sc7p5t_28/CDL/LVS/asap7sc7p5t_28_R.cdl -s /home/user1/Desktop/asap7/asap7sc7p5t_28/CDL/LVS/asap7sc7p5t_28_L.cdl -s /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_lvs/top_soc.stub.cdl -o top_soc.v2lvs.net -v /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr_pg.v
+/Mentor/Calibre/aok_cal_2025.2_38.18/bin/v2lvs: 234: test: unexpected operator
+/Mentor/Calibre/aok_cal_2025.2_38.18/bin/v2lvs: 113: /Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/set_shared_library_path: Syntax error: redirection unexpected
+INFO: v2lvs ket thuc sau 0 s - loi: child process exited abnormally
+ERROR: v2lvs khong ghi top_soc.v2lvs.net
