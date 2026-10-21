@@ -1,0 +1,11 @@
+FAIL
+Calibre LVS top_soc - 2026-10-21 15:59
+  GDS     : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc.gds (2026-10-21 01:31)
+  netlist : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr_pg.v (2026-10-21 01:31)
+  deck    : /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/rul/calibreLVS.rul (run_lvs/asap7_lvs.rul: LVS REPORT / POWER NAME / GROUND NAME da comment)
+  LVS BOX : srambank_256x4x32_6t122 srambank_128x4x20_6t122
+  cell    : 240 master, 2320788 instance: 235 master co CDL (hcell), 5 master stub rong, 2 master LVS BOX (reports/lvs_cell_usage.rpt)
+  Calibre khong ghi run_lvs/top_soc.lvs.report - doc logs/calibre_v2lvs.log va logs/calibre_lvs.log
+    /Mentor/Calibre/aok_cal_2025.2_38.18/bin/v2lvs: 113: /Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/set_shared_library_path: Syntax error: redirection unexpected
+    ERROR: v2lvs khong ghi top_soc.v2lvs.net
+    ERROR: thieu run_lvs/top_soc.source.net - v2lvs.tcl hong, doc ../logs/calibre_v2lvs.log
