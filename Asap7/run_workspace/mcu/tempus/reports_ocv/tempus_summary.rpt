@@ -1,6 +1,6 @@
 PASS
 Tempus top_soc: SPEF quantus (top_soc_quantus_rc_*.spef), OCV + CPPR, SI bat, 1 CPU
-  update_timing + bao cao 165 s; don vi 1ns / 1pf
+  update_timing + bao cao 164 s; don vi 1ns / 1pf
   logs/top_soc_pnr.tempus.sdc: bo 4 dong source latency tren generated clock (CLK_SDRAM_OUT), doi 0 set_max/min_delay ps -> ns
   derate SRAM: 84 macro, dc_ss late x1.30, dc_ff early x0.75; OCV chung late x1.0 / early x1.0
   derate lib FF dien ap thap: 56 lib cell cua asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120, dc_ff early cell_delay x0.85
