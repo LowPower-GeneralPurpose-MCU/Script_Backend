@@ -47,6 +47,71 @@ foreach tool [list $HGVAR_CALIBRE {*}[expr {$STEP eq "lvs" ? [list $HGVAR_V2LVS]
 
 need_file $HGVAR_SIGNOFF_GDS "GDS (eco/make finish hoac KHOI 16)"
 
+# ---- Precision cua GDS ------------------------------------------------------
+# Lan chay 2026-10-21 15:58 dung ngay khi doc GDS: "LAYOUT [PATH] precision 4000
+# is not consistent with database precision 2000".  Deck DRC khai LAYOUT
+# PRECISION 4000 (dong 37), deck LVS khong khai nen lay bang precision 4000 cua
+# no; GDS cua KHOI 16 ghi SOC_GDS_UNITS = 2000 dbu/um.  2000 khong lam tron toa
+# do nao (moi toa do GDS std cell la boi cua 2 dbu@4000), nen giu GDS, doc
+# precision that tu ban ghi UNITS va de run_*.sh khai LAYOUT PRECISION theo no.
+# Calibre tu doi sang PRECISION cua deck (deck DRC: LAYOUT MAGNIFY AUTO, log in
+# "MAGNIFICATION: 5" = 10000 / 2000).
+proc gds_real8 {bytes} {
+    # so thuc 8 byte cua GDS: bit dau, mu co so 16 lech 64, mantissa 56 bit
+    binary scan $bytes cu8 b
+    set m 0
+    foreach x [lrange $b 1 7] {
+        set m [expr {$m * 256 + $x}]
+    }
+    set v [expr {$m / 2.0 ** 56 * 16.0 ** (([lindex $b 0] & 0x7f) - 64)}]
+    return [expr {[lindex $b 0] & 0x80 ? -$v : $v}]
+}
+
+proc gds_dbu_per_um {gds} {
+    set f [open $gds r]
+    fconfigure $f -translation binary
+    set dbu ""
+    # UNITS (kieu 0x03, du lieu 0x05) nam ngay sau HEADER / BGNLIB / LIBNAME
+    for {set i 0} {$i < 16} {incr i} {
+        set hdr [read $f 4]
+        if {[string length $hdr] < 4} {
+            break
+        }
+        binary scan $hdr Sucucu len rtype dtype
+        if {$len < 4} {
+            break
+        }
+        set data [read $f [expr {$len - 4}]]
+        if {$rtype == 3 && $dtype == 5 && [string length $data] == 16} {
+            # gia tri thu hai: met / dbu
+            set m_per_dbu [gds_real8 [string range $data 8 15]]
+            if {$m_per_dbu > 0} {
+                set dbu [expr {round(1e-6 / $m_per_dbu)}]
+            }
+            break
+        }
+    }
+    close $f
+    return $dbu
+}
+
+proc deck_precision {deck} {
+    set f [open $deck r]
+    set value ""
+    while {[gets $f line] >= 0} {
+        if {[regexp -nocase {^\s*PRECISION\s+(\d+)} $line -> value]} {
+            break
+        }
+    }
+    close $f
+    return $value
+}
+
+set GDS_PRECISION [gds_dbu_per_um $HGVAR_SIGNOFF_GDS]
+if {![string is integer -strict $GDS_PRECISION] || $GDS_PRECISION <= 0} {
+    gen_fail "khong doc duoc ban ghi UNITS cua GDS: $HGVAR_SIGNOFF_GDS"
+}
+
 # ---- Offset luat track M4-M7 cua deck DRC --------------------------------
 # calibreDRC.rul dong 841/896/951/1006: VARIABLE VAR_M4_YOFFSET ENVIRONMENT ...
 # M4.AUX.1: canh M4 nam tren luoi VAR_M4_1X_DBU (= do rong 24 nm) lech VAR;
@@ -182,6 +247,17 @@ if {$STEP eq "drc"} {
     need_file $HGVAR_DRC_RULE_FILE "deck DRC"
 }
 
+set precision_note "# GDS_PRECISION=$GDS_PRECISION dbu/um (ban ghi UNITS cua GDS) = LAYOUT PRECISION"
+if {$STEP in {drc lvs}} {
+    set deck [expr {$STEP eq "drc" ? $HGVAR_DRC_RULE_FILE : $HGVAR_LVS_RULE_FILE}]
+    set p [deck_precision $deck]
+    if {![string is integer -strict $p] || $p <= 0} {
+        gen_fail "khong doc duoc PRECISION trong $deck"
+    }
+    # Khong doi ti le nguyen: deck goc tu dat 10000 / 4000 = x2.5.
+    append precision_note ", PRECISION deck $p (x[format %g [expr {double($p) / $GDS_PRECISION}]])"
+}
+
 # ---- Ghi sourceme -------------------------------------------------------------
 set out [file join $SCRIPT_DIR sourceme]
 set f [open $out w]
@@ -192,12 +268,14 @@ foreach {name value} [list \
         HYPER           $HGVAR_HYPER \
         CALIBRE         $HGVAR_CALIBRE \
         GDS_FILE        $HGVAR_SIGNOFF_GDS \
+        GDS_PRECISION   $GDS_PRECISION \
         NETLIST_PWR     $HGVAR_SIGNOFF_NETLIST_PWR \
         DRC_DECK        $HGVAR_DRC_RULE_FILE \
         LVS_DECK        $HGVAR_LVS_RULE_FILE \
         DRC_MAX_RESULTS $HGVAR_DRC_MAX_RESULTS] {
     puts $f "export $name=[bash_quote $value]"
 }
+puts $f $precision_note
 foreach line $offset_notes {
     puts $f $line
 }
@@ -207,6 +285,7 @@ foreach line $offset_lines {
 close $f
 
 puts "INFO: ghi $out"
+puts "INFO: [string range $precision_note 2 end]"
 foreach line $offset_notes {
     puts "INFO: [string range $line 2 end]"
 }

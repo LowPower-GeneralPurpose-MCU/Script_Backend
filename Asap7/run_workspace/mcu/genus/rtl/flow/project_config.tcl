@@ -445,7 +445,11 @@ proc mcu_ff_lowv_derate_reported {rpt {ocv_early 1.0}} {
     if {![file isfile $rpt]} {
         return -1
     }
-    set want [format %.3f [expr {$::STD_FF_LOWV_DERATE * $ocv_early}]]
+    # Cung he so ma mcu_apply_ff_lowv_derate dua cho tool ('%.4g'); bao cao in 3
+    # so le.  So bang gia tri, sai lech toi nua don vi chu so cuoi: so chuoi
+    # 'format %.3f' da bao "KHONG thay" sai o Tempus OCV 2026-10-21 15:04 - tich
+    # 0.85 x 0.95 = 0.80749999... ra 0.807, con Tempus in 0.808.
+    set want [format %.4g [expr {$::STD_FF_LOWV_DERATE * $ocv_early}]]
     set corner ""
     set seen_ff 0
     set count 0
@@ -457,9 +461,14 @@ proc mcu_ff_lowv_derate_reported {rpt {ocv_early 1.0}} {
             }
             continue
         }
-        if {$corner eq "dc_ff" && [regexp {^\s*Cell[ _][Dd]elay\s} $line] &&
-            [lsearch -exact [regexp -all -inline {\S+} $line] $want] >= 0} {
-            incr count
+        if {$corner ne "dc_ff" || ![regexp {^\s*Cell[ _][Dd]elay\s} $line]} {
+            continue
+        }
+        foreach field [regexp -all -inline {\S+} $line] {
+            if {[string is double -strict $field] && abs($field - $want) <= 0.0006} {
+                incr count
+                break
+            }
         }
     }
     close $fp

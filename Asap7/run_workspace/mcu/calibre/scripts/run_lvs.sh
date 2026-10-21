@@ -9,6 +9,13 @@ for f in "$DESIGN.source.net" hcell.list lvs_box.list; do
         exit 1
     fi
 done
+# Deck LVS khong khai LAYOUT PRECISION nen Calibre lay bang precision 4000 cua
+# deck, khac 2000 dbu/um cua GDS -> loi nhu DRC 2026-10-21.  Khai o header theo
+# ban ghi UNITS cua GDS (gen_env.tcl).
+if [ -z "$GDS_PRECISION" ]; then
+    echo "ERROR: GDS_PRECISION chua dat - chay qua make (gen_env.tcl)"
+    exit 1
+fi
 
 # Deck ASAP7 (rul/calibreLVS.rul) tu khai bao LVS REPORT mask.lvs.rep (dong 52)
 # va LVS POWER NAME "vdd!" "VDD!" / LVS GROUND NAME "VSS!" "vss!" (dong 23-24),
@@ -30,6 +37,7 @@ cal=run.lvs.cal
 echo "LAYOUT PRIMARY \"$DESIGN\""                       > $cal
 echo "LAYOUT PATH \"$GDS_FILE\""                       >> $cal
 echo "LAYOUT SYSTEM GDSII"                             >> $cal
+echo "LAYOUT PRECISION $GDS_PRECISION"                 >> $cal
 echo "SOURCE PRIMARY \"$DESIGN\""                      >> $cal
 echo "SOURCE PATH \"$PWD/$DESIGN.source.net\""         >> $cal
 echo "SOURCE SYSTEM SPICE"                             >> $cal

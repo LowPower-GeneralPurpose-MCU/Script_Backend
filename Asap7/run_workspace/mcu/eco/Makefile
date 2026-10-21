@@ -19,6 +19,10 @@
 #                                    STD_FF_LOWV_DERATE (project_config.tcl) bat
 #     make fillfix ECO_FILL_GUARD=0.015 ECO_FILL_ROUNDS=4   (dau file eco_fillfix.tcl)
 #     make finish ECO_FINISH_IN=./saved/<ten>.enc.dat       bo qua fillfix co chu dich
+#     make ... MCU_OCV_DERATE_LATE=1.05 MCU_OCV_DERATE_EARLY=0.95
+#                                    derate OCV chung, cung bien voi Innovus /
+#                                    Tempus; 'make all' DUNG khi khac bo so cua
+#                                    lan Tempus da bao vi pham setup / hold
 #     make ... ECO_ALLOW_STALE=1     cong tuoi chi con canh bao.  Mac dinh ca ba
 #                                    buoc DUNG khi dau vao cu hon checkpoint
 #                                    cuoi KHOI 14 (Innovus da chay lai): bao cao
@@ -27,7 +31,7 @@
 #
 # SAU KHI CHAY LAI INNOVUS: chay mcu/conformal -> mcu/quantus -> mcu/tempus tren
 # ket qua moi TRUOC 'make all'.  'make all' bao Tempus khong con max_transition
-# thi dung o do - khong fillfix, khong finish.
+# / setup / hold thi dung o do - khong fillfix, khong finish.
 
 INNOVUS    ?= innovus
 RUN_DIR    := ../innovus
@@ -51,6 +55,8 @@ export ECO_FILL_DIST
 export ECO_FILL_MAX_NETS
 export ECO_FINISH_IN
 export ECO_ALLOW_STALE
+export MCU_OCV_DERATE_LATE
+export MCU_OCV_DERATE_EARLY
 
 .PHONY: all fillfix finish clean
 

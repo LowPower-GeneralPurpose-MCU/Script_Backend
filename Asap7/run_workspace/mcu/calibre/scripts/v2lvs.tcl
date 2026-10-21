@@ -193,7 +193,29 @@ puts "INFO: LVS BOX: $box"
 
 # ---- 5. v2lvs -----------------------------------------------------------------
 set cdls [concat $HGVAR_STDCELL_CDL $HGVAR_SRAM_CDL $HGVAR_FLASH_CDL [list [file normalize $STUB_CDL]]]
-set cmd [list $HGVAR_V2LVS {*}$HGVAR_V2LVS_OPTS]
+# Wrapper v2lvs cua Calibre la script sh viet cho bash (RHEL).  Ubuntu tro
+# /bin/sh sang dash nen lan chay 2026-10-21 chet ngay sau 0 s: "v2lvs: 113:
+# .../set_shared_library_path: Syntax error: redirection unexpected".  Script
+# "#!/bin/sh" (hoac khong co #!, execvp cung roi ve /bin/sh) thi goi qua bash.
+set v2lvs [lindex [auto_execok $HGVAR_V2LVS] 0]
+if {$v2lvs eq ""} {
+    die "khong thay lenh '$HGVAR_V2LVS' trong PATH"
+}
+set f [open $v2lvs r]
+fconfigure $f -translation binary
+set magic [read $f 64]
+close $f
+set cmd [list $v2lvs {*}$HGVAR_V2LVS_OPTS]
+if {[string range $magic 0 3] ne "\x7fELF" &&
+    ([string range $magic 0 1] ne "#!" ||
+     [regexp {^#!\s*(/usr)?/bin/(env\s+)?sh\M} $magic])} {
+    set bash [lindex [auto_execok bash] 0]
+    if {$bash eq ""} {
+        die "$v2lvs la script sh nhung khong thay bash"
+    }
+    puts "INFO: $v2lvs la script sh -> chay qua $bash (/bin/sh co the la dash)"
+    set cmd [list $bash {*}$cmd]
+}
 foreach cdl $cdls {
     lappend cmd -s $cdl
 }

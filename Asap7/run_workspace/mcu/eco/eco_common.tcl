@@ -18,6 +18,37 @@ proc eco_warn {msg} {
     puts "WARNING: $msg"
 }
 
+# Derate OCV chung: cung bien moi truong (MCU_OCV_DERATE_LATE / _EARLY), cung
+# mac dinh 1.0 va cung kiem tra voi innovus/tcl/init_common.tcl va tempus.tcl.
+# Tra ve {late early}.
+proc eco_ocv_derates {} {
+    set values {}
+    foreach name {MCU_OCV_DERATE_LATE MCU_OCV_DERATE_EARLY} {
+        set value [eco_env $name 1.0]
+        if {![string is double -strict $value] || $value <= 0} {
+            error "$name phai la so duong, dang la '$value'"
+        }
+        lappend values [expr {double($value)}]
+    }
+    return $values
+}
+
+# Derate OCV ma lan Tempus da ghi <summary> dung: dong "OCV chung late x<a> /
+# early x<b>" cua tempus.tcl.  Tra ve {late early}; rong neu khong doc duoc.
+proc eco_tempus_ocv {summary} {
+    if {![file isfile $summary]} {
+        return {}
+    }
+    set fp [open $summary r]
+    set text [read $fp]
+    close $fp
+    if {[regexp {OCV chung late x(\S+) / early x(\S+)} $text -> late early] &&
+        [string is double -strict $late] && [string is double -strict $early]} {
+        return [list $late $early]
+    }
+    return {}
+}
+
 # 'puts' khong vao file log cua Innovus (da gap o mcu/quantus), nen ket luan
 # va ly do loi deu ghi ra file tom tat; Makefile doc dong dau cua file nay.
 proc eco_write_summary {path verdict lines} {
@@ -80,6 +111,41 @@ proc eco_tempus_max_tran {rpt} {
         } else {
             set pending ""
         }
+    }
+    close $fp
+    return $out
+}
+
+# Muc 'max_delay/setup' va 'min_delay/hold' cua cung file: so endpoint
+# VIOLATED va slack xau nhat.  Tra ve dict {setup {n wns} hold {n wns}}.  Ten
+# endpoint dai thi Tempus xuong dong: slack + VIOLATED nam o dong sau, nen dem
+# theo chu VIOLATED chu khong theo ten.
+proc eco_tempus_timing_viol {rpt} {
+    set out [dict create setup {0 0.0} hold {0 0.0}]
+    set fp [open $rpt r]
+    set section ""
+    while {[gets $fp line] >= 0} {
+        if {[regexp {^\s*max_delay/setup\s*$} $line]} {
+            set section setup
+            continue
+        }
+        if {[regexp {^\s*min_delay/hold\s*$} $line]} {
+            set section hold
+            continue
+        }
+        if {[regexp {^\s*Check type\s*:} $line]} {
+            set section ""
+            continue
+        }
+        if {$section eq "" || ![regexp {(\S+)\s+VIOLATED\M} $line -> slack]} {
+            continue
+        }
+        lassign [dict get $out $section] n wns
+        incr n
+        if {[string is double -strict $slack] && $slack < $wns} {
+            set wns $slack
+        }
+        dict set out $section [list $n $wns]
     }
     close $fp
     return $out
@@ -382,14 +448,36 @@ proc eco_log_unfixed_drv {log} {
 ## PROC GOI LENH INNOVUS
 ############################################################
 
-# Derate SRAM, derate lib FF dien ap thap va dont_touch TRNG dat o KHOI 0
-# (init_common.tcl) va duoc eco_drv.tcl dat lai sau restoreDesign.  Hai buoc
-# sau (eco_fillfix.tcl, eco_finish.tcl) mo checkpoint do eco_drv.tcl luu; dat
-# lai cung gia tri o day de ket luan hold cua chung khong phu thuoc vao viec
-# saveDesign co giu derate theo instance hay khong.  Tra ve ghi chu mot dong.
+# Derate OCV chung cho moi cell va net.  Truoc 2026-10-21 cac buoc ECO chi nhan
+# MCU_OCV_DERATE_EARLY vao he so lib FF, moi cell khac van x1.0: Tempus OCV
+# 1.05 / 0.95 (run 15:04) bao 14 endpoint hold view_ff am toi 5 ps ma luot
+# optDesign -hold o day khong thay duong nao.  Goi TRUOC derate SRAM va lib
+# FF: derate theo doi tuong thay the derate chung, va lenh khong -delay_corner
+# dat sau chung co the doi cach hieu cua chung (TCLCMD-1725).  Dat ca khi bang
+# 1.0: checkpoint cua mot lan Innovus co bat OCV co the con giu 1.05 / 0.95,
+# trong khi he so lib FF ben duoi tinh theo bien moi truong.  Tra ve ghi chu.
+proc eco_apply_ocv_derate {late early} {
+    set_timing_derate -late  -cell_delay -net_delay -cell_check $late
+    set_timing_derate -early -cell_delay -net_delay -cell_check $early
+    if {$late == 1.0 && $early == 1.0} {
+        eco_warn "khong co derate OCV chung (1.0): setup / hold sau ECO chua tinh bien\
+ thien tren chip, Tempus bat OCV se thay vi pham ma ECO khong sua; bat:\
+ MCU_OCV_DERATE_LATE=1.05 MCU_OCV_DERATE_EARLY=0.95 (cung bo so voi mcu/tempus)"
+        return "OCV chung tat (1.0)"
+    }
+    return "OCV chung late x$late / early x$early"
+}
+
+# Derate OCV chung, derate SRAM, derate lib FF dien ap thap va dont_touch TRNG
+# dat o KHOI 0 (init_common.tcl) va duoc eco_drv.tcl dat lai sau restoreDesign.
+# Hai buoc sau (eco_fillfix.tcl, eco_finish.tcl) mo checkpoint do eco_drv.tcl
+# luu; dat lai cung gia tri o day de ket luan hold cua chung khong phu thuoc vao
+# viec saveDesign co giu derate hay khong.  Tra ve ghi chu mot dong.
 proc eco_session_constraints {} {
     global SRAM_MASTER SRAM_TAG_MASTER SRAM_EXPECTED_COUNT SRAM_TAG_EXPECTED_COUNT
     global SRAM_DERATE_SS SRAM_DERATE_FF
+    lassign [eco_ocv_derates] ocv_late ocv_early
+    set ocv_note [eco_apply_ocv_derate $ocv_late $ocv_early]
     set sram_insts [get_cells -hierarchical -filter \
         "ref_name =~ ${SRAM_MASTER}* || ref_name =~ ${SRAM_TAG_MASTER}*"]
     set sram_expected [expr {$SRAM_EXPECTED_COUNT + $SRAM_TAG_EXPECTED_COUNT}]
@@ -402,7 +490,7 @@ proc eco_session_constraints {} {
             eco_warn "set_timing_derate $corner $side x$factor cho SRAM bi tu choi: $derate_err"
         }
     }
-    set ff_note [mcu_apply_ff_lowv_derate [eco_env MCU_OCV_DERATE_EARLY 1.0]]
+    set ff_note [mcu_apply_ff_lowv_derate $ocv_early]
     if {$ff_note eq ""} {
         set ff_note "tat (STD_FF_LOWV_DERATE 1.0)"
     }
@@ -413,7 +501,7 @@ proc eco_session_constraints {} {
     foreach ro_ptr $ro_ptrs {
         set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
     }
-    return "SRAM dc_ss late x$SRAM_DERATE_SS / dc_ff early x$SRAM_DERATE_FF;\
+    return "$ocv_note; SRAM dc_ss late x$SRAM_DERATE_SS / dc_ff early x$SRAM_DERATE_FF;\
  lib FF dien ap thap: $ff_note"
 }
 

@@ -45,6 +45,14 @@
 ##                           KHONG can cho SIMPLE_RVT_FF 0.7 V khi
 ##                           STD_FF_LOWV_DERATE (project_config.tcl) dang bat:
 ##                           lib do duoc bu bang derate, chi con la WARNING
+##   MCU_OCV_DERATE_LATE=1.05 MCU_OCV_DERATE_EARLY=0.95
+##                           derate OCV chung, cung bien voi Innovus / Tempus.
+##                           Phai bang bo so cua lan Tempus da bao vi pham
+##                           setup / hold (cong o buoc 1), khong thi luot
+##                           optDesign sua tren derate khac
+##
+## Ngoai max_transition, vi pham setup / hold cua Tempus (vd khi bat OCV) cung
+## la ly do de chay: luot optDesign -setup -hold o buoc 6 sua ca chung.
 ##
 ## Script KHONG ghi de checkpoint goc va KHONG dung vao reports/ cua flow
 ## chinh.  Sau khi PASS: make fillfix (DRV khi co metal fill), make finish
@@ -80,6 +88,7 @@ if {[catch {
     set ECO_EXTRACT    [eco_env ECO_EXTRACT high]
     set ECO_DRV_MARGIN [eco_env ECO_DRV_MARGIN 0.05]
     set ECO_CPUS       [eco_env ECO_CPUS 1]
+    lassign [eco_ocv_derates] ECO_OCV_LATE ECO_OCV_EARLY
     set ECO_TEMPUS_RPT [file join $FLOW_ROOT tempus reports all_violators.rpt]
     set ECO_LAYER_MAP  [file normalize ./tcl/asap7_lef_to_qrc_layers.map]
 
@@ -113,14 +122,38 @@ if {[catch {
     # 1. DANH SACH CUA TEMPUS
     # --------------------------------------------------------------------
     set tempus_viol [eco_tempus_max_tran $ECO_TEMPUS_RPT]
-    if {[llength $tempus_viol] == 0} {
+    set tempus_timing [eco_tempus_timing_viol $ECO_TEMPUS_RPT]
+    lassign [dict get $tempus_timing setup] tempus_setup_n tempus_setup_wns
+    lassign [dict get $tempus_timing hold] tempus_hold_n tempus_hold_wns
+    set tempus_timing_note [format "setup %d endpoint (xau nhat %.3f ns), hold %d endpoint (xau nhat %.3f ns)" \
+        $tempus_setup_n $tempus_setup_wns $tempus_hold_n $tempus_hold_wns]
+    if {[llength $tempus_viol] == 0 && $tempus_setup_n == 0 && $tempus_hold_n == 0} {
         eco_write_summary $ECO_SUMMARY PASS [list \
-            "ECO DRV $TOP: $ECO_TEMPUS_RPT khong co vi pham max_transition nao -\
+            "ECO DRV $TOP: $ECO_TEMPUS_RPT khong co vi pham max_transition / setup / hold nao -\
  khong co gi de sua, khong mo checkpoint, khong ghi $ECO_OUT.dat" \
             "  KHONG can 'make fillfix' / 'make finish': outputs/ hien co cua mcu/innovus da la ket qua cuoi." \
             "  ($ECO_OUT.dat neu con tren dia la cua lan ECO truoc do, khong phai do lan chay nay ghi.)"]
-        puts "ECO DRV: Tempus khong bao max_transition nao - khong lam gi."
+        puts "ECO DRV: Tempus khong bao max_transition / setup / hold nao - khong lam gi."
         exit 0
+    }
+    puts "ECO DRV: Tempus bao $tempus_timing_note"
+    # Vi pham setup / hold phu thuoc derate: sua chung voi bo OCV khac bo Tempus
+    # da dung thi optDesign khong thay (hoac thay sai) dung cac duong do.  Run
+    # Tempus 2026-10-21 14:39 (reports_ocv_bad) du dinh bat OCV nhung da chay voi
+    # x1.0.  Max_transition khong phu thuoc derate nen khong chan.
+    set tempus_ocv [eco_tempus_ocv [file join [file dirname $ECO_TEMPUS_RPT] tempus_summary.rpt]]
+    if {$tempus_setup_n + $tempus_hold_n > 0} {
+        if {[llength $tempus_ocv] == 0} {
+            eco_warn "khong doc duoc derate OCV cua Tempus trong tempus_summary.rpt -\
+ khong kiem duoc ECO (late x$ECO_OCV_LATE / early x$ECO_OCV_EARLY) co cung bo so voi\
+ lan Tempus bao $tempus_timing_note"
+        } elseif {abs([lindex $tempus_ocv 0] - $ECO_OCV_LATE) > 1e-6 ||
+                  abs([lindex $tempus_ocv 1] - $ECO_OCV_EARLY) > 1e-6} {
+            error "Tempus bao $tempus_timing_note voi OCV late x[lindex $tempus_ocv 0] /\
+ early x[lindex $tempus_ocv 1], nhung ECO dang dung late x$ECO_OCV_LATE / early\
+ x$ECO_OCV_EARLY - optDesign se khong sua dung cac duong do.  Chay lai voi\
+ MCU_OCV_DERATE_LATE=[lindex $tempus_ocv 0] MCU_OCV_DERATE_EARLY=[lindex $tempus_ocv 1]"
+        }
     }
     set tempus_worst 0.0
     set tempus_limits {}
@@ -226,9 +259,11 @@ if {[catch {
     }
     set inst_before [llength [dbGet top.insts]]
 
-    # Derate SRAM va dont_touch TRNG dat o KHOI 0 (init_common.tcl).  Dat lai
-    # o day - cung gia tri nen vo hai neu checkpoint con giu - de luot optDesign
-    # nay khong bao gio chay thieu chung (innovus.tcl, muc (e), dong "Luu y").
+    # Derate OCV chung, derate SRAM va dont_touch TRNG dat o KHOI 0
+    # (init_common.tcl).  Dat lai o day - cung gia tri nen vo hai neu checkpoint
+    # con giu - de luot optDesign nay khong bao gio chay thieu chung (innovus.tcl,
+    # muc (e), dong "Luu y").  OCV chung dat TRUOC: xem eco_apply_ocv_derate.
+    set ocv_note [eco_apply_ocv_derate $ECO_OCV_LATE $ECO_OCV_EARLY]
     set sram_insts [get_cells -hierarchical -filter \
         "ref_name =~ ${SRAM_MASTER}* || ref_name =~ ${SRAM_TAG_MASTER}*"]
     set sram_expected [expr {$SRAM_EXPECTED_COUNT + $SRAM_TAG_EXPECTED_COUNT}]
@@ -243,9 +278,9 @@ if {[catch {
     }
     # Lib FF dien ap thap: checkpoint luu truoc 2026-10-11 chua co derate nay.
     # Cong o buoc 2 da cho qua vi tin vao no, nen o day bi tu choi la DUNG
-    # (khong canh bao roi chay tiep nhu derate SRAM).  MCU_OCV_DERATE_EARLY:
-    # cung bien moi truong voi init_common.tcl.
-    set eco_ocv_early [eco_env MCU_OCV_DERATE_EARLY 1.0]
+    # (khong canh bao roi chay tiep nhu derate SRAM).  Derate lib cell thay the
+    # derate chung nen phai nhan he so OCV early vao.
+    set eco_ocv_early $ECO_OCV_EARLY
     set ff_lowv_note [mcu_apply_ff_lowv_derate $eco_ocv_early]
     set derate_rpt [file join $ECO_DIR reports timing_derate.rpt]
     file delete -force $derate_rpt
@@ -314,8 +349,23 @@ if {[catch {
         [expr {[dict exists $sum_pre wns] ? [dict get $sum_pre wns] : "?"}] \
         [expr {[dict exists $sum_pre drv_max_tran] ? [dict get $sum_pre drv_max_tran] : "?"}] \
         $common [dict size $tempus_nets]]
+    # Hold Tempus bao: Innovus co thay khong.  Luot optDesign duoi day chi sua
+    # duong duoi -holdTargetSlack 0.020; khong thay thi ECO chay xong ma Tempus
+    # van bao nhu cu - biet o day thay vi sau ca chuoi fillfix / finish / Tempus.
+    if {$tempus_hold_n > 0} {
+        set rpt_pre_hold [file join $ECO_DIR reports timing_pre_hold]
+        timeDesign -postRoute -hold -outDir $rpt_pre_hold -prefix pre
+        set sum_pre_hold [soc_timing_summary $rpt_pre_hold pre hold]
+        set pre_hold_wns [expr {[dict exists $sum_pre_hold wns] ? [dict get $sum_pre_hold wns] : "?"}]
+        append pre_note "; hold WNS $pre_hold_wns ns"
+        if {[string is double -strict $pre_hold_wns] && $pre_hold_wns >= 0.020} {
+            eco_warn "Innovus thay hold WNS $pre_hold_wns ns truoc ECO (>= holdTargetSlack\
+ 0.020) du Tempus bao $tempus_hold_n endpoint hold (xau nhat $tempus_hold_wns ns) -\
+ optDesign se khong sua chung; kiem derate OCV / RC cua hai ben"
+        }
+    }
     puts "ECO DRV: $pre_note"
-    if {[dict size $pre_nets] == 0} {
+    if {[llength $tempus_viol] > 0 && [dict size $pre_nets] == 0} {
         eco_warn "Innovus khong thay net max_tran nao truoc ECO du Tempus bao\
  [llength $tempus_viol] chan - viec sua chi con dua vao ECO_DRV_MARGIN\
  ($ECO_DRV_MARGIN); neu Tempus sau ECO van con vi pham thi tang margin"
@@ -417,9 +467,10 @@ if {[catch {
     set lines [list \
         "ECO DRV $TOP: $ECO_CHECKPOINT -> $ECO_OUT.dat, [expr {[clock seconds] - $eco_t0}] s, $ECO_CPUS CPU" \
         "  trich RC : $extract_note" \
-        "  derate   : SRAM dc_ss late x$SRAM_DERATE_SS / dc_ff early x$SRAM_DERATE_FF; lib FF dien ap thap: $ff_lowv_note" \
+        "  derate   : $ocv_note; SRAM dc_ss late x$SRAM_DERATE_SS / dc_ff early x$SRAM_DERATE_FF; lib FF dien ap thap: $ff_lowv_note" \
         "  Tempus   : [llength $tempus_viol] chan max_transition tren [dict size $tempus_nets] net,\
  xau nhat [format %.3f $tempus_worst] ns, gioi han $tempus_limits ns   ([file tail $ECO_TEMPUS_RPT])" \
+        "  Tempus   : $tempus_timing_note" \
         "  $pre_note" \
         "  sua      : optDesign -postRoute -setup -hold -drv ($margin_note) + soc_fix_cg_hold + ecoRoute + soc_fix_drv" \
         [format "  sau ECO, Innovus: setup WNS %s ns, hold WNS %s ns, max_tran Real %s net (%d net cua Tempus con trong do), DRC %d" \

@@ -14,6 +14,7 @@ file mkdir reports logs
 
 array set CFG {}
 set OFFSET_NOTES {}
+set PRECISION_NOTE ""
 if {[file isfile scripts/sourceme]} {
     set f [open scripts/sourceme r]
     while {[gets $f line] >= 0} {
@@ -21,6 +22,8 @@ if {[file isfile scripts/sourceme]} {
             set CFG($k) $v
         } elseif {[regexp {^# (VAR_M\d_[XY]OFFSET=.*)} $line -> note]} {
             lappend OFFSET_NOTES $note
+        } elseif {[regexp {^# GDS_PRECISION=(.*)} $line -> note]} {
+            set PRECISION_NOTE $note
         }
     }
     close $f
@@ -95,7 +98,7 @@ proc write_summary {verdict lines} {
 
 # =============================================================================
 proc summarize_drc {} {
-    global DESIGN CFG OFFSET_NOTES
+    global DESIGN CFG OFFSET_NOTES PRECISION_NOTE
     set run run_drc
     set sum  $run/$DESIGN.drc.sum
     set log  $run/calibre_drc.log
@@ -105,7 +108,10 @@ proc summarize_drc {} {
     set out [list "Calibre DRC $DESIGN - [clock format [clock seconds] -format {%Y-%m-%d %H:%M}]"]
     lappend out "  GDS     : [stamp [expr {[info exists CFG(GDS_FILE)] ? $CFG(GDS_FILE) : {?}}]]"
     lappend out "  deck    : [expr {[info exists CFG(DRC_DECK)] ? $CFG(DRC_DECK) : {?}}]\
- (run_drc/asap7_drc.rul: 5 lenh dac ta da comment)"
+ (run_drc/asap7_drc.rul: 6 lenh dac ta da comment)"
+    if {$PRECISION_NOTE ne ""} {
+        lappend out "  dbu     : $PRECISION_NOTE"
+    }
     foreach note $OFFSET_NOTES {
         lappend out "  offset  : $note"
     }
@@ -286,7 +292,7 @@ proc summarize_drc {} {
 
 # =============================================================================
 proc summarize_lvs {} {
-    global DESIGN CFG
+    global DESIGN CFG PRECISION_NOTE
     set run run_lvs
     set rep  $run/$DESIGN.lvs.report
     set ext  $run/$DESIGN.lvs.report.ext
@@ -305,6 +311,9 @@ proc summarize_lvs {} {
     lappend out "  netlist : [stamp [expr {[info exists CFG(NETLIST_PWR)] ? $CFG(NETLIST_PWR) : {?}}]]"
     lappend out "  deck    : [expr {[info exists CFG(LVS_DECK)] ? $CFG(LVS_DECK) : {?}}]\
  (run_lvs/asap7_lvs.rul: LVS REPORT / POWER NAME / GROUND NAME da comment)"
+    if {$PRECISION_NOTE ne ""} {
+        lappend out "  dbu     : $PRECISION_NOTE"
+    }
     if {[file isfile $run/lvs_box.list]} {
         set f [open $run/lvs_box.list r]
         lappend out "  LVS BOX : [string trim [string map {"\n" " "} [read $f]]]"

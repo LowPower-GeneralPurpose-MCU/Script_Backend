@@ -80,13 +80,17 @@ proc tempus_slack_stats {kind view} {
     }
     set tns 0.0
     set nvp 0
-    if {$wns < 0} {
+    # 'slack' cua path da lam tron 3 so le: duong vi pham duoi 0.5 ps doc ra
+    # "-0.000", ma -0.0 < 0 la sai.  Run OCV 2026-10-21 15:04 vi the ghi 9
+    # endpoint trong khi Tempus bao 14 VIOLATED.  Nen dem moi duong cua tap
+    # -max_slack 0 co slack <= 0, va hoi tap do ca khi WNS doc ra la 0.
+    if {$wns <= 0} {
         # -nworst 1: moi endpoint mot duong, nen so duong = so endpoint vi pham.
         set viol [report_timing -$kind -view $view -max_slack 0 -nworst 1 \
             -max_paths $::TEMPUS_MAX_VIOL -collection]
         foreach_in_collection path $viol {
             set slack [get_property $path slack]
-            if {[string is double -strict $slack] && $slack < 0} {
+            if {[string is double -strict $slack] && $slack <= 0} {
                 set tns [expr {$tns + $slack}]
                 incr nvp
             }
@@ -661,8 +665,9 @@ if {[catch {
                 lappend summary [format "%-5s %-8s WNS %9.4f ns   %d/%d duong da in VIOLATED (khong co TNS)   %s" \
                     $label $view $wns $nvp $paths [file tail $rpt]]
             }
-            if {$wns < 0} {
-                lappend failed [format "%s/%s WNS %.4f ns" $label $view $wns]
+            # nvp > 0 voi WNS "-0.000": moi vi pham deu duoi 0.5 ps, van la vi pham.
+            if {$wns < 0 || $nvp > 0} {
+                lappend failed [format "%s/%s WNS %.4f ns, %d endpoint" $label $view $wns $nvp]
             } elseif {$wns < $TEMPUS_SLACK_WATCH} {
                 tempus_warn [format "%s %s chi con du %.0f ps (WNS %.4f ns, nguong theo doi %.0f ps -\
  TEMPUS_SLACK_WATCH): duong xau nhat o dau reports/%s; mot lan trich RC / ECO nua co the lam no am" \
