@@ -1,7 +1,8 @@
 ############################################################
 ## Doc ket qua Calibre trong run_<buoc>/, ghi reports/<buoc>_summary.rpt
 ## (dong dau PASS / FAIL) va chep bao cao + log sang reports/ va logs/ de dua
-## len git (run_*/ khong vao git; file > 5 MB chi giu dau + duoi).
+## len git (run_*/ khong vao git; file > 2 MB chi giu 2000 dong dau + 2000
+## dong cuoi; dong ERROR van grep tu ban day du trong run_*/).
 ##     tclsh scripts/summarize.tcl drc|lvs
 ############################################################
 
@@ -33,7 +34,7 @@ proc stamp {path} {
     return "$path ([clock format [file mtime $path] -format {%Y-%m-%d %H:%M}])"
 }
 
-proc copy_capped {src dst {max_bytes 5000000} {keep 3000}} {
+proc copy_capped {src dst {max_bytes 2000000} {keep 2000}} {
     if {![file isfile $src]} {
         return
     }

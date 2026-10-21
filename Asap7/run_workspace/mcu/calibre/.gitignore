@@ -4,3 +4,5 @@ run_drc/
 run_lvs/
 # Sinh boi scripts/gen_env.tcl, chua duong dan tuyet doi cua may chay.
 scripts/sourceme
+# Output cua "nohup make drc &" / "make ... > x.out": trung voi logs/.
+*.out
