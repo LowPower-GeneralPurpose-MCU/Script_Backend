@@ -1,14 +1,14 @@
 PASS
 Tempus top_soc: SPEF quantus (top_soc_quantus_rc_*.spef), OCV + CPPR, SI bat, 1 CPU
-  update_timing + bao cao 167 s; don vi 1ns / 1pf
+  update_timing + bao cao 165 s; don vi 1ns / 1pf
   logs/top_soc_pnr.tempus.sdc: bo 4 dong source latency tren generated clock (CLK_SDRAM_OUT), doi 0 set_max/min_delay ps -> ns
   derate SRAM: 84 macro, dc_ss late x1.30, dc_ff early x0.75; OCV chung late x1.0 / early x1.0
   derate lib FF dien ap thap: 56 lib cell cua asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120, dc_ff early cell_delay x0.85
-  setup view_ss  WNS    0.2480 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_ss.rpt
+  setup view_ss  WNS    0.2510 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_ss.rpt
   setup view_tt  WNS    0.3780 ns   TNS       0.0000 ns        0 endpoint vi pham   setup_view_tt.rpt
   hold  view_ff  WNS    0.0150 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_ff.rpt
   hold  view_tt  WNS    0.0370 ns   TNS       0.0000 ns        0 endpoint vi pham   hold_view_tt.rpt
-  ky sinh (cong SPEF khop netlist)  : 146551 / 146551 net that da gan RC, 0 chua gan, 0 net broken; SPEF cu nhat ghi luc 10-14 01:35, netlist 10-14 01:18
+  ky sinh (cong SPEF khop netlist)  : 146554 / 146554 net that da gan RC, 0 chua gan, 0 net broken; SPEF cu nhat ghi luc 10-21 09:39, netlist 10-21 01:31
   max_transition / max_capacitance : reports/all_violators.rpt
   net chua gan ky sinh             : reports/annotated_parasitics.rpt
   duong khong rang buoc            : reports/check_timing.rpt, analysis_coverage.rpt

@@ -1,17 +1,17 @@
 DONE
 Voltus top_soc: goc TT 0.7 V / 25 C, static, activity mac dinh (chua co VCD = can tren), SPEF quantus (top_soc_quantus_rc_typ.spef), 1 CPU
-  thoi gian 955 s; don vi 1ns / 1pf
+  thoi gian 949 s; don vi 1ns / 1pf
   process: set_design_mode -process 7; tool log ghi 'Design Mode: 7nm' 1 lan, '65nm' 0 lan
   cong suat (reports/power_static.rpt):
-    Total Internal Power: 85.63040070 97.3959%
-    Total Switching Power: 2.24870090 2.5577%
-    Total Leakage Power: 0.04083527 0.0464%
-    Total Power: 87.91993686
+    Total Internal Power: 85.63041297 97.3959%
+    Total Switching Power: 2.24872166 2.5577%
+    Total Leakage Power: 0.04083599 0.0464%
+    Total Power: 87.91997062
   doi chieu Innovus KHOI 15 (innovus/reports/power_final.rpt, RC tQuantus):
-    Total Internal Power: 87.65170370 95.0812%
-    Total Switching Power: 4.49323569 4.8741%
-    Total Leakage Power: 0.04121809 0.0447%
-    Total Power: 92.18615749
+    Total Internal Power: 87.65182016 95.0811%
+    Total Switching Power: 4.49334241 4.8742%
+    Total Leakage Power: 0.04121881 0.0447%
+    Total Power: 92.18638139
   file dong cho luoi nguon: static_VDD.ptiavg static_VSS.ptiavg
   luoi nguon: ghep lop asap7_lefdef.layermap, diem cap nguon pin (VDD 182, VSS 182 nguon ap rai doc 4 / 4 hinh chan PG trong top_soc.lef, buoc 10.0 um; chi cap tu canh co hinh)
     nguong: VDD >= 0.65 V (danh dinh 0.7 V), VSS <= 0.05 V; -enable_xp tat; option them: -enable_scheduler false

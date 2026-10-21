@@ -18,7 +18,7 @@ ICGx2_ASAP7_75t_L         | tech                | 532
 BUFx10_ASAP7_75t_R        | tech                | 264
 AOI22xp33_ASAP7_75t_R     | tech                | 12980
 INVxp33_ASAP7_75t_R       | tech                | 9196
-BUFx4_ASAP7_75t_R         | tech                | 710
+BUFx4_ASAP7_75t_R         | tech                | 713
 DFFASRHQNx1_ASAP7_75t_R   | tech                | 13807
 AOI22xp5_ASAP7_75t_R      | tech                | 79
 OAI32xp33_ASAP7_75t_R     | tech                | 86
@@ -74,7 +74,7 @@ AND4x1_ASAP7_75t_R        | tech                | 498
 BUFx12f_ASAP7_75t_R       | tech                | 168
 DFFHQNx1_ASAP7_75t_R      | tech                | 17113
 AOI331xp33_ASAP7_75t_L    | tech                | 2
-FILLER_ASAP7_75t_R        | tech                | 2068978
+FILLER_ASAP7_75t_R        | tech                | 2068966
 AOI22xp33_ASAP7_75t_L     | tech                | 20
 OAI322xp33_ASAP7_75t_L    | tech                | 1
 AO22x2_ASAP7_75t_L        | tech                | 24
@@ -128,7 +128,7 @@ OAI222xp33_ASAP7_75t_L    | tech                | 2
 OAI222xp33_ASAP7_75t_R    | tech                | 90
 AO21x2_ASAP7_75t_R        | tech                | 2
 NAND2x1_ASAP7_75t_L       | tech                | 69
-FILLERxp5_ASAP7_75t_R     | tech                | 76981
+FILLERxp5_ASAP7_75t_R     | tech                | 76984
 CKINVDCx16_ASAP7_75t_R    | tech                | 1
 NOR3x1_ASAP7_75t_R        | tech                | 1
 INVx1_ASAP7_75t_R         | tech                | 158

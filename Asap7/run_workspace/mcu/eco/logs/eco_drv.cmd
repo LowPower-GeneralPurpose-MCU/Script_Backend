@@ -1,7 +1,7 @@
 #######################################################
 #                                                     
 #  Innovus Command Logging File                     
-#  Created on Tue Oct 20 23:39:07 2026                
+#  Created on Tue Oct 20 23:54:35 2026                
 #                                                     
 #######################################################
 
@@ -21,3 +21,64 @@ getVersion
 restoreDesign ./saved/top_soc_postRoute.enc.dat top_soc
 setMultiCpuUsage -acquireLicense 1 -localCpu 1
 setDistributeHost -local
+set_timing_derate -delay_corner $corner $side -cell_delay -cell_check  $factor $sram_insts
+set_timing_derate -delay_corner $corner $side -cell_delay -cell_check  $factor $sram_insts
+set_timing_derate -delay_corner dc_ff -early -cell_delay  $factor $lib_cells
+report_timing_derate > $derate_rpt
+report_timing_derate -delay_corner dc_ff >> $derate_rpt
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+set_dont_touch [get_cells [dbGet $ro_ptr.name]] true
+setExtractRCMode -engine postRoute -effortLevel high -coupled true
+setExtractRCMode -lefTechFileMap /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/tcl/asap7_lef_to_qrc_layers.map
+timeDesign -postRoute -outDir /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/eco/reports/timing_pre -prefix pre
+setOptMode -fixCap true -fixTran true -fixFanoutLoad true -setupTargetSlack 0.020 -holdTargetSlack 0.020
+setOptMode -drcMargin 0.05
+optDesign -postRoute -setup -hold -drv -prefix eco
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+setEcoMode -batchMode true -refinePlace false -updateTiming false -honorFixedNetWire false
+ecoAddRepeater -term cg_cpu/g16__6260/B -cell HB4xp67_ASAP7_75t_R
+ecoAddRepeater -term cg_cpu/g16__6260/B -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -term cg_dbg/g15__4319/B -cell HB4xp67_ASAP7_75t_R
+ecoAddRepeater -term cg_dbg/g15__4319/B -cell BUFx4_ASAP7_75t_R
+ecoAddRepeater -term cg_tim0/g15__1617/B -cell BUFx4_ASAP7_75t_R
+setEcoMode -batchMode false -refinePlace true -updateTiming true -honorFixedNetWire true
+refinePlace
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+report_timing -early -through $latch/Q  -max_paths 1 -collection
+ecoRoute
+ecoRoute -fix_drc
+setOptMode -drcMargin 0.0
+timeDesign -postRoute -outDir /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/eco/reports/timing_eco -prefix eco
+timeDesign -postRoute -hold -outDir /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/eco/reports/timing_eco_hold -prefix eco
+clearDrc
+verifyConnectivity -net {VDD VSS} -type all -error 100000 -warning 1000 -report ./verify_rpt/connectivity_eco_pg.rpt
+clearDrc
+verify_drc -limit 500000 -report ./verify_rpt/drc_eco.rpt
+verifyConnectivity -type all -error 100000 -warning 1000 -report ./verify_rpt/connectivity_eco.rpt
+saveDesign ./saved/top_soc_postRoute_eco.enc

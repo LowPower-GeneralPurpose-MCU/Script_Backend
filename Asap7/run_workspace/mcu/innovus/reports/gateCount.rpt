@@ -1,7 +1,7 @@
 Gate area 0.0437 um^2
-Level 0 Module top_soc                                  Gates=   2910395 Cells=  143735 Area=  127300.7 um^2
-Level 1 Module cg_cpu                                   Gates=24         Cells=6        Area=       1.1 um^2
-Level 1 Module cg_dbg                                   Gates=20         Cells=7        Area=       0.9 um^2
+Level 0 Module top_soc                                  Gates=   2910402 Cells=  143738 Area=  127301.0 um^2
+Level 1 Module cg_cpu                                   Gates=27         Cells=7        Area=       1.2 um^2
+Level 1 Module cg_dbg                                   Gates=22         Cells=8        Area=       1.0 um^2
 Level 1 Module u_axi_apb_dma_u_dma_engine               Gates=39966      Cells=11599    Area=    1748.1 um^2
 Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST229  Gates=17         Cells=2        Area=       0.7 um^2
 Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST237  Gates=7          Cells=2        Area=       0.3 um^2
@@ -19,7 +19,7 @@ Level 1 Module cg_spi                                   Gates=16         Cells=5
 Level 1 Module u_apb_gpio                               Gates=4621       Cells=1284     Area=     202.1 um^2
 Level 1 Module cg_gpio                                  Gates=14         Cells=5        Area=       0.6 um^2
 Level 1 Module u_axi_to_apb_cg_icg__RC_CG_HIER_INST230  Gates=7          Cells=2        Area=       0.3 um^2
-Level 1 Module cg_tim0                                  Gates=11         Cells=4        Area=       0.5 um^2
+Level 1 Module cg_tim0                                  Gates=14         Cells=5        Area=       0.6 um^2
 Level 1 Module cg_uart1                                 Gates=14         Cells=5        Area=       0.6 um^2
 Level 1 Module cg_tim1                                  Gates=16         Cells=5        Area=       0.7 um^2
 Level 1 Module u_clic                                   Gates=7970       Cells=3282     Area=     348.6 um^2

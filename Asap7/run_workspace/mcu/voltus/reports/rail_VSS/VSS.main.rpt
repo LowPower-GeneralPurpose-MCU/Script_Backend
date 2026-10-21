@@ -1,5 +1,5 @@
 POWER NET REPORT 
-Generated Date: Wed Oct 14 02:13:04 2026
+Generated Date: Wed Oct 21 10:15:21 2026
 Host Name: user1-EliteMini
 
 
@@ -24,7 +24,7 @@ Total Resistor Elements: 2570826
     Please refer to ../VSS/grid.gif for more details
 Top-level Resistor Elements:2570826
 Cell Library Resistor Elements: 0
-Total Number of Current Taps: 2325246
+Total Number of Current Taps: 2325240
     Please refer to ../VSS/tc.gif for more details
 
 
@@ -34,10 +34,10 @@ IR DROP ANALYSIS
 Layer based IR Drop Report: See Report
 Minimum, Average, Maximum IR drop: 0.000V 3.695mV 15.790mV
     Please refer to ../VSS/ir_linear.gif for more details
-Total Static Current Loaded: 0.1255999107088428A
+Total Static Current Loaded: 0.12559995871561114A
 Number of Violations: 0
     Please refer to ../VSS/ir_limit.gif for more details
-Minimum, Average, Maximum Vsrc Current: 0.00014181601000018418A, 0.0006901093994991363A, 0.001322101685218513A
+Minimum, Average, Maximum Vsrc Current: 0.00014181602455209941A, 0.00069010966327258871A, 0.001322102383710444A
 
 
 ==============================

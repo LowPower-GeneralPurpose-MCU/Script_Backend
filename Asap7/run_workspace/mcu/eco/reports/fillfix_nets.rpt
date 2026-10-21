@@ -24,8 +24,8 @@
 0  -0.002  u_dcache/FE_OFN8743_data_write_word_24  u_dcache/FE_OFC6979_data_write_word_24/A  INVx2_ASAP7_75t_L/A  buffer(dist)
 0  -0.002  u_axi_ram_lo/FE_OFN7839_mem_rdata_10  u_axi_ram_lo/g6761/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
 0  -0.001  u_axi_interconnect/n_7242  u_axi_interconnect/g270058/A2  AOI211xp5_ASAP7_75t_R/A2  buffer(net)
-0  -0.001  u_axi_ram_lo/u_mem/FE_OFN6583_n_541  u_axi_ram_lo/u_mem/g3467/A  AND4x1_ASAP7_75t_R/A  buffer(dist)
 0  -0.001  FE_DBTN7_s3_arready  u_axi_interconnect/g83020/B  NAND2xp33_ASAP7_75t_R/B  buffer(net)
+0  -0.001  u_axi_ram_lo/u_mem/FE_OFN6583_n_541  u_axi_ram_lo/u_mem/g3467/A  AND4x1_ASAP7_75t_R/A  buffer(dist)
 0  +0.000  u_axi_interconnect/FE_OFN7751_n_14539  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_s_WDATA_o_r_reg[20]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(dist)
 0  +0.000  u_axi_ram_lo/FE_OFN7837_mem_rdata_12  u_axi_ram_lo/g6763/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
 0  +0.000  u_axi_ram_hi/FE_OFN7786_mem_rdata_31  u_axi_ram_hi/g8420/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
@@ -46,17 +46,17 @@
 0  +0.001  u_axi_interconnect/FE_PHN22314_SA_GEN_0_genblk1_slave_arbitration_ARID_valid_nxt_6  u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_R_channel/FE_OFC9135_SA_GEN_0__genblk1_slave_arbitration_ARID_valid_nxt_6/A  HB1xp67_ASAP7_75t_L/A  buffer(net)
 0  +0.002  u_core/n_96  u_core/PMP_addr_q_reg[1][22]/D  DFFASRHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.002  u_axi_interconnect/n_9512  u_axi_interconnect/g270312/A1  A2O1A1Ixp33_ASAP7_75t_R/A1  buffer(net)
-0  +0.002  u_dcache/data_write_word[20]  u_dcache/FE_OFC7007_data_write_word_20/A  BUFx2_ASAP7_75t_L/A  buffer(dist)
 0  +0.002  u_axi_ram_lo/u_mem/n_84  u_axi_ram_lo/u_mem/g1150/Y  NOR2x1p5_ASAP7_75t_R/Y  buffer(dist)
+0  +0.002  u_dcache/data_write_word[20]  u_dcache/FE_OFC7007_data_write_word_20/A  BUFx2_ASAP7_75t_L/A  buffer(dist)
 0  +0.002  u_axi_interconnect/FE_PHN25384_n_5108  u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_AR_channel_MST_FIFO[1].fifo_Ax_channel_mem_reg[0][44]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.002  u_axi_ram_lo/FE_OFN7845_mem_rdata_4  u_axi_ram_lo/g6755/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
 0  +0.002  u_axi_interconnect/n_5062  u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_R_channel_SLV_FIFO[6].fifo_rdata_mem_reg[0][24]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.002  u_axi_ram_lo/FE_OFN7848_mem_rdata_1  u_axi_ram_lo/g6753/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
 0  +0.002  u_axi_interconnect/n_14352  u_axi_interconnect/g267761/B  NAND2xp5_ASAP7_75t_L/B  buffer(dist)
+0  +0.002  u_axi_interconnect/n_14564  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_s_WDATA_o_r_reg[22]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(dist)
 0  +0.002  u_axi_apb_dma_u_dma_engine/n_4488  u_axi_apb_dma_u_dma_engine/g134886/B  NAND5xp2_ASAP7_75t_R/B  buffer(dist)
 0  +0.002  u_tim0_cnt[11]  g132466/B1  AOI22xp33_ASAP7_75t_R/B1  buffer(net)
 0  +0.002  u_axi_ram_lo/FE_OFN7834_mem_rdata_15  u_axi_ram_lo/g6766/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
-0  +0.002  u_axi_interconnect/n_14564  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_s_WDATA_o_r_reg[22]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(dist)
 0  +0.002  u_axi_ram_lo/u_mem/FE_OFN2959_mem_addr_11  u_axi_ram_lo/u_mem/FE_OFC8601_mem_addr_11/A  INVx3_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 0  +0.002  u_axi_ram_lo/FE_OFN7838_mem_rdata_11  u_axi_ram_lo/g6762/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
 0  +0.003  u_axi_interconnect/FE_OFN2760_n_9973  u_axi_interconnect/FE_OFC2368_n_9973/A  BUFx2_ASAP7_75t_L/A  buffer(net)
@@ -73,11 +73,11 @@
 0  +0.003  u_axi_interconnect/FE_OFN6081_n_15458  u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AR_channel_MST_FIFO[3].fifo_Ax_channel_mem_reg[0][32]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.003  u_itcm/u_mem/n_71  u_itcm/u_mem/g1152/A  NAND2x1p5_ASAP7_75t_L/A  buffer(dist)
 0  +0.003  u_apb_syscon/n_129  u_apb_syscon/prdata_reg[31]/D  DFFASRHQNx1_ASAP7_75t_R/D  buffer(dist)
-0  +0.003  FE_OFN1585_sdram_addr_10  FE_OFC1192_sdram_addr_10/A  INVx3_ASAP7_75t_L/A  buffer(dist)
 0  +0.003  u_axi_interconnect/n_1438  u_axi_interconnect/DSP_GEN[1].dispatcher_write_channel_B_channel_SLV_FIFO[0].fifo_WRESP_slv_mem_reg[0][1]/SI  SDFHx1_ASAP7_75t_R/SI  buffer(net)
 0  +0.003  u_core/n_4500  u_core/g213243/A1  AOI221xp5_ASAP7_75t_R/A1  buffer(net)
 0  +0.003  u_axi_apb_dma_u_dma_engine/n_63  u_axi_apb_dma_u_dma_engine/g81269/B2  AOI22xp33_ASAP7_75t_R/B2  buffer(net)
 0  +0.003  n_23023  u_axi_sdram_g12941/B2  AOI22xp33_ASAP7_75t_R/B2  buffer(net)
+0  +0.003  FE_OFN1585_sdram_addr_10  FE_OFC1192_sdram_addr_10/A  INVx3_ASAP7_75t_L/A  buffer(dist)
 0  +0.003  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_R_channel/slv_skid_buffer_BWD_REGISTERED.rd_ptr[0]  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_R_channel/FE_OFC10253_slv_skid_buffer_BWD_REGISTERED_rd_ptr_0/A  INVx1_ASAP7_75t_L/A  buffer(net)
 0  +0.003  FE_OFN391_reset_sys_n  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_AR_channel_arbiter/credit_reg[0][2]/RESETN  DFFASRHQNx1_ASAP7_75t_R/RESETN  buffer(net)
 0  +0.004  u_axi_ram_lo/n_286  u_axi_ram_lo/wdata_hold_reg[19]/D  DFFASRHQNx1_ASAP7_75t_R/D  buffer(dist)
@@ -106,21 +106,22 @@
 0  +0.004  u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_B_channel/n_103  u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_B_channel/fifo_wresp_filter_mem_reg[0][2]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.004  n_17715  g209596/B  FAx1_ASAP7_75t_R/B  buffer(net)
 0  +0.004  u_apb_ascon_u_ascon/n_2101  u_apb_ascon_u_ascon/g37665__2802/A  XOR2xp5_ASAP7_75t_R/A  buffer(net)
+0  +0.004  u_axi_interconnect/n_14498  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_s_WDATA_o_r_reg[5]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(dist)
 0  +0.004  u_axi_interconnect/n_9164  u_axi_interconnect/g267484/B1  OAI22xp33_ASAP7_75t_R/B1  buffer(net)
 0  +0.004  u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_R_channel_SLV_FIFO[2].fifo_rdata_n_31  u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_R_channel_SLV_FIFO[2].fifo_rdata_cg_icg__RC_CG_HIER_INST1201/RC_CGIC_INST/ENA  ICGx1_ASAP7_75t_L/ENA  buffer(dist)
 0  +0.004  u_core/n_6767  u_core/g194491/A1  AOI22xp33_ASAP7_75t_R/A1  buffer(net)
 0  +0.005  n_13887  g208003/A  INVxp33_ASAP7_75t_R/A  buffer(net)
-0  +0.005  u_axi_interconnect/n_14498  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_s_WDATA_o_r_reg[5]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(dist)
 0  +0.005  u_core/FE_OFN5583_n_6542  u_core/FE_OFC3819_n_6542/A  BUFx2_ASAP7_75t_L/A  buffer(net)
 0  +0.005  n_10648  g165226/C  O2A1O1Ixp33_ASAP7_75t_R/C  buffer(net)
 0  +0.005  u_axi_ram_hi/u_mem/FE_OFN8164_mem_wdata_1  u_axi_ram_hi/u_mem/G_SRAM_BANK[26].u_sram/wd[1]  srambank_256x4x32_6t122/wd[1]  bo_qua: driver du manh, nhieu tai, con du
-0  +0.005  u_icache/FE_OFN7532_m0_araddr_12  u_icache/FE_OFC5768_m0_araddr_12/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 0  +0.005  n_19289  u_pinmux_prdata_reg[7]/D  DFFASRHQNx1_ASAP7_75t_R/D  buffer(dist)
 0  +0.005  u_axi_ram_lo/n_279  u_axi_ram_lo/FE_PHC31712_n_279/A  HB1xp67_ASAP7_75t_L/A  buffer(dist)
+0  +0.005  u_icache/FE_OFN7532_m0_araddr_12  u_icache/FE_OFC5768_m0_araddr_12/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 0  +0.005  u_dcache/n_114  u_dcache/g78679/B  NOR2x1_ASAP7_75t_L/B  buffer(net)
 0  +0.005  u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_R_channel/n_431  u_axi_interconnect/SA_GEN[0].genblk1.slave_arbitration_R_channel/g16129/A1  AOI332xp33_ASAP7_75t_R/A1  buffer(net)
 0  +0.005  u_clic/n_751  u_clic/g80430/A2  A2O1A1O1Ixp25_ASAP7_75t_R/A2  buffer(net)
 0  +0.005  u_clic/n_48  u_clic/g81276/B2  AOI331xp33_ASAP7_75t_R/B2  buffer(net)
+0  +0.005  FE_OFN781_reset_sys_n  u_clint_u_slave_r_pipe_data_reg[27]/SETN  DFFASRHQNx1_ASAP7_75t_R/SETN  buffer(net)
 0  +0.005  u_axi_ram_lo/u_mem/FE_OFN8286_mem_wdata_10  u_axi_ram_lo/u_mem/FE_OFC6524_mem_wdata_10/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 0  +0.005  u_axi_ram_lo/FE_OFN7847_mem_rdata_2  u_axi_ram_lo/g6752/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
 0  +0.005  n_24501  u_clint_u_slave_cg_icg__RC_CG_HIER_INST291/RC_CGIC_INST/ENA  ICGx1_ASAP7_75t_L/ENA  buffer(dist)
@@ -136,14 +137,13 @@
 0  +0.005  u_axi_interconnect/n_5485  u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_R_channel_SLV_FIFO[5].fifo_rdata_mem_reg[0][17]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.005  u_clic/n_816  u_clic/g79892/B2  OAI221xp5_ASAP7_75t_R/B2  buffer(net)
 0  +0.005  dc_rready  u_axi_interconnect/g287091/A  INVxp33_ASAP7_75t_R/A  buffer(net)
-0  +0.005  FE_OFN781_reset_sys_n  u_clint_u_slave_r_pipe_data_reg[27]/SETN  DFFASRHQNx1_ASAP7_75t_R/SETN  buffer(net)
 0  +0.005  u_apb_ascon_u_ascon/n_1965  u_apb_ascon_u_ascon/g37813__8428/A  XNOR2xp5_ASAP7_75t_R/A  buffer(net)
 0  +0.005  u_core/n_271  u_core/BPU_BTB_targets_reg[1][21]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.005  n_12198  g209419/C  MAJx2_ASAP7_75t_R/C  buffer(net)
 0  +0.005  u_axi_ram_hi/u_mem/FE_OFN3679_mem_addr_8  u_axi_ram_hi/u_mem/FE_OFC8249_mem_addr_8/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
+0  +0.005  u_axi_interconnect/FE_DBTN142_n_26292  u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel_MST_FIFO[1].fifo_Ax_channel_mem_reg[1][25]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.005  u_core/n_8323  u_core/g219112/B  NAND2xp33_ASAP7_75t_R/B  buffer(net)
 0  +0.005  u_core/EX_gen_muldiv.MUL_counter[5]  u_core/FE_OFC10934_EX_gen_muldiv_MUL_counter_5/A  BUFx2_ASAP7_75t_L/A  buffer(net)
-0  +0.005  u_axi_interconnect/FE_DBTN142_n_26292  u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel_MST_FIFO[1].fifo_Ax_channel_mem_reg[0][25]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.005  u_apb_ascon_u_ascon/n_2071  u_apb_ascon_u_ascon/g37684__7410/A  XOR2xp5_ASAP7_75t_R/A  buffer(net)
 0  +0.005  u_core/alu_in2[26]  u_core/g192919/E  OR5x1_ASAP7_75t_R/E  buffer(net)
 0  +0.006  u_apb_i2c/n_242  u_apb_i2c/g19180/A1  AOI221xp5_ASAP7_75t_R/A1  buffer(net)
@@ -199,11 +199,11 @@
 0  +0.007  u_core/mem_wb_reg_write  u_core/g193661/C  NAND4xp25_ASAP7_75t_R/C  buffer(net)
 0  +0.007  u_axi_apb_dma_u_dma_engine/n_3272  u_axi_apb_dma_u_dma_engine/FE_OFC8490_n_3272/A  BUFx2_ASAP7_75t_L/A  buffer(net)
 0  +0.007  n_14006  FE_OFC7709_n_14006/A  INVxp67_ASAP7_75t_L/A  buffer(net)
-0  +0.007  n_10057  FE_OFC9201_n_10057/A  BUFx2_ASAP7_75t_L/A  buffer(net)
 0  +0.007  u_axi_interconnect/FE_OFN2554_n_340  u_axi_interconnect/FE_OFC10039_n_340/A  BUFx2_ASAP7_75t_L/A  buffer(net)
 0  +0.007  u_core/n_9173  u_core/g167437/C1  AO222x2_ASAP7_75t_R/C1  buffer(net)
 0  +0.007  u_core/alu_in2[14]  u_core/g175759/B1  AOI22xp33_ASAP7_75t_R/B1  buffer(net)
 0  +0.007  spi_ss  g206772/B2  AOI22xp33_ASAP7_75t_R/B2  buffer(net)
+0  +0.007  n_10057  FE_OFC9201_n_10057/A  BUFx2_ASAP7_75t_L/A  buffer(net)
 0  +0.007  itcm_d_rdata[0]  g206421/B2  AO222x2_ASAP7_75t_R/B2  buffer(dist)
 0  +0.007  u_clic/n_3  u_clic/irq_id_reg[2]/D  DFFASRHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.007  u_clic/lvl_q[27][0]  u_clic/g79947/B2  AOI222xp33_ASAP7_75t_R/B2  buffer(net)
@@ -267,14 +267,14 @@
 0  +0.008  u_clic/n_594  u_clic/g79618/A1  A2O1A1O1Ixp25_ASAP7_75t_R/A1  buffer(net)
 0  +0.008  u_core/n_1474  u_core/g174389/C  OR4x1_ASAP7_75t_R/C  buffer(dist)
 0  +0.008  u_core/ex_mem_csr_write_data[30]  u_core/g167248/B  NAND2xp5_ASAP7_75t_R/B  buffer(net)
-0  +0.008  u_dtcm/n_75  u_dtcm/g9410/A2  AOI22xp33_ASAP7_75t_R/A2  buffer(net)
 0  +0.008  u_axi_ram_lo/u_mem/n_508  u_axi_ram_lo/u_mem/FE_OFC4805_n_508/A  INVxp67_ASAP7_75t_L/A  buffer(dist)
 0  +0.008  u_axi_ram_lo/n_292  u_axi_ram_lo/g7954/B  NAND2xp5_ASAP7_75t_L/B  buffer(dist)
-0  +0.008  u_axi_ram_hi/u_mem/n_68  u_axi_ram_hi/u_mem/G_SRAM_BANK[30].u_sram/banksel  srambank_256x4x32_6t122/banksel  buffer(dist)
 0  +0.008  u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_crossing_flag  u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_R_channel/FE_OFC9158_SA_GEN_5__genblk1_slave_arbitration_AR_crossing_flag/A  INVxp67_ASAP7_75t_L/A  buffer(net)
 0  +0.008  u_core/n_54  u_core/g174722/B2  OAI331xp33_ASAP7_75t_R/B2  buffer(net)
 0  +0.008  u_axi_apb_dma_u_dma_engine/n_3402  u_axi_apb_dma_u_dma_engine/FE_OFC10090_n_3402/A  BUFx2_ASAP7_75t_L/A  buffer(net)
+0  +0.008  u_dtcm/n_75  u_dtcm/g9343/C1  AO222x2_ASAP7_75t_R/C1  buffer(net)
 0  +0.008  u_axi_ram_hi/u_mem/n_123  u_axi_ram_hi/u_mem/g489/B  NOR2xp33_ASAP7_75t_R/B  buffer(net)
+0  +0.008  u_axi_ram_hi/u_mem/n_68  u_axi_ram_hi/u_mem/G_SRAM_BANK[30].u_sram/banksel  srambank_256x4x32_6t122/banksel  buffer(dist)
 0  +0.008  u_apb_ascon_u_ascon/n_775  u_apb_ascon_u_ascon/g40954/Y  XNOR2xp5_ASAP7_75t_L/Y  buffer(net)
 0  +0.008  u_apb_ascon_u_ascon/gen_sbox[40].t2_a  u_apb_ascon_u_ascon/g38211__2346/A  XNOR2xp5_ASAP7_75t_L/A  buffer(net)
 0  +0.008  u_core/n_9353  u_core/g167462/C  O2A1O1Ixp33_ASAP7_75t_R/C  buffer(dist)
@@ -311,6 +311,7 @@
 0  +0.009  u_axi_ram_hi/u_mem/FE_OFN8029_mem_wdata_31  u_axi_ram_hi/u_mem/FE_OFC6267_mem_wdata_31/A  BUFx4_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 0  +0.009  u_axi_ram_hi/FE_OFN7808_mem_rdata_9  u_axi_ram_hi/g6705/B  NAND2xp33_ASAP7_75t_R/B  buffer(net)
 0  +0.009  u_icache/n_84  u_icache/g80570/B  NAND2xp33_ASAP7_75t_R/B  buffer(net)
+0  +0.009  u_axi_interconnect/FE_DBTN154_n_26280  u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel_MST_FIFO[1].fifo_Ax_channel_mem_reg[1][28]/D  DFFHQNx1_ASAP7_75t_R/D  bo_qua: driver du manh, nhieu tai, con du
 0  +0.009  u_axi_interconnect/FE_OFN1316_n_1  u_axi_interconnect/SA_GEN[5].genblk1.slave_arbitration_AR_channel_MST_FIFO[3].fifo_Ax_channel_wr_ptr_reg[0]/SETN  DFFASRHQNx1_ASAP7_75t_R/SETN  buffer(net)
 0  +0.009  u_core/n_7274  u_core/g193784/B2  AOI22xp33_ASAP7_75t_R/B2  buffer(net)
 0  +0.009  u_core/ID_add_574_40_n_734  u_core/ID_add_574_40_g813/B  OA21x2_ASAP7_75t_R/B  buffer(net)
@@ -328,7 +329,6 @@
 0  +0.009  u_axi_interconnect/n_9581  u_axi_interconnect/g267926/D  OR5x1_ASAP7_75t_R/D  buffer(net)
 0  +0.009  u_axi_interconnect/n_6383  u_axi_interconnect/g275841/B1  AO32x1_ASAP7_75t_R/B1  buffer(net)
 0  +0.009  u_axi_interconnect/n_5496  u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_R_channel_SLV_FIFO[4].fifo_rdata_mem_reg[0][23]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
-0  +0.009  u_axi_interconnect/FE_DBTN154_n_26280  u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel_MST_FIFO[1].fifo_Ax_channel_mem_reg[0][28]/D  DFFHQNx1_ASAP7_75t_R/D  bo_qua: driver du manh, nhieu tai, con du
 0  +0.009  u_apb_ascon_u_ascon/n_770  u_apb_ascon_u_ascon/g40394/A  XOR2xp5_ASAP7_75t_R/A  buffer(net)
 0  +0.009  u_apb_ascon_u_ascon/gen_sbox[13].t2_a  u_apb_ascon_u_ascon/g40992/A  XOR2xp5_ASAP7_75t_R/A  buffer(net)
 0  +0.009  u_clic/n_663  u_clic/g79797/B  A2O1A1Ixp33_ASAP7_75t_R/B  buffer(net)
@@ -352,12 +352,12 @@
 0  +0.009  u_apb_syscon/n_148  u_apb_syscon/FE_PHC15965_n_148/A  HB4xp67_ASAP7_75t_R/A  buffer(dist)
 0  +0.009  u_core/n_9734  u_core/g193253/E  NOR5xp2_ASAP7_75t_R/E  buffer(net)
 0  +0.009  u_axi_apb_dma_u_dma_engine/n_5837  u_axi_apb_dma_u_dma_engine/g98012/A  AND2x2_ASAP7_75t_R/A  buffer(net)
+0  +0.009  u_axi_apb_dma_u_dma_engine/n_3377  u_axi_apb_dma_u_dma_engine/g135645/B2  AOI22xp33_ASAP7_75t_R/B2  buffer(net)
 0  +0.009  n_19690  FE_PHC23900_n_19690/A  HB1xp67_ASAP7_75t_L/A  buffer(dist)
 0  +0.009  u_axi_ram_lo/n_249  u_axi_ram_lo/FE_PHC31780_n_249/A  HB1xp67_ASAP7_75t_L/A  buffer(dist)
 0  +0.009  u_axi_ram_lo/FE_OFN7844_mem_rdata_5  u_axi_ram_lo/g6756/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
 0  +0.009  u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_R_channel_SLV_FIFO[4].fifo_rdata_n_28  u_axi_interconnect/DSP_GEN[0].dispatcher_read_channel_R_channel_SLV_FIFO[4].fifo_rdata_cg_icg__RC_CG_HIER_INST1222/RC_CGIC_INST/ENA  ICGx1_ASAP7_75t_R/ENA  buffer(dist)
 0  +0.009  u_clic/n_830  u_clic/g80367/A1  OAI221xp5_ASAP7_75t_R/A1  buffer(net)
-0  +0.009  u_axi_apb_dma_u_dma_engine/n_3377  u_axi_apb_dma_u_dma_engine/g135645/B2  AOI22xp33_ASAP7_75t_R/B2  buffer(net)
 0  +0.009  pad_oe[21]  pad_oe[21]  -  buffer(dist)
 0  +0.009  pad_out[19]  pad_out[19]  -  buffer(dist)
 0  +0.009  u_axi_interconnect/n_7387  u_axi_interconnect/g275825/A  NOR2xp33_ASAP7_75t_R/A  buffer(net)
@@ -366,6 +366,7 @@
 0  +0.009  u_axi_apb_dma_u_dma_engine/n_65  u_axi_apb_dma_u_dma_engine/g81093/B1  AOI221xp5_ASAP7_75t_R/B1  buffer(net)
 0  +0.009  u_dcache/FE_OFN8791_data_write_word_13  u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram/wd[13]  srambank_256x4x32_6t122/wd[13]  bo_qua: driver du manh, nhieu tai, con du
 0  +0.009  u_axi_interconnect/n_13675  u_axi_interconnect/g268708/C  AOI221xp5_ASAP7_75t_R/C  buffer(dist)
+0  +0.009  u_axi_interconnect/n_13124  u_axi_interconnect/g267264/C  A2O1A1Ixp33_ASAP7_75t_R/C  buffer(net)
 0  +0.009  u_axi_interconnect/FE_DBTN231_n_16063  u_axi_interconnect/FE_OFC1055_FE_DBTN231_n_16063/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 0  +0.009  u_apb_ascon_u_ascon/n_2094  u_apb_ascon_u_ascon/g38036/A  INVxp67_ASAP7_75t_R/A  buffer(net)
 0  +0.009  u_clic/n_950  u_clic/g80187/B2  OAI321xp33_ASAP7_75t_R/B2  buffer(net)
@@ -374,10 +375,9 @@
 0  +0.010  u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel/n_111  u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel/fifo_wresp_filter_mem_reg[0][7]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.010  u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel/n_26  u_axi_interconnect/SA_GEN[4].genblk1.slave_arbitration_B_channel/g2171/A1  AOI221xp5_ASAP7_75t_R/A1  buffer(net)
 0  +0.010  u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AR_channel_arbiter/n_102  u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AR_channel_arbiter/g4860/B  A2O1A1Ixp33_ASAP7_75t_R/B  buffer(net)
-0  +0.010  u_axi_interconnect/n_13124  u_axi_interconnect/g267264/C  A2O1A1Ixp33_ASAP7_75t_R/C  buffer(net)
+0  +0.010  u_axi_interconnect/n_14522  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_s_WDATA_o_r_reg[1]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(dist)
 0  +0.010  u_axi_interconnect/n_6525  u_axi_interconnect/g268753/A2  OAI21xp33_ASAP7_75t_R/A2  buffer(net)
 0  +0.010  u_axi_interconnect/n_4846  u_axi_interconnect/FE_OFC3144_n_4846/A  BUFx2_ASAP7_75t_L/A  buffer(net)
-0  +0.010  u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_W_channel_n_3257  u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_W_channel_cg_icg__RC_CG_HIER_INST668/RC_CGIC_INST/ENA  ICGx1_ASAP7_75t_L/ENA  buffer(dist)
 0  +0.010  u_axi_interconnect/DSP_GEN[2].dispatcher_read_channel_R_channel_SLV_FIFO[5].fifo_rdata_n_28  u_axi_interconnect/DSP_GEN[2].dispatcher_read_channel_R_channel_SLV_FIFO[5].fifo_rdata_cg_icg__RC_CG_HIER_INST1200/RC_CGIC_INST/ENA  ICGx1_ASAP7_75t_R/ENA  buffer(dist)
 0  +0.010  u_axi_interconnect/FE_OFN3548_n_7030  u_axi_interconnect/FE_OFC8855_n_7030/A  INVx1_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 0  +0.010  u_apb_ascon_u_ascon/gen_sbox[48].t2_a  u_apb_ascon_u_ascon/g41295/B  XNOR2xp5_ASAP7_75t_R/B  buffer(net)
@@ -387,14 +387,14 @@
 0  +0.010  u_axi_ram_lo/n_271  u_axi_ram_lo/FE_PHC31690_n_271/A  HB1xp67_ASAP7_75t_L/A  buffer(dist)
 0  +0.010  u_icache/n_94  u_icache/g80703/B  NAND2xp33_ASAP7_75t_R/B  bo_qua: driver du manh, nhieu tai, con du
 0  +0.010  u_icache/n_35  u_icache/g80474/A  NAND2xp33_ASAP7_75t_R/A  bo_qua: driver du manh, nhieu tai, con du
-0  +0.010  u_axi_interconnect/n_14522  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_W_channel_s_WDATA_o_r_reg[1]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(dist)
+0  +0.010  u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_W_channel_n_3257  u_axi_interconnect/SA_GEN[6].genblk1.slave_arbitration_W_channel_cg_icg__RC_CG_HIER_INST668/RC_CGIC_INST/ENA  ICGx1_ASAP7_75t_L/ENA  buffer(dist)
 0  +0.010  u_clic/n_1754  u_clic/g79562/A1  AOI211xp5_ASAP7_75t_R/A1  buffer(net)
+0  +0.010  u_axi_apb_dma_u_dma_engine/n_3123  u_axi_apb_dma_u_dma_engine/g134331/C  MAJx2_ASAP7_75t_R/C  buffer(net)
 0  +0.010  u_axi_apb_dma_u_dma_engine/n_125  u_axi_apb_dma_u_dma_engine/g81184/B  NAND2xp33_ASAP7_75t_R/B  buffer(dist)
 0  +0.010  u_axi_apb_dma_u_dma_engine/n_60  u_axi_apb_dma_u_dma_engine/g81268/B2  AOI22xp33_ASAP7_75t_R/B2  bo_qua: driver du manh, nhieu tai, con du
 0  +0.010  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_B_channel/n_105  u_axi_interconnect/SA_GEN[1].genblk1.slave_arbitration_B_channel/fifo_wresp_filter_mem_reg[0][3]/D  DFFHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.010  u_apb_ascon_u_ascon/n_1854  u_apb_ascon_u_ascon/g37995__1617/A  XNOR2xp5_ASAP7_75t_R/A  buffer(net)
 0  +0.010  u_apb_ascon_u_ascon/n_760  u_apb_ascon_u_ascon/g40404/A  XOR2xp5_ASAP7_75t_R/A  buffer(net)
-0  +0.010  u_axi_apb_dma_u_dma_engine/n_3123  u_axi_apb_dma_u_dma_engine/g134331/C  MAJx2_ASAP7_75t_R/C  buffer(net)
 0  +0.010  u_clic/n_437  u_clic/g56529/A  NOR3xp33_ASAP7_75t_R/A  buffer(net)
 0  +0.010  u_clic/n_4  u_clic/irq_id_reg[0]/D  DFFASRHQNx1_ASAP7_75t_R/D  buffer(net)
 0  +0.010  u_clic/best_key[2]  u_clic/g81276/A3  AOI331xp33_ASAP7_75t_R/A3  bo_qua: driver du manh, nhieu tai, con du
@@ -405,11 +405,11 @@
 1  +0.008  n_23047  g209423/A2  AOI31xp33_ASAP7_75t_R/A2  buffer(net)
 1  +0.008  FE_OFN1617_sdram_dq_o_2  FE_OFC1224_sdram_dq_o_2/A  BUFx2_ASAP7_75t_L/A  buffer(dist)
 1  +0.009  FE_OFN1612_sdram_dq_o_7  FE_OFC1219_sdram_dq_o_7/A  BUFx2_ASAP7_75t_L/A  buffer(dist)
+1  +0.009  u_axi_apb_dma_u_dma_engine/n_3291  u_axi_apb_dma_u_dma_engine/FE_OFC8488_n_3291/A  BUFx2_ASAP7_75t_L/A  buffer(net)
 1  +0.009  FE_OFN1609_sdram_dq_o_10  FE_OFC1216_sdram_dq_o_10/A  BUFx2_ASAP7_75t_L/A  buffer(dist)
 1  +0.009  FE_OFN3239_FE_DBTN43_u_axi_to_apb_u_resp_fifo_rd_ptr_0  g132292/A2  AOI22xp5_ASAP7_75t_L/A2  buffer(net)
 1  +0.009  u_dcache/n_121  u_dcache/g77898/A  NAND2xp33_ASAP7_75t_R/A  buffer(net)
-1  +0.009  u_axi_apb_dma_u_dma_engine/n_3291  u_axi_apb_dma_u_dma_engine/FE_OFC8488_n_3291/A  BUFx2_ASAP7_75t_L/A  buffer(net)
-1  +0.009  u_clic/n_652  u_clic/g80434/D  A2O1A1O1Ixp25_ASAP7_75t_R/D  buffer(net)
+1  +0.009  u_clic/n_652  u_clic/g79814/C  AOI221xp5_ASAP7_75t_R/C  buffer(net)
 1  +0.009  u_icache/n_90  u_icache/g80394/B  NAND2xp33_ASAP7_75t_R/B  buffer(net)
 1  +0.009  FE_OFN1579_sdram_ba_1  FE_OFC1186_sdram_ba_1/A  INVx3_ASAP7_75t_L/A  buffer(dist)
 1  +0.010  u_clic/lvl_q[29][0]  u_clic/g79884/B2  AOI221xp5_ASAP7_75t_R/B2  bo_qua: driver du manh, nhieu tai, con du
@@ -424,7 +424,7 @@
 3  +0.003  u_axi_ram_hi/u_mem/FE_OFN8074_mem_wdata_21  u_axi_ram_hi/u_mem/FE_OFC6313_mem_wdata_21/A  BUFx4_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.003  u_axi_ram_hi/u_mem/FE_OFN9115_n  u_axi_ram_hi/u_mem/FE_OFC6281_mem_wdata_28/A  BUFx3_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.005  u_axi_ram_hi/u_mem/FE_OFN8164_mem_wdata_1  u_axi_ram_hi/u_mem/G_SRAM_BANK[26].u_sram/wd[1]  srambank_256x4x32_6t122/wd[1]  bo_qua: driver du manh, nhieu tai, con du
-3  +0.005  u_icache/FE_OFN7532_m0_araddr_12  u_icache/g12069/A  NAND2x1p5_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
+3  +0.005  u_icache/FE_OFN7532_m0_araddr_12  u_icache/FE_OFC5768_m0_araddr_12/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.005  FE_OFN423_reset_sys_n  FE_OFC154_reset_sys_n/A  BUFx3_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.005  u_axi_ram_hi/u_mem/FE_OFN3679_mem_addr_8  u_axi_ram_hi/u_mem/FE_OFC8249_mem_addr_8/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.006  u_axi_ram_lo/u_mem/FE_OFN8242_mem_wdata_20  u_axi_ram_lo/u_mem/G_SRAM_BANK[6].u_sram/wd[20]  srambank_256x4x32_6t122/wd[20]  bo_qua: driver du manh, nhieu tai, con du
@@ -433,21 +433,21 @@
 3  +0.007  u_axi_ram_hi/u_mem/FE_OFN8041_mem_wdata_29  u_axi_ram_hi/u_mem/G_SRAM_BANK[0].u_sram/wd[29]  srambank_256x4x32_6t122/wd[29]  bo_qua: driver du manh, nhieu tai, con du
 3  +0.007  u_axi_ram_hi/u_mem/FE_OFN8121_mem_wdata_11  u_axi_ram_hi/u_mem/FE_OFC6359_mem_wdata_11/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.007  u_axi_ram_hi/u_mem/FE_OFN24002_n  u_axi_ram_hi/u_mem/FE_OFC6323_mem_wdata_19/A  BUFx4_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
+3  +0.007  u_clic/best_key[2]  u_clic/g81276/A3  AOI331xp33_ASAP7_75t_R/A3  bo_qua: driver du manh, nhieu tai, con du
 3  +0.008  u_axi_ram_hi/u_mem/FE_OFN3717_mem_addr_2  u_axi_ram_hi/u_mem/G_SRAM_BANK[13].u_sram/ADDRESS[0]  srambank_256x4x32_6t122/ADDRESS[0]  bo_qua: driver du manh, nhieu tai, con du
 3  +0.008  u_axi_ram_lo/u_mem/FE_OFN9387_n  u_axi_ram_lo/u_mem/FE_OFC9978_n/A  BUFx3_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.008  u_axi_interconnect/FE_OFN5989_n_7152  u_axi_interconnect/SA_GEN[2].genblk1.slave_arbitration_AR_channel_MST_FIFO[2].fifo_Ax_channel_mem_reg[0][35]/D  DFFHQNx1_ASAP7_75t_R/D  bo_qua: driver du manh, nhieu tai, con du
 3  +0.008  u_axi_ram_lo/u_mem/FE_OFN8286_mem_wdata_10  u_axi_ram_lo/u_mem/FE_OFC6524_mem_wdata_10/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
-3  +0.008  u_clic/best_key[2]  u_clic/g81286/B1  AOI32xp33_ASAP7_75t_R/B1  bo_qua: driver du manh, nhieu tai, con du
 3  +0.008  u_axi_ram_hi/u_mem/FE_OFN8029_mem_wdata_31  u_axi_ram_hi/u_mem/FE_OFC6267_mem_wdata_31/A  BUFx4_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.008  u_axi_apb_dma_u_dma_engine/n_60  u_axi_apb_dma_u_dma_engine/g81268/B2  AOI22xp33_ASAP7_75t_R/B2  bo_qua: driver du manh, nhieu tai, con du
 3  +0.008  u_axi_ram_lo/u_mem/FE_OFN8315_mem_wdata_4  u_axi_ram_lo/u_mem/G_SRAM_BANK[0].u_sram/wd[4]  srambank_256x4x32_6t122/wd[4]  bo_qua: driver du manh, nhieu tai, con du
 3  +0.008  u_apb_i2c/n_329  u_apb_i2c/g18807/B2  AOI22xp33_ASAP7_75t_R/B2  bo_qua: driver du manh, nhieu tai, con du
 3  +0.008  u_icache/n_94  u_icache/g80703/B  NAND2xp33_ASAP7_75t_R/B  bo_qua: driver du manh, nhieu tai, con du
 3  +0.009  u_dcache/FE_OFN8821_data_write_word_0  u_dcache/DATA_RAM_G_DATA_WAY[0].u_sram/G_SRAM_BANK[0].u_sram/wd[0]  srambank_256x4x32_6t122/wd[0]  bo_qua: driver du manh, nhieu tai, con du
+3  +0.009  u_axi_interconnect/FE_DBTN154_n_26280  u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel_MST_FIFO[1].fifo_Ax_channel_mem_reg[1][28]/D  DFFHQNx1_ASAP7_75t_R/D  bo_qua: driver du manh, nhieu tai, con du
 3  +0.009  u_axi_ram_lo/u_mem/FE_OFN8282_mem_wdata_11  u_axi_ram_lo/u_mem/FE_OFC6520_mem_wdata_11/A  BUFx2_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.009  u_axi_ram_lo/u_mem/FE_OFN24698_n  u_axi_ram_lo/u_mem/FE_OFC10751_n/A  BUFx3_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.009  u_axi_ram_lo/u_mem/FE_OFN2978_mem_addr_9  u_axi_ram_lo/u_mem/G_SRAM_BANK[1].u_sram/ADDRESS[7]  srambank_256x4x32_6t122/ADDRESS[7]  bo_qua: driver du manh, nhieu tai, con du
-3  +0.009  u_axi_interconnect/FE_DBTN154_n_26280  u_axi_interconnect/SA_GEN[3].genblk1.slave_arbitration_AW_channel_MST_FIFO[1].fifo_Ax_channel_mem_reg[0][28]/D  DFFHQNx1_ASAP7_75t_R/D  bo_qua: driver du manh, nhieu tai, con du
 3  +0.009  u_axi_ram_lo/u_mem/n_53  u_axi_ram_lo/u_mem/g3611/B2  AOI22xp5_ASAP7_75t_L/B2  bo_qua: driver du manh, nhieu tai, con du
 3  +0.009  u_axi_interconnect/FE_OFN3548_n_7030  u_axi_interconnect/FE_OFC8855_n_7030/A  INVx1_ASAP7_75t_L/A  bo_qua: driver du manh, nhieu tai, con du
 3  +0.009  u_icache/n_89  u_icache/g80430/B  NAND2xp33_ASAP7_75t_R/B  bo_qua: driver du manh, nhieu tai, con du

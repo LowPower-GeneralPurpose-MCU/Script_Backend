@@ -1,3 +1,16 @@
-FAIL
-eco_drv.tcl: 1 / 2 chan cua Tempus khong co trong ./saved/top_soc_postRoute.enc.dat (vd cg_cpu/FE_ECOC31901_CTS_1/Y) - checkpoint va tempus/reports khong cung mot run.  Chay lai Quantus + Tempus tren ket qua PnR hien tai, hoac chi dung checkpoint bang ECO_CHECKPOINT.
+PASS
+ECO DRV top_soc: ./saved/top_soc_postRoute.enc.dat -> ./saved/top_soc_postRoute_eco.enc.dat, 2151 s, 1 CPU
+  trich RC : IQuantus effortLevel high + asap7_lef_to_qrc_layers.map (nhu SPEF cua mcu/quantus)
+  derate   : SRAM dc_ss late x1.30 / dc_ff early x0.75; lib FF dien ap thap: 56 lib cell cua asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120, dc_ff early cell_delay x0.85 (bao cao derate khong co phan dc_ff - khong kiem duoc bang bao cao)
+  Tempus   : 142 chan max_transition tren 58 net, xau nhat -0.133 ns, gioi han 0.150 ns   (all_violators.rpt)
+  truoc ECO, Innovus (high): setup WNS 0.139 ns, max_tran Real 13 net; 4 / 58 net cua Tempus nam trong so do
+  sua      : optDesign -postRoute -setup -hold -drv (drcMargin 0.05) + soc_fix_cg_hold + ecoRoute + soc_fix_drv
+  sau ECO, Innovus: setup WNS 0.14 ns, hold WNS 0.018 ns, max_tran Real 0 net (0 net cua Tempus con trong do), DRC 0
+  optDesign bo lai ("can't be fixed", luot DRV cuoi): 103 net (71 net(s): Could not be fixed because instance couldn't be resized.; 32 net(s): Could not be fixed because no move is found.)
+  instance : 174070 -> 174462 (+392)
+  bao cao  : eco/reports/timing_eco/, timing_eco_hold/, innovus/verify_rpt/drc_eco.rpt, connectivity_eco.rpt
+  PASS o day = Innovus sach tren RC nhu signoff NHUNG CHUA CO METAL FILL: fill
+  them C ghep, net sat gioi han se vuot (run 2026-10-12: 0 net o day, 64 net sau fill).
+  tiep theo: make fillfix (do + sua khi co fill) -> make finish (KHOI 15 + 16)
+             -> mcu/conformal -> mcu/quantus -> mcu/tempus (ket luan DRV la cua Tempus)
   WARNING: goc FF: asap7sc7p5t_SIMPLE_RVT_FF_ccs_211120.lib khai bao 0.7 V, cac lib con lai 0.77 V - khong co file dung de thay, bu TAM bang derate dc_ff early cell_delay x0.85 (STD_FF_LOWV_DERATE trong project_config.tcl; he so do bang scripts/fix_ff_lib.py --derate)

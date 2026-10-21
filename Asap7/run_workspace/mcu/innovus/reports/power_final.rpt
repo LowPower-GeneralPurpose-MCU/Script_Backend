@@ -2,7 +2,7 @@
 *	Innovus 23.14-s088_1 (64bit) 02/28/2025 12:25 (Linux 3.10.0-693.el7.x86_64)
 *	
 *
-* 	Date & Time:	2026-Oct-14 01:10:57 (2026-Oct-13 16:10:57 GMT)
+* 	Date & Time:	2026-Oct-21 01:24:23 (2026-Oct-20 16:24:23 GMT)
 *
 *----------------------------------------------------------------------------------------
 *
@@ -54,10 +54,10 @@
 
 Total Power 
 -----------------------------------------------------------------------------------------
-Total Internal Power:       87.65170370 	   95.0812%
-Total Switching Power:       4.49323569 	    4.8741%
-Total Leakage Power:         0.04121809 	    0.0447%
-Total Power:                92.18615749 
+Total Internal Power:       87.65182016 	   95.0811%
+Total Switching Power:       4.49334241 	    4.8742%
+Total Leakage Power:         0.04121881 	    0.0447%
+Total Power:                92.18638139 
 -----------------------------------------------------------------------------------------
 
 
@@ -87,19 +87,19 @@ Clock                           Internal   Switching     Leakage       Total  Pe
 CLK_TIM1                        0.008933     0.01091   4.565e-05     0.01989     0.02157 
 CLK_UART                         0.01998     0.02233   0.0001687     0.04248     0.04608 
 CLK_GPIO                         0.01187     0.01452   2.475e-05     0.02641     0.02865 
-CLK_TIM0                        0.009471     0.01099   4.398e-05      0.0205     0.02224 
+CLK_TIM0                        0.009472     0.01099   4.398e-05     0.02051     0.02225 
 CLK_ASCON                        0.02843     0.03879   0.0001106     0.06733     0.07304 
 CLK_I2C                          0.01774     0.02002   0.0001618     0.03793     0.04114 
 CLK_PWM                         0.003749    0.003475   1.874e-05    0.007243    0.007857 
 CLK_CORDIC                      0.008069     0.01033    3.48e-05     0.01843     0.01999 
 CLK_TCK                        0.0004752     0.00047   5.152e-05   0.0009967    0.001081 
 CLK_SYS                           0.8066       0.933    0.004384       1.744       1.892 
-CLK_UART1                        0.01916     0.02139   0.0001538     0.04069     0.04414 
+CLK_UART1                        0.01916     0.02139   0.0001538      0.0407     0.04415 
 CLK_SPI                          0.01759      0.0204   0.0001644     0.03815     0.04139 
 CLK_DBG                          0.01164     0.01193   8.966e-05     0.02366     0.02567 
-CLK_CPU                           0.1188      0.1388    0.000669      0.2583      0.2802 
+CLK_CPU                           0.1188      0.1389    0.000669      0.2583      0.2802 
 -----------------------------------------------------------------------------------------
-Total (excluding duplicates)       1.083       1.257    0.006122       2.346       2.545 
+Total (excluding duplicates)       1.082       1.257    0.006122       2.346       2.545 
 -----------------------------------------------------------------------------------------
 Clock: CLK_TIM1
 Clock Period: 0.004000 usec 
@@ -177,8 +177,8 @@ Clock Static Probability:  0.5000
 *	Power Distribution Summary: 
 *                Highest Average Power: u_dcache/TAG_RAM_G_TAG_WAY[0].G_TAG_MACRO.u_sram/u_sram (srambank_128x4x20_6t122):            1.083 
 *                Highest Leakage Power: u_dcache/FE_PDC11265_tag_out_bus_16 (BUFx24_ASAP7_75t_L):        1.404e-05 
-*          Total Cap:      3.37489e-10 F
-*          Total instances in design: 143735
+*          Total Cap:      3.37494e-10 F
+*          Total instances in design: 143738
 *          Total instances in design with no power:     0
 *          Total instances in design with no activity:     0
 *          Total Fillers and Decap:     0
