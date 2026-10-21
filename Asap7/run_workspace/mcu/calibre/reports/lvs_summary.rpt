@@ -1,11 +1,118 @@
 FAIL
-Calibre LVS top_soc - 2026-10-21 15:59
+Calibre LVS top_soc - 2026-10-21 19:22
   GDS     : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc.gds (2026-10-21 01:31)
   netlist : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr_pg.v (2026-10-21 01:31)
   deck    : /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/rul/calibreLVS.rul (run_lvs/asap7_lvs.rul: LVS REPORT / POWER NAME / GROUND NAME da comment)
+  dbu     : 2000 dbu/um (ban ghi UNITS cua GDS) = LAYOUT PRECISION, PRECISION deck 4000 (x2)
   LVS BOX : srambank_256x4x32_6t122 srambank_128x4x20_6t122
   cell    : 240 master, 2320788 instance: 235 master co CDL (hcell), 5 master stub rong, 2 master LVS BOX (reports/lvs_cell_usage.rpt)
-  Calibre khong ghi run_lvs/top_soc.lvs.report - doc logs/calibre_v2lvs.log va logs/calibre_lvs.log
-    /Mentor/Calibre/aok_cal_2025.2_38.18/bin/v2lvs: 113: /Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/set_shared_library_path: Syntax error: redirection unexpected
-    ERROR: v2lvs khong ghi top_soc.v2lvs.net
-    ERROR: thieu run_lvs/top_soc.source.net - v2lvs.tcl hong, doc ../logs/calibre_v2lvs.log
+  ket qua : INCORRECT
+  cell    : INCORRECT 236 (CELL SUMMARY)
+  chi tiet: reports/top_soc.lvs.report, reports/top_soc.lvs.report.ext, run_lvs/svdb (Calibre RVE), log logs/calibre_lvs.log
+
+Error / Warning cua OVERALL COMPARISON RESULTS:
+  Error:    Different numbers of ports.
+  Error:    Different numbers of instances.
+  Error:    Connectivity errors.
+  Error:    Instances of different types or subtypes were matched.
+  Error:    Property errors.
+  Error:    Layout names missing in source.
+  Warning:  Ambiguity points were found and resolved arbitrarily.
+
+Cell khong CORRECT (layout / source):
+  INCORRECT  A2O1A1Ixp33_ASAP7_75t_L  A2O1A1Ixp33_ASAP7_75t_L
+  INCORRECT  A2O1A1Ixp33_ASAP7_75t_R  A2O1A1Ixp33_ASAP7_75t_R
+  INCORRECT  A2O1A1O1Ixp25_ASAP7_75t_L  A2O1A1O1Ixp25_ASAP7_75t_L
+  INCORRECT  A2O1A1O1Ixp25_ASAP7_75t_R  A2O1A1O1Ixp25_ASAP7_75t_R
+  INCORRECT  AND2x2_ASAP7_75t_L  AND2x2_ASAP7_75t_L
+  INCORRECT  AND2x2_ASAP7_75t_R  AND2x2_ASAP7_75t_R
+  INCORRECT  AND2x4_ASAP7_75t_L  AND2x4_ASAP7_75t_L
+  INCORRECT  AND2x4_ASAP7_75t_R  AND2x4_ASAP7_75t_R
+  INCORRECT  AND2x6_ASAP7_75t_L  AND2x6_ASAP7_75t_L
+  INCORRECT  AND2x6_ASAP7_75t_R  AND2x6_ASAP7_75t_R
+  INCORRECT  AND3x1_ASAP7_75t_L  AND3x1_ASAP7_75t_L
+  INCORRECT  AND3x1_ASAP7_75t_R  AND3x1_ASAP7_75t_R
+  INCORRECT  AND3x2_ASAP7_75t_L  AND3x2_ASAP7_75t_L
+  INCORRECT  AND4x1_ASAP7_75t_L  AND4x1_ASAP7_75t_L
+  INCORRECT  AND4x1_ASAP7_75t_R  AND4x1_ASAP7_75t_R
+  INCORRECT  AND4x2_ASAP7_75t_L  AND4x2_ASAP7_75t_L
+  INCORRECT  AND5x1_ASAP7_75t_R  AND5x1_ASAP7_75t_R
+  INCORRECT  AO21x1_ASAP7_75t_L  AO21x1_ASAP7_75t_L
+  INCORRECT  AO21x1_ASAP7_75t_R  AO21x1_ASAP7_75t_R
+  INCORRECT  AO21x2_ASAP7_75t_L  AO21x2_ASAP7_75t_L
+  INCORRECT  AO21x2_ASAP7_75t_R  AO21x2_ASAP7_75t_R
+  INCORRECT  AO221x1_ASAP7_75t_L  AO221x1_ASAP7_75t_L
+  INCORRECT  AO221x1_ASAP7_75t_R  AO221x1_ASAP7_75t_R
+  INCORRECT  AO221x2_ASAP7_75t_L  AO221x2_ASAP7_75t_L
+  INCORRECT  AO221x2_ASAP7_75t_R  AO221x2_ASAP7_75t_R
+  INCORRECT  AO222x2_ASAP7_75t_L  AO222x2_ASAP7_75t_L
+  INCORRECT  AO222x2_ASAP7_75t_R  AO222x2_ASAP7_75t_R
+  INCORRECT  AO22x1_ASAP7_75t_L  AO22x1_ASAP7_75t_L
+  INCORRECT  AO22x1_ASAP7_75t_R  AO22x1_ASAP7_75t_R
+  INCORRECT  AO22x2_ASAP7_75t_L  AO22x2_ASAP7_75t_L
+
+INITIAL NUMBERS OF OBJECTS (cell dau tien trong report):
+  --------------------------
+                  Layout    Source         Component Type
+                  ------    ------         --------------
+   Ports:              7         7
+   Nets:              10        10
+   Instances:          4         4         MN (4 pins)
+                       4         4         MP (4 pins)
+                  ------    ------
+   Total Inst:         8         8
+
+NUMBERS OF OBJECTS AFTER TRANSFORMATION (cell dau tien trong report):
+  ---------------------------------------
+                  Layout    Source         Component Type
+                  ------    ------         --------------
+   Ports:              7         7
+   Nets:               9         9
+   Instances:          1         1         MN (4 pins)
+                       3         3         MP (4 pins)
+                       1         1         _invb (6 pins)
+                       1         1         _sdw2v (4 pins)
+                  ------    ------
+   Total Inst:         6         6
+
+Bao cao trich xuat (reports/top_soc.lvs.report.ext, 40 dong dau khop):
+  Extraction Errors and Warnings for cell "FILLERxp5_ASAP7_75t_R"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.051,0.099) in cell "FILLERxp5_ASAP7_75t_R"
+  Extraction Errors and Warnings for cell "FILLER_ASAP7_75t_R"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.0745,0.1005) in cell "FILLER_ASAP7_75t_R"
+  Extraction Errors and Warnings for cell "BUFx2_ASAP7_75t_L"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.152,0.105) in cell "BUFx2_ASAP7_75t_L"
+  Extraction Errors and Warnings for cell "BUFx12_ASAP7_75t_R"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.4495,0.107) in cell "BUFx12_ASAP7_75t_R"
+  Extraction Errors and Warnings for cell "BUFx3_ASAP7_75t_L"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.182,0.107) in cell "BUFx3_ASAP7_75t_L"
+  Extraction Errors and Warnings for cell "BUFx8_ASAP7_75t_R"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.3425,0.1115) in cell "BUFx8_ASAP7_75t_R"
+  Extraction Errors and Warnings for cell "BUFx5_ASAP7_75t_L"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.238,0.1065) in cell "BUFx5_ASAP7_75t_L"
+  Extraction Errors and Warnings for cell "BUFx2_ASAP7_75t_R"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.152,0.105) in cell "BUFx2_ASAP7_75t_R"
+  Extraction Errors and Warnings for cell "BUFx4f_ASAP7_75t_L"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.2345,0.1085) in cell "BUFx4f_ASAP7_75t_L"
+  Extraction Errors and Warnings for cell "BUFx6f_ASAP7_75t_L"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.291,0.107) in cell "BUFx6f_ASAP7_75t_L"
+  Extraction Errors and Warnings for cell "BUFx4_ASAP7_75t_L"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.207,0.1115) in cell "BUFx4_ASAP7_75t_L"
+  Extraction Errors and Warnings for cell "BUFx4_ASAP7_75t_R"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.207,0.1115) in cell "BUFx4_ASAP7_75t_R"
+  Extraction Errors and Warnings for cell "INVx3_ASAP7_75t_L"
+  WARNING:  Unattached label:
+  WARNING: Unattached port "VSS" at location (0.153,0.106) in cell "INVx3_ASAP7_75t_L"
+  Extraction Errors and Warnings for cell "BUFx12f_ASAP7_75t_L"
