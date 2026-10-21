@@ -70,6 +70,20 @@ proc copy_capped {src dst {max_bytes 2000000} {keep 2000}} {
     close $out
 }
 
+# He so phong GDS -> luoi deck ma Calibre that su dung.  LVS 2026-10-21 19:22
+# chay het voi "MAGNIFICATION: 1" (moi hinh 1/2) ma tom tat khong ghi gi.
+proc magnify_note {log} {
+    set vals {}
+    foreach line [grep_lines $log {^(--- LAYOUT MAGNIFICATION|MAGNIFICATION:)} 2] {
+        regexp {[=:]\s*(\S+)\s*$} $line -> v
+        lappend vals $v
+    }
+    if {![llength $vals]} {
+        return "? (log khong co dong MAGNIFICATION)"
+    }
+    return "[join $vals { -> }] (dong '--- LAYOUT MAGNIFICATION' -> 'MAGNIFICATION:' cua log)"
+}
+
 proc grep_lines {path pattern {limit 20}} {
     set hits {}
     if {![file isfile $path]} {
@@ -115,6 +129,7 @@ proc summarize_drc {} {
     foreach note $OFFSET_NOTES {
         lappend out "  offset  : $note"
     }
+    lappend out "  magnify : [magnify_note $log]"
     set errors [grep_lines $log {(?i)^\s*(ERROR|\*\*\* ?ERROR|.*license.*(fail|denied|not available))} 15]
 
     if {![file isfile $sum]} {
@@ -319,6 +334,7 @@ proc summarize_lvs {} {
         lappend out "  LVS BOX : [string trim [string map {"\n" " "} [read $f]]]"
         close $f
     }
+    lappend out "  magnify : [magnify_note $log]"
     foreach line [grep_lines $run/cell_usage.rpt {^# [0-9]} 1] {
         lappend out "  cell    : [string range $line 2 end] (reports/lvs_cell_usage.rpt)"
     }

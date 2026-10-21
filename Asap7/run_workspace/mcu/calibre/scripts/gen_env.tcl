@@ -54,8 +54,10 @@ need_file $HGVAR_SIGNOFF_GDS "GDS (eco/make finish hoac KHOI 16)"
 # no; GDS cua KHOI 16 ghi SOC_GDS_UNITS = 2000 dbu/um.  2000 khong lam tron toa
 # do nao (moi toa do GDS std cell la boi cua 2 dbu@4000), nen giu GDS, doc
 # precision that tu ban ghi UNITS va de run_*.sh khai LAYOUT PRECISION theo no.
-# Calibre tu doi sang PRECISION cua deck (deck DRC: LAYOUT MAGNIFY AUTO, log in
-# "MAGNIFICATION: 5" = 10000 / 2000).
+# LAYOUT PRECISION chi la don vi; phong toa do len luoi PRECISION cua deck la
+# viec cua LAYOUT MAGNIFY AUTO (deck DRC co san, log in "MAGNIFICATION: 5" =
+# 10000 / 2000; deck LVS khong co, run_lvs.sh them - thieu no LVS 19:22 doc moi
+# hinh o 1/2 kich thuoc).
 proc gds_real8 {bytes} {
     # so thuc 8 byte cua GDS: bit dau, mu co so 16 lech 64, mantissa 56 bit
     binary scan $bytes cu8 b

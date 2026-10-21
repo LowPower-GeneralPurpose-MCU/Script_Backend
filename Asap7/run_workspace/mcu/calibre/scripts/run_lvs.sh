@@ -11,9 +11,17 @@ for f in "$DESIGN.source.net" hcell.list lvs_box.list; do
 done
 # Deck LVS khong khai LAYOUT PRECISION nen Calibre lay bang precision 4000 cua
 # deck, khac 2000 dbu/um cua GDS -> loi nhu DRC 2026-10-21.  Khai o header theo
-# ban ghi UNITS cua GDS (gen_env.tcl).
+# ban ghi UNITS cua GDS (gen_env.tcl).  LAYOUT PRECISION chi la don vi, KHONG
+# phong toa do: LVS 2026-10-21 19:22 chi co no -> "LAYOUT MAGNIFICATION = 1",
+# Calibre doc dbu 2000 theo luoi 4000 cua deck, moi hinh nho con 1/2 (l 0.01
+# vs 0.02 um, nfin 1.5 vs 3: 234 cell Property errors).  Them LAYOUT MAGNIFY
+# AUTO nhu deck DRC (x PRECISION deck / precision GDS = x2).
 if [ -z "$GDS_PRECISION" ]; then
     echo "ERROR: GDS_PRECISION chua dat - chay qua make (gen_env.tcl)"
+    exit 1
+fi
+if grep -qiE '^[[:space:]]*LAYOUT[[:space:]]+MAGNIFY' "$LVS_DECK"; then
+    echo "ERROR: $LVS_DECK da co LAYOUT MAGNIFY - bo dong do o header run_lvs.sh"
     exit 1
 fi
 
@@ -38,6 +46,7 @@ echo "LAYOUT PRIMARY \"$DESIGN\""                       > $cal
 echo "LAYOUT PATH \"$GDS_FILE\""                       >> $cal
 echo "LAYOUT SYSTEM GDSII"                             >> $cal
 echo "LAYOUT PRECISION $GDS_PRECISION"                 >> $cal
+echo "LAYOUT MAGNIFY AUTO"                             >> $cal
 echo "SOURCE PRIMARY \"$DESIGN\""                      >> $cal
 echo "SOURCE PATH \"$PWD/$DESIGN.source.net\""         >> $cal
 echo "SOURCE SYSTEM SPICE"                             >> $cal

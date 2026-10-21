@@ -6,8 +6,10 @@
 ##   2. hcell.list    = top + moi std cell co CDL ma netlist dung
 ##   3. lvs_box.list  = SRAM (+ filler/tap khi LVS_BOX_PHYS=1), run_lvs.sh doc
 ##   4. cell_usage.rpt: master / so instance / nguon / vai tro
-##   5. v2lvs -> top_soc.v2lvs.net; top_soc.source.net = .INCLUDE moi CDL ma
-##      v2lvs chua tu ghi + top_soc.v2lvs.net (SOURCE PATH cua run_lvs.sh)
+##   5. v2lvs -> top_soc.v2lvs.net
+##   6. top_soc.v2lvs.lvs.net = v2lvs.net bo instance stub rong (filler/tap)
+##      + port VDD/VSS cho top; top_soc.source.net = .INCLUDE moi CDL ma v2lvs
+##      chua tu ghi + top_soc.v2lvs.lvs.net (SOURCE PATH cua run_lvs.sh)
 ## Lenh v2lvs thu hai cua thay (-i -sl, netlist mo phong .src.net) bo: LVS
 ## khong dung.
 ############################################################
@@ -183,7 +185,7 @@ foreach m [lsort [array names use_count]] {
         set role hcell
     } else {
         set src "stub (LEF $lef_class($m))"
-        set role [expr {[lsearch -exact $box $m] >= 0 ? "LVS BOX" : "flatten (khong co thiet bi)"}]
+        set role [expr {[lsearch -exact $box $m] >= 0 ? "LVS BOX" : "bo khoi source (khong co thiet bi)"}]
     }
     puts $f [format "  %-34s %9d  %-24s %s" $m $use_count($m) $src $role]
 }
@@ -228,6 +230,103 @@ if {![file isfile $V2LVS_NET] || [file size $V2LVS_NET] == 0} {
     die "v2lvs khong ghi $V2LVS_NET"
 }
 
+# ---- 6. sua netlist v2lvs cho khop layout -------------------------------------
+# LVS 2026-10-21 19:22 (lan dau chay toi buoc so sanh):
+#  - Phia layout Calibre bo cell khong co thiet bi (FILLER*, TAPCELL*:
+#    "ELIMINATING EMPTY CELLS"), source van giu instance cua .SUBCKT stub rong
+#    -> 2068966 + 76984 + 31100 "missing instance".  Bo instance cua moi stub
+#    khong LVS BOX khoi source, giong het viec Calibre lam o layout.
+#  - KHOI 16 ghi _pnr_pg.v truoc soc_add_pg_pins nen module top khong co port
+#    VDD/VSS, con GDS co pin PG -> "Different numbers of ports" (176 / 174).
+#    Them vao .SUBCKT top; ten trung LVS POWER/GROUND NAME cua run_lvs.sh.
+set PG_PORTS {VDD VSS}
+set FLT_NET  ${DESIGN}.v2lvs.lvs.net
+array set dropped {}
+foreach m $stubs {
+    if {[lsearch -exact $box $m] < 0} {
+        set dropped($m) 0
+    }
+}
+set top_seen  0
+set top_added {}
+
+proc stmt_tokens {stmt} {
+    return [regexp -all -inline {\S+} [string map {"\n+" " "} [join $stmt "\n"]]]
+}
+
+# Master cua "Xten net... master [$PINS chan=net...] [tham_so=...]"
+proc stmt_master {toks} {
+    set i [lsearch -nocase -exact $toks {$PINS}]
+    if {$i > 0} {
+        return [lindex $toks [expr {$i - 1}]]
+    }
+    for {set i [expr {[llength $toks] - 1}]} {$i > 0} {incr i -1} {
+        if {[string first = [lindex $toks $i]] < 0} {
+            return [lindex $toks $i]
+        }
+    }
+    return ""
+}
+
+proc flush_stmt {out stmt} {
+    global dropped PG_PORTS DESIGN top_seen top_added
+    if {![llength $stmt]} {
+        return
+    }
+    set first [string trimleft [lindex $stmt 0]]
+    set c [string index $first 0]
+    if {$c eq "X" || $c eq "x"} {
+        set m [stmt_master [stmt_tokens $stmt]]
+        if {[info exists dropped($m)]} {
+            incr dropped($m)
+            return
+        }
+    } elseif {[regexp -nocase {^\.SUBCKT\s+(\S+)} $first -> name] && $name eq $DESIGN} {
+        set top_seen 1
+        set ports [lrange [stmt_tokens $stmt] 2 end]
+        foreach p $PG_PORTS {
+            if {[lsearch -nocase -exact $ports $p] < 0} {
+                lappend top_added $p
+            }
+        }
+        if {[llength $top_added]} {
+            lappend stmt "+ [join $top_added { }]"
+        }
+    }
+    puts $out [join $stmt "\n"]
+}
+
+set t0  [clock seconds]
+set in  [open $V2LVS_NET r]
+set out [open $FLT_NET w]
+fconfigure $in -buffersize 4194304
+fconfigure $out -buffersize 4194304
+set stmt {}
+while {[gets $in line] >= 0} {
+    if {[string index $line 0] eq "+"} {
+        lappend stmt $line
+        continue
+    }
+    flush_stmt $out $stmt
+    set stmt [list $line]
+}
+flush_stmt $out $stmt
+close $in
+close $out
+if {!$top_seen} {
+    die "khong thay .SUBCKT $DESIGN trong $V2LVS_NET"
+}
+foreach m [lsort [array names dropped]] {
+    puts "INFO: bo khoi source $dropped($m) instance $m (layout khong co thiet bi)"
+    if {$dropped($m) != $use_count($m)} {
+        puts "WARNING: $m: netlist co $use_count($m) instance, chi bo duoc $dropped($m)\
+ - doc dang instance trong $V2LVS_NET"
+    }
+}
+puts "INFO: port PG them vao .SUBCKT $DESIGN:\
+ [expr {[llength $top_added] ? $top_added : "khong (da co $PG_PORTS)"}]"
+puts "INFO: ghi $FLT_NET sau [expr {[clock seconds] - $t0}] s"
+
 # v2lvs -s co the da ghi .INCLUDE cho thu vien; them cai con thieu.
 set included {}
 set f [open $V2LVS_NET r]
@@ -244,7 +343,7 @@ foreach cdl $cdls {
         puts $f ".INCLUDE \"$cdl\""
     }
 }
-puts $f ".INCLUDE \"[file normalize $V2LVS_NET]\""
+puts $f ".INCLUDE \"[file normalize $FLT_NET]\""
 close $f
 puts "INFO: v2lvs da ghi .INCLUDE: [expr {[llength $included] ? $included : {khong co}}]"
 puts "INFO: ghi $SOURCE_NET"
