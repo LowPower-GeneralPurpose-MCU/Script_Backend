@@ -38,7 +38,8 @@ mcu/
 ├── quantus/                 # Trích RC signoff từ innovus/saved/top_soc_final.enc.dat -> SPEF
 ├── tempus/                  # STA signoff trên SPEF Quantus
 ├── voltus/                  # Công suất + IR drop
-└── eco/                     # ECO sửa DRV mà Tempus báo, rồi chạy lại KHỐI 15 + 16
+├── eco/                     # ECO sửa DRV mà Tempus báo, rồi chạy lại KHỐI 15 + 16
+└── calibre/                 # DRC + LVS trên innovus/outputs/top_soc.gds (khung pv/ của thầy)
 ```
 
 `outputs/` và `reports/` là sản phẩm của Genus nhưng hiện **có trong git** để
@@ -371,6 +372,44 @@ mang hệ số đó; thiếu thì file tóm tắt có `WARNING`.
 | `ECO_CPUS` | `1` | IQuantus nhiều tiến trình đã treo trên máy đang dùng |
 | `ECO_CHECKPOINT` | `./saved/top_soc_postRoute.enc.dat` | tính từ `mcu/innovus` |
 | `ECO_ALLOW_BAD_LIB` | *(trống)* | `1` = vẫn chạy khi checkpoint còn `.lib` sai điện áp (không cần cho `SIMPLE_RVT_FF` khi `STD_FF_LOWV_DERATE` bật) |
+
+## Chạy Calibre DRC / LVS (sau `eco/make finish`)
+
+```bash
+cd Asap7/run_workspace/mcu/calibre
+make drc
+make lvs
+```
+
+Khung giống `pv/` của thầy: `project_setup.tcl` (biến `HGVAR_*`, lấy đường dẫn
+từ `innovus/tcl/project_config.tcl`) → `scripts/gen_env.tcl` sinh
+`scripts/sourceme` → `scripts/run_drc.sh` / `run_lvs.sh` ghi header
+`run.<bước>.cal` rồi `INCLUDE` deck; `scripts/v2lvs.tcl` đổi
+`innovus/outputs/top_soc_pnr_pg.v` sang SPICE và sinh `hcell.list`. Mọi thứ
+chạy trong `run_drc/`, `run_lvs/` (không vào git).
+
+Khác với deck của thầy: deck ASAP7 (`Asap7/asap7/asap7sc7p5t_28/rul/`) tự khai
+`LAYOUT PATH "./test.gds"`, `LAYOUT PRIMARY`, `DRC SUMMARY REPORT`,
+`LVS REPORT`, `LVS POWER NAME "vdd!"`…, nên script chép deck và comment đúng
+các dòng đó (đếm đủ 5 / 3 dòng, sai thì dừng). Bốn biến môi trường
+`VAR_M4_YOFFSET`, `VAR_M5_XOFFSET`, `VAR_M6_YOFFSET`, `VAR_M7_XOFFSET` của luật
+track `M*.AUX.*` được tính từ `TRACKS` trong `innovus/outputs/top_soc_pnr.def`.
+SRAM, `FILLER*`, `TAPCELL*` không có CDL: `v2lvs.tcl` sinh `.SUBCKT` rỗng từ
+LEF; chỉ hai master SRAM được `LVS BOX` (GDS của chúng là hộp đen).
+
+Kết luận ở dòng đầu `reports/drc_summary.rpt` và `reports/lvs_summary.rpt`
+(`PASS` / `FAIL`); bản chép `top_soc.drc.sum`, `top_soc.lvs.report{,.ext}`,
+`lvs_cell_usage.rpt` ở `reports/`, log ở `logs/`.
+
+| Biến `make` | Mặc định | Ý nghĩa |
+|---|---|---|
+| `CAL_CORES` | `4` | số CPU cho `-turbo` |
+| `CAL_HYPER` | `1` | `0` = bỏ `-hyper` khi không có license hyperscaling |
+| `DRC_MAX_RESULTS` | `1000` | số kết quả tối đa mỗi luật trong DB |
+| `VAR_M4_YOFFSET` … | tính từ DEF | ghi đè offset luật track (đơn vị 0,1 nm) |
+| `LVS_BOX_PHYS` | `0` | `1` = box cả filler/tap như thầy (tap là chỗ nối well/substrate vào VDD/VSS) |
+| `V2LVS_OPTS` | `-64 -sn` | option của `v2lvs` |
+| `CALIBRE` / `V2LVS` | `calibre` / `v2lvs` | tên lệnh |
 
 ## Giả định timing cần xác nhận
 
