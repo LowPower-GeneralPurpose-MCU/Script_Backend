@@ -325,7 +325,7 @@ proc summarize_lvs {} {
     lappend out "  GDS     : [stamp [expr {[info exists CFG(GDS_FILE)] ? $CFG(GDS_FILE) : {?}}]]"
     lappend out "  netlist : [stamp [expr {[info exists CFG(NETLIST_PWR)] ? $CFG(NETLIST_PWR) : {?}}]]"
     lappend out "  deck    : [expr {[info exists CFG(LVS_DECK)] ? $CFG(LVS_DECK) : {?}}]\
- (run_lvs/asap7_lvs.rul: LVS REPORT / POWER NAME / GROUND NAME da comment)"
+ (run_lvs/asap7_lvs.rul: LVS REPORT / POWER NAME / GROUND NAME / RECOGNIZE GATES da comment)"
     if {$PRECISION_NOTE ne ""} {
         lappend out "  dbu     : $PRECISION_NOTE"
     }

@@ -30,13 +30,19 @@ fi
 # trong khi net nguon cua thiet ke la VDD / VSS.  Header khai bao lai ca ba,
 # nen INCLUDE ban chep da comment dung 3 dong do (LVS REPORT OPTION / MAXIMUM
 # giu nguyen).
+# Dong 47 LVS RECOGNIZE GATES NONE: LVS 2026-10-22 01:29 top_soc CORRECT nhung
+# 23 std cell INCORRECT chi vi GDS va CDL cua thu vien xep transistor trong
+# chong noi tiep khac thu tu (AO21x1: A1/A2 doi cho o in1/in2 cua _nand2b;
+# AOI211xp5/XOR2x2: transistor o dau VDD/VSS khac nhau) - tuong duong logic.
+# Header dat lai LVS RECOGNIZE GATES (mac dinh ALL: input tuong duong cua cong
+# nhan dang duoc phep doi cho); LVS_RECOGNIZE_GATES=NONE = dung y deck goc.
 deck=asap7_lvs.rul
 tag='// [run_lvs.sh]'
-sed -E "s#^[[:space:]]*(LVS[[:space:]]+REPORT[[:space:]]+[^[:space:]]+[[:space:]]*\$|LVS[[:space:]]+(POWER|GROUND)[[:space:]]+NAME[[:space:]])#$tag &#" \
+sed -E "s#^[[:space:]]*(LVS[[:space:]]+REPORT[[:space:]]+[^[:space:]]+[[:space:]]*\$|LVS[[:space:]]+(POWER|GROUND)[[:space:]]+NAME[[:space:]]|LVS[[:space:]]+RECOGNIZE[[:space:]]+GATES[[:space:]])#$tag &#" \
     "$LVS_DECK" > $deck
 n=$(grep -cF "$tag" $deck)
-if [ "$n" != 3 ]; then
-    echo "ERROR: comment duoc $n/3 lenh trong $LVS_DECK - deck da doi, sua run_lvs.sh"
+if [ "$n" != 4 ]; then
+    echo "ERROR: comment duoc $n/4 lenh trong $LVS_DECK - deck da doi, sua run_lvs.sh"
     exit 1
 fi
 
@@ -56,6 +62,7 @@ echo "ERC SUMMARY REPORT \"$DESIGN.lvs.summary\" REPLACE HIER" >> $cal
 echo "LVS POWER NAME \"VDD\" \"vdd!\" \"VDD!\""        >> $cal
 echo "LVS GROUND NAME \"VSS\" \"VSS!\" \"vss!\""       >> $cal
 echo "LVS BOX $(tr '\n' ' ' < lvs_box.list)"           >> $cal
+echo "LVS RECOGNIZE GATES ${LVS_RECOGNIZE_GATES:-ALL}"  >> $cal
 
 # include main rule file
 echo "INCLUDE \"$PWD/$deck\""                          >> $cal

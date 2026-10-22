@@ -12,6 +12,7 @@
 #     make drc VAR_M4_YOFFSET=-90   ghi de offset luat track (0.1 nm); mac dinh
 #                                   tinh tu TRACKS cua innovus/outputs/top_soc_pnr.def
 #                                   (cung VAR_M5_XOFFSET, VAR_M6_YOFFSET, VAR_M7_XOFFSET)
+#     make lvs LVS_RECOGNIZE_GATES=NONE  nhu deck goc (mac dinh ALL, xem run_lvs.sh)
 #     make lvs LVS_BOX_PHYS=1       box ca filler/tap nhu thay (mac dinh chi box SRAM,
 #                                   xem project_setup.tcl)
 #     make lvs V2LVS_OPTS="-64 -sn" option v2lvs (mac dinh nhu thay)
@@ -23,7 +24,7 @@
 SUMMARY_DRC := reports/drc_summary.rpt
 SUMMARY_LVS := reports/lvs_summary.rpt
 
-export CAL_CORES CAL_HYPER CALIBRE V2LVS V2LVS_OPTS DRC_MAX_RESULTS LVS_BOX_PHYS
+export CAL_CORES CAL_HYPER CALIBRE V2LVS V2LVS_OPTS DRC_MAX_RESULTS LVS_BOX_PHYS LVS_RECOGNIZE_GATES
 export CAL_GDS CAL_NETLIST CAL_DEF CAL_DRC_DECK CAL_LVS_DECK CAL_CDL_DIR
 export VAR_M4_YOFFSET VAR_M5_XOFFSET VAR_M6_YOFFSET VAR_M7_XOFFSET
 
