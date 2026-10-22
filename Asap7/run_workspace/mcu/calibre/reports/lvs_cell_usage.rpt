@@ -103,8 +103,8 @@
   DFFHQx4_ASAP7_75t_R                     2499  cdl asap7sc7p5t_28_R.cdl hcell
   DLLx1_ASAP7_75t_R                         12  cdl asap7sc7p5t_28_R.cdl hcell
   FAx1_ASAP7_75t_R                         447  cdl asap7sc7p5t_28_R.cdl hcell
-  FILLER_ASAP7_75t_R                   2068966  stub (LEF CORE SPACER)   flatten (khong co thiet bi)
-  FILLERxp5_ASAP7_75t_R                  76984  stub (LEF CORE SPACER)   flatten (khong co thiet bi)
+  FILLER_ASAP7_75t_R                   2068966  stub (LEF CORE SPACER)   bo khoi source (khong co thiet bi)
+  FILLERxp5_ASAP7_75t_R                  76984  stub (LEF CORE SPACER)   bo khoi source (khong co thiet bi)
   HAxp5_ASAP7_75t_R                        188  cdl asap7sc7p5t_28_R.cdl hcell
   HB1xp67_ASAP7_75t_L                     9061  cdl asap7sc7p5t_28_L.cdl hcell
   HB1xp67_ASAP7_75t_R                     2490  cdl asap7sc7p5t_28_R.cdl hcell
@@ -228,7 +228,7 @@
   OR5x2_ASAP7_75t_L                          4  cdl asap7sc7p5t_28_L.cdl hcell
   SDFHx1_ASAP7_75t_R                        51  cdl asap7sc7p5t_28_R.cdl hcell
   SDFHx2_ASAP7_75t_R                        17  cdl asap7sc7p5t_28_R.cdl hcell
-  TAPCELL_ASAP7_75t_R                    31100  stub (LEF CORE WELLTAP)  flatten (khong co thiet bi)
+  TAPCELL_ASAP7_75t_R                    31100  stub (LEF CORE WELLTAP)  bo khoi source (khong co thiet bi)
   TIEHIx1_ASAP7_75t_R                     1766  cdl asap7sc7p5t_28_R.cdl hcell
   TIELOx1_ASAP7_75t_R                     1632  cdl asap7sc7p5t_28_R.cdl hcell
   XNOR2x2_ASAP7_75t_L                      101  cdl asap7sc7p5t_28_L.cdl hcell
