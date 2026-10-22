@@ -7,7 +7,7 @@ MCU ASAP7 CONFIGURATION
  - Top          : top_soc
 ============================================================
 INFO: doc /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr_pg.v
-INFO: 240 master, 1704 module, 13 s
+INFO: 240 master, 1704 module, 23 s
 INFO: 5 master stub: FILLER_ASAP7_75t_R FILLERxp5_ASAP7_75t_R TAPCELL_ASAP7_75t_R srambank_128x4x20_6t122 srambank_256x4x32_6t122
 INFO: LVS BOX: srambank_256x4x32_6t122 srambank_128x4x20_6t122
 INFO: /Mentor/Calibre/aok_cal_2025.2_38.18/bin/v2lvs la script sh -> chay qua /usr/bin/bash (/bin/sh co the la dash)
@@ -34,55 +34,55 @@ V2LVS_CMD is: /usr/bin/bash /Mentor/Calibre/aok_cal_2025.2_38.18/bin/v2lvs -64 -
 //  Entries in /proc/meminfo:
 //
 //  MemTotal:       13556624 kB
-//  MemFree:         1173560 kB
-//  MemAvailable:    7172292 kB
-//  Buffers:          126396 kB
-//  Cached:          6095108 kB
-//  SwapCached:       135680 kB
-//  Active:          5467248 kB
-//  Inactive:        5723132 kB
-//  Active(anon):    4299116 kB
-//  Inactive(anon):   811652 kB
-//  Active(file):    1168132 kB
-//  Inactive(file):  4911480 kB
+//  MemFree:         5309136 kB
+//  MemAvailable:    9993832 kB
+//  Buffers:          140048 kB
+//  Cached:          4739664 kB
+//  SwapCached:       124172 kB
+//  Active:          3526552 kB
+//  Inactive:        3578600 kB
+//  Active(anon):    2217144 kB
+//  Inactive(anon):   150696 kB
+//  Active(file):    1309408 kB
+//  Inactive(file):  3427904 kB
 //  Unevictable:         172 kB
 //  Mlocked:             172 kB
 //  SwapTotal:      62499836 kB
-//  SwapFree:       62049212 kB
+//  SwapFree:       62102592 kB
 //  Zswap:                 0 kB
 //  Zswapped:              0 kB
-//  Dirty:              2204 kB
+//  Dirty:               468 kB
 //  Writeback:             0 kB
-//  AnonPages:       4951152 kB
-//  Mapped:          1074308 kB
-//  Shmem:            142212 kB
-//  KReclaimable:     250664 kB
-//  Slab:             506728 kB
-//  SReclaimable:     250664 kB
-//  SUnreclaim:       256064 kB
-//  KernelStack:       21416 kB
-//  PageTables:        53436 kB
-//  SecPageTables:      3584 kB
+//  AnonPages:       2208596 kB
+//  Mapped:          1016176 kB
+//  Shmem:            142736 kB
+//  KReclaimable:     291216 kB
+//  Slab:             556212 kB
+//  SReclaimable:     291216 kB
+//  SUnreclaim:       264996 kB
+//  KernelStack:       21648 kB
+//  PageTables:        48224 kB
+//  SecPageTables:      3624 kB
 //  NFS_Unstable:          0 kB
 //  Bounce:                0 kB
 //  WritebackTmp:          0 kB
 //  CommitLimit:    69278148 kB
-//  Committed_AS:   13246776 kB
+//  Committed_AS:   13485060 kB
 //  VmallocTotal:   34359738367 kB
-//  VmallocUsed:      134160 kB
+//  VmallocUsed:      134520 kB
 //  VmallocChunk:          0 kB
 //  Percpu:            17280 kB
 //  HardwareCorrupted:     0 kB
-//  AnonHugePages:   3385344 kB
+//  AnonHugePages:    475136 kB
 //  ShmemHugePages:        0 kB
 //  ShmemPmdMapped:        0 kB
-//  FileHugePages:         0 kB
+//  FileHugePages:    206848 kB
 //  FilePmdMapped:         0 kB
 //  CmaTotal:              0 kB
-//  CmaFree:          632996 kB
+//  CmaFree:         1071284 kB
 //  Unaccepted:            0 kB
 //  Balloon:               0 kB
-//  GPUActive:        263200 kB
+//  GPUActive:        294900 kB
 //  GPUReclaim:            0 kB
 //  HugePages_Total:       0
 //  HugePages_Free:        0
@@ -90,8 +90,8 @@ V2LVS_CMD is: /usr/bin/bash /Mentor/Calibre/aok_cal_2025.2_38.18/bin/v2lvs -64 -
 //  HugePages_Surp:        0
 //  Hugepagesize:       2048 kB
 //  Hugetlb:               0 kB
-//  DirectMap4k:      730628 kB
-//  DirectMap2M:    11628544 kB
+//  DirectMap4k:      744964 kB
+//  DirectMap2M:    11614208 kB
 //  DirectMap1G:     3145728 kB
 //
 //  User limits:
@@ -114,9 +114,9 @@ WARNING: Please increase descriptors limit for best performance (1024)
 //  Max file descriptors: 1024
 //  64 bit virtual addressing enabled
 //  Running aok_cal_2025.2_38.18/pkgs/icv/pvt/v2lvs -sn -s /home/user1/Desktop/asap7/asap7sc7p5t_28/CDL/LVS/asap7sc7p5t_28_R.cdl -s /home/user1/Desktop/asap7/asap7sc7p5t_28/CDL/LVS/asap7sc7p5t_28_L.cdl -s /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_lvs/top_soc.stub.cdl -o top_soc.v2lvs.net -v /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr_pg.v
-//  Process ID: 3364460
+//  Process ID: 2024135
 //
-//  Starting time: Thu Oct 22 01:28:37 2026
+//  Starting time: Thu Oct 22 11:08:24 2026
 //
 
 --- CALIBRE_* ENVIRONMENT VARIABLES:
@@ -130,7 +130,7 @@ CALIBRE_SKIP_DYNAMIC_LIBRARY_CHECK='1'
 
 V2LVS_OPTS=''
 
---- Verilog-to-LVS - Thu Oct 22 01:28:37 2026
+--- Verilog-to-LVS - Thu Oct 22 11:08:24 2026
 
 //  Applying licensing policy...
 //  calibrelvs license acquired.
@@ -142,13 +142,13 @@ V2LVS_OPTS=''
 
 
 Info: Creating Verilog Library Database ...
-Info: Verilog Library Database Creation completed. CPU TIME = 0  REAL TIME = 0  LVHEAP = 0/0/0  MALLOC = 15/15/15  ELAPSED TIME = 1
+Info: Verilog Library Database Creation completed. CPU TIME = 0  REAL TIME = 0  LVHEAP = 0/0/0  MALLOC = 15/15/15  ELAPSED TIME = 0
 
 Info: Creating Design Database of Module Interfaces ...
 Info: Design Database of Module Interfaces Creation completed. CPU TIME = 1  REAL TIME = 1  LVHEAP = 0/0/0  MALLOC = 20/20/20  ELAPSED TIME = 1
 
 Info: Creating Design Database of Module Instantiations ...
-Info: Design Database of Module Instantiations Creation completed. CPU TIME = 2  REAL TIME = 2  LVHEAP = 0/0/0  MALLOC = 27/27/27  ELAPSED TIME = 4
+Info: Design Database of Module Instantiations Creation completed. CPU TIME = 3  REAL TIME = 3  LVHEAP = 0/0/0  MALLOC = 27/27/27  ELAPSED TIME = 4
 Info: 1704 modules parsed, containing 2322491 module instantiations and 0 gate instance calls 
 
 Info: Converting Design ...
@@ -645,17 +645,17 @@ Warning: No module declaration for module FILLER_ASAP7_75t_R first encountered i
 Warning: No module declaration for module FILLERxp5_ASAP7_75t_R first encountered in module top_soc
 Warning: No module declaration for module TAPCELL_ASAP7_75t_R first encountered in module top_soc
 Info: module top_soc contained 28 ports, 18785 nets, 2197744 instance calls with 4474452 pin connections
-Info: Design Conversion completed. CPU TIME = 6  REAL TIME = 3  LVHEAP = 0/0/0  MALLOC = 162/162/184  ELAPSED TIME = 7
+Info: Design Conversion completed. CPU TIME = 7  REAL TIME = 4  LVHEAP = 0/0/0  MALLOC = 163/163/185  ELAPSED TIME = 8
 
---- Verilog-to-LVS COMPLETED - Thu Oct 22 01:28:44 2026
---- TOTAL CPU TIME = 9  REAL TIME = 7  LVHEAP = 0/0/0  MALLOC = 162/162/184  ELAPSED TIME = 7
+--- Verilog-to-LVS COMPLETED - Thu Oct 22 11:08:32 2026
+--- TOTAL CPU TIME = 11  REAL TIME = 8  LVHEAP = 0/0/0  MALLOC = 163/163/185  ELAPSED TIME = 8
 --- LOG FILE = v2lvs.log
 
-INFO: v2lvs ket thuc sau 7 s
+INFO: v2lvs ket thuc sau 9 s
 INFO: bo khoi source 2068966 instance FILLER_ASAP7_75t_R (layout khong co thiet bi)
 INFO: bo khoi source 76984 instance FILLERxp5_ASAP7_75t_R (layout khong co thiet bi)
 INFO: bo khoi source 31100 instance TAPCELL_ASAP7_75t_R (layout khong co thiet bi)
 INFO: port PG them vao .SUBCKT top_soc: VDD VSS
-INFO: ghi top_soc.v2lvs.lvs.net sau 12 s
+INFO: ghi top_soc.v2lvs.lvs.net sau 17 s
 INFO: v2lvs da ghi .INCLUDE: asap7sc7p5t_28_R.cdl asap7sc7p5t_28_L.cdl top_soc.stub.cdl
 INFO: ghi top_soc.source.net

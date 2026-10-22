@@ -1,46 +1,18 @@
-FAIL
-Calibre LVS top_soc - 2026-10-22 01:29
+PASS
+Calibre LVS top_soc - 2026-10-22 11:09
   GDS     : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc.gds (2026-10-21 01:31)
   netlist : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr_pg.v (2026-10-21 01:31)
-  deck    : /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/rul/calibreLVS.rul (run_lvs/asap7_lvs.rul: LVS REPORT / POWER NAME / GROUND NAME da comment)
+  deck    : /home/user1/Desktop/Script_Backend/Asap7/asap7/asap7sc7p5t_28/rul/calibreLVS.rul (run_lvs/asap7_lvs.rul: LVS REPORT / POWER NAME / GROUND NAME / RECOGNIZE GATES da comment)
   dbu     : 2000 dbu/um (ban ghi UNITS cua GDS) = LAYOUT PRECISION, PRECISION deck 4000 (x2)
   LVS BOX : srambank_256x4x32_6t122 srambank_128x4x20_6t122
   magnify : AUTO -> 2 (dong '--- LAYOUT MAGNIFICATION' -> 'MAGNIFICATION:' cua log)
   cell    : 240 master, 2320788 instance: 235 master co CDL (hcell), 5 master stub rong, 2 master LVS BOX (reports/lvs_cell_usage.rpt)
-  ket qua : INCORRECT
-  cell    : CORRECT 213, INCORRECT 23 (CELL SUMMARY)
+  ket qua : CORRECT
+  cell    : CORRECT 236 (CELL SUMMARY)
   chi tiet: reports/top_soc.lvs.report, reports/top_soc.lvs.report.ext, run_lvs/svdb (Calibre RVE), log logs/calibre_lvs.log
 
 Error / Warning cua OVERALL COMPARISON RESULTS:
-  Error:    Different numbers of instances.
-  Error:    Connectivity errors.
-  Error:    Instances of different types or subtypes were matched.
   Warning:  Ambiguity points were found and resolved arbitrarily.
-
-Cell khong CORRECT (layout / source):
-  INCORRECT  A2O1A1O1Ixp25_ASAP7_75t_L  A2O1A1O1Ixp25_ASAP7_75t_L
-  INCORRECT  A2O1A1O1Ixp25_ASAP7_75t_R  A2O1A1O1Ixp25_ASAP7_75t_R
-  INCORRECT  AND4x1_ASAP7_75t_L  AND4x1_ASAP7_75t_L
-  INCORRECT  AND4x1_ASAP7_75t_R  AND4x1_ASAP7_75t_R
-  INCORRECT  AO21x1_ASAP7_75t_L  AO21x1_ASAP7_75t_L
-  INCORRECT  AO21x1_ASAP7_75t_R  AO21x1_ASAP7_75t_R
-  INCORRECT  AO21x2_ASAP7_75t_L  AO21x2_ASAP7_75t_L
-  INCORRECT  AO21x2_ASAP7_75t_R  AO21x2_ASAP7_75t_R
-  INCORRECT  AOI211xp5_ASAP7_75t_L  AOI211xp5_ASAP7_75t_L
-  INCORRECT  AOI211xp5_ASAP7_75t_R  AOI211xp5_ASAP7_75t_R
-  INCORRECT  AOI32xp33_ASAP7_75t_R  AOI32xp33_ASAP7_75t_R
-  INCORRECT  FAx1_ASAP7_75t_R  FAx1_ASAP7_75t_R
-  INCORRECT  OAI21x1_ASAP7_75t_L  OAI21x1_ASAP7_75t_L
-  INCORRECT  OAI221xp5_ASAP7_75t_L  OAI221xp5_ASAP7_75t_L
-  INCORRECT  OAI221xp5_ASAP7_75t_R  OAI221xp5_ASAP7_75t_R
-  INCORRECT  OAI31xp33_ASAP7_75t_L  OAI31xp33_ASAP7_75t_L
-  INCORRECT  OAI31xp33_ASAP7_75t_R  OAI31xp33_ASAP7_75t_R
-  INCORRECT  OAI322xp33_ASAP7_75t_L  OAI322xp33_ASAP7_75t_L
-  INCORRECT  OAI322xp33_ASAP7_75t_R  OAI322xp33_ASAP7_75t_R
-  INCORRECT  OAI32xp33_ASAP7_75t_R  OAI32xp33_ASAP7_75t_R
-  INCORRECT  OAI33xp33_ASAP7_75t_R  OAI33xp33_ASAP7_75t_R
-  INCORRECT  XOR2x2_ASAP7_75t_L  XOR2x2_ASAP7_75t_L
-  INCORRECT  XOR2x2_ASAP7_75t_R  XOR2x2_ASAP7_75t_R
 
 INITIAL NUMBERS OF OBJECTS (cell dau tien trong report):
   --------------------------
@@ -58,13 +30,12 @@ NUMBERS OF OBJECTS AFTER TRANSFORMATION (cell dau tien trong report):
                   Layout    Source         Component Type
                   ------    ------         --------------
    Ports:              7         7
-   Nets:               9         9
-   Instances:          1         1         MN (4 pins)
-                       3         3         MP (4 pins)
-                       1         1         _invb (6 pins)
-                       1         1         _sdw2v (4 pins)
+   Nets:               7         7
+   Instances:          1         1         MP (4 pins)
+                       1         1         SPUP_2_1 (4 pins)
+                       1         1         SPMN((2+1)*1) (6 pins)
                   ------    ------
-   Total Inst:         6         6
+   Total Inst:         3         3
 
 Bao cao trich xuat (reports/top_soc.lvs.report.ext, 40 dong dau khop):
   Extraction Errors and Warnings for cell "FILLERxp5_ASAP7_75t_R"
