@@ -7,7 +7,11 @@
 #
 # Bien doi duoc tu dong lenh:
 #     make drc CAL_CORES=8          so CPU cho -turbo (mac dinh 4)
-#     make drc CAL_HYPER=0          bo -hyper (khong co license hyperscaling)
+#     make drc CAL_HYPER=1          bat -hyper (mac dinh tat: moi pseudo HDB giu
+#                                   mot ban du lieu, lan 2026-10-22 het RAM 13 GB)
+#     make drc DRC_GROUPS="m6_m7"   chi chay cac nhom rule nay, giu ket qua nhom khac
+#                                   trong run_drc/ (nhom: feol m1_m3 m4_m5 m6_m7 m8_m9,
+#                                   mac dinh ca 5 lan luot, xem run_drc.sh)
 #     make drc DRC_MAX_RESULTS=ALL  so ket qua toi da / rule trong DB (mac dinh 1000)
 #     make drc VAR_M4_YOFFSET=-90   ghi de offset luat track (0.1 nm); mac dinh
 #                                   tinh tu TRACKS cua innovus/outputs/top_soc_pnr.def
@@ -24,7 +28,7 @@
 SUMMARY_DRC := reports/drc_summary.rpt
 SUMMARY_LVS := reports/lvs_summary.rpt
 
-export CAL_CORES CAL_HYPER CALIBRE V2LVS V2LVS_OPTS DRC_MAX_RESULTS LVS_BOX_PHYS LVS_RECOGNIZE_GATES
+export CAL_CORES CAL_HYPER CALIBRE V2LVS V2LVS_OPTS DRC_MAX_RESULTS DRC_GROUPS LVS_BOX_PHYS LVS_RECOGNIZE_GATES
 export CAL_GDS CAL_NETLIST CAL_DEF CAL_DRC_DECK CAL_LVS_DECK CAL_CDL_DIR
 export VAR_M4_YOFFSET VAR_M5_XOFFSET VAR_M6_YOFFSET VAR_M7_XOFFSET
 
@@ -38,10 +42,12 @@ setup:
 # Ma thoat cua calibre khong dung lam ket luan (bo qua bang dau '-'); ket luan
 # la dong dau cua file tom tat do summarize.tcl ghi tu bao cao Calibre.
 # gen_env.tcl hong (thieu dau vao) thi tu ghi FAIL vao file tom tat.
+# DRC_GROUPS dat thi giu run_drc/ (ket qua cac nhom khac); run_drc.sh tu xoa
+# ket qua cu cua nhom no chay lai.
 drc:
 	@/bin/echo "INFO: Running Calibre DRC"
 	@/bin/mkdir -p logs reports
-	/bin/rm -rf run_$@ $(SUMMARY_DRC)
+	/bin/rm -rf $(if $(DRC_GROUPS),,run_$@) $(SUMMARY_DRC)
 	tclsh scripts/gen_env.tcl $@
 	/bin/mkdir -p run_$@
 	-cd run_$@ && /bin/bash ../scripts/run_drc.sh 2>&1 | tee calibre_$@.log

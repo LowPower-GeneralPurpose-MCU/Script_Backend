@@ -111,16 +111,136 @@ proc write_summary {verdict lines} {
 }
 
 # =============================================================================
+# DRC chay theo nhom rule (run_drc.sh): moi nhom mot lan Calibre voi
+# run_drc/$DESIGN.<nhom>.drc.sum va run_drc/calibre_drc_<nhom>.log;
+# run_drc/groups.list liet ke moi nhom va so rule.
+
+proc fmt_secs {s} {
+    if {$s eq ""} {
+        return "?"
+    }
+    return [format "%dh%02dm" [expr {$s / 3600}] [expr {$s % 3600 / 60}]]
+}
+
+# File summary HIER: "--- RULECHECK RESULTS STATISTICS (BY CELL)" (dong CELL ...
+# roi RULECHECK cua cell do), "--- RULECHECK RESULTS STATISTICS" (tong),
+# "--- SUMMARY" (TOTAL ...).  Dem "= H (F)": H theo phan cap, F phang.
+# Tra dict: done (co dong TOTAL DRC Results Generated), rules {r {h f}},
+# cells {c n}, cell_rule {c {{r h} ...}}, warnings, layers {l n}.
+proc drc_read_sum {sum} {
+    set rc_re {^\s*RULECHECK\s+(\S+)\s+\.+\s+TOTAL Result Count\s*=\s*(\d+)(?:\s*\((\d+)\))?}
+    set S [dict create done 0 rules {} cells {} cell_rule {} warnings {} layers {}]
+    set section ""
+    set cell ""
+    set f [open $sum r]
+    while {[gets $f line] >= 0} {
+        if {[regexp {^\s*---\s+(.*\S)\s*$} $line -> hdr]} {
+            set section $hdr
+            continue
+        }
+        if {[regexp {TOTAL DRC Results Generated:} $line]} {
+            dict set S done 1
+            continue
+        }
+        if {[string match "RUNTIME WARNINGS*" $section] && ![regexp {^[-=\s]*$} $line] &&
+            [llength [dict get $S warnings]] < 20} {
+            dict lappend S warnings [string trim $line]
+        } elseif {[string match "ORIGINAL LAYER STATISTICS*" $section] &&
+                  [regexp {LAYER\s+(\S+)\s+\.+\s+TOTAL Original Geometry Count\s*=\s*(\d+)(?:\s*\((\d+)\))?} \
+                      $line -> l h fl]} {
+            dict set S layers $l [expr {$fl ne "" ? $fl : $h}]
+        } elseif {[string match "*BY CELL*" $section]} {
+            if {[regexp {^\s*CELL\s+(\S+)\s+\.+\s+TOTAL Result Count\s*=\s*(\d+)} $line -> cell h]} {
+                dict set S cells $cell $h
+            } elseif {$cell ne "" && [regexp $rc_re $line -> r h fl] && $h > 0} {
+                set items [expr {[dict exists $S cell_rule $cell] ? [dict get $S cell_rule $cell] : {}}]
+                lappend items [list $r $h]
+                dict set S cell_rule $cell $items
+            }
+        } elseif {[string match "RULECHECK RESULTS STATISTICS*" $section] &&
+                  [regexp $rc_re $line -> r h fl]} {
+            dict set S rules $r [list $h [expr {$fl ne "" ? $fl : $h}]]
+        }
+    }
+    close $f
+    if {[dict size [dict get $S rules]] == 0} {
+        # khong thay muc tong: cong tu muc theo cell (chi co so phan cap)
+        foreach {c items} [dict get $S cell_rule] {
+            foreach item $items {
+                lassign $item r h
+                set old [expr {[dict exists $S rules $r] ? [lindex [dict get $S rules $r] 0] : 0}]
+                dict set S rules $r [list [expr {$old + $h}] [expr {$old + $h}]]
+            }
+        }
+    }
+    return $S
+}
+
+# Log Calibre: "DRC RuleCheck X COMPLETED. Number of Results = H (F)" sau moi
+# rule, "OPS COMPLETE = n OF m  ELAPSED TIME = s" sau moi lenh.  Con doc duoc
+# khi Calibre bi giet giua chung (lan 2026-10-22: khong co file .sum).
+proc drc_read_log {log} {
+    set L [dict create rules {} ops ? elapsed ""]
+    set f [open $log r]
+    while {[gets $f line] >= 0} {
+        if {[regexp {^\s*DRC RuleCheck\s+(\S+)\s+COMPLETED\.\s+Number of Results\s*=\s*(\d+)(?:\s*\((\d+)\))?} \
+                $line -> r h fl]} {
+            dict set L rules $r [list $h [expr {$fl ne "" ? $fl : $h}]]
+        } elseif {[regexp {OPS COMPLETE\s*=\s*(\d+\s+OF\s+\d+)\s+ELAPSED TIME\s*=\s*(\d+)} $line -> ops s]} {
+            dict set L ops $ops
+            dict set L elapsed $s
+        }
+    }
+    close $f
+    return $L
+}
+
+# Mo ta luat: dong "@" dau tien khac ten luat sau dong mo khoi "TEN {" (dau {
+# co the o dong sau ten) trong deck.
+proc drc_rule_desc {deck} {
+    set desc [dict create]
+    if {![file isfile $deck]} {
+        return $desc
+    }
+    set f [open $deck r]
+    set cur ""
+    set prev ""
+    while {[gets $f line] >= 0} {
+        if {[regexp {^\s*([A-Za-z0-9_.]+)\s*\{\s*$} $line -> cur]} {
+            set prev ""
+            continue
+        }
+        if {[regexp {^\s*\{\s*$} $line] && $prev ne ""} {
+            set cur $prev
+            set prev ""
+            continue
+        }
+        if {$cur ne "" && [regexp {^\s*@\s*(.*\S)} $line -> d] && $d ne $cur} {
+            dict set desc $cur $d
+            set cur ""
+        }
+        set t [string trim $line]
+        if {$t ne ""} {
+            set prev [expr {[regexp {^[A-Za-z0-9_.]+$} $t] ? $t : ""}]
+        }
+    }
+    close $f
+    return $desc
+}
+
 proc summarize_drc {} {
     global DESIGN CFG OFFSET_NOTES PRECISION_NOTE
     set run run_drc
-    set sum  $run/$DESIGN.drc.sum
-    set log  $run/calibre_drc.log
-    copy_capped $log logs/calibre_drc.log
-    copy_capped $sum reports/$DESIGN.drc.sum
+    # ban chep cua lan truoc (ca log / sum mot khoi truoc khi chia nhom)
+    foreach p [concat [glob -nocomplain logs/calibre_drc*.log] [glob -nocomplain reports/$DESIGN*.drc.sum]] {
+        file delete $p
+    }
+    set gds [expr {[info exists CFG(GDS_FILE)] ? $CFG(GDS_FILE) : {?}}]
+    set max_res [expr {[info exists CFG(DRC_MAX_RESULTS)] ? $CFG(DRC_MAX_RESULTS) : 1000}]
+    set err_re {(?i)^\s*(ERROR|\*\*\* ?ERROR|.*license.*(fail|denied|not available))}
 
     set out [list "Calibre DRC $DESIGN - [clock format [clock seconds] -format {%Y-%m-%d %H:%M}]"]
-    lappend out "  GDS     : [stamp [expr {[info exists CFG(GDS_FILE)] ? $CFG(GDS_FILE) : {?}}]]"
+    lappend out "  GDS     : [stamp $gds]"
     lappend out "  deck    : [expr {[info exists CFG(DRC_DECK)] ? $CFG(DRC_DECK) : {?}}]\
  (run_drc/asap7_drc.rul: 6 lenh dac ta da comment)"
     if {$PRECISION_NOTE ne ""} {
@@ -129,127 +249,105 @@ proc summarize_drc {} {
     foreach note $OFFSET_NOTES {
         lappend out "  offset  : $note"
     }
-    lappend out "  magnify : [magnify_note $log]"
-    set errors [grep_lines $log {(?i)^\s*(ERROR|\*\*\* ?ERROR|.*license.*(fail|denied|not available))} 15]
 
-    if {![file isfile $sum]} {
-        lappend out "  Calibre khong ghi $sum - doc logs/calibre_drc.log"
-        foreach e $errors {
+    if {![file isfile $run/groups.list]} {
+        lappend out "  run_drc.sh dung truoc khi chia nhom rule - doc logs/calibre_drc.log"
+        foreach e [grep_lines $run/calibre_drc.log $err_re 15] {
             lappend out "    $e"
         }
+        copy_capped $run/calibre_drc.log logs/calibre_drc.log
         write_summary FAIL $out
         return
     }
-
-    # Muc cua summary HIER: "--- RULECHECK RESULTS STATISTICS (BY CELL)" (dong
-    # CELL ... roi RULECHECK cua cell do), "--- RULECHECK RESULTS STATISTICS"
-    # (tong), "--- SUMMARY" (TOTAL ...).  Dem "= H (F)": H theo phan cap, F phang.
-    set rc_re {^\s*RULECHECK\s+(\S+)\s+\.+\s+TOTAL Result Count\s*=\s*(\d+)(?:\s*\((\d+)\))?}
-    set section ""
-    set cell ""
-    array set rule_h {}
-    array set rule_f {}
-    array set cell_rule {}
-    array set cell_tot {}
-    set layers {}
-    set warnings {}
-    set total_h ""
-    set total_f ""
-    set executed ""
-    set f [open $sum r]
-    while {[gets $f line] >= 0} {
-        if {[regexp {^\s*---\s+(.*\S)\s*$} $line -> hdr]} {
-            set section $hdr
-            continue
-        }
-        if {[regexp {TOTAL DRC Results Generated:\s+(\d+)(?:\s*\((\d+)\))?} $line -> total_h total_f]} {
-            continue
-        }
-        if {[regexp {TOTAL DRC RuleChecks Executed:\s+(\d+)} $line -> executed]} {
-            continue
-        }
-        if {[string match "RUNTIME WARNINGS*" $section] && ![regexp {^[-=\s]*$} $line] &&
-            [llength $warnings] < 20} {
-            lappend warnings [string trim $line]
-        } elseif {[string match "ORIGINAL LAYER STATISTICS*" $section] &&
-                  [regexp {LAYER\s+(\S+)\s+\.+\s+TOTAL Original Geometry Count\s*=\s*(\d+)(?:\s*\((\d+)\))?} \
-                      $line -> l h fl]} {
-            lappend layers "$l [expr {$fl ne "" ? $fl : $h}]"
-        } elseif {[string match "*BY CELL*" $section]} {
-            if {[regexp {^\s*CELL\s+(\S+)\s+\.+\s+TOTAL Result Count\s*=\s*(\d+)} $line -> cell h]} {
-                set cell_tot($cell) $h
-            } elseif {$cell ne "" && [regexp $rc_re $line -> r h fl] && $h > 0} {
-                lappend cell_rule($cell) "$r $h"
-            }
-        } elseif {[string match "RULECHECK RESULTS STATISTICS*" $section] &&
-                  [regexp $rc_re $line -> r h fl]} {
-            set rule_h($r) $h
-            set rule_f($r) [expr {$fl ne "" ? $fl : $h}]
-        }
-    }
+    set f [open $run/groups.list r]
+    set groups [read $f]
     close $f
 
-    set fallback ""
-    if {[array size rule_h] == 0} {
-        # khong thay muc tong: cong tu muc theo cell (chi co so phan cap)
-        set fallback " (KHONG thay muc RULECHECK RESULTS STATISTICS - so cong tu muc BY CELL)"
-        foreach c [array names cell_rule] {
-            foreach item $cell_rule($c) {
-                lassign $item r h
-                set rule_h($r) [expr {[info exists rule_h($r)] ? $rule_h($r) + $h : $h}]
-                set rule_f($r) $rule_h($r)
-            }
-        }
-    }
-
-    # Mo ta luat: dong "@" dau tien sau dong mo khoi luat trong deck.
-    array set desc {}
-    if {[info exists CFG(DRC_DECK)] && [file isfile $CFG(DRC_DECK)]} {
-        set f [open $CFG(DRC_DECK) r]
-        set cur ""
-        while {[gets $f line] >= 0} {
-            if {[regexp {^\s*([A-Za-z0-9_.]+)\s*\{\s*$} $line -> cur]} {
-                continue
-            }
-            if {$cur ne "" && [regexp {^\s*@\s*(.*\S)} $line -> d]} {
-                if {$d ne $cur} {
-                    set desc($cur) $d
-                    set cur ""
-                }
-            }
-        }
-        close $f
-    }
-
-    set max_res [expr {[info exists CFG(DRC_MAX_RESULTS)] ? $CFG(DRC_MAX_RESULTS) : 1000}]
-    set bad {}
-    array set group {}
-    foreach r [array names rule_h] {
-        if {$rule_h($r) == 0 && $rule_f($r) == 0} {
+    set rules [dict create]
+    set cell_rule [dict create]
+    set warnings {}
+    set layers [dict create]
+    set errors {}
+    set status {}
+    set magnify ""
+    set complete 1
+    set n_all 0
+    foreach {g n} $groups {
+        incr n_all $n
+        set sum $run/$DESIGN.$g.drc.sum
+        set log $run/calibre_drc_$g.log
+        set head [format "    %-6s %4d rule  " $g $n]
+        if {![file isfile $log]} {
+            lappend status "${head}CHUA CHAY (make drc DRC_GROUPS=$g)"
+            set complete 0
             continue
         }
-        lappend bad [list $r $rule_h($r) $rule_f($r)]
+        copy_capped $log logs/calibre_drc_$g.log
+        if {$magnify eq ""} {
+            set magnify [magnify_note $log]
+        }
+        foreach e [grep_lines $log $err_re 5] {
+            lappend errors "$g: $e"
+        }
+        set L [drc_read_log $log]
+        set S [dict create done 0]
+        if {[file isfile $sum]} {
+            copy_capped $sum reports/$DESIGN.$g.drc.sum
+            set S [drc_read_sum $sum]
+        }
+        if {[dict get $S done]} {
+            set R [dict get $S rules]
+            foreach {c items} [dict get $S cell_rule] {
+                dict lappend cell_rule $c {*}$items
+            }
+            set layers [dict merge $layers [dict get $S layers]]
+            set warnings [concat $warnings [dict get $S warnings]]
+            set st "xong sau [fmt_secs [dict get $L elapsed]]"
+        } else {
+            set R [dict get $L rules]
+            set complete 0
+            set st "KHONG XONG (OPS COMPLETE = [dict get $L ops] sau [fmt_secs [dict get $L elapsed]],\
+ [dict size $R] rule da ra ket qua, so lay tu log)"
+        }
+        set h 0
+        set fl 0
+        foreach {r c} $R {
+            dict set rules $r $c
+            incr h [lindex $c 0]
+            incr fl [lindex $c 1]
+        }
+        if {[file isfile $gds] && [file mtime $log] < [file mtime $gds]} {
+            set complete 0
+            append st " - CU HON GDS, chay lai nhom nay"
+        }
+        lappend status "$head$st: $h vi pham ($fl phang)"
+    }
+
+    set total_h 0
+    set total_f 0
+    set bad {}
+    array set group {}
+    foreach {r c} $rules {
+        lassign $c h fl
+        incr total_h $h
+        incr total_f $fl
+        if {$h == 0 && $fl == 0} {
+            continue
+        }
+        lappend bad [list $r $h $fl]
         set g [lindex [split $r .] 0]
-        set group($g) [expr {[info exists group($g)] ? $group($g) + $rule_f($r) : $rule_f($r)}]
+        set group($g) [expr {[info exists group($g)] ? $group($g) + $fl : $fl}]
     }
     set bad [lsort -integer -decreasing -index 2 $bad]
+    set verdict [expr {$complete && $total_f == 0 ? "PASS" : "FAIL"}]
 
-    if {$total_h eq ""} {
-        lappend out "  Calibre CHUA CHAY XONG: $sum khong co dong TOTAL DRC Results Generated"
-        foreach e $errors {
-            lappend out "    $e"
-        }
-        write_summary FAIL $out
-        return
-    }
-    if {$total_f eq ""} {
-        set total_f $total_h
-    }
-    set verdict [expr {$total_f == 0 ? "PASS" : "FAIL"}]
+    lappend out "  magnify : [expr {$magnify ne "" ? $magnify : "?"}]"
+    lappend out "  nhom    : (run_drc/groups.list; chay lai mot nhom: make drc DRC_GROUPS=<nhom>)"
+    lappend out {*}$status
     lappend out "  ket qua : $total_h vi pham theo phan cap ($total_f phang), [llength $bad] rule co vi pham\
- / [expr {$executed ne "" ? $executed : [array size rule_h]}] rule da chay$fallback"
-    lappend out "  chi tiet: reports/$DESIGN.drc.sum, run_drc/$DESIGN.drc.db (mo bang Calibre RVE),\
- log logs/calibre_drc.log"
+ / [dict size $rules] rule co ket qua / $n_all rule[expr {$complete ? "" : " - CO NHOM CHUA XONG / CU, KHONG KET LUAN DUOC"}]"
+    lappend out "  chi tiet: reports/$DESIGN.<nhom>.drc.sum, run_drc/$DESIGN.<nhom>.drc.db (Calibre RVE),\
+ logs/calibre_drc_<nhom>.log"
     lappend out "  (*) = cham DRC MAXIMUM RESULTS $max_res: so that co the lon hon"
     if {[llength $errors]} {
         lappend out ""
@@ -259,6 +357,7 @@ proc summarize_drc {} {
         }
     }
     if {[llength $bad]} {
+        set desc [drc_rule_desc [expr {[info exists CFG(DRC_DECK)] ? $CFG(DRC_DECK) : ""}]]
         lappend out ""
         lappend out "Theo lop / nhom luat (so phang):"
         foreach g [lsort [array names group]] {
@@ -268,39 +367,46 @@ proc summarize_drc {} {
         lappend out "Rule co vi pham, giam dan theo so phang (phan cap / phang):"
         foreach item $bad {
             lassign $item r h fl
-            set mark [expr {$h >= $max_res ? "*" : " "}]
-            set d [expr {[info exists desc($r)] ? $desc($r) : ""}]
+            set mark [expr {[string is integer -strict $max_res] && $h >= $max_res ? "*" : " "}]
+            set d [expr {[dict exists $desc $r] ? [dict get $desc $r] : ""}]
             lappend out [format "  %-22s %8d%s %10d   %s" $r $h $mark $fl $d]
         }
-        lappend out ""
-        lappend out "Cell co vi pham (10 cell nhieu nhat, so phan cap; top_soc = hinh o muc top):"
-        set cells {}
-        foreach c [array names cell_tot] {
-            if {$cell_tot($c) > 0} {
-                lappend cells [list $c $cell_tot($c)]
+        set cell_n {}
+        foreach {c items} $cell_rule {
+            set n 0
+            foreach item $items {
+                incr n [lindex $item 1]
             }
+            lappend cell_n [list $c $n]
         }
-        foreach item [lrange [lsort -integer -decreasing -index 1 $cells] 0 9] {
-            lassign $item c n
-            set rules {}
-            if {[info exists cell_rule($c)]} {
-                foreach rr [lrange [lsort -integer -decreasing -index 1 $cell_rule($c)] 0 5] {
-                    lappend rules "[lindex $rr 0]=[lindex $rr 1]"
+        if {[llength $cell_n]} {
+            lappend out ""
+            lappend out "Cell co vi pham (10 cell nhieu nhat, so phan cap, chi nhom da xong;\
+ top_soc = hinh o muc top):"
+            foreach item [lrange [lsort -integer -decreasing -index 1 $cell_n] 0 9] {
+                lassign $item c n
+                set rr {}
+                foreach x [lrange [lsort -integer -decreasing -index 1 [dict get $cell_rule $c]] 0 5] {
+                    lappend rr "[lindex $x 0]=[lindex $x 1]"
                 }
+                lappend out [format "  %-34s %8d   %s" $c $n [join $rr {, }]]
             }
-            lappend out [format "  %-34s %8d   %s" $c $n [join $rules {, }]]
         }
     }
     if {[llength $warnings]} {
         lappend out ""
-        lappend out "RUNTIME WARNINGS (20 dong dau):"
+        lappend out "RUNTIME WARNINGS (20 dong dau moi nhom):"
         foreach w $warnings {
             lappend out "  $w"
         }
     }
-    if {[llength $layers]} {
+    if {[dict size $layers]} {
+        set ll {}
+        foreach {l n} $layers {
+            lappend ll "$l $n"
+        }
         lappend out ""
-        lappend out "So hinh goc theo lop (phang): [join $layers {, }]"
+        lappend out "So hinh goc theo lop (phang): [join $ll {, }]"
     }
     write_summary $verdict $out
 }
