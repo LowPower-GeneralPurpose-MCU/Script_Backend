@@ -114,6 +114,8 @@ for g in $groups; do
     # nhom sau cung vay - dung luon.
     if grep -q 'could not be licensed' $log; then
         echo "ERROR: Calibre khong lay duoc license (run_drc/$log) - dung, cac nhom sau chua chay"
+        echo "       tien trinh calibre cu (ke ca bi Ctrl+Z, STAT T) van giu license:"
+        echo "       ps -eo pid,stat,etime,cmd | grep -i [c]alibre"
         exit 1
     fi
 done
