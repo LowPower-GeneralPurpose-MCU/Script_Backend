@@ -108,4 +108,12 @@ for g in $groups; do
     echo "INFO: nhom $g ($(wc -l < rules_$g.list) rule) bat dau $(date '+%F %T'), log run_drc/$log"
     $CALIBRE -64 -drc -hier -turbo $CORES $HYPER $cal 2>&1 | tee $log
     echo "INFO: nhom $g ket thuc $(date '+%F %T'), ma thoat calibre ${PIPESTATUS[0]}"
+
+    # Lan 2026-10-25: ca 5 nhom dung o LICENSING MODULE ("could not be licensed
+    # sufficiently"), moi nhom mat ~5 phut cho license.  Khong co license thi
+    # nhom sau cung vay - dung luon.
+    if grep -q 'could not be licensed' $log; then
+        echo "ERROR: Calibre khong lay duoc license (run_drc/$log) - dung, cac nhom sau chua chay"
+        exit 1
+    fi
 done

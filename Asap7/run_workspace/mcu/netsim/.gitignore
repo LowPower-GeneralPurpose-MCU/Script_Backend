@@ -1,0 +1,9 @@
+# Thu muc chay xrun: xcelium.d, SDF da compile (.sdf.X ~ tram MB), waves.shm.
+# summarize.tcl chep log (cat bot) sang logs/ va ghi reports/.
+run_rtl/
+run_syn/
+run_func/
+run_sdf_max/
+run_sdf_min/
+# Output cua "nohup make all &" / "make ... > x.out": trung voi logs/.
+*.out

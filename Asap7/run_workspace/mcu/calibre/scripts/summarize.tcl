@@ -237,7 +237,8 @@ proc summarize_drc {} {
     }
     set gds [expr {[info exists CFG(GDS_FILE)] ? $CFG(GDS_FILE) : {?}}]
     set max_res [expr {[info exists CFG(DRC_MAX_RESULTS)] ? $CFG(DRC_MAX_RESULTS) : 1000}]
-    set err_re {(?i)^\s*(ERROR|\*\*\* ?ERROR|.*license.*(fail|denied|not available))}
+    # Calibre ghi loi license dang "//  ERROR: ... could not be licensed"
+    set err_re {(?i)^\s*(//\s*)?(ERROR|\*\*\* ?ERROR)|license.*(fail|denied|not available)|could not be licensed}
 
     set out [list "Calibre DRC $DESIGN - [clock format [clock seconds] -format {%Y-%m-%d %H:%M}]"]
     lappend out "  GDS     : [stamp $gds]"
