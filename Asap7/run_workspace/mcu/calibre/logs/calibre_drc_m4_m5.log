@@ -1,0 +1,592 @@
+//  Calibre v2025.2_38.18    Mon Jun 2 16:41:43 PDT 2025
+//  Calibre Utility Library   v0-10_13-2017-1    Wed Dec 11 07:38:03 PST 2024
+//  Litho Libraries v2025.2_38.18  Mon Jun 2 16:41:43 PDT 2025
+//
+//                   Copyright Siemens 1996-2025
+//                       All Rights Reserved.
+//   THIS WORK CONTAINS TRADE SECRET AND PROPRIETARY INFORMATION
+//      WHICH IS THE PROPERTY OF MENTOR GRAPHICS CORPORATION
+//        OR ITS LICENSORS AND IS SUBJECT TO LICENSE TERMS.
+//
+//  The registered trademark Linux is used pursuant to a sublicense from LMI, the
+//  exclusive licensee of Linus Torvalds, owner of the mark on a world-wide basis.
+//
+//  Mentor Graphics software executing under x86-64 Linux
+//
+//  Running on Linux user1-EliteMini (127.0.1.1) 7.0.0-38-generic #38-Ubuntu SMP PREEMPT_DYNAMIC Fri Sep  4 09:10:14 UTC 2026 x86_64 glibc 2.43/NPTL 2.43
+//  OS: Ubuntu 26.04.1 LTS[7.0.0-38-generic]
+//
+//  Entries in /proc/meminfo:
+//
+//  MemTotal:       13556624 kB
+//  MemFree:         7712584 kB
+//  MemAvailable:   11049428 kB
+//  Buffers:          273916 kB
+//  Cached:          3250120 kB
+//  SwapCached:       324544 kB
+//  Active:          2111804 kB
+//  Inactive:        2657776 kB
+//  Active(anon):    1121256 kB
+//  Inactive(anon):   175548 kB
+//  Active(file):     990548 kB
+//  Inactive(file):  2482228 kB
+//  Unevictable:         172 kB
+//  Mlocked:             172 kB
+//  SwapTotal:      62499836 kB
+//  SwapFree:       61111264 kB
+//  Zswap:                 0 kB
+//  Zswapped:              0 kB
+//  Dirty:               128 kB
+//  Writeback:             0 kB
+//  AnonPages:       1209400 kB
+//  Mapped:           627948 kB
+//  Shmem:             51584 kB
+//  KReclaimable:     232476 kB
+//  Slab:             500352 kB
+//  SReclaimable:     232476 kB
+//  SUnreclaim:       267876 kB
+//  KernelStack:       20852 kB
+//  PageTables:        47680 kB
+//  SecPageTables:      3680 kB
+//  NFS_Unstable:          0 kB
+//  Bounce:                0 kB
+//  WritebackTmp:          0 kB
+//  CommitLimit:    69278148 kB
+//  Committed_AS:   13129320 kB
+//  VmallocTotal:   34359738367 kB
+//  VmallocUsed:      133788 kB
+//  VmallocChunk:          0 kB
+//  Percpu:            19584 kB
+//  HardwareCorrupted:     0 kB
+//  AnonHugePages:         0 kB
+//  ShmemHugePages:        0 kB
+//  ShmemPmdMapped:        0 kB
+//  FileHugePages:    292864 kB
+//  FilePmdMapped:         0 kB
+//  CmaTotal:              0 kB
+//  CmaFree:         2476604 kB
+//  Unaccepted:            0 kB
+//  Balloon:               0 kB
+//  GPUActive:        317752 kB
+//  GPUReclaim:            0 kB
+//  HugePages_Total:       0
+//  HugePages_Free:        0
+//  HugePages_Rsvd:        0
+//  HugePages_Surp:        0
+//  Hugepagesize:       2048 kB
+//  Hugetlb:               0 kB
+//  DirectMap4k:      814596 kB
+//  DirectMap2M:    11544576 kB
+//  DirectMap1G:     3145728 kB
+//
+//  User limits:
+//
+//  Data size: unlimited
+//  RSS: unlimited
+//  Stack size: 8192 kB
+//  Max user processes: 42600
+//  VM: unlimited
+//  Current active profile: Unknown
+//  net.netfilter.nf_conntrack_max: 262144
+//  vm.max_map_count: 1048576
+//  vm.overcommit_memory: 0
+//  kernel.pid_max: 4194304
+//
+WARNING: Please increase descriptors limit for best performance (1024)
+//
+//  Processor AMD Ryzen 5 7545U [251200] (4th generation)
+//  CPU Info: Cores = 6, SMT enabled with 6 additional virtual processors, affinity = (12/12/12)
+//  Max file descriptors: 1024
+//  64 bit virtual addressing enabled
+//  Running aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre -drc -hier -turbo 2 run.drc.m4_m5.cal
+//  Process ID: 3837329
+//
+//  Starting time: Sun Oct 25 00:41:49 2026
+//
+
+--- CALIBRE_* ENVIRONMENT VARIABLES:
+
+CALIBRE_ATOMIC_LVHEAP='0'
+CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 2 run.drc.m4_m5.cal'
+CALIBRE_HOME='/Mentor/Calibre/aok_cal_2025.2_38.18'
+CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 2 run.drc.m4_m5.cal'
+CALIBRE_READDB_LD_LIBRARY_PATH='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib/julia:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib:/Mentor/Calibre/aok_cal_2025.2_38.18/shared/pkgs/icv/tools/calibre_client/lib/64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/calibre_base/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_lib/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_qt5_comp/plugins:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_oa/22.41p004/lib/linux_rhel68_gcc44x_64/opt:/lib:/lib32:/usr/lib:/usr/lib32:/usr/local/lib'
+CALIBRE_SKIP_OS_CHECKS=''
+//  Calibre Controller logfile = /tmp/CalibreControllerLog.user1-EliteMini.3837329.2026_1025_0041
+//  Calibre Controller Connection user1-EliteMini:46871
+//  Running on 2 CPUs (pending licensing) 
+//
+//  LITHO operations available for use on 2 CPUs (pending licensing)
+//
+//  Created Core System logfile = /tmp/CalibreRRLog.user1-EliteMini.3837329.2026_1025_0041
+
+--- CALIBRE::DRC-H - Sun Oct 25 00:43:49 2026
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-----          STANDARD VERIFICATION RULE FILE COMPILATION MODULE          -----
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+--- RULE FILE = run.drc.m4_m5.cal
+
+LAYOUT PRIMARY "top_soc"
+LAYOUT PATH "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc.gds"
+LAYOUT SYSTEM GDSII
+LAYOUT PRECISION 2000
+DRC RESULTS DATABASE "top_soc.m4_m5.drc.db" ASCII
+DRC SUMMARY REPORT "top_soc.m4_m5.drc.sum" HIER
+DRC MAXIMUM RESULTS 1000
+DRC SELECT CHECK M4.W.1
+DRC SELECT CHECK M4.W.2
+DRC SELECT CHECK M4.W.3
+DRC SELECT CHECK M4.W.4
+DRC SELECT CHECK M4.W.5
+DRC SELECT CHECK M4.S.1
+DRC SELECT CHECK M4.S.2
+DRC SELECT CHECK M4.S.3
+DRC SELECT CHECK M4.S.4
+DRC SELECT CHECK M4.S.5
+DRC SELECT CHECK M4.AUX.1
+DRC SELECT CHECK M4.AUX.2
+DRC SELECT CHECK M4.AUX.3
+DRC SELECT CHECK M4.AUX.4
+DRC SELECT CHECK M5.W.1
+DRC SELECT CHECK M5.W.2
+DRC SELECT CHECK M5.W.3
+DRC SELECT CHECK M5.W.4
+DRC SELECT CHECK M5.W.5
+DRC SELECT CHECK M5.S.1
+DRC SELECT CHECK M5.S.2
+DRC SELECT CHECK M5.S.3
+DRC SELECT CHECK M5.S.4
+DRC SELECT CHECK M5.S.5
+DRC SELECT CHECK M5.AUX.1
+DRC SELECT CHECK M5.AUX.2
+DRC SELECT CHECK M5.AUX.3
+DRC SELECT CHECK M5.AUX.4
+DRC SELECT CHECK V4.W.1
+DRC SELECT CHECK V4.S.1
+DRC SELECT CHECK V4.S.2
+DRC SELECT CHECK V4.S.3
+DRC SELECT CHECK V4.M4.EN.1
+DRC SELECT CHECK V4.M5.EN.2
+DRC SELECT CHECK V4.AUX.1
+DRC SELECT CHECK V4.M5.AUX.2
+INCLUDE "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/asap7_drc.rul"
+
+
+--- STANDARD VERIFICATION RULE FILE COMPILATION MODULE COMPLETED.  CPU TIME = 0  REAL TIME = 0  LVHEAP = 1/3/5
+
+--- CALIBRE_* ENVIRONMENT VARIABLES:
+
+CALIBRE_ATOMIC_LVHEAP='0'
+CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 2 run.drc.m4_m5.cal'
+CALIBRE_HOME='/Mentor/Calibre/aok_cal_2025.2_38.18'
+CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 2 run.drc.m4_m5.cal'
+CALIBRE_READDB_LD_LIBRARY_PATH='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib/julia:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib:/Mentor/Calibre/aok_cal_2025.2_38.18/shared/pkgs/icv/tools/calibre_client/lib/64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/calibre_base/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_lib/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_qt5_comp/plugins:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_oa/22.41p004/lib/linux_rhel68_gcc44x_64/opt:/lib:/lib32:/usr/lib:/usr/lib32:/usr/local/lib'
+CALIBRE_SKIP_OS_CHECKS=''
+
+
+--- VARIABLES:
+    VAR_OPT_MEEF_MIN 2.5
+    VAR_OPT_MEEF_MAX 4
+    VAR_OPT_CDU 0.001
+    VAR_OPT_ERR 0.002
+    VAR_EUV_MISALI 0.004
+    VAR_EUV_MISALI_GRDBND 0.005
+    VAR_OPT_MISALI 0.007
+    VAR_OPT_EUV_MISALI 0.005
+    VAR_OPT_EUV_MISALI_GRDBND 0.007
+    VAR_OPT_RES 0.04
+    VAR_BLOCK_MASK_W 0.04
+    VAR_BLOCK_MASK_T2T 0.044
+    VAR_M4_YOFFSET 270
+    VAR_M4_1X_DBU 240
+    VAR_M4_1X 0.024
+    VAR_M4_1X_DECOMP_GRID 960
+    VAR_M4_1X_OFFSET_GRIDA 120
+    VAR_M4_1X_OFFSET_GRIDB 600
+    VAR_M4_1X_OFFSET_GRIDA_TOT 390
+    VAR_M4_1X_OFFSET_GRIDB_TOT 870
+    VAR_M5_XOFFSET 240
+    VAR_M5_1X_DBU 240
+    VAR_M5_1X 0.024
+    VAR_M5_1X_DECOMP_GRID 960
+    VAR_M5_1X_OFFSET_GRIDA 120
+    VAR_M5_1X_OFFSET_GRIDB 600
+    VAR_M5_1X_OFFSET_GRIDA_TOT 360
+    VAR_M5_1X_OFFSET_GRIDB_TOT 840
+    VAR_M6_YOFFSET 200
+    VAR_M6_1X_DBU 320
+    VAR_M6_1X 0.032
+    VAR_M6_1X_DECOMP_GRID 1280
+    VAR_M6_1X_OFFSET_GRIDA 160
+    VAR_M6_1X_OFFSET_GRIDB 800
+    VAR_M6_1X_OFFSET_GRIDA_TOT 360
+    VAR_M6_1X_OFFSET_GRIDB_TOT 1000
+    VAR_M7_XOFFSET 200
+    VAR_M7_1X_DBU 320
+    VAR_M7_1X 0.032
+    VAR_M7_1X_DECOMP_GRID 1280
+    VAR_M7_1X_OFFSET_GRIDA 160
+    VAR_M7_1X_OFFSET_GRIDB 800
+    VAR_M7_1X_OFFSET_GRIDA_TOT 360
+    VAR_M7_1X_OFFSET_GRIDB_TOT 1000
+
+--- DEFINES:
+
+--- SELECTED RULE CHECKS:
+    M4.W.1
+    M4.W.2
+    M4.W.3
+    M4.W.4
+    M4.W.5
+    M4.S.1
+    M4.S.2
+    M4.S.3
+    M4.S.4
+    M4.S.5
+    M4.AUX.1
+    M4.AUX.2
+    M4.AUX.3
+    M4.AUX.4
+    M5.W.1
+    M5.W.2
+    M5.W.3
+    M5.W.4
+    M5.W.5
+    M5.S.1
+    M5.S.2
+    M5.S.3
+    M5.S.4
+    M5.S.5
+    M5.AUX.1
+    M5.AUX.2
+    M5.AUX.3
+    M5.AUX.4
+    V4.W.1
+    V4.S.1
+    V4.S.2
+    V4.S.3
+    V4.M4.EN.1
+    V4.M5.EN.2
+    V4.AUX.1
+    V4.M5.AUX.2
+
+--- UNSELECTED RULE CHECKS (IMPLICIT):
+    GEOMETRY.NONORTHOGONAL
+    WELL.W.1
+    WELL.W.2
+    WELL.S.1
+    WELL.S.2
+    WELL.A.1A
+    WELL.A.1B
+    WELL.GATE.EX.1
+    WELL.GATE.EX.2
+    FIN.W.1
+    FIN.W.2
+    FIN.S.1
+    FIN.AUX.1
+    GATE.W.1
+    GATE.W.2
+    GATE.S.1
+    GATE.S.2
+    GATE.S.3
+    GATE.AUX.1
+    GATE.AUX.2
+    GATE.ACTIVE.AUX.3
+    GATE.ACTIVE.EX.1
+    GATE.ACTIVE.EX.2
+    GATE.LIG.EX.3
+    GATE.ACTIVE.S.4
+    ACTIVE.FIN.EX.1
+    ACTIVE.W.1
+    ACTIVE.W.2
+    ACTIVE.W.3
+    ACTIVE.S.1
+    ACTIVE.S.2A
+    ACTIVE.S.2B
+    ACTIVE.WELL.S.4
+    SRAM.ACTIVE.WELL.S.5
+    ACTIVE.WELL.EN.1
+    SRAM.ACTIVE.WELL.EN.2
+    ACTIVE.A.1A
+    ACTIVE.A.1B
+    SRAM.ACTIVE.A.2A
+    SRAM.ACTIVE.A.2B
+    ACTIVE.AUX.1
+    SRAM.ACTIVE.AUX.2
+    ACTIVE.AUX.3
+    ACTIVE.LUP.1
+    GCUT.W.1
+    GCUT.ACTIVE.S.1
+    GCUT.GATE.EX.1
+    GCUT.GATE.S.2
+    GCUT.S.3
+    GCUT.AUX.1
+    GCUT.AUX.2
+    GCUT.AUX.3
+    NSELECT.W.1
+    NSELECT.W.2
+    NSELECT.ACTIVE.EN.1
+    NSELECT.ACTIVE.EN.2
+    SRAM.NSELECT.ACTIVE.EN.3
+    SRAM.NSELECT.ACTIVE.EN.4
+    NSELECT.GATE.EX.1
+    NSELECT.GATE.EX.2
+    PSELECT.W.1
+    PSELECT.W.2
+    PSELECT.ACTIVE.EN.1
+    PSELECT.ACTIVE.EN.2
+    SRAM.PSELECT.ACTIVE.EN.3
+    SRAM.PSELECT.ACTIVE.EN.4
+    PSELECT.GATE.EX.1
+    PSELECT.GATE.EX.2
+    NSELECT.PSELECT.AUX.1
+    SLVT.W.1
+    SLVT.W.2
+    SLVT.ACTIVE.EN.1
+    SLVT.ACTIVE.EN.2
+    SRAM.SLVT.ACTIVE.EN.3
+    SRAM.SLVT.ACTIVE.EN.4
+    SLVT.GATE.EX.1
+    SLVT.GATE.EX.2
+    LVT.W.1
+    LVT.W.2
+    LVT.ACTIVE.EN.1
+    LVT.ACTIVE.EN.2
+    SRAM.LVT.ACTIVE.EN.3
+    SRAM.LVT.ACTIVE.EN.4
+    LVT.GATE.EX.1
+    LVT.GATE.EX.2
+    SRAMVT.W.1
+    SRAMVT.W.2
+    SRAMVT.ACTIVE.EN.1
+    SRAMVT.ACTIVE.EN.2
+    SRAM.SRAMVT.ACTIVE.EN.3
+    SRAM.SRAMVT.ACTIVE.EN.4
+    SRAMVT.GATE.EX.1
+    SRAMVT.GATE.EX.2
+    VT.AUX.2
+    DUMMY.W.1
+    DUMMY.CHANNEL.S.1
+    DUMMY.CHANNEL.AUX.1
+    DUMMY.AUX.2
+    SDT.W.1
+    SDT.W.2
+    SDT.W.3
+    SRAM.SDT.W.4
+    SDT.S.1
+    SDT.GATE.S.2
+    SDT.ACTIVE.OV.1
+    SDT.LISD.OV.2
+    SRAM.SDT.ACTIVE.OV.3
+    SRAM.SDT.LISD.OV.4
+    SDT.GATE.AUX.1
+    SDT.ACTIVE.AUX.2
+    SDT.ACTIVE.AUX.3
+    SDT.LISD.AUX.4
+    LISD.W.1
+    LISD.S.1
+    LISD.S.2
+    LISD.S.3
+    SRAM.LISD.S.4
+    LISD.A.1
+    SRAM.LISD.AUX.1
+    LIG.W.1
+    LIG.S.1
+    LIG.S.2
+    LIG.S.3
+    LIG.S.4
+    LIG.S.5
+    LIG.LISD.S.6
+    LIG.LISD.S.7
+    LIG.SDT.S.8
+    LIG.GATE.S.9A
+    LIG.GATE.S.9B
+    LIG.GCUT.S.11
+    LIG.A.1
+    LIG.LISD.A.2
+    LIG.GATE.A.3
+    SRAM.LIG.GATE.A.4
+    LIG.GATE.AUX.1
+    SRAM.LIG.AUX.2
+    LIG.GATE.EX.1
+    LIG.LISD.OV.1
+    SRAM.LIG.GATE.OV.2
+    V0.W.1
+    V0.S.1
+    V0.S.2
+    V0.S.3
+    V0.S.4
+    V0.M1.EN.1
+    V0.LISD.EN.2
+    V0.LISD.EN.3
+    V0.LIG.EN.4
+    V0.LIG.A.1
+    V0.AUX.1
+    V0.LIG.AUX.2
+    V0.M1.AUX.3
+    M1.W.1
+    M1.S.1
+    M1.S.2
+    M1.S.3
+    M1.S.4
+    M1.S.5
+    M1.S.6
+    M1.A.1
+    M2.W.1
+    M2.S.1
+    M2.S.2
+    M2.S.3
+    M2.S.4
+    M2.S.5
+    M2.S.6
+    M2.A.1
+    M3.W.1
+    M3.S.1
+    M3.S.2
+    M3.S.3
+    M3.S.4
+    M3.S.5
+    M3.S.6
+    M3.A.1
+    V1.W.1
+    V1.S.1
+    V1.S.2
+    V1.S.3
+    V1.S.4
+    V1.M1.EN.1
+    V1.M2.EN.2
+    V1.AUX.1
+    V1.M2.AUX.2
+    V2.W.1
+    V2.S.1
+    V2.S.2
+    V2.S.3
+    V2.S.4
+    V2.M2.EN.1
+    V2.M3.EN.2
+    V2.AUX.1
+    V2.M3.AUX.2
+    V3.W.1
+    V3.S.1
+    V3.S.2
+    V3.S.3
+    V3.S.4
+    V3.M3.EN.1
+    V3.M4.EN.2
+    V3.AUX.1
+    V3.M4.AUX.2
+    M6.W.1
+    M6.W.2
+    M6.W.3
+    M6.W.4
+    M6.W.5
+    M6.S.1
+    M6.S.2
+    M6.S.3
+    M6.S.4
+    M6.S.5
+    M6.AUX.1
+    M6.AUX.2
+    M6.AUX.3
+    M6.AUX.4
+    M7.W.1
+    M7.W.2
+    M7.W.3
+    M7.W.4
+    M7.W.5
+    M7.S.1
+    M7.S.2
+    M7.S.3
+    M7.S.4
+    M7.S.5
+    M7.AUX.1
+    M7.AUX.2
+    M7.AUX.3
+    M7.AUX.4
+    V5.W.1
+    V5.S.1
+    V5.S.2
+    V5.S.3
+    V5.M5.EN.1
+    V5.M6.EN.2
+    V5.AUX.1
+    V5.M6.AUX.2
+    V6.W.1
+    V6.S.1
+    V6.S.2
+    V6.S.3
+    V6.M6.EN.1
+    V6.M7.EN.2
+    V6.AUX.1
+    V6.M7.AUX.2
+    V7.W.1
+    V7.S.1
+    V7.S.2
+    V7.S.3
+    V7.M7.EN.1
+    V7.M8.EN.2
+    V7.AUX.1
+    V7.M8.AUX.2
+    M8.W.1
+    M8.W.2
+    M8.W.3
+    M8.W.4
+    M8.W.5
+    M8.S.1
+    M8.S.2
+    M8.S.3
+    M8.S.4
+    M8.S.5
+    M8.S.6
+    M8.S.7
+    M8.S.8
+    M8.A.1
+    M8.L.1
+    M9.W.1
+    M9.W.2
+    M9.W.3
+    M9.W.4
+    M9.W.5
+    M9.S.1
+    M9.S.2
+    M9.S.3
+    M9.S.4
+    M9.S.5
+    M9.S.6
+    M9.S.7
+    M9.S.8
+    M9.A.1
+    M9.L.1
+    V8.W.1
+    V8.S.1
+    V8.S.2
+    V8.M8.EN.1
+    V8.M9.EN.2
+    V8.AUX.1
+    V9.W.1
+    V9.S.1
+    V9.S.2
+    V9.M9.EN.1
+    V9.PAD.EN.2
+    V9.AUX.1
+
+--- UNSELECTED RULE CHECKS (EXPLICIT):
+
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+-----                  CALIBRE::DRC-H - LICENSING MODULE                   -----
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
+
+
+//  Applying licensing policy...
+
+//  ERROR: Unable to acquire the first license for one or more products
+//  ERROR: The following products could not be licensed sufficiently:
+//  ERROR: - DRC (Hierarchical)
+//  ERROR: - DFM COPY
+

@@ -1,7 +1,3 @@
-INFO: VAR_M4_YOFFSET=270
-INFO: VAR_M5_XOFFSET=240
-INFO: VAR_M6_YOFFSET=200
-INFO: VAR_M7_XOFFSET=200
 //  Calibre v2025.2_38.18    Mon Jun 2 16:41:43 PDT 2025
 //  Calibre Utility Library   v0-10_13-2017-1    Wed Dec 11 07:38:03 PST 2024
 //  Litho Libraries v2025.2_38.18  Mon Jun 2 16:41:43 PDT 2025
@@ -23,55 +19,55 @@ INFO: VAR_M7_XOFFSET=200
 //  Entries in /proc/meminfo:
 //
 //  MemTotal:       13556624 kB
-//  MemFree:         3221520 kB
-//  MemAvailable:   11770632 kB
-//  Buffers:           92940 kB
-//  Cached:          8577668 kB
-//  SwapCached:       219580 kB
-//  Active:          2389404 kB
-//  Inactive:        6912932 kB
-//  Active(anon):     369780 kB
-//  Inactive(anon):   299004 kB
-//  Active(file):    2019624 kB
-//  Inactive(file):  6613928 kB
+//  MemFree:         7711040 kB
+//  MemAvailable:   11047484 kB
+//  Buffers:          274368 kB
+//  Cached:          3249312 kB
+//  SwapCached:       324540 kB
+//  Active:          2110396 kB
+//  Inactive:        2657376 kB
+//  Active(anon):    1119848 kB
+//  Inactive(anon):   175548 kB
+//  Active(file):     990548 kB
+//  Inactive(file):  2481828 kB
 //  Unevictable:         172 kB
 //  Mlocked:             172 kB
 //  SwapTotal:      62499836 kB
-//  SwapFree:       61107152 kB
+//  SwapFree:       61111284 kB
 //  Zswap:                 0 kB
 //  Zswapped:              0 kB
-//  Dirty:              1524 kB
+//  Dirty:                76 kB
 //  Writeback:             0 kB
-//  AnonPages:        604548 kB
-//  Mapped:           591308 kB
-//  Shmem:             37372 kB
-//  KReclaimable:     247104 kB
-//  Slab:             496152 kB
-//  SReclaimable:     247104 kB
-//  SUnreclaim:       249048 kB
-//  KernelStack:       19044 kB
-//  PageTables:        42012 kB
-//  SecPageTables:      3576 kB
+//  AnonPages:       1207532 kB
+//  Mapped:           627248 kB
+//  Shmem:             51628 kB
+//  KReclaimable:     232476 kB
+//  Slab:             500320 kB
+//  SReclaimable:     232476 kB
+//  SUnreclaim:       267844 kB
+//  KernelStack:       20600 kB
+//  PageTables:        46968 kB
+//  SecPageTables:      3680 kB
 //  NFS_Unstable:          0 kB
 //  Bounce:                0 kB
 //  WritebackTmp:          0 kB
 //  CommitLimit:    69278148 kB
-//  Committed_AS:   11664404 kB
+//  Committed_AS:   13127132 kB
 //  VmallocTotal:   34359738367 kB
-//  VmallocUsed:      131816 kB
+//  VmallocUsed:      133724 kB
 //  VmallocChunk:          0 kB
-//  Percpu:            17280 kB
+//  Percpu:            19584 kB
 //  HardwareCorrupted:     0 kB
 //  AnonHugePages:         0 kB
 //  ShmemHugePages:        0 kB
 //  ShmemPmdMapped:        0 kB
-//  FileHugePages:     22528 kB
+//  FileHugePages:    292864 kB
 //  FilePmdMapped:         0 kB
 //  CmaTotal:              0 kB
-//  CmaFree:          939176 kB
+//  CmaFree:         2476604 kB
 //  Unaccepted:            0 kB
 //  Balloon:               0 kB
-//  GPUActive:        233804 kB
+//  GPUActive:        317752 kB
 //  GPUReclaim:            0 kB
 //  HugePages_Total:       0
 //  HugePages_Free:        0
@@ -79,8 +75,8 @@ INFO: VAR_M7_XOFFSET=200
 //  HugePages_Surp:        0
 //  Hugepagesize:       2048 kB
 //  Hugetlb:               0 kB
-//  DirectMap4k:      615940 kB
-//  DirectMap2M:    11743232 kB
+//  DirectMap4k:      814596 kB
+//  DirectMap2M:    11544576 kB
 //  DirectMap1G:     3145728 kB
 //
 //  User limits:
@@ -102,43 +98,29 @@ WARNING: Please increase descriptors limit for best performance (1024)
 //  CPU Info: Cores = 6, SMT enabled with 6 additional virtual processors, affinity = (12/12/12)
 //  Max file descriptors: 1024
 //  64 bit virtual addressing enabled
-//  Running aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre -drc -hier -turbo 4 -hyper run.drc.cal
-//  Process ID: 669858
+//  Running aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre -drc -hier -turbo 2 run.drc.m6_m7.cal
+//  Process ID: 3863159
 //
-//  Starting time: Wed Oct 21 15:58:29 2026
+//  Starting time: Sun Oct 25 00:46:50 2026
 //
 
 --- CALIBRE_* ENVIRONMENT VARIABLES:
 
 CALIBRE_ATOMIC_LVHEAP='0'
-CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 4 -hyper run.drc.cal'
+CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 2 run.drc.m6_m7.cal'
 CALIBRE_HOME='/Mentor/Calibre/aok_cal_2025.2_38.18'
-CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 4 -hyper run.drc.cal'
+CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 2 run.drc.m6_m7.cal'
 CALIBRE_READDB_LD_LIBRARY_PATH='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib/julia:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib:/Mentor/Calibre/aok_cal_2025.2_38.18/shared/pkgs/icv/tools/calibre_client/lib/64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/calibre_base/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_lib/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_qt5_comp/plugins:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_oa/22.41p004/lib/linux_rhel68_gcc44x_64/opt:/lib:/lib32:/usr/lib:/usr/lib32:/usr/local/lib'
 CALIBRE_SKIP_OS_CHECKS=''
-//  Calibre Controller logfile = /tmp/CalibreControllerLog.user1-EliteMini.669858.2026_1021_1558
-//  Calibre Controller Connection user1-EliteMini:48793
-//  Running on 4 CPUs (pending licensing) 
+//  Calibre Controller logfile = /tmp/CalibreControllerLog.user1-EliteMini.3863159.2026_1025_0046
+//  Calibre Controller Connection user1-EliteMini:60299
+//  Running on 2 CPUs (pending licensing) 
 //
-//  LITHO operations available for use on 4 CPUs (pending licensing)
+//  LITHO operations available for use on 2 CPUs (pending licensing)
 //
+//  Created Core System logfile = /tmp/CalibreRRLog.user1-EliteMini.3863159.2026_1025_0046
 
-//  HYPERSCALING ENABLED with 4 pseudo HDBs
-
-//  Created Core System logfile = /tmp/CalibreRRLog.user1-EliteMini.669858.2026_1021_1558
-//  Initializing MT on HDB 0: 
-//  Creating log for pseudo HDB 1 on user1-EliteMini(pid=670045), logfile = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/CalibreHDBLog.user1-EliteMini.669858.2026_1021_1558.1
-//  Creating log for pseudo HDB 2 on user1-EliteMini(pid=670047), logfile = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/CalibreHDBLog.user1-EliteMini.669858.2026_1021_1558.2
-//  Creating log for pseudo HDB 3 on user1-EliteMini(pid=670046), logfile = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/CalibreHDBLog.user1-EliteMini.669858.2026_1021_1558.3
-//  Creating log for pseudo HDB 4 on user1-EliteMini(pid=670044), logfile = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/CalibreHDBLog.user1-EliteMini.669858.2026_1021_1558.4
-//  Assigning threads to Pseudo HDBs, threads allocated per PHDB = 4
-//  Initializing MT on pseudo HDB 1
-//  Initializing MT on pseudo HDB 2
-//  Initializing MT on pseudo HDB 3
-//  Initializing MT on pseudo HDB 4
-//  SMT utilized, running on maximum 4 additional virtual processors
-
---- CALIBRE::DRC-H - Wed Oct 21 15:58:29 2026
+--- CALIBRE::DRC-H - Sun Oct 25 00:48:50 2026
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -146,25 +128,70 @@ CALIBRE_SKIP_OS_CHECKS=''
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 
---- RULE FILE = run.drc.cal
+--- RULE FILE = run.drc.m6_m7.cal
 
 LAYOUT PRIMARY "top_soc"
 LAYOUT PATH "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc.gds"
 LAYOUT SYSTEM GDSII
-DRC RESULTS DATABASE "top_soc.drc.db" ASCII
-DRC SUMMARY REPORT "top_soc.drc.sum" HIER
+LAYOUT PRECISION 2000
+DRC RESULTS DATABASE "top_soc.m6_m7.drc.db" ASCII
+DRC SUMMARY REPORT "top_soc.m6_m7.drc.sum" HIER
 DRC MAXIMUM RESULTS 1000
+DRC SELECT CHECK M6.W.1
+DRC SELECT CHECK M6.W.2
+DRC SELECT CHECK M6.W.3
+DRC SELECT CHECK M6.W.4
+DRC SELECT CHECK M6.W.5
+DRC SELECT CHECK M6.S.1
+DRC SELECT CHECK M6.S.2
+DRC SELECT CHECK M6.S.3
+DRC SELECT CHECK M6.S.4
+DRC SELECT CHECK M6.S.5
+DRC SELECT CHECK M6.AUX.1
+DRC SELECT CHECK M6.AUX.2
+DRC SELECT CHECK M6.AUX.3
+DRC SELECT CHECK M6.AUX.4
+DRC SELECT CHECK M7.W.1
+DRC SELECT CHECK M7.W.2
+DRC SELECT CHECK M7.W.3
+DRC SELECT CHECK M7.W.4
+DRC SELECT CHECK M7.W.5
+DRC SELECT CHECK M7.S.1
+DRC SELECT CHECK M7.S.2
+DRC SELECT CHECK M7.S.3
+DRC SELECT CHECK M7.S.4
+DRC SELECT CHECK M7.S.5
+DRC SELECT CHECK M7.AUX.1
+DRC SELECT CHECK M7.AUX.2
+DRC SELECT CHECK M7.AUX.3
+DRC SELECT CHECK M7.AUX.4
+DRC SELECT CHECK V5.W.1
+DRC SELECT CHECK V5.S.1
+DRC SELECT CHECK V5.S.2
+DRC SELECT CHECK V5.S.3
+DRC SELECT CHECK V5.M5.EN.1
+DRC SELECT CHECK V5.M6.EN.2
+DRC SELECT CHECK V5.AUX.1
+DRC SELECT CHECK V5.M6.AUX.2
+DRC SELECT CHECK V6.W.1
+DRC SELECT CHECK V6.S.1
+DRC SELECT CHECK V6.S.2
+DRC SELECT CHECK V6.S.3
+DRC SELECT CHECK V6.M6.EN.1
+DRC SELECT CHECK V6.M7.EN.2
+DRC SELECT CHECK V6.AUX.1
+DRC SELECT CHECK V6.M7.AUX.2
 INCLUDE "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/asap7_drc.rul"
 
 
---- STANDARD VERIFICATION RULE FILE COMPILATION MODULE COMPLETED.  CPU TIME = 0  REAL TIME = 0  LVHEAP = 2/3/5
+--- STANDARD VERIFICATION RULE FILE COMPILATION MODULE COMPLETED.  CPU TIME = 0  REAL TIME = 0  LVHEAP = 1/3/5
 
 --- CALIBRE_* ENVIRONMENT VARIABLES:
 
 CALIBRE_ATOMIC_LVHEAP='0'
-CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 4 -hyper run.drc.cal'
+CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 2 run.drc.m6_m7.cal'
 CALIBRE_HOME='/Mentor/Calibre/aok_cal_2025.2_38.18'
-CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 4 -hyper run.drc.cal'
+CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 2 run.drc.m6_m7.cal'
 CALIBRE_READDB_LD_LIBRARY_PATH='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib/julia:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib:/Mentor/Calibre/aok_cal_2025.2_38.18/shared/pkgs/icv/tools/calibre_client/lib/64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/calibre_base/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_lib/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_qt5_comp/plugins:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_oa/22.41p004/lib/linux_rhel68_gcc44x_64/opt:/lib:/lib32:/usr/lib:/usr/lib32:/usr/local/lib'
 CALIBRE_SKIP_OS_CHECKS=''
 
@@ -218,6 +245,52 @@ CALIBRE_SKIP_OS_CHECKS=''
 --- DEFINES:
 
 --- SELECTED RULE CHECKS:
+    M6.W.1
+    M6.W.2
+    M6.W.3
+    M6.W.4
+    M6.W.5
+    M6.S.1
+    M6.S.2
+    M6.S.3
+    M6.S.4
+    M6.S.5
+    M6.AUX.1
+    M6.AUX.2
+    M6.AUX.3
+    M6.AUX.4
+    M7.W.1
+    M7.W.2
+    M7.W.3
+    M7.W.4
+    M7.W.5
+    M7.S.1
+    M7.S.2
+    M7.S.3
+    M7.S.4
+    M7.S.5
+    M7.AUX.1
+    M7.AUX.2
+    M7.AUX.3
+    M7.AUX.4
+    V5.W.1
+    V5.S.1
+    V5.S.2
+    V5.S.3
+    V5.M5.EN.1
+    V5.M6.EN.2
+    V5.AUX.1
+    V5.M6.AUX.2
+    V6.W.1
+    V6.S.1
+    V6.S.2
+    V6.S.3
+    V6.M6.EN.1
+    V6.M7.EN.2
+    V6.AUX.1
+    V6.M7.AUX.2
+
+--- UNSELECTED RULE CHECKS (IMPLICIT):
     GEOMETRY.NONORTHOGONAL
     WELL.W.1
     WELL.W.2
@@ -450,34 +523,6 @@ CALIBRE_SKIP_OS_CHECKS=''
     M5.AUX.2
     M5.AUX.3
     M5.AUX.4
-    M6.W.1
-    M6.W.2
-    M6.W.3
-    M6.W.4
-    M6.W.5
-    M6.S.1
-    M6.S.2
-    M6.S.3
-    M6.S.4
-    M6.S.5
-    M6.AUX.1
-    M6.AUX.2
-    M6.AUX.3
-    M6.AUX.4
-    M7.W.1
-    M7.W.2
-    M7.W.3
-    M7.W.4
-    M7.W.5
-    M7.S.1
-    M7.S.2
-    M7.S.3
-    M7.S.4
-    M7.S.5
-    M7.AUX.1
-    M7.AUX.2
-    M7.AUX.3
-    M7.AUX.4
     V4.W.1
     V4.S.1
     V4.S.2
@@ -486,22 +531,6 @@ CALIBRE_SKIP_OS_CHECKS=''
     V4.M5.EN.2
     V4.AUX.1
     V4.M5.AUX.2
-    V5.W.1
-    V5.S.1
-    V5.S.2
-    V5.S.3
-    V5.M5.EN.1
-    V5.M6.EN.2
-    V5.AUX.1
-    V5.M6.AUX.2
-    V6.W.1
-    V6.S.1
-    V6.S.2
-    V6.S.3
-    V6.M6.EN.1
-    V6.M7.EN.2
-    V6.AUX.1
-    V6.M7.AUX.2
     V7.W.1
     V7.S.1
     V7.S.2
@@ -553,13 +582,7 @@ CALIBRE_SKIP_OS_CHECKS=''
     V9.PAD.EN.2
     V9.AUX.1
 
---- UNSELECTED RULE CHECKS (IMPLICIT):
-
 --- UNSELECTED RULE CHECKS (EXPLICIT):
-//  Initializing RDS on pseudo HDB 1
-//  Initializing RDS on pseudo HDB 2
-//  Initializing RDS on pseudo HDB 3
-//  Initializing RDS on pseudo HDB 4
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -569,41 +592,9 @@ CALIBRE_SKIP_OS_CHECKS=''
 
 
 //  Applying licensing policy...
-//  calibrehdrc license acquired.
-//  calibredrc license acquired.
-//  calibrehdrc license acquired.
-//  calibredrc license acquired.
 
-//  Licensed Products
-//  -----------------
-//  Base products running on 4 cores:
-//  - DRC (Hierarchical)
-//  - DFM COPY
-
---- CALIBRE::DRC-H LICENSING MODULE COMPLETED.  CPU TIME = 0  REAL TIME = 1
-
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
------                   CALIBRE LAYOUT DATA INPUT MODULE                   -----
---------------------------------------------------------------------------------
---------------------------------------------------------------------------------
-
---- LAYOUT SYSTEM = GDS
---- LAYOUT MAGNIFICATION = AUTO
-
---------------------------------------------------------------------------------
------                     GDS FILE SUMMARY INFORMATION                     -----
---------------------------------------------------------------------------------
-
-GDS FILENAME:        /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc.gds
-GDS VERSION:         5
-LIBRARY NAME:        DesignLib
-LAST MODIFIED:       ON 2026/10/21 AT 1:31:51
-LAST ACCESSED:       ON 2026/10/21 AT 1:31:51
-DATABASE PRECISION:  0.0005 user units per database unit
-PHYSICAL PRECISION:  5e-10 meters per database unit
-MAGNIFICATION:       5
-SIZE:                541841358
-
-ERROR: LAYOUT [PATH] precision 4000 is not consistent with database precision 2000 in input file /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc.gds.
+//  ERROR: Unable to acquire the first license for one or more products
+//  ERROR: The following products could not be licensed sufficiently:
+//  ERROR: - DRC (Hierarchical)
+//  ERROR: - DFM COPY
 
