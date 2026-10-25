@@ -1,4 +1,4 @@
-TOOL:	xrun(64)	24.09-s006: Started on Oct 25, 2026 at 19:58:51 JST
+TOOL:	xrun(64)	24.09-s006: Started on Oct 25, 2026 at 22:22:19 JST
 xrun(64): 24.09-s006: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
 DEFINE std       ./STD
 |
@@ -749,28 +749,410 @@ xmelab: (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/me
 xmelab: (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/dcache.v,151): m_axi_arqos
 xmelab: (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/memory/dcache.v,152): m_axi_arregion
 
+	Top level design units:
+		tb_netsim
 		Caching library 'srambank_128x4x20_6t122' ....... Done
 		Caching library 'srambank_256x4x32_6t122' ....... Done
-    INVx1_ASAP7_75t_R u_cell (.A(i0), .Y(out));
-                           |
-xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_0@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
-    INVx1_ASAP7_75t_R u_cell (.A(i0), .Y(out));
-                           |
-xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_1@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
-    INVx1_ASAP7_75t_R u_cell (.A(i0), .Y(out));
-                           |
-xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_2@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
-    INVx1_ASAP7_75t_R u_cell (.A(i0), .Y(out));
-                           |
-xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_3@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
-    INVx1_ASAP7_75t_R u_cell (.A(i0), .Y(out));
-                           |
-xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_4@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
-    INVx1_ASAP7_75t_R u_cell (.A(i0), .Y(out));
-                           |
-xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_5@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
-    NAND2x1_ASAP7_75t_R u_cell (.A(i0), .B(i1), .Y(out));
-                             |
-xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,158|29): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_nand_nand_gate_0@xilinx_nand<module>.inst@xilinx_primitive_nand<module>.u_cell' of design unit 'NAND2x1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_nand:v'.
-xrun: *E,ELBERR: Error (*E) or soft error (*SE) occurred during elaboration (status 1), exiting.
-TOOL:	xrun(64)	24.09-s006: Exiting on Oct 25, 2026 at 19:58:54 JST  (total: 00:00:03)
+	Building instance overlay tables: .................... Done
+	Generating native compiled code:
+DEFINE std       ./STD
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+DEFINE cds_inhconn ./CDS_INHCONN
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,13): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/CDS_INHCONN' (cds.lib command ignored).
+DEFINE cds_spicelib ./CDS_SPICELIB
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,14): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/CDS_SPICELIB' (cds.lib command ignored).
+DEFINE cds_amsfunctions ./CDS_AMSFUNCTIONS
+|
+xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,15): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/CDS_AMSFUNCTIONS' (cds.lib command ignored).
+		worklib.sync_ff:v <0x54db2d61>
+			streams:   8, words:  2802
+		worklib.axi4_master_wr:v <0x7d32fa8e>
+			streams:  24, words:  8639
+		worklib.timeout_cnt:v <0x242bc6c3>
+			streams:   3, words:  1040
+		worklib.sync_ff:v <0x5796e273>
+			streams:   6, words:  1689
+		worklib.axi4_master_rd:v <0x6cccab36>
+			streams:  11, words:  4133
+		worklib.onehot_mux:v <0x7cf25777>
+			streams:   1, words:  1208
+		worklib.onehot_mux:v <0x4874f46f>
+			streams:   1, words:  1208
+		worklib.onehot_mux:v <0x1a341212>
+			streams:   1, words:  1184
+		worklib.dma_channel:v <0x633550fe>
+			streams:  67, words: 28121
+		worklib.dma_channel:v <0x1bfc8944>
+			streams:  67, words: 28129
+		worklib.dma_channel:v <0x23405318>
+			streams:  67, words: 28135
+		worklib.sync_ff:v <0x795d142d>
+			streams:   8, words:  2766
+		worklib.dma_channel:v <0x5b898aa2>
+			streams:  67, words: 28135
+		worklib.axi_apb_dma:v <0x169c653d>
+			streams:   1, words:   332
+		worklib.RingGenerator:v <0x7fd9d275>
+			streams:   4, words:  4837
+		worklib.xilinx_primitive_nand:v <0x314ae070>
+			streams:   0, words:     0
+		worklib.xilinx_primitive_not:v <0x271596b3>
+			streams:   0, words:     0
+		worklib.RingOscillator:v <0x3dd44d25>
+			streams:   0, words:     0
+		worklib.trng_128b:v <0x4ef8a3fd>
+			streams:   5, words:  1359
+		worklib.apb_ascon:v <0x24957f06>
+			streams:  28, words: 13686
+		worklib.apb_syscon:v <0x456f4c17>
+			streams:  19, words:  9077
+		worklib.apb_cordic:v <0x2abc590f>
+			streams:  28, words: 14871
+		worklib.apb_watchdog:v <0x6db0a293>
+			streams:  12, words:  4967
+		worklib.apb_i2c:v <0x4dc6bc16>
+			streams:  38, words: 18933
+		worklib.apb_spi:v <0x178d0d09>
+			streams:  34, words: 13379
+		worklib.apb_pwm:v <0x185c0e2e>
+			streams:  10, words:  4485
+		worklib.uart_rx:v <0x012d1c93>
+			streams:  13, words:  4620
+		worklib.uart_tx:v <0x08d2259a>
+			streams:   9, words:  3465
+		worklib.baud_gen:v <0x34485503>
+			streams:   8, words:  2255
+		worklib.sync_fifo:v <0x604f43af>
+			streams:  10, words:  3206
+		worklib.apb_uart:v <0x0f0cc697>
+			streams:  14, words:  5189
+		worklib.apb_interconnect:v <0x3a0b4e1c>
+			streams:  20, words: 11964
+		worklib.clint_timer:v <0x37e7943a>
+			streams:  16, words:  6730
+		worklib.clint_regfile:v <0x2f9ffde8>
+			streams:  20, words: 13808
+		worklib.clint_axi4_slave:v <0x5f895ff4>
+			streams:  38, words: 16445
+		worklib.sync_fifo:v <0x1b43c4cf>
+			streams:  10, words:  3380
+		worklib.sync_fifo:v <0x3637b99e>
+			streams:  10, words:  3642
+		worklib.axi_to_apb_bridge:v <0x634dfc6b>
+			streams:  41, words: 19761
+		worklib.axi_sdram_controller:v <0x5a177f7a>
+			streams:  40, words: 31400
+		worklib.axi_spi_flash:v <0x3f69f6ed>
+			streams:  31, words: 14373
+		worklib.axi_ram:v <0x62799c25>
+			streams:  35, words: 21614
+		worklib.axi_rom:v <0x781560c9>
+			streams:  23, words: 11131
+		worklib.ai_slave_arbitration:v <0x577aab8f>
+			streams:   0, words:     0
+		worklib.ai_slave_arbitration:v <0x66793e45>
+			streams:   0, words:     0
+		worklib.ai_slave_arbitration:v <0x503a67cd>
+			streams:   0, words:     0
+		worklib.ai_slave_arbitration:v <0x6139f207>
+			streams:   0, words:     0
+		worklib.ai_slave_arbitration:v <0x681d8399>
+			streams:   0, words:     0
+		worklib.sync_fifo:v <0x099ef8b0>
+			streams:  10, words:  3380
+		worklib.ai_slave_arbitration:v <0x5a5b552a>
+			streams:   0, words:     0
+		worklib.skid_buffer:v <0x62fad6fa>
+			streams:   8, words:  3062
+		worklib.skid_buffer:v <0x46cc1c23>
+			streams:   8, words:  2864
+		worklib.sync_fifo:v <0x75be6316>
+			streams:  11, words:  3523
+		worklib.sync_fifo:v <0x7283f153>
+			streams:  10, words:  3390
+		worklib.skid_buffer:v <0x58ce2ef5>
+			streams:   5, words:  1755
+		worklib.sync_fifo:v <0x70f54724>
+			streams:  11, words:  3529
+		worklib.skid_buffer:v <0x7ea91535>
+			streams:   5, words:  1756
+		worklib.onehot_encoder:v <0x4da03df1>
+			streams:   1, words:   977
+		worklib.arbiter_iwrr_1cycle:v <0x08385013>
+			streams:  11, words:  7268
+		worklib.sync_fifo:v <0x21ab9b81>
+			streams:  10, words:  3459
+		worklib.ai_slave_arbitration:v <0x6c180ca2>
+			streams:   0, words:     0
+		worklib.skid_buffer:v <0x102a6cc7>
+			streams:   5, words:  1761
+		worklib.sync_fifo:v <0x374bb0ad>
+			streams:  10, words:  3386
+		worklib.skid_buffer:v <0x3b659d40>
+			streams:   5, words:  1641
+		worklib.sync_fifo:v <0x20384e12>
+			streams:  10, words:  3197
+		worklib.sync_fifo:v <0x4be85932>
+			streams:  10, words:  3353
+		worklib.skid_buffer:v <0x0a9bc40c>
+			streams:   8, words:  3039
+		worklib.onehot_decoder:v <0x58425501>
+			streams:   2, words:   801
+		worklib.skid_buffer:v <0x02fcf848>
+			streams:   8, words:  3331
+		worklib.sync_fifo:v <0x4135295c>
+			streams:  10, words:  3391
+		worklib.ai_dispatcher:v <0x58933a71>
+			streams:   0, words:     0
+		worklib.tcm:v <0x449e48ce>
+			streams:  18, words: 17613
+		worklib.tcm:v <0x2ede3555>
+			streams:  21, words: 19366
+		worklib.dtm_axi_master:v <0x30244e76>
+			streams:  17, words:  9426
+		worklib.rv_debug_module_sba:v <0x1c2ab7cc>
+			streams:  42, words: 22198
+		worklib.rv_jtag_dtm:v <0x7bef7bc0>
+			streams:  24, words: 10765
+		worklib.data_cache:v <0x34fd1a71>
+			streams:  63, words: 45736
+		worklib.asap7_sram_tag_512x20:v <0x133c483d>
+			streams:   3, words:   604
+		worklib.instruction_cache:v <0x1017b617>
+			streams:  28, words: 16355
+		worklib.branch_history_table:v <0x7633df9a>
+			streams:   7, words:  3374
+		worklib.branch_target_buffer:v <0x5ab63f68>
+			streams:  11, words:  4569
+		worklib.branch_prediction_unit:v <0x1a55037f>
+			streams:   1, words:   670
+		worklib.pipeline_control_unit:v <0x56ec690b>
+			streams:  14, words:  6848
+		worklib.write_back:v <0x50e93c22>
+			streams:   2, words:   656
+		worklib.mem_wb_register:v <0x409c6936>
+			streams:   4, words:  2645
+		worklib.memory_access:v <0x59ad6264>
+			streams:  16, words:  5205
+		worklib.ex_mem_register:v <0x6c888394>
+			streams:   4, words: 10781
+		worklib.divider:v <0x5ca4717e>
+			streams:  15, words:  8531
+		worklib.multiplier:v <0x02758663>
+			streams:   9, words:  9935
+		worklib.execute:v <0x14546cd0>
+			streams:   5, words:  4970
+		worklib.forwarding_unit:v <0x10bdd0d4>
+			streams:   8, words:  3565
+		worklib.id_ex_register:v <0x5d4ba967>
+			streams:   4, words: 13413
+		worklib.register_file:v <0x61d41dfd>
+			streams:  10, words:  6845
+		worklib.csr_register_file:v <0x5cccea22>
+			streams:  54, words: 32146
+		worklib.alu_control_unit:v <0x561b1ce9>
+			streams:   1, words:  2868
+		worklib.main_control_unit:v <0x397ab964>
+			streams:   4, words: 28559
+		worklib.instruction_decode:v <0x6d5c0e9b>
+			streams:  21, words:  8918
+		worklib.if_id_register:v <0x3b866089>
+			streams:   4, words:  2493
+		worklib.riscv_c_decompressor:v <0x6db2d7d3>
+			streams:   7, words: 11078
+		worklib.instruction_fetch:v <0x1794f7ca>
+			streams:  14, words:  5560
+		worklib.riscv_pipeline:v <0x0510bb13>
+			streams:  65, words: 21500
+		worklib.clock_gate:v <0x71d94fec>
+			streams:   2, words:   488
+		worklib.clock_gate:v <0x4ed817af>
+			streams:   2, words:   488
+		worklib.cdc_sync_bit:v <0x30b29923>
+			streams:   3, words:   613
+		worklib.reset_sync:v <0x61f46231>
+			streams:   3, words:   724
+		worklib.top_soc:v <0x50789321>
+			streams: 127, words: 50320
+		worklib.pmp_unit:v <0x31ed2c32>
+			streams:  20, words: 26618
+		worklib.cache_data_array:v <0x2f50b816>
+			streams:   1, words:   178
+		worklib.cache_tag_array:v <0x7564ecfb>
+			streams:   1, words:   178
+		worklib.asap7_sram_1rw:v <0x1b8c156c>
+			streams:   7, words:  1448
+		worklib.axi_interconnect:v <0x73976978>
+			streams:  64, words: 20960
+		worklib.asap7_sram_1rw:v <0x2dfa9d53>
+			streams:   7, words:  1448
+		worklib.clint_irq_gen:v <0x45f18bbb>
+			streams:   7, words:  2067
+		worklib.apb_gpio:v <0x7252ef32>
+			streams:  21, words:  9652
+		worklib.clic:v <0x328b834b>
+			streams:  32, words: 24616
+		worklib.apb_timer:v <0x40115b48>
+			streams:  66, words: 35858
+		worklib.apb_pinmux:v <0x53d85576>
+			streams:  16, words: 23851
+		worklib.ascon_core:v <0x044862d4>
+			streams:  51, words: 28771
+		worklib.dma_engine:v <0x5271cc52>
+			streams: 107, words: 43016
+		worklib.tb_netsim:sv <0x4735c5e3>
+			streams:  22, words: 19412
+		worklib.asap7_sram_1rw:v <0x6c3f935a>
+			streams:   7, words:  1538
+		worklib.dsp_Ax_channel:v <0x766fe95c>
+			streams:  26, words: 11822
+		worklib.dsp_W_channel:v <0x2b7789bb>
+			streams:   7, words:  2112
+		worklib.dsp_B_channel:v <0x57d54dbb>
+			streams:  10, words:  3434
+		worklib.dsp_write_channel:v <0x5cb6d6d1>
+			streams:   1, words:   250
+		worklib.dsp_Ax_channel:v <0x435e58c9>
+			streams:  26, words: 11822
+		worklib.dsp_R_channel:v <0x08878d22>
+			streams:   8, words:  4277
+		worklib.dsp_read_channel:v <0x62afb8a4>
+			streams:   1, words:   208
+		worklib.sa_W_channel:v <0x52c68e0f>
+			streams:  23, words:  7570
+		worklib.sa_Ax_channel:v <0x7c983440>
+			streams:  39, words: 17270
+		worklib.sa_W_channel:v <0x30046aa4>
+			streams:  23, words:  7570
+		worklib.sa_B_channel:v <0x08b95cb8>
+			streams:  10, words:  2420
+		worklib.sa_Ax_channel:v <0x71937a90>
+			streams:  39, words: 16591
+		worklib.sa_R_channel:v <0x6a52ecbe>
+			streams:  67, words: 42872
+		worklib.splitting_4kb_masker:v <0x6000891e>
+			streams:  13, words:  3434
+		worklib.spi_flash_model:v <0x67a4f252>
+			streams:   7, words:  7558
+		srambank_256x4x32_6t122.srambank_256x4x32_6t122:v <0x5b5ddc8d>
+			streams:   3, words:  1376
+		srambank_128x4x20_6t122.srambank_128x4x20_6t122:v <0x4e752178>
+			streams:   3, words:  1464
+	Building instance specific data structures.
+	Loading native compiled code:     .................... Done
+	Design hierarchy summary:
+		                    Instances  Unique
+		Modules:                  630     102
+		Registers:              2,775   1,149
+		Scalar wires:           7,695       -
+		Expanded wires:        15,204   1,676
+		Vectored wires:         5,440       -
+		Always blocks:            970     200
+		Initial blocks:            14      14
+		Cont. assignments:      7,645   1,562
+		Pseudo assignments:       285       -
+		Process Clocks:           826      28
+		Simulation timescale:     1ps
+	Writing initial simulation snapshot: worklib.tb_netsim:sv
+DEFINE std       ./STD
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,1): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/STD' (cds.lib command ignored).
+DEFINE synopsys  ./SYNOPSYS
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,2): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/SYNOPSYS' (cds.lib command ignored).
+DEFINE ieee      ./IEEE
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,3): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/IEEE' (cds.lib command ignored).
+DEFINE ambit     ./AMBIT
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,4): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/AMBIT' (cds.lib command ignored).
+DEFINE vital_memory ./VITAL_MEMORY
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,5): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/VITAL_MEMORY' (cds.lib command ignored).
+DEFINE ncutils ./NCUTILS
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,6): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/NCUTILS' (cds.lib command ignored).
+DEFINE ncinternal ./NCINTERNAL
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,7): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/NCINTERNAL' (cds.lib command ignored).
+DEFINE ncmodels ./NCMODELS
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,8): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/NCMODELS' (cds.lib command ignored).
+DEFINE xmutils ./XMUTILS
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,9): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/XMUTILS' (cds.lib command ignored).
+DEFINE xminternal ./XMINTERNAL
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,10): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/XMINTERNAL' (cds.lib command ignored).
+DEFINE xmmodels ./XMMODELS
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,11): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/XMMODELS' (cds.lib command ignored).
+DEFINE cds_assertions ./CDS_ASSERTIONS
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,12): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/CDS_ASSERTIONS' (cds.lib command ignored).
+DEFINE cds_inhconn ./CDS_INHCONN
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,13): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/CDS_INHCONN' (cds.lib command ignored).
+DEFINE cds_spicelib ./CDS_SPICELIB
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,14): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/CDS_SPICELIB' (cds.lib command ignored).
+DEFINE cds_amsfunctions ./CDS_AMSFUNCTIONS
+|
+xmsim: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,15): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/CDS_AMSFUNCTIONS' (cds.lib command ignored).
+Loading snapshot worklib.tb_netsim:sv .................... Done
+xcelium> source /Cadence/XCELIUM/tools/xcelium/files/xmsimrc
+xcelium> run
+[FLASH] nap flash.hex: header 4255434d
+[NETSIM] timeout 400 us
+[NETSIM] t=100000 nha rst_n / trst_n
+[FLASH] t=1066000 Fast Read @000000
+[FLASH] t=4018000 Fast Read @000010
+[FLASH] t=7054000 Fast Read @000020
+[FLASH] t=10022000 Fast Read @000030
+[FLASH] t=12990000 Fast Read @000040
+[FLASH] t=15958000 Fast Read @000050
+[FLASH] t=18926000 Fast Read @000060
+[FLASH] t=21894000 Fast Read @000070
+[FLASH] t=24862000 Fast Read @000080
+[NETSIM][UART] t=28390000 byte 0 = 0x49
+[NETSIM][RESULT] FAIL: byte 0 = 0x49, mong doi 0x4e (t=28390000, UART 0/10 byte, flash doc 9 lan)
+Simulation complete via $finish(1) at time 28390 NS + 0
+../tb/tb_netsim.sv:111         $finish;
+xcelium> exit
+TOOL:	xrun(64)	24.09-s006: Exiting on Oct 25, 2026 at 22:22:32 JST  (total: 00:00:13)
