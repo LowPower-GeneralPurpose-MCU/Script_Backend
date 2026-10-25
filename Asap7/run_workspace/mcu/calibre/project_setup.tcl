@@ -24,10 +24,11 @@ proc cal_env {name default_value} {
 
 set HGVAR_DESIGN $TOP
 set HGVAR_CORES  [cal_env CAL_CORES 4]
-# -hyper can license hyperscaling va moi pseudo HDB giu mot ban du lieu: DRC
-# 2026-10-22 (4 HDB, 13 GB RAM) bi giet vi het bo nho.  Mac dinh tat;
-# CAL_HYPER=1 de bat.
-set HGVAR_HYPER  [expr {[cal_env CAL_HYPER 0] ? "-hyper" : ""}]
+# Mac dinh = dong lenh duy nhat da lay duoc license tren may nay (DRC
+# 2026-10-21: -turbo 4 -hyper).  2026-10-25 chay -turbo 2 khong -hyper thi ca 5
+# nhom dung o "Unable to acquire the first license".  CAL_HYPER=0 tat -hyper
+# (moi pseudo HDB giu mot ban du lieu: 2026-10-22 ca deck mot lan het RAM 13 GB).
+set HGVAR_HYPER  [expr {[cal_env CAL_HYPER 1] ? "-hyper" : ""}]
 set HGVAR_CALIBRE [cal_env CALIBRE calibre]
 set HGVAR_V2LVS   [cal_env V2LVS v2lvs]
 set HGVAR_V2LVS_OPTS [cal_env V2LVS_OPTS "-64 -sn"]

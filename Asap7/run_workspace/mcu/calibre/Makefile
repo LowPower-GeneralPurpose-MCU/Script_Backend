@@ -7,8 +7,8 @@
 #
 # Bien doi duoc tu dong lenh:
 #     make drc CAL_CORES=8          so CPU cho -turbo (mac dinh 4)
-#     make drc CAL_HYPER=1          bat -hyper (mac dinh tat: moi pseudo HDB giu
-#                                   mot ban du lieu, lan 2026-10-22 het RAM 13 GB)
+#     make drc CAL_HYPER=0          bo -hyper (mac dinh bat: -turbo 4 -hyper la lenh
+#                                   duy nhat da lay duoc license, xem project_setup.tcl)
 #     make drc DRC_GROUPS="m6_m7"   chi chay cac nhom rule nay, giu ket qua nhom khac
 #                                   trong run_drc/ (nhom: feol m1_m3 m4_m5 m6_m7 m8_m9,
 #                                   mac dinh ca 5 lan luot, xem run_drc.sh)
