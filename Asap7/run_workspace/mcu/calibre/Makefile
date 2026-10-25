@@ -4,6 +4,7 @@
 # run_<buoc>/ voi header run.<buoc>.cal + INCLUDE deck.
 #     cd Asap7/run_workspace/mcu/calibre && make drc
 #     cd Asap7/run_workspace/mcu/calibre && make lvs
+#     cd Asap7/run_workspace/mcu/calibre && make drc_lic   (thu license, vai phut)
 #
 # Bien doi duoc tu dong lenh:
 #     make drc CAL_CORES=8          so CPU cho -turbo (mac dinh 4)
@@ -34,7 +35,7 @@ export VAR_M4_YOFFSET VAR_M5_XOFFSET VAR_M6_YOFFSET VAR_M7_XOFFSET
 
 # clean_drc / clean_lvs KHONG khai .PHONY: make bo qua pattern rule clean_%
 # cho target .PHONY.
-.PHONY: setup drc lvs all clean
+.PHONY: setup drc drc_lic lvs all clean
 
 setup:
 	@tclsh scripts/gen_env.tcl
@@ -53,6 +54,16 @@ drc:
 	-cd run_$@ && /bin/bash ../scripts/run_drc.sh 2>&1 | tee calibre_$@.log
 	tclsh scripts/summarize.tcl $@
 	@head -n 1 $(SUMMARY_DRC) | grep -qx PASS || { echo "DRC KHONG DAT - xem $(SUMMARY_DRC)"; exit 1; }
+
+# Thu license (vai phut, khong chay rule nao, khong dung run_drc/ va reports/):
+# file cal cua make drc co / khong DRC SELECT CHECK, xem scripts/lic_probe.sh.
+# Can run_drc/ cua mot lan make drc truoc (dung o license cung duoc).
+drc_lic:
+	@/bin/mkdir -p logs
+	tclsh scripts/gen_env.tcl
+	/bin/rm -rf run_lic
+	/bin/mkdir -p run_lic
+	-cd run_lic && /bin/bash ../scripts/lic_probe.sh 2>&1 | tee ../logs/lic_probe.log
 
 lvs:
 	@/bin/echo "INFO: Running Calibre V2LVS + LVS"

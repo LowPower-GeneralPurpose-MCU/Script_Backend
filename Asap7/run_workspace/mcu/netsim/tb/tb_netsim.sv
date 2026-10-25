@@ -8,9 +8,11 @@
 // uut.wfi_sleep_state, uut.u_core.*) - netlist khong con ten do - va dua vao
 // firmware bake vao ROM, trong khi ROM cua netlist la boot ROM tang 1.
 //
-// Kich ban: boot ROM doc header flash -> chep chuong trinh cua
-// scripts/gen_flash_image.py vao ITCM -> chuong trinh chep EXPECT qua RAM hi
-// (macro SRAM) roi gui ra UART0 = PA0.  tb giai ma UART tren pad_out[0].
+// Kich ban: boot ROM doc header flash -> nhay vao chuong trinh cua
+// scripts/gen_flash_image.py, chay XIP trong flash qua I-cache -> chuong trinh
+// chep EXPECT qua RAM hi (macro SRAM) roi gui ra UART0 = PA0.  tb giai ma UART
+// tren pad_out[0].  Anh tb/netsim_flash_itcm.hex chay cung chuong trinh trong
+// ITCM: hien FAIL vi erratum E1 (MEMORY_ARCHITECTURE.md muc 3).
 //     [NETSIM][RESULT] PASS            nhan du EXPECT dung thu tu
 //     [NETSIM][RESULT] FAIL: <ly do>   sai byte, X tren chan, het gio
 // scripts/summarize.tcl doc dong RESULT.
@@ -160,7 +162,7 @@ module tb_netsim;
                 finish_fail($sformatf("byte %0d = 0x%02h, mong doi 0x%02h", n_rx, rx_byte, EXPECT[n_rx]));
             n_rx = n_rx + 1;
             if (n_rx == EXPECT.len()) begin
-                $display("[NETSIM][RESULT] PASS t=%0t UART \"NETSIM OK\" qua boot ROM -> flash -> ITCM -> SRAM, flash doc %0d lan",
+                $display("[NETSIM][RESULT] PASS t=%0t UART \"NETSIM OK\" qua boot ROM -> flash -> SRAM, flash doc %0d lan",
                          $time, u_flash.nreads);
                 $finish;
             end

@@ -2,6 +2,7 @@
 # summarize.tcl chep bao cao + log (cat bot) sang reports/ va logs/.
 run_drc/
 run_lvs/
+run_lic/
 # Sinh boi scripts/gen_env.tcl, chua duong dan tuyet doi cua may chay.
 scripts/sourceme
 # Output cua "nohup make drc &" / "make ... > x.out": trung voi logs/.

@@ -11,8 +11,11 @@
 # Netlist PnR khong chay unit delay (race gia qua cay CTS) - xem gen_env.tcl.
 #
 # Kich ban (tb/tb_netsim.sv): boot ROM trong netlist doc anh flash
-# tb/netsim_flash.hex, chep chuong trinh vao ITCM, chuong trinh gui
-# "NETSIM OK\n" qua RAM hi (SRAM) ra UART0/PA0.  make image sinh lai anh.
+# tb/netsim_flash.hex, nhay vao chuong trinh chay XIP trong flash qua I-cache,
+# chuong trinh gui "NETSIM OK\n" qua RAM hi (SRAM) ra UART0/PA0.  make image sinh
+# lai anh nay va tb/netsim_flash_itcm.hex (cung chuong trinh, chay trong ITCM):
+#     make rtl NS_FLASH_IMAGE=tb/netsim_flash_itcm.hex   hien FAIL 'I' do erratum E1
+# (MEMORY_ARCHITECTURE.md muc 3); phai PASS sau khi sua tcm.v.
 #
 # Bien doi duoc tu dong lenh:
 #     make func NS_NETLIST=...          netlist PnR khac (mac dinh innovus/outputs/top_soc_pnr.v)

@@ -1,23 +1,33 @@
 #!/usr/bin/env python3
-"""Sinh tb/netsim_flash.hex - anh QSPI flash cho tb_netsim.sv (make image).
+"""Sinh hai anh QSPI flash cho tb_netsim.sv (make image).
 
 Netlist chi chua boot ROM tang 1 (genus/rtl/memory/boot.mem, 26 lenh): ROM doc
-header o 0x3000_0000, chep payload toi `load` roi nhay toi `entry`.  Firmware
-Driver/ khong chay duoc tren netlist (no duoc bake vao ROM o mo phong RTL va
-link cho dia chi ROM), nen netsim chay chuong trinh nho duoi day, ma hoa tay
-vi may nay khong co toolchain RISC-V.
+header o 0x3000_0000; length = 0 thi nhay thang toi `entry` (XIP), con lai chep
+payload toi `load` roi moi nhay.  Firmware Driver/ khong chay duoc tren netlist
+(no duoc bake vao ROM o mo phong RTL va link cho dia chi ROM), nen netsim chay
+chuong trinh nho duoi day, ma hoa tay vi may nay khong co toolchain RISC-V.
 
-Chuong trinh (chep vao ITCM 0x0002_0000 va chay o do):
+Chuong trinh (doc lap vi tri: dia chi MSG lay bang auipc):
   1. UART0 CLK_DIV = 0x0010_0008 (TX 8 chu ky clk / bit, khop UART_DIV trong tb)
-  2. chep MSG tu ITCM (cong data) sang RAM hi 0x2002_0000 - vung uncached,
-     tuc ghi/doc thang macro SRAM, khong qua D-cache - roi `fence` de store
-     buffer xa het truoc khi doc lai (ket qua khong phu thuoc forward)
+  2. chep MSG (cong data) sang RAM hi 0x2002_0000 - vung uncached, tuc ghi/doc
+     thang macro SRAM, khong qua D-cache - roi `fence` de store buffer xa het
+     truoc khi doc lai (ket qua khong phu thuoc forward)
   3. doc lai tung byte tu RAM hi (lbu), cho TX_FULL = 0, ghi TX_DATA
   4. j .
-Duong boot da di qua: I-cache (fetch ROM), D-cache (doc flash), ITCM, AXI ->
-SRAM, APB -> UART, pinmux PA0.
 
-    python3 scripts/gen_flash_image.py            # ghi tb/netsim_flash.hex
+Hai anh, cung mot chuong trinh, chi khac header:
+  tb/netsim_flash.hex       XIP: chay tai cho o 0x3000_0010 qua I-cache, MSG doc
+                            qua D-cache.  Anh mac dinh cua netsim - kiem netlist.
+                            Duong da di qua: I-cache (ROM + flash), D-cache (flash),
+                            AXI -> SRAM, APB -> UART, pinmux PA0.
+  tb/netsim_flash_itcm.hex  chep vao ITCM 0x0002_0000 roi chay o do.  Doi chung
+                            cua erratum E1 (MEMORY_ARCHITECTURE.md muc 3): cong
+                            fetch ITCM tra lenh cu sau khi PC doi huong, nen tren
+                            RTL/netlist hien tai anh nay FAIL voi byte 0 = 0x49 'I'
+                            (make rtl 2026-10-25).  Sau khi sua tcm.v no phai PASS:
+                                make rtl NS_FLASH_IMAGE=tb/netsim_flash_itcm.hex
+
+    python3 scripts/gen_flash_image.py            # ghi ca hai file
 """
 import os
 
@@ -25,6 +35,8 @@ ZERO, T0, T1, T2, S0 = 0, 5, 6, 7, 8
 A0, A1, A2 = 10, 11, 12
 
 MAGIC = 0x4255434D          # "MCUB", xem MEMORY_ARCHITECTURE.md muc 6
+FLASH = 0x3000_0000
+HEADER_BYTES = 16
 ITCM = 0x0002_0000
 UART0 = 0x4000_0000         # 0x00 CLK_DIV, 0x04 TX_DATA, 0x0C STATUS ([2] TX_FULL)
 RAM_HI = 0x2002_0000        # SOC_IS_UNCACHED trong top_soc.v
@@ -112,11 +124,11 @@ emit(lambda pc: addi(T0, T0, UART_CLK_DIV & 0xFFF), "addi t0, t0, 8          CLK
 emit(lambda pc: sw(T0, 0x00, S0),                   "sw   t0, 0(s0)")
 label("here")
 emit(lambda pc: auipc(A0, 0),                       "auipc a0, 0")
-emit(lambda pc: addi(A0, A0, labels["msg"] - labels["here"]), "addi a0, a0, msg-here   a0 = &MSG (ITCM)")
+emit(lambda pc: addi(A0, A0, labels["msg"] - labels["here"]), "addi a0, a0, msg-here   a0 = &MSG")
 emit(lambda pc: lui(A1, RAM_HI >> 12),              "lui  a1, %hi(RAM_HI)")
 emit(lambda pc: addi(A2, ZERO, msg_words),          "addi a2, zero, %d" % msg_words)
 label("copy")
-emit(lambda pc: lw(T1, 0, A0),                      "lw   t1, 0(a0)          doc ITCM qua cong data")
+emit(lambda pc: lw(T1, 0, A0),                      "lw   t1, 0(a0)          doc MSG qua cong data")
 emit(lambda pc: sw(T1, 0, A1),                      "sw   t1, 0(a1)          ghi macro SRAM")
 emit(lambda pc: addi(A0, A0, 4),                    "addi a0, a0, 4")
 emit(lambda pc: addi(A1, A1, 4),                    "addi a1, a1, 4")
@@ -143,34 +155,53 @@ for i in range(msg_words):
     emit(lambda pc, w=int.from_bytes(chunk, "little"): w, "MSG %r" % chunk)
 
 payload = [(fn(4 * i), text) for i, (fn, text) in enumerate(prog)]
-header = [
-    (MAGIC, "magic  'MCUB'"),
-    (ITCM, "entry  ITCM"),
-    (ITCM, "load   ITCM"),
-    (4 * len(payload), "length %d byte" % (4 * len(payload))),
+payload_bytes = 4 * len(payload)
+
+# (file, tieu de, header, dia chi chay cua payload)
+IMAGES = [
+    ("netsim_flash.hex", "XIP: chay tai cho trong flash qua I-cache", [
+        (MAGIC, "magic  'MCUB'"),
+        (FLASH + HEADER_BYTES, "entry  flash + 16 (payload)"),
+        (0, "load   (bo qua khi length = 0)"),
+        (0, "length 0 = XIP"),
+    ], FLASH + HEADER_BYTES),
+    ("netsim_flash_itcm.hex", "chep vao ITCM - doi chung erratum E1, hien FAIL 'I'", [
+        (MAGIC, "magic  'MCUB'"),
+        (ITCM, "entry  ITCM"),
+        (ITCM, "load   ITCM"),
+        (payload_bytes, "length %d byte" % payload_bytes),
+    ], ITCM),
 ]
 
 
-def main():
-    here = os.path.dirname(os.path.abspath(__file__))
-    out = os.path.normpath(os.path.join(here, "..", "tb", "netsim_flash.hex"))
+def write_image(out, title, header, run_base):
     with open(out, "w", newline="\n") as f:
         f.write("// Sinh boi scripts/gen_flash_image.py - KHONG sua tay.\n")
         f.write("// Anh QSPI flash cho tb_netsim.sv: 4 byte / dong (little-endian), tu dia chi 0.\n")
+        f.write("// %s\n" % title)
         f.write("@0\n")
         addr = 0
         for section, words in (("header ", header), ("payload", payload)):
             for word, text in words:
-                where = "%08x" % (0x3000_0000 + addr)
-                if section == "payload":
-                    where += " ITCM %08x" % (ITCM + addr - 16)
+                where = "%08x" % (FLASH + addr)
+                if section == "payload" and run_base != FLASH + HEADER_BYTES:
+                    where += " chay %08x" % (run_base + addr - HEADER_BYTES)
+                elif section == "payload":
+                    where += " (XIP)        "
                 else:
                     where += "              "
                 f.write("%02x %02x %02x %02x  // %s %08x  %s\n" % (
                     word & 0xFF, (word >> 8) & 0xFF, (word >> 16) & 0xFF, (word >> 24) & 0xFF,
                     where, word, text))
                 addr += 4
-    print("%s: %d byte (header 16 + payload %d)" % (out, addr, 4 * len(payload)))
+    print("%s: %d byte (header %d + payload %d)" % (out, addr, HEADER_BYTES, payload_bytes))
+
+
+def main():
+    here = os.path.dirname(os.path.abspath(__file__))
+    for name, title, header, run_base in IMAGES:
+        out = os.path.normpath(os.path.join(here, "..", "tb", name))
+        write_image(out, title, header, run_base)
 
 
 if __name__ == "__main__":

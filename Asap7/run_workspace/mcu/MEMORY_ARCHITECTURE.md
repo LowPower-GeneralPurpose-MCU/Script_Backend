@@ -121,6 +121,63 @@ chu kỳ trước (bit `f_starved`). Không có luật này thì một chuỗi l
 tiếp có thể giữ fetch lại vô hạn. Tranh chấp chỉ xảy ra trong lúc copy code vào
 ITCM, tức là hoạt động boot-time; steady-state fetch không bao giờ stall.
 
+### Erratum E1 — fetch từ ITCM trả lệnh cũ sau khi PC đổi hướng (CHƯA SỬA)
+
+**Hiện tượng.** Code chạy trong ITCM có thể thực thi **thêm một lệnh rác** ngay
+sau một lần đổi hướng PC: branch dự đoán sai, `jal`, `jalr`, trap. Lệnh rác là
+word ITCM mà fetch đang đọc dở lúc đổi hướng, và nó mang PC của địa chỉ đích.
+Netlist Genus/PnR hiện tại tổng hợp từ RTL này nên **có lỗi y hệt**.
+
+**Phát hiện.** `make rtl` của netsim ngày 2026-10-25, ảnh chép vào ITCM: UART ra
+`0x49` ('I') thay vì 'N'. Vòng copy lần 1, `bne` chưa có trong BTB nên PC đổi
+hướng. Word đang đọc dở là `lui a1, %hi(RAM_HI)` ở `0x2003C`; lệnh này chạy thừa
+làm `a1` quay về đầu RAM hi, nên vòng 2 ghi "IM O" đè lên word 0. Vòng 2 được
+dự đoán đúng (BHT reset ở trạng thái weakly taken), không đổi hướng thêm.
+Chuỗi đó cho ra đúng byte 'I'. Chẩn đoán dựa trên đọc RTL và byte quan sát
+được, **chưa có waveform**.
+
+**Nguyên nhân** (ba điều kiện cùng lúc):
+
+1. `riscv_pipeline.v`: khi flush (trap/branch/jalr/jal), `pc_reg <= pc_out` chỉ
+   chờ `!dcache_stall`, nên PC đổi ngay cả khi cổng lệnh đang stall.
+2. `tcm.v`, cổng F: `resolve && owner == OWNER_F` hạ `f_stall` và trả
+   `mem[addr_q]` **mà không so `addr_q` với `f_addr` hiện tại**. I-cache có
+   đúng phép kiểm này ở `LOOKUP` (`cpu_addr == miss_addr`, lệch thì giữ stall);
+   `tcm.v` thì không.
+3. `flush_if_id` không gồm `flush_temp`, nên ở chu kỳ sau đổi hướng IF/ID chốt
+   word cũ với `pc = đích`, rồi mới lấy lệnh thật ở đích.
+
+Lỗi cần **cả hai đầu nằm trong ITCM**: fetch đang đọc dở là từ ITCM, và đích nhảy
+cũng ở ITCM. Lý do là `f_req` và mux lệnh trong `top_soc.v` đều chọn theo địa chỉ
+*hiện tại* (`if_sel_itcm`); đích ở ngoài thì câu trả lời của I-cache được dùng.
+Ngoài ra lần đổi hướng phải rơi đúng chu kỳ ITCM vừa cấp macro cho fetch
+(trạng thái `S_IDLE`). Nếu rơi vào `S_RESP` thì `flush_if_id` dập được, nên lỗi
+phụ thuộc chẵn/lẻ chu kỳ. Branch được BTB dự đoán đúng không flush nên không bị.
+Cổng D không bị: khi D đang chờ, EX/MEM bị đóng băng bởi `dcache_stall`, nên
+`d_addr` không đổi giữa chừng.
+
+**Vì sao các suite cũ không thấy.** Firmware `Driver/` chạy từ ROM qua I-cache.
+Không suite nào lấy lệnh từ ITCM; `tb_mem_paths` chỉ thử cổng load/store.
+
+**Hệ quả cho phần mềm.** Không an toàn: mọi lần đổi hướng ITCM → ITCM. Gồm
+`jal`/`jalr` giữa hai hàm cùng nằm trong ITCM, branch dự đoán sai, và trap/`mret`
+khi cả code bị ngắt lẫn ISR đều ở ITCM. Một vòng lặp trong ITCM dính ít nhất hai
+lần: vòng đầu (BTB miss) và lúc thoát (dự đoán sai). An toàn: code thẳng không
+nhảy, và các lần nhảy ra hoặc vào giữa ITCM với ROM/flash/RAM. Trên thực tế
+điều đó loại bỏ mục đích của ITCM (ISR, vòng lặp DSP). Cho tới khi sửa, chạy
+code từ ROM/flash (XIP) hoặc RAM qua I-cache; DTCM dùng bình thường.
+
+**Cách sửa đề xuất** (chưa làm, cần chạy lại Genus → Innovus → signoff): ở cổng
+F chỉ trả `f_hit` / hạ `f_stall` khi `addr_q[..:2] == f_addr[..:2]`. Nếu lệch
+thì giữ stall; FSM đằng nào cũng về `S_IDLE` và cấp lại theo địa chỉ mới.
+
+**Kiểm tra.** Netsim mặc định chạy XIP (`tb/netsim_flash.hex`) nên không đi qua
+lỗi này. `tb/netsim_flash_itcm.hex` là đối chứng âm, cùng chương trình nhưng chạy
+trong ITCM: hiện FAIL 'I', sau khi sửa phải PASS.
+```
+cd netsim && make rtl NS_FLASH_IMAGE=tb/netsim_flash_itcm.hex
+```
+
 ## 4. Read-modify-write cho ghi dưới 32 bit
 
 Macro không có byte-write mask, nên ghi byte/halfword phải đọc word cũ, trộn byte
@@ -227,7 +284,9 @@ RISC-V; mã hoá và bốn kịch bản bên dưới đã chạy trên một ISS
 
 Kịch bản đã kiểm trên ISS: flash trống → `park`; ảnh XIP → nhảy vào flash; ảnh
 chép vào ITCM → ITCM khớp payload rồi chạy ở đó; `entry` không map → trap handler
-ROM với `mcause = 1`.
+ROM với `mcause = 1`. Trên RTL thật (netsim 2026-10-25), boot ROM chép đúng vào
+ITCM, nhưng chương trình chạy trong ITCM sai vì erratum E1 (mục 3). Vì vậy netsim
+dùng ảnh XIP.
 
 **Vòng chờ dùng `j .`, cố ý không dùng `wfi`.** `sleeping_reg` trong
 `pipeline_control_unit.v` chỉ được xoá bằng ngắt đã bật. Debugger halt rồi resume

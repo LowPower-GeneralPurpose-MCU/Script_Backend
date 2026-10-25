@@ -1,36 +1,37 @@
 // Sinh boi scripts/gen_flash_image.py - KHONG sua tay.
 // Anh QSPI flash cho tb_netsim.sv: 4 byte / dong (little-endian), tu dia chi 0.
+// XIP: chay tai cho trong flash qua I-cache
 @0
 4d 43 55 42  // 30000000               4255434d  magic  'MCUB'
-00 00 02 00  // 30000004               00020000  entry  ITCM
-00 00 02 00  // 30000008               00020000  load   ITCM
-74 00 00 00  // 3000000c               00000074  length 116 byte
-37 04 00 40  // 30000010 ITCM 00020000 40000437  lui  s0, %hi(UART0)
-b7 02 10 00  // 30000014 ITCM 00020004 001002b7  lui  t0, 0x00100
-93 82 82 00  // 30000018 ITCM 00020008 00828293  addi t0, t0, 8          CLK_DIV = 0x0010_0008
-23 20 54 00  // 3000001c ITCM 0002000c 00542023  sw   t0, 0(s0)
-17 05 00 00  // 30000020 ITCM 00020010 00000517  auipc a0, 0
-13 05 85 05  // 30000024 ITCM 00020014 05850513  addi a0, a0, msg-here   a0 = &MSG (ITCM)
-b7 05 02 20  // 30000028 ITCM 00020018 200205b7  lui  a1, %hi(RAM_HI)
-13 06 30 00  // 3000002c ITCM 0002001c 00300613  addi a2, zero, 3
-03 23 05 00  // 30000030 ITCM 00020020 00052303  lw   t1, 0(a0)          doc ITCM qua cong data
-23 a0 65 00  // 30000034 ITCM 00020024 0065a023  sw   t1, 0(a1)          ghi macro SRAM
-13 05 45 00  // 30000038 ITCM 00020028 00450513  addi a0, a0, 4
-93 85 45 00  // 3000003c ITCM 0002002c 00458593  addi a1, a1, 4
-13 06 f6 ff  // 30000040 ITCM 00020030 fff60613  addi a2, a2, -1
-e3 16 06 fe  // 30000044 ITCM 00020034 fe0616e3  bne  a2, zero, copy
-0f 00 f0 0f  // 30000048 ITCM 00020038 0ff0000f  fence                   xa store buffer
-b7 05 02 20  // 3000004c ITCM 0002003c 200205b7  lui  a1, %hi(RAM_HI)
-13 06 a0 00  // 30000050 ITCM 00020040 00a00613  addi a2, zero, 10
-03 c3 05 00  // 30000054 ITCM 00020044 0005c303  lbu  t1, 0(a1)          doc lai tu macro SRAM
-83 23 c4 00  // 30000058 ITCM 00020048 00c42383  lw   t2, 12(s0)         UART0 STATUS
-93 f3 43 00  // 3000005c ITCM 0002004c 0043f393  andi t2, t2, 4          TX_FULL
-e3 9c 03 fe  // 30000060 ITCM 00020050 fe039ce3  bne  t2, zero, wait
-23 22 64 00  // 30000064 ITCM 00020054 00642223  sw   t1, 4(s0)          TX_DATA
-93 85 15 00  // 30000068 ITCM 00020058 00158593  addi a1, a1, 1
-13 06 f6 ff  // 3000006c ITCM 0002005c fff60613  addi a2, a2, -1
-e3 12 06 fe  // 30000070 ITCM 00020060 fe0612e3  bne  a2, zero, send
-6f 00 00 00  // 30000074 ITCM 00020064 0000006f  j    .
-4e 45 54 53  // 30000078 ITCM 00020068 5354454e  MSG b'NETS'
-49 4d 20 4f  // 3000007c ITCM 0002006c 4f204d49  MSG b'IM O'
-4b 0a 00 00  // 30000080 ITCM 00020070 00000a4b  MSG b'K\n\x00\x00'
+10 00 00 30  // 30000004               30000010  entry  flash + 16 (payload)
+00 00 00 00  // 30000008               00000000  load   (bo qua khi length = 0)
+00 00 00 00  // 3000000c               00000000  length 0 = XIP
+37 04 00 40  // 30000010 (XIP)         40000437  lui  s0, %hi(UART0)
+b7 02 10 00  // 30000014 (XIP)         001002b7  lui  t0, 0x00100
+93 82 82 00  // 30000018 (XIP)         00828293  addi t0, t0, 8          CLK_DIV = 0x0010_0008
+23 20 54 00  // 3000001c (XIP)         00542023  sw   t0, 0(s0)
+17 05 00 00  // 30000020 (XIP)         00000517  auipc a0, 0
+13 05 85 05  // 30000024 (XIP)         05850513  addi a0, a0, msg-here   a0 = &MSG
+b7 05 02 20  // 30000028 (XIP)         200205b7  lui  a1, %hi(RAM_HI)
+13 06 30 00  // 3000002c (XIP)         00300613  addi a2, zero, 3
+03 23 05 00  // 30000030 (XIP)         00052303  lw   t1, 0(a0)          doc MSG qua cong data
+23 a0 65 00  // 30000034 (XIP)         0065a023  sw   t1, 0(a1)          ghi macro SRAM
+13 05 45 00  // 30000038 (XIP)         00450513  addi a0, a0, 4
+93 85 45 00  // 3000003c (XIP)         00458593  addi a1, a1, 4
+13 06 f6 ff  // 30000040 (XIP)         fff60613  addi a2, a2, -1
+e3 16 06 fe  // 30000044 (XIP)         fe0616e3  bne  a2, zero, copy
+0f 00 f0 0f  // 30000048 (XIP)         0ff0000f  fence                   xa store buffer
+b7 05 02 20  // 3000004c (XIP)         200205b7  lui  a1, %hi(RAM_HI)
+13 06 a0 00  // 30000050 (XIP)         00a00613  addi a2, zero, 10
+03 c3 05 00  // 30000054 (XIP)         0005c303  lbu  t1, 0(a1)          doc lai tu macro SRAM
+83 23 c4 00  // 30000058 (XIP)         00c42383  lw   t2, 12(s0)         UART0 STATUS
+93 f3 43 00  // 3000005c (XIP)         0043f393  andi t2, t2, 4          TX_FULL
+e3 9c 03 fe  // 30000060 (XIP)         fe039ce3  bne  t2, zero, wait
+23 22 64 00  // 30000064 (XIP)         00642223  sw   t1, 4(s0)          TX_DATA
+93 85 15 00  // 30000068 (XIP)         00158593  addi a1, a1, 1
+13 06 f6 ff  // 3000006c (XIP)         fff60613  addi a2, a2, -1
+e3 12 06 fe  // 30000070 (XIP)         fe0612e3  bne  a2, zero, send
+6f 00 00 00  // 30000074 (XIP)         0000006f  j    .
+4e 45 54 53  // 30000078 (XIP)         5354454e  MSG b'NETS'
+49 4d 20 4f  // 3000007c (XIP)         4f204d49  MSG b'IM O'
+4b 0a 00 00  // 30000080 (XIP)         00000a4b  MSG b'K\n\x00\x00'
