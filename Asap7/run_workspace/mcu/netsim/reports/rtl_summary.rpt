@@ -1,0 +1,19 @@
+FAIL
+che do   : rtl
+rtl      : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl (54 file) (2026-10-21 15:52)
+flash    : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/netsim/tb/netsim_flash.hex (2026-10-25 01:40)
+ket qua  : (khong co)
+UART     : 0 byte nhan tren PA0
+flash    : 0 lenh doc da log 
+loi Xcelium (toi da 20):
+    xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_0@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
+    xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_1@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
+    xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_2@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
+    xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_3@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
+    xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_4@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
+    xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,171|27): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_invs_not_gate_5@xilinx_not<module>.inst@xilinx_primitive_not<module>.u_cell' of design unit 'INVx1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_not:v'.
+    xmelab: *E,CUVMUR (/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl/apb_ascon/trng_128b.v,158|29): instance 'tb_netsim.uut@top_soc<module>.u_apb_ascon@apb_ascon<module>.u_trng@trng_128b<module>.ro@RingOscillator<module>.ro_nand_nand_gate_0@xilinx_nand<module>.inst@xilinx_primitive_nand<module>.u_cell' of design unit 'NAND2x1_ASAP7_75t_R' is unresolved in 'worklib.xilinx_primitive_nand:v'.
+    xrun: *E,ELBERR: Error (*E) or soft error (*SE) occurred during elaboration (status 1), exiting.
+canh bao log (top 10): *W,DLCPTH=135, *W,NONPRT=9, *W,CUVWSP=2
+KHONG DAT: tb khong in [NETSIM][RESULT]: elaborate/mo phong dung giua chung
+KHONG DAT: 8 dong *E/*F cua Xcelium (toi da 20 dong duoc dem)
