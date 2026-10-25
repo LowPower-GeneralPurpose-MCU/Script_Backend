@@ -8,7 +8,7 @@
 ## Thieu dau vao -> ghi FAIL vao reports/<che do>_summary.rpt va thoat 1.
 ##     tclsh scripts/gen_env.tcl rtl|syn|func|sdf_max|sdf_min
 ##
-## Che do:  rtl      RTL + define cua Genus, khong delay
+## Che do:  rtl      RTL + define SYNTHESIS (khong ASAP7, xem nhanh rtl), khong delay
 ##          syn      netlist Genus, unit delay, khong kiem timing
 ##          func     netlist PnR + SDF SS (MAXIMUM), khong kiem timing
 ##          sdf_max  netlist PnR + SDF SS (MAXIMUM) + kiem setup/hold
@@ -141,8 +141,13 @@ if {$NETLIST_MODE} {
 }
 switch -- $MODE {
     rtl {
-        lappend L "// Cung define Genus dung khi read_hdl (genus/tcl/genus.tcl)"
-        lappend L "+define+ASAP7+SYNTHESIS"
+        # Genus doc RTL voi -define {ASAP7 SYNTHESIS}, nhung ASAP7 chi doi ring
+        # oscillator cua TRNG (apb_ascon/trng_128b.v) sang cell INVx1/NAND2x1
+        # ASAP7.  Model cell tre 0 -> vong dao dong vo han trong cung mot thoi
+        # diem; khong co model thi xmelab CUVMUR (make rtl 2026-10-25).  Bo
+        # ASAP7 de dung nhanh `assign #0.05` ma mo phong RTL van chay.
+        lappend L "// Chi SYNTHESIS (bo ASAP7: nhanh ring oscillator hanh vi cua trng_128b.v)"
+        lappend L "+define+SYNTHESIS"
         foreach d $rtl_incdirs {
             lappend L "-incdir [file normalize $d]"
         }
