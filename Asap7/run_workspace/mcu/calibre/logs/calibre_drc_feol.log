@@ -18,65 +18,65 @@
 //
 //  Entries in /proc/meminfo:
 //
-//  MemTotal:       13556624 kB
-//  MemFree:         7708552 kB
-//  MemAvailable:   11043612 kB
-//  Buffers:          272992 kB
-//  Cached:          3249192 kB
-//  SwapCached:       324260 kB
-//  Active:          2109064 kB
-//  Inactive:        2656472 kB
-//  Active(anon):    1118984 kB
-//  Inactive(anon):   175544 kB
-//  Active(file):     990080 kB
-//  Inactive(file):  2480928 kB
+//  MemTotal:       13556636 kB
+//  MemFree:         4305572 kB
+//  MemAvailable:   10304984 kB
+//  Buffers:          203440 kB
+//  Cached:          6055092 kB
+//  SwapCached:            0 kB
+//  Active:          3911632 kB
+//  Inactive:        4197512 kB
+//  Active(anon):    2042164 kB
+//  Inactive(anon):        0 kB
+//  Active(file):    1869468 kB
+//  Inactive(file):  4197512 kB
 //  Unevictable:         172 kB
 //  Mlocked:             172 kB
 //  SwapTotal:      62499836 kB
-//  SwapFree:       61111228 kB
+//  SwapFree:       62499836 kB
 //  Zswap:                 0 kB
 //  Zswapped:              0 kB
-//  Dirty:               252 kB
+//  Dirty:               936 kB
 //  Writeback:             0 kB
-//  AnonPages:       1207752 kB
-//  Mapped:           627912 kB
-//  Shmem:             51500 kB
-//  KReclaimable:     232460 kB
-//  Slab:             500628 kB
-//  SReclaimable:     232460 kB
-//  SUnreclaim:       268168 kB
-//  KernelStack:       20832 kB
-//  PageTables:        46884 kB
-//  SecPageTables:      3680 kB
+//  AnonPages:       1851068 kB
+//  Mapped:          1323632 kB
+//  Shmem:            191648 kB
+//  KReclaimable:     263988 kB
+//  Slab:             539908 kB
+//  SReclaimable:     263988 kB
+//  SUnreclaim:       275920 kB
+//  KernelStack:       20240 kB
+//  PageTables:        41476 kB
+//  SecPageTables:      3404 kB
 //  NFS_Unstable:          0 kB
 //  Bounce:                0 kB
 //  WritebackTmp:          0 kB
-//  CommitLimit:    69278148 kB
-//  Committed_AS:   13127096 kB
+//  CommitLimit:    69278152 kB
+//  Committed_AS:   11896824 kB
 //  VmallocTotal:   34359738367 kB
-//  VmallocUsed:      133932 kB
+//  VmallocUsed:      133680 kB
 //  VmallocChunk:          0 kB
-//  Percpu:            19440 kB
+//  Percpu:            16176 kB
 //  HardwareCorrupted:     0 kB
 //  AnonHugePages:         0 kB
 //  ShmemHugePages:        0 kB
 //  ShmemPmdMapped:        0 kB
-//  FileHugePages:    292864 kB
-//  FilePmdMapped:         0 kB
+//  FileHugePages:   1646592 kB
+//  FilePmdMapped:     61440 kB
 //  CmaTotal:              0 kB
-//  CmaFree:         2476604 kB
+//  CmaFree:         1382300 kB
 //  Unaccepted:            0 kB
 //  Balloon:               0 kB
-//  GPUActive:        317752 kB
-//  GPUReclaim:            0 kB
+//  GPUActive:        147168 kB
+//  GPUReclaim:        80612 kB
 //  HugePages_Total:       0
 //  HugePages_Free:        0
 //  HugePages_Rsvd:        0
 //  HugePages_Surp:        0
 //  Hugepagesize:       2048 kB
 //  Hugetlb:               0 kB
-//  DirectMap4k:      814596 kB
-//  DirectMap2M:    11544576 kB
+//  DirectMap4k:      550404 kB
+//  DirectMap2M:    11808768 kB
 //  DirectMap1G:     3145728 kB
 //
 //  User limits:
@@ -98,29 +98,43 @@ WARNING: Please increase descriptors limit for best performance (1024)
 //  CPU Info: Cores = 6, SMT enabled with 6 additional virtual processors, affinity = (12/12/12)
 //  Max file descriptors: 1024
 //  64 bit virtual addressing enabled
-//  Running aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre -drc -hier -turbo 2 run.drc.feol.cal
-//  Process ID: 3785785
+//  Running aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre -drc -hier -turbo 4 -hyper run.drc.feol.cal
+//  Process ID: 585308
 //
-//  Starting time: Sun Oct 25 00:31:48 2026
+//  Starting time: Sun Oct 25 19:38:37 2026
 //
 
 --- CALIBRE_* ENVIRONMENT VARIABLES:
 
 CALIBRE_ATOMIC_LVHEAP='0'
-CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 2 run.drc.feol.cal'
+CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 4 -hyper run.drc.feol.cal'
 CALIBRE_HOME='/Mentor/Calibre/aok_cal_2025.2_38.18'
-CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 2 run.drc.feol.cal'
+CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 4 -hyper run.drc.feol.cal'
 CALIBRE_READDB_LD_LIBRARY_PATH='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib/julia:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib:/Mentor/Calibre/aok_cal_2025.2_38.18/shared/pkgs/icv/tools/calibre_client/lib/64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/calibre_base/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_lib/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_qt5_comp/plugins:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_oa/22.41p004/lib/linux_rhel68_gcc44x_64/opt:/lib:/lib32:/usr/lib:/usr/lib32:/usr/local/lib'
 CALIBRE_SKIP_OS_CHECKS=''
-//  Calibre Controller logfile = /tmp/CalibreControllerLog.user1-EliteMini.3785785.2026_1025_0031
-//  Calibre Controller Connection user1-EliteMini:37339
-//  Running on 2 CPUs (pending licensing) 
+//  Calibre Controller logfile = /tmp/CalibreControllerLog.user1-EliteMini.585308.2026_1025_1938
+//  Calibre Controller Connection user1-EliteMini:59491
+//  Running on 4 CPUs (pending licensing) 
 //
-//  LITHO operations available for use on 2 CPUs (pending licensing)
+//  LITHO operations available for use on 4 CPUs (pending licensing)
 //
-//  Created Core System logfile = /tmp/CalibreRRLog.user1-EliteMini.3785785.2026_1025_0031
 
---- CALIBRE::DRC-H - Sun Oct 25 00:33:49 2026
+//  HYPERSCALING ENABLED with 4 pseudo HDBs
+
+//  Created Core System logfile = /tmp/CalibreRRLog.user1-EliteMini.585308.2026_1025_1938
+//  Initializing MT on HDB 0: 
+//  Creating log for pseudo HDB 1 on user1-EliteMini(pid=595366), logfile = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/CalibreHDBLog.user1-EliteMini.585308.2026_1025_1938.1
+//  Creating log for pseudo HDB 2 on user1-EliteMini(pid=595368), logfile = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/CalibreHDBLog.user1-EliteMini.585308.2026_1025_1938.2
+//  Creating log for pseudo HDB 3 on user1-EliteMini(pid=595367), logfile = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/CalibreHDBLog.user1-EliteMini.585308.2026_1025_1938.3
+//  Creating log for pseudo HDB 4 on user1-EliteMini(pid=595365), logfile = /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/CalibreHDBLog.user1-EliteMini.585308.2026_1025_1938.4
+//  Assigning threads to Pseudo HDBs, threads allocated per PHDB = 4
+//  Initializing MT on pseudo HDB 1
+//  Initializing MT on pseudo HDB 2
+//  Initializing MT on pseudo HDB 3
+//  Initializing MT on pseudo HDB 4
+//  SMT utilized, running on maximum 4 additional virtual processors
+
+--- CALIBRE::DRC-H - Sun Oct 25 19:40:37 2026
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
@@ -293,14 +307,14 @@ DRC SELECT CHECK V0.M1.AUX.3
 INCLUDE "/home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/calibre/run_drc/asap7_drc.rul"
 
 
---- STANDARD VERIFICATION RULE FILE COMPILATION MODULE COMPLETED.  CPU TIME = 0  REAL TIME = 0  LVHEAP = 1/3/5
+--- STANDARD VERIFICATION RULE FILE COMPILATION MODULE COMPLETED.  CPU TIME = 0  REAL TIME = 0  LVHEAP = 2/3/5
 
 --- CALIBRE_* ENVIRONMENT VARIABLES:
 
 CALIBRE_ATOMIC_LVHEAP='0'
-CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 2 run.drc.feol.cal'
+CALIBRE_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/pvt/calibre  -drc -hier -turbo 4 -hyper run.drc.feol.cal'
 CALIBRE_HOME='/Mentor/Calibre/aok_cal_2025.2_38.18'
-CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 2 run.drc.feol.cal'
+CALIBRE_INITIAL_CMD_LINE='/Mentor/Calibre/aok_cal_2025.2_38.18/bin/calibre -64 -drc -hier -turbo 4 -hyper run.drc.feol.cal'
 CALIBRE_READDB_LD_LIBRARY_PATH='/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib/julia:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv/julia/1.5/lib:/Mentor/Calibre/aok_cal_2025.2_38.18/shared/pkgs/icv/tools/calibre_client/lib/64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/calibre_base/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_lib/lib64:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_qt5_comp/plugins:/Mentor/Calibre/aok_cal_2025.2_38.18/pkgs/icv_oa/22.41p004/lib/linux_rhel68_gcc44x_64/opt:/lib:/lib32:/usr/lib:/usr/lib32:/usr/local/lib'
 CALIBRE_SKIP_OS_CHECKS=''
 
@@ -692,6 +706,10 @@ CALIBRE_SKIP_OS_CHECKS=''
     V9.AUX.1
 
 --- UNSELECTED RULE CHECKS (EXPLICIT):
+//  Initializing RDS on pseudo HDB 1
+//  Initializing RDS on pseudo HDB 2
+//  Initializing RDS on pseudo HDB 3
+//  Initializing RDS on pseudo HDB 4
 
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
