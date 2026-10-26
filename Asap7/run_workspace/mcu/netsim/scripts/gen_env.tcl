@@ -177,9 +177,15 @@ lappend L "+FLASH_IMAGE=flash.hex"
 lappend L "+TIMEOUT_US=$NS_TIMEOUT_US"
 lappend L "-top $NS_TB_TOP"
 if {$NETLIST_MODE} {
-    lappend L "// Model std cell (-v: chi lay module netlist can; UDP altos_* co trong ca RVT va LVT)"
+    # KHONG dung -v: moi file ASAP7 chep nguyen bo UDP altos_* trong
+    # `ifdef _udp_def_altos_*_ / `define.  Voi -v, lan quet dau da `define het
+    # cac co do khi UDP chua can; luc cell DFF/latch/ICG can thi moi ban dinh
+    # nghia deu bi `ifdef bo qua -> make syn 2026-10-25: 666 *E,CUVMUR (altos_dff,
+    # altos_dff_sr_0, altos_latch...).  Bien dich nhu file nguon thi ban dau tien
+    # vao worklib, cac ban sau bi guard bo qua - dung y do cua thu vien.
+    lappend L "// Model std cell: file nguon, khong -v (UDP altos_* nam sau `ifdef guard)"
     foreach f $cell_models {
-        lappend L "-v $f"
+        lappend L $f
     }
 }
 lappend L "// Model hanh vi SRAM"
