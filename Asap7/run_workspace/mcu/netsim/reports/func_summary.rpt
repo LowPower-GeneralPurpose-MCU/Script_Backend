@@ -1,0 +1,17 @@
+FAIL
+che do   : func
+netlist  : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr.v (2026-10-21 01:31)
+sdf      : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/innovus/outputs/top_soc_pnr_ss.sdf (2026-10-21 01:28)
+flash    : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/netsim/tb/netsim_flash.hex (2026-10-25 23:24)
+ket qua  : FAIL: PA0 (UART0_TX) = x (t=435000, UART 0/10 byte, flash doc 0 lan)
+UART     : 0 byte nhan tren PA0
+flash    : 0 lenh doc da log 
+SDF      : Annotation completed with 0 Errors and 16891 Warnings; SDF statistics:
+timing   : tat (-notimingchecks)
+canh bao SDF (run_func/sdf.log, top 10):
+    *W,SDFNSB     500
+    *W,SDFNEP     500
+    *W,SDFNDP     482
+    (macro SRAM khong co specify -> canh bao o 84 instance SRAM la binh thuong)
+canh bao log (top 10): *W,CUVWSI=1000, *W,SDFNSB=500, *W,SDFNEP=500, *W,SDFNDP=482, *W,DLCPTH=165, *W,MXWARN=3, *W,NTCNTX=1
+KHONG DAT: tb: FAIL: PA0 (UART0_TX) = x (t=435000, UART 0/10 byte, flash doc 0 lan)
