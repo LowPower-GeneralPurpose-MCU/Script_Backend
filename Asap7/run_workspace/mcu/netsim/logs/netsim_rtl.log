@@ -1,4 +1,4 @@
-TOOL:	xrun(64)	24.09-s006: Started on Oct 25, 2026 at 22:22:19 JST
+TOOL:	xrun(64)	24.09-s006: Started on Oct 25, 2026 at 23:24:31 JST
 xrun(64): 24.09-s006: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
 DEFINE std       ./STD
 |
@@ -1142,17 +1142,27 @@ xcelium> run
 [NETSIM] timeout 400 us
 [NETSIM] t=100000 nha rst_n / trst_n
 [FLASH] t=1066000 Fast Read @000000
-[FLASH] t=4018000 Fast Read @000010
-[FLASH] t=7054000 Fast Read @000020
-[FLASH] t=10022000 Fast Read @000030
-[FLASH] t=12990000 Fast Read @000040
-[FLASH] t=15958000 Fast Read @000050
-[FLASH] t=18926000 Fast Read @000060
-[FLASH] t=21894000 Fast Read @000070
-[FLASH] t=24862000 Fast Read @000080
-[NETSIM][UART] t=28390000 byte 0 = 0x49
-[NETSIM][RESULT] FAIL: byte 0 = 0x49, mong doi 0x4e (t=28390000, UART 0/10 byte, flash doc 9 lan)
-Simulation complete via $finish(1) at time 28390 NS + 0
-../tb/tb_netsim.sv:111         $finish;
+[FLASH] t=4170000 Fast Read @000010
+[FLASH] t=6946000 Fast Read @000020
+[FLASH] t=9722000 Fast Read @000030
+[FLASH] t=12482000 Fast Read @000070
+[FLASH] t=15298000 Fast Read @000040
+[FLASH] t=18194000 Fast Read @000080
+[FLASH] t=21058000 Fast Read @000050
+[FLASH] t=23882000 Fast Read @000060
+[NETSIM][UART] t=26494000 byte 0 = 0x4e
+[FLASH] t=26746000 Fast Read @000070
+[NETSIM][UART] t=29566000 byte 1 = 0x45
+[NETSIM][UART] t=29886000 byte 2 = 0x54
+[NETSIM][UART] t=30206000 byte 3 = 0x53
+[NETSIM][UART] t=30526000 byte 4 = 0x49
+[NETSIM][UART] t=30846000 byte 5 = 0x4d
+[NETSIM][UART] t=31166000 byte 6 = 0x20
+[NETSIM][UART] t=31486000 byte 7 = 0x4f
+[NETSIM][UART] t=31806000 byte 8 = 0x4b
+[NETSIM][UART] t=32126000 byte 9 = 0x0a
+[NETSIM][RESULT] PASS t=32126000 UART "NETSIM OK" qua boot ROM -> flash -> SRAM, flash doc 10 lan
+Simulation complete via $finish(1) at time 32126 NS + 0
+../tb/tb_netsim.sv:167                 $finish;
 xcelium> exit
-TOOL:	xrun(64)	24.09-s006: Exiting on Oct 25, 2026 at 22:22:32 JST  (total: 00:00:13)
+TOOL:	xrun(64)	24.09-s006: Exiting on Oct 25, 2026 at 23:24:37 JST  (total: 00:00:06)

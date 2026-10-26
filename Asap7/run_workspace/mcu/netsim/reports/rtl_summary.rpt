@@ -1,9 +1,8 @@
-FAIL
+PASS
 che do   : rtl
 rtl      : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/rtl (54 file) (2026-10-21 15:52)
-flash    : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/netsim/tb/netsim_flash.hex (2026-10-25 01:40)
-ket qua  : FAIL: byte 0 = 0x49, mong doi 0x4e (t=28390000, UART 0/10 byte, flash doc 9 lan)
-UART     : 1 byte nhan tren PA0
-flash    : 9 lenh doc da log @000000 @000010 @000020 @000030 @000040 @000050 @000060 @000070 ...
+flash    : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/netsim/tb/netsim_flash.hex (2026-10-25 23:24)
+ket qua  : PASS t=32126000 UART "NETSIM OK" qua boot ROM -> flash -> SRAM, flash doc 10 lan
+UART     : 10 byte nhan tren PA0
+flash    : 10 lenh doc da log @000000 @000010 @000020 @000030 @000070 @000040 @000080 @000050 ...
 canh bao log (top 10): *W,DLCPTH=165, *W,NONPRT=9, *W,CUVWSP=2
-KHONG DAT: tb: FAIL: byte 0 = 0x49, mong doi 0x4e (t=28390000, UART 0/10 byte, flash doc 9 lan)
