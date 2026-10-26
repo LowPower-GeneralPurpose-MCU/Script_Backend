@@ -1,11 +1,11 @@
 PASS
 che do   : syn
-udp_init : q = 1'b1 o moi flop/latch (run_syn/udp_init.v) (-)
+udp_init : q = 1'b0 o moi flop/latch (run_syn/udp_init.v) (-)
 netlist  : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/genus/outputs/top_soc_syn.v (2026-09-29 18:43)
 flash    : /home/user1/Desktop/Script_Backend/Asap7/run_workspace/mcu/netsim/tb/netsim_flash.hex (2026-10-25 23:24)
 ket qua  : PASS t=32126000 UART "NETSIM OK" qua boot ROM -> flash -> SRAM, flash doc 10 lan
 UART     : 10 byte nhan tren PA0
 flash    : 10 lenh doc da log @000000 @000010 @000020 @000030 @000070 @000040 @000080 @000050 ...
 canh bao log (top 10): *W,DLCPTH=165, *W,NTCNTX=1
-LUU Y: NS_UDP_INIT=1 - flop/latch khong reset duoc gan gia tri dau, KHONG phai
+LUU Y: NS_UDP_INIT=0 - flop/latch khong reset duoc gan gia tri dau, KHONG phai
        netsim that.  Phai PASS ca NS_UDP_INIT=0 lan 1 moi ket luan X chi la bi quan cua cong.

@@ -1,4 +1,4 @@
-TOOL:	xrun(64)	24.09-s006: Started on Oct 26, 2026 at 12:44:54 JST
+TOOL:	xrun(64)	24.09-s006: Started on Oct 26, 2026 at 12:58:48 JST
 xrun(64): 24.09-s006: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
 DEFINE std       ./STD
 |
@@ -5194,4 +5194,4 @@ xcelium> run
 Simulation complete via $finish(1) at time 32126 NS + 0
 ../tb/tb_netsim.sv:184                 $finish;
 xcelium> exit
-TOOL:	xrun(64)	24.09-s006: Exiting on Oct 26, 2026 at 12:45:11 JST  (total: 00:00:17)
+TOOL:	xrun(64)	24.09-s006: Exiting on Oct 26, 2026 at 12:59:04 JST  (total: 00:00:16)
