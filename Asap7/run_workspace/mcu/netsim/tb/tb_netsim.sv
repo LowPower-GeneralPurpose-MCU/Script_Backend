@@ -97,7 +97,24 @@ module tb_netsim;
         .miso(flash_miso)
     );
 
-`ifdef NS_WAVES
+`ifdef NS_XWIN
+    // Cua so X (make ... NS_XWIN=1 hoac a:b): probe MOI tin hieu cua tb va netlist
+    // (tru ben trong cell thu vien) nhung chi trong [XWIN_START_NS, XWIN_STOP_NS]
+    // -> xwin.shm, de truy X nguoc tu pad_out[0] trong SimVision.  Vai chuc chu ky
+    // nen file nho.  Thay cho NS_WAVES khi dat ca hai.
+    initial begin : xwin
+        integer t0, t1;
+        if (!$value$plusargs("XWIN_START_NS=%d", t0)) t0 = 350;
+        if (!$value$plusargs("XWIN_STOP_NS=%d", t1))  t1 = 440;
+        #(t0);
+        $shm_open("xwin.shm");
+        $shm_probe(tb_netsim, "AS");
+        $display("[NETSIM] t=%0t mo xwin.shm (toi %0d ns)", $time, t1);
+        #(t1 - t0);
+        $shm_close;
+        $display("[NETSIM] t=%0t dong xwin.shm", $time);
+    end
+`elsif NS_WAVES
     // Chi cong cua uut + tin hieu tb: probe ca netlist cho vai chuc us la hang GB.
     initial begin
         $shm_open("waves.shm");

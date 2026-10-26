@@ -60,10 +60,87 @@ proc write_lf {path lines} {
     close $f
 }
 
+# NS_UDP_INIT: UDP altos_* cua ASAP7 khong co `initial`, nen moi flop/latch khong
+# reset bat dau bang X (netlist Genus 2026-09-29: 20137 flop khong reset), va
+# -xminitialize khong chac cham toi trang thai UDP.  Moi file model ASAP7 chep
+# du 14 UDP tuan tu sau `ifdef _udp_def_altos_*_ (file SEQ chep hai lan), va ban
+# duoc bien dich la ban trong file DAU danh sach.  Lay 14 UDP tu file do, chen
+# `initial q = 1'b<v>` vao 10 UDP luu trang thai (*_err chi nho canh clock X nen
+# de nguyen), ghi ra file dat TRUOC thu vien: guard `define truoc nen moi ban
+# trong thu vien bi bo qua.  q la nut luu cua model - cell ra QN luu D dao, q = 0
+# la Q = 1 - nen chay ca 0 lan 1.
+proc write_udp_init {lib_file out_file value} {
+    set f [open $lib_file r]
+    set lines [split [read $f] \n]
+    close $f
+    set out [list \
+        "// Sinh boi scripts/gen_env.tcl (NS_UDP_INIT=$value) tu [file tail $lib_file]." \
+        "// CHI DE MO PHONG: UDP tuan tu ASAP7 them initial q = 1'b$value." \
+        "`timescale 1ns/10ps"]
+    set seen {}
+    set n_init 0
+    set block {}
+    foreach line $lines {
+        if {![llength $block]} {
+            # Guard *_sr_0 / *_sr_1 khong co '_' cuoi nhu cac guard khac.
+            if {![regexp {^`ifdef _udp_def_altos_\w+\s*$} $line]} {
+                continue
+            }
+            set name ""
+            set has_init 0
+        }
+        regexp {^primitive (\w+)} $line -> name
+        # IEEE 1364: initial cua UDP dung sau moi khai bao port, ngay truoc table.
+        if {[regexp {^\s*table\s*$} $line] && ![string match *_err $name]
+                && [lsearch -regexp $block {^\s*reg q;}] >= 0} {
+            lappend block "\tinitial q = 1'b$value;"
+            set has_init 1
+        }
+        lappend block $line
+        if {[regexp {^`endif} $line]} {
+            # Ban dau tien moi UDP; UDP to hop (khong co reg q) giu ban thu vien.
+            if {$name ni $seen && [lsearch -regexp $block {^\s*reg q;}] >= 0} {
+                lappend out "" {*}$block
+                lappend seen $name
+                incr n_init $has_init
+            }
+            set block {}
+        }
+    }
+    if {[llength $seen] != 14 || $n_init != 10} {
+        die "NS_UDP_INIT: [file tail $lib_file] co [llength $seen] UDP tuan tu / $n_init UDP luu\
+ trang thai, mong doi 14 / 10 - thu vien doi dang, xem write_udp_init"
+    }
+    write_lf $out_file $out
+}
+
 set NETLIST_MODE [expr {$MODE ne "rtl"}]
 set SDF_MODE     [expr {$MODE in {func sdf_max sdf_min}}]
 set netlist      [expr {$MODE eq "syn" ? $NS_SYN_NETLIST : $NS_NETLIST}]
 set inputs {}
+
+# --- Go loi X: NS_UDP_INIT (xem write_udp_init), NS_XWIN (xem tb_netsim.sv) --
+if {$NS_UDP_INIT ni {"" 0 1}} {
+    die "NS_UDP_INIT=$NS_UDP_INIT: chi nhan 0 hoac 1 (bo trong = tat)"
+}
+if {$NS_UDP_INIT ne "" && !$NETLIST_MODE} {
+    puts "gen_env.tcl rtl: bo qua NS_UDP_INIT (chi co nghia voi netlist)"
+    set NS_UDP_INIT ""
+}
+if {$NS_UDP_INIT ne ""} {
+    lappend inputs [list udp_init "q = 1'b$NS_UDP_INIT o moi flop/latch (run_$MODE/udp_init.v)"]
+}
+set xwin {}
+if {$NS_XWIN eq "1"} {
+    set xwin {350 440}
+} elseif {[regexp {^(\d+):(\d+)$} $NS_XWIN -> a b] && [scan $a %d] < [scan $b %d]} {
+    set xwin [list [scan $a %d] [scan $b %d]]
+} elseif {$NS_XWIN ni {"" 0}} {
+    die "NS_XWIN=$NS_XWIN: dung 1 (= 350:440) hoac <bat dau>:<ket thuc> theo ns"
+}
+if {[llength $xwin]} {
+    lappend inputs [list xwin "[join $xwin -] ns -> run_$MODE/xwin.shm"]
+}
 
 # --- Netlist + model std cell ----------------------------------------------
 set cell_models {}
@@ -129,6 +206,10 @@ lappend inputs [list flash $NS_FLASH_IMAGE]
 set run_dir [file join $NS_ROOT run_$MODE]
 file mkdir $run_dir
 file copy -force $NS_FLASH_IMAGE [file join $run_dir flash.hex]
+if {$NS_UDP_INIT ne ""} {
+    # File dau tien trong thu tu bien dich = ban UDP le ra se thang.
+    write_udp_init [lindex $cell_models 0] [file join $run_dir udp_init.v] $NS_UDP_INIT
+}
 
 set L {}
 lappend L "// Sinh boi scripts/gen_env.tcl $MODE - [clock format [clock seconds] -format {%Y-%m-%d %H:%M}]"
@@ -169,9 +250,17 @@ switch -- $MODE {
         lappend L "+neg_tchk"
     }
 }
-if {$NS_WAVES} {
+if {$NS_WAVES || [llength $xwin]} {
     lappend L "-access +r"
+}
+if {$NS_WAVES} {
     lappend L "+define+NS_WAVES"
+}
+if {[llength $xwin]} {
+    lappend L "// Cua so X: probe toan bo tb + netlist trong [join $xwin -] ns (thay NS_WAVES)"
+    lappend L "+define+NS_XWIN"
+    lappend L "+XWIN_START_NS=[lindex $xwin 0]"
+    lappend L "+XWIN_STOP_NS=[lindex $xwin 1]"
 }
 lappend L "+FLASH_IMAGE=flash.hex"
 lappend L "+TIMEOUT_US=$NS_TIMEOUT_US"
@@ -183,6 +272,10 @@ if {$NETLIST_MODE} {
     # nghia deu bi `ifdef bo qua -> make syn 2026-10-25: 666 *E,CUVMUR (altos_dff,
     # altos_dff_sr_0, altos_latch...).  Bien dich nhu file nguon thi ban dau tien
     # vao worklib, cac ban sau bi guard bo qua - dung y do cua thu vien.
+    if {$NS_UDP_INIT ne ""} {
+        lappend L "// NS_UDP_INIT=$NS_UDP_INIT: UDP tuan tu co initial, TRUOC thu vien de thang guard"
+        lappend L "udp_init.v"
+    }
     lappend L "// Model std cell: file nguon, khong -v (UDP altos_* nam sau `ifdef guard)"
     foreach f $cell_models {
         lappend L $f
@@ -230,3 +323,9 @@ write_lf [file join $run_dir inputs.txt] $I
 
 puts "gen_env.tcl $MODE: run_$MODE/netsim.f ([llength $cell_models] model cell,\
  [expr {$NETLIST_MODE ? [file tail $netlist] : "[llength $rtl_files] file RTL"}])"
+if {$NS_UDP_INIT ne ""} {
+    puts "    NS_UDP_INIT=$NS_UDP_INIT: run_$MODE/udp_init.v"
+}
+if {[llength $xwin]} {
+    puts "    NS_XWIN: [join $xwin -] ns -> run_$MODE/xwin.shm"
+}

@@ -25,6 +25,10 @@
 #     make func NS_CELL_VERILOG_DIR=... thu muc model Verilog ASAP7 (mac dinh $STDCELL_ROOT/Verilog)
 #     make func NS_TIMEOUT_US=1000      gioi han thoi gian mo phong (mac dinh 400 us)
 #     make func NS_WAVES=1              ghi song cac cong top_soc vao run_func/waves.shm
+#     make syn NS_XWIN=1                ghi MOI tin hieu tb + netlist trong 350-440 ns vao
+#                                       run_syn/xwin.shm (NS_XWIN=300:500 doi cua so, ns)
+#     make syn NS_UDP_INIT=0            moi flop/latch khong reset bat dau = 0 (hoac 1), chi
+#                                       netlist; PASS ca 0 lan 1 -> X chi la bi quan cua cong
 #     make func NS_XRUN_OPTS="-gui"     them option cho xrun
 #     make func XRUN=irun XMSDFC=ncsdfc Incisive thay cho Xcelium
 
@@ -32,6 +36,7 @@ MODES := rtl syn func sdf_max sdf_min
 
 export XRUN XMSDFC NS_NETLIST NS_SYN_NETLIST NS_SDF_MAX NS_SDF_MIN NS_SDF_MAX_AGE NS_ALLOW_STALE_SDF
 export NS_CELL_VERILOG_DIR NS_VT_LIST NS_SRAM_MODELS NS_FLASH_IMAGE NS_TIMEOUT_US NS_WAVES NS_XRUN_OPTS
+export NS_UDP_INIT NS_XWIN
 
 # clean_<che do> KHONG khai .PHONY: make bo qua pattern rule clean_% cho target .PHONY.
 .PHONY: $(MODES) all image clean

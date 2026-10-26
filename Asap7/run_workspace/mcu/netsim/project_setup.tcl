@@ -63,3 +63,8 @@ set NS_FLASH_IMAGE [file normalize [ns_env NS_FLASH_IMAGE [file join $NS_TB_DIR 
 set NS_TIMEOUT_US  [ns_env NS_TIMEOUT_US 400]
 set NS_WAVES       [ns_env NS_WAVES 0]
 set NS_XRUN_OPTS   [ns_env NS_XRUN_OPTS ""]
+# Go loi X tren netlist (scripts/gen_env.tcl): NS_UDP_INIT 0|1 gan gia tri dau cho
+# moi flop/latch khong reset; NS_XWIN 1 hoac <bat dau>:<ket thuc> (ns) dump toan
+# bo tin hieu trong cua so do vao run_<che do>/xwin.shm.  Bo trong = tat.
+set NS_UDP_INIT    [ns_env NS_UDP_INIT ""]
+set NS_XWIN        [ns_env NS_XWIN ""]

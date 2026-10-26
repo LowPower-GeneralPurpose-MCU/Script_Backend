@@ -144,12 +144,16 @@ if {$MODE in {sdf_max sdf_min} && $viol > 0} {
 }
 
 set lines {}
+set udp_init ""
 lappend lines "che do   : $MODE"
 if {[file isfile $RUN/inputs.txt]} {
     set fi [open $RUN/inputs.txt r]
     while {[gets $fi l] >= 0} {
         lassign [split $l \t] name path t
         lappend lines [format "%-9s: %s (%s)" $name $path $t]
+        if {$name eq "udp_init"} {
+            regexp {1'b([01])} $path -> udp_init
+        }
     }
     close $fi
 }
@@ -192,6 +196,10 @@ if {[llength $logw]} {
 }
 foreach r $reasons {
     lappend lines "KHONG DAT: $r"
+}
+if {$udp_init ne ""} {
+    lappend lines "LUU Y: NS_UDP_INIT=$udp_init - flop/latch khong reset duoc gan gia tri dau, KHONG phai"
+    lappend lines "       netsim that.  Phai PASS ca NS_UDP_INIT=0 lan 1 moi ket luan X chi la bi quan cua cong."
 }
 if {$MODE eq "syn" && [llength $reasons]} {
     lappend lines "LUU Y: syn chay unit delay; ICG long nhau lam canh clock trung luc Q doi (race)."
