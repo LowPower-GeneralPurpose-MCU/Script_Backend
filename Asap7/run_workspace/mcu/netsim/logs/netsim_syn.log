@@ -1,4 +1,4 @@
-TOOL:	xrun(64)	24.09-s006: Started on Oct 26, 2026 at 12:02:29 JST
+TOOL:	xrun(64)	24.09-s006: Started on Oct 26, 2026 at 12:44:54 JST
 xrun(64): 24.09-s006: (c) Copyright 1995-2025 Cadence Design Systems, Inc.
 DEFINE std       ./STD
 |
@@ -270,6 +270,35 @@ xmvlog: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,14): cds.lib In
 DEFINE cds_amsfunctions ./CDS_AMSFUNCTIONS
 |
 xmvlog: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,15): cds.lib Invalid path '/Cadence/XCELIUM/tools/inca/files/CDS_AMSFUNCTIONS' (cds.lib command ignored).
+file: udp_init.v
+	primitive worklib.altos_latch:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_dff_err:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_dff:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_dff_r_err:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_dff_r:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_dff_s_err:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_dff_s:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_dff_sr_err:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_dff_sr_0:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_dff_sr_1:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_latch_r:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_latch_s:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_latch_sr_0:v
+		errors: 0, warnings: 0
+	primitive worklib.altos_latch_sr_1:v
+		errors: 0, warnings: 0
 file: /home/user1/Desktop/asap7/asap7sc7p5t_28/Verilog/asap7sc7p5t_AO_RVT_TT_201020.v
 	module worklib.A2O1A1Ixp33_ASAP7_75t_R:v
 		errors: 0, warnings: 0
@@ -354,34 +383,6 @@ file: /home/user1/Desktop/asap7/asap7sc7p5t_28/Verilog/asap7sc7p5t_AO_RVT_TT_201
 	module worklib.AOI333xp33_ASAP7_75t_R:v
 		errors: 0, warnings: 0
 	module worklib.AOI33xp33_ASAP7_75t_R:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_latch:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_dff_err:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_dff:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_dff_r_err:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_dff_r:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_dff_s_err:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_dff_s:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_dff_sr_err:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_dff_sr_0:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_dff_sr_1:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_latch_r:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_latch_s:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_latch_sr_0:v
-		errors: 0, warnings: 0
-	primitive worklib.altos_latch_sr_1:v
 		errors: 0, warnings: 0
 file: /home/user1/Desktop/asap7/asap7sc7p5t_28/Verilog/asap7sc7p5t_INVBUF_RVT_TT_201020.v
 	module worklib.BUFx10_ASAP7_75t_R:v
@@ -5089,7 +5090,7 @@ xmvlog_cg: *W,DLCPTH (/Cadence/XCELIUM/tools/inca/files/cdsvhdl.lib,15): cds.lib
 			streams:   0, words:     0
 		worklib.top_soc:v <0x11d94ab9>
 			streams:   0, words:     0
-		worklib.tb_netsim:sv <0x30e32531>
+		worklib.tb_netsim:sv <0x787dcb76>
 			streams:  20, words: 19016
 		worklib.spi_flash_model:v <0x33373472>
 			streams:   7, words:  7558
@@ -5169,8 +5170,28 @@ xcelium> run
 [FLASH] nap flash.hex: header 4255434d
 [NETSIM] timeout 400 us
 [NETSIM] t=100000 nha rst_n / trst_n
-[NETSIM][RESULT] FAIL: PA0 (UART0_TX) = x (t=434000, UART 0/10 byte, flash doc 0 lan)
-Simulation complete via $finish(1) at time 434 NS + 1
-../tb/tb_netsim.sv:113         $finish;
+[FLASH] t=1066000 Fast Read @000000
+[FLASH] t=4170000 Fast Read @000010
+[FLASH] t=6946000 Fast Read @000020
+[FLASH] t=9722000 Fast Read @000030
+[FLASH] t=12482000 Fast Read @000070
+[FLASH] t=15298000 Fast Read @000040
+[FLASH] t=18194000 Fast Read @000080
+[FLASH] t=21058000 Fast Read @000050
+[FLASH] t=23882000 Fast Read @000060
+[NETSIM][UART] t=26494000 byte 0 = 0x4e
+[FLASH] t=26746000 Fast Read @000070
+[NETSIM][UART] t=29566000 byte 1 = 0x45
+[NETSIM][UART] t=29886000 byte 2 = 0x54
+[NETSIM][UART] t=30206000 byte 3 = 0x53
+[NETSIM][UART] t=30526000 byte 4 = 0x49
+[NETSIM][UART] t=30846000 byte 5 = 0x4d
+[NETSIM][UART] t=31166000 byte 6 = 0x20
+[NETSIM][UART] t=31486000 byte 7 = 0x4f
+[NETSIM][UART] t=31806000 byte 8 = 0x4b
+[NETSIM][UART] t=32126000 byte 9 = 0x0a
+[NETSIM][RESULT] PASS t=32126000 UART "NETSIM OK" qua boot ROM -> flash -> SRAM, flash doc 10 lan
+Simulation complete via $finish(1) at time 32126 NS + 0
+../tb/tb_netsim.sv:184                 $finish;
 xcelium> exit
-TOOL:	xrun(64)	24.09-s006: Exiting on Oct 26, 2026 at 12:02:46 JST  (total: 00:00:17)
+TOOL:	xrun(64)	24.09-s006: Exiting on Oct 26, 2026 at 12:45:11 JST  (total: 00:00:17)
